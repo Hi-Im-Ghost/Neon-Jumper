@@ -32,6 +32,7 @@ void LevelTwoState::update(float dt) {
         updateEndTrigger();
         updateDmgTriggers();
         killPlayerTriggers();
+        hud->setPosition(player->getPosition().x);
         hud->update(player);
         checkLevel = 1;
     } else{
@@ -213,7 +214,6 @@ void LevelTwoState::initViewPlayer(sf::RenderTarget &window) {
         newViewPos.x = 960.0f;
     if (player->getPosition().x > 6250.0f)
         newViewPos.x = 6250.0f;
-
     newViewPos.y = windowSize.y/2;
     view.setCenter(newViewPos);
     window.setView(view);

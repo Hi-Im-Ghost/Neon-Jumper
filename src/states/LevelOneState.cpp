@@ -27,6 +27,7 @@ void LevelOneState::update(float dt) {
         updateDmgTriggers();
         updateDeadTrigger();
         killPlayerTriggers();
+        hud->setPosition(player->getPosition().x);
         hud->update(player);
     } else{
         if(bPaused)
@@ -176,6 +177,8 @@ void LevelOneState::renderPaused(sf::RenderTarget& window) {
 
 void LevelOneState::initViewPlayer(sf::RenderTarget &window) {
     sf::View view (sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+
+
     sf::Vector2<unsigned int> windowSize = window.getSize();
     sf::Vector2<float> newViewPos = player->getPosition();
     if (player->getPosition().x < 960.0f)

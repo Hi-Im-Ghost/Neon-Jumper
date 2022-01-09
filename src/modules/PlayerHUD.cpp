@@ -40,3 +40,9 @@ void PlayerHUD::initHeartTexture() {
     htfull.loadFromFile("../resources/hfull.png");
     htempty.loadFromFile("../resources/hempty.png");
 }
+
+void PlayerHUD::setPosition(float x) {
+        hearths[0].setPosition({x, 20});
+        hearths[1].setPosition({x+100, 20});
+        hearths[2].setPosition({x+200, 20});
+}

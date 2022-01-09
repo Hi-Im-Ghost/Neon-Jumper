@@ -4,16 +4,13 @@
 #include "GameState.h"
 #include "../entities/Player.h"
 #include "../LoadMap.h"
-#include "../modules/PlayerHUD.h"
 
 class LevelTwoState : public GameState {
 private:
-    // Duplicates
     Player* player;
     std::list<sf::RectangleShape> hitboxes;
     std::list<sf::RectangleShape> dmgboxes;
     LoadMap map;
-    PlayerHUD* hud;
 
     Button* endMenuBtn;
     Button* pauseResumeBtn;
@@ -25,6 +22,7 @@ private:
     bool level2;
 
     sf::RectangleShape endLevelTrigger;
+    PlayerHUD* hud;
 
     void initValues();
     void initHitboxes();
@@ -46,6 +44,9 @@ private:
     void killPlayerTriggers();
 
     void saveGame();
+
+protected:
+// Duplicates
 
 public:
     explicit LevelTwoState(std::stack<GameState*>* states);

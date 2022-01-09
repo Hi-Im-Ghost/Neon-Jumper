@@ -20,11 +20,14 @@ private:
     void initHeartTexture();
     void initHearts();
 
+protected:
+
 public:
     PlayerHUD();
 
     void render(sf::RenderTarget& window);
     void update(Damageable* damageableModule);
+    void setPosition(float x);
 };
 
 

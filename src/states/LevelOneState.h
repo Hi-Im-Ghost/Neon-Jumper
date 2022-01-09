@@ -10,7 +10,6 @@
 #include "../LoadMap.h"
 #include "../entities/Player.h"
 #include "LevelTwoState.h"
-#include "../modules/PlayerHUD.h"
 
 class LevelOneState : public GameState {
 private:
@@ -25,9 +24,9 @@ private:
     Button* loadBtn;
     Button* saveBtn;
     bool renderHitboxes = false;
-    PlayerHUD* hud;
 
     sf::RectangleShape endLevelTrigger;
+    PlayerHUD* hud;
 
     void initValues();
     void initHitboxes();
@@ -52,7 +51,11 @@ private:
     void saveGame();
     void loadGame();
 
+protected:
+
+
 public:
+
     explicit LevelOneState(std::stack<GameState*>* states);
 
     void update(float deltatime) override;

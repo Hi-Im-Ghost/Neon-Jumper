@@ -1086,6 +1086,8 @@ CMakeFiles/Platformer2D.dir/src/states/GameState.cpp.obj: \
  C:/SFML/include/SFML/Window/GlResource.hpp \
  C:/SFML/include/SFML/Window/Mouse.hpp \
  ../src/UI/Button.h \
+ ../src/modules/Damageable.h \
+ ../src/modules/PlayerHUD.h \
  ../src/states/GameState.cpp \
  ../src/states/GameState.h
 CMakeFiles/Platformer2D.dir/src/states/LevelOneState.cpp.obj: \

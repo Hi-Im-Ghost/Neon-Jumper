@@ -10,6 +10,7 @@
 #include <SFML/Audio.hpp>
 #include <stack>
 #include "../UI/Button.h"
+#include "../modules/PlayerHUD.h"
 
 class GameState {
 private:
