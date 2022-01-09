@@ -12,12 +12,17 @@ LevelTwoState::LevelTwoState(std::stack<GameState*>* states)
     initTextGame();
     initTextPause();
     musicGame.play();
-    checkLevel = 1; //TODO nie wiem czemu ale z level 1 nie chce mi zapisac mimo ze na trigerze jest ktory przechodzi do tej sceny zapis na 1, chyba ze sie resetuje gdzies to. Do tego mimo zapisanej poprawnej pozycji przenosi tylko na poczatek lvl, pewnie ten bool ma ustawione tak ze go tam ustawia.
-    player = new Player(10*3, 230*3);
+    if(loadSave) {
+        player->setPosition({playerPositionX, playerPositionY});
+        player->setHP(playerHP);
+    }
 }
 
 void LevelTwoState::initValues() {
-    player = nullptr;
+    player = new Player(10*3, 230*3);
+    hud = new PlayerHUD();
+    checkLevel = 1;
+    level2 = true;
 }
 
 void LevelTwoState::update(float dt) {
@@ -27,6 +32,8 @@ void LevelTwoState::update(float dt) {
         updateEndTrigger();
         updateDmgTriggers();
         killPlayerTriggers();
+        hud->update(player);
+        checkLevel = 1;
     } else{
         if(bPaused)
             updatePaused();
@@ -42,6 +49,7 @@ void LevelTwoState::render(sf::RenderTarget &window) {
     initViewPlayer(window);
     map.draw(window);
     player->render(window);
+    hud->render(window);
     if (renderHitboxes) {
         for (auto & h : hitboxes)
             window.draw(h);
@@ -126,6 +134,16 @@ void LevelTwoState::updateEnd() {
                 musicGame.play();
             }
         }
+        else if (saveBtn->intersects(virtualCursor))
+        {
+            // SAVE
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && saveBtn->getState() == ACTIVE){
+                clickMenu.play();
+                saveGame();
+                unpause();
+                musicGame.play();
+            }
+        }
         else if (loadBtn->intersects(virtualCursor))
         {
             // LOAD
@@ -134,7 +152,11 @@ void LevelTwoState::updateEnd() {
                 loadGame();
                 unpause();
                 if(checkLevel==1){
-                    musicGame.stop();
+                    if(level2)
+                    {
+                        musicGame.play();
+                    }else
+                        musicGame.stop();
                 }else
                     musicGame.play();
             }
@@ -145,20 +167,22 @@ void LevelTwoState::updateEnd() {
             if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseExitBtn->getState() == ACTIVE) {
                 clickMenu.play();
                 musicGame.stop();
-                saveGame();
+                //saveGame();
                 endState();
             }
         }
 
         pauseResumeBtn->update(virtualCursor);
+        saveBtn->update(virtualCursor);
         loadBtn->update(virtualCursor);
         pauseExitBtn->update(virtualCursor);
     }
 
 void LevelTwoState::initPauseButtons() {
     pauseResumeBtn = new Button("Powrot do gry", 960, 480, 300, 100);
-    loadBtn =  new Button("Wczytaj gre", 960, 600, 200, 100);
-    pauseExitBtn = new Button("Zapis i wyjscie", 960, 720, 300, 100);
+    saveBtn =  new Button("Zapisz gre", 960, 600, 200, 100);
+    loadBtn =  new Button("Wczytaj gre", 960, 720, 200, 100);
+    pauseExitBtn = new Button("Wyjscie", 960, 840, 300, 100);
 }
 
 void LevelTwoState::initEndButtons() {
@@ -170,6 +194,7 @@ void LevelTwoState::renderPaused(sf::RenderTarget& window) {
     initView(window);
     window.draw(nameTextPause);
     pauseResumeBtn->render(window);
+    saveBtn->render(window);
     loadBtn->render(window);
     pauseExitBtn->render(window);
 }
@@ -304,11 +329,19 @@ void LevelTwoState::loadGame() {
 
     player->setPosition({playerPositionX,playerPositionY});
     player->setHP(playerHP);
-    if(checkLevel==1){
-        bnextLevel=true;
-        musicGame.stop();
+    if(checkLevel>0){
+        if(level2){
+            loadSave=false;
+        }else {
+            loadSave = true;
+            bnextLevel = true;
+            musicGame.stop();
+        }
     }
     else{
+        player->setPosition({0,247});
+        player->setHP(player->getMaxHP());
+        loadSave=false;
         bnextLevel=false;
     }
     load.close();

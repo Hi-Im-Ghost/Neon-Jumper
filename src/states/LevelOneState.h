@@ -23,14 +23,11 @@ private:
     Button* pauseResumeBtn;
     Button* pauseExitBtn;
     Button* loadBtn;
+    Button* saveBtn;
     bool renderHitboxes = false;
     PlayerHUD* hud;
 
     sf::RectangleShape endLevelTrigger;
-
-    float playerPositionX;
-    float playerPositionY;
-    int playerHP;
 
     void initValues();
     void initHitboxes();

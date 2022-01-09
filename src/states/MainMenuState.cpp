@@ -19,7 +19,7 @@ void MainMenuState::initBackground() {
 }
 
 void MainMenuState::initButtons() {
-    buttons["START"] = new Button("Nowa gra", 960, 480, 200, 100);
+    buttons["START"] = new Button("Graj", 960, 480, 200, 100);
     buttons["EXIT"] = new Button("Wyjdz", 960, 600, 200, 100);
 }
 

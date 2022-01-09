@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "../entities/Player.h"
 #include "../LoadMap.h"
+#include "../modules/PlayerHUD.h"
 
 class LevelTwoState : public GameState {
 private:
@@ -12,18 +13,18 @@ private:
     std::list<sf::RectangleShape> hitboxes;
     std::list<sf::RectangleShape> dmgboxes;
     LoadMap map;
+    PlayerHUD* hud;
 
     Button* endMenuBtn;
     Button* pauseResumeBtn;
     Button* pauseExitBtn;
+    Button* saveBtn;
     Button* loadBtn;
     bool renderHitboxes = false;
 
-    sf::RectangleShape endLevelTrigger;
+    bool level2;
 
-    float playerPositionX;
-    float playerPositionY;
-    int playerHP;
+    sf::RectangleShape endLevelTrigger;
 
     void initValues();
     void initHitboxes();

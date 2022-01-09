@@ -49,6 +49,11 @@ protected:
     sf::RectangleShape virtualCursor;
 
     int checkLevel;
+    float playerPositionX;
+    float playerPositionY;
+    int playerHP;
+    bool loadSave = false;
+    bool lvl1 = true;
 
     /// Pozwala na aktualizowanie pozycji myszy na ekranie
     void updateMousePosition();

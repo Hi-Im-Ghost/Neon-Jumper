@@ -118,6 +118,16 @@ void LevelOneState::updatePaused() {
             musicGame.play();
         }
     }
+    else if (saveBtn->intersects(virtualCursor))
+    {
+        // SAVE
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && saveBtn->getState() == ACTIVE){
+            clickMenu.play();
+            saveGame();
+            unpause();
+            musicGame.play();
+        }
+    }
     else if (loadBtn->intersects(virtualCursor))
     {
         // LOAD
@@ -137,26 +147,29 @@ void LevelOneState::updatePaused() {
         if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseExitBtn->getState() == ACTIVE) {
             clickMenu.play();
             musicGame.stop();
-            saveGame();
+            //saveGame(); //zapis po wyjsciu
             endState();
         }
     }
 
     pauseResumeBtn->update(virtualCursor);
+    saveBtn->update(virtualCursor);
     loadBtn->update(virtualCursor);
     pauseExitBtn->update(virtualCursor);
 }
 
 void LevelOneState::initPauseButtons() {
     pauseResumeBtn = new Button("Powrot do gry", 960, 480, 300, 100);
-    loadBtn =  new Button("Wczytaj gre", 960, 600, 200, 100);
-    pauseExitBtn = new Button("Zapis i wyjscie", 960, 720, 300, 100);
+    saveBtn =  new Button("Zapisz gre", 960, 600, 200, 100);
+    loadBtn =  new Button("Wczytaj gre", 960, 720, 200, 100);
+    pauseExitBtn = new Button("Wyjscie", 960, 840, 300, 100);
 }
 
 void LevelOneState::renderPaused(sf::RenderTarget& window) {
     initView(window);
     window.draw(nameTextPause);
     pauseResumeBtn->render(window);
+    saveBtn->render(window);
     loadBtn->render(window);
     pauseExitBtn->render(window);
 }
@@ -242,7 +255,7 @@ void LevelOneState::updateDead() {
 }
 
 void LevelOneState::initDeadButtons() {
-    endMenuBtn = new Button("Przejdz do menu", 960, 480, 300, 100);
+    endMenuBtn = new Button("Przejdz do menu", 960, 600, 300, 100);
 }
 
 void LevelOneState::renderDead(sf::RenderTarget& window) {
@@ -332,11 +345,13 @@ void LevelOneState::loadGame() {
 
     player->setPosition({playerPositionX,playerPositionY});
     player->setHP(playerHP);
-    if(checkLevel==1){
+    if(checkLevel>0){
+        loadSave=true;
         bnextLevel=true;
         musicGame.stop();
     }
     else{
+        loadSave=false;
         bnextLevel=false;
     }
     load.close();

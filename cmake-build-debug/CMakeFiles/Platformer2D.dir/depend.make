@@ -1324,6 +1324,7 @@ CMakeFiles/Platformer2D.dir/src/states/LevelTwoState.cpp.obj: \
  ../src/entities/Player.h \
  ../src/modules/Animated.h \
  ../src/modules/Damageable.h \
+ ../src/modules/PlayerHUD.h \
  ../src/rapidjson/include/rapidjson/allocators.h \
  ../src/rapidjson/include/rapidjson/document.h \
  ../src/rapidjson/include/rapidjson/encodedstream.h \
