@@ -51,12 +51,12 @@ LoadMap::LoadMap(std::string mapFileName){
         }
     }
 
-    for (auto & l : layers)
+/*    for (auto & l : layers)
     {
         if (l.getName() == "weater") {
             solidLayer = l;
         }
-    }
+    }*/
 
     for (auto & l : layers)
     {

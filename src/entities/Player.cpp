@@ -1,17 +1,6 @@
 #include <iostream>
 #include "Player.h"
 
-Player::Player() {
-    initValues();
-    initSprite();
-    initHitbox();
-    initSoundGame();
-
-    setMaxHP(3);
-    setHP(3);
-
-}
-
 Player::Player(float x, float y) {
     initValues();
     initSprite();
@@ -20,6 +9,7 @@ Player::Player(float x, float y) {
     setMaxHP(3);
     setHP(3);
     setPosition({x,y});
+    switchAnimation(Animated::IDLE);
 }
 
 void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) {
@@ -30,12 +20,18 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
     applyGravity(dt);
     handleCollision(allHitboxes);
     moveFinal();
+    animateMovement();
+
+    if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
+        timeStart();
+    if (tsValue < 1.0f && !_bTimeStopped)
+        tsValue += dt * tsFillRate;
 }
 
 void Player::render(sf::RenderTarget &window) {
-    animateMovement();
+    animate(_sprite);
     window.draw(_sprite);
-    window.draw(_hitbox);
+    //window.draw(_hitbox);
 }
 
 void Player::initValues() {
@@ -47,13 +43,16 @@ void Player::initValues() {
     _gravityDelta = 0.0f;
     _bIsGrounded = false;
     _spriteOffset = {0,0};
+    _bTimeStopped = false;
+    tsValue = 0;
+    tsFillRate = 0.1;
 }
 
 void Player::initSprite() {
     _texture.loadFromFile("../resources/player.png");
     _sprite.setTexture(_texture);
     _sprite.setScale({4,4});
-    _sprite.setTextureRect(sf::IntRect(0, 0, 12, 16));
+    _sprite.setTextureRect(sf::IntRect(0, 0, 12, 15));
 }
 
 void Player::initHitbox() {
@@ -112,6 +111,14 @@ void Player::handleInput(float dt) {
     if (!bMoving)
         zeroVelocity(true, false);
     _bIsGrounded = false;
+
+    // Time Stop
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)
+    && !_bTimeStopped
+    && tsValue >= 1.0f)
+    {
+        timeStop();
+    }
 }
 
 void Player::zeroVelocity(bool x, bool y) {
@@ -204,29 +211,57 @@ void Player::animateMovement() {
     else if (_velocity.x < 0) {
         // FACING LEFT
         _sprite.setScale(-4,4);
-        _spriteOffset = {static_cast<float>(_sprite.getTextureRect().width), 0};
+        _spriteOffset = {36, 0};
     }
 
     if (_bIsGrounded) {
         // IDLE
         if (_velocity.x == 0) {
-            animate(_sprite, 2, 2);
+            if (getCurrentAinmation() != Animated::IDLE)
+                switchAnimation(Animated::IDLE);
         }
         // GOING RIGHT / LEFT
         else {
-            animate(_sprite, 1, 4);
+            if (getCurrentAinmation() != Animated::WALK)
+                switchAnimation(Animated::WALK);
         }
     }
     else {
-        if (_velocity.y > 0) {
-            // GOING UP / JUMPING
-            sf::IntRect upf = sf::IntRect(0,16*3,12,16);
-            _sprite.setTextureRect(upf);
-        }
-        else {
-            // FALLING
-            sf::IntRect upf = sf::IntRect(0,16*3,12*1,16);
-            _sprite.setTextureRect(upf);
+        if (std::abs(_velocity.y) > 0) {
+            // IN AIR
+            //sf::IntRect upf = sf::IntRect(0,20*3,15,20);
+            if (getCurrentAinmation() != JUMP)
+                switchAnimation(JUMP);
+            //_sprite.setTextureRect(upf);
         }
     }
+}
+
+void Player::switchAnimation(Animation newAnimation)  {
+    Animated::switchAnimation(newAnimation);
+    switch (newAnimation) {
+
+        case IDLE:
+            setAnimValues({0,16}, {12,15},2, 0.7, true);
+            break;
+        case WALK:
+            setAnimValues({0,0}, {12,15},4, 0.1, true);
+            break;
+        case JUMP:
+            setAnimValues({0, 31}, {12,15},1,10.0, false);
+            break;
+        case FALL:
+            break;
+    }
+    animate(_sprite, true);
+}
+
+void Player::timeStop() {
+    _bTimeStopped = true;
+    tsValue = 0;
+    tsClock.restart();
+}
+
+void Player::timeStart() {
+    _bTimeStopped = false;
 }

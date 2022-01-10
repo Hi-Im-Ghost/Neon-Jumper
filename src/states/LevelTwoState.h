@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "../entities/Player.h"
 #include "../LoadMap.h"
+#include "../entities/Slime.h"
 
 class LevelTwoState : public GameState {
 private:
@@ -11,6 +12,8 @@ private:
     std::list<sf::RectangleShape> hitboxes;
     std::list<sf::RectangleShape> dmgboxes;
     LoadMap map;
+
+    std::list<Enemy*> enemies;
 
     Button* endMenuBtn;
     Button* pauseResumeBtn;
@@ -32,12 +35,15 @@ private:
     void initEndTrigger();
     void initView(sf::RenderTarget& window);
     void initViewPlayer(sf::RenderTarget &window);
+    void initEnemies();
 
     void updateInput();
     void updatePaused();
     void updateEnd();
+    void updateEntities(float deltaTime);
     void renderPaused(sf::RenderTarget& window);
     void renderEnd(sf::RenderTarget& window);
+    void renderEntities(sf::RenderTarget& window);
 
     void updateEndTrigger();
     void updateDmgTriggers();

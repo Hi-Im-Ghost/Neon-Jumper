@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper"
+CMAKE_SOURCE_DIR = C:\Users\ACER\Documents\CLionProjects\Neon-Jumper
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug"
+CMAKE_BINARY_DIR = C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\CMakeFiles" "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\CMakeFiles C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -344,6 +344,30 @@ src/entities/Player.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/Player.cpp.s
 .PHONY : src/entities/Player.cpp.s
 
+src/entities/Slime.obj: src/entities/Slime.cpp.obj
+.PHONY : src/entities/Slime.obj
+
+# target to build an object file
+src/entities/Slime.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/Slime.cpp.obj
+.PHONY : src/entities/Slime.cpp.obj
+
+src/entities/Slime.i: src/entities/Slime.cpp.i
+.PHONY : src/entities/Slime.i
+
+# target to preprocess a source file
+src/entities/Slime.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/Slime.cpp.i
+.PHONY : src/entities/Slime.cpp.i
+
+src/entities/Slime.s: src/entities/Slime.cpp.s
+.PHONY : src/entities/Slime.s
+
+# target to generate assembly for a file
+src/entities/Slime.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/Slime.cpp.s
+.PHONY : src/entities/Slime.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -572,6 +596,9 @@ help:
 	@echo ... src/entities/Player.obj
 	@echo ... src/entities/Player.i
 	@echo ... src/entities/Player.s
+	@echo ... src/entities/Slime.obj
+	@echo ... src/entities/Slime.i
+	@echo ... src/entities/Slime.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

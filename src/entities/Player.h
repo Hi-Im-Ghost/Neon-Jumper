@@ -27,6 +27,15 @@ private:
     float _gravityDelta;
     bool _bIsGrounded;
 
+    /// Pozwala określić, czy czas jest w tej chwili zatrzymany
+    bool _bTimeStopped;
+    /// Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się
+    float tsValue;
+    /// Określa z jaką prędkością napełnia się wartość tsValue
+    float tsFillRate;
+    /// Liczy czas po którym czas zostanie wznowiony
+    sf::Clock tsClock;
+
     void initValues();
     void initSprite();
     void initHitbox();
@@ -39,18 +48,27 @@ private:
     void jump();
     void animateMovement();
 
-public:
-    Player();
-    Player(float x, float y);
+    /// Służy do zatrzymywania czasu
+    void timeStop();
+    /// Służy do wznawiania czasu
+    void timeStart();
 
+public:
+    /// Konstruktor gracza z opcją podania lokalizacji początkowej na mapie
+    explicit Player(float x = 0, float y = 0);
+
+    /// Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób.
     void move(float x, float y);
     sf::Vector2f getPosition();
     void zeroVelocity(bool x, bool y);
     bool checkForIntersection(sf::RectangleShape& shape);
+    bool getTimeStopped() const {return _bTimeStopped;}
+    float getTimeStopValue() const {return tsValue;}
 
     void update(float deltaTime, const std::list<sf::RectangleShape>& allHitboxes);
     void render(sf::RenderTarget& window);
     void setPosition(sf::Vector2f);
+    void switchAnimation(Animation newAnimation);
 };
 
 

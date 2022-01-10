@@ -6,6 +6,7 @@ LevelOneState::LevelOneState(std::stack<GameState*>* states)
     initHitboxes();
     initDmgBoxes();
     initEndTrigger();
+    initEnemies();
     initDeadButtons();
     initPauseButtons();
     initVirtualCursor();
@@ -22,6 +23,8 @@ void LevelOneState::initValues() {
 void LevelOneState::update(float dt) {
     if (!bPaused && !bEndGame) {
         updateInput();
+        if (!player->getTimeStopped())
+            updateEntities(dt);
         player->update(dt, hitboxes);
         updateEndTrigger();
         updateDmgTriggers();
@@ -41,7 +44,7 @@ void LevelOneState::render(sf::RenderTarget &window) {
 
     initViewPlayer(window);
     map.draw(window);
-    player->render(window);
+    renderEntities(window);
     hud->render(window);
 
     if (renderHitboxes) {
@@ -95,6 +98,9 @@ void LevelOneState::updateInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
         renderHitboxes = true;
 
+        // Get player location
+        std::cout << "L1: " << player->getPosition().x << ", " << player->getPosition().y << "\n";
+
         // Cheat go to level 2
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
             bnextLevel = true;
@@ -113,7 +119,7 @@ void LevelOneState::updatePaused() {
     if (pauseResumeBtn->intersects(virtualCursor))
     {
         // START
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseResumeBtn->getState() == ACTIVE) {
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseResumeBtn->getState() == Button::ACTIVE) {
             clickMenu.play();
             unpause();
             musicGame.play();
@@ -122,7 +128,7 @@ void LevelOneState::updatePaused() {
     else if (saveBtn->intersects(virtualCursor))
     {
         // SAVE
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && saveBtn->getState() == ACTIVE){
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && saveBtn->getState() == Button::ACTIVE){
             clickMenu.play();
             saveGame();
             unpause();
@@ -132,7 +138,7 @@ void LevelOneState::updatePaused() {
     else if (loadBtn->intersects(virtualCursor))
     {
         // LOAD
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && loadBtn->getState() == ACTIVE){
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && loadBtn->getState() == Button::ACTIVE){
             clickMenu.play();
             loadGame();
             unpause();
@@ -145,7 +151,7 @@ void LevelOneState::updatePaused() {
     else if (pauseExitBtn->intersects(virtualCursor))
     {
         // EXIT
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseExitBtn->getState() == ACTIVE) {
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && pauseExitBtn->getState() == Button::ACTIVE) {
             clickMenu.play();
             musicGame.stop();
             //saveGame(); //zapis po wyjsciu
@@ -246,7 +252,7 @@ void LevelOneState::updateDead() {
 
     if (endMenuBtn->intersects(virtualCursor)) {
         // EXIT
-        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && endMenuBtn->getState() == ACTIVE) {
+        if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && endMenuBtn->getState() == Button::ACTIVE) {
             clickMenu.play();
             unEndGame();
             musicGame.stop();
@@ -358,4 +364,50 @@ void LevelOneState::loadGame() {
         bnextLevel=false;
     }
     load.close();
+}
+
+void LevelOneState::initEnemies() {
+    // #1 location
+    enemies.push_back(new Slime(863.25*3, 262*3, 2160, 3050, false));
+    enemies.push_back(new Slime(820.25*3, 262*3, 2160, 3050, true));
+    enemies.push_back(new Slime(900.25*3, 262*3, 2160, 3050, false));
+    enemies.push_back(new Slime(750.25*3, 262*3, 2160, 3050, true));
+    // #2 location
+    enemies.push_back(new Slime(1071*3, 310*3, 3220, 3410, false));
+    // #3 location
+    enemies.push_back(new Slime(511*3, 166*3, 1400, 1725, false));
+    enemies.push_back(new Slime(467*3, 166*3, 1400, 1725, true));
+    // #4 location
+    enemies.push_back(new Slime(1567*3, 182*3, 4450, 4825, true));
+    enemies.push_back(new Slime(1510*3, 182*3, 4500, 4850, true));
+    // #5 location
+    enemies.push_back(new Slime(1407*3, 214*3, 4225, 4260, true));
+    // #6 location
+    enemies.push_back(new Slime(1935*3, 230*3, 5626, 6040, true));
+    enemies.push_back(new Slime(2000*3, 230*3, 5626, 6040, false));
+    // #7 location
+    enemies.push_back(new Slime(2064*3, 327*3, 6100, 6500, true));
+}
+
+void LevelOneState::renderEntities(sf::RenderTarget &window) {
+    // Render every enemy
+    for (auto& e : enemies) {
+        e->render(window);
+    }
+    // Render player
+    player->render(window);
+}
+
+void LevelOneState::updateEntities(float dt) {
+    // Update every enemy
+    for (auto& e : enemies) {
+        e->update(dt);
+    }
+
+    // Update enemy collision with player
+    for (auto & e : enemies) {
+        if (player->checkForIntersection(e->getHitbox())) {
+            player->takeDamage(1);
+        }
+    }
 }

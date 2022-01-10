@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 30.12.2021.
-//
-
 #ifndef TREES_JSON_LEVELONESTATE_H
 #define TREES_JSON_LEVELONESTATE_H
 
@@ -10,6 +6,8 @@
 #include "../LoadMap.h"
 #include "../entities/Player.h"
 #include "LevelTwoState.h"
+#include "../modules/PlayerHUD.h"
+#include "../entities/Slime.h"
 
 class LevelOneState : public GameState {
 private:
@@ -17,6 +15,8 @@ private:
     std::list<sf::RectangleShape> hitboxes;
     std::list<sf::RectangleShape> dmgboxes;
     LoadMap map;
+
+    std::list<Enemy*> enemies;
 
     Button* endMenuBtn;
     Button* pauseResumeBtn;
@@ -36,12 +36,15 @@ private:
     void initEndTrigger();
     void initView(sf::RenderTarget& window);
     void initViewPlayer(sf::RenderTarget &window);
+    void initEnemies();
 
     void updateInput();
     void updatePaused();
     void updateDead();
+    void updateEntities(float deltaTime);
     void renderPaused(sf::RenderTarget& window);
     void renderDead(sf::RenderTarget& window);
+    void renderEntities(sf::RenderTarget& window);
 
     void updateEndTrigger();
     void updateDeadTrigger();
@@ -51,11 +54,7 @@ private:
     void saveGame();
     void loadGame();
 
-protected:
-
-
 public:
-
     explicit LevelOneState(std::stack<GameState*>* states);
 
     void update(float deltatime) override;

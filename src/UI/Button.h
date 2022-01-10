@@ -12,13 +12,13 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-enum ButtonState {
-    IDLE,
-    HOVER,
-    ACTIVE
-};
-
 class Button {
+public:
+    enum ButtonState {
+        IDLE,
+        HOVER,
+        ACTIVE
+    };
 private:
     sf::RectangleShape buttonShape;
     sf::Text text;

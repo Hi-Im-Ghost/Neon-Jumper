@@ -27,7 +27,7 @@ void MainMenuState::updateButtons() {
     if (buttons["START"]->intersects(virtualCursor))
     {
         // START
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttons["START"]->getState() == ACTIVE) {
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttons["START"]->getState() == Button::ACTIVE) {
             clickMenu.play();
             musicMenu.stop();
             states->push(new LevelOneState(states));
@@ -36,7 +36,7 @@ void MainMenuState::updateButtons() {
     else if (buttons["EXIT"]->intersects(virtualCursor))
     {
         // EXIT
-        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttons["EXIT"]->getState() == ACTIVE){
+        if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttons["EXIT"]->getState() == Button::ACTIVE){
             clickMenu.play();
             endState();
         }
