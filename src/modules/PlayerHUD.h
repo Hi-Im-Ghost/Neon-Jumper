@@ -1,18 +1,20 @@
+//
+// Created by ToQly on 04.01.2022.
+//
+
 #ifndef TREES_JSON_PLAYERHUD_H
 #define TREES_JSON_PLAYERHUD_H
+
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include "Damageable.h"
-/**
- * @class Klasa reprezentująca interfejs gracza.
- */
+
 class PlayerHUD {
 private:
     sf::RectangleShape hearths[3];
     sf::Texture htfull;
-    sf::Texture htempty;
 
     void initHeartTexture();
     void initHearts();
@@ -21,12 +23,11 @@ protected:
 
 public:
     PlayerHUD();
-    /// Wyświetla HUD na ekranie
+
     void render(sf::RenderTarget& window);
-    /// Aktualizuje logikę interfejsu
     void update(Damageable* damageableModule);
-    /// Ustawia pozycję interfejsu na ekranie
-    void setPosition(float x);
+    void setPosition(float x, float y);
+    bool takedDmg;
 };
 
 

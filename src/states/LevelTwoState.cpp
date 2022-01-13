@@ -35,7 +35,7 @@ void LevelTwoState::update(float dt) {
         updateEndTrigger();
         updateDmgTriggers();
         killPlayerTriggers();
-        hud->setPosition(player->getPosition().x);
+        hud->setPosition(player->getPosition().x,player->getPosition().y);
         hud->update(player);
         checkLevel = 1;
     } else{
