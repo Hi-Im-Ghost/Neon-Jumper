@@ -15,7 +15,6 @@ class PlayerHUD {
 private:
     sf::RectangleShape hearths[3];
     sf::Texture htfull;
-    sf::Texture htempty;
 
     void initHeartTexture();
     void initHearts();
@@ -27,7 +26,8 @@ public:
 
     void render(sf::RenderTarget& window);
     void update(Damageable* damageableModule);
-    void setPosition(float x);
+    void setPosition(float x, float y);
+    bool takedDmg;
 };
 
 

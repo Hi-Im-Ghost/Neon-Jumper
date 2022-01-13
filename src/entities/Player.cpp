@@ -19,8 +19,8 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
     handleInput(dt);
     applyGravity(dt);
     handleCollision(allHitboxes);
-    moveFinal();
     animateMovement();
+    moveFinal();
 
     if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
         timeStart();
@@ -35,10 +35,10 @@ void Player::render(sf::RenderTarget &window) {
 }
 
 void Player::initValues() {
-    _acceleration = 3.0f;
-    _maxSpeedX = 1.0f;
-    _maxSpeedY = 3.0f;
-    _jumpForce = 900.0f;
+    _acceleration = 6.0f;
+    _maxSpeedX = 3.0f;
+    _maxSpeedY = 10.0f;
+    _jumpForce = 2700.0f;
     _gravity = 3.0f;
     _gravityDelta = 0.0f;
     _bIsGrounded = false;

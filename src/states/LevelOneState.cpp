@@ -30,7 +30,7 @@ void LevelOneState::update(float dt) {
         updateDmgTriggers();
         updateDeadTrigger();
         killPlayerTriggers();
-        hud->setPosition(player->getPosition().x);
+        hud->setPosition(player->getPosition().x,player->getPosition().y);
         hud->update(player);
     } else{
         if(bPaused)
@@ -292,9 +292,12 @@ void LevelOneState::updateDmgTriggers() {
         {
             deathGame.play();
             // Do damage
+            hud->takedDmg = true;
             player->takeDamage(1);
 
             std::cout << "Player damage detected!\n";
+        }else{
+            hud->takedDmg = false;
         }
     }
 }
@@ -306,7 +309,7 @@ void LevelOneState::killPlayerTriggers(){
             sf::sleep(sf::seconds(0.1f));
             deathGame.stop();
         }
-        player->takeDamage(player->getHP());
+        player->takeDamage(player->getMaxHP());
 
         std::cout << "Player killed!\n";
 
@@ -407,7 +410,12 @@ void LevelOneState::updateEntities(float dt) {
     // Update enemy collision with player
     for (auto & e : enemies) {
         if (player->checkForIntersection(e->getHitbox())) {
+            deathGame.play();
+            hud->takedDmg = true;
+
             player->takeDamage(1);
+        }else{
+            hud->takedDmg = false;
         }
     }
 }
