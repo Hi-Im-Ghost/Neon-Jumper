@@ -12,6 +12,9 @@
 #include "../UI/Button.h"
 #include "../modules/PlayerHUD.h"
 
+/**
+ * @class Każdy stan aplikacji dziedziczy po tej klasie
+ */
 class GameState {
 private:
 

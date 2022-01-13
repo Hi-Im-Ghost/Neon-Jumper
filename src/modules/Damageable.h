@@ -1,7 +1,9 @@
 #ifndef TREES_JSON_DAMAGEABLE_H
 #define TREES_JSON_DAMAGEABLE_H
 
-
+ /**
+  * @class Przedstawia obiekt, który może przyjąć obrażenia
+  */
 class Damageable {
 private:
     /// Aktualna ilość punktów życia obiektu

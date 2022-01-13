@@ -19,8 +19,8 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
     handleInput(dt);
     applyGravity(dt);
     handleCollision(allHitboxes);
-    moveFinal();
     animateMovement();
+    moveFinal();
 
     if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
         timeStart();

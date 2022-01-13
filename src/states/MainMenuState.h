@@ -15,6 +15,9 @@
 #include "LevelOneState.h"
 #include "../UI/Button.h"
 
+/**
+ * @class Stan aplikacji obsługujący menu główne
+ */
 class MainMenuState : public GameState {
 private:
     /// Tekstura tła menu

@@ -56,7 +56,6 @@ void Animated::setAnimValues(sf::Vector2i frameOrigin, sf::Vector2i frameSize, i
 
     _maxFrameNumber = frameCount;
     _startingX = frameOrigin.x;
-    _frameY = frameOrigin.y;
     frameIntervalTime = intervalTime;
     _bLooping = isLooping;
 }
