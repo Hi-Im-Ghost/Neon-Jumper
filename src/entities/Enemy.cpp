@@ -28,12 +28,10 @@ sf::Vector2f Enemy::getPosition() {
 
 void Enemy::moveHorizontal(float x) {
     if (movingRight) {
-        _sprite.setScale(-3, 3);
-        spriteOffset = _sprite.getTextureRect().width * 3;
+        _bIsFlipped = true;
         setPosition(getPosition().x + x, getPosition().y);
     } else {
-        _sprite.setScale(3, 3);
-        spriteOffset = 0;
+        _bIsFlipped = false;
         setPosition(getPosition().x - x, getPosition().y);
     }
 

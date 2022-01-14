@@ -43,6 +43,8 @@ protected:
     /// Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji
     void setAnimValues(sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping);
 
+    /// Określa czy sprite jest obrócony w drugą stronę
+    bool _bIsFlipped;
 public:
     /// Animuje przekazanego sprite-a z odpowiednią częstotliwością
     void animate(sf::Sprite& sprite, bool noWait = false);

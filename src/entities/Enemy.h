@@ -18,8 +18,6 @@ protected:
     sf::RectangleShape _path;
     /// Określa kierunek ruchu przeciwnika
     bool movingRight = false;
-    /// Przesunięcie sprite-u względem pozycji przeciwnika
-    int spriteOffset;
 
     /// Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury
     void initSprite(const std::string& filePath, sf::IntRect frame);

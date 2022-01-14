@@ -9,7 +9,7 @@ Slime::Slime(float x, float y, float pathPointA, float pathPointB, bool moveRigh
 }
 
 void Slime::update(float deltaSeconds) {
-    _sprite.setPosition(getPosition().x + spriteOffset, getPosition().y);
+    _sprite.setPosition(getPosition().x, getPosition().y);
     animate(_sprite);
 
     moveHorizontal(100 * deltaSeconds); //30

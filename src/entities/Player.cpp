@@ -13,14 +13,14 @@ Player::Player(float x, float y) {
 }
 
 void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) {
-    _sprite.setPosition(_hitbox.getPosition() + _spriteOffset);
+    _sprite.setPosition(_hitbox.getPosition());
 
     updateInvincibilityTimer(dt);
     handleInput(dt);
     applyGravity(dt);
     handleCollision(allHitboxes);
-    animateMovement();
     moveFinal();
+    //animateMovement();
 
     if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
         timeStart();
@@ -36,20 +36,20 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
 }
 
 void Player::render(sf::RenderTarget &window) {
+    animateMovement();
     animate(_sprite);
     window.draw(_sprite);
     //window.draw(_hitbox);
 }
 
 void Player::initValues() {
-    _acceleration = 6.0f;
-    _maxSpeedX = 3.0f;
-    _maxSpeedY = 10.0f;
-    _jumpForce = 2700.0f;
-    _gravity = 3.0f;
-    _gravityDelta = 0.0f;
+    _acceleration = 8.0f;
+    _maxSpeedX = 5.0f;
+    _maxSpeedY = 20.0f;
+    _jumpForce = 2.3f;
+    _gravity = 7.0f;
+    _gravityDelta = 5.0f;
     _bIsGrounded = false;
-    _spriteOffset = {0,0};
     _bTimeStopped = false;
     tsValue = 0;
     tsFillRate = 0.1;
@@ -111,7 +111,7 @@ void Player::handleInput(float dt) {
     {
         if (_bIsGrounded)
             jump();
-        _gravityDelta = -0.5f;
+        _gravityDelta = -2.5f;
     } else
         _gravityDelta = 0.0f;
 
@@ -212,13 +212,11 @@ bool Player::checkForIntersection(sf::RectangleShape& shape) {
 void Player::animateMovement() {
     if (_velocity.x > 0) {
         // FACING RIGHT
-        _sprite.setScale(4, 4);
-        _spriteOffset = {0,0};
+        _bIsFlipped = false;
     }
     else if (_velocity.x < 0) {
         // FACING LEFT
-        _sprite.setScale(-4,4);
-        _spriteOffset = {36, 0};
+        _bIsFlipped = true;
     }
 
     if (_bIsGrounded) {

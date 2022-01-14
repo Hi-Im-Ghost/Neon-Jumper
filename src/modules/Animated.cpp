@@ -38,9 +38,9 @@ void Animated::animate(sf::Sprite &sprite, bool noWait) {
 void Animated::setFrame(sf::Sprite& sprite) {
     /// Zmienia teksturę źródłową sprite na taką o zadanych współrzędnych
     sprite.setTextureRect(sf::IntRect(
-            _frameOrigin.x,
+            _frameOrigin.x + ( (_bIsFlipped) ? _frameSize.x : 0 ),
             _frameOrigin.y,
-            _frameSize.x,
+            _frameSize.x * ( (_bIsFlipped) ? -1 : 1 ),
             _frameSize.y)
     );
     ///przesuwa ramkę o jedną klatkę do przodu

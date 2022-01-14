@@ -26,8 +26,6 @@ private:
     sf::RectangleShape _hitbox;
     /// Prędkość gracza. Dodaje się ją do poprzedniej prędkości symulując ruch
     sf::Vector2f _velocity;
-    /// Przesunięcie sprite względem pozycji gracza
-    sf::Vector2f _spriteOffset;
 
     /// Przyspieszenie gracza podczas poruszania się
     float _acceleration;
