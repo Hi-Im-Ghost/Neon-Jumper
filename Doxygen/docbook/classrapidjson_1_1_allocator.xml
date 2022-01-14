@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classrapidjson_1_1_allocator" xml:lang="en-US">
+<title>Allocator Class Reference</title>
+<indexterm><primary>Allocator</primary></indexterm>
+<para>
+
+<para>Concept for allocating, resizing and freeing memory block. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;allocators.h&gt;</computeroutput>
+</para>
+<section>
+<title>Detailed Description</title>
+
+<para>Concept for allocating, resizing and freeing memory block. </para>
+
+
+
+<para>Note that <link linkend="_allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf">Malloc()</link> and <link linkend="_allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223">Realloc()</link> are non-static but <link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Free()</link> is static.</para>
+
+<para>So if an allocator need to support <link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Free()</link>, it needs to put its pointer in the header of memory block.</para>
+
+<para><literallayout><computeroutput><emphasis role="keyword">concept&#32;</emphasis><link linkend="_classrapidjson_1_1_allocator">Allocator</link>&#32;{
+&#32;&#32;&#32;&#32;static&#32;const&#32;bool&#32;kNeedFree;&#32;&#32;&#32;&#32;
+
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Allocate&#32;a&#32;memory&#32;block.</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\param&#32;size&#32;of&#32;the&#32;memory&#32;block&#32;in&#32;bytes.</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\returns&#32;pointer&#32;to&#32;the&#32;memory&#32;block.</emphasis>
+&#32;&#32;&#32;&#32;void*&#32;<link linkend="_allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf">Malloc</link>(size_t&#32;size);
+
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Resize&#32;a&#32;memory&#32;block.</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\param&#32;originalPtr&#32;The&#32;pointer&#32;to&#32;current&#32;memory&#32;block.&#32;Null&#32;pointer&#32;is&#32;permitted.</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\param&#32;originalSize&#32;The&#32;current&#32;size&#32;in&#32;bytes.&#32;(Design&#32;issue:&#32;since&#32;some&#32;allocator&#32;may&#32;not&#32;book-keep&#32;this,&#32;explicitly&#32;pass&#32;to&#32;it&#32;can&#32;save&#32;memory.)</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\param&#32;newSize&#32;the&#32;new&#32;size&#32;in&#32;bytes.</emphasis>
+&#32;&#32;&#32;&#32;void*&#32;<link linkend="_allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223">Realloc</link>(void*&#32;originalPtr,&#32;size_t&#32;originalSize,&#32;size_t&#32;newSize);
+
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Free&#32;a&#32;memory&#32;block.</emphasis>
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;\param&#32;pointer&#32;to&#32;the&#32;memory&#32;block.&#32;Null&#32;pointer&#32;is&#32;permitted.</emphasis>
+&#32;&#32;&#32;&#32;static&#32;void&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Free</link>(void&#32;*ptr);
+};
+</computeroutput></literallayout> </para>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/rapidjson/include/rapidjson/<link linkend="_allocators_8h">allocators.h</link></section>
+</section>

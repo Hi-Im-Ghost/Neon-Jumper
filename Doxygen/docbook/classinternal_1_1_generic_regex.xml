@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classinternal_1_1_generic_regex" xml:lang="en-US">
+<title>internal::GenericRegex&lt; Encoding, Allocator &gt; Class Template Reference</title>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary></indexterm>
+<para>
+
+<para>Regular expression engine with subset of ECMAscript grammar. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;regex.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef <link linkend="_classrapidjson_1_1_encoding">Encoding</link> <link linkend="_classinternal_1_1_generic_regex_1a8d0eb2f6a71868b2a8f03382b7836d30">EncodingType</link></para>
+</listitem>
+            <listitem><para>typedef Encoding::Ch <link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classinternal_1_1_generic_regex_1a35c3a49bc4545a991ab039858227df0f">GenericRegex</link> (const <link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link> *<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *allocator=0)</para>
+</listitem>
+            <listitem><para><link linkend="_classinternal_1_1_generic_regex_1a6a4956c0391bccbf8580b2e047d5bc35">~GenericRegex</link> ()</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8">IsValid</link> () const</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Friends    </title>
+        <itemizedlist>
+            <listitem><para>template&lt;typename , typename &gt; </para><para>class <link linkend="_classinternal_1_1_generic_regex_1a919008cc046ab9f1c09609f1fc143986">GenericRegexSearch</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link> = CrtAllocator&gt;
+class internal::GenericRegex&lt; Encoding, Allocator &gt;</title></simplesect>
+
+<para>Regular expression engine with subset of ECMAscript grammar. </para>
+
+
+
+<para>Supported regular expression syntax:<itemizedlist>
+<listitem>
+<para><computeroutput>ab</computeroutput> Concatenation</para>
+</listitem><listitem>
+<para><computeroutput>a|b</computeroutput> Alternation</para>
+</listitem><listitem>
+<para><computeroutput>a</computeroutput>? Zero or one</para>
+</listitem><listitem>
+<para><computeroutput>a*</computeroutput> Zero or more</para>
+</listitem><listitem>
+<para><computeroutput>a+</computeroutput> One or more</para>
+</listitem><listitem>
+<para><computeroutput>a{3}</computeroutput> Exactly 3 times</para>
+</listitem><listitem>
+<para><computeroutput>a{3</computeroutput>,} At least 3 times</para>
+</listitem><listitem>
+<para><computeroutput>a{3</computeroutput>,5} 3 to 5 times</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>(ab) Grouping</para>
+</listitem><listitem>
+<para><computeroutput>^a</computeroutput> At the beginning</para>
+</listitem><listitem>
+<para><computeroutput>a$</computeroutput> At the end</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>. Any character</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[abc] Character classes</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[a-c] Character class range</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[a-z0-9_] Character class combination</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[^abc] Negated character classes</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[^a-c] Negated character class range</para>
+</listitem><listitem>
+<para><computeroutput></computeroutput>[<emphasis role="bold"></emphasis>] Backspace (U+0008)</para>
+</listitem><listitem>
+<para><computeroutput>\</computeroutput>| \\ ... Escape characters</para>
+</listitem><listitem>
+<para><computeroutput>\f</computeroutput> Form feed (U+000C)</para>
+</listitem><listitem>
+<para><computeroutput>\n</computeroutput> Line feed (U+000A)</para>
+</listitem><listitem>
+<para><computeroutput>\r</computeroutput> Carriage return (U+000D)</para>
+</listitem><listitem>
+<para><computeroutput>\t</computeroutput> Tab (U+0009)</para>
+</listitem><listitem>
+<para><computeroutput>\v</computeroutput> Vertical tab (U+000B)</para>
+</listitem></itemizedlist>
+</para>
+
+<para><note><title>Note</title>
+
+<para>This is a Thompson NFA engine, implemented with reference to Cox, Russ. &quot;Regular Expression Matching Can Be Simple And Fast (but is slow in Java, Perl, PHP, Python, Ruby,...).&quot;, <link xlink:href="https://swtch.com/~rsc/regexp/regexp1.html">https://swtch.com/~rsc/regexp/regexp1.html</link> </para>
+</note>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef Encoding::Ch <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Ch</computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a8d0eb2f6a71868b2a8f03382b7836d30"/><section>
+    <title>EncodingType</title>
+<indexterm><primary>EncodingType</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>EncodingType</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_classrapidjson_1_1_encoding">Encoding</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::EncodingType</computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a35c3a49bc4545a991ab039858227df0f"/><section>
+    <title>GenericRegex()</title>
+<indexterm><primary>GenericRegex</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GenericRegex</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GenericRegex (const <link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link> * source, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a6a4956c0391bccbf8580b2e047d5bc35"/><section>
+    <title>~GenericRegex()</title>
+<indexterm><primary>~GenericRegex</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>~GenericRegex</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::~<link linkend="_classinternal_1_1_generic_regex">GenericRegex</link> ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8"/><section>
+    <title>IsValid()</title>
+<indexterm><primary>IsValid</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>IsValid</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::IsValid ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Friends And Related Function Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a919008cc046ab9f1c09609f1fc143986"/><section>
+    <title>GenericRegexSearch</title>
+<indexterm><primary>GenericRegexSearch</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GenericRegexSearch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename , typename &gt; </computeroutput><para><computeroutput>friend class <link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link><computeroutput>[friend]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/rapidjson/include/rapidjson/internal/<link linkend="_regex_8h">regex.h</link></section>
+</section>

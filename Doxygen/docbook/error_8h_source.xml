@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_error_8h_source" xml:lang="en-US">
+<title>error.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/error/error.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ERROR_ERROR_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ERROR_ERROR_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;../rapidjson.h&quot;</emphasis>
+19 
+20 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+21 RAPIDJSON_DIAG_PUSH
+22 RAPIDJSON_DIAG_OFF(padded)
+23 <emphasis role="preprocessor">#endif</emphasis>
+24 
+30 <emphasis role="comment">//&#32;RAPIDJSON_ERROR_CHARTYPE</emphasis>
+31 
+33 
+38 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ERROR_CHARTYPE</emphasis>
+39 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ERROR_CHARTYPE&#32;char</emphasis>
+40 <emphasis role="preprocessor">#endif</emphasis>
+41 
+43 <emphasis role="comment">//&#32;RAPIDJSON_ERROR_STRING</emphasis>
+44 
+46 
+51 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ERROR_STRING</emphasis>
+52 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ERROR_STRING(x)&#32;x</emphasis>
+53 <emphasis role="preprocessor">#endif</emphasis>
+54 
+55 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+56 
+58 <emphasis role="comment">//&#32;ParseErrorCode</emphasis>
+59 
+61 
+64 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;{
+65 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+66 
+67 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a">kParseErrorDocumentEmpty</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+68 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5">kParseErrorDocumentRootNotSingular</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+69 
+70 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9">kParseErrorValueInvalid</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+71 
+72 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3">kParseErrorObjectMissName</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+73 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017">kParseErrorObjectMissColon</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+74 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a34f70d7ed2fa121954f5fc5b5113d05f">kParseErrorObjectMissCommaOrCurlyBracket</link>,&#32;&#32;&#32;
+75 
+76 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7abfdd2bd90134fec4fe6a22762d16a5f5">kParseErrorArrayMissCommaOrSquareBracket</link>,&#32;&#32;&#32;
+77 
+78 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7afc65ea941a0a26812f0f258d2429e5d2">kParseErrorStringUnicodeEscapeInvalidHex</link>,&#32;&#32;&#32;
+79 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ad9fced6763a06435ca448626c74e5c72">kParseErrorStringUnicodeSurrogateInvalid</link>,&#32;&#32;&#32;
+80 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a98bb3f3b1e12fdb7f278b9fa4029306f">kParseErrorStringEscapeInvalid</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+81 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6369e5b4e4922720cbc45c5941efc4af">kParseErrorStringMissQuotationMark</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+82 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456">kParseErrorStringInvalidEncoding</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+83 
+84 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae52aaa70fde46e4cc422420309700b82">kParseErrorNumberTooBig</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+85 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a08a2cc2b4cacfba1673ed536eee229ce">kParseErrorNumberMissFraction</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+86 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a82cdbd740e22b819a70d05e585c2a442">kParseErrorNumberMissExponent</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+87 
+88 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6">kParseErrorTermination</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+89 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2bec6b26bddd3e093a37fc0d6399e0be">kParseErrorUnspecificSyntaxError</link>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+90 };
+91 
+93 
+106 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_parse_result">ParseResult</link>&#32;{
+108 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;bool&#32;(<link linkend="_struct_parse_result">ParseResult</link>::*<link linkend="_struct_parse_result_1a991cd2759ba802bdb5e960d40890e874">BooleanType</link>)()&#32;<emphasis role="keyword">const</emphasis>;
+109 <emphasis role="keyword">public</emphasis>:
+111 &#32;&#32;&#32;&#32;<link linkend="_struct_parse_result_1acd4a266f815bec59fa27f64f1923fe9e">ParseResult</link>()&#32;:&#32;code_(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>),&#32;offset_(0)&#32;{}
+113 &#32;&#32;&#32;&#32;<link linkend="_struct_parse_result_1a38ca49a53e80633d0864ad5026adaf84">ParseResult</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset)&#32;:&#32;code_(code),&#32;offset_(offset)&#32;{}
+114 
+116 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;<link linkend="_struct_parse_result_1a2aae3c2f42b31cc2409ee1e03bc4852e">Code</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;code_;&#32;}
+118 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_parse_result_1afbe762766ac21b2aae266105f1dfa643">Offset</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;offset_;&#32;}
+119 
+121 &#32;&#32;&#32;&#32;<emphasis role="keyword">operator</emphasis>&#32;<link linkend="_struct_parse_result_1a991cd2759ba802bdb5e960d40890e874">BooleanType</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;!<link linkend="_struct_parse_result_1adfe0ef5b994e82f8aa9ebf0b30c924b1">IsError</link>()&#32;?&#32;&amp;<link linkend="_struct_parse_result_1adfe0ef5b994e82f8aa9ebf0b30c924b1">ParseResult::IsError</link>&#32;:&#32;NULL;&#32;}
+123 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1adfe0ef5b994e82f8aa9ebf0b30c924b1">IsError</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;code_&#32;!=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>;&#32;}
+124 
+125 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1a4d98465a5dc6055e367a7ea7089fc73d">operator==</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_parse_result">ParseResult</link>&amp;&#32;that)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;code_&#32;==&#32;that.code_;&#32;}
+126 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1a6de18a7e43013b2defc51d892c2cf90f">operator==</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;code_&#32;==&#32;code;&#32;}
+127 &#32;&#32;&#32;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1a58c9982e833d1c74686506ac7449200c">operator==</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code,&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_parse_result">ParseResult</link>&#32;&amp;&#32;err)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;code&#32;==&#32;err.code_;&#32;}
+128 
+129 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1aa1fcc912cede0ef0526e0cbfcb14e4c2">operator!=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_parse_result">ParseResult</link>&amp;&#32;that)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;!(*<emphasis role="keyword">this</emphasis>&#32;==&#32;that);&#32;}
+130 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1afbe78dd07fd1bc09adb1609dda028ee0">operator!=</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;!(*<emphasis role="keyword">this</emphasis>&#32;==&#32;code);&#32;}
+131 &#32;&#32;&#32;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_parse_result_1a0498aebcfdd3d4a5dcb989ee29b93d4d">operator!=</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code,&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_parse_result">ParseResult</link>&#32;&amp;&#32;err)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;err&#32;!=&#32;code;&#32;}
+132 
+134 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_parse_result_1a88b6d44f052a19e6436ae6aadc2c40b4">Clear</link>()&#32;{&#32;<link linkend="_struct_parse_result_1aa81b4a7b776b77216cb752385203a8c1">Set</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>);&#32;}
+136 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_parse_result_1aa81b4a7b776b77216cb752385203a8c1">Set</link>(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset&#32;=&#32;0)&#32;{&#32;code_&#32;=&#32;code;&#32;offset_&#32;=&#32;offset;&#32;}
+137 
+138 <emphasis role="keyword">private</emphasis>:
+139 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>&#32;code_;
+140 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset_;
+141 };
+142 
+144 
+153 <emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>*&#32;(*GetParseErrorFunc)(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>);
+154 
+156 <emphasis role="comment">//&#32;ValidateErrorCode</emphasis>
+157 
+159 
+162 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link>&#32;{
+163 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa626466aeef9cacbac149e4ae57d5fda2">kValidateErrors</link>&#32;&#32;&#32;&#32;=&#32;-1,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+164 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aac15ca121db8911126960c0672dfe2a2e">kValidateErrorNone</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+165 
+166 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aab8cf6f0be86047d0bf345f25dac31f4c">kValidateErrorMultipleOf</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+167 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa933fe947a713d741c3dcdcd7cae96b35">kValidateErrorMaximum</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+168 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3fca29f33702d8d98135b849c5f05f00">kValidateErrorExclusiveMaximum</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+169 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaa5f0cf3faa2e08c359cfcd6d151d76e9">kValidateErrorMinimum</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+170 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1722fc952e01a7a858d954c08e382d65">kValidateErrorExclusiveMinimum</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+171 
+172 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa6825de2427572de01bd121c9fffcee76">kValidateErrorMaxLength</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+173 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa58e6e01eef18ea0af4763abd84128790">kValidateErrorMinLength</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+174 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa86bde2af1a18d73a533ba8e2f5971879">kValidateErrorPattern</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+175 
+176 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa9acbcf73fe6a65bd23108a2dbc945cff">kValidateErrorMaxItems</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+177 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aad31b3292fb68a14016514736b076200c">kValidateErrorMinItems</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+178 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa35159c760856953cbd62258140d8d498">kValidateErrorUniqueItems</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+179 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa17861cca8a0ab2a0685f3b7804f67303">kValidateErrorAdditionalItems</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+180 
+181 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa179693cbb5ea15f0242e37588e99edf6">kValidateErrorMaxProperties</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+182 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa017c1ccb7febfaff42115fc256753fb6">kValidateErrorMinProperties</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+183 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2dc93a549f16b70911e6399c61a1aec4">kValidateErrorRequired</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+184 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aae02b299a3f5db48400e7c1987201d2ca">kValidateErrorAdditionalProperties</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+185 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaecdd1b884cbacca0213b36def4e1feaf">kValidateErrorPatternProperties</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+186 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2f81ab754a29330709c24110a2e895c8">kValidateErrorDependencies</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+187 
+188 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3c12e9cbc8a479b77776ceccbda4c289">kValidateErrorEnum</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+189 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa5504bec97bd2ef15efac9ff5b0a6e8fa">kValidateErrorType</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+190 
+191 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa56466697ca410e5ddc2c7fabe11f3132">kValidateErrorOneOf</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+192 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1bbc2293748b2e80415c77c7a6a069f9">kValidateErrorOneOfMatch</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+193 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaef48f9db2382e3308b823f078c73bce4">kValidateErrorAllOf</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+194 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa7b821605f3eb4ec77e2c42204b3957cf">kValidateErrorAnyOf</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+195 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aadd079998cffcae99da28675a5742327d">kValidateErrorNot</link>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+196 };
+197 
+199 
+208 <emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>*&#32;(*GetValidateErrorFunc)(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link>);
+209 
+210 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+211 
+212 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+213 RAPIDJSON_DIAG_POP
+214 <emphasis role="preprocessor">#endif</emphasis>
+215 
+216 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ERROR_ERROR_H_</emphasis>
+</programlisting></section>

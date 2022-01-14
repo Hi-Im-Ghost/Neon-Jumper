@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_readme_zh_cn" kind="page">
+    <compoundname>md_src_rapidjson_readme_zh_cn</compoundname>
+    <title>readme.zh-cn</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><image type="html" name="doc/logo/rapidjson.png" alt="RapidJSON logo" inline="yes"></image>
+</para>
+<para><image type="html" name="https://img.shields.io/badge/release-v1.1.0-blue.svg" alt="Release version" inline="yes"></image>
+</para>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md140">
+<title>高效的 C++ JSON 解析／生成器，提供 SAX 及 DOM 风格 API</title>
+<para>Tencent is pleased to support the open source community by making RapidJSON available.</para>
+<para>Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.</para>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/Tencent/rapidjson/">RapidJSON GitHub</ulink></para>
+</listitem><listitem><para>RapidJSON 文档<itemizedlist>
+<listitem><para><ulink url="http://rapidjson.org/">English</ulink></para>
+</listitem><listitem><para><ulink url="http://rapidjson.org/zh-cn/">简体中文</ulink></para>
+</listitem><listitem><para><ulink url="https://www.gitbook.com/book/miloyip/rapidjson/details/zh-cn">GitBook</ulink> 可下载 PDF/EPUB/MOBI，但不含 API 参考手册。</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md141">
+<title>Build 状态</title>
+<para><table rows="2" cols="3"><row>
+<entry thead="yes" align='center'><para><ulink url="https://travis-ci.org/Tencent/rapidjson">Linux</ulink>   </para>
+</entry><entry thead="yes" align='center'><para><ulink url="https://ci.appveyor.com/project/miloyip/rapidjson-0fdqj/branch/master">Windows</ulink>   </para>
+</entry><entry thead="yes" align='center'><para><ulink url="https://coveralls.io/r/Tencent/rapidjson?branch=master">Coveralls</ulink>    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para><image type="html" name="https://travis-ci.org/Tencent/rapidjson.svg?branch=master" alt="lin-badge" inline="yes"></image>
+   </para>
+</entry><entry thead="no" align='center'><para><image type="html" name="https://ci.appveyor.com/api/projects/status/l6qulgqahcayidrf/branch/master?svg=true" alt="win-badge" inline="yes"></image>
+   </para>
+</entry><entry thead="no" align='center'><para><image type="html" name="https://coveralls.io/repos/Tencent/rapidjson/badge.svg?branch=master" alt="cov-badge" inline="yes"></image>
+   </para>
+</entry></row>
+</table>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md142">
+<title>简介</title>
+<para>RapidJSON 是一个 C++ 的 JSON 解析器及生成器。它的灵感来自 <ulink url="http://rapidxml.sourceforge.net/">RapidXml</ulink>。</para>
+<para><itemizedlist>
+<listitem><para>RapidJSON 小而全。它同时支持 SAX 和 DOM 风格的 API。SAX 解析器只有约 500 行代码。</para>
+</listitem><listitem><para>RapidJSON 快。它的性能可与 <computeroutput>strlen()</computeroutput> 相比。可支持 SSE2/SSE4.2 加速。</para>
+</listitem><listitem><para>RapidJSON 独立。它不依赖于 BOOST 等外部库。它甚至不依赖于 STL。</para>
+</listitem><listitem><para>RapidJSON 对内存友好。在大部分 32/64 位机器上，每个 JSON 值只占 16 字节（除字符串外）。它预设使用一个快速的内存分配器，令分析器可以紧凑地分配内存。</para>
+</listitem><listitem><para>RapidJSON 对 Unicode 友好。它支持 UTF-8、UTF-16、UTF-32 (大端序／小端序)，并内部支持这些编码的检测、校验及转码。例如，RapidJSON 可以在分析一个 UTF-8 文件至 DOM 时，把当中的 JSON 字符串转码至 UTF-16。它也支持代理对（surrogate pair）及 <computeroutput>&quot;\u0000&quot;</computeroutput>（空字符）。</para>
+</listitem></itemizedlist>
+</para>
+<para>在 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/src/rapidjson/doc/features.zh-cn.md &quot;这里&quot; 可读取更多特点。</para>
+<para>JSON（JavaScript Object Notation）是一个轻量的数据交换格式。RapidJSON 应该完全遵从 RFC7159/ECMA-404，并支持可选的放宽语法。 关于 JSON 的更多信息可参考：<itemizedlist>
+<listitem><para><ulink url="http://json.org/">Introducing JSON</ulink></para>
+</listitem><listitem><para><ulink url="https://tools.ietf.org/html/rfc7159">RFC7159: The JavaScript Object Notation (JSON) Data Interchange Format</ulink></para>
+</listitem><listitem><para><ulink url="https://www.ecma-international.org/publications/standards/Ecma-404.htm">Standard ECMA-404: The JSON Data Interchange Format</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md143">
+<title>v1.1 中的亮点 (2016-8-25)</title>
+<para><itemizedlist>
+<listitem><para>加入 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/src/rapidjson/doc/pointer.zh-cn.md &quot;JSON Pointer&quot; 功能，可更简单地访问及更改 DOM。</para>
+</listitem><listitem><para>加入 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/src/rapidjson/doc/schema.zh-cn.md &quot;JSON Schema&quot; 功能，可在解析或生成 JSON 时进行校验。</para>
+</listitem><listitem><para>加入 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/src/rapidjson/doc/dom.zh-cn.md &quot;放宽的 JSON 语法&quot; （注释、尾随逗号、NaN/Infinity）</para>
+</listitem><listitem><para>使用 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/src/rapidjson/doc/tutorial.zh-cn.md &quot;C++11 范围 for 循环&quot; 去遍历 array 和 object。</para>
+</listitem><listitem><para>在 x86-64 架构下，缩减每个 <computeroutput>Value</computeroutput> 的内存开销从 24 字节至 16 字节。</para>
+</listitem></itemizedlist>
+</para>
+<para>其他改动请参考 C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <ref refid="_c_h_a_n_g_e_l_o_g_8md" kindref="compound">Jumper/src/rapidjson/CHANGELOG.md</ref> &quot;change log&quot;.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md144">
+<title>兼容性</title>
+<para>RapidJSON 是跨平台的。以下是一些曾测试的平台／编译器组合：<itemizedlist>
+<listitem><para>Visual C++ 2008/2010/2013 在 Windows (32/64-bit)</para>
+</listitem><listitem><para>GNU C++ 3.8.x 在 Cygwin</para>
+</listitem><listitem><para>Clang 3.4 在 Mac OS X (32/64-bit) 及 iOS</para>
+</listitem><listitem><para>Clang 3.4 在 Android NDK</para>
+</listitem></itemizedlist>
+</para>
+<para>用户也可以在他们的平台上生成及执行单元测试。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md145">
+<title>安装</title>
+<para>RapidJSON 是只有头文件的 C++ 库。只需把 <computeroutput>include/rapidjson</computeroutput> 目录复制至系统或项目的 include 目录中。</para>
+<para>RapidJSON 依赖于以下软件：<itemizedlist>
+<listitem><para><ulink url="https://cmake.org/">CMake</ulink> 作为通用生成工具</para>
+</listitem><listitem><para>(optional) <ulink url="http://www.doxygen.org">Doxygen</ulink> 用于生成文档</para>
+</listitem><listitem><para>(optional) <ulink url="https://github.com/google/googletest">googletest</ulink> 用于单元及性能测试</para>
+</listitem></itemizedlist>
+</para>
+<para>生成测试及例子的步骤：</para>
+<para><orderedlist>
+<listitem><para>执行 <computeroutput>git submodule update --init</computeroutput> 去获取 thirdparty submodules (google test)。</para>
+</listitem><listitem><para>在 rapidjson 目录下，建立一个 <computeroutput>build</computeroutput> 目录。</para>
+</listitem><listitem><para>在 <computeroutput>build</computeroutput> 目录下执行 <computeroutput>cmake ..</computeroutput> 命令以设置生成。Windows 用户可使用 cmake-gui 应用程序。</para>
+</listitem><listitem><para>在 Windows 下，编译生成在 build 目录中的 solution。在 Linux 下，于 build 目录运行 <computeroutput>make</computeroutput>。</para>
+</listitem></orderedlist>
+</para>
+<para>成功生成后，你会在 <computeroutput>bin</computeroutput> 的目录下找到编译后的测试及例子可执行文件。而生成的文档将位于 build 下的 <computeroutput>doc/html</computeroutput> 目录。要执行测试，请在 build 下执行 <computeroutput>make test</computeroutput> 或 <computeroutput>ctest</computeroutput>。使用 <computeroutput>ctest -V</computeroutput> 命令可获取详细的输出。</para>
+<para>我们也可以把程序库安装至全系统中，只要在具管理权限下从 build 目录执行 <computeroutput>make install</computeroutput> 命令。这样会按系统的偏好设置安装所有文件。当安装 RapidJSON 后，其他的 CMake 项目需要使用它时，可以通过在 <computeroutput>CMakeLists.txt</computeroutput> 加入一句 <computeroutput>find_package(RapidJSON)</computeroutput>。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_readme_zh_cn_1autotoc_md146">
+<title>用法一览</title>
+<para>此简单例子解析一个 JSON 字符串至一个 document (DOM)，对 DOM 作出简单修改，最终把 DOM 转换（stringify）至 JSON 字符串。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>rapidjson/example/simpledom/simpledom.cpp`</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="stringbuffer_8h" kindref="compound">rapidjson/stringbuffer.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="_c_make_c_compiler_id_8c_1a0ddf1224851353fc92bfbff6f499fa97" kindref="member">main</ref>()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1.<sp/>把<sp/>JSON<sp/>解析至<sp/>DOM。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>json<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;{\&quot;project\&quot;:\&quot;rapidjson\&quot;,\&quot;stars\&quot;:10}&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2.<sp/>利用<sp/>DOM<sp/>作出修改。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/>s<sp/>=<sp/>d[</highlight><highlight class="stringliteral">&quot;stars&quot;</highlight><highlight class="normal">];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>s.SetInt(s.GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3.<sp/>把<sp/>DOM<sp/>转换（stringify）成<sp/>JSON。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer&gt;</ref><sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Output<sp/>{&quot;project&quot;:&quot;rapidjson&quot;,&quot;stars&quot;:11}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::cout<sp/>&lt;&lt;<sp/>buffer.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>()<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>注意此例子并没有处理潜在错误。</para>
+<para>下图展示执行过程。</para>
+<para><image type="html" name="doc/diagram/simpledom.png" alt="simpledom" inline="yes"></image>
+</para>
+<para>还有许多 <ulink url="https://github.com/Tencent/rapidjson/tree/master/example">例子</ulink> 可供参考：</para>
+<para><itemizedlist>
+<listitem><para>DOM API<itemizedlist>
+<listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/tutorial/tutorial.cpp">tutorial</ulink>: DOM API 的基本使用方法。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>SAX API<itemizedlist>
+<listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/simplereader/simplereader.cpp">simplereader</ulink>: 使用 <computeroutput>Reader</computeroutput> 解析 JSON 时，打印所有 SAX 事件。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/condense/condense.cpp">condense</ulink>: 移除 JSON 中所有空白符的命令行工具。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp">pretty</ulink>: 为 JSON 加入缩进与换行的命令行工具，当中使用了 <computeroutput><ref refid="class_pretty_writer" kindref="compound">PrettyWriter</ref></computeroutput>。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/capitalize/capitalize.cpp">capitalize</ulink>: 把 JSON 中所有字符串改为大写的命令行工具。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/messagereader/messagereader.cpp">messagereader</ulink>: 使用 SAX API 去解析一个 JSON 报文。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/serialize/serialize.cpp">serialize</ulink>: 使用 SAX API 去序列化 C++ 对象，生成 JSON。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/jsonx/jsonx.cpp">jsonx</ulink>: 实现了一个 <computeroutput><ref refid="class_jsonx_writer" kindref="compound">JsonxWriter</ref></computeroutput>，它能把 SAX 事件写成 <ulink url="https://www-01.ibm.com/support/knowledgecenter/SS9H2Y_7.1.0/com.ibm.dp.doc/json_jsonx.html">JSONx</ulink>（一种 XML）格式。这个例子是把 JSON 输入转换成 JSONx 格式的命令行工具。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><ref refid="class_schema" kindref="compound">Schema</ref> API<itemizedlist>
+<listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/schemavalidator/schemavalidator.cpp">schemavalidator</ulink>: 使用 JSON <ref refid="class_schema" kindref="compound">Schema</ref> 去校验 JSON 的命令行工具。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>进阶<itemizedlist>
+<listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/prettyauto/prettyauto.cpp">prettyauto</ulink>: <ulink url="https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp">pretty</ulink> 的修改版本，可自动处理任何 UTF 编码的 JSON。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/parsebyparts/parsebyparts.cpp">parsebyparts</ulink>: 这例子中的 <computeroutput>AsyncDocumentParser</computeroutput> 类使用 C++ 线程来逐段解析 JSON。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/filterkey/filterkey.cpp">filterkey</ulink>: 移取使用者指定的键值的命令行工具。</para>
+</listitem><listitem><para><ulink url="https://github.com/Tencent/rapidjson/blob/master/example/filterkey/filterkey.cpp">filterkeydom</ulink>: 如上的工具，但展示如何使用生成器（generator）去填充一个 <computeroutput>Document</computeroutput>。 </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+    </detaileddescription>
+    <location file="src/rapidjson/readme.zh-cn.md"/>
+  </compounddef>
+</doxygen>

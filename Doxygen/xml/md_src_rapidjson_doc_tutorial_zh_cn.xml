@@ -1,0 +1,464 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_tutorial_zh_cn" kind="page">
+    <compoundname>md_src_rapidjson_doc_tutorial_zh_cn</compoundname>
+    <title>教程</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>本教程简介文件对象模型（Document Object Model, DOM）API。</para>
+<para>如 <ulink url="../readme.zh-cn.md#用法一览">用法一览</ulink> 中所示，可以解析一个 JSON 至 DOM，然后就可以轻松查询及修改 DOM，并最终转换回 JSON。</para>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1ValueDocument">
+<title>Value &amp; Document</title>
+<para>每个 JSON 值都储存为 <computeroutput>Value</computeroutput> 类，而 <computeroutput>Document</computeroutput> 类则表示整个 DOM，它存储了一个 DOM 树的根 <computeroutput>Value</computeroutput>。RapidJSON 的所有公开类型及函数都在 <computeroutput>rapidjson</computeroutput> 命名空间中。</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryValue">
+<title>Query Value</title>
+<para>在本节中，我们会使用到 <computeroutput><ref refid="tutorial_8cpp" kindref="compound">example/tutorial/tutorial.cpp</ref></computeroutput> 中的代码片段。</para>
+<para>假设我们用 C 语言的字符串储存一个 JSON（<computeroutput>const char* json</computeroutput>）： <programlisting filename=".js"><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;hello&quot;:<sp/>&quot;world&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;t&quot;:<sp/>true<sp/>,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;f&quot;:<sp/>false,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;n&quot;:<sp/>null,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;i&quot;:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;:<sp/>3.1416,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;a&quot;:<sp/>[1,<sp/>2,<sp/>3,<sp/>4]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>把它解析至一个 <computeroutput>Document</computeroutput>： <programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
+<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+</programlisting></para>
+<para>那么现在该 JSON 就会被解析至 <computeroutput>document</computeroutput> 中，成为一棵 *DOM 树 *:</para>
+<para><image type="html" name="diagram/tutorial.png" alt="教程中的 DOM" inline="yes"></image>
+</para>
+<para>自从 RFC 7159 作出更新，合法 JSON 文件的根可以是任何类型的 JSON 值。而在较早的 RFC 4627 中，根值只允许是 Object 或 Array。而在上述例子中，根是一个 Object。 <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.IsObject());</highlight></codeline>
+</programlisting></para>
+<para>让我们查询一下根 Object 中有没有 <computeroutput>&quot;hello&quot;</computeroutput> 成员。由于一个 <computeroutput>Value</computeroutput> 可包含不同类型的值，我们可能需要验证它的类型，并使用合适的 API 去获取其值。在此例中，<computeroutput>&quot;hello&quot;</computeroutput> 成员关联到一个 JSON String。 <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.HasMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].IsString());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].GetString());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">world</highlight></codeline>
+</programlisting></para>
+<para>JSON True/False 值是以 <computeroutput>bool</computeroutput> 表示的。 <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;t&quot;</highlight><highlight class="normal">].IsBool());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;t<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;t&quot;</highlight><highlight class="normal">].GetBool()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;true&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;false&quot;</highlight><highlight class="normal">);</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">true</highlight></codeline>
+</programlisting></para>
+<para>JSON Null 值可用 <computeroutput>IsNull()</computeroutput> 查询。 <programlisting filename=".cpp"><codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;n<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;n&quot;</highlight><highlight class="normal">].IsNull()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;null&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;?&quot;</highlight><highlight class="normal">);</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">null</highlight></codeline>
+</programlisting></para>
+<para>JSON Number 类型表示所有数值。然而，C++ 需要使用更专门的类型。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].IsNumber());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>在此情况下，IsUint()/IsInt64()/IsUint64()<sp/>也会返回<sp/>true</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].IsInt());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;i<sp/>=<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].GetInt());</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>另一种用法：<sp/>(int)document[&quot;i&quot;]</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].IsNumber());</highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].IsDouble());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;pi<sp/>=<sp/>%g\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].GetDouble());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">i<sp/>=<sp/>123</highlight></codeline>
+<codeline><highlight class="normal">pi<sp/>=<sp/>3.1416</highlight></codeline>
+</programlisting></para>
+<para>JSON Array 包含一些元素。 <programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>使用引用来连续访问，方便之余还更高效。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>document[</highlight><highlight class="stringliteral">&quot;a&quot;</highlight><highlight class="normal">];</highlight></codeline>
+<codeline><highlight class="normal">assert(<ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.IsArray());</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Size();<sp/>i++)<sp/></highlight><highlight class="comment">//<sp/>使用<sp/>SizeType<sp/>而不是<sp/>size_t</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;a[%d]<sp/>=<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>i,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>[i].GetInt());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">a[0]<sp/>=<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">a[1]<sp/>=<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">a[2]<sp/>=<sp/>3</highlight></codeline>
+<codeline><highlight class="normal">a[3]<sp/>=<sp/>4</highlight></codeline>
+</programlisting></para>
+<para>注意，RapidJSON 并不自动转换各种 JSON 类型。例如，对一个 String 的 Value 调用 <computeroutput>GetInt()</computeroutput> 是非法的。在调试模式下，它会被断言失败。在发布模式下，其行为是未定义的。</para>
+<para>以下将会讨论有关查询各类型的细节。</para>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryArray">
+<title>Query Array</title>
+<para>缺省情况下，<computeroutput>SizeType</computeroutput> 是 <computeroutput>unsigned</computeroutput> 的 typedef。在多数系统中，Array 最多能存储 2^32-1 个元素。</para>
+<para>你可以用整数字面量访问元素，如 <computeroutput>a[0]</computeroutput>、<computeroutput>a[1]</computeroutput>、<computeroutput>a[2]</computeroutput>。</para>
+<para>Array 与 <computeroutput>std::vector</computeroutput> 相似，除了使用索引，也可使用迭代器来访问所有元素。 <programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_value" kindref="compound">Value::ConstValueIterator</ref><sp/>itr<sp/>=<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Begin();<sp/>itr<sp/>!=<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.End();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%d<sp/>&quot;</highlight><highlight class="normal">,<sp/>itr-&gt;GetInt());</highlight></codeline>
+</programlisting></para>
+<para>还有一些熟悉的查询函数：<itemizedlist>
+<listitem><para><computeroutput>SizeType Capacity() const</computeroutput></para>
+</listitem><listitem><para><computeroutput>bool Empty() const</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="md_src_rapidjson_doc_tutorial_zh_cn_1autotoc_md125">
+<title>范围 for 循环 (v1.1.0 中的新功能)</title>
+<para>当使用 C++11 功能时，你可使用范围 for 循环去访问 Array 内的所有元素。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>v<sp/>:<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.GetArray())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%d<sp/>&quot;</highlight><highlight class="normal">,<sp/>v.GetInt());</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryObject">
+<title>Query Object</title>
+<para>和 Array 相似，我们可以用迭代器去访问所有 Object 成员：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>kTypeNames[]<sp/>=<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="stringliteral">&quot;Null&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;False&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;True&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Object&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Array&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;String&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Number&quot;</highlight><highlight class="normal"><sp/>};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_member_iterator" kindref="compound">Value::ConstMemberIterator</ref><sp/>itr<sp/>=<sp/>document.MemberBegin();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>itr<sp/>!=<sp/>document.MemberEnd();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>itr-&gt;name.GetString(),<sp/>kTypeNames[itr-&gt;value.GetType()]);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>hello<sp/>is<sp/>String</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>t<sp/>is<sp/>True</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>f<sp/>is<sp/>False</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>n<sp/>is<sp/>Null</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>i<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>pi<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>a<sp/>is<sp/>Array</highlight></codeline>
+</programlisting></para>
+<para>注意，当 <computeroutput>operator[](const char*)</computeroutput> 找不到成员，它会断言失败。</para>
+<para>若我们不确定一个成员是否存在，便需要在调用 <computeroutput>operator[](const char*)</computeroutput> 前先调用 <computeroutput>HasMember()</computeroutput>。然而，这会导致两次查找。更好的做法是调用 <computeroutput>FindMember()</computeroutput>，它能同时检查成员是否存在并返回它的 Value：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_member_iterator" kindref="compound">Value::ConstMemberIterator</ref><sp/>itr<sp/>=<sp/>document.FindMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(itr<sp/>!=<sp/>document.MemberEnd())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%s\n&quot;</highlight><highlight class="normal">,<sp/>itr-&gt;value.GetString());</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_src_rapidjson_doc_tutorial_zh_cn_1autotoc_md126">
+<title>范围 for 循环 (v1.1.0 中的新功能)</title>
+<para>当使用 C++11 功能时，你可使用范围 for 循环去访问 Object 内的所有成员。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>m<sp/>:<sp/>document.GetObject())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>m.name.GetString(),<sp/>kTypeNames[m.value.GetType()]);</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryNumber">
+<title>Querying Number</title>
+<para>JSON 只提供一种数值类型──Number。数字可以是整数或实数。RFC 4627 规定数字的范围由解析器指定。</para>
+<para>由于 C++ 提供多种整数及浮点数类型，DOM 尝试尽量提供最广的范围及良好性能。</para>
+<para>当解析一个 Number 时, 它会被存储在 DOM 之中，成为下列其中一个类型：</para>
+<para><table rows="6" cols="2"><row>
+<entry thead="yes"><para>类型   </para>
+</entry><entry thead="yes"><para>描述    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned</computeroutput>   </para>
+</entry><entry thead="no"><para>32 位无号整数    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int</computeroutput>   </para>
+</entry><entry thead="no"><para>32 位有号整数    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>uint64_t</computeroutput>   </para>
+</entry><entry thead="no"><para>64 位无号整数    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int64_t</computeroutput>   </para>
+</entry><entry thead="no"><para>64 位有号整数    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>double</computeroutput>   </para>
+</entry><entry thead="no"><para>64 位双精度浮点数   </para>
+</entry></row>
+</table>
+</para>
+<para>当查询一个 Number 时, 你可以检查该数字是否能以目标类型来提取：</para>
+<para><table rows="7" cols="2"><row>
+<entry thead="yes"><para>查检   </para>
+</entry><entry thead="yes"><para>提取    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsNumber()</computeroutput>   </para>
+</entry><entry thead="no"><para>不适用    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsUint()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>unsigned GetUint()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsInt()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>int GetInt()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsUint64()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>uint64_t GetUint64()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsInt64()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>int64_t GetInt64()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsDouble()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>double GetDouble()</computeroutput>   </para>
+</entry></row>
+</table>
+</para>
+<para>注意，一个整数可能用几种类型来提取，而无需转换。例如，一个名为 <computeroutput>x</computeroutput> 的 Value 包含 123，那么 <computeroutput>x.IsInt() == x.IsUint() == x.IsInt64() == x.IsUint64() == true</computeroutput>。但如果一个名为 <computeroutput>y</computeroutput> 的 Value 包含 -3000000000，那么仅会令 <computeroutput>x.IsInt64() == true</computeroutput>。</para>
+<para>当要提取 Number 类型，<computeroutput>GetDouble()</computeroutput> 是会把内部整数的表示转换成 <computeroutput>double</computeroutput>。注意 <computeroutput>int</computeroutput> 和 <computeroutput>unsigned</computeroutput> 可以安全地转换至 <computeroutput>double</computeroutput>，但 <computeroutput>int64_t</computeroutput> 及 <computeroutput>uint64_t</computeroutput> 可能会丧失精度（因为 <computeroutput>double</computeroutput> 的尾数只有 52 位）。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryString">
+<title>Query String</title>
+<para>除了 <computeroutput>GetString()</computeroutput>，<computeroutput>Value</computeroutput> 类也有一个 <computeroutput>GetStringLength()</computeroutput>。这里会解释个中原因。</para>
+<para>根据 RFC 4627，JSON String 可包含 Unicode 字符 <computeroutput>U+0000</computeroutput>，在 JSON 中会表示为 <computeroutput>&quot;\u0000&quot;</computeroutput>。问题是，C/C++ 通常使用空字符结尾字符串（null-terminated string），这种字符串把 `<lsquo/>\0<rsquo/>` 作为结束符号。</para>
+<para>为了符合 RFC 4627，RapidJSON 支持包含 <computeroutput>U+0000</computeroutput> 的 String。若你需要处理这些 String，便可使用 <computeroutput>GetStringLength()</computeroutput> 去获得正确的字符串长度。</para>
+<para>例如，当解析以下的 JSON 至 <computeroutput>Document d</computeroutput> 之后：</para>
+<para><programlisting filename=".js"><codeline><highlight class="normal">{<sp/>&quot;s&quot;<sp/>:<sp/><sp/>&quot;a\u0000b&quot;<sp/>}</highlight></codeline>
+</programlisting> <computeroutput>&quot;a\u0000b&quot;</computeroutput> 值的正确长度应该是 3。但 <computeroutput>strlen()</computeroutput> 会返回 1。</para>
+<para><computeroutput>GetStringLength()</computeroutput> 也可以提高性能，因为用户可能需要调用 <computeroutput>strlen()</computeroutput> 去分配缓冲。</para>
+<para>此外，<computeroutput>std::string</computeroutput> 也支持这个构造函数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal">string(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>s,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>count);</highlight></codeline>
+</programlisting></para>
+<para>此构造函数接受字符串长度作为参数。它支持在字符串中存储空字符，也应该会有更好的性能。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1autotoc_md127">
+<title>比较两个 Value</title>
+<para>你可使用 <computeroutput>==</computeroutput> 及 <computeroutput>!=</computeroutput> 去比较两个 Value。当且仅当两个 Value 的类型及内容相同，它们才当作相等。你也可以比较 Value 和它的原生类型值。以下是一个例子。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">]<sp/>==<sp/>document[</highlight><highlight class="stringliteral">&quot;n&quot;</highlight><highlight class="normal">])<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>比较两个值</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">]<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;world&quot;</highlight><highlight class="normal">)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>与字符串字面量作比较</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">]<sp/>!=<sp/>123)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>与整数作比较</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">]<sp/>!=<sp/>3.14)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>与<sp/>double<sp/>作比较</highlight></codeline>
+</programlisting></para>
+<para>Array／Object 顺序以它们的元素／成员作比较。当且仅当它们的整个子树相等，它们才当作相等。</para>
+<para>注意，现时若一个 Object 含有重复命名的成员，它与任何 Object 作比较都总会返回 <computeroutput>false</computeroutput>。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1CreateModifyValues">
+<title>Create/Modify Values</title>
+<para>有多种方法去创建值。 当一个 DOM 树被创建或修改后，可使用 <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 再次存储为 JSON。</para>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ChangeValueType">
+<title>Change Value Type</title>
+<para>当使用默认构造函数创建一个 Value 或 Document，它的类型便会是 Null。要改变其类型，需调用 <computeroutput>SetXXX()</computeroutput> 或赋值操作，例如：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>Null</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.SetObject();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Null</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v.SetInt(10);</highlight></codeline>
+<codeline><highlight class="normal">v<sp/>=<sp/>10;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>简写，和上面的相同</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_src_rapidjson_doc_tutorial_zh_cn_1autotoc_md128">
+<title>构造函数的各个重载</title>
+<para>几个类型也有重载构造函数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(</highlight><highlight class="keyword">true</highlight><highlight class="normal">);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>调用<sp/>Value(bool)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>i(-123);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>调用<sp/>Value(int)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>u(123u);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>调用<sp/>Value(unsigned)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>d(1.5);<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>调用<sp/>Value(double)</highlight></codeline>
+</programlisting></para>
+<para>要重建空 Object 或 Array，可在默认构造函数后使用 <computeroutput>SetObject()</computeroutput>/<computeroutput>SetArray()</computeroutput>，或一次性使用 <computeroutput>Value(Type)</computeroutput>：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1MoveSemantics">
+<title>Move Semantics</title>
+<para>在设计 RapidJSON 时有一个非常特别的决定，就是 Value 赋值并不是把来源 Value 复制至目的 Value，而是把来源 Value 转移（move）至目的 Value。例如：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(123);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(456);</highlight></codeline>
+<codeline><highlight class="normal">b<sp/>=<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>a<sp/>变成<sp/>Null，b<sp/>变成数字<sp/>123。</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move1.png" alt="使用移动语义赋值。" inline="yes"></image>
+</para>
+<para>为什么？此语义有何优点？</para>
+<para>最简单的答案就是性能。对于固定大小的 JSON 类型（Number、True、False、Null），复制它们是简单快捷。然而，对于可变大小的 JSON 类型（String、Array、Object），复制它们会产生大量开销，而且这些开销常常不被察觉。尤其是当我们需要创建临时 Object，把它复制至另一变量，然后再析构它。</para>
+<para>例如，若使用正常 * 复制 * 语义：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contacts(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>把元素加进<sp/>contacts<sp/>数组。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(</highlight><highlight class="stringliteral">&quot;contacts&quot;</highlight><highlight class="normal">,<sp/>contacts,<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/><sp/></highlight><highlight class="comment">//<sp/>深度复制<sp/>contacts<sp/>（可能有大量内存分配）</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>析构<sp/>contacts。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move2.png" alt="复制语义产生大量的复制操作。" inline="yes"></image>
+</para>
+<para>那个 <computeroutput>o</computeroutput> Object 需要分配一个和 contacts 相同大小的缓冲区，对 conacts 做深度复制，并最终要析构 contacts。这样会产生大量无必要的内存分配／释放，以及内存复制。</para>
+<para>有一些方案可避免实质地复制这些数据，例如引用计数（reference counting）、垃圾回收（garbage collection, GC）。</para>
+<para>为了使 RapidJSON 简单及快速，我们选择了对赋值采用 * 转移 * 语义。这方法与 <computeroutput>std::auto_ptr</computeroutput> 相似，都是在赋值时转移拥有权。转移快得多简单得多，只需要析构原来的 Value，把来源 <computeroutput>memcpy()</computeroutput> 至目标，最后把来源设置为 Null 类型。</para>
+<para>因此，使用转移语义后，上面的例子变成：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contacts(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>adding<sp/>elements<sp/>to<sp/>contacts<sp/>array.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(</highlight><highlight class="stringliteral">&quot;contacts&quot;</highlight><highlight class="normal">,<sp/>contacts,<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/><sp/></highlight><highlight class="comment">//<sp/>只需<sp/>memcpy()<sp/>contacts<sp/>本身至新成员的<sp/>Value（16<sp/>字节）</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>contacts<sp/>在这里变成<sp/>Null。它的析构是平凡的。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move3.png" alt="转移语义不需复制。" inline="yes"></image>
+</para>
+<para>在 C++11 中这称为转移赋值操作（move assignment operator）。由于 RapidJSON 支持 C++03，它在赋值操作采用转移语义，其它修改型函数如 <computeroutput>AddMember()</computeroutput>, <computeroutput>PushBack()</computeroutput> 也采用转移语义。</para>
+<sect3 id="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues">
+<title>Move semantics and temporary values</title>
+<para>有时候，我们想直接构造一个 Value 并传递给一个“转移”函数（如 <computeroutput>PushBack()</computeroutput>、<computeroutput>AddMember()</computeroutput>）。由于临时对象是不能转换为正常的 Value 引用，我们加入了一个方便的 <computeroutput>Move()</computeroutput> 函数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/>allocator<sp/>=<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>a.PushBack(Value(42),<sp/>allocator);<sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>不能通过编译</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>().SetInt(42),<sp/>allocator);<sp/></highlight><highlight class="comment">//<sp/>fluent<sp/>API</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(42).Move(),<sp/>allocator);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>和上一行相同</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString">
+<title>Create String</title>
+<para>RapidJSON 提供两个 String 的存储策略。</para>
+<para><orderedlist>
+<listitem><para>copy-string: 分配缓冲区，然后把来源数据复制至它。</para>
+</listitem><listitem><para>const-string: 简单地储存字符串的指针。</para>
+</listitem></orderedlist>
+</para>
+<para>Copy-string 总是安全的，因为它拥有数据的克隆。Const-string 可用于存储字符串字面量，以及用于在 DOM 一节中将会提到的 in-situ 解析中。</para>
+<para>为了让用户自定义内存分配方式，当一个操作可能需要内存分配时，RapidJSON 要求用户传递一个 allocator 实例作为 API 参数。此设计避免了在每个 Value 存储 allocator（或 document）的指针。</para>
+<para>因此，当我们把一个 copy-string 赋值时, 调用含有 allocator 的 <computeroutput>SetString()</computeroutput> 重载函数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>author;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>buffer[10];</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>len<sp/>=<sp/>sprintf(buffer,<sp/></highlight><highlight class="stringliteral">&quot;%s<sp/>%s&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Milo&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Yip&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>动态创建的字符串。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">author.SetString(buffer,<sp/>len,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal">memset(buffer,<sp/>0,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(buffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>清空<sp/>buffer<sp/>后<sp/>author.GetString()<sp/>仍然包含<sp/>&quot;Milo<sp/>Yip&quot;</highlight></codeline>
+</programlisting></para>
+<para>在此例子中，我们使用 <computeroutput>Document</computeroutput> 实例的 allocator。这是使用 RapidJSON 时常用的惯用法。但你也可以用其他 allocator 实例。</para>
+<para>另外，上面的 <computeroutput>SetString()</computeroutput> 需要长度参数。这个 API 能处理含有空字符的字符串。另一个 <computeroutput>SetString()</computeroutput> 重载函数没有长度参数，它假设输入是空字符结尾的，并会调用类似 <computeroutput>strlen()</computeroutput> 的函数去获取长度。</para>
+<para>最后，对于字符串字面量或有安全生命周期的字符串，可以使用 const-string 版本的 <computeroutput>SetString()</computeroutput>，它没有 allocator 参数。对于字符串字面量（或字符数组常量），只需简单地传递字面量，又安全又高效：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>s;</highlight></codeline>
+<codeline><highlight class="normal">s.SetString(</highlight><highlight class="stringliteral">&quot;rapidjson&quot;</highlight><highlight class="normal">);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>可包含空字符，长度在编译期推导</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;rapidjson&quot;</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>上行的缩写</highlight></codeline>
+</programlisting></para>
+<para>对于字符指针，RapidJSON 需要作一个标记，代表它不复制也是安全的。可以使用 <computeroutput>StringRef</computeroutput> 函数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<sp/>cstr<sp/>=<sp/>getenv(</highlight><highlight class="stringliteral">&quot;USER&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>cstr_len<sp/>=<sp/>...;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>如果有长度</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>s;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>s.SetString(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>这不能通过编译</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s.SetString(<ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>可以，假设它的生命周期安全，并且是以空字符结尾的</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/><ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>上行的缩写</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s.SetString(<ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr,<sp/>cstr_len));</highlight><highlight class="comment">//<sp/>更快，可处理空字符</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/><ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr,<sp/>cstr_len);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>上行的缩写</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ModifyArray">
+<title>Modify Array</title>
+<para>Array 类型的 Value 提供与 <computeroutput>std::vector</computeroutput> 相似的 API。</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>Clear()</computeroutput></para>
+</listitem><listitem><para><computeroutput>Reserve(SizeType, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; PushBack(Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>template &lt;typename T&gt; <ref refid="class_generic_value" kindref="compound">GenericValue</ref>&amp; PushBack(T, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; PopBack()</computeroutput></para>
+</listitem><listitem><para><computeroutput>ValueIterator Erase(ConstValueIterator pos)</computeroutput></para>
+</listitem><listitem><para><computeroutput>ValueIterator Erase(ConstValueIterator first, ConstValueIterator last)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para>注意，<computeroutput>Reserve(...)</computeroutput> 及 <computeroutput>PushBack(...)</computeroutput> 可能会为数组元素分配内存，所以需要一个 allocator。</para>
+<para>以下是 <computeroutput>PushBack()</computeroutput> 的例子：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/>allocator<sp/>=<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>5;<sp/>i<sp/>&lt;=<sp/>10;<sp/>i++)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(i,<sp/>allocator);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>可能需要调用<sp/>realloc()<sp/>所以需要<sp/>allocator</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>流畅接口（Fluent<sp/>interface）</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(</highlight><highlight class="stringliteral">&quot;Lua&quot;</highlight><highlight class="normal">,<sp/>allocator).PushBack(</highlight><highlight class="stringliteral">&quot;Mio&quot;</highlight><highlight class="normal">,<sp/>allocator);</highlight></codeline>
+</programlisting></para>
+<para>与 STL 不一样的是，<computeroutput>PushBack()</computeroutput>/<computeroutput>PopBack()</computeroutput> 返回 Array 本身的引用。这称为流畅接口（_fluent interface_）。</para>
+<para>如果你想在 Array 中加入一个非常量字符串，或是一个没有足够生命周期的字符串（见 <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString" kindref="member">Create String</ref>），你需要使用 copy-string API 去创建一个 String。为了避免加入中间变量，可以就地使用一个 <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues" kindref="member">临时值</ref>：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>就地<sp/>Value<sp/>参数</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(</highlight><highlight class="stringliteral">&quot;copy&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>()).Move(),<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>显式<sp/>Value<sp/>参数</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>val(</highlight><highlight class="stringliteral">&quot;key&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(val,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ModifyObject">
+<title>Modify Object</title>
+<para>Object 是键值对的集合。每个键必须为 String。要修改 Object，方法是增加或移除成员。以下的 API 用来增加成员：</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>Value&amp; AddMember(Value&amp;, Value&amp;, Allocator&amp; allocator)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; AddMember(StringRefType, Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>template &lt;typename T&gt; Value&amp; AddMember(StringRefType, T value, Allocator&amp;)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para>以下是一个例子。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contact(kObject);</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(</highlight><highlight class="stringliteral">&quot;name&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Milo&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(</highlight><highlight class="stringliteral">&quot;married&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+<para>使用 <computeroutput>StringRefType</computeroutput> 作为 name 参数的重载版本与字符串的 <computeroutput>SetString</computeroutput> 的接口相似。 这些重载是为了避免复制 <computeroutput>name</computeroutput> 字符串，因为 JSON object 中经常会使用常数键名。</para>
+<para>如果你需要从非常数字符串或生命周期不足的字符串创建键名（见 <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString" kindref="member">创建 String</ref>），你需要使用 copy-string API。为了避免中间变量，可以就地使用 <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues" kindref="member">临时值</ref>：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>就地<sp/>Value<sp/>参数</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(</highlight><highlight class="stringliteral">&quot;copy&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>()).Move(),<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref>().Move(),<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>null<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>显式参数</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>key(</highlight><highlight class="stringliteral">&quot;key&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string<sp/>name</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>val(42);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>某<sp/>Value</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(key,<sp/>val,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+<para>移除成员有几个选择：</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>bool RemoveMember(const Ch* name)</computeroutput>：使用键名来移除成员（线性时间复杂度）。</para>
+</listitem><listitem><para><computeroutput>bool RemoveMember(const Value&amp; name)</computeroutput>：除了 <computeroutput>name</computeroutput> 是一个 Value，和上一行相同。</para>
+</listitem><listitem><para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput>：使用迭代器移除成员（_ 常数 _ 时间复杂度）。</para>
+</listitem><listitem><para><computeroutput>MemberIterator EraseMember(MemberIterator)</computeroutput>：和上行相似但维持成员次序（线性时间复杂度）。</para>
+</listitem><listitem><para><computeroutput>MemberIterator EraseMember(MemberIterator first, MemberIterator last)</computeroutput>：移除一个范围内的成员，维持次序（线性时间复杂度）。</para>
+</listitem></itemizedlist>
+</para>
+<para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput> 使用了“转移最后”手法来达成常数时间复杂度。基本上就是析构迭代器位置的成员，然后把最后的成员转移至迭代器位置。因此，成员的次序会被改变。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1DeepCopyValue">
+<title>Deep Copy Value</title>
+<para>若我们真的要复制一个 DOM 树，我们可使用两个 APIs 作深复制：含 allocator 的构造函数及 <computeroutput>CopyFrom()</computeroutput>。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v1(</highlight><highlight class="stringliteral">&quot;foo&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Value<sp/>v2(v1);<sp/>//<sp/>不容许</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v2(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>制造一个克隆</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsString());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>v1<sp/>不变</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.SetArray().PushBack(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>).PushBack(v2,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsNull()<sp/>&amp;&amp;<sp/>v2.IsNull());<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>两个都转移动<sp/>d</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v2.CopyFrom(d,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>把整个<sp/>document<sp/>复制至<sp/>v2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(d.IsArray()<sp/>&amp;&amp;<sp/>d.Size()<sp/>==<sp/>2);<sp/></highlight><highlight class="comment">//<sp/>d<sp/>不变</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v1.SetObject().AddMember(</highlight><highlight class="stringliteral">&quot;array&quot;</highlight><highlight class="normal">,<sp/>v2,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal">d.PushBack(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1SwapValues">
+<title>Swap Values</title>
+<para>RapidJSON 也提供 <computeroutput><ref refid="namespaceinternal_1a72b2c71d36273b9691487f58c671ce04" kindref="member">Swap()</ref></computeroutput>。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(123);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(</highlight><highlight class="stringliteral">&quot;Hello&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Swap(b);</highlight></codeline>
+<codeline><highlight class="normal">assert(<ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.IsString());</highlight></codeline>
+<codeline><highlight class="normal">assert(b.IsInt());</highlight></codeline>
+</programlisting></para>
+<para>无论两棵 DOM 树有多复杂，交换是很快的（常数时间）。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1WhatsNext">
+<title>What&apos;s next</title>
+<para>本教程展示了如何询查及修改 DOM 树。RapidJSON 还有一个重要概念：</para>
+<para><orderedlist>
+<listitem><para><ref refid="stream_8zh-cn_8md" kindref="compound">流</ref> 是读写 JSON 的通道。流可以是内存字符串、文件流等。用户也可以自定义流。</para>
+</listitem><listitem><para><ref refid="encoding_8zh-cn_8md" kindref="compound">编码</ref> 定义在流或内存中使用的字符编码。RapidJSON 也在内部提供 Unicode 转换及校验功能。</para>
+</listitem><listitem><para><ref refid="dom_8zh-cn_8md" kindref="compound">DOM</ref> 的基本功能已在本教程里介绍。还有更高级的功能，如原位（*in situ*）解析、其他解析选项及高级用法。</para>
+</listitem><listitem><para><ref refid="sax_8zh-cn_8md" kindref="compound">SAX</ref> 是 RapidJSON 解析／生成功能的基础。学习使用 <computeroutput>Reader</computeroutput>/<computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 去实现更高性能的应用程序。也可以使用 <computeroutput><ref refid="class_pretty_writer" kindref="compound">PrettyWriter</ref></computeroutput> 去格式化 JSON。</para>
+</listitem><listitem><para><ref refid="performance_8zh-cn_8md" kindref="compound">性能</ref> 展示一些我们做的及第三方的性能测试。</para>
+</listitem><listitem><para><ref refid="internals_8md" kindref="compound">技术内幕</ref> 讲述一些 RapidJSON 内部的设计及技术。</para>
+</listitem></orderedlist>
+</para>
+<para>你也可以参考 <ref refid="faq_8zh-cn_8md" kindref="compound">常见问题</ref>、API 文档、例子及单元测试。 </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/tutorial.zh-cn.md"/>
+  </compounddef>
+</doxygen>

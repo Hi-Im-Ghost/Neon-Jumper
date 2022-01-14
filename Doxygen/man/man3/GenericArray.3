@@ -1,0 +1,194 @@
+.TH "GenericArray< Const, ValueT >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericArray< Const, ValueT > \- Helper class for accessing Value of array type\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericArray\fP< true, ValueT > \fBConstArray\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericArray\fP< false, ValueT > \fBArray\fP"
+.br
+.ti -1c
+.RI "typedef ValueT \fBPlainType\fP"
+.br
+.ti -1c
+.RI "typedef internal::MaybeAddConst< Const, \fBPlainType\fP >\fB::Type\fP \fBValueType\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType\fP * \fBValueIterator\fP"
+.br
+.ti -1c
+.RI "typedef \fBconst\fP ValueT * \fBConstValueIterator\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::AllocatorType\fP \fBAllocatorType\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::StringRefType\fP \fBStringRefType\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericArray\fP (\fBconst\fP \fBGenericArray\fP &rhs)"
+.br
+.ti -1c
+.RI "\fBGenericArray\fP & \fBoperator=\fP (\fBconst\fP \fBGenericArray\fP &rhs)"
+.br
+.ti -1c
+.RI "\fB~GenericArray\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator ValueType &\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBSize\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBCapacity\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "bool \fBEmpty\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "void \fBClear\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBValueType\fP & \fBoperator[]\fP (\fBSizeType\fP index) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBValueIterator\fP \fBBegin\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBValueIterator\fP \fBEnd\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericArray\fP \fBReserve\fP (\fBSizeType\fP newCapacity, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericArray\fP \fBPushBack\fP (\fBValueType\fP &\fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericArray\fP \fBPushBack\fP (\fBStringRefType\fP \fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >),(\fBconst\fP \fBGenericArray\fP &)) \fBPushBack\fP(\fBT\fP \fBvalue\fP"
+.br
+.ti -1c
+.RI "\fBGenericArray\fP \fBPopBack\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBValueIterator\fP \fBErase\fP (\fBConstValueIterator\fP pos) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBValueIterator\fP \fBErase\fP (\fBConstValueIterator\fP first, \fBConstValueIterator\fP last) \fBconst\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocatorType\fP &allocator \fBconst\fP { value_\&.PushBack(\fBvalue\fP, allocator)"
+.br
+.ti -1c
+.RI "return * \fBthis\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "template<typename , typename > class \fBGenericValue\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<bool Const, typename ValueT>
+.br
+class GenericArray< Const, ValueT >"Helper class for accessing Value of array type\&. 
+
+Instance of this helper class is obtained by \fCGenericValue::GetArray()\fP\&. In addition to all APIs for array type, it provides range-based for loop if \fCRAPIDJSON_HAS_CXX11_RANGE_FOR=1\fP\&. 
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::AllocatorType\fP \fBGenericArray\fP< Const, ValueT >::AllocatorType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericArray\fP<false, ValueT> \fBGenericArray\fP< Const, ValueT >::Array"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericArray\fP<true, ValueT> \fBGenericArray\fP< Const, ValueT >::ConstArray"
+
+.SS "template<bool Const, typename ValueT > typedef \fBconst\fP ValueT* \fBGenericArray\fP< Const, ValueT >::ConstValueIterator"
+
+.SS "template<bool Const, typename ValueT > typedef ValueT \fBGenericArray\fP< Const, ValueT >::PlainType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::StringRefType\fP \fBGenericArray\fP< Const, ValueT >::StringRefType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBValueType\fP* \fBGenericArray\fP< Const, ValueT >::ValueIterator"
+
+.SS "template<bool Const, typename ValueT > typedef internal::MaybeAddConst<Const,\fBPlainType\fP>\fB::Type\fP \fBGenericArray\fP< Const, ValueT >\fB::ValueType\fP"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP< Const, ValueT >\fB::GenericArray\fP (\fBconst\fP \fBGenericArray\fP< Const, ValueT > & rhs)\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP< Const, ValueT >::~\fBGenericArray\fP ()\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBValueIterator\fP \fBGenericArray\fP< Const, ValueT >::Begin () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBSizeType\fP \fBGenericArray\fP< Const, ValueT >::Capacity () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > void \fBGenericArray\fP< Const, ValueT >::Clear () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > bool \fBGenericArray\fP< Const, ValueT >::Empty () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBValueIterator\fP \fBGenericArray\fP< Const, ValueT >::End () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBValueIterator\fP \fBGenericArray\fP< Const, ValueT >::Erase (\fBConstValueIterator\fP first, \fBConstValueIterator\fP last) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBValueIterator\fP \fBGenericArray\fP< Const, ValueT >::Erase (\fBConstValueIterator\fP pos) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP< Const, ValueT >::operator \fBValueType\fP & () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP & \fBGenericArray\fP< Const, ValueT >::operator= (\fBconst\fP \fBGenericArray\fP< Const, ValueT > & rhs)\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBValueType\fP & \fBGenericArray\fP< Const, ValueT >::operator[] (\fBSizeType\fP index) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP \fBGenericArray\fP< Const, ValueT >::PopBack () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP \fBGenericArray\fP< Const, ValueT >::PushBack (\fBStringRefType\fP value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP \fBGenericArray\fP< Const, ValueT >::PushBack (\fBValueType\fP & value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename \fBT\fP > \fBGenericArray\fP< Const, ValueT >::RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >), (\fBconst\fP \fBGenericArray\fP< Const, ValueT > &))"
+
+.SS "template<bool Const, typename ValueT > \fBGenericArray\fP \fBGenericArray\fP< Const, ValueT >::Reserve (\fBSizeType\fP newCapacity, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBSizeType\fP \fBGenericArray\fP< Const, ValueT >::Size () const\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > template<typename , typename > friend class \fBGenericValue\fP\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBAllocatorType\fP& allocator \fBGenericArray\fP< Const, ValueT >::const { value_\&.PushBack(\fBvalue\fP, allocator)"
+
+.SS "template<bool Const, typename ValueT > return* \fBGenericArray\fP< Const, ValueT >::this"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

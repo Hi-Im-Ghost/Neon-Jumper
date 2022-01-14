@@ -1,0 +1,249 @@
+.TH "src/rapidjson/include/rapidjson/document.h" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/include/rapidjson/document.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'reader\&.h'\fP
+.br
+\fC#include 'internal/meta\&.h'\fP
+.br
+\fC#include 'internal/strfunc\&.h'\fP
+.br
+\fC#include 'memorystream\&.h'\fP
+.br
+\fC#include 'encodedstream\&.h'\fP
+.br
+\fC#include <new>\fP
+.br
+\fC#include <limits>\fP
+.br
+\fC#include <iterator>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBGenericMember< Encoding, Allocator >\fP"
+.br
+.RI "Name-value pair in a JSON object value\&. "
+.ti -1c
+.RI "class \fBGenericMemberIterator< Const, Encoding, Allocator >\fP"
+.br
+.RI "(Constant) member iterator for a JSON object value "
+.ti -1c
+.RI "struct \fBGenericStringRef< CharType >\fP"
+.br
+.RI "Reference to a constant string (not taking a copy) "
+.ti -1c
+.RI "struct \fBinternal::IsGenericValueImpl< T, Encoding, Allocator >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::IsGenericValueImpl< T, typename Void< typename T::EncodingType >::Type, typename Void< typename T::AllocatorType >::Type >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::IsGenericValue< T >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, T >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, bool >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, int >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, unsigned >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, int64_t >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, uint64_t >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, double >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, float >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, const typename ValueType::Ch * >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, typename ValueType::Array >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, typename ValueType::ConstArray >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, typename ValueType::Object >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TypeHelper< ValueType, typename ValueType::ConstObject >\fP"
+.br
+.ti -1c
+.RI "class \fBGenericValue< Encoding, Allocator >\fP"
+.br
+.RI "Represents a JSON value\&. Use Value for \fBUTF8\fP encoding and default allocator\&. "
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::Flag\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::String\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::ShortString\fP"
+.br
+.ti -1c
+.RI "union \fBGenericValue< Encoding, Allocator >::Number\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::Number::I\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::Number::U\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::ObjectData\fP"
+.br
+.ti -1c
+.RI "struct \fBGenericValue< Encoding, Allocator >::ArrayData\fP"
+.br
+.ti -1c
+.RI "union \fBGenericValue< Encoding, Allocator >::Data\fP"
+.br
+.ti -1c
+.RI "class \fBGenericDocument< Encoding, Allocator, StackAllocator >\fP"
+.br
+.RI "A document for parsing JSON text as DOM\&. "
+.ti -1c
+.RI "class \fBGenericArray< Const, ValueT >\fP"
+.br
+.RI "Helper class for accessing Value of array type\&. "
+.ti -1c
+.RI "class \fBGenericObject< Const, ValueT >\fP"
+.br
+.RI "Helper class for accessing Value of object type\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBinternal\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_DEFAULT_ALLOCATOR\fP   \fBMemoryPoolAllocator\fP<\fBCrtAllocator\fP>"
+.br
+.RI "Allows to choose default allocator\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_DEFAULT_STACK_ALLOCATOR\fP   \fBCrtAllocator\fP"
+.br
+.RI "Allows to choose default stack allocator for Document\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY\fP   16"
+.br
+.RI "User defined kDefaultObjectCapacity value\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY\fP   16"
+.br
+.RI "User defined kDefaultArrayCapacity value\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericValue\fP< \fBUTF8\fP<> > \fBValue\fP"
+.br
+.RI "\fBGenericValue\fP with \fBUTF8\fP encoding\&. "
+.ti -1c
+.RI "typedef \fBGenericDocument\fP< \fBUTF8\fP<> > \fBDocument\fP"
+.br
+.RI "\fBGenericDocument\fP with \fBUTF8\fP encoding\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename CharType > \fBGenericStringRef\fP< CharType > \fBStringRef\fP (const CharType *str)"
+.br
+.RI "Mark a character pointer as constant string\&. "
+.ti -1c
+.RI "template<typename CharType > \fBGenericStringRef\fP< CharType > \fBStringRef\fP (const CharType *str, size_t length)"
+.br
+.RI "Mark a character pointer as constant string\&. "
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef \fBGenericDocument\fP<\fBUTF8\fP<> > \fBDocument\fP"
+
+.PP
+\fBGenericDocument\fP with \fBUTF8\fP encoding\&. 
+.SS "typedef \fBGenericValue\fP<\fBUTF8\fP<> > \fBValue\fP"
+
+.PP
+\fBGenericValue\fP with \fBUTF8\fP encoding\&. 
+.SH "Function Documentation"
+.PP 
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType > StringRef (const CharType * str)\fC [inline]\fP"
+
+.PP
+Mark a character pointer as constant string\&. Mark a plain character pointer as a 'string literal'\&. This function can be used to avoid copying a character string to be referenced as a value in a JSON \fBGenericValue\fP object, if the string's lifetime is known to be valid long enough\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP Character type of the string 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant string, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBGenericStringRef\fP string reference object
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericValue::GenericValue(StringRefType)\fP, \fBGenericValue::operator=(StringRefType)\fP, GenericValue::SetString(StringRefType), GenericValue::PushBack(StringRefType, Allocator&), GenericValue::AddMember 
+.RE
+.PP
+
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType > StringRef (const CharType * str, size_t length)\fC [inline]\fP"
+
+.PP
+Mark a character pointer as constant string\&. Mark a plain character pointer as a 'string literal'\&. This function can be used to avoid copying a character string to be referenced as a value in a JSON \fBGenericValue\fP object, if the string's lifetime is known to be valid long enough\&.
+.PP
+This version has better performance with supplied length, and also supports string containing null characters\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP character type of the string 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant string, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP 
+.br
+\fIlength\fP The length of source string\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBGenericStringRef\fP string reference object 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

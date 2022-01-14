@@ -1,0 +1,269 @@
+.TH "GenericObject< Const, ValueT >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericObject< Const, ValueT > \- Helper class for accessing Value of object type\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericObject\fP< true, ValueT > \fBConstObject\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericObject\fP< false, ValueT > \fBObject\fP"
+.br
+.ti -1c
+.RI "typedef ValueT \fBPlainType\fP"
+.br
+.ti -1c
+.RI "typedef internal::MaybeAddConst< Const, \fBPlainType\fP >\fB::Type\fP \fBValueType\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< Const, typename ValueT::EncodingType, typename ValueT::AllocatorType > \fBMemberIterator\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< true, typename ValueT::EncodingType, typename ValueT::AllocatorType > \fBConstMemberIterator\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::AllocatorType\fP \fBAllocatorType\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::StringRefType\fP \fBStringRefType\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::EncodingType\fP \fBEncodingType\fP"
+.br
+.ti -1c
+.RI "typedef \fBValueType::Ch\fP \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericObject\fP (\fBconst\fP \fBGenericObject\fP &rhs)"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP & \fBoperator=\fP (\fBconst\fP \fBGenericObject\fP &rhs)"
+.br
+.ti -1c
+.RI "\fB~GenericObject\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator ValueType &\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBMemberCount\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBMemberCapacity\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "bool \fBObjectEmpty\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBValueType\fP & \fBoperator[]\fP (\fBT\fP *name) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > \fBValueType\fP & \fBoperator[]\fP (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > &name) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBMemberBegin\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBMemberEnd\fP () \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP \fBMemberReserve\fP (\fBSizeType\fP newCapacity, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "bool \fBHasMember\fP (\fBconst\fP \fBCh\fP *name) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > bool \fBHasMember\fP (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > &name) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBFindMember\fP (\fBconst\fP \fBCh\fP *name) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > \fBMemberIterator\fP \fBFindMember\fP (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > &name) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP \fBAddMember\fP (\fBValueType\fP &name, \fBValueType\fP &\fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP \fBAddMember\fP (\fBValueType\fP &name, \fBStringRefType\fP \fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >),(\fBValueType\fP &)) \fBAddMember\fP(\fBValueType\fP &name"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP \fBAddMember\fP (\fBStringRefType\fP name, \fBValueType\fP &\fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBGenericObject\fP \fBAddMember\fP (\fBStringRefType\fP name, \fBStringRefType\fP \fBvalue\fP, \fBAllocatorType\fP &allocator) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >),(\fBGenericObject\fP)) \fBAddMember\fP(\fBStringRefType\fP name"
+.br
+.ti -1c
+.RI "void \fBRemoveAllMembers\fP ()"
+.br
+.ti -1c
+.RI "bool \fBRemoveMember\fP (\fBconst\fP \fBCh\fP *name) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > bool \fBRemoveMember\fP (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > &name) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBRemoveMember\fP (\fBMemberIterator\fP m) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBEraseMember\fP (\fBConstMemberIterator\fP pos) \fBconst\fP"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBEraseMember\fP (\fBConstMemberIterator\fP first, \fBConstMemberIterator\fP last) \fBconst\fP"
+.br
+.ti -1c
+.RI "bool \fBEraseMember\fP (\fBconst\fP \fBCh\fP *name) \fBconst\fP"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > bool \fBEraseMember\fP (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > &name) \fBconst\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBT\fP \fBvalue\fP"
+.br
+.ti -1c
+.RI "\fBT\fP \fBAllocatorType\fP &allocator \fBconst\fP { value_\&.AddMember(name, \fBvalue\fP, allocator)"
+.br
+.ti -1c
+.RI "return * \fBthis\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "template<typename , typename > class \fBGenericValue\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<bool Const, typename ValueT>
+.br
+class GenericObject< Const, ValueT >"Helper class for accessing Value of object type\&. 
+
+Instance of this helper class is obtained by \fCGenericValue::GetObject()\fP\&. In addition to all APIs for array type, it provides range-based for loop if \fCRAPIDJSON_HAS_CXX11_RANGE_FOR=1\fP\&. 
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::AllocatorType\fP \fBGenericObject\fP< Const, ValueT >::AllocatorType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::Ch\fP \fBGenericObject\fP< Const, ValueT >::Ch"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericMemberIterator\fP<true, typename ValueT::EncodingType, typename ValueT::AllocatorType> \fBGenericObject\fP< Const, ValueT >::ConstMemberIterator"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericObject\fP<true, ValueT> \fBGenericObject\fP< Const, ValueT >::ConstObject"
+
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::EncodingType\fP \fBGenericObject\fP< Const, ValueT >::EncodingType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericMemberIterator\fP<Const, typename ValueT::EncodingType, typename ValueT::AllocatorType> \fBGenericObject\fP< Const, ValueT >::MemberIterator"
+
+.SS "template<bool Const, typename ValueT > typedef \fBGenericObject\fP<false, ValueT> \fBGenericObject\fP< Const, ValueT >::Object"
+
+.SS "template<bool Const, typename ValueT > typedef ValueT \fBGenericObject\fP< Const, ValueT >::PlainType"
+
+.SS "template<bool Const, typename ValueT > typedef \fBValueType::StringRefType\fP \fBGenericObject\fP< Const, ValueT >::StringRefType"
+
+.SS "template<bool Const, typename ValueT > typedef internal::MaybeAddConst<Const,\fBPlainType\fP>\fB::Type\fP \fBGenericObject\fP< Const, ValueT >\fB::ValueType\fP"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP< Const, ValueT >\fB::GenericObject\fP (\fBconst\fP \fBGenericObject\fP< Const, ValueT > & rhs)\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP< Const, ValueT >::~\fBGenericObject\fP ()\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP \fBGenericObject\fP< Const, ValueT >::AddMember (\fBStringRefType\fP name, \fBStringRefType\fP value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP \fBGenericObject\fP< Const, ValueT >::AddMember (\fBStringRefType\fP name, \fBValueType\fP & value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP \fBGenericObject\fP< Const, ValueT >::AddMember (\fBValueType\fP & name, \fBStringRefType\fP value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP \fBGenericObject\fP< Const, ValueT >::AddMember (\fBValueType\fP & name, \fBValueType\fP & value, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > bool \fBGenericObject\fP< Const, ValueT >::EraseMember (\fBconst\fP \fBCh\fP * name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename SourceAllocator > bool \fBGenericObject\fP< Const, ValueT >::EraseMember (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > & name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::EraseMember (\fBConstMemberIterator\fP first, \fBConstMemberIterator\fP last) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::EraseMember (\fBConstMemberIterator\fP pos) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::FindMember (\fBconst\fP \fBCh\fP * name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename SourceAllocator > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::FindMember (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > & name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > bool \fBGenericObject\fP< Const, ValueT >::HasMember (\fBconst\fP \fBCh\fP * name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename SourceAllocator > bool \fBGenericObject\fP< Const, ValueT >::HasMember (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > & name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::MemberBegin () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBSizeType\fP \fBGenericObject\fP< Const, ValueT >::MemberCapacity () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBSizeType\fP \fBGenericObject\fP< Const, ValueT >::MemberCount () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::MemberEnd () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP \fBGenericObject\fP< Const, ValueT >::MemberReserve (\fBSizeType\fP newCapacity, \fBAllocatorType\fP & allocator) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > bool \fBGenericObject\fP< Const, ValueT >::ObjectEmpty () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP< Const, ValueT >::operator \fBValueType\fP & () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBGenericObject\fP & \fBGenericObject\fP< Const, ValueT >::operator= (\fBconst\fP \fBGenericObject\fP< Const, ValueT > & rhs)\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename SourceAllocator > \fBValueType\fP & \fBGenericObject\fP< Const, ValueT >::operator[] (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > & name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename \fBT\fP > \fBValueType\fP & \fBGenericObject\fP< Const, ValueT >::operator[] (\fBT\fP * name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename \fBT\fP > \fBGenericObject\fP< Const, ValueT >::RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >), (\fBGenericObject\fP< Const, ValueT >))"
+
+.SS "template<bool Const, typename ValueT > template<typename \fBT\fP > \fBGenericObject\fP< Const, ValueT >::RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< \fBT\fP >, \fBinternal::IsGenericValue\fP< \fBT\fP > >), (\fBValueType\fP &)) &"
+
+.SS "template<bool Const, typename ValueT > void \fBGenericObject\fP< Const, ValueT >::RemoveAllMembers ()\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > bool \fBGenericObject\fP< Const, ValueT >::RemoveMember (\fBconst\fP \fBCh\fP * name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > template<typename SourceAllocator > bool \fBGenericObject\fP< Const, ValueT >::RemoveMember (\fBconst\fP \fBGenericValue\fP< \fBEncodingType\fP, SourceAllocator > & name) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename ValueT > \fBMemberIterator\fP \fBGenericObject\fP< Const, ValueT >::RemoveMember (\fBMemberIterator\fP m) const\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > template<typename , typename > friend class \fBGenericValue\fP\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<bool Const, typename ValueT > \fBT\fP \fBAllocatorType\fP &allocator \fBGenericObject\fP< Const, ValueT >::const { value_\&.AddMember(name, \fBvalue\fP, allocator)"
+
+.SS "template<bool Const, typename ValueT > return * \fBGenericObject\fP< Const, ValueT >::this"
+
+.SS "template<bool Const, typename ValueT > \fBT\fP \fBGenericObject\fP< Const, ValueT >::value"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

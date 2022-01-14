@@ -1,0 +1,800 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_internals" kind="page">
+    <compoundname>md_src_rapidjson_doc_internals</compoundname>
+    <title>Internals</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>This section records some design and implementation details.</para>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1Architecture">
+<title>Architecture</title>
+<sect2 id="md_src_rapidjson_doc_internals_1autotoc_md92">
+<title>SAX and DOM</title>
+<para>The basic relationships of SAX and DOM is shown in the following UML diagram.</para>
+<para><image type="html" name="diagram/architecture.png" alt="Architecture UML class diagram" inline="yes"></image>
+</para>
+<para>The core of the relationship is the <computeroutput>Handler</computeroutput> concept. From the SAX side, <computeroutput>Reader</computeroutput> parses a JSON from a stream and publish events to a <computeroutput>Handler</computeroutput>. <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> implements the <computeroutput>Handler</computeroutput> concept to handle the same set of events. From the DOM side, <computeroutput>Document</computeroutput> implements the <computeroutput>Handler</computeroutput> concept to build a DOM according to the events. <computeroutput>Value</computeroutput> supports a <computeroutput>Value::Accept(Handler&amp;)</computeroutput> function, which traverses the DOM to publish events.</para>
+<para>With this design, SAX is not dependent on DOM. Even <computeroutput>Reader</computeroutput> and <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> have no dependencies between them. This provides flexibility to chain event publisher and handlers. Besides, <computeroutput>Value</computeroutput> does not depends on SAX as well. So, in addition to stringify a DOM to JSON, user may also stringify it to a XML writer, or do anything else.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_1autotoc_md93">
+<title>Utility Classes</title>
+<para>Both SAX and DOM APIs depends on 3 additional concepts: <computeroutput>Allocator</computeroutput>, <computeroutput>Encoding</computeroutput> and <computeroutput>Stream</computeroutput>. Their inheritance hierarchy is shown as below.</para>
+<para><image type="html" name="diagram/utilityclass.png" alt="Utility classes UML class diagram" inline="yes"></image>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1Value">
+<title>Value</title>
+<para><computeroutput>Value</computeroutput> (actually a typedef of <computeroutput><ref refid="class_generic_value" kindref="compound">GenericValue</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt;&gt;</computeroutput>) is the core of DOM API. This section describes the design of it.</para>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1DataLayout">
+<title>Data Layout</title>
+<para><computeroutput>Value</computeroutput> is a <ulink url="http://en.wikipedia.org/wiki/Variant_type">variant type</ulink>. In RapidJSON&apos;s context, an instance of <computeroutput>Value</computeroutput> can contain 1 of 6 JSON value types. This is possible by using <computeroutput>union</computeroutput>. Each <computeroutput>Value</computeroutput> contains two members: <computeroutput>union Data data_</computeroutput> and a<computeroutput>unsigned flags_</computeroutput>. The <computeroutput>flags_</computeroutput> indicates the JSON type, and also additional information.</para>
+<para>The following tables show the data layout of each type. The 32-bit/64-bit columns indicates the size of the field in bytes.</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Null   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNullType kNullFlag</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Bool   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kBoolType</computeroutput> (either <computeroutput>kTrueFlag</computeroutput> or <computeroutput>kFalseFlag</computeroutput>)   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>String   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>Ch* str</computeroutput>   </para>
+</entry><entry thead="no"><para>Pointer to the string (may own)   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>SizeType length</computeroutput>   </para>
+</entry><entry thead="no"><para>Length of string   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Object   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>Member* members</computeroutput>   </para>
+</entry><entry thead="no"><para>Pointer to array of members (owned)   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry thead="no"><para>Number of members   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry thead="no"><para>Capacity of members   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kObjectType kObjectFlag</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Array   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>Value* values</computeroutput>   </para>
+</entry><entry thead="no"><para>Pointer to array of values (owned)   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry thead="no"><para>Number of values   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry thead="no"><para>Capacity of values   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kArrayType kArrayFlag</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Number (Int)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int i</computeroutput>   </para>
+</entry><entry thead="no"><para>32-bit signed integer   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(zero padding)   </para>
+</entry><entry thead="no"><para>0   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNumberType kNumberFlag kIntFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="5" cols="4"><row>
+<entry thead="yes"><para>Number (UInt)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned u</computeroutput>   </para>
+</entry><entry thead="no"><para>32-bit unsigned integer   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(zero padding)   </para>
+</entry><entry thead="no"><para>0   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNumberType kNumberFlag kUintFlag kUint64Flag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="4" cols="4"><row>
+<entry thead="yes"><para>Number (Int64)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int64_t i64</computeroutput>   </para>
+</entry><entry thead="no"><para>64-bit signed integer   </para>
+</entry><entry thead="no" align='center'><para>8   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="4" cols="4"><row>
+<entry thead="yes"><para>Number (Uint64)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry thead="no"><para>64-bit unsigned integer   </para>
+</entry><entry thead="no" align='center'><para>8   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para><table rows="4" cols="4"><row>
+<entry thead="yes"><para>Number (Double)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry thead="no"><para>Double precision floating-point   </para>
+</entry><entry thead="no" align='center'><para>8   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para>(unused)   </para>
+</entry><entry thead="no"><para></para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>8    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kNumberType kNumberFlag kDoubleFlag</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para>Here are some notes:<itemizedlist>
+<listitem><para>To reduce memory consumption for 64-bit architecture, <computeroutput>SizeType</computeroutput> is typedef as <computeroutput>unsigned</computeroutput> instead of <computeroutput>size_t</computeroutput>.</para>
+</listitem><listitem><para>Zero padding for 32-bit number may be placed after or before the actual type, according to the endianness. This makes possible for interpreting a 32-bit integer as a 64-bit integer, without any conversion.</para>
+</listitem><listitem><para>An <computeroutput>Int</computeroutput> is always an <computeroutput>Int64</computeroutput>, but the converse is not always true.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1Flags">
+<title>Flags</title>
+<para>The 32-bit <computeroutput>flags_</computeroutput> contains both JSON type and other additional information. As shown in the above tables, each JSON type contains redundant <computeroutput>kXXXType</computeroutput> and <computeroutput>kXXXFlag</computeroutput>. This design is for optimizing the operation of testing bit-flags (<computeroutput>IsNumber()</computeroutput>) and obtaining a sequential number for each type (<computeroutput>GetType()</computeroutput>).</para>
+<para>String has two optional flags. <computeroutput>kCopyFlag</computeroutput> means that the string owns a copy of the string. <computeroutput>kInlineStrFlag</computeroutput> means using <ref refid="md_src_rapidjson_doc_internals_zh_cn_1ShortString" kindref="member">Short-String Optimization</ref>.</para>
+<para>Number is a bit more complicated. For normal integer values, it can contains <computeroutput>kIntFlag</computeroutput>, <computeroutput>kUintFlag</computeroutput>, <computeroutput>kInt64Flag</computeroutput> and/or <computeroutput>kUint64Flag</computeroutput>, according to the range of the integer. For numbers with fraction, and integers larger than 64-bit range, they will be stored as <computeroutput>double</computeroutput> with <computeroutput>kDoubleFlag</computeroutput>.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1ShortString">
+<title>Short-String Optimization</title>
+<para><ulink url="https://github.com/Kosta-Github">Kosta</ulink> provided a very neat short-string optimization. The optimization idea is given as follow. Excluding the <computeroutput>flags_</computeroutput>, a <computeroutput>Value</computeroutput> has 12 or 16 bytes (32-bit or 64-bit) for storing actual data. Instead of storing a pointer to a string, it is possible to store short strings in these space internally. For encoding with 1-byte character type (e.g. <computeroutput>char</computeroutput>), it can store maximum 11 or 15 characters string inside the <computeroutput>Value</computeroutput> type.</para>
+<para><table rows="4" cols="4"><row>
+<entry thead="yes"><para>ShortString (Ch=char)   </para>
+</entry><entry thead="yes"><para></para>
+</entry><entry thead="yes" align='center'><para>32-bit   </para>
+</entry><entry thead="yes" align='center'><para>64-bit    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>Ch str[MaxChars]</computeroutput>   </para>
+</entry><entry thead="no"><para>String buffer   </para>
+</entry><entry thead="no" align='center'><para>11   </para>
+</entry><entry thead="no" align='center'><para>15    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>Ch invLength</computeroutput>   </para>
+</entry><entry thead="no"><para>MaxChars - Length   </para>
+</entry><entry thead="no" align='center'><para>1   </para>
+</entry><entry thead="no" align='center'><para>1    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry><entry thead="no" align='center'><para>4   </para>
+</entry></row>
+</table>
+</para>
+<para>A special technique is applied. Instead of storing the length of string directly, it stores (MaxChars - length). This make it possible to store 11 characters with trailing <computeroutput>\0</computeroutput>.</para>
+<para>This optimization can reduce memory usage for copy-string. It can also improve cache-coherence thus improve runtime performance.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1InternalAllocator">
+<title>Allocator</title>
+<para><computeroutput>Allocator</computeroutput> is a concept in RapidJSON: <programlisting filename=".cpp"><codeline><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="classrapidjson_1_1_allocator" kindref="compound">Allocator</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>const<sp/>bool<sp/>kNeedFree;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Allocate<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>size<sp/>of<sp/>the<sp/>memory<sp/>block<sp/>in<sp/>bytes.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\returns<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/><ref refid="allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf" kindref="member">Malloc</ref>(size_t<sp/>size);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Resize<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>originalPtr<sp/>The<sp/>pointer<sp/>to<sp/>current<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>originalSize<sp/>The<sp/>current<sp/>size<sp/>in<sp/>bytes.<sp/>(Design<sp/>issue:<sp/>since<sp/>some<sp/>allocator<sp/>may<sp/>not<sp/>book-keep<sp/>this,<sp/>explicitly<sp/>pass<sp/>to<sp/>it<sp/>can<sp/>save<sp/>memory.)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>newSize<sp/>the<sp/>new<sp/>size<sp/>in<sp/>bytes.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/><ref refid="allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223" kindref="member">Realloc</ref>(void*<sp/>originalPtr,<sp/>size_t<sp/>originalSize,<sp/>size_t<sp/>newSize);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Free<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>void<sp/><ref refid="allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e" kindref="member">Free</ref>(void<sp/>*ptr);</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>Note that <computeroutput><ref refid="allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf" kindref="member">Malloc()</ref></computeroutput> and <computeroutput><ref refid="allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223" kindref="member">Realloc()</ref></computeroutput> are member functions but <computeroutput><ref refid="allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e" kindref="member">Free()</ref></computeroutput> is static member function.</para>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1MemoryPoolAllocator">
+<title>MemoryPoolAllocator</title>
+<para><computeroutput><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref></computeroutput> is the default allocator for DOM. It allocate but do not free memory. This is suitable for building a DOM tree.</para>
+<para>Internally, it allocates chunks of memory from the base allocator (by default <computeroutput><ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref></computeroutput>) and stores the chunks as a singly linked list. When user requests an allocation, it allocates memory from the following order:</para>
+<para><orderedlist>
+<listitem><para>User supplied buffer if it is available. (See <ref refid="dom_8md" kindref="compound">User Buffer section in DOM</ref>)</para>
+</listitem><listitem><para>If user supplied buffer is full, use the current memory chunk.</para>
+</listitem><listitem><para>If the current block is full, allocate a new block of memory.</para>
+</listitem></orderedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1ParsingOptimization">
+<title>Parsing Optimization</title>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1SkipwhitespaceWithSIMD">
+<title>Skip Whitespaces with SIMD</title>
+<para>When parsing JSON from a stream, the parser need to skip 4 whitespace characters:</para>
+<para><orderedlist>
+<listitem><para>Space (<computeroutput>U+0020</computeroutput>)</para>
+</listitem><listitem><para>Character Tabulation (<computeroutput>U+000B</computeroutput>)</para>
+</listitem><listitem><para>Line Feed (<computeroutput>U+000A</computeroutput>)</para>
+</listitem><listitem><para>Carriage Return (<computeroutput>U+000D</computeroutput>)</para>
+</listitem></orderedlist>
+</para>
+<para>A simple implementation will be simply: <programlisting filename=".cpp"><codeline><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="reader_8h_1a60338858b2582eca23f3e509a2d82e0e" kindref="member">SkipWhitespace</ref>(InputStream&amp;<sp/>s)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;<sp/>&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\n&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\r&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\t&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.Take();</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>However, this requires 4 comparisons and a few branching for each character. This was found to be a hot spot.</para>
+<para>To accelerate this process, SIMD was applied to compare 16 characters with 4 white spaces for each iteration. Currently RapidJSON supports SSE2, SSE4.2 and ARM Neon instructions for this. And it is only activated for UTF-8 memory streams, including string stream or <emphasis>in situ</emphasis> parsing.</para>
+<para>To enable this optimization, need to define <computeroutput>RAPIDJSON_SSE2</computeroutput>, <computeroutput>RAPIDJSON_SSE42</computeroutput> or <computeroutput>RAPIDJSON_NEON</computeroutput> before including <computeroutput><ref refid="rapidjson_8h" kindref="compound">rapidjson.h</ref></computeroutput>. Some compilers can detect the setting, as in <computeroutput><ref refid="perftest_8h" kindref="compound">perftest.h</ref></computeroutput>:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>__SSE2__<sp/>and<sp/>__SSE4_2__<sp/>are<sp/>recognized<sp/>by<sp/>gcc,<sp/>clang,<sp/>and<sp/>the<sp/>Intel<sp/>compiler.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>We<sp/>use<sp/>-march=native<sp/>with<sp/>gmake<sp/>to<sp/>enable<sp/>-msse2<sp/>and<sp/>-msse4.2,<sp/>if<sp/>supported.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Likewise,<sp/>__ARM_NEON<sp/>is<sp/>used<sp/>to<sp/>detect<sp/>Neon.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(__SSE4_2__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>RAPIDJSON_SSE42</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__SSE2__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>RAPIDJSON_SSE2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__ARM_NEON)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/><sp/>define<sp/>RAPIDJSON_NEON</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+</programlisting></para>
+<para>Note that, these are compile-time settings. Running the executable on a machine without such instruction set support will make it crash.</para>
+<sect3 id="md_src_rapidjson_doc_internals_1autotoc_md94">
+<title>Page boundary issue</title>
+<para>In an early version of RapidJSON, <ulink url="https://code.google.com/archive/p/rapidjson/issues/104">an issue</ulink> reported that the <computeroutput>SkipWhitespace_SIMD()</computeroutput> causes crash very rarely (around 1 in 500,000). After investigation, it is suspected that <computeroutput>_mm_loadu_si128()</computeroutput> accessed bytes after <lsquo/><rsquo/>\0&apos;`, and across a protected page boundary.</para>
+<para>In <ulink url="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">Intel® 64 and IA-32 Architectures Optimization Reference Manual</ulink>, section 10.2.1:</para>
+<para><blockquote><para><zwj/>To support algorithms requiring unaligned 128-bit SIMD memory accesses, memory buffer allocation by a caller function should consider adding some pad space so that a callee function can safely use the address pointer safely with unaligned 128-bit SIMD memory operations. The minimal padding size should be the width of the SIMD register that might be used in conjunction with unaligned SIMD memory access. </para>
+</blockquote>This is not feasible as RapidJSON should not enforce such requirement.</para>
+<para>To fix this issue, currently the routine process bytes up to the next aligned address. After tha, use aligned read to perform SIMD processing. Also see <ulink url="https://github.com/Tencent/rapidjson/issues/85">#85</ulink>.</para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1LocalStreamCopy">
+<title>Local Stream Copy</title>
+<para>During optimization, it is found that some compilers cannot localize some member data access of streams into local variables or registers. Experimental results show that for some stream types, making a copy of the stream and used it in inner-loop can improve performance. For example, the actual (non-SIMD) implementation of <computeroutput><ref refid="reader_8h_1a60338858b2582eca23f3e509a2d82e0e" kindref="member">SkipWhitespace()</ref></computeroutput> is implemented as:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="reader_8h_1a60338858b2582eca23f3e509a2d82e0e" kindref="member">SkipWhitespace</ref>(InputStream&amp;<sp/>is)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classinternal_1_1_stream_local_copy" kindref="compound">internal::StreamLocalCopy&lt;InputStream&gt;</ref><sp/>copy(is);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>InputStream&amp;<sp/>s(copy.s);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;<sp/>&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\n&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\r&apos;</highlight><highlight class="normal"><sp/>||<sp/>s.Peek()<sp/>==<sp/></highlight><highlight class="charliteral">&apos;\t&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.Take();</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>Depending on the traits of stream, <computeroutput>StreamLocalCopy</computeroutput> will make (or not make) a copy of the stream object, use it locally and copy the states of stream back to the original stream.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1ParsingDouble">
+<title>Parsing to Double</title>
+<para>Parsing string into <computeroutput>double</computeroutput> is difficult. The standard library function <computeroutput>strtod()</computeroutput> can do the job but it is slow. By default, the parsers use normal precision setting. This has has maximum 3 <ulink url="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</ulink> error and implemented in <computeroutput><ref refid="namespaceinternal_1a9e5fac4695310f09892fe52b1d24ab19" kindref="member">internal::StrtodNormalPrecision()</ref></computeroutput>.</para>
+<para>When using <computeroutput>kParseFullPrecisionFlag</computeroutput>, the parsers calls <computeroutput><ref refid="namespaceinternal_1a6109c750ee4707d4f71de280816a1a00" kindref="member">internal::StrtodFullPrecision()</ref></computeroutput> instead, and this function actually implemented 3 versions of conversion methods.<orderedlist>
+<listitem><para><ulink url="http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/">Fast-Path</ulink>.</para>
+</listitem><listitem><para>Custom DIY-FP implementation as in <ulink url="https://github.com/floitsch/double-conversion">double-conversion</ulink>.</para>
+</listitem><listitem><para>Big Integer Method as in (Clinger, William D. How to read floating point numbers accurately. Vol. 25. No. 6. ACM, 1990).</para>
+</listitem></orderedlist>
+</para>
+<para>If the first conversion methods fail, it will try the second, and so on.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1GenerationOptimization">
+<title>Generation Optimization</title>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1itoa">
+<title>Integer-to-String conversion</title>
+<para>The naive algorithm for integer-to-string conversion involves division per each decimal digit. We have implemented various implementations and evaluated them in <ulink url="https://github.com/miloyip/itoa-benchmark">itoa-benchmark</ulink>.</para>
+<para>Although SSE2 version is the fastest but the difference is minor by comparing to the first running-up <computeroutput>branchlut</computeroutput>. And <computeroutput>branchlut</computeroutput> is pure C++ implementation so we adopt <computeroutput>branchlut</computeroutput> in RapidJSON.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1dtoa">
+<title>Double-to-String conversion</title>
+<para>Originally RapidJSON uses <computeroutput>snprintf(..., ..., &quot;%g&quot;)</computeroutput> to achieve double-to-string conversion. This is not accurate as the default precision is 6. Later we also find that this is slow and there is an alternative.</para>
+<para>Google&apos;s V8 <ulink url="https://github.com/floitsch/double-conversion">double-conversion</ulink> implemented a newer, fast algorithm called Grisu3 (Loitsch, Florian. &quot;Printing floating-point numbers quickly and accurately with integers.&quot; ACM Sigplan Notices 45.6 (2010): 233-243.).</para>
+<para>However, since it is not header-only so that we implemented a header-only version of Grisu2. This algorithm guarantees that the result is always accurate. And in most of cases it produces the shortest (optimal) string representation.</para>
+<para>The header-only conversion function has been evaluated in <ulink url="https://github.com/miloyip/dtoa-benchmark">dtoa-benchmark</ulink>.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_internals_zh_cn_1Parser">
+<title>Parser</title>
+<sect2 id="md_src_rapidjson_doc_internals_zh_cn_1IterativeParser">
+<title>Iterative Parser</title>
+<para>The iterative parser is a recursive descent LL(1) parser implemented in a non-recursive manner.</para>
+<sect3 id="md_src_rapidjson_doc_internals_zh_cn_1IterativeParserGrammar">
+<title>Grammar</title>
+<para>The grammar used for this parser is based on strict JSON syntax: <programlisting><codeline><highlight class="normal">S<sp/>-&gt;<sp/>array<sp/>|<sp/>object</highlight></codeline>
+<codeline><highlight class="normal">array<sp/>-&gt;<sp/>[<sp/>values<sp/>]</highlight></codeline>
+<codeline><highlight class="normal">object<sp/>-&gt;<sp/>{<sp/>members<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">values<sp/>-&gt;<sp/>non-empty-values<sp/>|<sp/>ε</highlight></codeline>
+<codeline><highlight class="normal">non-empty-values<sp/>-&gt;<sp/>value<sp/>addition-values</highlight></codeline>
+<codeline><highlight class="normal">addition-values<sp/>-&gt;<sp/>ε<sp/>|<sp/>,<sp/>non-empty-values</highlight></codeline>
+<codeline><highlight class="normal">members<sp/>-&gt;<sp/>non-empty-members<sp/>|<sp/>ε</highlight></codeline>
+<codeline><highlight class="normal">non-empty-members<sp/>-&gt;<sp/>member<sp/>addition-members</highlight></codeline>
+<codeline><highlight class="normal">addition-members<sp/>-&gt;<sp/>ε<sp/>|<sp/>,<sp/>non-empty-members</highlight></codeline>
+<codeline><highlight class="normal">member<sp/>-&gt;<sp/>STRING<sp/>:<sp/>value</highlight></codeline>
+<codeline><highlight class="normal">value<sp/>-&gt;<sp/>STRING<sp/>|<sp/>NUMBER<sp/>|<sp/>NULL<sp/>|<sp/>BOOLEAN<sp/>|<sp/>object<sp/>|<sp/>array</highlight></codeline>
+</programlisting></para>
+<para>Note that left factoring is applied to non-terminals <computeroutput>values</computeroutput> and <computeroutput>members</computeroutput> to make the grammar be LL(1).</para>
+</sect3>
+<sect3 id="md_src_rapidjson_doc_internals_zh_cn_1IterativeParserParsingTable">
+<title>Parsing Table</title>
+<para>Based on the grammar, we can construct the FIRST and FOLLOW set.</para>
+<para>The FIRST set of non-terminals is listed below:</para>
+<para><table rows="12" cols="2"><row>
+<entry thead="yes" align='center'><para>NON-TERMINAL   </para>
+</entry><entry thead="yes" align='center'><para>FIRST    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>array   </para>
+</entry><entry thead="no" align='center'><para>[    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>object   </para>
+</entry><entry thead="no" align='center'><para>{    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>values   </para>
+</entry><entry thead="no" align='center'><para>ε STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-values   </para>
+</entry><entry thead="no" align='center'><para>ε COMMA    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>members   </para>
+</entry><entry thead="no" align='center'><para>ε STRING    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-members   </para>
+</entry><entry thead="no" align='center'><para>ε COMMA    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>member   </para>
+</entry><entry thead="no" align='center'><para>STRING    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>value   </para>
+</entry><entry thead="no" align='center'><para>STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>S   </para>
+</entry><entry thead="no" align='center'><para>[ {    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-members   </para>
+</entry><entry thead="no" align='center'><para>STRING    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>STRING NUMBER NULL BOOLEAN { [   </para>
+</entry></row>
+</table>
+</para>
+<para>The FOLLOW set is listed below:</para>
+<para><table rows="12" cols="2"><row>
+<entry thead="yes" align='center'><para>NON-TERMINAL   </para>
+</entry><entry thead="yes" align='center'><para>FOLLOW    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>S   </para>
+</entry><entry thead="no" align='center'><para>$    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>array   </para>
+</entry><entry thead="no" align='center'><para>, $ } ]    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>object   </para>
+</entry><entry thead="no" align='center'><para>, $ } ]    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>values   </para>
+</entry><entry thead="no" align='center'><para>]    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>]    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-values   </para>
+</entry><entry thead="no" align='center'><para>]    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>members   </para>
+</entry><entry thead="no" align='center'><para>}    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-members   </para>
+</entry><entry thead="no" align='center'><para>}    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-members   </para>
+</entry><entry thead="no" align='center'><para>}    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>member   </para>
+</entry><entry thead="no" align='center'><para>, }    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>value   </para>
+</entry><entry thead="no" align='center'><para>, } ]   </para>
+</entry></row>
+</table>
+</para>
+<para>Finally the parsing table can be constructed from FIRST and FOLLOW set:</para>
+<para><table rows="12" cols="11"><row>
+<entry thead="yes" align='center'><para>NON-TERMINAL   </para>
+</entry><entry thead="yes" align='center'><para>[   </para>
+</entry><entry thead="yes" align='center'><para>{   </para>
+</entry><entry thead="yes" align='center'><para>,   </para>
+</entry><entry thead="yes" align='center'><para>:   </para>
+</entry><entry thead="yes" align='center'><para>]   </para>
+</entry><entry thead="yes" align='center'><para>}   </para>
+</entry><entry thead="yes" align='center'><para>STRING   </para>
+</entry><entry thead="yes" align='center'><para>NUMBER   </para>
+</entry><entry thead="yes" align='center'><para>NULL   </para>
+</entry><entry thead="yes" align='center'><para>BOOLEAN    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>S   </para>
+</entry><entry thead="no" align='center'><para>array   </para>
+</entry><entry thead="no" align='center'><para>object   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>array   </para>
+</entry><entry thead="no" align='center'><para>[ values ]   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>object   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>{ members }   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>values   </para>
+</entry><entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>ε   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>non-empty-values    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-values   </para>
+</entry><entry thead="no" align='center'><para>value addition-values   </para>
+</entry><entry thead="no" align='center'><para>value addition-values   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>value addition-values   </para>
+</entry><entry thead="no" align='center'><para>value addition-values   </para>
+</entry><entry thead="no" align='center'><para>value addition-values   </para>
+</entry><entry thead="no" align='center'><para>value addition-values    </para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-values   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>, non-empty-values   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>ε   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>ε   </para>
+</entry><entry thead="no" align='center'><para>non-empty-members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>non-empty-members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>member addition-members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>addition-members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>, non-empty-members   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>ε   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>member   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>STRING : value   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry></row>
+<row>
+<entry thead="no" align='center'><para>value   </para>
+</entry><entry thead="no" align='center'><para>array   </para>
+</entry><entry thead="no" align='center'><para>object   </para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para></para>
+</entry><entry thead="no" align='center'><para>STRING   </para>
+</entry><entry thead="no" align='center'><para>NUMBER   </para>
+</entry><entry thead="no" align='center'><para>NULL   </para>
+</entry><entry thead="no" align='center'><para>BOOLEAN   </para>
+</entry></row>
+</table>
+</para>
+<para>There is a great <ulink url="http://hackingoff.com/compilers/predict-first-follow-set">tool</ulink> for above grammar analysis.</para>
+</sect3>
+<sect3 id="md_src_rapidjson_doc_internals_zh_cn_1IterativeParserImplementation">
+<title>Implementation</title>
+<para>Based on the parsing table, a direct(or conventional) implementation that pushes the production body in reverse order while generating a production could work.</para>
+<para>In RapidJSON, several modifications(or adaptations to current design) are made to a direct implementation.</para>
+<para>First, the parsing table is encoded in a state machine in RapidJSON. States are constructed by the head and body of production. State transitions are constructed by production rules. Besides, extra states are added for productions involved with <computeroutput>array</computeroutput> and <computeroutput>object</computeroutput>. In this way the generation of array values or object members would be a single state transition, rather than several pop/push operations in the direct implementation. This also makes the estimation of stack size more easier.</para>
+<para>The state diagram is shown as follows:</para>
+<para><image type="html" name="diagram/iterative-parser-states-diagram.png" alt="State Diagram" inline="yes"></image>
+</para>
+<para>Second, the iterative parser also keeps track of array&apos;s value count and object&apos;s member count in its internal stack, which may be different from a conventional implementation. </para>
+</sect3>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/internals.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,77 @@
+\hypertarget{clzll_8h_source}{}\doxysection{clzll.\+h}
+\label{clzll_8h_source}\index{src/rapidjson/include/rapidjson/internal/clzll.h@{src/rapidjson/include/rapidjson/internal/clzll.h}}
+\mbox{\hyperlink{clzll_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_CLZLL\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_CLZLL\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}../rapidjson.h"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& !defined(UNDER\_CE)}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include <intrin.h>}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#if defined(\_WIN64)}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#pragma intrinsic(\_BitScanReverse64)}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#pragma intrinsic(\_BitScanReverse)}}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{30 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{keyword}{inline} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} \mbox{\hyperlink{namespaceinternal_af72bbb0200bf0166f728c7afde826286}{clzll}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} x) \{}
+\DoxyCodeLine{33     \textcolor{comment}{// Passing 0 to \_\_builtin\_clzll is UB in GCC and results in an}}
+\DoxyCodeLine{34     \textcolor{comment}{// infinite loop in the software implementation.}}
+\DoxyCodeLine{35     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(x != 0);}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& !defined(UNDER\_CE)}}
+\DoxyCodeLine{38     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} r = 0;}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#if defined(\_WIN64)}}
+\DoxyCodeLine{40     \_BitScanReverse64(\&r, x);}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{42     \textcolor{comment}{// Scan the high 32 bits.}}
+\DoxyCodeLine{43     \textcolor{keywordflow}{if} (\_BitScanReverse(\&r, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(x >> 32)))}
+\DoxyCodeLine{44         \textcolor{keywordflow}{return} 63 -\/ (r + 32);}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{comment}{// Scan the low 32 bits.}}
+\DoxyCodeLine{47     \_BitScanReverse(\&r, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(x \& 0xFFFFFFFF));}
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_WIN64}}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50     \textcolor{keywordflow}{return} 63 -\/ r;}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#elif (defined(\_\_GNUC\_\_) \&\& \_\_GNUC\_\_ >= 4) || RAPIDJSON\_HAS\_BUILTIN(\_\_builtin\_clzll)}}
+\DoxyCodeLine{52     \textcolor{comment}{// \_\_builtin\_clzll wrapper}}
+\DoxyCodeLine{53     \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\_\_builtin\_clzll(x));}
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{55     \textcolor{comment}{// naive version}}
+\DoxyCodeLine{56     \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} r = 0;}
+\DoxyCodeLine{57     \textcolor{keywordflow}{while} (!(x \& (\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(1) << 63))) \{}
+\DoxyCodeLine{58         x <<= 1;}
+\DoxyCodeLine{59         ++r;}
+\DoxyCodeLine{60     \}}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \textcolor{keywordflow}{return} r;}
+\DoxyCodeLine{63 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_VER}}
+\DoxyCodeLine{64 \}}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{preprocessor}{\#define RAPIDJSON\_CLZLL RAPIDJSON\_NAMESPACE::internal::clzll}}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{69 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_CLZLL\_H\_}}
+
+\end{DoxyCode}

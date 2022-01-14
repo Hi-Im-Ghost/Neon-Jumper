@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_filereadstream_8h_source" xml:lang="en-US">
+<title>filereadstream.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/filereadstream.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_FILEREADSTREAM_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_FILEREADSTREAM_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stream_8h">stream.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&lt;cstdio&gt;</emphasis>
+20 
+21 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+22 RAPIDJSON_DIAG_PUSH
+23 RAPIDJSON_DIAG_OFF(padded)
+24 RAPIDJSON_DIAG_OFF(unreachable-code)
+25 RAPIDJSON_DIAG_OFF(missing-noreturn)
+26 <emphasis role="preprocessor">#endif</emphasis>
+27 
+28 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+29 
+31 
+34 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_file_read_stream">FileReadStream</link>&#32;{
+35 <emphasis role="keyword">public</emphasis>:
+36 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>;&#32;&#32;&#32;&#32;
+37 
+39 
+44 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1adf91191843d50b900f43cb4f35f16f67">FileReadStream</link>(std::FILE*&#32;fp,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;fp_(fp),&#32;buffer_(buffer),&#32;bufferSize_(bufferSize),&#32;bufferLast_(0),&#32;current_(buffer_),&#32;readCount_(0),&#32;count_(0),&#32;eof_(false)&#32;{&#32;
+45 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(fp_&#32;!=&#32;0);
+46 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(bufferSize&#32;&gt;=&#32;4);
+47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Read();
+48 &#32;&#32;&#32;&#32;}
+49 
+50 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1ab7d47da8952d3fe5856a261ec3c020c9">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*current_;&#32;}
+51 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1addcbccc9d86ccbbe6d8e876ba595dbcb">Take</link>()&#32;{&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;c&#32;=&#32;*current_;&#32;Read();&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;&#32;}
+52 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1ae82cfaafe347286b3af8976548bedf86">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(current_&#32;-&#32;buffer_);&#32;}
+53 
+54 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Not&#32;implemented</emphasis>
+55 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_read_stream_1a4f2eac5b08033b1527bff517be657a36">Put</link>(<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}
+56 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_read_stream_1acd031e3f578b23bc2a792ac41e1e95ae">Flush</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}&#32;
+57 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>*&#32;<link linkend="_class_file_read_stream_1a21421afa5b1f41f7349f633f290aa223">PutBegin</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+58 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1a886660c89f698ff913d641d61466108f">PutEnd</link>(<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>*)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+59 
+60 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;encoding&#32;detection&#32;only.</emphasis>
+61 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>*&#32;<link linkend="_class_file_read_stream_1a1989429ffa42111e6f56ee14a3916cac">Peek4</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(current_&#32;+&#32;4&#32;-&#32;!eof_&#32;&lt;=&#32;bufferLast_)&#32;?&#32;current_&#32;:&#32;0;
+63 &#32;&#32;&#32;&#32;}
+64 
+65 <emphasis role="keyword">private</emphasis>:
+66 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Read()&#32;{
+67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current_&#32;&lt;&#32;bufferLast_)
+68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++current_;
+69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!eof_)&#32;{
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;+=&#32;readCount_;
+71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;readCount_&#32;=&#32;std::fread(buffer_,&#32;1,&#32;bufferSize_,&#32;fp_);
+72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bufferLast_&#32;=&#32;buffer_&#32;+&#32;readCount_&#32;-&#32;1;
+73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;=&#32;buffer_;
+74 
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(readCount_&#32;&lt;&#32;bufferSize_)&#32;{
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer_[readCount_]&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++bufferLast_;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;eof_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+81 &#32;&#32;&#32;&#32;}
+82 
+83 &#32;&#32;&#32;&#32;std::FILE*&#32;fp_;
+84 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*buffer_;
+85 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize_;
+86 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*bufferLast_;
+87 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*current_;
+88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;readCount_;
+89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count_;&#32;&#32;
+90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;eof_;
+91 };
+92 
+93 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+94 
+95 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+96 RAPIDJSON_DIAG_POP
+97 <emphasis role="preprocessor">#endif</emphasis>
+98 
+99 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_FILESTREAM_H_</emphasis>
+</programlisting></section>

@@ -1,0 +1,457 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_dom" xml:lang="en-US">
+
+<para>Document Object Model(DOM) is an in-memory representation of JSON for query and manipulation. The basic usage of DOM is described in <link linkend="_tutorial_8md">Tutorial</link>. This section will describe some details and more advanced usages.</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Template">
+<title>Template</title>
+
+<para>In the tutorial, <computeroutput>Value</computeroutput> and <computeroutput>Document</computeroutput> was used. Similarly to <computeroutput>std::string</computeroutput>, these are actually <computeroutput>typedef</computeroutput> of template classes:</para>
+
+<para><literallayout><computeroutput>namespace&#32;rapidjson&#32;{
+
+template&#32;&lt;typename&#32;Encoding,&#32;typename&#32;Allocator&#32;=&#32;MemoryPoolAllocator&lt;&gt;&#32;&gt;
+class&#32;GenericValue&#32;{
+&#32;&#32;&#32;&#32;//&#32;...
+};
+
+template&#32;&lt;typename&#32;Encoding,&#32;typename&#32;Allocator&#32;=&#32;MemoryPoolAllocator&lt;&gt;&#32;&gt;
+class&#32;GenericDocument&#32;:&#32;public&#32;GenericValue&lt;Encoding,&#32;Allocator&gt;&#32;{
+&#32;&#32;&#32;&#32;//&#32;...
+};
+
+typedef&#32;GenericValue&lt;UTF8&lt;&gt;&#32;&gt;&#32;Value;
+typedef&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;Document;
+
+}&#32;//&#32;namespace&#32;rapidjson
+</computeroutput></literallayout></para>
+
+<para>User can customize these template parameters.</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Encoding">
+<title>Encoding</title>
+
+<para>The <computeroutput>Encoding</computeroutput> parameter specifies the encoding of JSON String value in memory. Possible options are <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f32">UTF32</link></computeroutput>. Note that, these 3 types are also template class. <computeroutput><link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;</computeroutput> is <computeroutput><link linkend="_struct_u_t_f8">UTF8</link>&lt;char&gt;</computeroutput>, which means using char to store the characters. You may refer to <link linkend="_encoding_8md">Encoding</link> for details.</para>
+
+<para>Suppose a Windows application would query localization strings stored in JSON files. Unicode-enabled functions in Windows use UTF-16 (wide character) encoding. No matter what encoding was used in JSON files, we can store the strings in UTF-16 in memory.</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+typedef&#32;GenericDocument&lt;UTF16&lt;&gt;&#32;&gt;&#32;WDocument;
+typedef&#32;GenericValue&lt;UTF16&lt;&gt;&#32;&gt;&#32;WValue;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;localization.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+AutoUTFInputStream&lt;unsigned,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;wraps&#32;bis&#32;into&#32;eis
+
+WDocument&#32;d;
+d.ParseStream&lt;0,&#32;AutoUTF&lt;unsigned&gt;&#32;&gt;(eis);
+
+const&#32;WValue&#32;locale(L&quot;ja&quot;);&#32;//&#32;Japanese
+
+MessageBoxW(hWnd,&#32;d[locale].GetString(),&#32;L&quot;Test&quot;,&#32;MB_OK);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Allocator">
+<title>Allocator</title>
+
+<para>The <computeroutput>Allocator</computeroutput> defines which allocator class is used when allocating/deallocating memory for <computeroutput>Document</computeroutput>/<computeroutput>Value</computeroutput>. <computeroutput>Document</computeroutput> owns, or references to an <computeroutput>Allocator</computeroutput> instance. On the other hand, <computeroutput>Value</computeroutput> does not do so, in order to reduce memory consumption.</para>
+
+<para>The default allocator used in <computeroutput><link linkend="_class_generic_document">GenericDocument</link></computeroutput> is <computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput>. This allocator actually allocate memory sequentially, and cannot deallocate one by one. This is very suitable when parsing a JSON into a DOM tree.</para>
+
+<para>Another allocator is <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>, of which CRT is short for C RunTime library. This allocator simply calls the standard <computeroutput>malloc()</computeroutput>/<computeroutput>realloc()</computeroutput>/<computeroutput>free()</computeroutput>. When there is a lot of add and remove operations, this allocator may be preferred. But this allocator is far less efficient than <computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Parsing">
+<title>Parsing</title>
+
+<para><computeroutput>Document</computeroutput> provides several functions for parsing. In below, (1) is the fundamental function, while the others are helpers which call (1).</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+//&#32;(1)&#32;Fundamental
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;SourceEncoding,&#32;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(2)&#32;Using&#32;the&#32;same&#32;Encoding&#32;for&#32;stream
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(3)&#32;Using&#32;default&#32;parse&#32;flags
+template&#32;&lt;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(4)&#32;In&#32;situ&#32;parsing
+template&#32;&lt;unsigned&#32;parseFlags&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseInsitu(Ch*&#32;str);
+
+//&#32;(5)&#32;In&#32;situ&#32;parsing,&#32;using&#32;default&#32;parse&#32;flags
+GenericDocument&amp;&#32;GenericDocument::ParseInsitu(Ch*&#32;str);
+
+//&#32;(6)&#32;Normal&#32;parsing&#32;of&#32;a&#32;string
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;SourceEncoding&gt;
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+
+//&#32;(7)&#32;Normal&#32;parsing&#32;of&#32;a&#32;string,&#32;using&#32;same&#32;Encoding&#32;of&#32;Document
+template&#32;&lt;unsigned&#32;parseFlags&gt;
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+
+//&#32;(8)&#32;Normal&#32;parsing&#32;of&#32;a&#32;string,&#32;using&#32;default&#32;parse&#32;flags
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+</computeroutput></literallayout></para>
+
+<para>The examples of <link linkend="_tutorial_8md">tutorial</link> uses (8) for normal parsing of string. The examples of <link linkend="_stream_8md">stream</link> uses the first three. <emphasis>In situ</emphasis> parsing will be described soon.</para>
+
+<para>The <computeroutput>parseFlags</computeroutput> are combination of the following bit-flags:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Parse flags   </para>
+</entry><entry>
+<para>Meaning    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNoFlags</computeroutput>   </para>
+</entry><entry>
+<para>No flag is set.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseDefaultFlags</computeroutput>   </para>
+</entry><entry>
+<para>Default parse flags. It is equal to macro <computeroutput>RAPIDJSON_PARSE_DEFAULT_FLAGS</computeroutput>, which is defined as <computeroutput>kParseNoFlags</computeroutput>.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseInsituFlag</computeroutput>   </para>
+</entry><entry>
+<para>In-situ(destructive) parsing.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseValidateEncodingFlag</computeroutput>   </para>
+</entry><entry>
+<para>Validate encoding of JSON strings.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseIterativeFlag</computeroutput>   </para>
+</entry><entry>
+<para>Iterative(constant complexity in terms of function call stack size) parsing.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseStopWhenDoneFlag</computeroutput>   </para>
+</entry><entry>
+<para>After parsing a complete JSON root from stream, stop further processing the rest of stream. When this flag is used, parser will not generate <computeroutput>kParseErrorDocumentRootNotSingular</computeroutput> error. Using this flag for parsing multiple JSONs in the same stream.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseFullPrecisionFlag</computeroutput>   </para>
+</entry><entry>
+<para>Parse number in full precision (slower). If this flag is not set, the normal precision (faster) is used. Normal precision has maximum 3 <link xlink:href="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</link> error.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseCommentsFlag</computeroutput>   </para>
+</entry><entry>
+<para>Allow one-line <computeroutput>// ...</computeroutput> and multi-line <computeroutput>/* ... */</computeroutput> comments (relaxed JSON syntax).    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNumbersAsStringsFlag</computeroutput>   </para>
+</entry><entry>
+<para>Parse numerical type values as strings.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseTrailingCommasFlag</computeroutput>   </para>
+</entry><entry>
+<para>Allow trailing commas at the end of objects and arrays (relaxed JSON syntax).    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNanAndInfFlag</computeroutput>   </para>
+</entry><entry>
+<para>Allow parsing <computeroutput>NaN</computeroutput>, <computeroutput>Inf</computeroutput>, <computeroutput>Infinity</computeroutput>, <computeroutput>-Inf</computeroutput> and <computeroutput>-Infinity</computeroutput> as <computeroutput>double</computeroutput> values (relaxed JSON syntax).    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseEscapedApostropheFlag</computeroutput>   </para>
+</entry><entry>
+<para>Allow escaped apostrophe &#8216;&amp;rsquo;` in strings (relaxed JSON syntax).   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>By using a non-type template parameter, instead of a function parameter, C++ compiler can generate code which is optimized for specified combinations, improving speed, and reducing code size (if only using a single specialization). The downside is the flags needed to be determined in compile-time.</para>
+
+<para>The <computeroutput>SourceEncoding</computeroutput> parameter defines what encoding is in the stream. This can be differed to the <computeroutput>Encoding</computeroutput> of the <computeroutput>Document</computeroutput>. See <link linkend="_md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation">Transcoding and Validation</link> section for details.</para>
+
+<para>And the <computeroutput>InputStream</computeroutput> is type of input stream.</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1ParseError">
+<title>Parse Error</title>
+
+<para>When the parse processing succeeded, the <computeroutput>Document</computeroutput> contains the parse results. When there is an error, the original DOM is <emphasis>unchanged</emphasis>. And the error state of parsing can be obtained by <computeroutput>bool HasParseError()</computeroutput>, <computeroutput>ParseErrorCode GetParseError()</computeroutput> and <computeroutput>size_t GetErrorOffset()</computeroutput>.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Parse Error Code   </para>
+</entry><entry>
+<para>Description    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorNone</computeroutput>   </para>
+</entry><entry>
+<para>No error.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorDocumentEmpty</computeroutput>   </para>
+</entry><entry>
+<para>The document is empty.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorDocumentRootNotSingular</computeroutput>   </para>
+</entry><entry>
+<para>The document root must not follow by other values.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorValueInvalid</computeroutput>   </para>
+</entry><entry>
+<para>Invalid value.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissName</computeroutput>   </para>
+</entry><entry>
+<para>Missing a name for object member.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissColon</computeroutput>   </para>
+</entry><entry>
+<para>Missing a colon after a name of object member.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissCommaOrCurlyBracket</computeroutput>   </para>
+</entry><entry>
+<para>Missing a comma or <computeroutput>}</computeroutput> after an object member.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorArrayMissCommaOrSquareBracket</computeroutput>   </para>
+</entry><entry>
+<para>Missing a comma or <computeroutput>]</computeroutput> after an array element.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringUnicodeEscapeInvalidHex</computeroutput>   </para>
+</entry><entry>
+<para>Incorrect hex digit after <computeroutput>\\u</computeroutput> escape in string.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorStringUnicodeSurrogateInvalid</computeroutput>   </para>
+</entry><entry>
+<para>The surrogate pair in string is invalid.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringEscapeInvalid</computeroutput>   </para>
+</entry><entry>
+<para>Invalid escape character in string.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorStringMissQuotationMark</computeroutput>   </para>
+</entry><entry>
+<para>Missing a closing quotation mark in string.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringInvalidEncoding</computeroutput>   </para>
+</entry><entry>
+<para>Invalid encoding in string.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorNumberTooBig</computeroutput>   </para>
+</entry><entry>
+<para>Number too big to be stored in <computeroutput>double</computeroutput>.    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorNumberMissFraction</computeroutput>   </para>
+</entry><entry>
+<para>Miss fraction part in number.    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorNumberMissExponent</computeroutput>   </para>
+</entry><entry>
+<para>Miss exponent in number.   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>The offset of error is defined as the character number from beginning of stream. Currently RapidJSON does not keep track of line number.</para>
+
+<para>To get an error message, RapidJSON provided a English messages in <computeroutput><link linkend="_en_8h">rapidjson/error/en.h</link></computeroutput>. User can customize it for other locales, or use a custom localization system.</para>
+
+<para>Here shows an example of parse error handling.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/error/en.h&quot;
+
+//&#32;...
+Document&#32;d;
+if&#32;(d.Parse(json).HasParseError())&#32;{
+&#32;&#32;&#32;&#32;fprintf(stderr,&#32;&quot;\nError(offset&#32;%u):&#32;%s\n&quot;,&#32;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(unsigned)d.GetErrorOffset(),
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetParseError_En(d.GetParseError()));
+&#32;&#32;&#32;&#32;//&#32;...
+}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1InSituParsing">
+<title>In Situ Parsing</title>
+
+<para>From <link xlink:href="http://en.wikipedia.org/wiki/In_situ">Wikipedia</link>:</para>
+
+<para><blockquote>
+<para>&#8205;<emphasis>In situ</emphasis> ... is a Latin phrase that translates literally to &quot;on site&quot; or &quot;in position&quot;. It means &quot;locally&quot;, &quot;on site&quot;, &quot;on the premises&quot; or &quot;in place&quot; to describe an event where it takes place, and is used in many different contexts. ... (In computer science) An algorithm is said to be an in situ algorithm, or in-place algorithm, if the extra amount of memory required to execute the algorithm is O(1), that is, does not exceed a constant no matter how large the input. For example, heapsort is an in situ sorting algorithm. </para>
+</blockquote>In normal parsing process, a large overhead is to decode JSON strings and copy them to other buffers. <emphasis>In situ</emphasis> parsing decodes those JSON string at the place where it is stored. It is possible in JSON because the length of decoded string is always shorter than or equal to the one in JSON. In this context, decoding a JSON string means to process the escapes, such as <computeroutput>&quot;\n&quot;</computeroutput>, <computeroutput>&quot;\u1234&quot;</computeroutput>, etc., and add a null terminator (&#8216;&#8217;\0&apos;`)at the end of string.</para>
+
+<para>The following diagrams compare normal and <emphasis>in situ</emphasis> parsing. The JSON string values contain pointers to the decoded string.</para>
+
+<para></para>
+
+<para>In normal parsing, the decoded string are copied to freshly allocated buffers. <computeroutput>&quot;\\n&quot;</computeroutput> (2 characters) is decoded as <computeroutput>&quot;\n&quot;</computeroutput> (1 character). <computeroutput>&quot;\\u0073&quot;</computeroutput> (6 characters) is decoded as <computeroutput>&quot;s&quot;</computeroutput> (1 character).</para>
+
+<para></para>
+
+<para><emphasis>In situ</emphasis> parsing just modified the original JSON. Updated characters are highlighted in the diagram. If the JSON string does not contain escape character, such as <computeroutput>&quot;msg&quot;</computeroutput>, the parsing process merely replace the closing double quotation mark with a null character.</para>
+
+<para>Since <emphasis>in situ</emphasis> parsing modify the input, the parsing API needs <computeroutput>char*</computeroutput> instead of <computeroutput>const char*</computeroutput>.</para>
+
+<para><literallayout><computeroutput>//&#32;Read&#32;whole&#32;file&#32;into&#32;a&#32;buffer
+FILE*&#32;fp&#32;=&#32;fopen(&quot;test.json&quot;,&#32;&quot;r&quot;);
+fseek(fp,&#32;0,&#32;SEEK_END);
+size_t&#32;filesize&#32;=&#32;(size_t)ftell(fp);
+fseek(fp,&#32;0,&#32;SEEK_SET);
+char*&#32;buffer&#32;=&#32;(char*)malloc(filesize&#32;+&#32;1);
+size_t&#32;readLength&#32;=&#32;fread(buffer,&#32;1,&#32;filesize,&#32;fp);
+buffer[readLength]&#32;=&#32;&apos;\0&apos;;
+fclose(fp);
+
+//&#32;In&#32;situ&#32;parsing&#32;the&#32;buffer&#32;into&#32;d,&#32;buffer&#32;will&#32;also&#32;be&#32;modified
+Document&#32;d;
+d.ParseInsitu(buffer);
+
+//&#32;Query/manipulate&#32;the&#32;DOM&#32;here...
+
+free(buffer);
+//&#32;Note:&#32;At&#32;this&#32;point,&#32;d&#32;may&#32;have&#32;dangling&#32;pointers&#32;pointed&#32;to&#32;the&#32;deallocated&#32;buffer.
+</computeroutput></literallayout></para>
+
+<para>The JSON strings are marked as const-string. But they may not be really &quot;constant&quot;. The life cycle of it depends on the JSON buffer.</para>
+
+<para>In situ parsing minimizes allocation overheads and memory copying. Generally this improves cache coherence, which is an important factor of performance in modern computer.</para>
+
+<para>There are some limitations of <emphasis>in situ</emphasis> parsing:</para>
+
+<para><orderedlist>
+<listitem>
+<para>The whole JSON is in memory.</para>
+</listitem><listitem>
+<para>The source encoding in stream and target encoding in document must be the same.</para>
+</listitem><listitem>
+<para>The buffer need to be retained until the document is no longer used.</para>
+</listitem><listitem>
+<para>If the DOM need to be used for long period after parsing, and there are few JSON strings in the DOM, retaining the buffer may be a memory waste.</para>
+</listitem></orderedlist>
+</para>
+
+<para><emphasis>In situ</emphasis> parsing is mostly suitable for short-term JSON that only need to be processed once, and then be released from memory. In practice, these situation is very common, for example, deserializing JSON to C++ objects, processing web requests represented in JSON, etc.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation">
+<title>Transcoding and Validation</title>
+
+<para>RapidJSON supports conversion between Unicode formats (officially termed UCS Transformation Format) internally. During DOM parsing, the source encoding of the stream can be different from the encoding of the DOM. For example, the source stream contains a UTF-8 JSON, while the DOM is using UTF-16 encoding. There is an example code in <link linkend="_stream_8md">EncodedInputStream</link>.</para>
+
+<para>When writing a JSON from DOM to output stream, transcoding can also be used. An example is in <link linkend="_stream_8md">EncodedOutputStream</link>.</para>
+
+<para>During transcoding, the source string is decoded to into Unicode code points, and then the code points are encoded in the target format. During decoding, it will validate the byte sequence in the source string. If it is not a valid sequence, the parser will be stopped with <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> error.</para>
+
+<para>When the source encoding of stream is the same as encoding of DOM, by default, the parser will <emphasis>not</emphasis> validate the sequence. User may use <computeroutput>kParseValidateEncodingFlag</computeroutput> to force validation.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Techniques">
+<title>Techniques</title>
+
+<para>Some techniques about using DOM API is discussed here.</para>
+<section xml:id="_md_src_rapidjson_doc_dom_1autotoc_md44">
+<title>DOM as SAX Event Publisher</title>
+
+<para>In RapidJSON, stringifying a DOM with <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> may be look a little bit weird.</para>
+
+<para><literallayout><computeroutput>//&#32;...
+Writer&lt;StringBuffer&gt;&#32;writer(buffer);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>Actually, <computeroutput>Value::Accept()</computeroutput> is responsible for publishing SAX events about the value to the handler. With this design, <computeroutput>Value</computeroutput> and <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> are decoupled. <computeroutput>Value</computeroutput> can generate SAX events, and <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> can handle those events.</para>
+
+<para>User may create custom handlers for transforming the DOM into other formats. For example, a handler which converts the DOM into XML.</para>
+
+<para>For more about SAX events and handler, please refer to <link linkend="_sax_8md">SAX</link>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1UserBuffer">
+<title>User Buffer</title>
+
+<para>Some applications may try to avoid memory allocations whenever possible.</para>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> can support this by letting user to provide a buffer. The buffer can be on the program stack, or a &quot;scratch buffer&quot; which is statically allocated (a static/global array) for storing temporary data.</para>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> will use the user buffer to satisfy allocations. When the user buffer is used up, it will allocate a chunk of memory from the base allocator (by default the <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>).</para>
+
+<para>Here is an example of using stack memory. The first allocator is for storing values, while the second allocator is for storing temporary data during parsing.</para>
+
+<para><literallayout><computeroutput>typedef&#32;GenericDocument&lt;UTF8&lt;&gt;,&#32;MemoryPoolAllocator&lt;&gt;,&#32;MemoryPoolAllocator&lt;&gt;&gt;&#32;DocumentType;
+char&#32;valueBuffer[4096];
+char&#32;parseBuffer[1024];
+MemoryPoolAllocator&lt;&gt;&#32;valueAllocator(valueBuffer,&#32;sizeof(valueBuffer));
+MemoryPoolAllocator&lt;&gt;&#32;parseAllocator(parseBuffer,&#32;sizeof(parseBuffer));
+DocumentType&#32;d(&amp;valueAllocator,&#32;sizeof(parseBuffer),&#32;&amp;parseAllocator);
+d.Parse(json);
+</computeroutput></literallayout></para>
+
+<para>If the total size of allocation is less than 4096+1024 bytes during parsing, this code does not invoke any heap allocation (via <computeroutput>new</computeroutput> or <computeroutput>malloc()</computeroutput>) at all.</para>
+
+<para>User can query the current memory consumption in bytes via <computeroutput><link linkend="_class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d">MemoryPoolAllocator::Size()</link></computeroutput>. And then user can determine a suitable size of user buffer. </para>
+</section>
+</section>
+</section>

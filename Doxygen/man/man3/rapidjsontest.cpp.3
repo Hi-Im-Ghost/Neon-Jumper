@@ -1,0 +1,301 @@
+.TH "src/rapidjson/test/perftest/rapidjsontest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/perftest/rapidjsontest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'perftest\&.h'\fP
+.br
+\fC#include 'rapidjson/rapidjson\&.h'\fP
+.br
+\fC#include 'rapidjson/document\&.h'\fP
+.br
+\fC#include 'rapidjson/prettywriter\&.h'\fP
+.br
+\fC#include 'rapidjson/stringbuffer\&.h'\fP
+.br
+\fC#include 'rapidjson/filereadstream\&.h'\fP
+.br
+\fC#include 'rapidjson/istreamwrapper\&.h'\fP
+.br
+\fC#include 'rapidjson/encodedstream\&.h'\fP
+.br
+\fC#include 'rapidjson/memorystream\&.h'\fP
+.br
+\fC#include <fstream>\fP
+.br
+\fC#include <vector>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBRapidJson\fP"
+.br
+.ti -1c
+.RI "struct \fBValueCounter\fP"
+.br
+.ti -1c
+.RI "struct \fBNullStream\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBSIMD_SUFFIX\fP(name)   name"
+.br
+.ti -1c
+.RI "#define \fBTEST_TYPED\fP(index,  Name)"
+.br
+.ti -1c
+.RI "#define \fBTEST_TYPED\fP(index,  Name)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseInsitu_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseInsitu_DummyHandler_ValidateEncoding))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_FullPrecision))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterative_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativeInsitu_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativePull_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativePullInsitu_DummyHandler))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_ValidateEncoding))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseInsitu_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseIterativeInsitu_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParse_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseLength_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseStdString_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseIterative_MemoryPoolAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParse_CrtAllocator))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseEncodedInputStream_MemoryStream))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseAutoUTFInputStream_MemoryStream))"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > size_t \fBTraverse\fP (const \fBT\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, DocumentTraverse)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, DocumentAccept)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, DocumentFind)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, Writer_NullStream)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(Writer_StringBuffer))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(PrettyWriter_StringBuffer))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, internal_Pow10)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, SkipWhitespace_Basic)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(\fBSkipWhitespace\fP))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, SkipWhitespace_strspn)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, UTF8_Validate)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBFileReadStream\fP)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_FileReadStream))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBIStreamWrapper\fP)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, IStreamWrapper_Unbuffered)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, IStreamWrapper_Setbuffered)"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper_Unbuffered))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper_Setbuffered))"
+.br
+.ti -1c
+.RI "\fBTEST_F\fP (\fBRapidJson\fP, \fBStringBuffer\fP)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define SIMD_SUFFIX(name)   name"
+
+.SS "#define TEST_TYPED(index, Name)"
+\fBValue:\fP
+.PP
+.nf
+TEST_F(RapidJson, SIMD_SUFFIX(ReaderParse_DummyHandler_##Name)) {\
+    for (size_t i = 0; i < kTrialCount * 10; i++) {\
+        StringStream s(types_[index]);\
+        BaseReaderHandler<> h;\
+        Reader reader;\
+        EXPECT_TRUE(reader\&.Parse(s, h));\
+    }\
+}\
+TEST_F(RapidJson, SIMD_SUFFIX(ReaderParseInsitu_DummyHandler_##Name)) {\
+    for (size_t i = 0; i < kTrialCount * 10; i++) {\
+        memcpy(temp_, types_[index], typesLength_[index] + 1);\
+        InsituStringStream s(temp_);\
+        BaseReaderHandler<> h;\
+        Reader reader;\
+        EXPECT_TRUE(reader\&.Parse<kParseInsituFlag>(s, h));\
+    }\
+}
+.fi
+.SS "#define TEST_TYPED(index, Name)"
+\fBValue:\fP
+.PP
+.nf
+TEST_F(RapidJson, SIMD_SUFFIX(Writer_StringBuffer_##Name)) {\
+    for (size_t i = 0; i < kTrialCount * 10; i++) {\
+        StringBuffer s(0, 1024 * 1024);\
+        Writer<StringBuffer> writer(s);\
+        typesDoc_[index]\&.Accept(writer);\
+        const char* str = s\&.GetString();\
+        (void)str;\
+    }\
+}
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "TEST_F (\fBRapidJson\fP, DocumentAccept)"
+
+.SS "TEST_F (\fBRapidJson\fP, DocumentFind)"
+
+.SS "TEST_F (\fBRapidJson\fP, DocumentTraverse)"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBFileReadStream\fP)"
+
+.SS "TEST_F (\fBRapidJson\fP, internal_Pow10)"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBIStreamWrapper\fP)"
+
+.SS "TEST_F (\fBRapidJson\fP, IStreamWrapper_Setbuffered)"
+
+.SS "TEST_F (\fBRapidJson\fP, IStreamWrapper_Unbuffered)"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParse_CrtAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParse_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseAutoUTFInputStream_MemoryStream))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseEncodedInputStream_MemoryStream))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseInsitu_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseIterative_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseIterativeInsitu_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseLength_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(DocumentParseStdString_MemoryPoolAllocator))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(PrettyWriter_StringBuffer))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_FileReadStream))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_FullPrecision))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper_Setbuffered))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_IStreamWrapper_Unbuffered))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParse_DummyHandler_ValidateEncoding))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseInsitu_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseInsitu_DummyHandler_ValidateEncoding))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterative_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativeInsitu_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativePull_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(ReaderParseIterativePullInsitu_DummyHandler))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(\fBSkipWhitespace\fP))"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBSIMD_SUFFIX\fP(Writer_StringBuffer))"
+
+.SS "TEST_F (\fBRapidJson\fP, SkipWhitespace_Basic)"
+
+.SS "TEST_F (\fBRapidJson\fP, SkipWhitespace_strspn)"
+
+.SS "TEST_F (\fBRapidJson\fP, \fBStringBuffer\fP)"
+
+.SS "TEST_F (\fBRapidJson\fP, UTF8_Validate)"
+
+.SS "TEST_F (\fBRapidJson\fP, Writer_NullStream)"
+
+.SS "template<typename \fBT\fP > size_t Traverse (const \fBT\fP & value)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

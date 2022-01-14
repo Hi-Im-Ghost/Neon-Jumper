@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_pointer" xml:lang="en-US">
+
+<para>(This feature was released in v1.1.0)</para>
+
+<para>JSON Pointer is a standardized (<link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link>) way to select a value inside a JSON Document (DOM). This can be analogous to XPath for XML document. However, JSON Pointer is much simpler, and a single JSON Pointer only pointed to a single value.</para>
+
+<para>Using RapidJSON&apos;s implementation of JSON Pointer can simplify some manipulations of the DOM.</para>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1JsonPointer">
+<title>JSON Pointer</title>
+
+<para>A JSON Pointer is a list of zero-to-many tokens, each prefixed by <computeroutput>/</computeroutput>. Each token can be a string or a number. For example, given a JSON: <literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;foo&quot;&#32;:&#32;[&quot;bar&quot;,&#32;&quot;baz&quot;],
+&#32;&#32;&#32;&#32;&quot;pi&quot;&#32;:&#32;3.1416
+}
+</computeroutput></literallayout></para>
+
+<para>The following JSON Pointers resolve this JSON as:</para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>&quot;/foo&quot;</computeroutput> → <computeroutput>[ &quot;bar&quot;, &quot;baz&quot; ]</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/foo/0&quot;</computeroutput> → <computeroutput>&quot;bar&quot;</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/foo/1&quot;</computeroutput> → <computeroutput>&quot;baz&quot;</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/pi&quot;</computeroutput> → <computeroutput>3.1416</computeroutput></para>
+</listitem></orderedlist>
+</para>
+
+<para>Note that, an empty JSON Pointer <computeroutput>&quot;&quot;</computeroutput> (zero token) resolves to the whole JSON.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1BasicUsage">
+<title>Basic Usage</title>
+
+<para>The following example code is self-explanatory.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/pointer.h&quot;
+
+//&#32;...
+Document&#32;d;
+
+//&#32;Create&#32;DOM&#32;by&#32;Set()
+Pointer(&quot;/project&quot;).Set(d,&#32;&quot;RapidJSON&quot;);
+Pointer(&quot;/stars&quot;).Set(d,&#32;10);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;10&#32;}
+
+//&#32;Access&#32;DOM&#32;by&#32;Get().&#32;It&#32;return&#32;nullptr&#32;if&#32;the&#32;value&#32;does&#32;not&#32;exist.
+if&#32;(Value*&#32;stars&#32;=&#32;Pointer(&quot;/stars&quot;).Get(d))
+&#32;&#32;&#32;&#32;stars-&gt;SetInt(stars-&gt;GetInt()&#32;+&#32;1);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11&#32;}
+
+//&#32;Set()&#32;and&#32;Create()&#32;automatically&#32;generate&#32;parents&#32;if&#32;not&#32;exist.
+Pointer(&quot;/a/b/0&quot;).Create(d);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;}&#32;}
+
+//&#32;GetWithDefault()&#32;returns&#32;reference.&#32;And&#32;it&#32;deep&#32;clones&#32;the&#32;default&#32;value.
+Value&amp;&#32;hello&#32;=&#32;Pointer(&quot;/hello&quot;).GetWithDefault(d,&#32;&quot;world&quot;);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;},&#32;&quot;hello&quot;&#32;:&#32;&quot;world&quot;&#32;}
+
+//&#32;Swap()&#32;is&#32;similar&#32;to&#32;Set()
+Value&#32;x(&quot;C++&quot;);
+Pointer(&quot;/hello&quot;).Swap(d,&#32;x);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;},&#32;&quot;hello&quot;&#32;:&#32;&quot;C++&quot;&#32;}
+//&#32;x&#32;becomes&#32;&quot;world&quot;
+
+//&#32;Erase&#32;a&#32;member&#32;or&#32;element,&#32;return&#32;true&#32;if&#32;the&#32;value&#32;exists
+bool&#32;success&#32;=&#32;Pointer(&quot;/a&quot;).Erase(d);
+assert(success);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;10&#32;}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1HelperFunctions">
+<title>Helper Functions</title>
+
+<para>Since object-oriented calling convention may be non-intuitive, RapidJSON also provides helper functions, which just wrap the member functions with free-functions.</para>
+
+<para>The following example does exactly the same as the above one.</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+
+SetValueByPointer(d,&#32;&quot;/project&quot;,&#32;&quot;RapidJSON&quot;);
+SetValueByPointer(d,&#32;&quot;/stars&quot;,&#32;10);
+
+if&#32;(Value*&#32;stars&#32;=&#32;GetValueByPointer(d,&#32;&quot;/stars&quot;))
+&#32;&#32;&#32;&#32;stars-&gt;SetInt(stars-&gt;GetInt()&#32;+&#32;1);
+
+CreateValueByPointer(d,&#32;&quot;/a/b/0&quot;);
+
+Value&amp;&#32;hello&#32;=&#32;GetValueByPointerWithDefault(d,&#32;&quot;/hello&quot;,&#32;&quot;world&quot;);
+
+Value&#32;x(&quot;C++&quot;);
+SwapValueByPointer(d,&#32;&quot;/hello&quot;,&#32;x);
+
+bool&#32;success&#32;=&#32;EraseValueByPointer(d,&#32;&quot;/a&quot;);
+assert(success);
+</computeroutput></literallayout></para>
+
+<para>The conventions are shown here for comparison:</para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>Pointer(source).&lt;Method&gt;(root, ...)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&lt;Method&gt;ValueByPointer(root, Pointer(source), ...)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&lt;Method&gt;ValueByPointer(root, source, ...)</computeroutput></para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1ResolvingPointer">
+<title>Resolving Pointer</title>
+
+<para><computeroutput>Pointer::Get()</computeroutput> or <computeroutput><link linkend="_pointer_8h_1a581633984b11d0587c2ad06649efefc4">GetValueByPointer()</link></computeroutput> function does not modify the DOM. If the tokens cannot match a value in the DOM, it returns <computeroutput>nullptr</computeroutput>. User can use this to check whether a value exists.</para>
+
+<para>Note that, numerical tokens can represent an array index or member name. The resolving process will match the values according to the types of value.</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;0&quot;&#32;:&#32;123,
+&#32;&#32;&#32;&#32;&quot;1&quot;&#32;:&#32;[456]
+}
+</computeroutput></literallayout></para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>&quot;/0&quot;</computeroutput> → <computeroutput>123</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/1/0&quot;</computeroutput> → <computeroutput>456</computeroutput></para>
+</listitem></orderedlist>
+</para>
+
+<para>The token <computeroutput>&quot;0&quot;</computeroutput> is treated as member name in the first pointer. It is treated as an array index in the second pointer.</para>
+
+<para>The other functions, including <computeroutput>Create()</computeroutput>, <computeroutput>GetWithDefault()</computeroutput>, <computeroutput>Set()</computeroutput> and <computeroutput><link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">Swap()</link></computeroutput>, will change the DOM. These functions will always succeed. They will create the parent values if they do not exist. If the parent values do not match the tokens, they will also be forced to change their type. Changing the type also mean fully removal of that DOM subtree.</para>
+
+<para>Parsing the above JSON into <computeroutput>d</computeroutput>,</para>
+
+<para><literallayout><computeroutput>SetValueByPointer(d,&#32;&quot;1/a&quot;,&#32;789);&#32;//&#32;{&#32;&quot;0&quot;&#32;:&#32;123,&#32;&quot;1&quot;&#32;:&#32;{&#32;&quot;a&quot;&#32;:&#32;789&#32;}&#32;}
+</computeroutput></literallayout></para>
+<section xml:id="_md_src_rapidjson_doc_pointer_1autotoc_md105">
+<title>Resolving Minus Sign Token</title>
+
+<para>Besides, <link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link> defines a special token <computeroutput>-</computeroutput> (single minus sign), which represents the pass-the-end element of an array. <computeroutput>Get()</computeroutput> only treats this token as a member name &apos;&quot;-&quot;&apos;. Yet the other functions can resolve this for array, equivalent to calling <computeroutput>Value::PushBack()</computeroutput> to the array.</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+d.Parse(&quot;{\&quot;foo\&quot;:[123]}&quot;);
+SetValueByPointer(d,&#32;&quot;/foo/-&quot;,&#32;456);&#32;//&#32;{&#32;&quot;foo&quot;&#32;:&#32;[123,&#32;456]&#32;}
+SetValueByPointer(d,&#32;&quot;/-&quot;,&#32;789);&#32;&#32;&#32;&#32;//&#32;{&#32;&quot;foo&quot;&#32;:&#32;[123,&#32;456],&#32;&quot;-&quot;&#32;:&#32;789&#32;}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_1autotoc_md106">
+<title>Resolving Document and Value</title>
+
+<para>When using <computeroutput>p.Get(root)</computeroutput> or <computeroutput>GetValueByPointer(root, p)</computeroutput>, <computeroutput>root</computeroutput> is a (const) <computeroutput>Value&amp;</computeroutput>. That means, it can be a subtree of the DOM.</para>
+
+<para>The other functions have two groups of signature. One group uses <computeroutput>Document&amp; document</computeroutput> as parameter, another one uses <computeroutput>Value&amp; root</computeroutput>. The first group uses <computeroutput>document.GetAllocator()</computeroutput> for creating values. And the second group needs user to supply an allocator, like the functions in DOM.</para>
+
+<para>All examples above do not require an allocator parameter, because the first parameter is a <computeroutput>Document&amp;</computeroutput>. But if you want to resolve a pointer to a subtree, you need to supply the allocator as in the following example:</para>
+
+<para><literallayout><computeroutput>class&#32;Person&#32;{
+public:
+&#32;&#32;&#32;&#32;Person()&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;document_&#32;=&#32;new&#32;Document();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;CreateValueByPointer()&#32;here&#32;no&#32;need&#32;allocator
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetLocation(CreateValueByPointer(*document_,&#32;&quot;/residence&quot;),&#32;...);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetLocation(CreateValueByPointer(*document_,&#32;&quot;/office&quot;),&#32;...);
+&#32;&#32;&#32;&#32;};
+
+private:
+&#32;&#32;&#32;&#32;void&#32;SetLocation(Value&amp;&#32;location,&#32;const&#32;char*&#32;country,&#32;const&#32;char*&#32;addresses[2])&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Value::Allocator&amp;&#32;a&#32;=&#32;document_-&gt;GetAllocator();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;SetValueByPointer()&#32;here&#32;need&#32;allocator
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/country&quot;,&#32;country,&#32;a);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/address/0&quot;,&#32;address[0],&#32;a);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/address/1&quot;,&#32;address[1],&#32;a);
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;//&#32;...
+
+&#32;&#32;&#32;&#32;Document*&#32;document_;
+};
+</computeroutput></literallayout></para>
+
+<para><computeroutput>Erase()</computeroutput> or <computeroutput><link linkend="_pointer_8h_1a7342710933f35ad7267c871f4a8cc55f">EraseValueByPointer()</link></computeroutput> does not need allocator. And they return <computeroutput>true</computeroutput> if the value is erased successfully.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1ErrorHandling">
+<title>Error Handling</title>
+
+<para>A <computeroutput>Pointer</computeroutput> parses a source string in its constructor. If there is parsing error, <computeroutput>Pointer::IsValid()</computeroutput> returns <computeroutput>false</computeroutput>. And you can use <computeroutput>Pointer::GetParseErrorCode()</computeroutput> and <computeroutput>GetParseErrorOffset()</computeroutput> to retrieve the error information.</para>
+
+<para>Note that, all resolving functions assumes valid pointer. Resolving with an invalid pointer causes assertion failure.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1URIFragment">
+<title>URI Fragment Representation</title>
+
+<para>In addition to the string representation of JSON pointer that we are using till now, <link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link> also defines the URI fragment representation of JSON pointer. URI fragment is specified in <link xlink:href="https://tools.ietf.org/html/rfc3986">RFC3986</link> &quot;Uniform Resource Identifier (URI): Generic Syntax&quot;.</para>
+
+<para>The main differences are that a the URI fragment always has a <computeroutput>#</computeroutput> (pound sign) in the beginning, and some characters are encoded by percent-encoding in UTF-8 sequence. For example, the following table shows different C/C++ string literals of different representations.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="3" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>String Representation   </para>
+</entry><entry>
+<para>URI Fragment Representation   </para>
+</entry><entry>
+<para>Pointer Tokens (UTF-8)    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/foo/0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/foo/0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;foo&quot;, 0}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/a~1b&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/a~1b&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;a/b&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/m~0n&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/m~0n&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;m~n&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/ &quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%20&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot; &quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/\0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%00&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;\0&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/€&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%E2%82%AC&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;€&quot;}</computeroutput>   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>RapidJSON fully support URI fragment representation. It automatically detects the pound sign during parsing.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_1autotoc_md107">
+<title>Stringify</title>
+
+<para>You may also stringify a <computeroutput>Pointer</computeroutput> to a string or other output streams. This can be done by:</para>
+
+<para><literallayout><computeroutput>Pointer&#32;p(...);
+StringBuffer&#32;sb;
+p.Stringify(sb);
+std::cout&#32;&lt;&lt;&#32;sb.GetString()&#32;&lt;&lt;&#32;std::endl;
+</computeroutput></literallayout></para>
+
+<para>It can also stringify to URI fragment representation by <computeroutput>StringifyUriFragment()</computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1UserSuppliedTokens">
+<title>User-Supplied Tokens</title>
+
+<para>If a pointer will be resolved multiple times, it should be constructed once, and then apply it to different DOMs or in different times. This reduce time and memory allocation for constructing <computeroutput>Pointer</computeroutput> multiple times.</para>
+
+<para>We can go one step further, to completely eliminate the parsing process and dynamic memory allocation, we can establish the token array directly:</para>
+
+<para><literallayout><computeroutput>#define&#32;NAME(s)&#32;{&#32;s,&#32;sizeof(s)&#32;/&#32;sizeof(s[0])&#32;-&#32;1,&#32;kPointerInvalidIndex&#32;}
+#define&#32;INDEX(i)&#32;{&#32;#i,&#32;sizeof(#i)&#32;-&#32;1,&#32;i&#32;}
+
+static&#32;const&#32;Pointer::Token&#32;kTokens[]&#32;=&#32;{&#32;NAME(&quot;foo&quot;),&#32;INDEX(123)&#32;};
+static&#32;const&#32;Pointer&#32;p(kTokens,&#32;sizeof(kTokens)&#32;/&#32;sizeof(kTokens[0]));
+//&#32;Equivalent&#32;to&#32;static&#32;const&#32;Pointer&#32;p(&quot;/foo/123&quot;);
+</computeroutput></literallayout></para>
+
+<para>This may be useful for memory constrained systems. </para>
+</section>
+</section>

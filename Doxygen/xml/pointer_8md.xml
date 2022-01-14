@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="pointer_8md" kind="file" language="Markdown">
+    <compoundname>pointer.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Pointer</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(This<sp/>feature<sp/>was<sp/>released<sp/>in<sp/>v1.1.0)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>Pointer<sp/>is<sp/>a<sp/>standardized<sp/>([RFC6901])<sp/>way<sp/>to<sp/>select<sp/>a<sp/>value<sp/>inside<sp/>a<sp/>JSON<sp/>Document<sp/>(DOM).<sp/>This<sp/>can<sp/>be<sp/>analogous<sp/>to<sp/>XPath<sp/>for<sp/>XML<sp/>document.<sp/>However,<sp/>JSON<sp/>Pointer<sp/>is<sp/>much<sp/>simpler,<sp/>and<sp/>a<sp/>single<sp/>JSON<sp/>Pointer<sp/>only<sp/>pointed<sp/>to<sp/>a<sp/>single<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Using<sp/>RapidJSON&apos;s<sp/>implementation<sp/>of<sp/>JSON<sp/>Pointer<sp/>can<sp/>simplify<sp/>some<sp/>manipulations<sp/>of<sp/>the<sp/>DOM.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>JSON<sp/>Pointer<sp/>{#JsonPointer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>JSON<sp/>Pointer<sp/>is<sp/>a<sp/>list<sp/>of<sp/>zero-to-many<sp/>tokens,<sp/>each<sp/>prefixed<sp/>by<sp/>`/`.<sp/>Each<sp/>token<sp/>can<sp/>be<sp/>a<sp/>string<sp/>or<sp/>a<sp/>number.<sp/>For<sp/>example,<sp/>given<sp/>a<sp/>JSON:</highlight></codeline>
+<codeline><highlight class="normal">~~~javascript</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;foo&quot;<sp/>:<sp/>[&quot;bar&quot;,<sp/>&quot;baz&quot;],</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;<sp/>:<sp/>3.1416</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>JSON<sp/>Pointers<sp/>resolve<sp/>this<sp/>JSON<sp/>as:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`&quot;/foo&quot;`<sp/>→<sp/>`[<sp/>&quot;bar&quot;,<sp/>&quot;baz&quot;<sp/>]`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&quot;/foo/0&quot;`<sp/>→<sp/>`&quot;bar&quot;`</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>`&quot;/foo/1&quot;`<sp/>→<sp/>`&quot;baz&quot;`</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>`&quot;/pi&quot;`<sp/>→<sp/>`3.1416`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>an<sp/>empty<sp/>JSON<sp/>Pointer<sp/>`&quot;&quot;`<sp/>(zero<sp/>token)<sp/>resolves<sp/>to<sp/>the<sp/>whole<sp/>JSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Basic<sp/>Usage<sp/>{#BasicUsage}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>example<sp/>code<sp/>is<sp/>self-explanatory.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/pointer.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Create<sp/>DOM<sp/>by<sp/>Set()</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/project&quot;).Set(d,<sp/>&quot;RapidJSON&quot;);</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/stars&quot;).Set(d,<sp/>10);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Access<sp/>DOM<sp/>by<sp/>Get().<sp/>It<sp/>return<sp/>nullptr<sp/>if<sp/>the<sp/>value<sp/>does<sp/>not<sp/>exist.</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(Value*<sp/>stars<sp/>=<sp/>Pointer(&quot;/stars&quot;).Get(d))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Set()<sp/>and<sp/>Create()<sp/>automatically<sp/>generate<sp/>parents<sp/>if<sp/>not<sp/>exist.</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/a/b/0&quot;).Create(d);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>}<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>GetWithDefault()<sp/>returns<sp/>reference.<sp/>And<sp/>it<sp/>deep<sp/>clones<sp/>the<sp/>default<sp/>value.</highlight></codeline>
+<codeline><highlight class="normal">Value&amp;<sp/>hello<sp/>=<sp/>Pointer(&quot;/hello&quot;).GetWithDefault(d,<sp/>&quot;world&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;world&quot;<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Swap()<sp/>is<sp/>similar<sp/>to<sp/>Set()</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>x(&quot;C++&quot;);</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/hello&quot;).Swap(d,<sp/>x);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;C++&quot;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>x<sp/>becomes<sp/>&quot;world&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Erase<sp/>a<sp/>member<sp/>or<sp/>element,<sp/>return<sp/>true<sp/>if<sp/>the<sp/>value<sp/>exists</highlight></codeline>
+<codeline><highlight class="normal">bool<sp/>success<sp/>=<sp/>Pointer(&quot;/a&quot;).Erase(d);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Helper<sp/>Functions<sp/>{#HelperFunctions}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Since<sp/>object-oriented<sp/>calling<sp/>convention<sp/>may<sp/>be<sp/>non-intuitive,<sp/>RapidJSON<sp/>also<sp/>provides<sp/>helper<sp/>functions,<sp/>which<sp/>just<sp/>wrap<sp/>the<sp/>member<sp/>functions<sp/>with<sp/>free-functions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>example<sp/>does<sp/>exactly<sp/>the<sp/>same<sp/>as<sp/>the<sp/>above<sp/>one.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/project&quot;,<sp/>&quot;RapidJSON&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/stars&quot;,<sp/>10);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">if<sp/>(Value*<sp/>stars<sp/>=<sp/>GetValueByPointer(d,<sp/>&quot;/stars&quot;))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CreateValueByPointer(d,<sp/>&quot;/a/b/0&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value&amp;<sp/>hello<sp/>=<sp/>GetValueByPointerWithDefault(d,<sp/>&quot;/hello&quot;,<sp/>&quot;world&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value<sp/>x(&quot;C++&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SwapValueByPointer(d,<sp/>&quot;/hello&quot;,<sp/>x);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">bool<sp/>success<sp/>=<sp/>EraseValueByPointer(d,<sp/>&quot;/a&quot;);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>conventions<sp/>are<sp/>shown<sp/>here<sp/>for<sp/>comparison:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`Pointer(source).&lt;Method&gt;(root,<sp/>...)`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&lt;Method&gt;ValueByPointer(root,<sp/>Pointer(source),<sp/>...)`</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>`&lt;Method&gt;ValueByPointer(root,<sp/>source,<sp/>...)`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Resolving<sp/>Pointer<sp/>{#ResolvingPointer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Pointer::Get()`<sp/>or<sp/>`GetValueByPointer()`<sp/>function<sp/>does<sp/>not<sp/>modify<sp/>the<sp/>DOM.<sp/>If<sp/>the<sp/>tokens<sp/>cannot<sp/>match<sp/>a<sp/>value<sp/>in<sp/>the<sp/>DOM,<sp/>it<sp/>returns<sp/>`nullptr`.<sp/>User<sp/>can<sp/>use<sp/>this<sp/>to<sp/>check<sp/>whether<sp/>a<sp/>value<sp/>exists.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>numerical<sp/>tokens<sp/>can<sp/>represent<sp/>an<sp/>array<sp/>index<sp/>or<sp/>member<sp/>name.<sp/>The<sp/>resolving<sp/>process<sp/>will<sp/>match<sp/>the<sp/>values<sp/>according<sp/>to<sp/>the<sp/>types<sp/>of<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~javascript</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;0&quot;<sp/>:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;1&quot;<sp/>:<sp/>[456]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`&quot;/0&quot;`<sp/>→<sp/>`123`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&quot;/1/0&quot;`<sp/>→<sp/>`456`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>token<sp/>`&quot;0&quot;`<sp/>is<sp/>treated<sp/>as<sp/>member<sp/>name<sp/>in<sp/>the<sp/>first<sp/>pointer.<sp/>It<sp/>is<sp/>treated<sp/>as<sp/>an<sp/>array<sp/>index<sp/>in<sp/>the<sp/>second<sp/>pointer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>other<sp/>functions,<sp/>including<sp/>`Create()`,<sp/>`GetWithDefault()`,<sp/>`Set()`<sp/>and<sp/>`Swap()`,<sp/>will<sp/>change<sp/>the<sp/>DOM.<sp/>These<sp/>functions<sp/>will<sp/>always<sp/>succeed.<sp/>They<sp/>will<sp/>create<sp/>the<sp/>parent<sp/>values<sp/>if<sp/>they<sp/>do<sp/>not<sp/>exist.<sp/>If<sp/>the<sp/>parent<sp/>values<sp/>do<sp/>not<sp/>match<sp/>the<sp/>tokens,<sp/>they<sp/>will<sp/>also<sp/>be<sp/>forced<sp/>to<sp/>change<sp/>their<sp/>type.<sp/>Changing<sp/>the<sp/>type<sp/>also<sp/>mean<sp/>fully<sp/>removal<sp/>of<sp/>that<sp/>DOM<sp/>subtree.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parsing<sp/>the<sp/>above<sp/>JSON<sp/>into<sp/>`d`,<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;1/a&quot;,<sp/>789);<sp/>//<sp/>{<sp/>&quot;0&quot;<sp/>:<sp/>123,<sp/>&quot;1&quot;<sp/>:<sp/>{<sp/>&quot;a&quot;<sp/>:<sp/>789<sp/>}<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Resolving<sp/>Minus<sp/>Sign<sp/>Token</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>[RFC6901]<sp/>defines<sp/>a<sp/>special<sp/>token<sp/>`-`<sp/>(single<sp/>minus<sp/>sign),<sp/>which<sp/>represents<sp/>the<sp/>pass-the-end<sp/>element<sp/>of<sp/>an<sp/>array.<sp/>`Get()`<sp/>only<sp/>treats<sp/>this<sp/>token<sp/>as<sp/>a<sp/>member<sp/>name<sp/>&apos;&quot;-&quot;&apos;.<sp/>Yet<sp/>the<sp/>other<sp/>functions<sp/>can<sp/>resolve<sp/>this<sp/>for<sp/>array,<sp/>equivalent<sp/>to<sp/>calling<sp/>`Value::PushBack()`<sp/>to<sp/>the<sp/>array.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(&quot;{\&quot;foo\&quot;:[123]}&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/foo/-&quot;,<sp/>456);<sp/>//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456]<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/-&quot;,<sp/>789);<sp/><sp/><sp/><sp/>//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456],<sp/>&quot;-&quot;<sp/>:<sp/>789<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Resolving<sp/>Document<sp/>and<sp/>Value</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>using<sp/>`p.Get(root)`<sp/>or<sp/>`GetValueByPointer(root,<sp/>p)`,<sp/>`root`<sp/>is<sp/>a<sp/>(const)<sp/>`Value&amp;`.<sp/>That<sp/>means,<sp/>it<sp/>can<sp/>be<sp/>a<sp/>subtree<sp/>of<sp/>the<sp/>DOM.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>other<sp/>functions<sp/>have<sp/>two<sp/>groups<sp/>of<sp/>signature.<sp/>One<sp/>group<sp/>uses<sp/>`Document&amp;<sp/>document`<sp/>as<sp/>parameter,<sp/>another<sp/>one<sp/>uses<sp/>`Value&amp;<sp/>root`.<sp/>The<sp/>first<sp/>group<sp/>uses<sp/>`document.GetAllocator()`<sp/>for<sp/>creating<sp/>values.<sp/>And<sp/>the<sp/>second<sp/>group<sp/>needs<sp/>user<sp/>to<sp/>supply<sp/>an<sp/>allocator,<sp/>like<sp/>the<sp/>functions<sp/>in<sp/>DOM.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">All<sp/>examples<sp/>above<sp/>do<sp/>not<sp/>require<sp/>an<sp/>allocator<sp/>parameter,<sp/>because<sp/>the<sp/>first<sp/>parameter<sp/>is<sp/>a<sp/>`Document&amp;`.<sp/>But<sp/>if<sp/>you<sp/>want<sp/>to<sp/>resolve<sp/>a<sp/>pointer<sp/>to<sp/>a<sp/>subtree,<sp/>you<sp/>need<sp/>to<sp/>supply<sp/>the<sp/>allocator<sp/>as<sp/>in<sp/>the<sp/>following<sp/>example:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>Person<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Person()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document_<sp/>=<sp/>new<sp/>Document();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>CreateValueByPointer()<sp/>here<sp/>no<sp/>need<sp/>allocator</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(CreateValueByPointer(*document_,<sp/>&quot;/residence&quot;),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(CreateValueByPointer(*document_,<sp/>&quot;/office&quot;),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">private:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>SetLocation(Value&amp;<sp/>location,<sp/>const<sp/>char*<sp/>country,<sp/>const<sp/>char*<sp/>addresses[2])<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Value::Allocator&amp;<sp/>a<sp/>=<sp/>document_-&gt;GetAllocator();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>SetValueByPointer()<sp/>here<sp/>need<sp/>allocator</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/country&quot;,<sp/>country,<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/address/0&quot;,<sp/>address[0],<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/address/1&quot;,<sp/>address[1],<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Document*<sp/>document_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Erase()`<sp/>or<sp/>`EraseValueByPointer()`<sp/>does<sp/>not<sp/>need<sp/>allocator.<sp/>And<sp/>they<sp/>return<sp/>`true`<sp/>if<sp/>the<sp/>value<sp/>is<sp/>erased<sp/>successfully.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Error<sp/>Handling<sp/>{#ErrorHandling}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>`Pointer`<sp/>parses<sp/>a<sp/>source<sp/>string<sp/>in<sp/>its<sp/>constructor.<sp/>If<sp/>there<sp/>is<sp/>parsing<sp/>error,<sp/>`Pointer::IsValid()`<sp/>returns<sp/>`false`.<sp/>And<sp/>you<sp/>can<sp/>use<sp/>`Pointer::GetParseErrorCode()`<sp/>and<sp/>`GetParseErrorOffset()`<sp/>to<sp/>retrieve<sp/>the<sp/>error<sp/>information.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>all<sp/>resolving<sp/>functions<sp/>assumes<sp/>valid<sp/>pointer.<sp/>Resolving<sp/>with<sp/>an<sp/>invalid<sp/>pointer<sp/>causes<sp/>assertion<sp/>failure.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>URI<sp/>Fragment<sp/>Representation<sp/>{#URIFragment}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>addition<sp/>to<sp/>the<sp/>string<sp/>representation<sp/>of<sp/>JSON<sp/>pointer<sp/>that<sp/>we<sp/>are<sp/>using<sp/>till<sp/>now,<sp/>[RFC6901]<sp/>also<sp/>defines<sp/>the<sp/>URI<sp/>fragment<sp/>representation<sp/>of<sp/>JSON<sp/>pointer.<sp/>URI<sp/>fragment<sp/>is<sp/>specified<sp/>in<sp/>[RFC3986]<sp/>&quot;Uniform<sp/>Resource<sp/>Identifier<sp/>(URI):<sp/>Generic<sp/>Syntax&quot;.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>main<sp/>differences<sp/>are<sp/>that<sp/>a<sp/>the<sp/>URI<sp/>fragment<sp/>always<sp/>has<sp/>a<sp/>`#`<sp/>(pound<sp/>sign)<sp/>in<sp/>the<sp/>beginning,<sp/>and<sp/>some<sp/>characters<sp/>are<sp/>encoded<sp/>by<sp/>percent-encoding<sp/>in<sp/>UTF-8<sp/>sequence.<sp/>For<sp/>example,<sp/>the<sp/>following<sp/>table<sp/>shows<sp/>different<sp/>C/C++<sp/>string<sp/>literals<sp/>of<sp/>different<sp/>representations.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">String<sp/>Representation<sp/>|<sp/>URI<sp/>Fragment<sp/>Representation<sp/>|<sp/>Pointer<sp/>Tokens<sp/>(UTF-8)</highlight></codeline>
+<codeline><highlight class="normal">----------------------|-----------------------------|------------------------</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/foo/0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/foo/0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;foo&quot;,<sp/>0}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/a~1b&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/a~1b&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;a/b&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/m~0n&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/m~0n&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;m~n&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/<sp/>&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%20&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;<sp/>&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/\0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%00&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;\0&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/€&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%E2%82%AC&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;€&quot;}`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>fully<sp/>support<sp/>URI<sp/>fragment<sp/>representation.<sp/>It<sp/>automatically<sp/>detects<sp/>the<sp/>pound<sp/>sign<sp/>during<sp/>parsing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Stringify</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>also<sp/>stringify<sp/>a<sp/>`Pointer`<sp/>to<sp/>a<sp/>string<sp/>or<sp/>other<sp/>output<sp/>streams.<sp/>This<sp/>can<sp/>be<sp/>done<sp/>by:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">Pointer<sp/>p(...);</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal">p.Stringify(sb);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>sb.GetString()<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">It<sp/>can<sp/>also<sp/>stringify<sp/>to<sp/>URI<sp/>fragment<sp/>representation<sp/>by<sp/>`StringifyUriFragment()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>User-Supplied<sp/>Tokens<sp/>{#UserSuppliedTokens}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>a<sp/>pointer<sp/>will<sp/>be<sp/>resolved<sp/>multiple<sp/>times,<sp/>it<sp/>should<sp/>be<sp/>constructed<sp/>once,<sp/>and<sp/>then<sp/>apply<sp/>it<sp/>to<sp/>different<sp/>DOMs<sp/>or<sp/>in<sp/>different<sp/>times.<sp/>This<sp/>reduce<sp/>time<sp/>and<sp/>memory<sp/>allocation<sp/>for<sp/>constructing<sp/>`Pointer`<sp/>multiple<sp/>times.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">We<sp/>can<sp/>go<sp/>one<sp/>step<sp/>further,<sp/>to<sp/>completely<sp/>eliminate<sp/>the<sp/>parsing<sp/>process<sp/>and<sp/>dynamic<sp/>memory<sp/>allocation,<sp/>we<sp/>can<sp/>establish<sp/>the<sp/>token<sp/>array<sp/>directly:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>NAME(s)<sp/>{<sp/>s,<sp/>sizeof(s)<sp/>/<sp/>sizeof(s[0])<sp/>-<sp/>1,<sp/>kPointerInvalidIndex<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>INDEX(i)<sp/>{<sp/>#i,<sp/>sizeof(#i)<sp/>-<sp/>1,<sp/>i<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">static<sp/>const<sp/>Pointer::Token<sp/>kTokens[]<sp/>=<sp/>{<sp/>NAME(&quot;foo&quot;),<sp/>INDEX(123)<sp/>};</highlight></codeline>
+<codeline><highlight class="normal">static<sp/>const<sp/>Pointer<sp/>p(kTokens,<sp/>sizeof(kTokens)<sp/>/<sp/>sizeof(kTokens[0]));</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Equivalent<sp/>to<sp/>static<sp/>const<sp/>Pointer<sp/>p(&quot;/foo/123&quot;);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>may<sp/>be<sp/>useful<sp/>for<sp/>memory<sp/>constrained<sp/>systems.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[RFC3986]:<sp/>https://tools.ietf.org/html/rfc3986</highlight></codeline>
+<codeline><highlight class="normal">[RFC6901]:<sp/>https://tools.ietf.org/html/rfc6901</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/pointer.md"/>
+  </compounddef>
+</doxygen>

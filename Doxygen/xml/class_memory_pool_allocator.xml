@@ -1,0 +1,629 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="class_memory_pool_allocator" kind="class" language="C++" prot="public">
+    <compoundname>MemoryPoolAllocator</compoundname>
+    <includes refid="allocators_8h" local="no">allocators.h</includes>
+    <innerclass refid="struct_memory_pool_allocator_1_1_chunk_header" prot="private">MemoryPoolAllocator::ChunkHeader</innerclass>
+    <innerclass refid="struct_memory_pool_allocator_1_1_shared_data" prot="private">MemoryPoolAllocator::SharedData</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename BaseAllocator</type>
+        <defval><ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref></defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552" prot="private" static="yes" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::SIZEOF_SHARED_DATA</definition>
+        <argsstring></argsstring>
+        <name>SIZEOF_SHARED_DATA</name>
+        <qualifiedname>MemoryPoolAllocator::SIZEOF_SHARED_DATA</qualifiedname>
+        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(SharedData))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="146" column="25" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f" prot="private" static="yes" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::SIZEOF_CHUNK_HEADER</definition>
+        <argsstring></argsstring>
+        <name>SIZEOF_CHUNK_HEADER</name>
+        <qualifiedname>MemoryPoolAllocator::SIZEOF_CHUNK_HEADER</qualifiedname>
+        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(ChunkHeader))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="147" column="25" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c" prot="private" static="yes" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::kDefaultChunkCapacity</definition>
+        <argsstring></argsstring>
+        <name>kDefaultChunkCapacity</name>
+        <qualifiedname>MemoryPoolAllocator::kDefaultChunkCapacity</qualifiedname>
+        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga860570d04d489be08b9835d2ec58bac5" kindref="member">RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY</ref></initializer>
+        <briefdescription>
+<para>Default chunk capacity. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="158" column="25" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f" prot="public" static="yes" mutable="no">
+        <type>const bool</type>
+        <definition>const bool MemoryPoolAllocator&lt; BaseAllocator &gt;::kNeedFree</definition>
+        <argsstring></argsstring>
+        <name>kNeedFree</name>
+        <qualifiedname>MemoryPoolAllocator::kNeedFree</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>Tell users that no need to call <ref refid="class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33" kindref="member">Free()</ref> with this allocator. (concept Allocator) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="161" column="23" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a3a18920d6afd9e9c9e62d8fd8f73e095" prot="public" static="yes" mutable="no">
+        <type>const bool</type>
+        <definition>const bool MemoryPoolAllocator&lt; BaseAllocator &gt;::kRefCounted</definition>
+        <argsstring></argsstring>
+        <name>kRefCounted</name>
+        <qualifiedname>MemoryPoolAllocator::kRefCounted</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+<para>Tell users that this allocator is reference counted on copy. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="162" column="23" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::chunk_capacity_</definition>
+        <argsstring></argsstring>
+        <name>chunk_capacity_</name>
+        <qualifiedname>MemoryPoolAllocator::chunk_capacity_</qualifiedname>
+        <briefdescription>
+<para>The minimum capacity of chunk when they are allocated. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="417" column="12" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="417" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6" prot="private" static="no" mutable="no">
+        <type>BaseAllocator *</type>
+        <definition>BaseAllocator* MemoryPoolAllocator&lt; BaseAllocator &gt;::baseAllocator_</definition>
+        <argsstring></argsstring>
+        <name>baseAllocator_</name>
+        <qualifiedname>MemoryPoolAllocator::baseAllocator_</qualifiedname>
+        <briefdescription>
+<para>base allocator for allocating memory chunks. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="418" column="19" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="418" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c" prot="private" static="no" mutable="no">
+        <type>SharedData *</type>
+        <definition>SharedData* MemoryPoolAllocator&lt; BaseAllocator &gt;::shared_</definition>
+        <argsstring></argsstring>
+        <name>shared_</name>
+        <qualifiedname>MemoryPoolAllocator::shared_</qualifiedname>
+        <briefdescription>
+<para>The shared data of the allocator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="419" column="16" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="419" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ChunkHeader *</type>
+        <definition>static ChunkHeader * MemoryPoolAllocator&lt; BaseAllocator &gt;::GetChunkHead</definition>
+        <argsstring>(SharedData *shared)</argsstring>
+        <name>GetChunkHead</name>
+        <qualifiedname>MemoryPoolAllocator::GetChunkHead</qualifiedname>
+        <param>
+          <type>SharedData *</type>
+          <declname>shared</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="149" column="31" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5" kindref="member">uint8_t</ref> *</type>
+        <definition>static uint8_t * MemoryPoolAllocator&lt; BaseAllocator &gt;::GetChunkBuffer</definition>
+        <argsstring>(SharedData *shared)</argsstring>
+        <name>GetChunkBuffer</name>
+        <qualifiedname>MemoryPoolAllocator::GetChunkBuffer</qualifiedname>
+        <param>
+          <type>SharedData *</type>
+          <declname>shared</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="153" column="27" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="153" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void *</type>
+        <definition>static void * MemoryPoolAllocator&lt; BaseAllocator &gt;::AlignBuffer</definition>
+        <argsstring>(void *buf, size_t &amp;size)</argsstring>
+        <name>AlignBuffer</name>
+        <qualifiedname>MemoryPoolAllocator::AlignBuffer</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type>size_t &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="403" column="24" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="403" bodyend="415"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>MemoryPoolAllocator&lt; BaseAllocator &gt;::MemoryPoolAllocator</definition>
+        <argsstring>(size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</argsstring>
+        <name>MemoryPoolAllocator</name>
+        <qualifiedname>MemoryPoolAllocator::MemoryPoolAllocator</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>chunkSize</declname>
+          <defval>kDefaultChunkCapacity</defval>
+        </param>
+        <param>
+          <type>BaseAllocator *</type>
+          <declname>baseAllocator</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Constructor with chunkSize. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>chunkSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of memory chunk. The default is kDefaultChunkSize. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>baseAllocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator for allocating memory chunks. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="169" column="5" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="169" bodyend="188"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>MemoryPoolAllocator&lt; BaseAllocator &gt;::MemoryPoolAllocator</definition>
+        <argsstring>(void *buffer, size_t size, size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</argsstring>
+        <name>MemoryPoolAllocator</name>
+        <qualifiedname>MemoryPoolAllocator::MemoryPoolAllocator</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>chunkSize</declname>
+          <defval>kDefaultChunkCapacity</defval>
+        </param>
+        <param>
+          <type>BaseAllocator *</type>
+          <declname>baseAllocator</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Constructor with user-supplied buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The user buffer will be used firstly. When it is full, memory pool allocates new chunk with chunk size.</para>
+<para>The user buffer will not be deallocated when this allocator is destructed.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>User supplied buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Size of the buffer in bytes. It must at least larger than sizeof(ChunkHeader). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>chunkSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size of memory chunk. The default is kDefaultChunkSize. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>baseAllocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The allocator for allocating memory chunks. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="200" column="5" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="200" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1afa7a6555d8a6e151148c8876c60a36c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>MemoryPoolAllocator&lt; BaseAllocator &gt;::MemoryPoolAllocator</definition>
+        <argsstring>(const MemoryPoolAllocator &amp;rhs) RAPIDJSON_NOEXCEPT</argsstring>
+        <name>MemoryPoolAllocator</name>
+        <qualifiedname>MemoryPoolAllocator::MemoryPoolAllocator</qualifiedname>
+        <param>
+          <type>const <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="215" column="5" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="215" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a32812539a2d21759082f325ee78565c7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref> &amp;</type>
+        <definition>MemoryPoolAllocator &amp; MemoryPoolAllocator&lt; BaseAllocator &gt;::operator=</definition>
+        <argsstring>(const MemoryPoolAllocator &amp;rhs) RAPIDJSON_NOEXCEPT</argsstring>
+        <name>operator=</name>
+        <qualifiedname>MemoryPoolAllocator::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="223" column="25" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="223" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>MemoryPoolAllocator&lt; BaseAllocator &gt;::~MemoryPoolAllocator</definition>
+        <argsstring>() RAPIDJSON_NOEXCEPT</argsstring>
+        <name>~MemoryPoolAllocator</name>
+        <qualifiedname>MemoryPoolAllocator::~MemoryPoolAllocator</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This deallocates all memory chunks, excluding the user-supplied buffer. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="258" column="5" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="258" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void MemoryPoolAllocator&lt; BaseAllocator &gt;::Clear</definition>
+        <argsstring>() RAPIDJSON_NOEXCEPT</argsstring>
+        <name>Clear</name>
+        <qualifiedname>MemoryPoolAllocator::Clear</qualifiedname>
+        <briefdescription>
+<para>Deallocates all memory chunks, excluding the first/user one. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="276" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="276" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::Capacity</definition>
+        <argsstring>() const RAPIDJSON_NOEXCEPT</argsstring>
+        <name>Capacity</name>
+        <qualifiedname>MemoryPoolAllocator::Capacity</qualifiedname>
+        <briefdescription>
+<para>Computes the total capacity of allocated memory chunks. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>total capacity in bytes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="292" column="12" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="292" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t MemoryPoolAllocator&lt; BaseAllocator &gt;::Size</definition>
+        <argsstring>() const RAPIDJSON_NOEXCEPT</argsstring>
+        <name>Size</name>
+        <qualifiedname>MemoryPoolAllocator::Size</qualifiedname>
+        <briefdescription>
+<para>Computes the memory blocks allocated. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>total used bytes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="303" column="12" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="303" bodyend="309"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1aee5e0b6d09dfbbc9bbbc59399a14cc53" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MemoryPoolAllocator&lt; BaseAllocator &gt;::Shared</definition>
+        <argsstring>() const RAPIDJSON_NOEXCEPT</argsstring>
+        <name>Shared</name>
+        <qualifiedname>MemoryPoolAllocator::Shared</qualifiedname>
+        <briefdescription>
+<para>Whether the allocator is shared. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>true or false. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="314" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="314" bodyend="317"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void *</type>
+        <definition>void * MemoryPoolAllocator&lt; BaseAllocator &gt;::Malloc</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>Malloc</name>
+        <qualifiedname>MemoryPoolAllocator::Malloc</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Allocates a memory block. (concept Allocator) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="320" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="320" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void *</type>
+        <definition>void * MemoryPoolAllocator&lt; BaseAllocator &gt;::Realloc</definition>
+        <argsstring>(void *originalPtr, size_t originalSize, size_t newSize)</argsstring>
+        <name>Realloc</name>
+        <qualifiedname>MemoryPoolAllocator::Realloc</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>originalPtr</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>originalSize</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>newSize</declname>
+        </param>
+        <briefdescription>
+<para>Resizes a memory block (concept Allocator) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="336" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="336" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MemoryPoolAllocator&lt; BaseAllocator &gt;::operator==</definition>
+        <argsstring>(const MemoryPoolAllocator &amp;rhs) const RAPIDJSON_NOEXCEPT</argsstring>
+        <name>operator==</name>
+        <qualifiedname>MemoryPoolAllocator::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compare (equality) with another <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="374" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="374" bodyend="378"/>
+      </memberdef>
+      <memberdef kind="function" id="class_memory_pool_allocator_1ab81d11c88aef06b905cece2e5a4e7b4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MemoryPoolAllocator&lt; BaseAllocator &gt;::operator!=</definition>
+        <argsstring>(const MemoryPoolAllocator &amp;rhs) const RAPIDJSON_NOEXCEPT</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>MemoryPoolAllocator::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Compare (inequality) with another <ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="380" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="380" bodyend="382"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void MemoryPoolAllocator&lt; BaseAllocator &gt;::Free</definition>
+        <argsstring>(void *ptr) RAPIDJSON_NOEXCEPT</argsstring>
+        <name>Free</name>
+        <qualifiedname>MemoryPoolAllocator::Free</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>ptr</declname>
+        </param>
+        <briefdescription>
+<para>Frees a memory block (concept Allocator) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="371" column="17" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="371" bodyend="371"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MemoryPoolAllocator&lt; BaseAllocator &gt;::AddChunk</definition>
+        <argsstring>(size_t capacity)</argsstring>
+        <name>AddChunk</name>
+        <qualifiedname>MemoryPoolAllocator::AddChunk</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>capacity</declname>
+        </param>
+        <briefdescription>
+<para>Creates a new chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>capacity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Capacity of the chunk in bytes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if success. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/allocators.h" line="389" column="10" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="389" bodyend="401"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Default memory allocator used by the parser and DOM. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This allocator allocate memory blocks from pre-allocated memory chunks.</para>
+<para>It does not free memory blocks. And <ref refid="class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074" kindref="member">Realloc()</ref> only allocate new memory.</para>
+<para>The memory chunks are allocated by BaseAllocator, which is <ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref> by default.</para>
+<para>User may also supply a buffer as the first chunk.</para>
+<para>If the user-buffer is full then additional chunks are allocated by BaseAllocator.</para>
+<para>The user-buffer is not deallocated by this allocator.</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>BaseAllocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>the allocator type for allocating memory chunks. Default is <ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>implements Allocator concept </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="src/rapidjson/include/rapidjson/allocators.h" line="129" column="1" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="129" bodyend="420"/>
+    <listofallmembers>
+      <member refid="class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>AddChunk</name></member>
+      <member refid="class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>AlignBuffer</name></member>
+      <member refid="class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>baseAllocator_</name></member>
+      <member refid="class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Capacity</name></member>
+      <member refid="class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>chunk_capacity_</name></member>
+      <member refid="class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Clear</name></member>
+      <member refid="class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Free</name></member>
+      <member refid="class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>GetChunkBuffer</name></member>
+      <member refid="class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>GetChunkHead</name></member>
+      <member refid="class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>kDefaultChunkCapacity</name></member>
+      <member refid="class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>kNeedFree</name></member>
+      <member refid="class_memory_pool_allocator_1a3a18920d6afd9e9c9e62d8fd8f73e095" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>kRefCounted</name></member>
+      <member refid="class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Malloc</name></member>
+      <member refid="class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>MemoryPoolAllocator</name></member>
+      <member refid="class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>MemoryPoolAllocator</name></member>
+      <member refid="class_memory_pool_allocator_1afa7a6555d8a6e151148c8876c60a36c5" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>MemoryPoolAllocator</name></member>
+      <member refid="class_memory_pool_allocator_1ab81d11c88aef06b905cece2e5a4e7b4d" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>operator!=</name></member>
+      <member refid="class_memory_pool_allocator_1a32812539a2d21759082f325ee78565c7" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>operator=</name></member>
+      <member refid="class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>operator==</name></member>
+      <member refid="class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Realloc</name></member>
+      <member refid="class_memory_pool_allocator_1aee5e0b6d09dfbbc9bbbc59399a14cc53" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Shared</name></member>
+      <member refid="class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>shared_</name></member>
+      <member refid="class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>Size</name></member>
+      <member refid="class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>SIZEOF_CHUNK_HEADER</name></member>
+      <member refid="class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>SIZEOF_SHARED_DATA</name></member>
+      <member refid="class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e" prot="public" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>~MemoryPoolAllocator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

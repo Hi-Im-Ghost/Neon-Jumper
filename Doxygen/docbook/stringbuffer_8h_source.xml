@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_stringbuffer_8h_source" xml:lang="en-US">
+<title>stringbuffer.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/stringbuffer.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_STRINGBUFFER_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STRINGBUFFER_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stream_8h">stream.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stack_8h">internal/stack.h</link>&quot;</emphasis>
+20 
+21 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+22 <emphasis role="preprocessor">#include&#32;&lt;utility&gt;</emphasis>&#32;<emphasis role="comment">//&#32;std::move</emphasis>
+23 <emphasis role="preprocessor">#endif</emphasis>
+24 
+25 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stack_8h">internal/stack.h</link>&quot;</emphasis>
+26 
+27 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+28 RAPIDJSON_DIAG_PUSH
+29 RAPIDJSON_DIAG_OFF(c++98-compat)
+30 <emphasis role="preprocessor">#endif</emphasis>
+31 
+32 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+33 
+35 
+40 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&#32;=&#32;CrtAllocator&gt;
+41 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&#32;{
+42 <emphasis role="keyword">public</emphasis>:
+43 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>;
+44 
+45 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1a62f5ea1a53a2a3f98088f8c152b6183e">GenericStringBuffer</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator&#32;=&#32;0,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;capacity&#32;=&#32;<link linkend="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22">kDefaultCapacity</link>)&#32;:&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>(allocator,&#32;capacity)&#32;{}
+46 
+47 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+48 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1a62f5ea1a53a2a3f98088f8c152b6183e">GenericStringBuffer</link>(<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;&amp;&#32;rhs)&#32;:&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>(std::move(rhs.<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>))&#32;{}
+49 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;&#32;operator=(<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;&amp;&#32;rhs)&#32;{
+50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(&amp;rhs&#32;!=&#32;<emphasis role="keyword">this</emphasis>)
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>&#32;=&#32;std::move(rhs.stack_);
+52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
+53 &#32;&#32;&#32;&#32;}
+54 <emphasis role="preprocessor">#endif</emphasis>
+55 
+56 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a8be5c8fadccacdcf40e20220f38e0afa">Put</link>(<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>&#32;c)&#32;{&#32;*<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Push&lt;Ch&gt;()&#32;=&#32;c;&#32;}
+57 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a9225468d11fdddfc3a9a4e48bf4d3ba4">PutUnsafe</link>(<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>&#32;c)&#32;{&#32;*<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;PushUnsafe&lt;Ch&gt;()&#32;=&#32;c;&#32;}
+58 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a28bb539487db17b07314a532f3b8847c">Flush</link>()&#32;{}
+59 
+60 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a42f15c959046d899cb74c3120a6995f9">Clear</link>()&#32;{&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.Clear();&#32;}
+61 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a0dbdb77489b95923795011a24f705be5">ShrinkToFit</link>()&#32;{
+62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Push&#32;and&#32;pop&#32;a&#32;null&#32;terminator.&#32;This&#32;is&#32;safe.</emphasis>
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Push&lt;Ch&gt;()&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.ShrinkToFit();
+65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Pop&lt;Ch&gt;(1);
+66 &#32;&#32;&#32;&#32;}
+67 
+68 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a4d6becae201b98c122746298882a318f">Reserve</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Reserve&lt;Ch&gt;(count);&#32;}
+69 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>*&#32;<link linkend="_class_generic_string_buffer_1a80af78c43da93126a940a40d1889278a">Push</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Push&lt;Ch&gt;(count);&#32;}
+70 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>*&#32;<link linkend="_class_generic_string_buffer_1a67bbdeb1f0f7c539f85ca36857a62ca3">PushUnsafe</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;PushUnsafe&lt;Ch&gt;(count);&#32;}
+71 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a0038e53ba03c271bc4cbbac403ec4de4">Pop</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Pop&lt;Ch&gt;(count);&#32;}
+72 
+73 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>*&#32;<link linkend="_class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719">GetString</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+74 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Push&#32;and&#32;pop&#32;a&#32;null&#32;terminator.&#32;This&#32;is&#32;safe.</emphasis>
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Push&lt;Ch&gt;()&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Pop&lt;Ch&gt;(1);
+77 
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.template&#32;Bottom&lt;Ch&gt;();
+79 &#32;&#32;&#32;&#32;}
+80 
+82 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_generic_string_buffer_1a725e862b9a78375f5363b0b61ad789f3">GetSize</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.GetSize();&#32;}
+83 
+85 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_generic_string_buffer_1ad324b8154be3354dda3aa4a0a7361499">GetLength</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>.GetSize()&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link>);&#32;}
+86 
+87 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22">kDefaultCapacity</link>&#32;=&#32;256;
+88 &#32;&#32;&#32;&#32;<emphasis role="keyword">mutable</emphasis>&#32;<link linkend="_classinternal_1_1_stack">internal::Stack&lt;Allocator&gt;</link>&#32;<link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link>;
+89 
+90 <emphasis role="keyword">private</emphasis>:
+91 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prohibit&#32;copy&#32;constructor&#32;&amp;&#32;assignment&#32;operator.</emphasis>
+92 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer_1a62f5ea1a53a2a3f98088f8c152b6183e">GenericStringBuffer</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;);
+93 &#32;&#32;&#32;&#32;<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&amp;);
+94 };
+95 
+97 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_generic_string_buffer">GenericStringBuffer&lt;UTF8&lt;&gt;</link>&#32;&gt;&#32;<link linkend="_stringbuffer_8h_1a88f2d61781c8daefde48a81bdeac6ecd">StringBuffer</link>;
+98 
+99 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&gt;
+100 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stringbuffer_8h_1a76f1b69abd71a248a55c8a55792dfd69">PutReserve</link>(<link linkend="_class_generic_string_buffer">GenericStringBuffer&lt;Encoding, Allocator&gt;</link>&amp;&#32;stream,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{
+101 &#32;&#32;&#32;&#32;stream.<link linkend="_class_generic_string_buffer_1a4d6becae201b98c122746298882a318f">Reserve</link>(count);
+102 }
+103 
+104 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&gt;
+105 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stringbuffer_8h_1a2ff92a4ec7c5995738cfaf39fe99f31a">PutUnsafe</link>(<link linkend="_class_generic_string_buffer">GenericStringBuffer&lt;Encoding, Allocator&gt;</link>&amp;&#32;stream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;c)&#32;{
+106 &#32;&#32;&#32;&#32;stream.<link linkend="_class_generic_string_buffer_1a9225468d11fdddfc3a9a4e48bf4d3ba4">PutUnsafe</link>(c);
+107 }
+108 
+110 <emphasis role="keyword">template</emphasis>&lt;&gt;
+111 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stringbuffer_8h_1a4bcf83273503d7b834ec530e84914f8c">PutN</link>(<link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt;<link linkend="_struct_u_t_f8">UTF8&lt;&gt;</link>&#32;&gt;&amp;&#32;stream,&#32;<emphasis role="keywordtype">char</emphasis>&#32;c,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;n)&#32;{
+112 &#32;&#32;&#32;&#32;std::memset(stream.stack_.Push&lt;<emphasis role="keywordtype">char</emphasis>&gt;(n),&#32;c,&#32;n&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(c));
+113 }
+114 
+115 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+116 
+117 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+118 RAPIDJSON_DIAG_POP
+119 <emphasis role="preprocessor">#endif</emphasis>
+120 
+121 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STRINGBUFFER_H_</emphasis>
+</programlisting></section>

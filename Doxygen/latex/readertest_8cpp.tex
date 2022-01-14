@@ -1,0 +1,939 @@
+\hypertarget{readertest_8cpp}{}\doxysection{src/rapidjson/test/unittest/readertest.cpp File Reference}
+\label{readertest_8cpp}\index{src/rapidjson/test/unittest/readertest.cpp@{src/rapidjson/test/unittest/readertest.cpp}}
+{\ttfamily \#include \char`\"{}unittest.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}rapidjson/reader.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}rapidjson/internal/dtoa.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}rapidjson/internal/itoa.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}rapidjson/memorystream.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$limits$>$}\newline
+{\ttfamily \#include $<$sstream$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_parse_bool_handler}{Parse\+Bool\+Handler$<$ expect $>$}}
+\item 
+struct \mbox{\hyperlink{struct_parse_int_handler}{Parse\+Int\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_uint_handler}{Parse\+Uint\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_int64_handler}{Parse\+Int64\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_uint64_handler}{Parse\+Uint64\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_double_handler}{Parse\+Double\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_string_handler}{Parse\+String\+Handler$<$ Encoding $>$}}
+\item 
+struct \mbox{\hyperlink{struct_parse_array_handler}{Parse\+Array\+Handler$<$ count $>$}}
+\item 
+struct \mbox{\hyperlink{struct_parse_object_handler}{Parse\+Object\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_empty_object_handler}{Parse\+Empty\+Object\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_parse_multiple_root_handler}{Parse\+Multiple\+Root\+Handler}}
+\item 
+class \mbox{\hyperlink{class_custom_string_stream}{Custom\+String\+Stream$<$ Encoding $>$}}
+\item 
+class \mbox{\hyperlink{class_i_stream_wrapper}{IStream\+Wrapper}}
+\item 
+class \mbox{\hyperlink{class_w_i_stream_wrapper}{WIStream\+Wrapper}}
+\item 
+struct \mbox{\hyperlink{struct_iterative_parsing_reader_handler}{Iterative\+Parsing\+Reader\+Handler$<$ Encoding $>$}}
+\item 
+struct \mbox{\hyperlink{struct_handler_terminate_at_start_object}{Handler\+Terminate\+At\+Start\+Object}}
+\item 
+struct \mbox{\hyperlink{struct_handler_terminate_at_start_array}{Handler\+Terminate\+At\+Start\+Array}}
+\item 
+struct \mbox{\hyperlink{struct_handler_terminate_at_end_object}{Handler\+Terminate\+At\+End\+Object}}
+\item 
+struct \mbox{\hyperlink{struct_handler_terminate_at_end_array}{Handler\+Terminate\+At\+End\+Array}}
+\item 
+struct \mbox{\hyperlink{struct_terminate_handler}{Terminate\+Handler$<$ e $>$}}
+\item 
+struct \mbox{\hyperlink{struct_numbers_as_strings_handler}{Numbers\+As\+Strings\+Handler}}
+\item 
+struct \mbox{\hyperlink{struct_numbers_as_strings_handler_w_char__t}{Numbers\+As\+Strings\+Handler\+WChar\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_aa487c2e30c2c0abec07c6ef75baf3aee}{TEST\+\_\+\+INTEGER}}(\mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}},  str,  x)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a21b994bed3341147071a62be3e1c592f}{TEST\+\_\+\+DOUBLE}}(full\+Precision,  str,  x)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a0915e2497a66e1c6569fbc2346abc4a7}{TEST\+\_\+\+NUMBER\+\_\+\+ERROR}}(error\+Code,  str,  error\+Offset,  stream\+Pos)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a9d7119f7924a0a61bdd167748c770dae}{TEST\+\_\+\+STRING}}(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  e,  x)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}{ARRAY}}(...)~\{ \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+ \}
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_aca32d23ddbdec658bb1ca388b6f6bb97}{TEST\+\_\+\+STRINGARRAY}}(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  utype,  array,  x)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_afe94ee74dfe8222d034c1c8924b51080}{TEST\+\_\+\+STRINGARRAY2}}(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  utype,  earray,  xarray)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a5f47d54ec9d33d6d02cf84fbf375b393}{TEST\+\_\+\+STRING\+\_\+\+ERROR}}(error\+Code,  str,  error\+Offset,  stream\+Pos)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}{ARRAY}}(...)~\{ \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+ \}
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a61f78b99d29fd8c3f30ba08cdd193d32}{TEST\+\_\+\+STRINGENCODING\+\_\+\+ERROR}}(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  Target\+Encoding,  utype,  array)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_aab63dea66734b992ac716833984e6a6e}{TEST\+\_\+\+ARRAY\+\_\+\+ERROR}}(error\+Code,  str,  error\+Offset)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_af0cc358a05148bd414d612047eda8637}{TEST\+\_\+\+ERROR}}(error\+Code,  str,  error\+Offset)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a42611f55159ca2d7b080ee7b5995a51e}{TESTERRORHANDLING}}(text,  error\+Code,  offset)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a59abe708b636f5305e064d40eca97f6e}{TEST\+\_\+\+TERMINATION}}(e,  json)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a0cb67eee4e9c25329656c6c6359073d7}{TEST\+\_\+\+NAN\+\_\+\+INF}}(str,  x)
+\item 
+\#define \mbox{\hyperlink{readertest_8cpp_a49931364fff3592ba2dcb37ac90d3b10}{TEST\+\_\+\+NAN\+\_\+\+INF\+\_\+\+ERROR}}(error\+Code,  str,  error\+Offset)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{readertest_8cpp_acd0e3395c882a9ffffd0cd3e541f737e}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+True)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a89b2294cf02d35650e58af5b803143b3}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+False)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a0f338ae50a463adeddde167f9409bedc}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+\_\+\+Integer)
+\item 
+\mbox{\hyperlink{readertest_8cpp_aa293384d534e668619d44318d3d77d5e}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+\_\+\+Normal\+Precision\+Double)
+\item 
+\mbox{\hyperlink{readertest_8cpp_aa2ce5bf11a889af8f9efe3fd77240fd5}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+\_\+\+Full\+Precision\+Double)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a2be15887d12d0e7bb634d6807da64b17}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+\_\+\+Normal\+Precision\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a0a70a215ad0f6c5484dfbcb0d32dec72}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+Error\+\_\+\+Normal\+Precision\+Double)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a2bbd1606be48d3fa85117a864ec9c9e4}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Number\+Error\+\_\+\+Full\+Precision\+Double)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a15e169b6344e504df0eea4b5121060da}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+String)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a74f5978d08350eef0b4c9e458f9fb811}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+String\+\_\+\+Transcoding)
+\item 
+\mbox{\hyperlink{readertest_8cpp_ab541be9d37347bb83774aa2bc99a7482}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+String\+\_\+\+Transcoding\+With\+Validation)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a90cebede6f67a54e178e049793bf0d98}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+String\+\_\+\+Non\+Destructive)
+\item 
+{\footnotesize template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ }\\\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{Parse\+Error\+Code}} \mbox{\hyperlink{readertest_8cpp_aecbde81eaceef1ab965fbccc9c6a2cc1}{Test\+String}} (const typename Encoding\+::\+Ch $\ast$str)
+\item 
+\mbox{\hyperlink{readertest_8cpp_abd8b31cbdcf64777f9389eb782096914}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+String\+\_\+\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a351a887dbc1a7a7edc582e45e8c0e2e8}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Empty\+Array)
+\item 
+\mbox{\hyperlink{readertest_8cpp_af99e41513ed14fec7e1d4d3e2f610819}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Array)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a2bbae6820b8599a03c91235a3b96e141}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Array\+\_\+\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a2c25bdca73b3dcbf73aa441f9277384f}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Object)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a18bca8296eaae111c4373dfa381a1c36}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+\_\+\+Empty\+Object)
+\item 
+{\footnotesize template$<$unsigned parse\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_a43a70800373051361573d37f95bb433e}{Test\+Multiple\+Root}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_a5b7ceca8eb13509ac2015a74c90b004a}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+\_\+\+Multiple\+Root)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a190231ffaeee049afcbe613dbbc5751b}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Iterative\+\_\+\+Multiple\+Root)
+\item 
+{\footnotesize template$<$unsigned parse\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_a3e697a5cd8deeff851239ddc33e9466f}{Test\+Insitu\+Multiple\+Root}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_aa237ee4974ab4463734b51bc308d53bb}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Insitu\+\_\+\+Multiple\+Root)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a341f256b64084922f5f08d42b610a183}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Insitu\+Iterative\+\_\+\+Multiple\+Root)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a903c1326dbf0e8ce889aaee534ce5c6d}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Document\+\_\+\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_abb4708dbc92034ce8428154fc3446ac4}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Value\+\_\+\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_aae5733e8671508fb38ac9e90911e1be7}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Object\+\_\+\+Error)
+\item 
+\mbox{\hyperlink{readertest_8cpp_abfa886640a194ac6dbdd83d87d6d6501}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, \mbox{\hyperlink{reader_8h_aeddf0374b22926be76140ec6708dc203}{Skip\+Whitespace}})
+\item 
+\mbox{\hyperlink{readertest_8cpp_a9fb049586354f7af008ba7f57cb7932c}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, \mbox{\hyperlink{class_custom_string_stream}{Custom\+String\+Stream}})
+\item 
+\mbox{\hyperlink{readertest_8cpp_a90f7ee3e65bb9a8d14555eb2dd6e4393}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+\_\+\+IStream\+Wrapper\+\_\+\+String\+Stream)
+\item 
+\mbox{\hyperlink{readertest_8cpp_aeaebdcc79099df91507f5f015d762569}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Iterative\+Parsing\+\_\+\+Error\+Handling)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a2112c6391e74b80c3d2db6e327d88e04}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Iterative\+Parsing\+\_\+\+General)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a993a1536dc41d6024e435a2c48b24923}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Iterative\+Parsing\+\_\+\+Count)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a70dd9ea1fe24447f13125e256e315086}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Iterative\+Pull\+Parsing\+\_\+\+General)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a870329d14861214eb2ae5a9a8609bf8f}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Iterative\+Parsing\+\_\+\+Short\+Circuit)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a854d1d6e5e6ac5e209a75851b64f6085}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Base\+Reader\+Handler\+\_\+\+Default)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a37d7b918c516febe122eb98fd95d835d}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Termination\+By\+Handler)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a8dc48b304866b695871d888ea0a2592d}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Comments)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a3f3480cf5d13c5818b549265bf3ac1ca}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Empty\+Inline\+Comment)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a56fcadf8f03df7af57cad7acadf504ab}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Empty\+Oneline\+Comment)
+\item 
+\mbox{\hyperlink{readertest_8cpp_afd6d8f1c19c09ae0d6f919f61bbad887}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Multiple\+Comments\+In\+ARow)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a942f3e82ad0c2e74f2ed0d5bb92d5495}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Inline\+Comments\+Are\+Disabled\+By\+Default)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a877aa3d42a2ee1b20d26c2480b1104ba}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Oneline\+Comments\+Are\+Disabled\+By\+Default)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a5df37d2665c76b6becee133720872a39}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Eof\+After\+One\+Line\+Comment)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a6e04bdedbeaf39e022d22054f399af8a}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Incomplete\+Multiline\+Comment)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a4ed130c1c10e5e9c32bb00ca9fb715ce}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Incomplete\+Multiline\+Comment2)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a287de0c3676e77b625b3984de3c8018d}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Unrecognized\+Comment)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a54ff7ac35c2b6ed78f427e77b9ba2b39}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Numbers\+As\+Strings)
+\item 
+\mbox{\hyperlink{readertest_8cpp_ae854759d4b07a3e1f82705d7e577787e}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Numbers\+As\+Strings\+WChar\+\_\+t)
+\item 
+{\footnotesize template$<$unsigned extra\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_a53b9204ec8bf882697790d11e728f81f}{Test\+Trailing\+Commas}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_a6915cfb99ca350fe96d8d3bcfdd8cd88}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Trailing\+Commas)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a682347bb2b9e7237a432cc36c07c81a0}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Trailing\+Commas\+Iterative)
+\item 
+{\footnotesize template$<$unsigned extra\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_a655f124d90808a045e7fb01f27c56c7b}{Test\+Multiple\+Trailing\+Comma\+Errors}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_a5f560a3f67d416d54dcfded7ecfbd04f}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Multiple\+Trailing\+Comma\+Errors)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a41e6c386bd804991906f8e7420df4635}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Multiple\+Trailing\+Comma\+Errors\+Iterative)
+\item 
+{\footnotesize template$<$unsigned extra\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_a32605d0e16ee73d21ab6009f266e3593}{Test\+Empty\+Except\+For\+Comma\+Errors}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_aa18cc109c75368968b1be3c938ad2e97}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Empty\+Except\+For\+Comma\+Errors)
+\item 
+\mbox{\hyperlink{readertest_8cpp_ab5c9b6f1601c378c4448ceba82e07e09}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Empty\+Except\+For\+Comma\+Errors\+Iterative)
+\item 
+{\footnotesize template$<$unsigned extra\+Flags$>$ }\\void \mbox{\hyperlink{readertest_8cpp_aee91bf3d9cd695a8cbe30cecb97e8351}{Test\+Trailing\+Comma\+Handler\+Termination}} ()
+\item 
+\mbox{\hyperlink{readertest_8cpp_a5cf2c15500cac34d39712e79413904b5}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Trailing\+Comma\+Handler\+Termination)
+\item 
+\mbox{\hyperlink{readertest_8cpp_ad85517af92c65a0853f67ad7d1609513}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Trailing\+Comma\+Handler\+Termination\+Iterative)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a317013469a1faa845f73423bcf057668}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Parse\+Nan\+And\+Infinity)
+\item 
+\mbox{\hyperlink{readertest_8cpp_a29547e2b6fa655bc161c074a0a183c2e}{TEST}} (\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}, Escaped\+Apostrophe)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}\label{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}} 
+\index{readertest.cpp@{readertest.cpp}!ARRAY@{ARRAY}}
+\index{ARRAY@{ARRAY}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{ARRAY}{ARRAY}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \#define ARRAY(\begin{DoxyParamCaption}\item[{}]{... }\end{DoxyParamCaption})~\{ \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+ \}}
+
+\mbox{\Hypertarget{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}\label{readertest_8cpp_a5d00524e55c84dee4a584e0536b2da71}} 
+\index{readertest.cpp@{readertest.cpp}!ARRAY@{ARRAY}}
+\index{ARRAY@{ARRAY}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{ARRAY}{ARRAY}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \#define ARRAY(\begin{DoxyParamCaption}\item[{}]{... }\end{DoxyParamCaption})~\{ \+\_\+\+\_\+\+VA\+\_\+\+ARGS\+\_\+\+\_\+ \}}
+
+\mbox{\Hypertarget{readertest_8cpp_aab63dea66734b992ac716833984e6a6e}\label{readertest_8cpp_aab63dea66734b992ac716833984e6a6e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_ARRAY\_ERROR@{TEST\_ARRAY\_ERROR}}
+\index{TEST\_ARRAY\_ERROR@{TEST\_ARRAY\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_ARRAY\_ERROR}{TEST\_ARRAY\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+ARRAY\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{error\+Code,  }\item[{}]{str,  }\item[{}]{error\+Offset }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        unsigned streamPos = errorOffset; \(\backslash\)}
+\DoxyCodeLine{        char buffer[1001]; \(\backslash\)}
+\DoxyCodeLine{        strncpy(buffer, str, 1000); \(\backslash\)}
+\DoxyCodeLine{        InsituStringStream s(buffer); \(\backslash\)}
+\DoxyCodeLine{        BaseReaderHandler<> h; \(\backslash\)}
+\DoxyCodeLine{        GenericReader<UTF8<>, \mbox{\hyperlink{struct_u_t_f8}{UTF8<>}}, \mbox{\hyperlink{class_crt_allocator}{CrtAllocator}}> reader; \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_FALSE(reader.Parse(s, h)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorCode, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorOffset, reader.GetErrorOffset());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(streamPos, s.Tell());\(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a21b994bed3341147071a62be3e1c592f}\label{readertest_8cpp_a21b994bed3341147071a62be3e1c592f}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_DOUBLE@{TEST\_DOUBLE}}
+\index{TEST\_DOUBLE@{TEST\_DOUBLE}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_DOUBLE}{TEST\_DOUBLE}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+DOUBLE(\begin{DoxyParamCaption}\item[{}]{full\+Precision,  }\item[{}]{str,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        StringStream s(str); \(\backslash\)}
+\DoxyCodeLine{        ParseDoubleHandler h; \(\backslash\)}
+\DoxyCodeLine{        Reader reader; \(\backslash\)}
+\DoxyCodeLine{        ASSERT\_EQ(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f}{kParseErrorNone}}, reader.Parse<fullPrecision ? \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46}{kParseFullPrecisionFlag}} : 0>(s, h).Code()); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(1u, h.step\_); \(\backslash\)}
+\DoxyCodeLine{        internal::Double e(x), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}(h.actual\_); \(\backslash\)}
+\DoxyCodeLine{        if (fullPrecision) \{ \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_EQ(e.Uint64Value(), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Uint64Value()); \(\backslash\)}
+\DoxyCodeLine{            if (e.Uint64Value() != \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Uint64Value()) \(\backslash\)}
+\DoxyCodeLine{                printf(\textcolor{stringliteral}{"{}  String: \%s\(\backslash\)n  Actual: \%.17g\(\backslash\)nExpected: \%.17g\(\backslash\)n"{}}, str, h.actual\_, x); \(\backslash\)}
+\DoxyCodeLine{        \} \(\backslash\)}
+\DoxyCodeLine{        else \{ \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_EQ(e.Sign(), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Sign()); \textcolor{comment}{/* for 0.0 != -\/0.0 */} \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_DOUBLE\_EQ(x, h.actual\_); \(\backslash\)}
+\DoxyCodeLine{        \} \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_af0cc358a05148bd414d612047eda8637}\label{readertest_8cpp_af0cc358a05148bd414d612047eda8637}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_ERROR@{TEST\_ERROR}}
+\index{TEST\_ERROR@{TEST\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_ERROR}{TEST\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{error\+Code,  }\item[{}]{str,  }\item[{}]{error\+Offset }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        unsigned streamPos = errorOffset; \(\backslash\)}
+\DoxyCodeLine{        char buffer[1001]; \(\backslash\)}
+\DoxyCodeLine{        strncpy(buffer, str, 1000); \(\backslash\)}
+\DoxyCodeLine{        InsituStringStream s(buffer); \(\backslash\)}
+\DoxyCodeLine{        BaseReaderHandler<> h; \(\backslash\)}
+\DoxyCodeLine{        Reader reader; \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_FALSE(reader.Parse(s, h)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorCode, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorOffset, reader.GetErrorOffset());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(streamPos, s.Tell());\(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_aa487c2e30c2c0abec07c6ef75baf3aee}\label{readertest_8cpp_aa487c2e30c2c0abec07c6ef75baf3aee}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_INTEGER@{TEST\_INTEGER}}
+\index{TEST\_INTEGER@{TEST\_INTEGER}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_INTEGER}{TEST\_INTEGER}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+INTEGER(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}},  }\item[{}]{str,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        StringStream s(str); \(\backslash\)}
+\DoxyCodeLine{        Handler h; \(\backslash\)}
+\DoxyCodeLine{        Reader reader; \(\backslash\)}
+\DoxyCodeLine{        reader.Parse(s, h); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(1u, h.step\_); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(x, h.actual\_); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a0cb67eee4e9c25329656c6c6359073d7}\label{readertest_8cpp_a0cb67eee4e9c25329656c6c6359073d7}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_NAN\_INF@{TEST\_NAN\_INF}}
+\index{TEST\_NAN\_INF@{TEST\_NAN\_INF}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_NAN\_INF}{TEST\_NAN\_INF}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+NAN\+\_\+\+INF(\begin{DoxyParamCaption}\item[{}]{str,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        \{ \(\backslash\)}
+\DoxyCodeLine{            StringStream s(str); \(\backslash\)}
+\DoxyCodeLine{            ParseDoubleHandler h; \(\backslash\)}
+\DoxyCodeLine{            Reader reader; \(\backslash\)}
+\DoxyCodeLine{            ASSERT\_EQ(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f}{kParseErrorNone}}, reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6}{kParseNanAndInfFlag}}>(s, h).Code()); \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_EQ(1u, h.step\_); \(\backslash\)}
+\DoxyCodeLine{            internal::Double e(x), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}(h.actual\_); \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_EQ(e.IsNan(), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.IsNan()); \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_EQ(e.IsInf(), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.IsInf()); \(\backslash\)}
+\DoxyCodeLine{            if (!e.IsNan()) \(\backslash\)}
+\DoxyCodeLine{                EXPECT\_EQ(e.Sign(), \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Sign()); \(\backslash\)}
+\DoxyCodeLine{        \} \(\backslash\)}
+\DoxyCodeLine{        \{ \(\backslash\)}
+\DoxyCodeLine{            const \textcolor{keywordtype}{char}* json = \textcolor{stringliteral}{"{}\{ \(\backslash\)"{}naninfdouble\(\backslash\)"{}: "{}} str \textcolor{stringliteral}{"{} \} "{}}; \(\backslash\)}
+\DoxyCodeLine{            StringStream s(json); \(\backslash\)}
+\DoxyCodeLine{            NumbersAsStringsHandler h(str); \(\backslash\)}
+\DoxyCodeLine{            Reader reader; \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_TRUE(reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01}{kParseNumbersAsStringsFlag}}|\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6}{kParseNanAndInfFlag}}>(s, h)); \(\backslash\)}
+\DoxyCodeLine{        \} \(\backslash\)}
+\DoxyCodeLine{        \{ \(\backslash\)}
+\DoxyCodeLine{            char* json = \mbox{\hyperlink{unittest_8h_a0b8e1bafb97ad4a272c5cc4469a13687}{StrDup}}(\textcolor{stringliteral}{"{}\{ \(\backslash\)"{}naninfdouble\(\backslash\)"{}: "{}} str \textcolor{stringliteral}{"{} \} "{}}); \(\backslash\)}
+\DoxyCodeLine{            InsituStringStream s(json); \(\backslash\)}
+\DoxyCodeLine{            NumbersAsStringsHandler h(str); \(\backslash\)}
+\DoxyCodeLine{            Reader reader; \(\backslash\)}
+\DoxyCodeLine{            EXPECT\_TRUE(reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01}{kParseInsituFlag}}|\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01}{kParseNumbersAsStringsFlag}}|\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6}{kParseNanAndInfFlag}}>(s, h)); \(\backslash\)}
+\DoxyCodeLine{            free(json); \(\backslash\)}
+\DoxyCodeLine{        \} \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a49931364fff3592ba2dcb37ac90d3b10}\label{readertest_8cpp_a49931364fff3592ba2dcb37ac90d3b10}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_NAN\_INF\_ERROR@{TEST\_NAN\_INF\_ERROR}}
+\index{TEST\_NAN\_INF\_ERROR@{TEST\_NAN\_INF\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_NAN\_INF\_ERROR}{TEST\_NAN\_INF\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+NAN\+\_\+\+INF\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{error\+Code,  }\item[{}]{str,  }\item[{}]{error\+Offset }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        unsigned streamPos = errorOffset; \(\backslash\)}
+\DoxyCodeLine{        char buffer[1001]; \(\backslash\)}
+\DoxyCodeLine{        strncpy(buffer, str, 1000); \(\backslash\)}
+\DoxyCodeLine{        InsituStringStream s(buffer); \(\backslash\)}
+\DoxyCodeLine{        BaseReaderHandler<> h; \(\backslash\)}
+\DoxyCodeLine{        Reader reader; \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_FALSE(reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6}{kParseNanAndInfFlag}}>(s, h)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorCode, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorOffset, reader.GetErrorOffset());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(streamPos, s.Tell());\(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a0915e2497a66e1c6569fbc2346abc4a7}\label{readertest_8cpp_a0915e2497a66e1c6569fbc2346abc4a7}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_NUMBER\_ERROR@{TEST\_NUMBER\_ERROR}}
+\index{TEST\_NUMBER\_ERROR@{TEST\_NUMBER\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_NUMBER\_ERROR}{TEST\_NUMBER\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+NUMBER\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{error\+Code,  }\item[{}]{str,  }\item[{}]{error\+Offset,  }\item[{}]{stream\+Pos }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        char buffer[2048]; \(\backslash\)}
+\DoxyCodeLine{        ASSERT\_LT(std::strlen(str), 2048u); \(\backslash\)}
+\DoxyCodeLine{        sprintf(buffer, \textcolor{stringliteral}{"{}\%s"{}}, str); \(\backslash\)}
+\DoxyCodeLine{        InsituStringStream s(buffer); \(\backslash\)}
+\DoxyCodeLine{        BaseReaderHandler<> h; \(\backslash\)}
+\DoxyCodeLine{        Reader reader; \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_FALSE(reader.Parse<fullPrecision ? \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46}{kParseFullPrecisionFlag}} : 0>(s, h)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorCode, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(errorOffset, reader.GetErrorOffset());\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(streamPos, s.Tell());\(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a9d7119f7924a0a61bdd167748c770dae}\label{readertest_8cpp_a9d7119f7924a0a61bdd167748c770dae}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_STRING@{TEST\_STRING}}
+\index{TEST\_STRING@{TEST\_STRING}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_STRING}{TEST\_STRING}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+STRING(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  }\item[{}]{e,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        Encoding::Ch* buffer = \mbox{\hyperlink{unittest_8h_a0b8e1bafb97ad4a272c5cc4469a13687}{StrDup}}(x); \(\backslash\)}
+\DoxyCodeLine{        GenericInsituStringStream<Encoding> is(buffer); \(\backslash\)}
+\DoxyCodeLine{        ParseStringHandler<Encoding> h; \(\backslash\)}
+\DoxyCodeLine{        GenericReader<Encoding, Encoding> reader; \(\backslash\)}
+\DoxyCodeLine{        reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01}{kParseInsituFlag}} | \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928}{kParseValidateEncodingFlag}}>(is, h); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(0, StrCmp<Encoding::Ch>(e, h.str\_)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(\mbox{\hyperlink{unittest_8h_a158bf1a4953297866644112d81a7a3e7}{StrLen}}(e), h.length\_); \(\backslash\)}
+\DoxyCodeLine{        free(buffer); \(\backslash\)}
+\DoxyCodeLine{        GenericStringStream<Encoding> s(x); \(\backslash\)}
+\DoxyCodeLine{        ParseStringHandler<Encoding> h2; \(\backslash\)}
+\DoxyCodeLine{        GenericReader<Encoding, Encoding> reader2; \(\backslash\)}
+\DoxyCodeLine{        reader2.Parse(s, h2); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(0, StrCmp<Encoding::Ch>(e, h2.str\_)); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(\mbox{\hyperlink{unittest_8h_a158bf1a4953297866644112d81a7a3e7}{StrLen}}(e), h2.length\_); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a5f47d54ec9d33d6d02cf84fbf375b393}\label{readertest_8cpp_a5f47d54ec9d33d6d02cf84fbf375b393}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_STRING\_ERROR@{TEST\_STRING\_ERROR}}
+\index{TEST\_STRING\_ERROR@{TEST\_STRING\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_STRING\_ERROR}{TEST\_STRING\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+STRING\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{error\+Code,  }\item[{}]{str,  }\item[{}]{error\+Offset,  }\item[{}]{stream\+Pos }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\(\backslash\)}
+\DoxyCodeLine{    GenericStringStream<UTF8<> > s(str);\(\backslash\)}
+\DoxyCodeLine{    BaseReaderHandler<UTF8<> > h;\(\backslash\)}
+\DoxyCodeLine{    GenericReader<UTF8<> , \mbox{\hyperlink{struct_u_t_f8}{UTF8<>}} > reader;\(\backslash\)}
+\DoxyCodeLine{    reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928}{kParseValidateEncodingFlag}}>(s, h);\(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(errorCode, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(errorOffset, reader.GetErrorOffset());\(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(streamPos, s.Tell());\(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_aca32d23ddbdec658bb1ca388b6f6bb97}\label{readertest_8cpp_aca32d23ddbdec658bb1ca388b6f6bb97}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_STRINGARRAY@{TEST\_STRINGARRAY}}
+\index{TEST\_STRINGARRAY@{TEST\_STRINGARRAY}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_STRINGARRAY}{TEST\_STRINGARRAY}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+STRINGARRAY(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  }\item[{}]{utype,  }\item[{}]{array,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} utype ue[] = array; \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} Encoding::Ch* e = \textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const }Encoding::Ch *\textcolor{keyword}{>}(\&ue[0]); \(\backslash\)}
+\DoxyCodeLine{        TEST\_STRING(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, e, x); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_afe94ee74dfe8222d034c1c8924b51080}\label{readertest_8cpp_afe94ee74dfe8222d034c1c8924b51080}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_STRINGARRAY2@{TEST\_STRINGARRAY2}}
+\index{TEST\_STRINGARRAY2@{TEST\_STRINGARRAY2}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_STRINGARRAY2}{TEST\_STRINGARRAY2}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+STRINGARRAY2(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  }\item[{}]{utype,  }\item[{}]{earray,  }\item[{}]{xarray }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} utype ue[] = earray; \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} utype xe[] = xarray; \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} Encoding::Ch* e = \textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const }Encoding::Ch *\textcolor{keyword}{>}(\&ue[0]); \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} Encoding::Ch* x = \textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const }Encoding::Ch *\textcolor{keyword}{>}(\&xe[0]); \(\backslash\)}
+\DoxyCodeLine{        TEST\_STRING(\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, e, x); \(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a61f78b99d29fd8c3f30ba08cdd193d32}\label{readertest_8cpp_a61f78b99d29fd8c3f30ba08cdd193d32}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_STRINGENCODING\_ERROR@{TEST\_STRINGENCODING\_ERROR}}
+\index{TEST\_STRINGENCODING\_ERROR@{TEST\_STRINGENCODING\_ERROR}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_STRINGENCODING\_ERROR}{TEST\_STRINGENCODING\_ERROR}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+STRINGENCODING\+\_\+\+ERROR(\begin{DoxyParamCaption}\item[{}]{\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}},  }\item[{}]{Target\+Encoding,  }\item[{}]{utype,  }\item[{}]{array }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \{ \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} utype ue[] = array; \(\backslash\)}
+\DoxyCodeLine{        static \textcolor{keyword}{const} Encoding::Ch* e = \textcolor{keyword}{reinterpret\_cast<}\textcolor{keyword}{const }Encoding::Ch *\textcolor{keyword}{>}(\&ue[0]); \(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456}{kParseErrorStringInvalidEncoding}}, TestString<Encoding>(e));\(\backslash\)}
+\DoxyCodeLine{        \textcolor{comment}{/* decode error */}\(\backslash\)}
+\DoxyCodeLine{        GenericStringStream<Encoding> s(e);\(\backslash\)}
+\DoxyCodeLine{        BaseReaderHandler<TargetEncoding> h;\(\backslash\)}
+\DoxyCodeLine{        GenericReader<Encoding, TargetEncoding> reader;\(\backslash\)}
+\DoxyCodeLine{        reader.Parse(s, h);\(\backslash\)}
+\DoxyCodeLine{        EXPECT\_EQ(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456}{kParseErrorStringInvalidEncoding}}, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{    \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a59abe708b636f5305e064d40eca97f6e}\label{readertest_8cpp_a59abe708b636f5305e064d40eca97f6e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST\_TERMINATION@{TEST\_TERMINATION}}
+\index{TEST\_TERMINATION@{TEST\_TERMINATION}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST\_TERMINATION}{TEST\_TERMINATION}}
+{\footnotesize\ttfamily \#define TEST\+\_\+\+TERMINATION(\begin{DoxyParamCaption}\item[{}]{e,  }\item[{}]{json }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\(\backslash\)}
+\DoxyCodeLine{    Reader reader;\(\backslash\)}
+\DoxyCodeLine{    TerminateHandler<e> h;\(\backslash\)}
+\DoxyCodeLine{    StringStream is(json);\(\backslash\)}
+\DoxyCodeLine{    EXPECT\_FALSE(reader.Parse(is, h));\(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, reader.GetParseErrorCode());\(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{readertest_8cpp_a42611f55159ca2d7b080ee7b5995a51e}\label{readertest_8cpp_a42611f55159ca2d7b080ee7b5995a51e}} 
+\index{readertest.cpp@{readertest.cpp}!TESTERRORHANDLING@{TESTERRORHANDLING}}
+\index{TESTERRORHANDLING@{TESTERRORHANDLING}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TESTERRORHANDLING}{TESTERRORHANDLING}}
+{\footnotesize\ttfamily \#define TESTERRORHANDLING(\begin{DoxyParamCaption}\item[{}]{text,  }\item[{}]{error\+Code,  }\item[{}]{offset }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\(\backslash\)}
+\DoxyCodeLine{    unsigned streamPos = offset; \(\backslash\)}
+\DoxyCodeLine{    StringStream json(text); \(\backslash\)}
+\DoxyCodeLine{    BaseReaderHandler<> handler; \(\backslash\)}
+\DoxyCodeLine{    Reader reader; \(\backslash\)}
+\DoxyCodeLine{    reader.Parse<\mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9}{kParseIterativeFlag}}>(json, handler); \(\backslash\)}
+\DoxyCodeLine{    EXPECT\_TRUE(reader.HasParseError()); \(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(errorCode, reader.GetParseErrorCode()); \(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(offset, reader.GetErrorOffset()); \(\backslash\)}
+\DoxyCodeLine{    EXPECT\_EQ(streamPos, json.Tell()); \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{readertest_8cpp_a854d1d6e5e6ac5e209a75851b64f6085}\label{readertest_8cpp_a854d1d6e5e6ac5e209a75851b64f6085}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [1/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Base\+Reader\+Handler\+\_\+\+Default}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a9fb049586354f7af008ba7f57cb7932c}\label{readertest_8cpp_a9fb049586354f7af008ba7f57cb7932c}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [2/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{\mbox{\hyperlink{class_custom_string_stream}{Custom\+String\+Stream}}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aa18cc109c75368968b1be3c938ad2e97}\label{readertest_8cpp_aa18cc109c75368968b1be3c938ad2e97}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [3/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Empty\+Except\+For\+Comma\+Errors}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_ab5c9b6f1601c378c4448ceba82e07e09}\label{readertest_8cpp_ab5c9b6f1601c378c4448ceba82e07e09}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [4/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Empty\+Except\+For\+Comma\+Errors\+Iterative}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a5df37d2665c76b6becee133720872a39}\label{readertest_8cpp_a5df37d2665c76b6becee133720872a39}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [5/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Eof\+After\+One\+Line\+Comment}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a29547e2b6fa655bc161c074a0a183c2e}\label{readertest_8cpp_a29547e2b6fa655bc161c074a0a183c2e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [6/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Escaped\+Apostrophe}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a6e04bdedbeaf39e022d22054f399af8a}\label{readertest_8cpp_a6e04bdedbeaf39e022d22054f399af8a}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [7/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Incomplete\+Multiline\+Comment}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a4ed130c1c10e5e9c32bb00ca9fb715ce}\label{readertest_8cpp_a4ed130c1c10e5e9c32bb00ca9fb715ce}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [8/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Incomplete\+Multiline\+Comment2}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a942f3e82ad0c2e74f2ed0d5bb92d5495}\label{readertest_8cpp_a942f3e82ad0c2e74f2ed0d5bb92d5495}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [9/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Inline\+Comments\+Are\+Disabled\+By\+Default}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a993a1536dc41d6024e435a2c48b24923}\label{readertest_8cpp_a993a1536dc41d6024e435a2c48b24923}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [10/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Iterative\+Parsing\+\_\+\+Count}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aeaebdcc79099df91507f5f015d762569}\label{readertest_8cpp_aeaebdcc79099df91507f5f015d762569}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [11/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Iterative\+Parsing\+\_\+\+Error\+Handling}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a2112c6391e74b80c3d2db6e327d88e04}\label{readertest_8cpp_a2112c6391e74b80c3d2db6e327d88e04}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [12/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Iterative\+Parsing\+\_\+\+General}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a870329d14861214eb2ae5a9a8609bf8f}\label{readertest_8cpp_a870329d14861214eb2ae5a9a8609bf8f}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [13/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Iterative\+Parsing\+\_\+\+Short\+Circuit}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a70dd9ea1fe24447f13125e256e315086}\label{readertest_8cpp_a70dd9ea1fe24447f13125e256e315086}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [14/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Iterative\+Pull\+Parsing\+\_\+\+General}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a5f560a3f67d416d54dcfded7ecfbd04f}\label{readertest_8cpp_a5f560a3f67d416d54dcfded7ecfbd04f}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [15/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Multiple\+Trailing\+Comma\+Errors}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a41e6c386bd804991906f8e7420df4635}\label{readertest_8cpp_a41e6c386bd804991906f8e7420df4635}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [16/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Multiple\+Trailing\+Comma\+Errors\+Iterative}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a54ff7ac35c2b6ed78f427e77b9ba2b39}\label{readertest_8cpp_a54ff7ac35c2b6ed78f427e77b9ba2b39}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [17/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Numbers\+As\+Strings}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_ae854759d4b07a3e1f82705d7e577787e}\label{readertest_8cpp_ae854759d4b07a3e1f82705d7e577787e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [18/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Numbers\+As\+Strings\+WChar\+\_\+t}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a877aa3d42a2ee1b20d26c2480b1104ba}\label{readertest_8cpp_a877aa3d42a2ee1b20d26c2480b1104ba}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [19/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Oneline\+Comments\+Are\+Disabled\+By\+Default}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a18bca8296eaae111c4373dfa381a1c36}\label{readertest_8cpp_a18bca8296eaae111c4373dfa381a1c36}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [20/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+\_\+\+Empty\+Object}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a90f7ee3e65bb9a8d14555eb2dd6e4393}\label{readertest_8cpp_a90f7ee3e65bb9a8d14555eb2dd6e4393}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [21/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+\_\+\+IStream\+Wrapper\+\_\+\+String\+Stream}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a5b7ceca8eb13509ac2015a74c90b004a}\label{readertest_8cpp_a5b7ceca8eb13509ac2015a74c90b004a}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [22/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+\_\+\+Multiple\+Root}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_af99e41513ed14fec7e1d4d3e2f610819}\label{readertest_8cpp_af99e41513ed14fec7e1d4d3e2f610819}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [23/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Array}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a2bbae6820b8599a03c91235a3b96e141}\label{readertest_8cpp_a2bbae6820b8599a03c91235a3b96e141}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [24/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Array\+\_\+\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a8dc48b304866b695871d888ea0a2592d}\label{readertest_8cpp_a8dc48b304866b695871d888ea0a2592d}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [25/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Comments}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a903c1326dbf0e8ce889aaee534ce5c6d}\label{readertest_8cpp_a903c1326dbf0e8ce889aaee534ce5c6d}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [26/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Document\+\_\+\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a351a887dbc1a7a7edc582e45e8c0e2e8}\label{readertest_8cpp_a351a887dbc1a7a7edc582e45e8c0e2e8}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [27/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Empty\+Array}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a3f3480cf5d13c5818b549265bf3ac1ca}\label{readertest_8cpp_a3f3480cf5d13c5818b549265bf3ac1ca}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [28/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Empty\+Inline\+Comment}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a56fcadf8f03df7af57cad7acadf504ab}\label{readertest_8cpp_a56fcadf8f03df7af57cad7acadf504ab}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [29/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Empty\+Oneline\+Comment}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a89b2294cf02d35650e58af5b803143b3}\label{readertest_8cpp_a89b2294cf02d35650e58af5b803143b3}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [30/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+False}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aa237ee4974ab4463734b51bc308d53bb}\label{readertest_8cpp_aa237ee4974ab4463734b51bc308d53bb}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [31/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Insitu\+\_\+\+Multiple\+Root}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a341f256b64084922f5f08d42b610a183}\label{readertest_8cpp_a341f256b64084922f5f08d42b610a183}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [32/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Insitu\+Iterative\+\_\+\+Multiple\+Root}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a190231ffaeee049afcbe613dbbc5751b}\label{readertest_8cpp_a190231ffaeee049afcbe613dbbc5751b}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [33/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Iterative\+\_\+\+Multiple\+Root}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_afd6d8f1c19c09ae0d6f919f61bbad887}\label{readertest_8cpp_afd6d8f1c19c09ae0d6f919f61bbad887}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [34/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Multiple\+Comments\+In\+ARow}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a317013469a1faa845f73423bcf057668}\label{readertest_8cpp_a317013469a1faa845f73423bcf057668}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [35/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Nan\+And\+Infinity}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aa2ce5bf11a889af8f9efe3fd77240fd5}\label{readertest_8cpp_aa2ce5bf11a889af8f9efe3fd77240fd5}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [36/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+\_\+\+Full\+Precision\+Double}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a0f338ae50a463adeddde167f9409bedc}\label{readertest_8cpp_a0f338ae50a463adeddde167f9409bedc}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [37/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+\_\+\+Integer}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aa293384d534e668619d44318d3d77d5e}\label{readertest_8cpp_aa293384d534e668619d44318d3d77d5e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [38/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+\_\+\+Normal\+Precision\+Double}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a2be15887d12d0e7bb634d6807da64b17}\label{readertest_8cpp_a2be15887d12d0e7bb634d6807da64b17}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [39/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+\_\+\+Normal\+Precision\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a2bbd1606be48d3fa85117a864ec9c9e4}\label{readertest_8cpp_a2bbd1606be48d3fa85117a864ec9c9e4}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [40/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+Error\+\_\+\+Full\+Precision\+Double}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a0a70a215ad0f6c5484dfbcb0d32dec72}\label{readertest_8cpp_a0a70a215ad0f6c5484dfbcb0d32dec72}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [41/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Number\+Error\+\_\+\+Normal\+Precision\+Double}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a2c25bdca73b3dcbf73aa441f9277384f}\label{readertest_8cpp_a2c25bdca73b3dcbf73aa441f9277384f}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [42/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Object}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aae5733e8671508fb38ac9e90911e1be7}\label{readertest_8cpp_aae5733e8671508fb38ac9e90911e1be7}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [43/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Object\+\_\+\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a15e169b6344e504df0eea4b5121060da}\label{readertest_8cpp_a15e169b6344e504df0eea4b5121060da}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [44/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+String}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_abd8b31cbdcf64777f9389eb782096914}\label{readertest_8cpp_abd8b31cbdcf64777f9389eb782096914}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [45/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+String\+\_\+\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a90cebede6f67a54e178e049793bf0d98}\label{readertest_8cpp_a90cebede6f67a54e178e049793bf0d98}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [46/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+String\+\_\+\+Non\+Destructive}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a74f5978d08350eef0b4c9e458f9fb811}\label{readertest_8cpp_a74f5978d08350eef0b4c9e458f9fb811}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [47/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+String\+\_\+\+Transcoding}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_ab541be9d37347bb83774aa2bc99a7482}\label{readertest_8cpp_ab541be9d37347bb83774aa2bc99a7482}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [48/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+String\+\_\+\+Transcoding\+With\+Validation}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a37d7b918c516febe122eb98fd95d835d}\label{readertest_8cpp_a37d7b918c516febe122eb98fd95d835d}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [49/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Termination\+By\+Handler}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_acd0e3395c882a9ffffd0cd3e541f737e}\label{readertest_8cpp_acd0e3395c882a9ffffd0cd3e541f737e}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [50/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+True}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_abb4708dbc92034ce8428154fc3446ac4}\label{readertest_8cpp_abb4708dbc92034ce8428154fc3446ac4}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [51/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Parse\+Value\+\_\+\+Error}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_abfa886640a194ac6dbdd83d87d6d6501}\label{readertest_8cpp_abfa886640a194ac6dbdd83d87d6d6501}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [52/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{\mbox{\hyperlink{reader_8h_aeddf0374b22926be76140ec6708dc203}{Skip\+Whitespace}}}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a5cf2c15500cac34d39712e79413904b5}\label{readertest_8cpp_a5cf2c15500cac34d39712e79413904b5}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [53/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Trailing\+Comma\+Handler\+Termination}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_ad85517af92c65a0853f67ad7d1609513}\label{readertest_8cpp_ad85517af92c65a0853f67ad7d1609513}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [54/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Trailing\+Comma\+Handler\+Termination\+Iterative}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a6915cfb99ca350fe96d8d3bcfdd8cd88}\label{readertest_8cpp_a6915cfb99ca350fe96d8d3bcfdd8cd88}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [55/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Trailing\+Commas}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a682347bb2b9e7237a432cc36c07c81a0}\label{readertest_8cpp_a682347bb2b9e7237a432cc36c07c81a0}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [56/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Trailing\+Commas\+Iterative}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a287de0c3676e77b625b3984de3c8018d}\label{readertest_8cpp_a287de0c3676e77b625b3984de3c8018d}} 
+\index{readertest.cpp@{readertest.cpp}!TEST@{TEST}}
+\index{TEST@{TEST}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TEST()}{TEST()}\hspace{0.1cm}{\footnotesize\ttfamily [57/57]}}
+{\footnotesize\ttfamily TEST (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{fwd_8h_ab7f1c1207749ff25c0d7f0cc88e62788}{Reader}}}]{,  }\item[{Unrecognized\+Comment}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a32605d0e16ee73d21ab6009f266e3593}\label{readertest_8cpp_a32605d0e16ee73d21ab6009f266e3593}} 
+\index{readertest.cpp@{readertest.cpp}!TestEmptyExceptForCommaErrors@{TestEmptyExceptForCommaErrors}}
+\index{TestEmptyExceptForCommaErrors@{TestEmptyExceptForCommaErrors}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestEmptyExceptForCommaErrors()}{TestEmptyExceptForCommaErrors()}}
+{\footnotesize\ttfamily template$<$unsigned extra\+Flags$>$ \\
+void Test\+Empty\+Except\+For\+Comma\+Errors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a3e697a5cd8deeff851239ddc33e9466f}\label{readertest_8cpp_a3e697a5cd8deeff851239ddc33e9466f}} 
+\index{readertest.cpp@{readertest.cpp}!TestInsituMultipleRoot@{TestInsituMultipleRoot}}
+\index{TestInsituMultipleRoot@{TestInsituMultipleRoot}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestInsituMultipleRoot()}{TestInsituMultipleRoot()}}
+{\footnotesize\ttfamily template$<$unsigned parse\+Flags$>$ \\
+void Test\+Insitu\+Multiple\+Root (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a43a70800373051361573d37f95bb433e}\label{readertest_8cpp_a43a70800373051361573d37f95bb433e}} 
+\index{readertest.cpp@{readertest.cpp}!TestMultipleRoot@{TestMultipleRoot}}
+\index{TestMultipleRoot@{TestMultipleRoot}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestMultipleRoot()}{TestMultipleRoot()}}
+{\footnotesize\ttfamily template$<$unsigned parse\+Flags$>$ \\
+void Test\+Multiple\+Root (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a655f124d90808a045e7fb01f27c56c7b}\label{readertest_8cpp_a655f124d90808a045e7fb01f27c56c7b}} 
+\index{readertest.cpp@{readertest.cpp}!TestMultipleTrailingCommaErrors@{TestMultipleTrailingCommaErrors}}
+\index{TestMultipleTrailingCommaErrors@{TestMultipleTrailingCommaErrors}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestMultipleTrailingCommaErrors()}{TestMultipleTrailingCommaErrors()}}
+{\footnotesize\ttfamily template$<$unsigned extra\+Flags$>$ \\
+void Test\+Multiple\+Trailing\+Comma\+Errors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aecbde81eaceef1ab965fbccc9c6a2cc1}\label{readertest_8cpp_aecbde81eaceef1ab965fbccc9c6a2cc1}} 
+\index{readertest.cpp@{readertest.cpp}!TestString@{TestString}}
+\index{TestString@{TestString}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestString()}{TestString()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \\
+\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{Parse\+Error\+Code}} Test\+String (\begin{DoxyParamCaption}\item[{const typename Encoding\+::\+Ch $\ast$}]{str }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_aee91bf3d9cd695a8cbe30cecb97e8351}\label{readertest_8cpp_aee91bf3d9cd695a8cbe30cecb97e8351}} 
+\index{readertest.cpp@{readertest.cpp}!TestTrailingCommaHandlerTermination@{TestTrailingCommaHandlerTermination}}
+\index{TestTrailingCommaHandlerTermination@{TestTrailingCommaHandlerTermination}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestTrailingCommaHandlerTermination()}{TestTrailingCommaHandlerTermination()}}
+{\footnotesize\ttfamily template$<$unsigned extra\+Flags$>$ \\
+void Test\+Trailing\+Comma\+Handler\+Termination (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{readertest_8cpp_a53b9204ec8bf882697790d11e728f81f}\label{readertest_8cpp_a53b9204ec8bf882697790d11e728f81f}} 
+\index{readertest.cpp@{readertest.cpp}!TestTrailingCommas@{TestTrailingCommas}}
+\index{TestTrailingCommas@{TestTrailingCommas}!readertest.cpp@{readertest.cpp}}
+\doxysubsubsection{\texorpdfstring{TestTrailingCommas()}{TestTrailingCommas()}}
+{\footnotesize\ttfamily template$<$unsigned extra\+Flags$>$ \\
+void Test\+Trailing\+Commas (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+

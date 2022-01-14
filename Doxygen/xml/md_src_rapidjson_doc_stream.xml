@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_stream" kind="page">
+    <compoundname>md_src_rapidjson_doc_stream</compoundname>
+    <title>Stream</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>In RapidJSON, <computeroutput><ref refid="classrapidjson_1_1_stream" kindref="compound">rapidjson::Stream</ref></computeroutput> is a concept for reading/writing JSON. Here we&apos;ll first show you how to use provided streams. And then see how to create a custom stream.</para>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1MemoryStreams">
+<title>Memory Streams</title>
+<para>Memory streams store JSON in memory.</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1StringStream">
+<title>StringStream (Input)</title>
+<para><computeroutput>StringStream</computeroutput> is the most basic input stream. It represents a complete, read-only JSON stored in memory. It is defined in <computeroutput><ref refid="rapidjson_8h" kindref="compound">rapidjson/rapidjson.h</ref></computeroutput>.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>will<sp/>include<sp/>&quot;rapidjson/rapidjson.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>json[]<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="struct_generic_string_stream" kindref="compound">StringStream</ref><sp/>s(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(s);</highlight></codeline>
+</programlisting></para>
+<para>Since this is very common usage, <computeroutput>Document::Parse(const char*)</computeroutput> is provided to do exactly the same as above:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>json[]<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+</programlisting></para>
+<para>Note that, <computeroutput>StringStream</computeroutput> is a typedef of <computeroutput><ref refid="struct_generic_string_stream" kindref="compound">GenericStringStream</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt; &gt;</computeroutput>, user may use another encodings to represent the character set of the stream.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1StringBuffer">
+<title>StringBuffer (Output)</title>
+<para><computeroutput>StringBuffer</computeroutput> is a simple output stream. It allocates a memory buffer for writing the whole JSON. Use <computeroutput>GetString()</computeroutput> to obtain the buffer.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="stringbuffer_8h" kindref="compound">rapidjson/stringbuffer.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer&gt;</ref><sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>output<sp/>=<sp/>buffer.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+</programlisting></para>
+<para>When the buffer is full, it will increases the capacity automatically. The default capacity is 256 characters (256 bytes for <ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>, 512 bytes for <ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>, etc.). User can provide an allocator and an initial capacity.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer1(0,<sp/>1024);<sp/></highlight><highlight class="comment">//<sp/>Use<sp/>its<sp/>allocator,<sp/>initial<sp/>size<sp/>=<sp/>1024</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer2(allocator,<sp/>1024);</highlight></codeline>
+</programlisting></para>
+<para>By default, <computeroutput>StringBuffer</computeroutput> will instantiate an internal allocator.</para>
+<para>Similarly, <computeroutput>StringBuffer</computeroutput> is a typedef of <computeroutput><ref refid="class_generic_string_buffer" kindref="compound">GenericStringBuffer</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt; &gt;</computeroutput>.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1FileStreams">
+<title>File Streams</title>
+<para>When parsing a JSON from file, you may read the whole JSON into memory and use <computeroutput>StringStream</computeroutput> above.</para>
+<para>However, if the JSON is big, or memory is limited, you can use <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput>. It only read a part of JSON from file into buffer, and then let the part be parsed. If it runs out of characters in the buffer, it will read the next part from file.</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1FileReadStream">
+<title>FileReadStream (Input)</title>
+<para><computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> reads the file via a <computeroutput>FILE</computeroutput> pointer. And user need to provide a buffer.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;big.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>is(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(is);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>Different from string streams, <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> is byte stream. It does not handle encodings. If the file is not UTF-8, the byte stream can be wrapped in a <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput>. We will discuss more about this later in this tutorial.</para>
+<para>Apart from reading file, user can also use <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> to read <computeroutput>stdin</computeroutput>.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1FileWriteStream">
+<title>FileWriteStream (Output)</title>
+<para><computeroutput><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref></computeroutput> is buffered output stream. Its usage is very similar to <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput>.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filewritestream_8h" kindref="compound">rapidjson/filewritestream.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;output.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;wb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>non-Windows<sp/>use<sp/>&quot;w&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>os(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;FileWriteStream&gt;</ref><sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>It can also redirect the output to <computeroutput>stdout</computeroutput>.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1iostreamWrapper">
+<title>iostream Wrapper</title>
+<para>Due to users&apos; requests, RapidJSON also provides official wrappers for <computeroutput>std::basic_istream</computeroutput> and <computeroutput>std::basic_ostream</computeroutput>. However, please note that the performance will be much lower than the other streams above.</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1IStreamWrapper">
+<title>IStreamWrapper</title>
+<para><computeroutput><ref refid="class_i_stream_wrapper" kindref="compound">IStreamWrapper</ref></computeroutput> wraps any class derived from <computeroutput>std::istream</computeroutput>, such as <computeroutput>std::istringstream</computeroutput>, <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ifstream</computeroutput>, <computeroutput>std::fstream</computeroutput>, into RapidJSON&apos;s input stream.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&lt;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="istreamwrapper_8h" kindref="compound">rapidjson/istreamwrapper.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ifstream<sp/>ifs(</highlight><highlight class="stringliteral">&quot;test.json&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_i_stream_wrapper" kindref="compound">IStreamWrapper</ref><sp/>isw(ifs);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(isw);</highlight></codeline>
+</programlisting></para>
+<para>For classes derived from <computeroutput>std::wistream</computeroutput>, use <computeroutput><ref refid="class_w_i_stream_wrapper" kindref="compound">WIStreamWrapper</ref></computeroutput>.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1OStreamWrapper">
+<title>OStreamWrapper</title>
+<para>Similarly, <computeroutput><ref refid="class_o_stream_wrapper" kindref="compound">OStreamWrapper</ref></computeroutput> wraps any class derived from <computeroutput>std::ostream</computeroutput>, such as <computeroutput>std::ostringstream</computeroutput>, <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ofstream</computeroutput>, <computeroutput>std::fstream</computeroutput>, into RapidJSON&apos;s input stream.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&lt;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ostreamwrapper_8h" kindref="compound">rapidjson/ostreamwrapper.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ofstream<sp/>ofs(</highlight><highlight class="stringliteral">&quot;output.json&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_o_stream_wrapper" kindref="compound">OStreamWrapper</ref><sp/>osw(ofs);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;OStreamWrapper&gt;</ref><sp/>writer(osw);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+</programlisting></para>
+<para>For classes derived from <computeroutput>std::wostream</computeroutput>, use <computeroutput>WOStreamWrapper</computeroutput>.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedStreams">
+<title>Encoded Streams</title>
+<para>Encoded streams do not contain JSON itself, but they wrap byte streams to provide basic encoding/decoding function.</para>
+<para>As mentioned above, UTF-8 byte streams can be read directly. However, UTF-16 and UTF-32 have endian issue. To handle endian correctly, it needs to convert bytes into characters (e.g. <computeroutput>wchar_t</computeroutput> for UTF-16) while reading, and characters into bytes while writing.</para>
+<para>Besides, it also need to handle <ulink url="http://en.wikipedia.org/wiki/Byte_order_mark">byte order mark (BOM)</ulink>. When reading from a byte stream, it is needed to detect or just consume the BOM if exists. When writing to a byte stream, it can optionally write BOM.</para>
+<para>If the encoding of stream is known during compile-time, you may use <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> and <computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput>. If the stream can be UTF-8, UTF-16LE, UTF-16BE, UTF-32LE, UTF-32BE JSON, and it is only known in runtime, you may use <computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> and <computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput>. These streams are defined in <computeroutput><ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref></computeroutput>.</para>
+<para>Note that, these encoded streams can be applied to streams other than file. For example, you may have a file in memory, or a custom byte stream, be wrapped in encoded streams.</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedInputStream">
+<title>EncodedInputStream</title>
+<para><computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> has two template parameters. The first one is a <computeroutput>Encoding</computeroutput> class, such as <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref></computeroutput>, defined in <computeroutput><ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref></computeroutput>. The second one is the class of stream to be wrapped.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>FileReadStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>EncodedInputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;utf16le.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>bis(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream&lt;UTF16LE&lt;&gt;</ref>,<sp/><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref>&gt;<sp/>eis(bis);<sp/><sp/></highlight><highlight class="comment">//<sp/>wraps<sp/>bis<sp/>into<sp/>eis</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>&lt;0,<sp/><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE&lt;&gt;</ref><sp/>&gt;(eis);<sp/><sp/></highlight><highlight class="comment">//<sp/>Parses<sp/>UTF-16LE<sp/>file<sp/>into<sp/>UTF-8<sp/>in<sp/>memory</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedOutputStream">
+<title>EncodedOutputStream</title>
+<para><computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput> is similar but it has a <computeroutput>bool putBOM</computeroutput> parameter in the constructor, controlling whether to write BOM into output byte stream.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filewritestream_8h" kindref="compound">rapidjson/filewritestream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>FileWriteStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>EncodedOutputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;output_utf32le.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;wb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>non-Windows<sp/>use<sp/>&quot;w&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>bos(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream&lt;UTF32LE&lt;&gt;</ref>,<sp/><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref>&gt;<sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal">OutputStream<sp/>eos(bos,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Write<sp/>BOM</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;OutputStream, UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE&lt;&gt;</ref>&gt;<sp/>writer(eos);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>generates<sp/>UTF32-LE<sp/>file<sp/>from<sp/>UTF-8<sp/>in<sp/>memory</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1AutoUTFInputStream">
+<title>AutoUTFInputStream</title>
+<para>Sometimes an application may want to handle all supported JSON encoding. <computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> will detection encoding by BOM first. If BOM is unavailable, it will use characteristics of valid JSON to make detection. If neither method success, it falls back to the UTF type provided in constructor.</para>
+<para>Since the characters (code units) may be 8-bit, 16-bit or 32-bit. <computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> requires a character type which can hold at least 32-bit. We may use <computeroutput>unsigned</computeroutput>, as in the template parameter:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>FileReadStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>AutoUTFInputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;any.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>bis(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream&lt;unsigned, FileReadStream&gt;</ref><sp/>eis(bis);<sp/><sp/></highlight><highlight class="comment">//<sp/>wraps<sp/>bis<sp/>into<sp/>eis</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>&lt;0,<sp/><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF&lt;unsigned&gt;</ref><sp/>&gt;(eis);<sp/></highlight><highlight class="comment">//<sp/>This<sp/>parses<sp/>any<sp/>UTF<sp/>file<sp/>into<sp/>UTF-8<sp/>in<sp/>memory</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>When specifying the encoding of stream, uses <computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref>&lt;CharType&gt;</computeroutput> as in <computeroutput>ParseStream()</computeroutput> above.</para>
+<para>You can obtain the type of UTF via <computeroutput>UTFType GetType()</computeroutput>. And check whether a BOM is found by <computeroutput>HasBOM()</computeroutput></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1AutoUTFOutputStream">
+<title>AutoUTFOutputStream</title>
+<para>Similarly, to choose encoding for output during runtime, we can use <computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput>. This class is not automatic <emphasis>per se</emphasis>. You need to specify the UTF type and whether to write BOM in runtime.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>WriteJSONFile(FILE*<sp/>fp,<sp/><ref refid="encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58" kindref="member">UTFType</ref><sp/>type,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>putBOM,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">Document</ref>&amp;<sp/>d)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>bos(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream&lt;unsigned, FileWriteStream&gt;</ref><sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>OutputStream<sp/>eos(bos,<sp/>type,<sp/>putBOM);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_writer" kindref="compound">Writer&lt;OutputStream, UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF&lt;&gt;</ref><sp/>&gt;<sp/>writer;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> and <computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput> is more convenient than <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> and <computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput>. They just incur a little bit runtime overheads.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1CustomStream">
+<title>Custom Stream</title>
+<para>In addition to memory/file streams, user can create their own stream classes which fits RapidJSON&apos;s API. For example, you may create network stream, stream from compressed file, etc.</para>
+<para>RapidJSON combines different types using templates. A class containing all required interface can be a stream. The Stream interface is defined in comments of <computeroutput><ref refid="rapidjson_8h" kindref="compound">rapidjson/rapidjson.h</ref></computeroutput>:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="classrapidjson_1_1_stream" kindref="compound">Stream</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/>Ch;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()<sp/>const;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>Tell();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Put(Ch<sp/>c);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Flush();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>PutEnd(Ch*<sp/>begin);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>For input stream, they must implement <computeroutput>Peek()</computeroutput>, <computeroutput>Take()</computeroutput> and <computeroutput>Tell()</computeroutput>. For output stream, they must implement <computeroutput>Put()</computeroutput> and <computeroutput>Flush()</computeroutput>. There are two special interface, <computeroutput>PutBegin()</computeroutput> and <computeroutput>PutEnd()</computeroutput>, which are only for <emphasis>in situ</emphasis> parsing. Normal streams do not implement them. However, if the interface is not needed for a particular stream, it is still need to a dummy implementation, otherwise will generate compilation error.</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1ExampleIStreamWrapper">
+<title>Example: istream wrapper</title>
+<para>The following example is a simple wrapper of <computeroutput>std::istream</computeroutput>, which only implements 3 functions.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">class<sp/></highlight><highlight class="normal">MyIStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>Ch;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(std::istream&amp;<sp/>is)<sp/>:<sp/>is_(is)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="comment">//<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c<sp/>=<sp/>is_.peek();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal"><sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/></highlight><highlight class="comment">//<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c<sp/>=<sp/>is_.get();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal"><sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Tell()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)is_.tellg();<sp/>}<sp/></highlight><highlight class="comment">//<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Put(Ch)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Flush()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>PutEnd(Ch*)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::istream&amp;<sp/>is_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>User can use it to wrap instances of <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ifstream</computeroutput>.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>json<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,2,3,4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss(json);</highlight></codeline>
+<codeline><highlight class="normal">MyIStreamWrapper<sp/>is(ss);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(is);</highlight></codeline>
+</programlisting></para>
+<para>Note that, this implementation may not be as efficient as RapidJSON&apos;s memory or file streams, due to internal overheads of the standard library.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1ExampleOStreamWrapper">
+<title>Example: ostream wrapper</title>
+<para>The following example is a simple wrapper of <computeroutput>std::istream</computeroutput>, which only implements 2 functions.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">class<sp/></highlight><highlight class="normal">MyOStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>Ch;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper(std::ostream&amp;<sp/>os)<sp/>:<sp/>os_(os)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Tell()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Put(Ch<sp/>c)<sp/>{<sp/>os_.put(c);<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Flush()<sp/>{<sp/>os_.flush();<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>PutEnd(Ch*)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::ostream&amp;<sp/>os_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>User can use it to wrap instances of <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ofstream</computeroutput>.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss;</highlight></codeline>
+<codeline><highlight class="normal">MyOStreamWrapper<sp/>os(ss);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;MyOStreamWrapper&gt;</ref><sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+</programlisting></para>
+<para>Note that, this implementation may not be as efficient as RapidJSON&apos;s memory or file streams, due to internal overheads of the standard library.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1Summary">
+<title>Summary</title>
+<para>This section describes stream classes available in RapidJSON. Memory streams are simple. File stream can reduce the memory required during JSON parsing and generation, if the JSON is stored in file system. Encoded streams converts between byte streams and character streams. Finally, user may create custom streams using a simple interface. </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/stream.md"/>
+  </compounddef>
+</doxygen>

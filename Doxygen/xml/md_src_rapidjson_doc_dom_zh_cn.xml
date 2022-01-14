@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_dom_zh_cn" kind="page">
+    <compoundname>md_src_rapidjson_doc_dom_zh_cn</compoundname>
+    <title>DOM</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>文档对象模型（Document Object Model, DOM）是一种罝于内存中的 JSON 表示方式，以供查询及操作。我们已于 <ref refid="tutorial_8zh-cn_8md" kindref="compound">教程</ref> 中介绍了 DOM 的基本用法，本节将讲述一些细节及高级用法。</para>
+<sect1 id="md_src_rapidjson_doc_dom_zh_cn_1Template">
+<title>Template</title>
+<para>教程中使用了 <computeroutput>Value</computeroutput> 和 <computeroutput>Document</computeroutput> 类型。与 <computeroutput>std::string</computeroutput> 相似，这些类型其实是两个模板类的 <computeroutput>typedef</computeroutput>：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Encoding,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Allocator<sp/>=<sp/>MemoryPoolAllocator&lt;&gt;<sp/>&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_generic_value" kindref="compound">GenericValue</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Encoding,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>Allocator<sp/>=<sp/>MemoryPoolAllocator&lt;&gt;<sp/>&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">GenericValue</ref>&lt;Encoding,<sp/>Allocator&gt;<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">GenericValue&lt;UTF8&lt;&gt;</ref><sp/>&gt;<sp/><ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">GenericDocument&lt;UTF8&lt;&gt;</ref><sp/>&gt;<sp/><ref refid="document_8h_1ac6ea5b168e3fe8c7fa532450fc9391f7" kindref="member">Document</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+</programlisting></para>
+<para>使用者可以自定义这些模板参数。</para>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1Encoding">
+<title>Encoding</title>
+<para><computeroutput>Encoding</computeroutput> 参数指明在内存中的 JSON String 使用哪种编码。可行的选项有 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput>。要注意这 3 个类型其实也是模板类。<computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt;</computeroutput> 等同 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;char&gt;</computeroutput>，这代表它使用 <computeroutput>char</computeroutput> 来存储字符串。更多细节可以参考 <ref refid="encoding_8zh-cn_8md" kindref="compound">编码</ref>。</para>
+<para>这里是一个例子。假设一个 Windows 应用软件希望查询存储于 JSON 中的本地化字符串。Windows 中含 Unicode 的函数使用 UTF-16（宽字符）编码。无论 JSON 文件使用哪种编码，我们都可以把字符串以 UTF-16 形式存储在内存。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">GenericDocument&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">GenericValue&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WValue;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;localization.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>bis(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream&lt;unsigned, FileReadStream&gt;</ref><sp/>eis(bis);<sp/><sp/></highlight><highlight class="comment">//<sp/>包装<sp/>bis<sp/>成<sp/>eis</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">WDocument<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream&lt;0,<sp/><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF&lt;unsigned&gt;</ref><sp/>&gt;(eis);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>WValue<sp/>locale(L</highlight><highlight class="stringliteral">&quot;ja&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>Japanese</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">MessageBoxW(hWnd,<sp/>d[locale].GetString(),<sp/>L</highlight><highlight class="stringliteral">&quot;Test&quot;</highlight><highlight class="normal">,<sp/>MB_OK);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1Allocator">
+<title>Allocator</title>
+<para><computeroutput>Allocator</computeroutput> 定义当 <computeroutput>Document</computeroutput>/<computeroutput>Value</computeroutput> 分配或释放内存时使用那个分配类。<computeroutput>Document</computeroutput> 拥有或引用到一个 <computeroutput>Allocator</computeroutput> 实例。而为了节省内存，<computeroutput>Value</computeroutput> 没有这么做。</para>
+<para><computeroutput><ref refid="class_generic_document" kindref="compound">GenericDocument</ref></computeroutput> 的缺省分配器是 <computeroutput><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref></computeroutput>。此分配器实际上会顺序地分配内存，并且不能逐一释放。当要解析一个 JSON 并生成 DOM，这种分配器是非常合适的。</para>
+<para>RapidJSON 还提供另一个分配器 <computeroutput><ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref></computeroutput>，当中 CRT 是 C 运行库（C RunTime library）的缩写。此分配器简单地读用标准的 <computeroutput>malloc()</computeroutput>/<computeroutput>realloc()</computeroutput>/<computeroutput>free()</computeroutput>。当我们需要许多增减操作，这种分配器会更为适合。然而这种分配器远远比 <computeroutput><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref></computeroutput> 低效。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_dom_zh_cn_1Parsing">
+<title>Parsing</title>
+<para><computeroutput>Document</computeroutput> 提供几个解析函数。以下的 (1) 是根本的函数，其他都是调用 (1) 的协助函数。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(1)<sp/>根本</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>parseFlags,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SourceEncoding,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">GenericDocument::ParseStream</ref>(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(2)<sp/>使用流的编码</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>parseFlags,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">GenericDocument::ParseStream</ref>(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(3)<sp/>使用缺省标志</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">GenericDocument::ParseStream</ref>(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(4)<sp/>原位解析</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>parseFlags&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a13f68b1896a24eea4cdbc03a3916225f" kindref="member">GenericDocument::ParseInsitu</ref>(Ch*<sp/>str);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(5)<sp/>原位解析，使用缺省标志</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a13f68b1896a24eea4cdbc03a3916225f" kindref="member">GenericDocument::ParseInsitu</ref>(Ch*<sp/>str);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(6)<sp/>正常解析一个字符串</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>parseFlags,<sp/></highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>SourceEncoding&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">GenericDocument::Parse</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ch*<sp/>str);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(7)<sp/>正常解析一个字符串，使用<sp/>Document<sp/>的编码</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/>parseFlags&gt;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">GenericDocument::Parse</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ch*<sp/>str);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>(8)<sp/>正常解析一个字符串，使用缺省标志</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&amp;<sp/><ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">GenericDocument::Parse</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ch*<sp/>str);</highlight></codeline>
+</programlisting></para>
+<para><ref refid="tutorial_8zh-cn_8md" kindref="compound">教程</ref> 中的例使用 (8) 去正常解析字符串。而 <ref refid="stream_8zh-cn_8md" kindref="compound">流</ref> 的例子使用前 3 个函数。我们将稍后介绍原位（*In situ*） 解析。</para>
+<para><computeroutput>parseFlags</computeroutput> 是以下位标置的组合：</para>
+<para><table rows="13" cols="2"><row>
+<entry thead="yes"><para>解析位标志   </para>
+</entry><entry thead="yes"><para>意义    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseNoFlags</computeroutput>   </para>
+</entry><entry thead="no"><para>没有任何标志。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseDefaultFlags</computeroutput>   </para>
+</entry><entry thead="no"><para>缺省的解析选项。它等于 <computeroutput>RAPIDJSON_PARSE_DEFAULT_FLAGS</computeroutput> 宏，此宏定义为 <computeroutput>kParseNoFlags</computeroutput>。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseInsituFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>原位（破坏性）解析。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseValidateEncodingFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>校验 JSON 字符串的编码。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseIterativeFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>迭代式（调用堆栈大小为常数复杂度）解析。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseStopWhenDoneFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>当从流解析了一个完整的 JSON 根节点之后，停止继续处理余下的流。当使用了此标志，解析器便不会产生 <computeroutput>kParseErrorDocumentRootNotSingular</computeroutput> 错误。可使用本标志去解析同一个流里的多个 JSON。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseFullPrecisionFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>使用完整的精确度去解析数字（较慢）。如不设置此标节，则会使用正常的精确度（较快）。正常精确度会有最多 3 个 <ulink url="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</ulink> 的误差。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseCommentsFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>容许单行 <computeroutput>// ...</computeroutput> 及多行 <computeroutput>/* ... */</computeroutput> 注释（放宽的 JSON 语法）。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseNumbersAsStringsFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>把数字类型解析成字符串。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseTrailingCommasFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>容许在对象和数组结束前含有逗号（放宽的 JSON 语法）。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseNanAndInfFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>容许 <computeroutput>NaN</computeroutput>、<computeroutput>Inf</computeroutput>、<computeroutput>Infinity</computeroutput>、<computeroutput>-Inf</computeroutput> 及 <computeroutput>-Infinity</computeroutput> 作为 <computeroutput>double</computeroutput> 值（放宽的 JSON 语法）。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseEscapedApostropheFlag</computeroutput>   </para>
+</entry><entry thead="no"><para>容许字符串中转义单引号 <lsquo/>&amp;rsquo;` （放宽的 JSON 语法）。   </para>
+</entry></row>
+</table>
+</para>
+<para>由于使用了非类型模板参数，而不是函数参数，C++ 编译器能为个别组合生成代码，以改善性能及减少代码尺寸（当只用单种特化）。缺点是需要在编译期决定标志。</para>
+<para><computeroutput>SourceEncoding</computeroutput> 参数定义流使用了什么编码。这与 <computeroutput>Document</computeroutput> 的 <computeroutput>Encoding</computeroutput> 不相同。细节可参考 <ref refid="md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation" kindref="member">转码和校验</ref> 一节。</para>
+<para>此外 <computeroutput>InputStream</computeroutput> 是输入流的类型。</para>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1ParseError">
+<title>Parse Error</title>
+<para>当解析过程顺利完成，<computeroutput>Document</computeroutput> 便会含有解析结果。当过程出现错误，原来的 DOM 会*维持不变*。可使用 <computeroutput>bool HasParseError()</computeroutput>、<computeroutput>ParseErrorCode GetParseError()</computeroutput> 及 <computeroutput>size_t GetErrorOffset()</computeroutput> 获取解析的错误状态。</para>
+<para><table rows="17" cols="2"><row>
+<entry thead="yes"><para>解析错误代号   </para>
+</entry><entry thead="yes"><para>描述    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorNone</computeroutput>   </para>
+</entry><entry thead="no"><para>无错误。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorDocumentEmpty</computeroutput>   </para>
+</entry><entry thead="no"><para>文档是空的。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorDocumentRootNotSingular</computeroutput>   </para>
+</entry><entry thead="no"><para>文档的根后面不能有其它值。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorValueInvalid</computeroutput>   </para>
+</entry><entry thead="no"><para>不合法的值。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorObjectMissName</computeroutput>   </para>
+</entry><entry thead="no"><para>Object 成员缺少名字。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorObjectMissColon</computeroutput>   </para>
+</entry><entry thead="no"><para>Object 成员名字后缺少冒号。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorObjectMissCommaOrCurlyBracket</computeroutput>   </para>
+</entry><entry thead="no"><para>Object 成员后缺少逗号或 <computeroutput>}</computeroutput>。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorArrayMissCommaOrSquareBracket</computeroutput>   </para>
+</entry><entry thead="no"><para>Array 元素后缺少逗号或 <computeroutput>]</computeroutput> 。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorStringUnicodeEscapeInvalidHex</computeroutput>   </para>
+</entry><entry thead="no"><para>String 中的 <computeroutput>\\u</computeroutput> 转义符后含非十六进位数字。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorStringUnicodeSurrogateInvalid</computeroutput>   </para>
+</entry><entry thead="no"><para>String 中的代理对（surrogate pair）不合法。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorStringEscapeInvalid</computeroutput>   </para>
+</entry><entry thead="no"><para>String 含非法转义字符。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorStringMissQuotationMark</computeroutput>   </para>
+</entry><entry thead="no"><para>String 缺少关闭引号。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorStringInvalidEncoding</computeroutput>   </para>
+</entry><entry thead="no"><para>String 含非法编码。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorNumberTooBig</computeroutput>   </para>
+</entry><entry thead="no"><para>Number 的值太大，不能存储于 <computeroutput>double</computeroutput>。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorNumberMissFraction</computeroutput>   </para>
+</entry><entry thead="no"><para>Number 缺少了小数部分。    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>kParseErrorNumberMissExponent</computeroutput>   </para>
+</entry><entry thead="no"><para>Number 缺少了指数。   </para>
+</entry></row>
+</table>
+</para>
+<para>错误的偏移量定义为从流开始至错误处的字符数量。目前 RapidJSON 不记录错误行号。</para>
+<para>要取得错误讯息，RapidJSON 在 <computeroutput><ref refid="en_8h" kindref="compound">rapidjson/error/en.h</ref></computeroutput> 中提供了英文错误讯息。使用者可以修改它用于其他语言环境，或使用一个自定义的本地化系统。</para>
+<para>以下是一个处理错误的例子。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="en_8h" kindref="compound">rapidjson/error/en.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json).<ref refid="class_generic_document_1a510a0588db4eb372f5d81bc3646578fb" kindref="member">HasParseError</ref>())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/></highlight><highlight class="stringliteral">&quot;\nError(offset<sp/>%u):<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">)d.<ref refid="class_generic_document_1ae1ef7ca99ced428e9300c68e5142afdb" kindref="member">GetErrorOffset</ref>(),</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga28835eb93d2c3c07bbea13515eb31415" kindref="member">GetParseError_En</ref>(d.GetParseErrorCode()));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1InSituParsing">
+<title>In Situ Parsing</title>
+<para>根据 <ulink url="http://en.wikipedia.org/wiki/In_situ">维基百科</ulink>:</para>
+<para><blockquote><para><zwj/><emphasis>In situ</emphasis> ... is a Latin phrase that translates literally to &quot;on site&quot; or &quot;in position&quot;. It means &quot;locally&quot;, &quot;on site&quot;, &quot;on the premises&quot; or &quot;in place&quot; to describe an event where it takes place, and is used in many different contexts. ... (In computer science) An algorithm is said to be an in situ algorithm, or in-place algorithm, if the extra amount of memory required to execute the algorithm is O(1), that is, does not exceed a constant no matter how large the input. For example, heapsort is an in situ sorting algorithm. </para>
+</blockquote><blockquote><para><zwj/>翻译：*In situ*……是一个拉丁文片语，字面上的意思是指「现场」、「在位置」。在许多不同语境中，它描述一个事件发生的位置，意指「本地」、「现场」、「在处所」、「就位」。 …… （在计算机科学中）一个算法若称为原位算法，或在位算法，是指执行该算法所需的额外内存空间是 O(1) 的，换句话说，无论输入大小都只需要常数空间。例如，堆排序是一个原位排序算法。 </para>
+</blockquote>在正常的解析过程中，对 JSON string 解码并复制至其他缓冲区是一个很大的开销。原位解析（*in situ* parsing）把这些 JSON string 直接解码于它原来存储的地方。由于解码后的 string 长度总是短于或等于原来储存于 JSON 的 string，所以这是可行的。在这个语境下，对 JSON string 进行解码是指处理转义符，如 <computeroutput>&quot;\n&quot;</computeroutput>、<computeroutput>&quot;\u1234&quot;</computeroutput> 等，以及在 string 末端加入空终止符号 (<lsquo/><rsquo/>\0&apos;`)。</para>
+<para>以下的图比较正常及原位解析。JSON string 值包含指向解码后的字符串。</para>
+<para><image type="html" name="diagram/normalparsing.png" alt="正常解析" inline="yes"></image>
+</para>
+<para>在正常解析中，解码后的字符串被复制至全新分配的缓冲区中。<computeroutput>&quot;\\n&quot;</computeroutput>（2 个字符）被解码成 <computeroutput>&quot;\n&quot;</computeroutput>（1 个字符）。<computeroutput>&quot;\\u0073&quot;</computeroutput>（6 个字符）被解码成 <computeroutput>&quot;s&quot;</computeroutput>（1 个字符）。</para>
+<para><image type="html" name="diagram/insituparsing.png" alt="原位解析" inline="yes"></image>
+</para>
+<para>原位解析直接修改了原来的 JSON。图中高亮了被更新的字符。若 JSON string 不含转义符，例如 <computeroutput>&quot;msg&quot;</computeroutput>，那么解析过程仅仅是以空字符代替结束双引号。</para>
+<para>由于原位解析修改了输入，其解析 API 需要 <computeroutput>char*</computeroutput> 而非 <computeroutput>const char*</computeroutput>。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>把整个文件读入<sp/>buffer</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;test.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;r&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal">fseek(fp,<sp/>0,<sp/>SEEK_END);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>filesize<sp/>=<sp/>(size_t)ftell(fp);</highlight></codeline>
+<codeline><highlight class="normal">fseek(fp,<sp/>0,<sp/>SEEK_SET);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>buffer<sp/>=<sp/>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*)malloc(filesize<sp/>+<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>readLength<sp/>=<sp/>fread(buffer,<sp/>1,<sp/>filesize,<sp/>fp);</highlight></codeline>
+<codeline><highlight class="normal">buffer[readLength]<sp/>=<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>原位解析<sp/>buffer<sp/>至<sp/>d，buffer<sp/>内容会被修改。</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a13f68b1896a24eea4cdbc03a3916225f" kindref="member">ParseInsitu</ref>(buffer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>在此查询、修改<sp/>DOM……</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">free(buffer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>注意：在这个位置，d<sp/>可能含有指向已被释放的<sp/>buffer<sp/>的悬空指针</highlight></codeline>
+</programlisting></para>
+<para>JSON string 会被打上 const-string 的标志。但它们可能并非真正的「常数」。它的生命周期取决于存储 JSON 的缓冲区。</para>
+<para>原位解析把分配开销及内存复制减至最小。通常这样做能改善缓存一致性，而这对现代计算机来说是一个重要的性能因素。</para>
+<para>原位解析有以下限制：</para>
+<para><orderedlist>
+<listitem><para>整个 JSON 须存储在内存之中。</para>
+</listitem><listitem><para>流的来源缓码与文档的目标编码必须相同。</para>
+</listitem><listitem><para>需要保留缓冲区，直至文档不再被使用。</para>
+</listitem><listitem><para>若 DOM 需要在解析后被长期使用，而 DOM 内只有很少 JSON string，保留缓冲区可能造成内存浪费。</para>
+</listitem></orderedlist>
+</para>
+<para>原位解析最适合用于短期的、用完即弃的 JSON。实际应用中，这些场合是非常普遍的，例如反序列化 JSON 至 C++ 对象、处理以 JSON 表示的 web 请求等。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation">
+<title>Transcoding and Validation</title>
+<para>RapidJSON 内部支持不同 Unicode 格式（正式的术语是 UCS 变换格式）间的转换。在 DOM 解析时，流的来源编码与 DOM 的编码可以不同。例如，来源流可能含有 UTF-8 的 JSON，而 DOM 则使用 UTF-16 编码。在 <ref refid="stream_8zh-cn_8md" kindref="compound">EncodedInputStream</ref> 一节里有一个例子。</para>
+<para>当从 DOM 输出一个 JSON 至输出流之时，也可以使用转码功能。在 <ref refid="stream_8zh-cn_8md" kindref="compound">EncodedOutputStream</ref> 一节里有一个例子。</para>
+<para>在转码过程中，会把来源 string 解码成 Unicode 码点，然后把码点编码成目标格式。在解码时，它会校验来源 string 的字节序列是否合法。若遇上非合法序列，解析器会停止并返回 <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> 错误。</para>
+<para>当来源编码与 DOM 的编码相同，解析器缺省地 * 不会 * 校验序列。使用者可开启 <computeroutput>kParseValidateEncodingFlag</computeroutput> 去强制校验。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_dom_zh_cn_1Techniques">
+<title>Techniques</title>
+<para>这里讨论一些 DOM API 的使用技巧。</para>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1autotoc_md46">
+<title>把 DOM 作为 SAX 事件发表者</title>
+<para>在 RapidJSON 中，利用 <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 把 DOM 生成 JSON 的做法，看来有点奇怪。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer&gt;</ref><sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+</programlisting></para>
+<para>实际上，<computeroutput>Value::Accept()</computeroutput> 是负责发布该值相关的 SAX 事件至处理器的。通过这个设计，<computeroutput>Value</computeroutput> 及 <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 解除了偶合。<computeroutput>Value</computeroutput> 可生成 SAX 事件，而 <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 则可以处理这些事件。</para>
+<para>使用者可以创建自定义的处理器，去把 DOM 转换成其它格式。例如，一个把 DOM 转换成 XML 的处理器。</para>
+<para>要知道更多关于 SAX 事件与处理器，可参阅 <ref refid="sax_8zh-cn_8md" kindref="compound">SAX</ref>。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_dom_zh_cn_1UserBuffer">
+<title>User Buffer</title>
+<para>许多应用软件可能需要尽量减少内存分配。</para>
+<para><computeroutput><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref></computeroutput> 可以帮助这方面，它容许使用者提供一个缓冲区。该缓冲区可能置于程序堆栈，或是一个静态分配的「草稿缓冲区（scratch buffer）」（一个静态／全局的数组），用于储存临时数据。</para>
+<para><computeroutput><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator</ref></computeroutput> 会先用使用者缓冲区去解决分配请求。当使用者缓冲区用完，就会从基础分配器（缺省为 <computeroutput><ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref></computeroutput>）分配一块内存。</para>
+<para>以下是使用堆栈内存的例子，第一个分配器用于存储值，第二个用于解析时的临时缓冲。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">GenericDocument&lt;UTF8&lt;&gt;</ref>,<sp/><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator&lt;&gt;</ref>,<sp/><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator&lt;&gt;</ref>&gt;<sp/>DocumentType;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>valueBuffer[4096];</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>parseBuffer[1024];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator&lt;&gt;</ref><sp/>valueAllocator(valueBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(valueBuffer));</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_memory_pool_allocator" kindref="compound">MemoryPoolAllocator&lt;&gt;</ref><sp/>parseAllocator(parseBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(parseBuffer));</highlight></codeline>
+<codeline><highlight class="normal">DocumentType<sp/>d(&amp;valueAllocator,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(parseBuffer),<sp/>&amp;parseAllocator);</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+</programlisting></para>
+<para>若解析时分配总量少于 4096+1024 字节时，这段代码不会造成任何堆内存分配（经 <computeroutput>new</computeroutput> 或 <computeroutput>malloc()</computeroutput>）。</para>
+<para>使用者可以通过 <computeroutput><ref refid="class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d" kindref="member">MemoryPoolAllocator::Size()</ref></computeroutput> 查询当前已分的内存大小。那么使用者可以拟定使用者缓冲区的合适大小。 </para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/dom.zh-cn.md"/>
+  </compounddef>
+</doxygen>

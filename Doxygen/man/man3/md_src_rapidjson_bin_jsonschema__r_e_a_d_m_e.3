@@ -1,0 +1,139 @@
+.TH "md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e \- JSON \fBSchema\fP Test Suite \fC\fP 
+This repository contains a set of JSON objects that implementors of JSON \fBSchema\fP validation libraries can use to test their validators\&.
+.PP
+It is meant to be language agnostic and should require only a JSON parser\&.
+.PP
+The conversion of the JSON objects into tests within your test framework of choice is still the job of the validator implementor\&.
+.SH "Structure of a Test"
+.PP
+If you're going to use this suite, you need to know how tests are laid out\&. The tests are contained in the \fCtests\fP directory at the root of this repository\&.
+.PP
+Inside that directory is a subdirectory for each draft or version of the schema\&. We'll use \fCdraft3\fP as an example\&.
+.PP
+If you look inside the draft directory, there are a number of \fC\&.json\fP files, which logically group a set of test cases together\&. Often the grouping is by property under test, but not always, especially within optional test files (discussed below)\&.
+.PP
+Inside each \fC\&.json\fP file is a single array containing objects\&. It's easiest to illustrate the structure of these with an example:
+.PP
+.PP
+.nf
+{
+    "description": "the description of the test case",
+    "schema": {"the schema that should" : "be validated against"},
+    "tests": [
+        {
+            "description": "a specific test of a valid instance",
+            "data": "the instance",
+            "valid": true
+        },
+        {
+            "description": "another specific test this time, invalid",
+            "data": 15,
+            "valid": false
+        }
+    ]
+}
+.fi
+.PP
+.PP
+So a description, a schema, and some tests, where tests is an array containing one or more objects with descriptions, data, and a boolean indicating whether they should be valid or invalid\&.
+.SH "Coverage"
+.PP
+Draft 3 and 4 should have full coverage\&. If you see anything missing or think there is a useful test missing, please send a pull request or open an issue\&.
+.SH "Who Uses the Test Suite"
+.PP
+This suite is being used by:
+.SS "Coffeescript"
+.IP "\(bu" 2
+\fCjsck\fP
+.PP
+.SS "Dart"
+.IP "\(bu" 2
+\fCjson_schema\fP
+.PP
+.SS "Erlang"
+.IP "\(bu" 2
+\fCjesse\fP
+.PP
+.SS "Go"
+.IP "\(bu" 2
+\fCgojsonschema\fP
+.IP "\(bu" 2
+\fCvalidate-json\fP
+.PP
+.SS "Haskell"
+.IP "\(bu" 2
+\fCaeson-schema\fP
+.IP "\(bu" 2
+\fChjsonschema\fP
+.PP
+.SS "Java"
+.IP "\(bu" 2
+\fCjson-schema-validator\fP
+.PP
+.SS "JavaScript"
+.IP "\(bu" 2
+\fCjson-schema-benchmark\fP
+.IP "\(bu" 2
+\fCdirect-schema\fP
+.IP "\(bu" 2
+\fCis-my-json-valid\fP
+.IP "\(bu" 2
+\fCjassi\fP
+.IP "\(bu" 2
+\fCJaySchema\fP
+.IP "\(bu" 2
+\fCjson-schema-valid\fP
+.IP "\(bu" 2
+\fCJsonary\fP
+.IP "\(bu" 2
+\fCjsonschema\fP
+.IP "\(bu" 2
+\fCrequest-validator\fP
+.IP "\(bu" 2
+\fCskeemas\fP
+.IP "\(bu" 2
+\fCtv4\fP
+.IP "\(bu" 2
+\fCz-schema\fP
+.IP "\(bu" 2
+\fCjsen\fP
+.IP "\(bu" 2
+\fCajv\fP
+.PP
+.SS "Node\&.js"
+The JSON \fBSchema\fP Test Suite is also available as an \fCnpm\fP package\&. Node-specific support is maintained on the \fCnode branch\fP\&. See \fCNODE-README\&.md\fP for more information\&.
+.SS "\&.NET"
+.IP "\(bu" 2
+\fCNewtonsoft\&.Json\&.Schema\fP
+.PP
+.SS "PHP"
+.IP "\(bu" 2
+\fCjson-schema\fP
+.PP
+.SS "Python"
+.IP "\(bu" 2
+\fCjsonschema\fP
+.PP
+.SS "Ruby"
+.IP "\(bu" 2
+\fCjson-schema\fP
+.PP
+.SS "Rust"
+.IP "\(bu" 2
+\fCvalico\fP
+.PP
+.SS "Swift"
+.IP "\(bu" 2
+\fCJSONSchema\fP
+.PP
+.PP
+If you use it as well, please fork and send a pull request adding yourself to the list :)\&.
+.SH "Contributing"
+.PP
+If you see something missing or incorrect, a pull request is most welcome!
+.PP
+There are some sanity checks in place for testing the test suite\&. You can run them with \fCbin/jsonschema_suite check\fP or \fCtox\fP\&. They will be run automatically by \fCTravis CI\fP as well\&. 

@@ -1,0 +1,442 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="stream_8md" kind="file" language="Markdown">
+    <compoundname>stream.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Stream</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>RapidJSON,<sp/>`rapidjson::Stream`<sp/>is<sp/>a<sp/>concept<sp/>for<sp/>reading/writing<sp/>JSON.<sp/>Here<sp/>we&apos;ll<sp/>first<sp/>show<sp/>you<sp/>how<sp/>to<sp/>use<sp/>provided<sp/>streams.<sp/>And<sp/>then<sp/>see<sp/>how<sp/>to<sp/>create<sp/>a<sp/>custom<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Memory<sp/>Streams<sp/>{#MemoryStreams}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Memory<sp/>streams<sp/>store<sp/>JSON<sp/>in<sp/>memory.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>StringStream<sp/>(Input)<sp/>{#StringStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`StringStream`<sp/>is<sp/>the<sp/>most<sp/>basic<sp/>input<sp/>stream.<sp/>It<sp/>represents<sp/>a<sp/>complete,<sp/>read-only<sp/>JSON<sp/>stored<sp/>in<sp/>memory.<sp/>It<sp/>is<sp/>defined<sp/>in<sp/>`rapidjson/rapidjson.h`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/document.h&quot;<sp/>//<sp/>will<sp/>include<sp/>&quot;rapidjson/rapidjson.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">const<sp/>char<sp/>json[]<sp/>=<sp/>&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;;</highlight></codeline>
+<codeline><highlight class="normal">StringStream<sp/>s(json);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream(s);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Since<sp/>this<sp/>is<sp/>very<sp/>common<sp/>usage,<sp/>`Document::Parse(const<sp/>char*)`<sp/>is<sp/>provided<sp/>to<sp/>do<sp/>exactly<sp/>the<sp/>same<sp/>as<sp/>above:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">const<sp/>char<sp/>json[]<sp/>=<sp/>&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;;</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(json);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>`StringStream`<sp/>is<sp/>a<sp/>typedef<sp/>of<sp/>`GenericStringStream&lt;UTF8&lt;&gt;<sp/>&gt;`,<sp/>user<sp/>may<sp/>use<sp/>another<sp/>encodings<sp/>to<sp/>represent<sp/>the<sp/>character<sp/>set<sp/>of<sp/>the<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>StringBuffer<sp/>(Output)<sp/>{#StringBuffer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`StringBuffer`<sp/>is<sp/>a<sp/>simple<sp/>output<sp/>stream.<sp/>It<sp/>allocates<sp/>a<sp/>memory<sp/>buffer<sp/>for<sp/>writing<sp/>the<sp/>whole<sp/>JSON.<sp/>Use<sp/>`GetString()`<sp/>to<sp/>obtain<sp/>the<sp/>buffer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/stringbuffer.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/writer.h&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal">Writer&lt;StringBuffer&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">const<sp/>char*<sp/>output<sp/>=<sp/>buffer.GetString();</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>the<sp/>buffer<sp/>is<sp/>full,<sp/>it<sp/>will<sp/>increases<sp/>the<sp/>capacity<sp/>automatically.<sp/>The<sp/>default<sp/>capacity<sp/>is<sp/>256<sp/>characters<sp/>(256<sp/>bytes<sp/>for<sp/>UTF8,<sp/>512<sp/>bytes<sp/>for<sp/>UTF16,<sp/>etc.).<sp/>User<sp/>can<sp/>provide<sp/>an<sp/>allocator<sp/>and<sp/>an<sp/>initial<sp/>capacity.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>buffer1(0,<sp/>1024);<sp/>//<sp/>Use<sp/>its<sp/>allocator,<sp/>initial<sp/>size<sp/>=<sp/>1024</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>buffer2(allocator,<sp/>1024);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>`StringBuffer`<sp/>will<sp/>instantiate<sp/>an<sp/>internal<sp/>allocator.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Similarly,<sp/>`StringBuffer`<sp/>is<sp/>a<sp/>typedef<sp/>of<sp/>`GenericStringBuffer&lt;UTF8&lt;&gt;<sp/>&gt;`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>File<sp/>Streams<sp/>{#FileStreams}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>parsing<sp/>a<sp/>JSON<sp/>from<sp/>file,<sp/>you<sp/>may<sp/>read<sp/>the<sp/>whole<sp/>JSON<sp/>into<sp/>memory<sp/>and<sp/>use<sp/>``StringStream``<sp/>above.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">However,<sp/>if<sp/>the<sp/>JSON<sp/>is<sp/>big,<sp/>or<sp/>memory<sp/>is<sp/>limited,<sp/>you<sp/>can<sp/>use<sp/>`FileReadStream`.<sp/>It<sp/>only<sp/>read<sp/>a<sp/>part<sp/>of<sp/>JSON<sp/>from<sp/>file<sp/>into<sp/>buffer,<sp/>and<sp/>then<sp/>let<sp/>the<sp/>part<sp/>be<sp/>parsed.<sp/>If<sp/>it<sp/>runs<sp/>out<sp/>of<sp/>characters<sp/>in<sp/>the<sp/>buffer,<sp/>it<sp/>will<sp/>read<sp/>the<sp/>next<sp/>part<sp/>from<sp/>file.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>FileReadStream<sp/>(Input)<sp/>{#FileReadStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`FileReadStream`<sp/>reads<sp/>the<sp/>file<sp/>via<sp/>a<sp/>`FILE`<sp/>pointer.<sp/>And<sp/>user<sp/>need<sp/>to<sp/>provide<sp/>a<sp/>buffer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filereadstream.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cstdio&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;big.json&quot;,<sp/>&quot;rb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>readBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal">FileReadStream<sp/>is(fp,<sp/>readBuffer,<sp/>sizeof(readBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream(is);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Different<sp/>from<sp/>string<sp/>streams,<sp/>`FileReadStream`<sp/>is<sp/>byte<sp/>stream.<sp/>It<sp/>does<sp/>not<sp/>handle<sp/>encodings.<sp/>If<sp/>the<sp/>file<sp/>is<sp/>not<sp/>UTF-8,<sp/>the<sp/>byte<sp/>stream<sp/>can<sp/>be<sp/>wrapped<sp/>in<sp/>a<sp/>`EncodedInputStream`.<sp/>We<sp/>will<sp/>discuss<sp/>more<sp/>about<sp/>this<sp/>later<sp/>in<sp/>this<sp/>tutorial.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Apart<sp/>from<sp/>reading<sp/>file,<sp/>user<sp/>can<sp/>also<sp/>use<sp/>`FileReadStream`<sp/>to<sp/>read<sp/>`stdin`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>FileWriteStream<sp/>(Output)<sp/>{#FileWriteStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`FileWriteStream`<sp/>is<sp/>buffered<sp/>output<sp/>stream.<sp/>Its<sp/>usage<sp/>is<sp/>very<sp/>similar<sp/>to<sp/>`FileReadStream`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filewritestream.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/writer.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cstdio&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(json);</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;output.json&quot;,<sp/>&quot;wb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;w&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>writeBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal">FileWriteStream<sp/>os(fp,<sp/>writeBuffer,<sp/>sizeof(writeBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Writer&lt;FileWriteStream&gt;<sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">It<sp/>can<sp/>also<sp/>redirect<sp/>the<sp/>output<sp/>to<sp/>`stdout`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>iostream<sp/>Wrapper<sp/>{#iostreamWrapper}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Due<sp/>to<sp/>users&apos;<sp/>requests,<sp/>RapidJSON<sp/>also<sp/>provides<sp/>official<sp/>wrappers<sp/>for<sp/>`std::basic_istream`<sp/>and<sp/>`std::basic_ostream`.<sp/>However,<sp/>please<sp/>note<sp/>that<sp/>the<sp/>performance<sp/>will<sp/>be<sp/>much<sp/>lower<sp/>than<sp/>the<sp/>other<sp/>streams<sp/>above.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>IStreamWrapper<sp/>{#IStreamWrapper}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`IStreamWrapper`<sp/>wraps<sp/>any<sp/>class<sp/>derived<sp/>from<sp/>`std::istream`,<sp/>such<sp/>as<sp/>`std::istringstream`,<sp/>`std::stringstream`,<sp/>`std::ifstream`,<sp/>`std::fstream`,<sp/>into<sp/>RapidJSON&apos;s<sp/>input<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/document.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/istreamwrapper.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;fstream&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>std;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ifstream<sp/>ifs(&quot;test.json&quot;);</highlight></codeline>
+<codeline><highlight class="normal">IStreamWrapper<sp/>isw(ifs);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream(isw);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>classes<sp/>derived<sp/>from<sp/>`std::wistream`,<sp/>use<sp/>`WIStreamWrapper`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>OStreamWrapper<sp/>{#OStreamWrapper}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Similarly,<sp/>`OStreamWrapper`<sp/>wraps<sp/>any<sp/>class<sp/>derived<sp/>from<sp/>`std::ostream`,<sp/>such<sp/>as<sp/>`std::ostringstream`,<sp/>`std::stringstream`,<sp/>`std::ofstream`,<sp/>`std::fstream`,<sp/>into<sp/>RapidJSON&apos;s<sp/>input<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/document.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/ostreamwrapper.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/writer.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;fstream&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>std;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(json);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ofstream<sp/>ofs(&quot;output.json&quot;);</highlight></codeline>
+<codeline><highlight class="normal">OStreamWrapper<sp/>osw(ofs);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Writer&lt;OStreamWrapper&gt;<sp/>writer(osw);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>classes<sp/>derived<sp/>from<sp/>`std::wostream`,<sp/>use<sp/>`WOStreamWrapper`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Encoded<sp/>Streams<sp/>{#EncodedStreams}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Encoded<sp/>streams<sp/>do<sp/>not<sp/>contain<sp/>JSON<sp/>itself,<sp/>but<sp/>they<sp/>wrap<sp/>byte<sp/>streams<sp/>to<sp/>provide<sp/>basic<sp/>encoding/decoding<sp/>function.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>mentioned<sp/>above,<sp/>UTF-8<sp/>byte<sp/>streams<sp/>can<sp/>be<sp/>read<sp/>directly.<sp/>However,<sp/>UTF-16<sp/>and<sp/>UTF-32<sp/>have<sp/>endian<sp/>issue.<sp/>To<sp/>handle<sp/>endian<sp/>correctly,<sp/>it<sp/>needs<sp/>to<sp/>convert<sp/>bytes<sp/>into<sp/>characters<sp/>(e.g.<sp/>`wchar_t`<sp/>for<sp/>UTF-16)<sp/>while<sp/>reading,<sp/>and<sp/>characters<sp/>into<sp/>bytes<sp/>while<sp/>writing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>it<sp/>also<sp/>need<sp/>to<sp/>handle<sp/>[byte<sp/>order<sp/>mark<sp/>(BOM)](http://en.wikipedia.org/wiki/Byte_order_mark).<sp/>When<sp/>reading<sp/>from<sp/>a<sp/>byte<sp/>stream,<sp/>it<sp/>is<sp/>needed<sp/>to<sp/>detect<sp/>or<sp/>just<sp/>consume<sp/>the<sp/>BOM<sp/>if<sp/>exists.<sp/>When<sp/>writing<sp/>to<sp/>a<sp/>byte<sp/>stream,<sp/>it<sp/>can<sp/>optionally<sp/>write<sp/>BOM.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>the<sp/>encoding<sp/>of<sp/>stream<sp/>is<sp/>known<sp/>during<sp/>compile-time,<sp/>you<sp/>may<sp/>use<sp/>`EncodedInputStream`<sp/>and<sp/>`EncodedOutputStream`.<sp/>If<sp/>the<sp/>stream<sp/>can<sp/>be<sp/>UTF-8,<sp/>UTF-16LE,<sp/>UTF-16BE,<sp/>UTF-32LE,<sp/>UTF-32BE<sp/>JSON,<sp/>and<sp/>it<sp/>is<sp/>only<sp/>known<sp/>in<sp/>runtime,<sp/>you<sp/>may<sp/>use<sp/>`AutoUTFInputStream`<sp/>and<sp/>`AutoUTFOutputStream`.<sp/>These<sp/>streams<sp/>are<sp/>defined<sp/>in<sp/>`rapidjson/encodedstream.h`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>these<sp/>encoded<sp/>streams<sp/>can<sp/>be<sp/>applied<sp/>to<sp/>streams<sp/>other<sp/>than<sp/>file.<sp/>For<sp/>example,<sp/>you<sp/>may<sp/>have<sp/>a<sp/>file<sp/>in<sp/>memory,<sp/>or<sp/>a<sp/>custom<sp/>byte<sp/>stream,<sp/>be<sp/>wrapped<sp/>in<sp/>encoded<sp/>streams.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>EncodedInputStream<sp/>{#EncodedInputStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`EncodedInputStream`<sp/>has<sp/>two<sp/>template<sp/>parameters.<sp/>The<sp/>first<sp/>one<sp/>is<sp/>a<sp/>`Encoding`<sp/>class,<sp/>such<sp/>as<sp/>`UTF8`,<sp/>`UTF16LE`,<sp/>defined<sp/>in<sp/>`rapidjson/encodings.h`.<sp/>The<sp/>second<sp/>one<sp/>is<sp/>the<sp/>class<sp/>of<sp/>stream<sp/>to<sp/>be<sp/>wrapped.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/document.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filereadstream.h&quot;<sp/><sp/><sp/>//<sp/>FileReadStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/encodedstream.h&quot;<sp/><sp/><sp/><sp/>//<sp/>EncodedInputStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cstdio&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;utf16le.json&quot;,<sp/>&quot;rb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal">FileReadStream<sp/>bis(fp,<sp/>readBuffer,<sp/>sizeof(readBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">EncodedInputStream&lt;UTF16LE&lt;&gt;,<sp/>FileReadStream&gt;<sp/>eis(bis);<sp/><sp/>//<sp/>wraps<sp/>bis<sp/>into<sp/>eis</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/>//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream&lt;0,<sp/>UTF16LE&lt;&gt;<sp/>&gt;(eis);<sp/><sp/>//<sp/>Parses<sp/>UTF-16LE<sp/>file<sp/>into<sp/>UTF-8<sp/>in<sp/>memory</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>EncodedOutputStream<sp/>{#EncodedOutputStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`EncodedOutputStream`<sp/>is<sp/>similar<sp/>but<sp/>it<sp/>has<sp/>a<sp/>`bool<sp/>putBOM`<sp/>parameter<sp/>in<sp/>the<sp/>constructor,<sp/>controlling<sp/>whether<sp/>to<sp/>write<sp/>BOM<sp/>into<sp/>output<sp/>byte<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filewritestream.h&quot;<sp/><sp/>//<sp/>FileWriteStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/encodedstream.h&quot;<sp/><sp/><sp/><sp/>//<sp/>EncodedOutputStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;rapidjson/writer.h&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cstdio&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;output_utf32le.json&quot;,<sp/>&quot;wb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;w&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal">FileWriteStream<sp/>bos(fp,<sp/>writeBuffer,<sp/>sizeof(writeBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">typedef<sp/>EncodedOutputStream&lt;UTF32LE&lt;&gt;,<sp/>FileWriteStream&gt;<sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal">OutputStream<sp/>eos(bos,<sp/>true);<sp/><sp/><sp/>//<sp/>Write<sp/>BOM</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Writer&lt;OutputStream,<sp/>UTF8&lt;&gt;,<sp/>UTF32LE&lt;&gt;&gt;<sp/>writer(eos);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);<sp/><sp/><sp/>//<sp/>This<sp/>generates<sp/>UTF32-LE<sp/>file<sp/>from<sp/>UTF-8<sp/>in<sp/>memory</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>AutoUTFInputStream<sp/>{#AutoUTFInputStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Sometimes<sp/>an<sp/>application<sp/>may<sp/>want<sp/>to<sp/>handle<sp/>all<sp/>supported<sp/>JSON<sp/>encoding.<sp/>`AutoUTFInputStream`<sp/>will<sp/>detection<sp/>encoding<sp/>by<sp/>BOM<sp/>first.<sp/>If<sp/>BOM<sp/>is<sp/>unavailable,<sp/>it<sp/>will<sp/>use<sp/><sp/>characteristics<sp/>of<sp/>valid<sp/>JSON<sp/>to<sp/>make<sp/>detection.<sp/>If<sp/>neither<sp/>method<sp/>success,<sp/>it<sp/>falls<sp/>back<sp/>to<sp/>the<sp/>UTF<sp/>type<sp/>provided<sp/>in<sp/>constructor.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Since<sp/>the<sp/>characters<sp/>(code<sp/>units)<sp/>may<sp/>be<sp/>8-bit,<sp/>16-bit<sp/>or<sp/>32-bit.<sp/>`AutoUTFInputStream`<sp/>requires<sp/>a<sp/>character<sp/>type<sp/>which<sp/>can<sp/>hold<sp/>at<sp/>least<sp/>32-bit.<sp/>We<sp/>may<sp/>use<sp/>`unsigned`,<sp/>as<sp/>in<sp/>the<sp/>template<sp/>parameter:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/document.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filereadstream.h&quot;<sp/><sp/><sp/>//<sp/>FileReadStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/encodedstream.h&quot;<sp/><sp/><sp/><sp/>//<sp/>AutoUTFInputStream</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cstdio&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;any.json&quot;,<sp/>&quot;rb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal">FileReadStream<sp/>bis(fp,<sp/>readBuffer,<sp/>sizeof(readBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">AutoUTFInputStream&lt;unsigned,<sp/>FileReadStream&gt;<sp/>eis(bis);<sp/><sp/>//<sp/>wraps<sp/>bis<sp/>into<sp/>eis</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Document<sp/>is<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream&lt;0,<sp/>AutoUTF&lt;unsigned&gt;<sp/>&gt;(eis);<sp/>//<sp/>This<sp/>parses<sp/>any<sp/>UTF<sp/>file<sp/>into<sp/>UTF-8<sp/>in<sp/>memory</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>specifying<sp/>the<sp/>encoding<sp/>of<sp/>stream,<sp/>uses<sp/>`AutoUTF&lt;CharType&gt;`<sp/>as<sp/>in<sp/>`ParseStream()`<sp/>above.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>obtain<sp/>the<sp/>type<sp/>of<sp/>UTF<sp/>via<sp/>`UTFType<sp/>GetType()`.<sp/>And<sp/>check<sp/>whether<sp/>a<sp/>BOM<sp/>is<sp/>found<sp/>by<sp/>`HasBOM()`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>AutoUTFOutputStream<sp/>{#AutoUTFOutputStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Similarly,<sp/>to<sp/>choose<sp/>encoding<sp/>for<sp/>output<sp/>during<sp/>runtime,<sp/>we<sp/>can<sp/>use<sp/>`AutoUTFOutputStream`.<sp/>This<sp/>class<sp/>is<sp/>not<sp/>automatic<sp/>*per<sp/>se*.<sp/>You<sp/>need<sp/>to<sp/>specify<sp/>the<sp/>UTF<sp/>type<sp/>and<sp/>whether<sp/>to<sp/>write<sp/>BOM<sp/>in<sp/>runtime.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>WriteJSONFile(FILE*<sp/>fp,<sp/>UTFType<sp/>type,<sp/>bool<sp/>putBOM,<sp/>const<sp/>Document&amp;<sp/>d)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>char<sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>FileWriteStream<sp/>bos(fp,<sp/>writeBuffer,<sp/>sizeof(writeBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typedef<sp/>AutoUTFOutputStream&lt;unsigned,<sp/>FileWriteStream&gt;<sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>OutputStream<sp/>eos(bos,<sp/>type,<sp/>putBOM);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Writer&lt;OutputStream,<sp/>UTF8&lt;&gt;,<sp/>AutoUTF&lt;&gt;<sp/>&gt;<sp/>writer;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`AutoUTFInputStream`<sp/>and<sp/>`AutoUTFOutputStream`<sp/>is<sp/>more<sp/>convenient<sp/>than<sp/>`EncodedInputStream`<sp/>and<sp/>`EncodedOutputStream`.<sp/>They<sp/>just<sp/>incur<sp/>a<sp/>little<sp/>bit<sp/>runtime<sp/>overheads.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Custom<sp/>Stream<sp/>{#CustomStream}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>addition<sp/>to<sp/>memory/file<sp/>streams,<sp/>user<sp/>can<sp/>create<sp/>their<sp/>own<sp/>stream<sp/>classes<sp/>which<sp/>fits<sp/>RapidJSON&apos;s<sp/>API.<sp/>For<sp/>example,<sp/>you<sp/>may<sp/>create<sp/>network<sp/>stream,<sp/>stream<sp/>from<sp/>compressed<sp/>file,<sp/>etc.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>combines<sp/>different<sp/>types<sp/>using<sp/>templates.<sp/>A<sp/>class<sp/>containing<sp/>all<sp/>required<sp/>interface<sp/>can<sp/>be<sp/>a<sp/>stream.<sp/>The<sp/>Stream<sp/>interface<sp/>is<sp/>defined<sp/>in<sp/>comments<sp/>of<sp/>`rapidjson/rapidjson.h`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">concept<sp/>Stream<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/>Ch;<sp/><sp/><sp/><sp/>//!&lt;<sp/>Character<sp/>type<sp/>of<sp/>the<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Read<sp/>the<sp/>current<sp/>character<sp/>from<sp/>stream<sp/>without<sp/>moving<sp/>the<sp/>read<sp/>cursor.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()<sp/>const;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Read<sp/>the<sp/>current<sp/>character<sp/>from<sp/>stream<sp/>and<sp/>moving<sp/>the<sp/>read<sp/>cursor<sp/>to<sp/>next<sp/>character.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Get<sp/>the<sp/>current<sp/>read<sp/>cursor.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>\return<sp/>Number<sp/>of<sp/>characters<sp/>read<sp/>from<sp/>start.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>Tell();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Begin<sp/>writing<sp/>operation<sp/>at<sp/>the<sp/>current<sp/>read<sp/>pointer.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>\return<sp/>The<sp/>begin<sp/>writer<sp/>pointer.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Write<sp/>a<sp/>character.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Put(Ch<sp/>c);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>Flush<sp/>the<sp/>buffer.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Flush();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>End<sp/>the<sp/>writing<sp/>operation.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>\param<sp/>begin<sp/>The<sp/>begin<sp/>write<sp/>pointer<sp/>returned<sp/>by<sp/>PutBegin().</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//!<sp/>\return<sp/>Number<sp/>of<sp/>characters<sp/>written.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>PutEnd(Ch*<sp/>begin);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>input<sp/>stream,<sp/>they<sp/>must<sp/>implement<sp/>`Peek()`,<sp/>`Take()`<sp/>and<sp/>`Tell()`.</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>output<sp/>stream,<sp/>they<sp/>must<sp/>implement<sp/>`Put()`<sp/>and<sp/>`Flush()`.<sp/></highlight></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>two<sp/>special<sp/>interface,<sp/>`PutBegin()`<sp/>and<sp/>`PutEnd()`,<sp/>which<sp/>are<sp/>only<sp/>for<sp/>*in<sp/>situ*<sp/>parsing.<sp/>Normal<sp/>streams<sp/>do<sp/>not<sp/>implement<sp/>them.<sp/>However,<sp/>if<sp/>the<sp/>interface<sp/>is<sp/>not<sp/>needed<sp/>for<sp/>a<sp/>particular<sp/>stream,<sp/>it<sp/>is<sp/>still<sp/>need<sp/>to<sp/>a<sp/>dummy<sp/>implementation,<sp/>otherwise<sp/>will<sp/>generate<sp/>compilation<sp/>error.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Example:<sp/>istream<sp/>wrapper<sp/>{#ExampleIStreamWrapper}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>example<sp/>is<sp/>a<sp/>simple<sp/>wrapper<sp/>of<sp/>`std::istream`,<sp/>which<sp/>only<sp/>implements<sp/>3<sp/>functions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>MyIStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typedef<sp/>char<sp/>Ch;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(std::istream&amp;<sp/>is)<sp/>:<sp/>is_(is)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()<sp/>const<sp/>{<sp/>//<sp/>1</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>int<sp/>c<sp/>=<sp/>is_.peek();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/>&apos;\0&apos;<sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/>//<sp/>2</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>int<sp/>c<sp/>=<sp/>is_.get();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/>&apos;\0&apos;<sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>Tell()<sp/>const<sp/>{<sp/>return<sp/>(size_t)is_.tellg();<sp/>}<sp/>//<sp/>3</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(false);<sp/>return<sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Put(Ch)<sp/>{<sp/>assert(false);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Flush()<sp/>{<sp/>assert(false);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>PutEnd(Ch*)<sp/>{<sp/>assert(false);<sp/>return<sp/>0;<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">private:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(const<sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper&amp;<sp/>operator=(const<sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::istream&amp;<sp/>is_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>can<sp/>use<sp/>it<sp/>to<sp/>wrap<sp/>instances<sp/>of<sp/>`std::stringstream`,<sp/>`std::ifstream`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">const<sp/>char*<sp/>json<sp/>=<sp/>&quot;[1,2,3,4]&quot;;</highlight></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss(json);</highlight></codeline>
+<codeline><highlight class="normal">MyIStreamWrapper<sp/>is(ss);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream(is);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>this<sp/>implementation<sp/>may<sp/>not<sp/>be<sp/>as<sp/>efficient<sp/>as<sp/>RapidJSON&apos;s<sp/>memory<sp/>or<sp/>file<sp/>streams,<sp/>due<sp/>to<sp/>internal<sp/>overheads<sp/>of<sp/>the<sp/>standard<sp/>library.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Example:<sp/>ostream<sp/>wrapper<sp/>{#ExampleOStreamWrapper}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>example<sp/>is<sp/>a<sp/>simple<sp/>wrapper<sp/>of<sp/>`std::istream`,<sp/>which<sp/>only<sp/>implements<sp/>2<sp/>functions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>MyOStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typedef<sp/>char<sp/>Ch;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper(std::ostream&amp;<sp/>os)<sp/>:<sp/>os_(os)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()<sp/>const<sp/>{<sp/>assert(false);<sp/>return<sp/>&apos;\0&apos;;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/>assert(false);<sp/>return<sp/>&apos;\0&apos;;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>Tell()<sp/>const<sp/>{<sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(false);<sp/>return<sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Put(Ch<sp/>c)<sp/>{<sp/>os_.put(c);<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>1</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Flush()<sp/>{<sp/>os_.flush();<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>2</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>PutEnd(Ch*)<sp/>{<sp/>assert(false);<sp/>return<sp/>0;<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">private:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper(const<sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper&amp;<sp/>operator=(const<sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::ostream&amp;<sp/>os_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>can<sp/>use<sp/>it<sp/>to<sp/>wrap<sp/>instances<sp/>of<sp/>`std::stringstream`,<sp/>`std::ofstream`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss;</highlight></codeline>
+<codeline><highlight class="normal">MyOStreamWrapper<sp/>os(ss);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Writer&lt;MyOStreamWrapper&gt;<sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>this<sp/>implementation<sp/>may<sp/>not<sp/>be<sp/>as<sp/>efficient<sp/>as<sp/>RapidJSON&apos;s<sp/>memory<sp/>or<sp/>file<sp/>streams,<sp/>due<sp/>to<sp/>internal<sp/>overheads<sp/>of<sp/>the<sp/>standard<sp/>library.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Summary<sp/>{#Summary}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>section<sp/>describes<sp/>stream<sp/>classes<sp/>available<sp/>in<sp/>RapidJSON.<sp/>Memory<sp/>streams<sp/>are<sp/>simple.<sp/>File<sp/>stream<sp/>can<sp/>reduce<sp/>the<sp/>memory<sp/>required<sp/>during<sp/>JSON<sp/>parsing<sp/>and<sp/>generation,<sp/>if<sp/>the<sp/>JSON<sp/>is<sp/>stored<sp/>in<sp/>file<sp/>system.<sp/>Encoded<sp/>streams<sp/>converts<sp/>between<sp/>byte<sp/>streams<sp/>and<sp/>character<sp/>streams.<sp/>Finally,<sp/>user<sp/>may<sp/>create<sp/>custom<sp/>streams<sp/>using<sp/>a<sp/>simple<sp/>interface.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/stream.md"/>
+  </compounddef>
+</doxygen>

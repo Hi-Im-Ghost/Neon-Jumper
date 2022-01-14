@@ -1,0 +1,492 @@
+\hypertarget{rapidjson_8h_source}{}\doxysection{rapidjson.\+h}
+\label{rapidjson_8h_source}\index{src/rapidjson/include/rapidjson/rapidjson.h@{src/rapidjson/include/rapidjson/rapidjson.h}}
+\mbox{\hyperlink{rapidjson_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_RAPIDJSON\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_RAPIDJSON\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include <cstdlib>}  \textcolor{comment}{// malloc(), realloc(), free(), size\_t}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include <cstring>}  \textcolor{comment}{// memset(), memcpy(), memmove(), memcmp()}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{43 \textcolor{comment}{// RAPIDJSON\_VERSION\_STRING}}
+\DoxyCodeLine{44 \textcolor{comment}{//}}
+\DoxyCodeLine{45 \textcolor{comment}{// ALWAYS synchronize the following 3 macros with corresponding variables in /CMakeLists.txt.}}
+\DoxyCodeLine{46 \textcolor{comment}{//}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{49 \textcolor{comment}{// token stringification}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#define RAPIDJSON\_STRINGIFY(x) RAPIDJSON\_DO\_STRINGIFY(x)}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#define RAPIDJSON\_DO\_STRINGIFY(x) \#x}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53 \textcolor{comment}{// token concatenation}}
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#define RAPIDJSON\_JOIN(X, Y) RAPIDJSON\_DO\_JOIN(X, Y)}}
+\DoxyCodeLine{55 \textcolor{preprocessor}{\#define RAPIDJSON\_DO\_JOIN(X, Y) RAPIDJSON\_DO\_JOIN2(X, Y)}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{\#define RAPIDJSON\_DO\_JOIN2(X, Y) X\#\#Y}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{75 \textcolor{preprocessor}{\#define RAPIDJSON\_MAJOR\_VERSION 1}}
+\DoxyCodeLine{76 \textcolor{preprocessor}{\#define RAPIDJSON\_MINOR\_VERSION 1}}
+\DoxyCodeLine{77 \textcolor{preprocessor}{\#define RAPIDJSON\_PATCH\_VERSION 0}}
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#define RAPIDJSON\_VERSION\_STRING \(\backslash\)}}
+\DoxyCodeLine{79 \textcolor{preprocessor}{    RAPIDJSON\_STRINGIFY(RAPIDJSON\_MAJOR\_VERSION.RAPIDJSON\_MINOR\_VERSION.RAPIDJSON\_PATCH\_VERSION)}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{82 \textcolor{comment}{// RAPIDJSON\_NAMESPACE\_(BEGIN|END)}}
+\DoxyCodeLine{117 \textcolor{comment}{}\textcolor{preprocessor}{\#ifndef RAPIDJSON\_NAMESPACE}}
+\DoxyCodeLine{118 \textcolor{preprocessor}{\#define RAPIDJSON\_NAMESPACE rapidjson}}
+\DoxyCodeLine{119 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{120 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NAMESPACE\_BEGIN}}
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#define RAPIDJSON\_NAMESPACE\_BEGIN namespace RAPIDJSON\_NAMESPACE \{}}
+\DoxyCodeLine{122 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{123 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NAMESPACE\_END}}
+\DoxyCodeLine{124 \textcolor{preprocessor}{\#define RAPIDJSON\_NAMESPACE\_END \}}}
+\DoxyCodeLine{125 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{128 \textcolor{comment}{// \_\_cplusplus macro}}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132 \textcolor{preprocessor}{\#if defined(\_MSC\_VER)}}
+\DoxyCodeLine{133 \textcolor{preprocessor}{\#define RAPIDJSON\_CPLUSPLUS \_MSVC\_LANG}}
+\DoxyCodeLine{134 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{135 \textcolor{preprocessor}{\#define RAPIDJSON\_CPLUSPLUS \_\_cplusplus}}
+\DoxyCodeLine{136 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{139 }
+\DoxyCodeLine{141 \textcolor{comment}{// RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{144 \textcolor{preprocessor}{\#ifdef RAPIDJSON\_DOXYGEN\_RUNNING}}
+\DoxyCodeLine{145 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_STDSTRING 1 }\textcolor{comment}{// force generation of documentation}}
+\DoxyCodeLine{146 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{147 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_STDSTRING 0 }\textcolor{comment}{// no std::string support by default}}
+\DoxyCodeLine{148 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{159 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// !defined(RAPIDJSON\_HAS\_STDSTRING)}}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{162 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{163 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{166 \textcolor{comment}{// RAPIDJSON\_USE\_MEMBERSMAP}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{179 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_USE\_MEMBERSMAP}}
+\DoxyCodeLine{180 \textcolor{preprocessor}{\#define RAPIDJSON\_USE\_MEMBERSMAP 0 }\textcolor{comment}{// not by default}}
+\DoxyCodeLine{181 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{184 \textcolor{comment}{// RAPIDJSON\_NO\_INT64DEFINE}}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{196 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NO\_INT64DEFINE}}
+\DoxyCodeLine{198 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& (\_MSC\_VER < 1800)  }\textcolor{comment}{// Visual Studio 2013}}
+\DoxyCodeLine{199 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stdint_8h}{msinttypes/stdint.h}}"{}}}
+\DoxyCodeLine{200 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{inttypes_8h}{msinttypes/inttypes.h}}"{}}}
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{202 \textcolor{comment}{// Other compilers should have this.}}
+\DoxyCodeLine{203 \textcolor{preprocessor}{\#include <\mbox{\hyperlink{stdint_8h}{stdint.h}}>}}
+\DoxyCodeLine{204 \textcolor{preprocessor}{\#include <\mbox{\hyperlink{inttypes_8h}{inttypes.h}}>}}
+\DoxyCodeLine{205 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{207 \textcolor{preprocessor}{\#ifdef RAPIDJSON\_DOXYGEN\_RUNNING}}
+\DoxyCodeLine{208 \textcolor{preprocessor}{\#define RAPIDJSON\_NO\_INT64DEFINE}}
+\DoxyCodeLine{209 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{210 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_NO\_INT64TYPEDEF}}
+\DoxyCodeLine{211 }
+\DoxyCodeLine{213 \textcolor{comment}{// RAPIDJSON\_FORCEINLINE}}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_FORCEINLINE}}
+\DoxyCodeLine{217 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& defined(NDEBUG)}}
+\DoxyCodeLine{218 \textcolor{preprocessor}{\#define RAPIDJSON\_FORCEINLINE \_\_forceinline}}
+\DoxyCodeLine{219 \textcolor{preprocessor}{\#elif defined(\_\_GNUC\_\_) \&\& \_\_GNUC\_\_ >= 4 \&\& defined(NDEBUG)}}
+\DoxyCodeLine{220 \textcolor{preprocessor}{\#define RAPIDJSON\_FORCEINLINE \_\_attribute\_\_((always\_inline))}}
+\DoxyCodeLine{221 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{222 \textcolor{preprocessor}{\#define RAPIDJSON\_FORCEINLINE}}
+\DoxyCodeLine{223 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{225 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_FORCEINLINE}}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{228 \textcolor{comment}{// RAPIDJSON\_ENDIAN}}
+\DoxyCodeLine{229 \textcolor{preprocessor}{\#define RAPIDJSON\_LITTLEENDIAN  0   }}
+\DoxyCodeLine{230 \textcolor{preprocessor}{\#define RAPIDJSON\_BIGENDIAN     1   }}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{233 }
+\DoxyCodeLine{245 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ENDIAN}}
+\DoxyCodeLine{246 \textcolor{comment}{// Detect with GCC 4.6's macro}}
+\DoxyCodeLine{247 \textcolor{preprocessor}{\#  ifdef \_\_BYTE\_ORDER\_\_}}
+\DoxyCodeLine{248 \textcolor{preprocessor}{\#    if \_\_BYTE\_ORDER\_\_ == \_\_ORDER\_LITTLE\_ENDIAN\_\_}}
+\DoxyCodeLine{249 \textcolor{preprocessor}{\#      define RAPIDJSON\_ENDIAN RAPIDJSON\_LITTLEENDIAN}}
+\DoxyCodeLine{250 \textcolor{preprocessor}{\#    elif \_\_BYTE\_ORDER\_\_ == \_\_ORDER\_BIG\_ENDIAN\_\_}}
+\DoxyCodeLine{251 \textcolor{preprocessor}{\#      define RAPIDJSON\_ENDIAN RAPIDJSON\_BIGENDIAN}}
+\DoxyCodeLine{252 \textcolor{preprocessor}{\#    else}}
+\DoxyCodeLine{253 \textcolor{preprocessor}{\#      error Unknown machine endianness detected. User needs to define RAPIDJSON\_ENDIAN.}}
+\DoxyCodeLine{254 \textcolor{preprocessor}{\#    endif }\textcolor{comment}{// \_\_BYTE\_ORDER\_\_}}
+\DoxyCodeLine{255 \textcolor{comment}{// Detect with GLIBC's endian.h}}
+\DoxyCodeLine{256 \textcolor{preprocessor}{\#  elif defined(\_\_GLIBC\_\_)}}
+\DoxyCodeLine{257 \textcolor{preprocessor}{\#    include <endian.h>}}
+\DoxyCodeLine{258 \textcolor{preprocessor}{\#    if (\_\_BYTE\_ORDER == \_\_LITTLE\_ENDIAN)}}
+\DoxyCodeLine{259 \textcolor{preprocessor}{\#      define RAPIDJSON\_ENDIAN RAPIDJSON\_LITTLEENDIAN}}
+\DoxyCodeLine{260 \textcolor{preprocessor}{\#    elif (\_\_BYTE\_ORDER == \_\_BIG\_ENDIAN)}}
+\DoxyCodeLine{261 \textcolor{preprocessor}{\#      define RAPIDJSON\_ENDIAN RAPIDJSON\_BIGENDIAN}}
+\DoxyCodeLine{262 \textcolor{preprocessor}{\#    else}}
+\DoxyCodeLine{263 \textcolor{preprocessor}{\#      error Unknown machine endianness detected. User needs to define RAPIDJSON\_ENDIAN.}}
+\DoxyCodeLine{264 \textcolor{preprocessor}{\#   endif }\textcolor{comment}{// \_\_GLIBC\_\_}}
+\DoxyCodeLine{265 \textcolor{comment}{// Detect with \_LITTLE\_ENDIAN and \_BIG\_ENDIAN macro}}
+\DoxyCodeLine{266 \textcolor{preprocessor}{\#  elif defined(\_LITTLE\_ENDIAN) \&\& !defined(\_BIG\_ENDIAN)}}
+\DoxyCodeLine{267 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN RAPIDJSON\_LITTLEENDIAN}}
+\DoxyCodeLine{268 \textcolor{preprocessor}{\#  elif defined(\_BIG\_ENDIAN) \&\& !defined(\_LITTLE\_ENDIAN)}}
+\DoxyCodeLine{269 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN RAPIDJSON\_BIGENDIAN}}
+\DoxyCodeLine{270 \textcolor{comment}{// Detect with architecture macros}}
+\DoxyCodeLine{271 \textcolor{preprocessor}{\#  elif defined(\_\_sparc) || defined(\_\_sparc\_\_) || defined(\_POWER) || defined(\_\_powerpc\_\_) || defined(\_\_ppc\_\_) || defined(\_\_hpux) || defined(\_\_hppa) || defined(\_MIPSEB) || defined(\_POWER) || defined(\_\_s390\_\_)}}
+\DoxyCodeLine{272 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN RAPIDJSON\_BIGENDIAN}}
+\DoxyCodeLine{273 \textcolor{preprocessor}{\#  elif defined(\_\_i386\_\_) || defined(\_\_alpha\_\_) || defined(\_\_ia64) || defined(\_\_ia64\_\_) || defined(\_M\_IX86) || defined(\_M\_IA64) || defined(\_M\_ALPHA) || defined(\_\_amd64) || defined(\_\_amd64\_\_) || defined(\_M\_AMD64) || defined(\_\_x86\_64) || defined(\_\_x86\_64\_\_) || defined(\_M\_X64) || defined(\_\_bfin\_\_)}}
+\DoxyCodeLine{274 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN RAPIDJSON\_LITTLEENDIAN}}
+\DoxyCodeLine{275 \textcolor{preprocessor}{\#  elif defined(\_MSC\_VER) \&\& (defined(\_M\_ARM) || defined(\_M\_ARM64))}}
+\DoxyCodeLine{276 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN RAPIDJSON\_LITTLEENDIAN}}
+\DoxyCodeLine{277 \textcolor{preprocessor}{\#  elif defined(RAPIDJSON\_DOXYGEN\_RUNNING)}}
+\DoxyCodeLine{278 \textcolor{preprocessor}{\#    define RAPIDJSON\_ENDIAN}}
+\DoxyCodeLine{279 \textcolor{preprocessor}{\#  else}}
+\DoxyCodeLine{280 \textcolor{preprocessor}{\#    error Unknown machine endianness detected. User needs to define RAPIDJSON\_ENDIAN.   }}
+\DoxyCodeLine{281 \textcolor{preprocessor}{\#  endif}}
+\DoxyCodeLine{282 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_ENDIAN}}
+\DoxyCodeLine{283 }
+\DoxyCodeLine{285 \textcolor{comment}{// RAPIDJSON\_64BIT}}
+\DoxyCodeLine{286 }
+\DoxyCodeLine{288 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_64BIT}}
+\DoxyCodeLine{289 \textcolor{preprocessor}{\#if defined(\_\_LP64\_\_) || (defined(\_\_x86\_64\_\_) \&\& defined(\_\_ILP32\_\_)) || defined(\_WIN64) || defined(\_\_EMSCRIPTEN\_\_)}}
+\DoxyCodeLine{290 \textcolor{preprocessor}{\#define RAPIDJSON\_64BIT 1}}
+\DoxyCodeLine{291 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{292 \textcolor{preprocessor}{\#define RAPIDJSON\_64BIT 0}}
+\DoxyCodeLine{293 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{294 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_64BIT}}
+\DoxyCodeLine{295 }
+\DoxyCodeLine{297 \textcolor{comment}{// RAPIDJSON\_ALIGN}}
+\DoxyCodeLine{298 }
+\DoxyCodeLine{300 }
+\DoxyCodeLine{306 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ALIGN}}
+\DoxyCodeLine{307 \textcolor{preprocessor}{\#define RAPIDJSON\_ALIGN(x) (((x) + static\_cast<size\_t>(7u)) \& \string~static\_cast<size\_t>(7u))}}
+\DoxyCodeLine{308 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{311 \textcolor{comment}{// RAPIDJSON\_UINT64\_C2}}
+\DoxyCodeLine{312 }
+\DoxyCodeLine{314 }
+\DoxyCodeLine{319 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_UINT64\_C2}}
+\DoxyCodeLine{320 \textcolor{preprocessor}{\#define RAPIDJSON\_UINT64\_C2(high32, low32) ((static\_cast<uint64\_t>(high32) << 32) | static\_cast<uint64\_t>(low32))}}
+\DoxyCodeLine{321 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{322 }
+\DoxyCodeLine{324 \textcolor{comment}{// RAPIDJSON\_48BITPOINTER\_OPTIMIZATION}}
+\DoxyCodeLine{325 }
+\DoxyCodeLine{327 }
+\DoxyCodeLine{334 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_48BITPOINTER\_OPTIMIZATION}}
+\DoxyCodeLine{335 \textcolor{preprocessor}{\#if defined(\_\_amd64\_\_) || defined(\_\_amd64) || defined(\_\_x86\_64\_\_) || defined(\_\_x86\_64) || defined(\_M\_X64) || defined(\_M\_AMD64)}}
+\DoxyCodeLine{336 \textcolor{preprocessor}{\#define RAPIDJSON\_48BITPOINTER\_OPTIMIZATION 1}}
+\DoxyCodeLine{337 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{338 \textcolor{preprocessor}{\#define RAPIDJSON\_48BITPOINTER\_OPTIMIZATION 0}}
+\DoxyCodeLine{339 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{340 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_48BITPOINTER\_OPTIMIZATION}}
+\DoxyCodeLine{341 }
+\DoxyCodeLine{342 \textcolor{preprocessor}{\#if RAPIDJSON\_48BITPOINTER\_OPTIMIZATION == 1}}
+\DoxyCodeLine{343 \textcolor{preprocessor}{\#if RAPIDJSON\_64BIT != 1}}
+\DoxyCodeLine{344 \textcolor{preprocessor}{\#error RAPIDJSON\_48BITPOINTER\_OPTIMIZATION can only be set to 1 when RAPIDJSON\_64BIT=1}}
+\DoxyCodeLine{345 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{346 \textcolor{preprocessor}{\#define RAPIDJSON\_SETPOINTER(type, p, x) (p = reinterpret\_cast<type *>((reinterpret\_cast<uintptr\_t>(p) \& static\_cast<uintptr\_t>(RAPIDJSON\_UINT64\_C2(0xFFFF0000, 0x00000000))) | reinterpret\_cast<uintptr\_t>(reinterpret\_cast<const void*>(x))))}}
+\DoxyCodeLine{347 \textcolor{preprocessor}{\#define RAPIDJSON\_GETPOINTER(type, p) (reinterpret\_cast<type *>(reinterpret\_cast<uintptr\_t>(p) \& static\_cast<uintptr\_t>(RAPIDJSON\_UINT64\_C2(0x0000FFFF, 0xFFFFFFFF))))}}
+\DoxyCodeLine{348 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{349 \textcolor{preprocessor}{\#define RAPIDJSON\_SETPOINTER(type, p, x) (p = (x))}}
+\DoxyCodeLine{350 \textcolor{preprocessor}{\#define RAPIDJSON\_GETPOINTER(type, p) (p)}}
+\DoxyCodeLine{351 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{352 }
+\DoxyCodeLine{354 \textcolor{comment}{// RAPIDJSON\_SSE2/RAPIDJSON\_SSE42/RAPIDJSON\_NEON/RAPIDJSON\_SIMD}}
+\DoxyCodeLine{355 }
+\DoxyCodeLine{382 \textcolor{preprocessor}{\#if defined(RAPIDJSON\_SSE2) || defined(RAPIDJSON\_SSE42) \(\backslash\)}}
+\DoxyCodeLine{383 \textcolor{preprocessor}{    || defined(RAPIDJSON\_NEON) || defined(RAPIDJSON\_DOXYGEN\_RUNNING)}}
+\DoxyCodeLine{384 \textcolor{preprocessor}{\#define RAPIDJSON\_SIMD}}
+\DoxyCodeLine{385 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{386 }
+\DoxyCodeLine{388 \textcolor{comment}{// RAPIDJSON\_NO\_SIZETYPEDEFINE}}
+\DoxyCodeLine{389 }
+\DoxyCodeLine{390 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NO\_SIZETYPEDEFINE}}
+\DoxyCodeLine{406 \textcolor{preprocessor}{\#ifdef RAPIDJSON\_DOXYGEN\_RUNNING}}
+\DoxyCodeLine{407 \textcolor{preprocessor}{\#define RAPIDJSON\_NO\_SIZETYPEDEFINE}}
+\DoxyCodeLine{408 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{409 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{411 }
+\DoxyCodeLine{415 \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}};}
+\DoxyCodeLine{416 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{417 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{418 }
+\DoxyCodeLine{419 \textcolor{comment}{// always import std::size\_t to rapidjson namespace}}
+\DoxyCodeLine{420 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{421 \textcolor{keyword}{using} std::size\_t;}
+\DoxyCodeLine{422 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{423 }
+\DoxyCodeLine{425 \textcolor{comment}{// RAPIDJSON\_ASSERT}}
+\DoxyCodeLine{426 }
+\DoxyCodeLine{428 }
+\DoxyCodeLine{435 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ASSERT}}
+\DoxyCodeLine{436 \textcolor{preprocessor}{\#include <cassert>}}
+\DoxyCodeLine{437 \textcolor{preprocessor}{\#define RAPIDJSON\_ASSERT(x) assert(x)}}
+\DoxyCodeLine{438 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_ASSERT}}
+\DoxyCodeLine{439 }
+\DoxyCodeLine{441 \textcolor{comment}{// RAPIDJSON\_STATIC\_ASSERT}}
+\DoxyCodeLine{442 }
+\DoxyCodeLine{443 \textcolor{comment}{// Prefer C++11 static\_assert, if available}}
+\DoxyCodeLine{444 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_STATIC\_ASSERT}}
+\DoxyCodeLine{445 \textcolor{preprocessor}{\#if RAPIDJSON\_CPLUSPLUS >= 201103L || ( defined(\_MSC\_VER) \&\& \_MSC\_VER >= 1800 )}}
+\DoxyCodeLine{446 \textcolor{preprocessor}{\#define RAPIDJSON\_STATIC\_ASSERT(x) \(\backslash\)}}
+\DoxyCodeLine{447 \textcolor{preprocessor}{   static\_assert(x, RAPIDJSON\_STRINGIFY(x))}}
+\DoxyCodeLine{448 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// C++11}}
+\DoxyCodeLine{449 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STATIC\_ASSERT}}
+\DoxyCodeLine{450 }
+\DoxyCodeLine{451 \textcolor{comment}{// Adopt C++03 implementation from boost}}
+\DoxyCodeLine{452 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_STATIC\_ASSERT}}
+\DoxyCodeLine{453 \textcolor{preprocessor}{\#ifndef \_\_clang\_\_}}
+\DoxyCodeLine{455 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{456 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{457 \textcolor{keyword}{template} <\textcolor{keywordtype}{bool} x> \textcolor{keyword}{struct }STATIC\_ASSERTION\_FAILURE;}
+\DoxyCodeLine{458 \textcolor{keyword}{template} <> \textcolor{keyword}{struct }STATIC\_ASSERTION\_FAILURE<true> \{ \textcolor{keyword}{enum} \{ \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} = 1 \}; \};}
+\DoxyCodeLine{459 \textcolor{keyword}{template} <\textcolor{keywordtype}{size\_t} x> \textcolor{keyword}{struct }StaticAssertTest \{\};}
+\DoxyCodeLine{460 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{461 }
+\DoxyCodeLine{462 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || defined(\_\_clang\_\_)}}
+\DoxyCodeLine{463 \textcolor{preprocessor}{\#define RAPIDJSON\_STATIC\_ASSERT\_UNUSED\_ATTRIBUTE \_\_attribute\_\_((unused))}}
+\DoxyCodeLine{464 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{465 \textcolor{preprocessor}{\#define RAPIDJSON\_STATIC\_ASSERT\_UNUSED\_ATTRIBUTE }}
+\DoxyCodeLine{466 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{467 \textcolor{preprocessor}{\#ifndef \_\_clang\_\_}}
+\DoxyCodeLine{469 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{470 }
+\DoxyCodeLine{476 \textcolor{preprocessor}{\#define RAPIDJSON\_STATIC\_ASSERT(x) \(\backslash\)}}
+\DoxyCodeLine{477 \textcolor{preprocessor}{    typedef ::RAPIDJSON\_NAMESPACE::StaticAssertTest< \(\backslash\)}}
+\DoxyCodeLine{478 \textcolor{preprocessor}{      sizeof(::RAPIDJSON\_NAMESPACE::STATIC\_ASSERTION\_FAILURE<bool(x) >)> \(\backslash\)}}
+\DoxyCodeLine{479 \textcolor{preprocessor}{    RAPIDJSON\_JOIN(StaticAssertTypedef, \_\_LINE\_\_) RAPIDJSON\_STATIC\_ASSERT\_UNUSED\_ATTRIBUTE}}
+\DoxyCodeLine{480 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STATIC\_ASSERT}}
+\DoxyCodeLine{481 }
+\DoxyCodeLine{483 \textcolor{comment}{// RAPIDJSON\_LIKELY, RAPIDJSON\_UNLIKELY}}
+\DoxyCodeLine{484 }
+\DoxyCodeLine{486 }
+\DoxyCodeLine{490 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_LIKELY}}
+\DoxyCodeLine{491 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || defined(\_\_clang\_\_)}}
+\DoxyCodeLine{492 \textcolor{preprocessor}{\#define RAPIDJSON\_LIKELY(x) \_\_builtin\_expect(!!(x), 1)}}
+\DoxyCodeLine{493 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{494 \textcolor{preprocessor}{\#define RAPIDJSON\_LIKELY(x) (x)}}
+\DoxyCodeLine{495 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{496 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{497 }
+\DoxyCodeLine{499 }
+\DoxyCodeLine{503 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_UNLIKELY}}
+\DoxyCodeLine{504 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || defined(\_\_clang\_\_)}}
+\DoxyCodeLine{505 \textcolor{preprocessor}{\#define RAPIDJSON\_UNLIKELY(x) \_\_builtin\_expect(!!(x), 0)}}
+\DoxyCodeLine{506 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{507 \textcolor{preprocessor}{\#define RAPIDJSON\_UNLIKELY(x) (x)}}
+\DoxyCodeLine{508 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{509 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{510 }
+\DoxyCodeLine{512 \textcolor{comment}{// Helpers}}
+\DoxyCodeLine{513 }
+\DoxyCodeLine{515 }
+\DoxyCodeLine{516 \textcolor{preprocessor}{\#define RAPIDJSON\_MULTILINEMACRO\_BEGIN do \{  }}
+\DoxyCodeLine{517 \textcolor{preprocessor}{\#define RAPIDJSON\_MULTILINEMACRO\_END \(\backslash\)}}
+\DoxyCodeLine{518 \textcolor{preprocessor}{\} while((void)0, 0)}}
+\DoxyCodeLine{519 }
+\DoxyCodeLine{520 \textcolor{comment}{// adopted from Boost}}
+\DoxyCodeLine{521 \textcolor{preprocessor}{\#define RAPIDJSON\_VERSION\_CODE(x,y,z) \(\backslash\)}}
+\DoxyCodeLine{522 \textcolor{preprocessor}{  (((x)*100000) + ((y)*100) + (z))}}
+\DoxyCodeLine{523 }
+\DoxyCodeLine{524 \textcolor{preprocessor}{\#if defined(\_\_has\_builtin)}}
+\DoxyCodeLine{525 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_BUILTIN(x) \_\_has\_builtin(x)}}
+\DoxyCodeLine{526 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{527 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_BUILTIN(x) 0}}
+\DoxyCodeLine{528 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{529 }
+\DoxyCodeLine{531 \textcolor{comment}{// RAPIDJSON\_DIAG\_PUSH/POP, RAPIDJSON\_DIAG\_OFF}}
+\DoxyCodeLine{532 }
+\DoxyCodeLine{533 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{534 \textcolor{preprocessor}{\#define RAPIDJSON\_GNUC \(\backslash\)}}
+\DoxyCodeLine{535 \textcolor{preprocessor}{    RAPIDJSON\_VERSION\_CODE(\_\_GNUC\_\_,\_\_GNUC\_MINOR\_\_,\_\_GNUC\_PATCHLEVEL\_\_)}}
+\DoxyCodeLine{536 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{537 }
+\DoxyCodeLine{538 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || (defined(RAPIDJSON\_GNUC) \&\& RAPIDJSON\_GNUC >= RAPIDJSON\_VERSION\_CODE(4,2,0))}}
+\DoxyCodeLine{539 }
+\DoxyCodeLine{540 \textcolor{preprocessor}{\#define RAPIDJSON\_PRAGMA(x) \_Pragma(RAPIDJSON\_STRINGIFY(x))}}
+\DoxyCodeLine{541 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PRAGMA(x) RAPIDJSON\_PRAGMA(GCC diagnostic x)}}
+\DoxyCodeLine{542 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_OFF(x) \(\backslash\)}}
+\DoxyCodeLine{543 \textcolor{preprocessor}{    RAPIDJSON\_DIAG\_PRAGMA(ignored RAPIDJSON\_STRINGIFY(RAPIDJSON\_JOIN(-\/W,x)))}}
+\DoxyCodeLine{544 }
+\DoxyCodeLine{545 \textcolor{comment}{// push/pop support in Clang and GCC>=4.6}}
+\DoxyCodeLine{546 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || (defined(RAPIDJSON\_GNUC) \&\& RAPIDJSON\_GNUC >= RAPIDJSON\_VERSION\_CODE(4,6,0))}}
+\DoxyCodeLine{547 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PUSH RAPIDJSON\_DIAG\_PRAGMA(push)}}
+\DoxyCodeLine{548 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_POP  RAPIDJSON\_DIAG\_PRAGMA(pop)}}
+\DoxyCodeLine{549 \textcolor{preprocessor}{\#else }\textcolor{comment}{// GCC >= 4.2, < 4.6}}
+\DoxyCodeLine{550 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PUSH }\textcolor{comment}{/* ignored */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{551 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_POP }\textcolor{comment}{/* ignored */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{552 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{553 }
+\DoxyCodeLine{554 \textcolor{preprocessor}{\#elif defined(\_MSC\_VER)}}
+\DoxyCodeLine{555 }
+\DoxyCodeLine{556 \textcolor{comment}{// pragma (MSVC specific)}}
+\DoxyCodeLine{557 \textcolor{preprocessor}{\#define RAPIDJSON\_PRAGMA(x) \_\_pragma(x)}}
+\DoxyCodeLine{558 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PRAGMA(x) RAPIDJSON\_PRAGMA(warning(x))}}
+\DoxyCodeLine{559 }
+\DoxyCodeLine{560 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_OFF(x) RAPIDJSON\_DIAG\_PRAGMA(disable: x)}}
+\DoxyCodeLine{561 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PUSH RAPIDJSON\_DIAG\_PRAGMA(push)}}
+\DoxyCodeLine{562 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_POP  RAPIDJSON\_DIAG\_PRAGMA(pop)}}
+\DoxyCodeLine{563 }
+\DoxyCodeLine{564 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{565 }
+\DoxyCodeLine{566 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_OFF(x) }\textcolor{comment}{/* ignored */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{567 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_PUSH   }\textcolor{comment}{/* ignored */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{568 \textcolor{preprocessor}{\#define RAPIDJSON\_DIAG\_POP    }\textcolor{comment}{/* ignored */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{569 }
+\DoxyCodeLine{570 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_DIAG\_*}}
+\DoxyCodeLine{571 }
+\DoxyCodeLine{573 \textcolor{comment}{// C++11 features}}
+\DoxyCodeLine{574 }
+\DoxyCodeLine{575 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX11}}
+\DoxyCodeLine{576 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11 (RAPIDJSON\_CPLUSPLUS >= 201103L)}}
+\DoxyCodeLine{577 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{578 }
+\DoxyCodeLine{579 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{580 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11}}
+\DoxyCodeLine{581 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS 1}}
+\DoxyCodeLine{582 \textcolor{preprocessor}{\#elif defined(\_\_clang\_\_)}}
+\DoxyCodeLine{583 \textcolor{preprocessor}{\#if \_\_has\_feature(cxx\_rvalue\_references) \&\& \(\backslash\)}}
+\DoxyCodeLine{584 \textcolor{preprocessor}{    (defined(\_MSC\_VER) || defined(\_LIBCPP\_VERSION) || defined(\_\_GLIBCXX\_\_) \&\& \_\_GLIBCXX\_\_ >= 20080306)}}
+\DoxyCodeLine{585 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS 1}}
+\DoxyCodeLine{586 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{587 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS 0}}
+\DoxyCodeLine{588 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{589 \textcolor{preprocessor}{\#elif (defined(RAPIDJSON\_GNUC) \&\& (RAPIDJSON\_GNUC >= RAPIDJSON\_VERSION\_CODE(4,3,0)) \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_)) || \(\backslash\)}}
+\DoxyCodeLine{590 \textcolor{preprocessor}{      (defined(\_MSC\_VER) \&\& \_MSC\_VER >= 1600) || \(\backslash\)}}
+\DoxyCodeLine{591 \textcolor{preprocessor}{      (defined(\_\_SUNPRO\_CC) \&\& \_\_SUNPRO\_CC >= 0x5140 \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_))}}
+\DoxyCodeLine{592 }
+\DoxyCodeLine{593 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS 1}}
+\DoxyCodeLine{594 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{595 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS 0}}
+\DoxyCodeLine{596 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{597 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{598 }
+\DoxyCodeLine{599 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{600 \textcolor{preprocessor}{\#include <utility>} \textcolor{comment}{// std::move}}
+\DoxyCodeLine{601 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{602 }
+\DoxyCodeLine{603 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX11\_NOEXCEPT}}
+\DoxyCodeLine{604 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11}}
+\DoxyCodeLine{605 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_NOEXCEPT 1}}
+\DoxyCodeLine{606 \textcolor{preprocessor}{\#elif defined(\_\_clang\_\_)}}
+\DoxyCodeLine{607 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_NOEXCEPT \_\_has\_feature(cxx\_noexcept)}}
+\DoxyCodeLine{608 \textcolor{preprocessor}{\#elif (defined(RAPIDJSON\_GNUC) \&\& (RAPIDJSON\_GNUC >= RAPIDJSON\_VERSION\_CODE(4,6,0)) \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_)) || \(\backslash\)}}
+\DoxyCodeLine{609 \textcolor{preprocessor}{    (defined(\_MSC\_VER) \&\& \_MSC\_VER >= 1900) || \(\backslash\)}}
+\DoxyCodeLine{610 \textcolor{preprocessor}{    (defined(\_\_SUNPRO\_CC) \&\& \_\_SUNPRO\_CC >= 0x5140 \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_))}}
+\DoxyCodeLine{611 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_NOEXCEPT 1}}
+\DoxyCodeLine{612 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{613 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_NOEXCEPT 0}}
+\DoxyCodeLine{614 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{615 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{616 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NOEXCEPT}}
+\DoxyCodeLine{617 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_NOEXCEPT}}
+\DoxyCodeLine{618 \textcolor{preprocessor}{\#define RAPIDJSON\_NOEXCEPT noexcept}}
+\DoxyCodeLine{619 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{620 \textcolor{preprocessor}{\#define RAPIDJSON\_NOEXCEPT throw()}}
+\DoxyCodeLine{621 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_HAS\_CXX11\_NOEXCEPT}}
+\DoxyCodeLine{622 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{623 }
+\DoxyCodeLine{624 \textcolor{comment}{// no automatic detection, yet}}
+\DoxyCodeLine{625 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX11\_TYPETRAITS}}
+\DoxyCodeLine{626 \textcolor{preprocessor}{\#if (defined(\_MSC\_VER) \&\& \_MSC\_VER >= 1700)}}
+\DoxyCodeLine{627 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_TYPETRAITS 1}}
+\DoxyCodeLine{628 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{629 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_TYPETRAITS 0}}
+\DoxyCodeLine{630 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{631 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{632 }
+\DoxyCodeLine{633 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX11\_RANGE\_FOR}}
+\DoxyCodeLine{634 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{635 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RANGE\_FOR \_\_has\_feature(cxx\_range\_for)}}
+\DoxyCodeLine{636 \textcolor{preprocessor}{\#elif (defined(RAPIDJSON\_GNUC) \&\& (RAPIDJSON\_GNUC >= RAPIDJSON\_VERSION\_CODE(4,6,0)) \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_)) || \(\backslash\)}}
+\DoxyCodeLine{637 \textcolor{preprocessor}{      (defined(\_MSC\_VER) \&\& \_MSC\_VER >= 1700) || \(\backslash\)}}
+\DoxyCodeLine{638 \textcolor{preprocessor}{      (defined(\_\_SUNPRO\_CC) \&\& \_\_SUNPRO\_CC >= 0x5140 \&\& defined(\_\_GXX\_EXPERIMENTAL\_CXX0X\_\_))}}
+\DoxyCodeLine{639 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RANGE\_FOR 1}}
+\DoxyCodeLine{640 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{641 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_RANGE\_FOR 0}}
+\DoxyCodeLine{642 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{643 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_HAS\_CXX11\_RANGE\_FOR}}
+\DoxyCodeLine{644 }
+\DoxyCodeLine{646 \textcolor{comment}{// C++17 features}}
+\DoxyCodeLine{647 }
+\DoxyCodeLine{648 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_HAS\_CXX17}}
+\DoxyCodeLine{649 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX17 (RAPIDJSON\_CPLUSPLUS >= 201703L)}}
+\DoxyCodeLine{650 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{651 }
+\DoxyCodeLine{652 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX17}}
+\DoxyCodeLine{653 \textcolor{preprocessor}{\# define RAPIDJSON\_DELIBERATE\_FALLTHROUGH [[fallthrough]]}}
+\DoxyCodeLine{654 \textcolor{preprocessor}{\#elif defined(\_\_has\_cpp\_attribute)}}
+\DoxyCodeLine{655 \textcolor{preprocessor}{\# if \_\_has\_cpp\_attribute(clang::fallthrough)}}
+\DoxyCodeLine{656 \textcolor{preprocessor}{\#  define RAPIDJSON\_DELIBERATE\_FALLTHROUGH [[clang::fallthrough]]}}
+\DoxyCodeLine{657 \textcolor{preprocessor}{\# elif \_\_has\_cpp\_attribute(fallthrough)}}
+\DoxyCodeLine{658 \textcolor{preprocessor}{\#  define RAPIDJSON\_DELIBERATE\_FALLTHROUGH \_\_attribute\_\_((fallthrough))}}
+\DoxyCodeLine{659 \textcolor{preprocessor}{\# else}}
+\DoxyCodeLine{660 \textcolor{preprocessor}{\#  define RAPIDJSON\_DELIBERATE\_FALLTHROUGH}}
+\DoxyCodeLine{661 \textcolor{preprocessor}{\# endif}}
+\DoxyCodeLine{662 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{663 \textcolor{preprocessor}{\# define RAPIDJSON\_DELIBERATE\_FALLTHROUGH}}
+\DoxyCodeLine{664 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{665 }
+\DoxyCodeLine{667 }
+\DoxyCodeLine{669 }
+\DoxyCodeLine{680 \textcolor{comment}{// RAPIDJSON\_NOEXCEPT\_ASSERT}}
+\DoxyCodeLine{681 }
+\DoxyCodeLine{682 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NOEXCEPT\_ASSERT}}
+\DoxyCodeLine{683 \textcolor{preprocessor}{\#ifdef RAPIDJSON\_ASSERT\_THROWS}}
+\DoxyCodeLine{684 \textcolor{preprocessor}{\#include <cassert>}}
+\DoxyCodeLine{685 \textcolor{preprocessor}{\#define RAPIDJSON\_NOEXCEPT\_ASSERT(x) assert(x)}}
+\DoxyCodeLine{686 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{687 \textcolor{preprocessor}{\#define RAPIDJSON\_NOEXCEPT\_ASSERT(x) RAPIDJSON\_ASSERT(x)}}
+\DoxyCodeLine{688 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_ASSERT\_THROWS}}
+\DoxyCodeLine{689 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_NOEXCEPT\_ASSERT}}
+\DoxyCodeLine{690 }
+\DoxyCodeLine{692 \textcolor{comment}{// malloc/realloc/free}}
+\DoxyCodeLine{693 }
+\DoxyCodeLine{694 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_MALLOC}}
+\DoxyCodeLine{696 \textcolor{preprocessor}{\#define RAPIDJSON\_MALLOC(size) std::malloc(size)}}
+\DoxyCodeLine{697 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{698 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_REALLOC}}
+\DoxyCodeLine{700 \textcolor{preprocessor}{\#define RAPIDJSON\_REALLOC(ptr, new\_size) std::realloc(ptr, new\_size)}}
+\DoxyCodeLine{701 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{702 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_FREE}}
+\DoxyCodeLine{704 \textcolor{preprocessor}{\#define RAPIDJSON\_FREE(ptr) std::free(ptr)}}
+\DoxyCodeLine{705 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{706 }
+\DoxyCodeLine{708 \textcolor{comment}{// new/delete}}
+\DoxyCodeLine{709 }
+\DoxyCodeLine{710 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_NEW}}
+\DoxyCodeLine{712 \textcolor{preprocessor}{\#define RAPIDJSON\_NEW(TypeName) new TypeName}}
+\DoxyCodeLine{713 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{714 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_DELETE}}
+\DoxyCodeLine{716 \textcolor{preprocessor}{\#define RAPIDJSON\_DELETE(x) delete x}}
+\DoxyCodeLine{717 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{718 }
+\DoxyCodeLine{720 \textcolor{comment}{// Type}}
+\DoxyCodeLine{721 }
+\DoxyCodeLine{726 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{727 }
+\DoxyCodeLine{729 \textcolor{keyword}{enum} \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{Type}} \{}
+\DoxyCodeLine{730     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087}{kNullType}} = 0,      }
+\DoxyCodeLine{731     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54}{kFalseType}} = 1,     }
+\DoxyCodeLine{732     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6}{kTrueType}} = 2,      }
+\DoxyCodeLine{733     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f}{kObjectType}} = 3,    }
+\DoxyCodeLine{734     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8}{kArrayType}} = 4,     }
+\DoxyCodeLine{735     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338}{kStringType}} = 5,    }
+\DoxyCodeLine{736     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}} = 6     }
+\DoxyCodeLine{737 \};}
+\DoxyCodeLine{738 }
+\DoxyCodeLine{739 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{740 }
+\DoxyCodeLine{741 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_RAPIDJSON\_H\_}}
+
+\end{DoxyCode}

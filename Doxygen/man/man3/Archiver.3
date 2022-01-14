@@ -1,0 +1,52 @@
+.TH "Archiver" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Archiver \- \fBArchiver\fP concept\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <archiver\&.h>\fP
+.SH "Detailed Description"
+.PP 
+\fBArchiver\fP concept\&. 
+
+\fBArchiver\fP can be a reader or writer for serialization or deserialization respectively\&.
+.PP
+class \fBArchiver\fP { public: / 
+.PP
+\fBReturns\fP
+.RS 4
+true if the archiver is in normal state\&. false if it has errors\&. operator bool() const;
+.RE
+.PP
+/ Starts an object \fBArchiver\fP& StartObject();
+.PP
+/ After calling StartObject(), assign a member with a name \fBArchiver\fP& Member(const char* name);
+.PP
+/ After calling StartObject(), check if a member presents bool HasMember(const char* name) const;
+.PP
+/ Ends an object \fBArchiver\fP& EndObject();
+.PP
+/ Starts an array /
+.PP
+\fBParameters\fP
+.RS 4
+\fIsize\fP If Archiver::IsReader is true, the size of array is written\&. \fBArchiver\fP& StartArray(size_t* size = 0);
+.RE
+.PP
+/ Ends an array \fBArchiver\fP& EndArray();
+.PP
+/ Read/Write primitive types\&. \fBArchiver\fP& operator&(bool& b); \fBArchiver\fP& operator&(unsigned& u); \fBArchiver\fP& operator&(int& i); \fBArchiver\fP& operator&(double& d); \fBArchiver\fP& operator&(std::string& s);
+.PP
+/ Write primitive types\&. \fBArchiver\fP& SetNull();
+.PP
+! Whether it is a reader\&. static const bool IsReader;
+.PP
+! Whether it is a writer\&. static const bool IsWriter; }; 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

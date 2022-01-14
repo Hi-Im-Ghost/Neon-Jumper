@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_pointertest_8cpp" xml:lang="en-US">
+<title>src/rapidjson/test/unittest/pointertest.cpp File Reference</title>
+<indexterm><primary>src/rapidjson/test/unittest/pointertest.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;unittest.h&quot;
+#include &quot;rapidjson/pointer.h&quot;
+#include &quot;rapidjson/stringbuffer.h&quot;
+#include &quot;rapidjson/ostreamwrapper.h&quot;
+#include &lt;sstream&gt;
+#include &lt;map&gt;
+#include &lt;algorithm&gt;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_classmyjson_1_1_my_allocator">myjson::MyAllocator</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para>namespace <link linkend="_namespacemyjson">myjson</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_pointertest_8cpp_1a59c7737920212dcb3bb9df58d7062de4">NAME</link>(s)   { s, static_cast&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&gt;(sizeof(s) / sizeof(s[0]) - 1), kPointerInvalidIndex }</para>
+</listitem>
+            <listitem><para>#define <link linkend="_pointertest_8cpp_1aa5fad23b2a5eed790e6661e896a506b7">INDEX</link>(i)   { #i, static_cast&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&gt;(sizeof(#i) - 1), i }</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Typedefs    </title>
+        <itemizedlist>
+            <listitem><para>typedef rapidjson::GenericDocument&lt; rapidjson::UTF8&lt;&gt;, rapidjson::MemoryPoolAllocator&lt; MyAllocator &gt;, MyAllocator &gt; <link linkend="_namespacemyjson_1ad443708a91ffd171ce0fa565e59a1f47">myjson::Document</link></para>
+</listitem>
+            <listitem><para>typedef rapidjson::GenericPointer&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">::myjson::Document::ValueType</link>, MyAllocator &gt; <link linkend="_namespacemyjson_1a5a66903f9686e4aee03475a435604dbc">myjson::Pointer</link></para>
+</listitem>
+            <listitem><para>typedef <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">::myjson::Document::ValueType</link> <link linkend="_namespacemyjson_1a85df4ee44b7616a2b01bfec8c31aec5f">myjson::Value</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_pointertest_8cpp_1a194da73d7b156fd70e813df418390de7">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, DefaultConstructor)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a274c49524d51e59971372891c8d0a661">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Parse)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a03023789dbdf13e7f28249684534813f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Parse_URIFragment)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a42d16691830cb00339e59301ea2b7c8a">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Stringify)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ae14bab0f36a26eeab4a8f45833b98758">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, ConstructorWithToken)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a9f65b695f8b05a0d5d4b960fb6d22bbf">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, CopyConstructor)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1abcf17e7dcf818df73a143b557c9bc778">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Assignment)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a850b5ef6bb119da1eaec4bfb06bd3a83">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Swap)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a443fb02eea9b29b59f04f505a27d9419">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Append)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1af7c25af8dc3453d4fbdee83dbc05424d">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Equality)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1acba05ab369979cce13477b10b41da452">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Inequality)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a5f2b8313d2428b0f550df9e8fa703057">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Create)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a8482a4f7d5692f5e636f38df40625801">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetUri)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1aab494faf7f41d5047c33f34774547c2d">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Get)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1af8a1b9bb5536deca3aaadbc09fa7d677">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetWithDefault)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a07d1e7051af182b4a8bf5dfad448fc1e">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetWithDefault_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a8aeecfd8e34537e8264d97d698a0d2c7">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Set)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ac2b4429e4f8f086f718e703c57b6de50">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Set_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a23f3598a2934146d519ad83c8ad733cc">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Swap_Value)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a9105da16375cc70494a9b4c5fefe7f1f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Swap_Value_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ae39583acf35a83ea7b7f7235445f450e">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Erase)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a2394e338389afb50b51faed6680a9c67">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, <link linkend="_pointer_8h_1ae5f22e098e170e51d47beb75812b9a5b">CreateValueByPointer</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ab89d9a4571a1f783b32ccbc7a3f35ec4">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, CreateValueByPointer_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1af2d350c8a64b8e22c5728c724ac25730">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, <link linkend="_pointer_8h_1a2683bf19840749f07ceaf659b4cee6d9">GetValueByPointer</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ab1983a6fc89a2318433785c6cd205a43">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetValueByPointerWithDefault_Pointer)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ad43ebe6bc91d4d543b5ec0494dce731f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetValueByPointerWithDefault_String)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a047f42b40fe08ae66b160b70aa9a7920">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetValueByPointerWithDefault_Pointer_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a6b704eea580a8e097c2c11d1aee243ce">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, GetValueByPointerWithDefault_String_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a4c28fc4ad671b1a34e3ade5fd36e8035">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, SetValueByPointer_Pointer)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a0d55e9b601e8e23d9cad6c0e53077b2f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, SetValueByPointer_String)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a534f2b97e331a4ee1b296ef72893c29a">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, SetValueByPointer_Pointer_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ae3cce0506001378eccfd9882c3829c2a">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, SetValueByPointer_String_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1afeb479140b7555fae2822585794ffc9f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, <link linkend="_pointer_8h_1a33c56cdd1034a750112e81df6c4e653a">SwapValueByPointer</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ae77ef998f1d9c1e2fad3bd688faa422f">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, SwapValueByPointer_NoAllocator)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a1fef14fd9a650ae0a319495b8f9d0d71">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, EraseValueByPointer_Pointer)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ab371ee4cf6973d503478721385f0a296">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, EraseValueByPointer_String)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ad6649baa8a1718779bab8a57d3fd3460">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Ambiguity)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a50642ef276de0935a79e8fb752eba92c">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, ResolveOnObject)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1af9a629d86e2e3e53832ac7f0cdee1458">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, ResolveOnArray)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a99c995334eca1b8aa01f93b80166eb87">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, LessThan)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1a2dade46fca55d8f028ac8826741cf9ae">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Issue483)</para>
+</listitem>
+            <listitem><para><link linkend="_pointertest_8cpp_1ad76116fe671e8744aefd2dce3f765926">TEST</link> (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link>, Issue1899)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_pointertest_8cpp_1aa5fad23b2a5eed790e6661e896a506b7"/><section>
+    <title>INDEX</title>
+<indexterm><primary>INDEX</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>INDEX</secondary></indexterm>
+<para><computeroutput>#define INDEX( i)   { #i, static_cast&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&gt;(sizeof(#i) - 1), i }</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a59c7737920212dcb3bb9df58d7062de4"/><section>
+    <title>NAME</title>
+<indexterm><primary>NAME</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>NAME</secondary></indexterm>
+<para><computeroutput>#define NAME( s)   { s, static_cast&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&gt;(sizeof(s) / sizeof(s[0]) - 1), kPointerInvalidIndex }</computeroutput></para></section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_pointertest_8cpp_1ad6649baa8a1718779bab8a57d3fd3460"/><section>
+    <title>TEST()<computeroutput>[1/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Ambiguity )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a443fb02eea9b29b59f04f505a27d9419"/><section>
+    <title>TEST()<computeroutput>[2/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Append )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1abcf17e7dcf818df73a143b557c9bc778"/><section>
+    <title>TEST()<computeroutput>[3/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Assignment )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ae14bab0f36a26eeab4a8f45833b98758"/><section>
+    <title>TEST()<computeroutput>[4/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , ConstructorWithToken )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a9f65b695f8b05a0d5d4b960fb6d22bbf"/><section>
+    <title>TEST()<computeroutput>[5/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , CopyConstructor )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a5f2b8313d2428b0f550df9e8fa703057"/><section>
+    <title>TEST()<computeroutput>[6/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Create )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a2394e338389afb50b51faed6680a9c67"/><section>
+    <title>TEST()<computeroutput>[7/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , <link linkend="_pointer_8h_1ae5f22e098e170e51d47beb75812b9a5b">CreateValueByPointer</link> )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ab89d9a4571a1f783b32ccbc7a3f35ec4"/><section>
+    <title>TEST()<computeroutput>[8/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , CreateValueByPointer_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a194da73d7b156fd70e813df418390de7"/><section>
+    <title>TEST()<computeroutput>[9/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , DefaultConstructor )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1af7c25af8dc3453d4fbdee83dbc05424d"/><section>
+    <title>TEST()<computeroutput>[10/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Equality )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ae39583acf35a83ea7b7f7235445f450e"/><section>
+    <title>TEST()<computeroutput>[11/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Erase )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a1fef14fd9a650ae0a319495b8f9d0d71"/><section>
+    <title>TEST()<computeroutput>[12/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , EraseValueByPointer_Pointer )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ab371ee4cf6973d503478721385f0a296"/><section>
+    <title>TEST()<computeroutput>[13/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , EraseValueByPointer_String )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1aab494faf7f41d5047c33f34774547c2d"/><section>
+    <title>TEST()<computeroutput>[14/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Get )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a8482a4f7d5692f5e636f38df40625801"/><section>
+    <title>TEST()<computeroutput>[15/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetUri )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1af2d350c8a64b8e22c5728c724ac25730"/><section>
+    <title>TEST()<computeroutput>[16/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , <link linkend="_pointer_8h_1a2683bf19840749f07ceaf659b4cee6d9">GetValueByPointer</link> )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ab1983a6fc89a2318433785c6cd205a43"/><section>
+    <title>TEST()<computeroutput>[17/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetValueByPointerWithDefault_Pointer )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a047f42b40fe08ae66b160b70aa9a7920"/><section>
+    <title>TEST()<computeroutput>[18/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetValueByPointerWithDefault_Pointer_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ad43ebe6bc91d4d543b5ec0494dce731f"/><section>
+    <title>TEST()<computeroutput>[19/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetValueByPointerWithDefault_String )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a6b704eea580a8e097c2c11d1aee243ce"/><section>
+    <title>TEST()<computeroutput>[20/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetValueByPointerWithDefault_String_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1af8a1b9bb5536deca3aaadbc09fa7d677"/><section>
+    <title>TEST()<computeroutput>[21/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetWithDefault )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a07d1e7051af182b4a8bf5dfad448fc1e"/><section>
+    <title>TEST()<computeroutput>[22/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , GetWithDefault_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1acba05ab369979cce13477b10b41da452"/><section>
+    <title>TEST()<computeroutput>[23/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Inequality )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ad76116fe671e8744aefd2dce3f765926"/><section>
+    <title>TEST()<computeroutput>[24/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Issue1899 )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a2dade46fca55d8f028ac8826741cf9ae"/><section>
+    <title>TEST()<computeroutput>[25/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Issue483 )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a99c995334eca1b8aa01f93b80166eb87"/><section>
+    <title>TEST()<computeroutput>[26/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , LessThan )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a274c49524d51e59971372891c8d0a661"/><section>
+    <title>TEST()<computeroutput>[27/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Parse )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a03023789dbdf13e7f28249684534813f"/><section>
+    <title>TEST()<computeroutput>[28/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Parse_URIFragment )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1af9a629d86e2e3e53832ac7f0cdee1458"/><section>
+    <title>TEST()<computeroutput>[29/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , ResolveOnArray )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a50642ef276de0935a79e8fb752eba92c"/><section>
+    <title>TEST()<computeroutput>[30/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , ResolveOnObject )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a8aeecfd8e34537e8264d97d698a0d2c7"/><section>
+    <title>TEST()<computeroutput>[31/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Set )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ac2b4429e4f8f086f718e703c57b6de50"/><section>
+    <title>TEST()<computeroutput>[32/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Set_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a4c28fc4ad671b1a34e3ade5fd36e8035"/><section>
+    <title>TEST()<computeroutput>[33/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , SetValueByPointer_Pointer )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a534f2b97e331a4ee1b296ef72893c29a"/><section>
+    <title>TEST()<computeroutput>[34/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , SetValueByPointer_Pointer_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a0d55e9b601e8e23d9cad6c0e53077b2f"/><section>
+    <title>TEST()<computeroutput>[35/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , SetValueByPointer_String )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ae3cce0506001378eccfd9882c3829c2a"/><section>
+    <title>TEST()<computeroutput>[36/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , SetValueByPointer_String_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a42d16691830cb00339e59301ea2b7c8a"/><section>
+    <title>TEST()<computeroutput>[37/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Stringify )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a850b5ef6bb119da1eaec4bfb06bd3a83"/><section>
+    <title>TEST()<computeroutput>[38/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Swap )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a23f3598a2934146d519ad83c8ad733cc"/><section>
+    <title>TEST()<computeroutput>[39/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Swap_Value )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1a9105da16375cc70494a9b4c5fefe7f1f"/><section>
+    <title>TEST()<computeroutput>[40/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , Swap_Value_NoAllocator )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1afeb479140b7555fae2822585794ffc9f"/><section>
+    <title>TEST()<computeroutput>[41/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , <link linkend="_pointer_8h_1a33c56cdd1034a750112e81df6c4e653a">SwapValueByPointer</link> )</computeroutput></para></section>
+<anchor xml:id="_pointertest_8cpp_1ae77ef998f1d9c1e2fad3bd688faa422f"/><section>
+    <title>TEST()<computeroutput>[42/42]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>pointertest.cpp</secondary></indexterm>
+<indexterm><primary>pointertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a0e5c49dba7ec654cdda5735347c00397">Pointer</link> , SwapValueByPointer_NoAllocator )</computeroutput></para></section>
+</section>
+</section>

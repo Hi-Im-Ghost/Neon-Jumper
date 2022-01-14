@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="classrapidjson_1_1_allocator" kind="class" language="C++" prot="public">
+    <compoundname>rapidjson::Allocator</compoundname>
+    <includes refid="allocators_8h" local="no">allocators.h</includes>
+    <briefdescription>
+<para>Concept for allocating, resizing and freeing memory block. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Note that <ref refid="allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf" kindref="member">Malloc()</ref> and <ref refid="allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223" kindref="member">Realloc()</ref> are non-static but <ref refid="allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e" kindref="member">Free()</ref> is static.</para>
+<para>So if an allocator need to support <ref refid="allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e" kindref="member">Free()</ref>, it needs to put its pointer in the header of memory block.</para>
+<para><programlisting><codeline><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="classrapidjson_1_1_allocator" kindref="compound">Allocator</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>const<sp/>bool<sp/>kNeedFree;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Allocate<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>size<sp/>of<sp/>the<sp/>memory<sp/>block<sp/>in<sp/>bytes.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\returns<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/><ref refid="allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf" kindref="member">Malloc</ref>(size_t<sp/>size);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Resize<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>originalPtr<sp/>The<sp/>pointer<sp/>to<sp/>current<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>originalSize<sp/>The<sp/>current<sp/>size<sp/>in<sp/>bytes.<sp/>(Design<sp/>issue:<sp/>since<sp/>some<sp/>allocator<sp/>may<sp/>not<sp/>book-keep<sp/>this,<sp/>explicitly<sp/>pass<sp/>to<sp/>it<sp/>can<sp/>save<sp/>memory.)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>newSize<sp/>the<sp/>new<sp/>size<sp/>in<sp/>bytes.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/><ref refid="allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223" kindref="member">Realloc</ref>(void*<sp/>originalPtr,<sp/>size_t<sp/>originalSize,<sp/>size_t<sp/>newSize);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Free<sp/>a<sp/>memory<sp/>block.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>\param<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>void<sp/><ref refid="allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e" kindref="member">Free</ref>(void<sp/>*ptr);</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting> </para>
+    </detaileddescription>
+    <location file="src/rapidjson/include/rapidjson/allocators.h" line="32" column="1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

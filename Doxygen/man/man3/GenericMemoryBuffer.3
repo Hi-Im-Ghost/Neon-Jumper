@@ -1,0 +1,128 @@
+.TH "GenericMemoryBuffer< Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericMemoryBuffer< Allocator > \- Represents an in-memory output byte stream\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memorybuffer\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef char \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericMemoryBuffer\fP (\fBAllocator\fP *allocator=0, size_t capacity=\fBkDefaultCapacity\fP)"
+.br
+.ti -1c
+.RI "void \fBPut\fP (\fBCh\fP c)"
+.br
+.ti -1c
+.RI "void \fBFlush\fP ()"
+.br
+.ti -1c
+.RI "void \fBClear\fP ()"
+.br
+.ti -1c
+.RI "void \fBShrinkToFit\fP ()"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBPush\fP (size_t count)"
+.br
+.ti -1c
+.RI "void \fBPop\fP (size_t count)"
+.br
+.ti -1c
+.RI "const \fBCh\fP * \fBGetBuffer\fP () const"
+.br
+.ti -1c
+.RI "size_t \fBGetSize\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBinternal::Stack\fP< \fBAllocator\fP > \fBstack_\fP"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkDefaultCapacity\fP = 256"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename \fBAllocator\fP = CrtAllocator>
+.br
+struct GenericMemoryBuffer< Allocator >"Represents an in-memory output byte stream\&. 
+
+This class is mainly for being wrapped by \fBEncodedOutputStream\fP or \fBAutoUTFOutputStream\fP\&.
+.PP
+It is similar to FileWriteBuffer but the destination is an in-memory buffer instead of a file\&.
+.PP
+Differences between MemoryBuffer and StringBuffer:
+.IP "1." 4
+StringBuffer has Encoding but MemoryBuffer is only a byte buffer\&.
+.IP "2." 4
+\fBStringBuffer::GetString()\fP returns a null-terminated string\&. \fBMemoryBuffer::GetBuffer()\fP returns a buffer without terminator\&.
+.PP
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIAllocator\fP type for allocating memory buffer\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+implements Stream concept 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> typedef char \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Ch"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> \fBGenericMemoryBuffer\fP< \fBAllocator\fP >\fB::GenericMemoryBuffer\fP (\fBAllocator\fP * allocator = \fC0\fP, size_t capacity = \fC\fBkDefaultCapacity\fP\fP)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> void \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Clear ()\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> void \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Flush ()\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> const \fBCh\fP * \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::GetBuffer () const\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> size_t \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::GetSize () const\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> void \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Pop (size_t count)\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP * \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Push (size_t count)\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> void \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::Put (\fBCh\fP c)\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> void \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::ShrinkToFit ()\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> const size_t \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::kDefaultCapacity = 256\fC [static]\fP"
+
+.SS "template<typename \fBAllocator\fP  = CrtAllocator> \fBinternal::Stack\fP<\fBAllocator\fP> \fBGenericMemoryBuffer\fP< \fBAllocator\fP >::stack_\fC [mutable]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

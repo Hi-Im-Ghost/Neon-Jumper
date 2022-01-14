@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_ostreamwrapper_8h_source" xml:lang="en-US">
+<title>ostreamwrapper.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/ostreamwrapper.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_OSTREAMWRAPPER_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_OSTREAMWRAPPER_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stream_8h">stream.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&lt;iosfwd&gt;</emphasis>
+20 
+21 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+22 RAPIDJSON_DIAG_PUSH
+23 RAPIDJSON_DIAG_OFF(padded)
+24 <emphasis role="preprocessor">#endif</emphasis>
+25 
+26 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+27 
+29 
+44 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;StreamType&gt;
+45 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper</link>&#32;{
+46 <emphasis role="keyword">public</emphasis>:
+47 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;StreamType::char_type&#32;<link linkend="_class_basic_o_stream_wrapper_1aafc6276f1f5cc0b8d45d137584d380bb">Ch</link>;
+48 &#32;&#32;&#32;&#32;<link linkend="_class_basic_o_stream_wrapper_1a067a516c13b7c9d4dacef598d32779ef">BasicOStreamWrapper</link>(StreamType&amp;&#32;stream)&#32;:&#32;stream_(stream)&#32;{}
+49 
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a7d3ba9d651fbe27fe05387f512154ea8">Put</link>(<link linkend="_class_basic_o_stream_wrapper_1aafc6276f1f5cc0b8d45d137584d380bb">Ch</link>&#32;c)&#32;{
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stream_.put(c);
+52 &#32;&#32;&#32;&#32;}
+53 
+54 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a1c48a8b7520b0ab6ca34e665b928b56d">Flush</link>()&#32;{
+55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stream_.flush();
+56 &#32;&#32;&#32;&#32;}
+57 
+58 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Not&#32;implemented</emphasis>
+59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a6dc18ded82487d41a2d123e21a9e050b">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+60 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a54be63e8d24f4d82329b860a907f65fe">Take</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+61 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a62f214649fbfb8380a69fe92b864a61b">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+62 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_class_basic_o_stream_wrapper_1a730569bd680f2f08ee71b891ebea101a">PutBegin</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+63 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper_1a1da108e43a5a517c4484821fced1fca0">PutEnd</link>(<emphasis role="keywordtype">char</emphasis>*)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+64 
+65 <emphasis role="keyword">private</emphasis>:
+66 &#32;&#32;&#32;&#32;<link linkend="_class_basic_o_stream_wrapper_1a067a516c13b7c9d4dacef598d32779ef">BasicOStreamWrapper</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper</link>&amp;);
+67 &#32;&#32;&#32;&#32;<link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper</link>&amp;);
+68 
+69 &#32;&#32;&#32;&#32;StreamType&amp;&#32;stream_;
+70 };
+71 
+72 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper&lt;std::ostream&gt;</link>&#32;<link linkend="_ostreamwrapper_8h_1aa8f833ae8c21c308bc48717f056ac4b6">OStreamWrapper</link>;
+73 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_basic_o_stream_wrapper">BasicOStreamWrapper&lt;std::wostream&gt;</link>&#32;<link linkend="_ostreamwrapper_8h_1a5784dd6d198cadc8a6c33d4690e3c99c">WOStreamWrapper</link>;
+74 
+75 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+76 RAPIDJSON_DIAG_POP
+77 <emphasis role="preprocessor">#endif</emphasis>
+78 
+79 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+80 
+81 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_OSTREAMWRAPPER_H_</emphasis>
+</programlisting></section>

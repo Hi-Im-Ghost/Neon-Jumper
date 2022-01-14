@@ -1,0 +1,1403 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_internals" xml:lang="en-US">
+
+<para>This section records some design and implementation details.</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Architecture">
+<title>Architecture</title>
+<section xml:id="_md_src_rapidjson_doc_internals_1autotoc_md92">
+<title>SAX and DOM</title>
+
+<para>The basic relationships of SAX and DOM is shown in the following UML diagram.</para>
+
+<para></para>
+
+<para>The core of the relationship is the <computeroutput>Handler</computeroutput> concept. From the SAX side, <computeroutput>Reader</computeroutput> parses a JSON from a stream and publish events to a <computeroutput>Handler</computeroutput>. <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> implements the <computeroutput>Handler</computeroutput> concept to handle the same set of events. From the DOM side, <computeroutput>Document</computeroutput> implements the <computeroutput>Handler</computeroutput> concept to build a DOM according to the events. <computeroutput>Value</computeroutput> supports a <computeroutput>Value::Accept(Handler&amp;)</computeroutput> function, which traverses the DOM to publish events.</para>
+
+<para>With this design, SAX is not dependent on DOM. Even <computeroutput>Reader</computeroutput> and <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> have no dependencies between them. This provides flexibility to chain event publisher and handlers. Besides, <computeroutput>Value</computeroutput> does not depends on SAX as well. So, in addition to stringify a DOM to JSON, user may also stringify it to a XML writer, or do anything else.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_1autotoc_md93">
+<title>Utility Classes</title>
+
+<para>Both SAX and DOM APIs depends on 3 additional concepts: <computeroutput>Allocator</computeroutput>, <computeroutput>Encoding</computeroutput> and <computeroutput>Stream</computeroutput>. Their inheritance hierarchy is shown as below.</para>
+
+<para></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Value">
+<title>Value</title>
+
+<para><computeroutput>Value</computeroutput> (actually a typedef of <computeroutput><link linkend="_class_generic_value">GenericValue</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;&gt;</computeroutput>) is the core of DOM API. This section describes the design of it.</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1DataLayout">
+<title>Data Layout</title>
+
+<para><computeroutput>Value</computeroutput> is a <link xlink:href="http://en.wikipedia.org/wiki/Variant_type">variant type</link>. In RapidJSON&apos;s context, an instance of <computeroutput>Value</computeroutput> can contain 1 of 6 JSON value types. This is possible by using <computeroutput>union</computeroutput>. Each <computeroutput>Value</computeroutput> contains two members: <computeroutput>union Data data_</computeroutput> and a<computeroutput>unsigned flags_</computeroutput>. The <computeroutput>flags_</computeroutput> indicates the JSON type, and also additional information.</para>
+
+<para>The following tables show the data layout of each type. The 32-bit/64-bit columns indicates the size of the field in bytes.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Null   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNullType kNullFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Bool   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kBoolType</computeroutput> (either <computeroutput>kTrueFlag</computeroutput> or <computeroutput>kFalseFlag</computeroutput>)   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>String   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Ch* str</computeroutput>   </para>
+</entry><entry>
+<para>Pointer to the string (may own)   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType length</computeroutput>   </para>
+</entry><entry>
+<para>Length of string   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Object   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Member* members</computeroutput>   </para>
+</entry><entry>
+<para>Pointer to array of members (owned)   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry>
+<para>Number of members   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry>
+<para>Capacity of members   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kObjectType kObjectFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Array   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Value* values</computeroutput>   </para>
+</entry><entry>
+<para>Pointer to array of values (owned)   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry>
+<para>Number of values   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry>
+<para>Capacity of values   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kArrayType kArrayFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Int)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>int i</computeroutput>   </para>
+</entry><entry>
+<para>32-bit signed integer   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(zero padding)   </para>
+</entry><entry>
+<para>0   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kIntFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (UInt)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned u</computeroutput>   </para>
+</entry><entry>
+<para>32-bit unsigned integer   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(zero padding)   </para>
+</entry><entry>
+<para>0   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kUintFlag kUint64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Int64)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>int64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>64-bit signed integer   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Uint64)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>64-bit unsigned integer   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Double)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>Double precision floating-point   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>(unused)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kDoubleFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>Here are some notes:<itemizedlist>
+<listitem>
+<para>To reduce memory consumption for 64-bit architecture, <computeroutput>SizeType</computeroutput> is typedef as <computeroutput>unsigned</computeroutput> instead of <computeroutput>size_t</computeroutput>.</para>
+</listitem><listitem>
+<para>Zero padding for 32-bit number may be placed after or before the actual type, according to the endianness. This makes possible for interpreting a 32-bit integer as a 64-bit integer, without any conversion.</para>
+</listitem><listitem>
+<para>An <computeroutput>Int</computeroutput> is always an <computeroutput>Int64</computeroutput>, but the converse is not always true.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Flags">
+<title>Flags</title>
+
+<para>The 32-bit <computeroutput>flags_</computeroutput> contains both JSON type and other additional information. As shown in the above tables, each JSON type contains redundant <computeroutput>kXXXType</computeroutput> and <computeroutput>kXXXFlag</computeroutput>. This design is for optimizing the operation of testing bit-flags (<computeroutput>IsNumber()</computeroutput>) and obtaining a sequential number for each type (<computeroutput>GetType()</computeroutput>).</para>
+
+<para>String has two optional flags. <computeroutput>kCopyFlag</computeroutput> means that the string owns a copy of the string. <computeroutput>kInlineStrFlag</computeroutput> means using <link linkend="_md_src_rapidjson_doc_internals_zh_cn_1ShortString">Short-String Optimization</link>.</para>
+
+<para>Number is a bit more complicated. For normal integer values, it can contains <computeroutput>kIntFlag</computeroutput>, <computeroutput>kUintFlag</computeroutput>, <computeroutput>kInt64Flag</computeroutput> and/or <computeroutput>kUint64Flag</computeroutput>, according to the range of the integer. For numbers with fraction, and integers larger than 64-bit range, they will be stored as <computeroutput>double</computeroutput> with <computeroutput>kDoubleFlag</computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ShortString">
+<title>Short-String Optimization</title>
+
+<para><link xlink:href="https://github.com/Kosta-Github">Kosta</link> provided a very neat short-string optimization. The optimization idea is given as follow. Excluding the <computeroutput>flags_</computeroutput>, a <computeroutput>Value</computeroutput> has 12 or 16 bytes (32-bit or 64-bit) for storing actual data. Instead of storing a pointer to a string, it is possible to store short strings in these space internally. For encoding with 1-byte character type (e.g. <computeroutput>char</computeroutput>), it can store maximum 11 or 15 characters string inside the <computeroutput>Value</computeroutput> type.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>ShortString (Ch=char)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32-bit   </para>
+</entry><entry align='center'>
+<para>64-bit    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Ch str[MaxChars]</computeroutput>   </para>
+</entry><entry>
+<para>String buffer   </para>
+</entry><entry align='center'>
+<para>11   </para>
+</entry><entry align='center'>
+<para>15    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>Ch invLength</computeroutput>   </para>
+</entry><entry>
+<para>MaxChars - Length   </para>
+</entry><entry align='center'>
+<para>1   </para>
+</entry><entry align='center'>
+<para>1    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>A special technique is applied. Instead of storing the length of string directly, it stores (MaxChars - length). This make it possible to store 11 characters with trailing <computeroutput>\0</computeroutput>.</para>
+
+<para>This optimization can reduce memory usage for copy-string. It can also improve cache-coherence thus improve runtime performance.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1InternalAllocator">
+<title>Allocator</title>
+
+<para><computeroutput>Allocator</computeroutput> is a concept in RapidJSON: <literallayout><computeroutput>concept&#32;Allocator&#32;{
+&#32;&#32;&#32;&#32;static&#32;const&#32;bool&#32;kNeedFree;&#32;&#32;&#32;&#32;//!&lt;&#32;Whether&#32;this&#32;allocator&#32;needs&#32;to&#32;call&#32;Free().
+
+&#32;&#32;&#32;&#32;//&#32;Allocate&#32;a&#32;memory&#32;block.
+&#32;&#32;&#32;&#32;//&#32;\param&#32;size&#32;of&#32;the&#32;memory&#32;block&#32;in&#32;bytes.
+&#32;&#32;&#32;&#32;//&#32;\returns&#32;pointer&#32;to&#32;the&#32;memory&#32;block.
+&#32;&#32;&#32;&#32;void*&#32;Malloc(size_t&#32;size);
+
+&#32;&#32;&#32;&#32;//&#32;Resize&#32;a&#32;memory&#32;block.
+&#32;&#32;&#32;&#32;//&#32;\param&#32;originalPtr&#32;The&#32;pointer&#32;to&#32;current&#32;memory&#32;block.&#32;Null&#32;pointer&#32;is&#32;permitted.
+&#32;&#32;&#32;&#32;//&#32;\param&#32;originalSize&#32;The&#32;current&#32;size&#32;in&#32;bytes.&#32;(Design&#32;issue:&#32;since&#32;some&#32;allocator&#32;may&#32;not&#32;book-keep&#32;this,&#32;explicitly&#32;pass&#32;to&#32;it&#32;can&#32;save&#32;memory.)
+&#32;&#32;&#32;&#32;//&#32;\param&#32;newSize&#32;the&#32;new&#32;size&#32;in&#32;bytes.
+&#32;&#32;&#32;&#32;void*&#32;Realloc(void*&#32;originalPtr,&#32;size_t&#32;originalSize,&#32;size_t&#32;newSize);
+
+&#32;&#32;&#32;&#32;//&#32;Free&#32;a&#32;memory&#32;block.
+&#32;&#32;&#32;&#32;//&#32;\param&#32;pointer&#32;to&#32;the&#32;memory&#32;block.&#32;Null&#32;pointer&#32;is&#32;permitted.
+&#32;&#32;&#32;&#32;static&#32;void&#32;Free(void&#32;*ptr);
+};
+</computeroutput></literallayout></para>
+
+<para>Note that <computeroutput><link linkend="_allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf">Malloc()</link></computeroutput> and <computeroutput><link linkend="_allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223">Realloc()</link></computeroutput> are member functions but <computeroutput><link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Free()</link></computeroutput> is static member function.</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1MemoryPoolAllocator">
+<title>MemoryPoolAllocator</title>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> is the default allocator for DOM. It allocate but do not free memory. This is suitable for building a DOM tree.</para>
+
+<para>Internally, it allocates chunks of memory from the base allocator (by default <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>) and stores the chunks as a singly linked list. When user requests an allocation, it allocates memory from the following order:</para>
+
+<para><orderedlist>
+<listitem>
+<para>User supplied buffer if it is available. (See <link linkend="_dom_8md">User Buffer section in DOM</link>)</para>
+</listitem><listitem>
+<para>If user supplied buffer is full, use the current memory chunk.</para>
+</listitem><listitem>
+<para>If the current block is full, allocate a new block of memory.</para>
+</listitem></orderedlist>
+</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ParsingOptimization">
+<title>Parsing Optimization</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1SkipwhitespaceWithSIMD">
+<title>Skip Whitespaces with SIMD</title>
+
+<para>When parsing JSON from a stream, the parser need to skip 4 whitespace characters:</para>
+
+<para><orderedlist>
+<listitem>
+<para>Space (<computeroutput>U+0020</computeroutput>)</para>
+</listitem><listitem>
+<para>Character Tabulation (<computeroutput>U+000B</computeroutput>)</para>
+</listitem><listitem>
+<para>Line Feed (<computeroutput>U+000A</computeroutput>)</para>
+</listitem><listitem>
+<para>Carriage Return (<computeroutput>U+000D</computeroutput>)</para>
+</listitem></orderedlist>
+</para>
+
+<para>A simple implementation will be simply: <literallayout><computeroutput>void&#32;SkipWhitespace(InputStream&amp;&#32;s)&#32;{
+&#32;&#32;&#32;&#32;while&#32;(s.Peek()&#32;==&#32;&apos;&#32;&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\n&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\r&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\t&apos;)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s.Take();
+}
+</computeroutput></literallayout></para>
+
+<para>However, this requires 4 comparisons and a few branching for each character. This was found to be a hot spot.</para>
+
+<para>To accelerate this process, SIMD was applied to compare 16 characters with 4 white spaces for each iteration. Currently RapidJSON supports SSE2, SSE4.2 and ARM Neon instructions for this. And it is only activated for UTF-8 memory streams, including string stream or <emphasis>in situ</emphasis> parsing.</para>
+
+<para>To enable this optimization, need to define <computeroutput>RAPIDJSON_SSE2</computeroutput>, <computeroutput>RAPIDJSON_SSE42</computeroutput> or <computeroutput>RAPIDJSON_NEON</computeroutput> before including <computeroutput><link linkend="_rapidjson_8h">rapidjson.h</link></computeroutput>. Some compilers can detect the setting, as in <computeroutput><link linkend="_perftest_8h">perftest.h</link></computeroutput>:</para>
+
+<para><literallayout><computeroutput>//&#32;__SSE2__&#32;and&#32;__SSE4_2__&#32;are&#32;recognized&#32;by&#32;gcc,&#32;clang,&#32;and&#32;the&#32;Intel&#32;compiler.
+//&#32;We&#32;use&#32;-march=native&#32;with&#32;gmake&#32;to&#32;enable&#32;-msse2&#32;and&#32;-msse4.2,&#32;if&#32;supported.
+//&#32;Likewise,&#32;__ARM_NEON&#32;is&#32;used&#32;to&#32;detect&#32;Neon.
+#if&#32;defined(__SSE4_2__)
+#&#32;&#32;define&#32;RAPIDJSON_SSE42
+#elif&#32;defined(__SSE2__)
+#&#32;&#32;define&#32;RAPIDJSON_SSE2
+#elif&#32;defined(__ARM_NEON)
+#&#32;&#32;define&#32;RAPIDJSON_NEON
+#endif
+</computeroutput></literallayout></para>
+
+<para>Note that, these are compile-time settings. Running the executable on a machine without such instruction set support will make it crash.</para>
+<section xml:id="_md_src_rapidjson_doc_internals_1autotoc_md94">
+<title>Page boundary issue</title>
+
+<para>In an early version of RapidJSON, <link xlink:href="https://code.google.com/archive/p/rapidjson/issues/104">an issue</link> reported that the <computeroutput>SkipWhitespace_SIMD()</computeroutput> causes crash very rarely (around 1 in 500,000). After investigation, it is suspected that <computeroutput>_mm_loadu_si128()</computeroutput> accessed bytes after &#8216;&#8217;\0&apos;`, and across a protected page boundary.</para>
+
+<para>In <link xlink:href="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">Intel® 64 and IA-32 Architectures Optimization Reference Manual</link>, section 10.2.1:</para>
+
+<para><blockquote>
+<para>&#8205;To support algorithms requiring unaligned 128-bit SIMD memory accesses, memory buffer allocation by a caller function should consider adding some pad space so that a callee function can safely use the address pointer safely with unaligned 128-bit SIMD memory operations. The minimal padding size should be the width of the SIMD register that might be used in conjunction with unaligned SIMD memory access. </para>
+</blockquote>This is not feasible as RapidJSON should not enforce such requirement.</para>
+
+<para>To fix this issue, currently the routine process bytes up to the next aligned address. After tha, use aligned read to perform SIMD processing. Also see <link xlink:href="https://github.com/Tencent/rapidjson/issues/85">#85</link>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1LocalStreamCopy">
+<title>Local Stream Copy</title>
+
+<para>During optimization, it is found that some compilers cannot localize some member data access of streams into local variables or registers. Experimental results show that for some stream types, making a copy of the stream and used it in inner-loop can improve performance. For example, the actual (non-SIMD) implementation of <computeroutput><link linkend="_reader_8h_1a60338858b2582eca23f3e509a2d82e0e">SkipWhitespace()</link></computeroutput> is implemented as:</para>
+
+<para><literallayout><computeroutput>template&lt;typename&#32;InputStream&gt;
+void&#32;SkipWhitespace(InputStream&amp;&#32;is)&#32;{
+&#32;&#32;&#32;&#32;internal::StreamLocalCopy&lt;InputStream&gt;&#32;copy(is);
+&#32;&#32;&#32;&#32;InputStream&amp;&#32;s(copy.s);
+
+&#32;&#32;&#32;&#32;while&#32;(s.Peek()&#32;==&#32;&apos;&#32;&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\n&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\r&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\t&apos;)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s.Take();
+}
+</computeroutput></literallayout></para>
+
+<para>Depending on the traits of stream, <computeroutput>StreamLocalCopy</computeroutput> will make (or not make) a copy of the stream object, use it locally and copy the states of stream back to the original stream.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ParsingDouble">
+<title>Parsing to Double</title>
+
+<para>Parsing string into <computeroutput>double</computeroutput> is difficult. The standard library function <computeroutput>strtod()</computeroutput> can do the job but it is slow. By default, the parsers use normal precision setting. This has has maximum 3 <link xlink:href="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</link> error and implemented in <computeroutput><link linkend="_namespaceinternal_1a9e5fac4695310f09892fe52b1d24ab19">internal::StrtodNormalPrecision()</link></computeroutput>.</para>
+
+<para>When using <computeroutput>kParseFullPrecisionFlag</computeroutput>, the parsers calls <computeroutput><link linkend="_namespaceinternal_1a6109c750ee4707d4f71de280816a1a00">internal::StrtodFullPrecision()</link></computeroutput> instead, and this function actually implemented 3 versions of conversion methods.<orderedlist>
+<listitem>
+<para><link xlink:href="http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/">Fast-Path</link>.</para>
+</listitem><listitem>
+<para>Custom DIY-FP implementation as in <link xlink:href="https://github.com/floitsch/double-conversion">double-conversion</link>.</para>
+</listitem><listitem>
+<para>Big Integer Method as in (Clinger, William D. How to read floating point numbers accurately. Vol. 25. No. 6. ACM, 1990).</para>
+</listitem></orderedlist>
+</para>
+
+<para>If the first conversion methods fail, it will try the second, and so on.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1GenerationOptimization">
+<title>Generation Optimization</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1itoa">
+<title>Integer-to-String conversion</title>
+
+<para>The naive algorithm for integer-to-string conversion involves division per each decimal digit. We have implemented various implementations and evaluated them in <link xlink:href="https://github.com/miloyip/itoa-benchmark">itoa-benchmark</link>.</para>
+
+<para>Although SSE2 version is the fastest but the difference is minor by comparing to the first running-up <computeroutput>branchlut</computeroutput>. And <computeroutput>branchlut</computeroutput> is pure C++ implementation so we adopt <computeroutput>branchlut</computeroutput> in RapidJSON.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1dtoa">
+<title>Double-to-String conversion</title>
+
+<para>Originally RapidJSON uses <computeroutput>snprintf(..., ..., &quot;%g&quot;)</computeroutput> to achieve double-to-string conversion. This is not accurate as the default precision is 6. Later we also find that this is slow and there is an alternative.</para>
+
+<para>Google&apos;s V8 <link xlink:href="https://github.com/floitsch/double-conversion">double-conversion</link> implemented a newer, fast algorithm called Grisu3 (Loitsch, Florian. &quot;Printing floating-point numbers quickly and accurately with integers.&quot; ACM Sigplan Notices 45.6 (2010): 233-243.).</para>
+
+<para>However, since it is not header-only so that we implemented a header-only version of Grisu2. This algorithm guarantees that the result is always accurate. And in most of cases it produces the shortest (optimal) string representation.</para>
+
+<para>The header-only conversion function has been evaluated in <link xlink:href="https://github.com/miloyip/dtoa-benchmark">dtoa-benchmark</link>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Parser">
+<title>Parser</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParser">
+<title>Iterative Parser</title>
+
+<para>The iterative parser is a recursive descent LL(1) parser implemented in a non-recursive manner.</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserGrammar">
+<title>Grammar</title>
+
+<para>The grammar used for this parser is based on strict JSON syntax: <literallayout><computeroutput>S&#32;-&gt;&#32;array&#32;|&#32;object
+array&#32;-&gt;&#32;[&#32;values&#32;]
+object&#32;-&gt;&#32;{&#32;members&#32;}
+values&#32;-&gt;&#32;non-empty-values&#32;|&#32;ε
+non-empty-values&#32;-&gt;&#32;value&#32;addition-values
+addition-values&#32;-&gt;&#32;ε&#32;|&#32;,&#32;non-empty-values
+members&#32;-&gt;&#32;non-empty-members&#32;|&#32;ε
+non-empty-members&#32;-&gt;&#32;member&#32;addition-members
+addition-members&#32;-&gt;&#32;ε&#32;|&#32;,&#32;non-empty-members
+member&#32;-&gt;&#32;STRING&#32;:&#32;value
+value&#32;-&gt;&#32;STRING&#32;|&#32;NUMBER&#32;|&#32;NULL&#32;|&#32;BOOLEAN&#32;|&#32;object&#32;|&#32;array
+</computeroutput></literallayout></para>
+
+<para>Note that left factoring is applied to non-terminals <computeroutput>values</computeroutput> and <computeroutput>members</computeroutput> to make the grammar be LL(1).</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserParsingTable">
+<title>Parsing Table</title>
+
+<para>Based on the grammar, we can construct the FIRST and FOLLOW set.</para>
+
+<para>The FIRST set of non-terminals is listed below:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>FIRST    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>[    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para>{    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>ε STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para>ε COMMA    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para>ε STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para>ε COMMA    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para>STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>[ {    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para>STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>STRING NUMBER NULL BOOLEAN { [   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>The FOLLOW set is listed below:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>FOLLOW    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>$    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>, $ } ]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para>, $ } ]    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para>, }    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>, } ]   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>Finally the parsing table can be constructed from FIRST and FOLLOW set:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="11" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+      <colspec colname='c5'/>
+      <colspec colname='c6'/>
+      <colspec colname='c7'/>
+      <colspec colname='c8'/>
+      <colspec colname='c9'/>
+      <colspec colname='c10'/>
+      <colspec colname='c11'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>[   </para>
+</entry><entry align='center'>
+<para>{   </para>
+</entry><entry align='center'>
+<para>,   </para>
+</entry><entry align='center'>
+<para>:   </para>
+</entry><entry align='center'>
+<para>]   </para>
+</entry><entry align='center'>
+<para>}   </para>
+</entry><entry align='center'>
+<para>STRING   </para>
+</entry><entry align='center'>
+<para>NUMBER   </para>
+</entry><entry align='center'>
+<para>NULL   </para>
+</entry><entry align='center'>
+<para>BOOLEAN    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>[ values ]   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>{ members }   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>, non-empty-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>member addition-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>, non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>STRING : value   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>STRING   </para>
+</entry><entry align='center'>
+<para>NUMBER   </para>
+</entry><entry align='center'>
+<para>NULL   </para>
+</entry><entry align='center'>
+<para>BOOLEAN   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>There is a great <link xlink:href="http://hackingoff.com/compilers/predict-first-follow-set">tool</link> for above grammar analysis.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserImplementation">
+<title>Implementation</title>
+
+<para>Based on the parsing table, a direct(or conventional) implementation that pushes the production body in reverse order while generating a production could work.</para>
+
+<para>In RapidJSON, several modifications(or adaptations to current design) are made to a direct implementation.</para>
+
+<para>First, the parsing table is encoded in a state machine in RapidJSON. States are constructed by the head and body of production. State transitions are constructed by production rules. Besides, extra states are added for productions involved with <computeroutput>array</computeroutput> and <computeroutput>object</computeroutput>. In this way the generation of array values or object members would be a single state transition, rather than several pop/push operations in the direct implementation. This also makes the estimation of stack size more easier.</para>
+
+<para>The state diagram is shown as follows:</para>
+
+<para></para>
+
+<para>Second, the iterative parser also keeps track of array&apos;s value count and object&apos;s member count in its internal stack, which may be different from a conventional implementation. </para>
+</section>
+</section>
+</section>
+</section>

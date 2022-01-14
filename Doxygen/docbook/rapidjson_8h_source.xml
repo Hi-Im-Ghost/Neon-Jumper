@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_rapidjson_8h_source" xml:lang="en-US">
+<title>rapidjson.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/rapidjson.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_RAPIDJSON_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_RAPIDJSON_H_</emphasis>
+17 
+39 <emphasis role="preprocessor">#include&#32;&lt;cstdlib&gt;</emphasis>&#32;&#32;<emphasis role="comment">//&#32;malloc(),&#32;realloc(),&#32;free(),&#32;size_t</emphasis>
+40 <emphasis role="preprocessor">#include&#32;&lt;cstring&gt;</emphasis>&#32;&#32;<emphasis role="comment">//&#32;memset(),&#32;memcpy(),&#32;memmove(),&#32;memcmp()</emphasis>
+41 
+43 <emphasis role="comment">//&#32;RAPIDJSON_VERSION_STRING</emphasis>
+44 <emphasis role="comment">//</emphasis>
+45 <emphasis role="comment">//&#32;ALWAYS&#32;synchronize&#32;the&#32;following&#32;3&#32;macros&#32;with&#32;corresponding&#32;variables&#32;in&#32;/CMakeLists.txt.</emphasis>
+46 <emphasis role="comment">//</emphasis>
+47 
+49 <emphasis role="comment">//&#32;token&#32;stringification</emphasis>
+50 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STRINGIFY(x)&#32;RAPIDJSON_DO_STRINGIFY(x)</emphasis>
+51 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DO_STRINGIFY(x)&#32;#x</emphasis>
+52 
+53 <emphasis role="comment">//&#32;token&#32;concatenation</emphasis>
+54 <emphasis role="preprocessor">#define&#32;RAPIDJSON_JOIN(X,&#32;Y)&#32;RAPIDJSON_DO_JOIN(X,&#32;Y)</emphasis>
+55 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DO_JOIN(X,&#32;Y)&#32;RAPIDJSON_DO_JOIN2(X,&#32;Y)</emphasis>
+56 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DO_JOIN2(X,&#32;Y)&#32;X##Y</emphasis>
+58 
+75 <emphasis role="preprocessor">#define&#32;RAPIDJSON_MAJOR_VERSION&#32;1</emphasis>
+76 <emphasis role="preprocessor">#define&#32;RAPIDJSON_MINOR_VERSION&#32;1</emphasis>
+77 <emphasis role="preprocessor">#define&#32;RAPIDJSON_PATCH_VERSION&#32;0</emphasis>
+78 <emphasis role="preprocessor">#define&#32;RAPIDJSON_VERSION_STRING&#32;\</emphasis>
+79 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;RAPIDJSON_STRINGIFY(RAPIDJSON_MAJOR_VERSION.RAPIDJSON_MINOR_VERSION.RAPIDJSON_PATCH_VERSION)</emphasis>
+80 
+82 <emphasis role="comment">//&#32;RAPIDJSON_NAMESPACE_(BEGIN|END)</emphasis>
+117 <emphasis role="comment"></emphasis><emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NAMESPACE</emphasis>
+118 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NAMESPACE&#32;rapidjson</emphasis>
+119 <emphasis role="preprocessor">#endif</emphasis>
+120 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NAMESPACE_BEGIN</emphasis>
+121 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NAMESPACE_BEGIN&#32;namespace&#32;RAPIDJSON_NAMESPACE&#32;{</emphasis>
+122 <emphasis role="preprocessor">#endif</emphasis>
+123 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NAMESPACE_END</emphasis>
+124 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NAMESPACE_END&#32;}</emphasis>
+125 <emphasis role="preprocessor">#endif</emphasis>
+126 
+128 <emphasis role="comment">//&#32;__cplusplus&#32;macro</emphasis>
+129 
+131 
+132 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)</emphasis>
+133 <emphasis role="preprocessor">#define&#32;RAPIDJSON_CPLUSPLUS&#32;_MSVC_LANG</emphasis>
+134 <emphasis role="preprocessor">#else</emphasis>
+135 <emphasis role="preprocessor">#define&#32;RAPIDJSON_CPLUSPLUS&#32;__cplusplus</emphasis>
+136 <emphasis role="preprocessor">#endif</emphasis>
+137 
+139 
+141 <emphasis role="comment">//&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+142 
+143 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+144 <emphasis role="preprocessor">#ifdef&#32;RAPIDJSON_DOXYGEN_RUNNING</emphasis>
+145 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_STDSTRING&#32;1&#32;</emphasis><emphasis role="comment">//&#32;force&#32;generation&#32;of&#32;documentation</emphasis>
+146 <emphasis role="preprocessor">#else</emphasis>
+147 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_STDSTRING&#32;0&#32;</emphasis><emphasis role="comment">//&#32;no&#32;std::string&#32;support&#32;by&#32;default</emphasis>
+148 <emphasis role="preprocessor">#endif</emphasis>
+159 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;!defined(RAPIDJSON_HAS_STDSTRING)</emphasis>
+160 
+161 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+162 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+163 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+164 
+166 <emphasis role="comment">//&#32;RAPIDJSON_USE_MEMBERSMAP</emphasis>
+167 
+179 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_USE_MEMBERSMAP</emphasis>
+180 <emphasis role="preprocessor">#define&#32;RAPIDJSON_USE_MEMBERSMAP&#32;0&#32;</emphasis><emphasis role="comment">//&#32;not&#32;by&#32;default</emphasis>
+181 <emphasis role="preprocessor">#endif</emphasis>
+182 
+184 <emphasis role="comment">//&#32;RAPIDJSON_NO_INT64DEFINE</emphasis>
+185 
+196 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NO_INT64DEFINE</emphasis>
+198 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;(_MSC_VER&#32;&lt;&#32;1800)&#32;&#32;</emphasis><emphasis role="comment">//&#32;Visual&#32;Studio&#32;2013</emphasis>
+199 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stdint_8h">msinttypes/stdint.h</link>&quot;</emphasis>
+200 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_inttypes_8h">msinttypes/inttypes.h</link>&quot;</emphasis>
+201 <emphasis role="preprocessor">#else</emphasis>
+202 <emphasis role="comment">//&#32;Other&#32;compilers&#32;should&#32;have&#32;this.</emphasis>
+203 <emphasis role="preprocessor">#include&#32;&lt;<link linkend="_stdint_8h">stdint.h</link>&gt;</emphasis>
+204 <emphasis role="preprocessor">#include&#32;&lt;<link linkend="_inttypes_8h">inttypes.h</link>&gt;</emphasis>
+205 <emphasis role="preprocessor">#endif</emphasis>
+207 <emphasis role="preprocessor">#ifdef&#32;RAPIDJSON_DOXYGEN_RUNNING</emphasis>
+208 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NO_INT64DEFINE</emphasis>
+209 <emphasis role="preprocessor">#endif</emphasis>
+210 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_NO_INT64TYPEDEF</emphasis>
+211 
+213 <emphasis role="comment">//&#32;RAPIDJSON_FORCEINLINE</emphasis>
+214 
+215 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_FORCEINLINE</emphasis>
+217 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;defined(NDEBUG)</emphasis>
+218 <emphasis role="preprocessor">#define&#32;RAPIDJSON_FORCEINLINE&#32;__forceinline</emphasis>
+219 <emphasis role="preprocessor">#elif&#32;defined(__GNUC__)&#32;&amp;&amp;&#32;__GNUC__&#32;&gt;=&#32;4&#32;&amp;&amp;&#32;defined(NDEBUG)</emphasis>
+220 <emphasis role="preprocessor">#define&#32;RAPIDJSON_FORCEINLINE&#32;__attribute__((always_inline))</emphasis>
+221 <emphasis role="preprocessor">#else</emphasis>
+222 <emphasis role="preprocessor">#define&#32;RAPIDJSON_FORCEINLINE</emphasis>
+223 <emphasis role="preprocessor">#endif</emphasis>
+225 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_FORCEINLINE</emphasis>
+226 
+228 <emphasis role="comment">//&#32;RAPIDJSON_ENDIAN</emphasis>
+229 <emphasis role="preprocessor">#define&#32;RAPIDJSON_LITTLEENDIAN&#32;&#32;0&#32;&#32;&#32;</emphasis>
+230 <emphasis role="preprocessor">#define&#32;RAPIDJSON_BIGENDIAN&#32;&#32;&#32;&#32;&#32;1&#32;&#32;&#32;</emphasis>
+231 
+233 
+245 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ENDIAN</emphasis>
+246 <emphasis role="comment">//&#32;Detect&#32;with&#32;GCC&#32;4.6&apos;s&#32;macro</emphasis>
+247 <emphasis role="preprocessor">#&#32;&#32;ifdef&#32;__BYTE_ORDER__</emphasis>
+248 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;if&#32;__BYTE_ORDER__&#32;==&#32;__ORDER_LITTLE_ENDIAN__</emphasis>
+249 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_LITTLEENDIAN</emphasis>
+250 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;elif&#32;__BYTE_ORDER__&#32;==&#32;__ORDER_BIG_ENDIAN__</emphasis>
+251 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_BIGENDIAN</emphasis>
+252 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;else</emphasis>
+253 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;error&#32;Unknown&#32;machine&#32;endianness&#32;detected.&#32;User&#32;needs&#32;to&#32;define&#32;RAPIDJSON_ENDIAN.</emphasis>
+254 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;endif&#32;</emphasis><emphasis role="comment">//&#32;__BYTE_ORDER__</emphasis>
+255 <emphasis role="comment">//&#32;Detect&#32;with&#32;GLIBC&apos;s&#32;endian.h</emphasis>
+256 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(__GLIBC__)</emphasis>
+257 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;include&#32;&lt;endian.h&gt;</emphasis>
+258 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;if&#32;(__BYTE_ORDER&#32;==&#32;__LITTLE_ENDIAN)</emphasis>
+259 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_LITTLEENDIAN</emphasis>
+260 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;elif&#32;(__BYTE_ORDER&#32;==&#32;__BIG_ENDIAN)</emphasis>
+261 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_BIGENDIAN</emphasis>
+262 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;else</emphasis>
+263 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;&#32;&#32;error&#32;Unknown&#32;machine&#32;endianness&#32;detected.&#32;User&#32;needs&#32;to&#32;define&#32;RAPIDJSON_ENDIAN.</emphasis>
+264 <emphasis role="preprocessor">#&#32;&#32;&#32;endif&#32;</emphasis><emphasis role="comment">//&#32;__GLIBC__</emphasis>
+265 <emphasis role="comment">//&#32;Detect&#32;with&#32;_LITTLE_ENDIAN&#32;and&#32;_BIG_ENDIAN&#32;macro</emphasis>
+266 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(_LITTLE_ENDIAN)&#32;&amp;&amp;&#32;!defined(_BIG_ENDIAN)</emphasis>
+267 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_LITTLEENDIAN</emphasis>
+268 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(_BIG_ENDIAN)&#32;&amp;&amp;&#32;!defined(_LITTLE_ENDIAN)</emphasis>
+269 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_BIGENDIAN</emphasis>
+270 <emphasis role="comment">//&#32;Detect&#32;with&#32;architecture&#32;macros</emphasis>
+271 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(__sparc)&#32;||&#32;defined(__sparc__)&#32;||&#32;defined(_POWER)&#32;||&#32;defined(__powerpc__)&#32;||&#32;defined(__ppc__)&#32;||&#32;defined(__hpux)&#32;||&#32;defined(__hppa)&#32;||&#32;defined(_MIPSEB)&#32;||&#32;defined(_POWER)&#32;||&#32;defined(__s390__)</emphasis>
+272 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_BIGENDIAN</emphasis>
+273 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(__i386__)&#32;||&#32;defined(__alpha__)&#32;||&#32;defined(__ia64)&#32;||&#32;defined(__ia64__)&#32;||&#32;defined(_M_IX86)&#32;||&#32;defined(_M_IA64)&#32;||&#32;defined(_M_ALPHA)&#32;||&#32;defined(__amd64)&#32;||&#32;defined(__amd64__)&#32;||&#32;defined(_M_AMD64)&#32;||&#32;defined(__x86_64)&#32;||&#32;defined(__x86_64__)&#32;||&#32;defined(_M_X64)&#32;||&#32;defined(__bfin__)</emphasis>
+274 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_LITTLEENDIAN</emphasis>
+275 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;(defined(_M_ARM)&#32;||&#32;defined(_M_ARM64))</emphasis>
+276 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN&#32;RAPIDJSON_LITTLEENDIAN</emphasis>
+277 <emphasis role="preprocessor">#&#32;&#32;elif&#32;defined(RAPIDJSON_DOXYGEN_RUNNING)</emphasis>
+278 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;define&#32;RAPIDJSON_ENDIAN</emphasis>
+279 <emphasis role="preprocessor">#&#32;&#32;else</emphasis>
+280 <emphasis role="preprocessor">#&#32;&#32;&#32;&#32;error&#32;Unknown&#32;machine&#32;endianness&#32;detected.&#32;User&#32;needs&#32;to&#32;define&#32;RAPIDJSON_ENDIAN.&#32;&#32;&#32;</emphasis>
+281 <emphasis role="preprocessor">#&#32;&#32;endif</emphasis>
+282 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ENDIAN</emphasis>
+283 
+285 <emphasis role="comment">//&#32;RAPIDJSON_64BIT</emphasis>
+286 
+288 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_64BIT</emphasis>
+289 <emphasis role="preprocessor">#if&#32;defined(__LP64__)&#32;||&#32;(defined(__x86_64__)&#32;&amp;&amp;&#32;defined(__ILP32__))&#32;||&#32;defined(_WIN64)&#32;||&#32;defined(__EMSCRIPTEN__)</emphasis>
+290 <emphasis role="preprocessor">#define&#32;RAPIDJSON_64BIT&#32;1</emphasis>
+291 <emphasis role="preprocessor">#else</emphasis>
+292 <emphasis role="preprocessor">#define&#32;RAPIDJSON_64BIT&#32;0</emphasis>
+293 <emphasis role="preprocessor">#endif</emphasis>
+294 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_64BIT</emphasis>
+295 
+297 <emphasis role="comment">//&#32;RAPIDJSON_ALIGN</emphasis>
+298 
+300 
+306 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ALIGN</emphasis>
+307 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ALIGN(x)&#32;(((x)&#32;+&#32;static_cast&lt;size_t&gt;(7u))&#32;&amp;&#32;~static_cast&lt;size_t&gt;(7u))</emphasis>
+308 <emphasis role="preprocessor">#endif</emphasis>
+309 
+311 <emphasis role="comment">//&#32;RAPIDJSON_UINT64_C2</emphasis>
+312 
+314 
+319 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_UINT64_C2</emphasis>
+320 <emphasis role="preprocessor">#define&#32;RAPIDJSON_UINT64_C2(high32,&#32;low32)&#32;((static_cast&lt;uint64_t&gt;(high32)&#32;&lt;&lt;&#32;32)&#32;|&#32;static_cast&lt;uint64_t&gt;(low32))</emphasis>
+321 <emphasis role="preprocessor">#endif</emphasis>
+322 
+324 <emphasis role="comment">//&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION</emphasis>
+325 
+327 
+334 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION</emphasis>
+335 <emphasis role="preprocessor">#if&#32;defined(__amd64__)&#32;||&#32;defined(__amd64)&#32;||&#32;defined(__x86_64__)&#32;||&#32;defined(__x86_64)&#32;||&#32;defined(_M_X64)&#32;||&#32;defined(_M_AMD64)</emphasis>
+336 <emphasis role="preprocessor">#define&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION&#32;1</emphasis>
+337 <emphasis role="preprocessor">#else</emphasis>
+338 <emphasis role="preprocessor">#define&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION&#32;0</emphasis>
+339 <emphasis role="preprocessor">#endif</emphasis>
+340 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION</emphasis>
+341 
+342 <emphasis role="preprocessor">#if&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION&#32;==&#32;1</emphasis>
+343 <emphasis role="preprocessor">#if&#32;RAPIDJSON_64BIT&#32;!=&#32;1</emphasis>
+344 <emphasis role="preprocessor">#error&#32;RAPIDJSON_48BITPOINTER_OPTIMIZATION&#32;can&#32;only&#32;be&#32;set&#32;to&#32;1&#32;when&#32;RAPIDJSON_64BIT=1</emphasis>
+345 <emphasis role="preprocessor">#endif</emphasis>
+346 <emphasis role="preprocessor">#define&#32;RAPIDJSON_SETPOINTER(type,&#32;p,&#32;x)&#32;(p&#32;=&#32;reinterpret_cast&lt;type&#32;*&gt;((reinterpret_cast&lt;uintptr_t&gt;(p)&#32;&amp;&#32;static_cast&lt;uintptr_t&gt;(RAPIDJSON_UINT64_C2(0xFFFF0000,&#32;0x00000000)))&#32;|&#32;reinterpret_cast&lt;uintptr_t&gt;(reinterpret_cast&lt;const&#32;void*&gt;(x))))</emphasis>
+347 <emphasis role="preprocessor">#define&#32;RAPIDJSON_GETPOINTER(type,&#32;p)&#32;(reinterpret_cast&lt;type&#32;*&gt;(reinterpret_cast&lt;uintptr_t&gt;(p)&#32;&amp;&#32;static_cast&lt;uintptr_t&gt;(RAPIDJSON_UINT64_C2(0x0000FFFF,&#32;0xFFFFFFFF))))</emphasis>
+348 <emphasis role="preprocessor">#else</emphasis>
+349 <emphasis role="preprocessor">#define&#32;RAPIDJSON_SETPOINTER(type,&#32;p,&#32;x)&#32;(p&#32;=&#32;(x))</emphasis>
+350 <emphasis role="preprocessor">#define&#32;RAPIDJSON_GETPOINTER(type,&#32;p)&#32;(p)</emphasis>
+351 <emphasis role="preprocessor">#endif</emphasis>
+352 
+354 <emphasis role="comment">//&#32;RAPIDJSON_SSE2/RAPIDJSON_SSE42/RAPIDJSON_NEON/RAPIDJSON_SIMD</emphasis>
+355 
+382 <emphasis role="preprocessor">#if&#32;defined(RAPIDJSON_SSE2)&#32;||&#32;defined(RAPIDJSON_SSE42)&#32;\</emphasis>
+383 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;||&#32;defined(RAPIDJSON_NEON)&#32;||&#32;defined(RAPIDJSON_DOXYGEN_RUNNING)</emphasis>
+384 <emphasis role="preprocessor">#define&#32;RAPIDJSON_SIMD</emphasis>
+385 <emphasis role="preprocessor">#endif</emphasis>
+386 
+388 <emphasis role="comment">//&#32;RAPIDJSON_NO_SIZETYPEDEFINE</emphasis>
+389 
+390 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NO_SIZETYPEDEFINE</emphasis>
+406 <emphasis role="preprocessor">#ifdef&#32;RAPIDJSON_DOXYGEN_RUNNING</emphasis>
+407 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NO_SIZETYPEDEFINE</emphasis>
+408 <emphasis role="preprocessor">#endif</emphasis>
+409 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+411 
+415 <emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>;
+416 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+417 <emphasis role="preprocessor">#endif</emphasis>
+418 
+419 <emphasis role="comment">//&#32;always&#32;import&#32;std::size_t&#32;to&#32;rapidjson&#32;namespace</emphasis>
+420 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+421 <emphasis role="keyword">using</emphasis>&#32;std::size_t;
+422 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+423 
+425 <emphasis role="comment">//&#32;RAPIDJSON_ASSERT</emphasis>
+426 
+428 
+435 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ASSERT</emphasis>
+436 <emphasis role="preprocessor">#include&#32;&lt;cassert&gt;</emphasis>
+437 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ASSERT(x)&#32;assert(x)</emphasis>
+438 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ASSERT</emphasis>
+439 
+441 <emphasis role="comment">//&#32;RAPIDJSON_STATIC_ASSERT</emphasis>
+442 
+443 <emphasis role="comment">//&#32;Prefer&#32;C++11&#32;static_assert,&#32;if&#32;available</emphasis>
+444 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_STATIC_ASSERT</emphasis>
+445 <emphasis role="preprocessor">#if&#32;RAPIDJSON_CPLUSPLUS&#32;&gt;=&#32;201103L&#32;||&#32;(&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&gt;=&#32;1800&#32;)</emphasis>
+446 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STATIC_ASSERT(x)&#32;\</emphasis>
+447 <emphasis role="preprocessor">&#32;&#32;&#32;static_assert(x,&#32;RAPIDJSON_STRINGIFY(x))</emphasis>
+448 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;C++11</emphasis>
+449 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STATIC_ASSERT</emphasis>
+450 
+451 <emphasis role="comment">//&#32;Adopt&#32;C++03&#32;implementation&#32;from&#32;boost</emphasis>
+452 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_STATIC_ASSERT</emphasis>
+453 <emphasis role="preprocessor">#ifndef&#32;__clang__</emphasis>
+455 <emphasis role="preprocessor">#endif</emphasis>
+456 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+457 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keywordtype">bool</emphasis>&#32;x&gt;&#32;<emphasis role="keyword">struct&#32;</emphasis>STATIC_ASSERTION_FAILURE;
+458 <emphasis role="keyword">template</emphasis>&#32;&lt;&gt;&#32;<emphasis role="keyword">struct&#32;</emphasis>STATIC_ASSERTION_FAILURE&lt;true&gt;&#32;{&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>&#32;=&#32;1&#32;};&#32;};
+459 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keywordtype">size_t</emphasis>&#32;x&gt;&#32;<emphasis role="keyword">struct&#32;</emphasis>StaticAssertTest&#32;{};
+460 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+461 
+462 <emphasis role="preprocessor">#if&#32;defined(__GNUC__)&#32;||&#32;defined(__clang__)</emphasis>
+463 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STATIC_ASSERT_UNUSED_ATTRIBUTE&#32;__attribute__((unused))</emphasis>
+464 <emphasis role="preprocessor">#else</emphasis>
+465 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STATIC_ASSERT_UNUSED_ATTRIBUTE&#32;</emphasis>
+466 <emphasis role="preprocessor">#endif</emphasis>
+467 <emphasis role="preprocessor">#ifndef&#32;__clang__</emphasis>
+469 <emphasis role="preprocessor">#endif</emphasis>
+470 
+476 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STATIC_ASSERT(x)&#32;\</emphasis>
+477 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;typedef&#32;::RAPIDJSON_NAMESPACE::StaticAssertTest&lt;&#32;\</emphasis>
+478 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;&#32;&#32;sizeof(::RAPIDJSON_NAMESPACE::STATIC_ASSERTION_FAILURE&lt;bool(x)&#32;&gt;)&gt;&#32;\</emphasis>
+479 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;RAPIDJSON_JOIN(StaticAssertTypedef,&#32;__LINE__)&#32;RAPIDJSON_STATIC_ASSERT_UNUSED_ATTRIBUTE</emphasis>
+480 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STATIC_ASSERT</emphasis>
+481 
+483 <emphasis role="comment">//&#32;RAPIDJSON_LIKELY,&#32;RAPIDJSON_UNLIKELY</emphasis>
+484 
+486 
+490 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_LIKELY</emphasis>
+491 <emphasis role="preprocessor">#if&#32;defined(__GNUC__)&#32;||&#32;defined(__clang__)</emphasis>
+492 <emphasis role="preprocessor">#define&#32;RAPIDJSON_LIKELY(x)&#32;__builtin_expect(!!(x),&#32;1)</emphasis>
+493 <emphasis role="preprocessor">#else</emphasis>
+494 <emphasis role="preprocessor">#define&#32;RAPIDJSON_LIKELY(x)&#32;(x)</emphasis>
+495 <emphasis role="preprocessor">#endif</emphasis>
+496 <emphasis role="preprocessor">#endif</emphasis>
+497 
+499 
+503 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_UNLIKELY</emphasis>
+504 <emphasis role="preprocessor">#if&#32;defined(__GNUC__)&#32;||&#32;defined(__clang__)</emphasis>
+505 <emphasis role="preprocessor">#define&#32;RAPIDJSON_UNLIKELY(x)&#32;__builtin_expect(!!(x),&#32;0)</emphasis>
+506 <emphasis role="preprocessor">#else</emphasis>
+507 <emphasis role="preprocessor">#define&#32;RAPIDJSON_UNLIKELY(x)&#32;(x)</emphasis>
+508 <emphasis role="preprocessor">#endif</emphasis>
+509 <emphasis role="preprocessor">#endif</emphasis>
+510 
+512 <emphasis role="comment">//&#32;Helpers</emphasis>
+513 
+515 
+516 <emphasis role="preprocessor">#define&#32;RAPIDJSON_MULTILINEMACRO_BEGIN&#32;do&#32;{&#32;&#32;</emphasis>
+517 <emphasis role="preprocessor">#define&#32;RAPIDJSON_MULTILINEMACRO_END&#32;\</emphasis>
+518 <emphasis role="preprocessor">}&#32;while((void)0,&#32;0)</emphasis>
+519 
+520 <emphasis role="comment">//&#32;adopted&#32;from&#32;Boost</emphasis>
+521 <emphasis role="preprocessor">#define&#32;RAPIDJSON_VERSION_CODE(x,y,z)&#32;\</emphasis>
+522 <emphasis role="preprocessor">&#32;&#32;(((x)*100000)&#32;+&#32;((y)*100)&#32;+&#32;(z))</emphasis>
+523 
+524 <emphasis role="preprocessor">#if&#32;defined(__has_builtin)</emphasis>
+525 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_BUILTIN(x)&#32;__has_builtin(x)</emphasis>
+526 <emphasis role="preprocessor">#else</emphasis>
+527 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_BUILTIN(x)&#32;0</emphasis>
+528 <emphasis role="preprocessor">#endif</emphasis>
+529 
+531 <emphasis role="comment">//&#32;RAPIDJSON_DIAG_PUSH/POP,&#32;RAPIDJSON_DIAG_OFF</emphasis>
+532 
+533 <emphasis role="preprocessor">#if&#32;defined(__GNUC__)</emphasis>
+534 <emphasis role="preprocessor">#define&#32;RAPIDJSON_GNUC&#32;\</emphasis>
+535 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;RAPIDJSON_VERSION_CODE(__GNUC__,__GNUC_MINOR__,__GNUC_PATCHLEVEL__)</emphasis>
+536 <emphasis role="preprocessor">#endif</emphasis>
+537 
+538 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;(defined(RAPIDJSON_GNUC)&#32;&amp;&amp;&#32;RAPIDJSON_GNUC&#32;&gt;=&#32;RAPIDJSON_VERSION_CODE(4,2,0))</emphasis>
+539 
+540 <emphasis role="preprocessor">#define&#32;RAPIDJSON_PRAGMA(x)&#32;_Pragma(RAPIDJSON_STRINGIFY(x))</emphasis>
+541 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PRAGMA(x)&#32;RAPIDJSON_PRAGMA(GCC&#32;diagnostic&#32;x)</emphasis>
+542 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_OFF(x)&#32;\</emphasis>
+543 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;RAPIDJSON_DIAG_PRAGMA(ignored&#32;RAPIDJSON_STRINGIFY(RAPIDJSON_JOIN(-W,x)))</emphasis>
+544 
+545 <emphasis role="comment">//&#32;push/pop&#32;support&#32;in&#32;Clang&#32;and&#32;GCC&gt;=4.6</emphasis>
+546 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;(defined(RAPIDJSON_GNUC)&#32;&amp;&amp;&#32;RAPIDJSON_GNUC&#32;&gt;=&#32;RAPIDJSON_VERSION_CODE(4,6,0))</emphasis>
+547 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PUSH&#32;RAPIDJSON_DIAG_PRAGMA(push)</emphasis>
+548 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_POP&#32;&#32;RAPIDJSON_DIAG_PRAGMA(pop)</emphasis>
+549 <emphasis role="preprocessor">#else&#32;</emphasis><emphasis role="comment">//&#32;GCC&#32;&gt;=&#32;4.2,&#32;&lt;&#32;4.6</emphasis>
+550 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PUSH&#32;</emphasis><emphasis role="comment">/*&#32;ignored&#32;*/</emphasis><emphasis role="preprocessor"></emphasis>
+551 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_POP&#32;</emphasis><emphasis role="comment">/*&#32;ignored&#32;*/</emphasis><emphasis role="preprocessor"></emphasis>
+552 <emphasis role="preprocessor">#endif</emphasis>
+553 
+554 <emphasis role="preprocessor">#elif&#32;defined(_MSC_VER)</emphasis>
+555 
+556 <emphasis role="comment">//&#32;pragma&#32;(MSVC&#32;specific)</emphasis>
+557 <emphasis role="preprocessor">#define&#32;RAPIDJSON_PRAGMA(x)&#32;__pragma(x)</emphasis>
+558 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PRAGMA(x)&#32;RAPIDJSON_PRAGMA(warning(x))</emphasis>
+559 
+560 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_OFF(x)&#32;RAPIDJSON_DIAG_PRAGMA(disable:&#32;x)</emphasis>
+561 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PUSH&#32;RAPIDJSON_DIAG_PRAGMA(push)</emphasis>
+562 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_POP&#32;&#32;RAPIDJSON_DIAG_PRAGMA(pop)</emphasis>
+563 
+564 <emphasis role="preprocessor">#else</emphasis>
+565 
+566 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_OFF(x)&#32;</emphasis><emphasis role="comment">/*&#32;ignored&#32;*/</emphasis><emphasis role="preprocessor"></emphasis>
+567 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_PUSH&#32;&#32;&#32;</emphasis><emphasis role="comment">/*&#32;ignored&#32;*/</emphasis><emphasis role="preprocessor"></emphasis>
+568 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIAG_POP&#32;&#32;&#32;&#32;</emphasis><emphasis role="comment">/*&#32;ignored&#32;*/</emphasis><emphasis role="preprocessor"></emphasis>
+569 
+570 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_DIAG_*</emphasis>
+571 
+573 <emphasis role="comment">//&#32;C++11&#32;features</emphasis>
+574 
+575 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX11</emphasis>
+576 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11&#32;(RAPIDJSON_CPLUSPLUS&#32;&gt;=&#32;201103L)</emphasis>
+577 <emphasis role="preprocessor">#endif</emphasis>
+578 
+579 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+580 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11</emphasis>
+581 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS&#32;1</emphasis>
+582 <emphasis role="preprocessor">#elif&#32;defined(__clang__)</emphasis>
+583 <emphasis role="preprocessor">#if&#32;__has_feature(cxx_rvalue_references)&#32;&amp;&amp;&#32;\</emphasis>
+584 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;(defined(_MSC_VER)&#32;||&#32;defined(_LIBCPP_VERSION)&#32;||&#32;defined(__GLIBCXX__)&#32;&amp;&amp;&#32;__GLIBCXX__&#32;&gt;=&#32;20080306)</emphasis>
+585 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS&#32;1</emphasis>
+586 <emphasis role="preprocessor">#else</emphasis>
+587 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS&#32;0</emphasis>
+588 <emphasis role="preprocessor">#endif</emphasis>
+589 <emphasis role="preprocessor">#elif&#32;(defined(RAPIDJSON_GNUC)&#32;&amp;&amp;&#32;(RAPIDJSON_GNUC&#32;&gt;=&#32;RAPIDJSON_VERSION_CODE(4,3,0))&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))&#32;||&#32;\</emphasis>
+590 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;&#32;&#32;(defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&gt;=&#32;1600)&#32;||&#32;\</emphasis>
+591 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;&#32;&#32;(defined(__SUNPRO_CC)&#32;&amp;&amp;&#32;__SUNPRO_CC&#32;&gt;=&#32;0x5140&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))</emphasis>
+592 
+593 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS&#32;1</emphasis>
+594 <emphasis role="preprocessor">#else</emphasis>
+595 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS&#32;0</emphasis>
+596 <emphasis role="preprocessor">#endif</emphasis>
+597 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+598 
+599 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+600 <emphasis role="preprocessor">#include&#32;&lt;utility&gt;</emphasis>&#32;<emphasis role="comment">//&#32;std::move</emphasis>
+601 <emphasis role="preprocessor">#endif</emphasis>
+602 
+603 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT</emphasis>
+604 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11</emphasis>
+605 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT&#32;1</emphasis>
+606 <emphasis role="preprocessor">#elif&#32;defined(__clang__)</emphasis>
+607 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT&#32;__has_feature(cxx_noexcept)</emphasis>
+608 <emphasis role="preprocessor">#elif&#32;(defined(RAPIDJSON_GNUC)&#32;&amp;&amp;&#32;(RAPIDJSON_GNUC&#32;&gt;=&#32;RAPIDJSON_VERSION_CODE(4,6,0))&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))&#32;||&#32;\</emphasis>
+609 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;(defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&gt;=&#32;1900)&#32;||&#32;\</emphasis>
+610 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;(defined(__SUNPRO_CC)&#32;&amp;&amp;&#32;__SUNPRO_CC&#32;&gt;=&#32;0x5140&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))</emphasis>
+611 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT&#32;1</emphasis>
+612 <emphasis role="preprocessor">#else</emphasis>
+613 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT&#32;0</emphasis>
+614 <emphasis role="preprocessor">#endif</emphasis>
+615 <emphasis role="preprocessor">#endif</emphasis>
+616 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NOEXCEPT</emphasis>
+617 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT</emphasis>
+618 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NOEXCEPT&#32;noexcept</emphasis>
+619 <emphasis role="preprocessor">#else</emphasis>
+620 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NOEXCEPT&#32;throw()</emphasis>
+621 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT</emphasis>
+622 <emphasis role="preprocessor">#endif</emphasis>
+623 
+624 <emphasis role="comment">//&#32;no&#32;automatic&#32;detection,&#32;yet</emphasis>
+625 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX11_TYPETRAITS</emphasis>
+626 <emphasis role="preprocessor">#if&#32;(defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&gt;=&#32;1700)</emphasis>
+627 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_TYPETRAITS&#32;1</emphasis>
+628 <emphasis role="preprocessor">#else</emphasis>
+629 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_TYPETRAITS&#32;0</emphasis>
+630 <emphasis role="preprocessor">#endif</emphasis>
+631 <emphasis role="preprocessor">#endif</emphasis>
+632 
+633 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX11_RANGE_FOR</emphasis>
+634 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+635 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RANGE_FOR&#32;__has_feature(cxx_range_for)</emphasis>
+636 <emphasis role="preprocessor">#elif&#32;(defined(RAPIDJSON_GNUC)&#32;&amp;&amp;&#32;(RAPIDJSON_GNUC&#32;&gt;=&#32;RAPIDJSON_VERSION_CODE(4,6,0))&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))&#32;||&#32;\</emphasis>
+637 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;&#32;&#32;(defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&gt;=&#32;1700)&#32;||&#32;\</emphasis>
+638 <emphasis role="preprocessor">&#32;&#32;&#32;&#32;&#32;&#32;(defined(__SUNPRO_CC)&#32;&amp;&amp;&#32;__SUNPRO_CC&#32;&gt;=&#32;0x5140&#32;&amp;&amp;&#32;defined(__GXX_EXPERIMENTAL_CXX0X__))</emphasis>
+639 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RANGE_FOR&#32;1</emphasis>
+640 <emphasis role="preprocessor">#else</emphasis>
+641 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_RANGE_FOR&#32;0</emphasis>
+642 <emphasis role="preprocessor">#endif</emphasis>
+643 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_HAS_CXX11_RANGE_FOR</emphasis>
+644 
+646 <emphasis role="comment">//&#32;C++17&#32;features</emphasis>
+647 
+648 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_HAS_CXX17</emphasis>
+649 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX17&#32;(RAPIDJSON_CPLUSPLUS&#32;&gt;=&#32;201703L)</emphasis>
+650 <emphasis role="preprocessor">#endif</emphasis>
+651 
+652 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX17</emphasis>
+653 <emphasis role="preprocessor">#&#32;define&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH&#32;[[fallthrough]]</emphasis>
+654 <emphasis role="preprocessor">#elif&#32;defined(__has_cpp_attribute)</emphasis>
+655 <emphasis role="preprocessor">#&#32;if&#32;__has_cpp_attribute(clang::fallthrough)</emphasis>
+656 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH&#32;[[clang::fallthrough]]</emphasis>
+657 <emphasis role="preprocessor">#&#32;elif&#32;__has_cpp_attribute(fallthrough)</emphasis>
+658 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH&#32;__attribute__((fallthrough))</emphasis>
+659 <emphasis role="preprocessor">#&#32;else</emphasis>
+660 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH</emphasis>
+661 <emphasis role="preprocessor">#&#32;endif</emphasis>
+662 <emphasis role="preprocessor">#else</emphasis>
+663 <emphasis role="preprocessor">#&#32;define&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH</emphasis>
+664 <emphasis role="preprocessor">#endif</emphasis>
+665 
+667 
+669 
+680 <emphasis role="comment">//&#32;RAPIDJSON_NOEXCEPT_ASSERT</emphasis>
+681 
+682 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NOEXCEPT_ASSERT</emphasis>
+683 <emphasis role="preprocessor">#ifdef&#32;RAPIDJSON_ASSERT_THROWS</emphasis>
+684 <emphasis role="preprocessor">#include&#32;&lt;cassert&gt;</emphasis>
+685 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NOEXCEPT_ASSERT(x)&#32;assert(x)</emphasis>
+686 <emphasis role="preprocessor">#else</emphasis>
+687 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NOEXCEPT_ASSERT(x)&#32;RAPIDJSON_ASSERT(x)</emphasis>
+688 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ASSERT_THROWS</emphasis>
+689 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_NOEXCEPT_ASSERT</emphasis>
+690 
+692 <emphasis role="comment">//&#32;malloc/realloc/free</emphasis>
+693 
+694 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_MALLOC</emphasis>
+696 <emphasis role="preprocessor">#define&#32;RAPIDJSON_MALLOC(size)&#32;std::malloc(size)</emphasis>
+697 <emphasis role="preprocessor">#endif</emphasis>
+698 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_REALLOC</emphasis>
+700 <emphasis role="preprocessor">#define&#32;RAPIDJSON_REALLOC(ptr,&#32;new_size)&#32;std::realloc(ptr,&#32;new_size)</emphasis>
+701 <emphasis role="preprocessor">#endif</emphasis>
+702 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_FREE</emphasis>
+704 <emphasis role="preprocessor">#define&#32;RAPIDJSON_FREE(ptr)&#32;std::free(ptr)</emphasis>
+705 <emphasis role="preprocessor">#endif</emphasis>
+706 
+708 <emphasis role="comment">//&#32;new/delete</emphasis>
+709 
+710 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_NEW</emphasis>
+712 <emphasis role="preprocessor">#define&#32;RAPIDJSON_NEW(TypeName)&#32;new&#32;TypeName</emphasis>
+713 <emphasis role="preprocessor">#endif</emphasis>
+714 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_DELETE</emphasis>
+716 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DELETE(x)&#32;delete&#32;x</emphasis>
+717 <emphasis role="preprocessor">#endif</emphasis>
+718 
+720 <emphasis role="comment">//&#32;Type</emphasis>
+721 
+726 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+727 
+729 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;{
+730 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087">kNullType</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;
+731 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54">kFalseType</link>&#32;=&#32;1,&#32;&#32;&#32;&#32;&#32;
+732 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6">kTrueType</link>&#32;=&#32;2,&#32;&#32;&#32;&#32;&#32;&#32;
+733 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f">kObjectType</link>&#32;=&#32;3,&#32;&#32;&#32;&#32;
+734 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>&#32;=&#32;4,&#32;&#32;&#32;&#32;&#32;
+735 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link>&#32;=&#32;5,&#32;&#32;&#32;&#32;
+736 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>&#32;=&#32;6&#32;&#32;&#32;&#32;&#32;
+737 };
+738 
+739 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+740 
+741 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_RAPIDJSON_H_</emphasis>
+</programlisting></section>

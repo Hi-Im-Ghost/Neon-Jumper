@@ -1,0 +1,303 @@
+\hypertarget{biginteger_8h_source}{}\doxysection{biginteger.\+h}
+\label{biginteger_8h_source}\index{src/rapidjson/include/rapidjson/internal/biginteger.h@{src/rapidjson/include/rapidjson/internal/biginteger.h}}
+\mbox{\hyperlink{biginteger_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_BIGINTEGER\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_BIGINTEGER\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}../rapidjson.h"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& !defined(\_\_INTEL\_COMPILER) \&\& defined(\_M\_AMD64)}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include <intrin.h>} \textcolor{comment}{// for \_umul128}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#if !defined(\_ARM64EC\_)}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#pragma intrinsic(\_umul128)}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#pragma comment(lib,"{}softintrin"{}})}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{30 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{keyword}{class }\mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} \{}
+\DoxyCodeLine{33 \textcolor{keyword}{public}:}
+\DoxyCodeLine{34     \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}};}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     \mbox{\hyperlink{classinternal_1_1_big_integer_abec623168bc9494dec2f50643b897f72}{BigInteger}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& rhs) : count\_(rhs.count\_) \{}
+\DoxyCodeLine{37         std::memcpy(digits\_, rhs.digits\_, count\_ * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}}));}
+\DoxyCodeLine{38     \}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40     \textcolor{keyword}{explicit} \mbox{\hyperlink{classinternal_1_1_big_integer_ad02b0ef9da203efddd4af07e923732c0}{BigInteger}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u) : count\_(1) \{}
+\DoxyCodeLine{41         digits\_[0] = u;}
+\DoxyCodeLine{42     \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{45     \mbox{\hyperlink{classinternal_1_1_big_integer_a4dc2632b2aa2973d18864a127d7c141a}{BigInteger}}(\textcolor{keyword}{const} Ch* decimals, \textcolor{keywordtype}{size\_t} length) : count\_(1) \{}
+\DoxyCodeLine{46         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(length > 0);}
+\DoxyCodeLine{47         digits\_[0] = 0;}
+\DoxyCodeLine{48         \textcolor{keywordtype}{size\_t} i = 0;}
+\DoxyCodeLine{49         \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kMaxDigitPerIteration = 19;  \textcolor{comment}{// 2\string^64 = 18446744073709551616 > 10\string^19}}
+\DoxyCodeLine{50         \textcolor{keywordflow}{while} (length >= kMaxDigitPerIteration) \{}
+\DoxyCodeLine{51             AppendDecimal64(decimals + i, decimals + i + kMaxDigitPerIteration);}
+\DoxyCodeLine{52             length -\/= kMaxDigitPerIteration;}
+\DoxyCodeLine{53             i += kMaxDigitPerIteration;}
+\DoxyCodeLine{54         \}}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56         \textcolor{keywordflow}{if} (length > 0)}
+\DoxyCodeLine{57             AppendDecimal64(decimals + i, decimals + i + length);}
+\DoxyCodeLine{58     \}}
+\DoxyCodeLine{59     }
+\DoxyCodeLine{60     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_ac783203409480350dbbcd9e0c95001be}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} \&rhs)}
+\DoxyCodeLine{61     \{}
+\DoxyCodeLine{62         \textcolor{keywordflow}{if} (\textcolor{keyword}{this} != \&rhs) \{}
+\DoxyCodeLine{63             count\_ = rhs.count\_;}
+\DoxyCodeLine{64             std::memcpy(digits\_, rhs.digits\_, count\_ * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}}));}
+\DoxyCodeLine{65         \}}
+\DoxyCodeLine{66         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{67     \}}
+\DoxyCodeLine{68     }
+\DoxyCodeLine{69     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_a0ffe0c4c762312682d60e82c38b38c45}{operator=}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u) \{}
+\DoxyCodeLine{70         digits\_[0] = u;            }
+\DoxyCodeLine{71         count\_ = 1;}
+\DoxyCodeLine{72         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{73     \}}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_ad77a8a66494070c1518d8ca4948cbfae}{operator+=}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u) \{}
+\DoxyCodeLine{76         \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}} backup = digits\_[0];}
+\DoxyCodeLine{77         digits\_[0] += u;}
+\DoxyCodeLine{78         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < count\_ -\/ 1; i++) \{}
+\DoxyCodeLine{79             \textcolor{keywordflow}{if} (digits\_[i] >= backup)}
+\DoxyCodeLine{80                 \textcolor{keywordflow}{return} *\textcolor{keyword}{this}; \textcolor{comment}{// no carry}}
+\DoxyCodeLine{81             backup = digits\_[i + 1];}
+\DoxyCodeLine{82             digits\_[i + 1] += 1;}
+\DoxyCodeLine{83         \}}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85         \textcolor{comment}{// Last carry}}
+\DoxyCodeLine{86         \textcolor{keywordflow}{if} (digits\_[count\_ -\/ 1] < backup)}
+\DoxyCodeLine{87             PushBack(1);}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{90     \}}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_a212b816f6d07b5b50347bde5a96a0160}{operator*=}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u) \{}
+\DoxyCodeLine{93         \textcolor{keywordflow}{if} (u == 0) \textcolor{keywordflow}{return} *\textcolor{keyword}{this} = 0;}
+\DoxyCodeLine{94         \textcolor{keywordflow}{if} (u == 1) \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{95         \textcolor{keywordflow}{if} (*\textcolor{keyword}{this} == 1) \textcolor{keywordflow}{return} *\textcolor{keyword}{this} = u;}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} k = 0;}
+\DoxyCodeLine{98         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < count\_; i++) \{}
+\DoxyCodeLine{99             \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} hi;}
+\DoxyCodeLine{100             digits\_[i] = MulAdd64(digits\_[i], u, k, \&hi);}
+\DoxyCodeLine{101             k = hi;}
+\DoxyCodeLine{102         \}}
+\DoxyCodeLine{103         }
+\DoxyCodeLine{104         \textcolor{keywordflow}{if} (k > 0)}
+\DoxyCodeLine{105             PushBack(k);}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{108     \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_ad6b2e9b15ae1e1c9c2f8e68112b3f265}{operator*=}}(\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} u) \{}
+\DoxyCodeLine{111         \textcolor{keywordflow}{if} (u == 0) \textcolor{keywordflow}{return} *\textcolor{keyword}{this} = 0;}
+\DoxyCodeLine{112         \textcolor{keywordflow}{if} (u == 1) \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{113         \textcolor{keywordflow}{if} (*\textcolor{keyword}{this} == 1) \textcolor{keywordflow}{return} *\textcolor{keyword}{this} = u;}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} k = 0;}
+\DoxyCodeLine{116         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < count\_; i++) \{}
+\DoxyCodeLine{117             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} c = digits\_[i] >> 32;}
+\DoxyCodeLine{118             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} d = digits\_[i] \& 0xFFFFFFFF;}
+\DoxyCodeLine{119             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} uc = u * c;}
+\DoxyCodeLine{120             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} ud = u * d;}
+\DoxyCodeLine{121             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} p0 = ud + k;}
+\DoxyCodeLine{122             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} p1 = uc + (p0 >> 32);}
+\DoxyCodeLine{123             digits\_[i] = (p0 \& 0xFFFFFFFF) | (p1 << 32);}
+\DoxyCodeLine{124             k = p1 >> 32;}
+\DoxyCodeLine{125         \}}
+\DoxyCodeLine{126         }
+\DoxyCodeLine{127         \textcolor{keywordflow}{if} (k > 0)}
+\DoxyCodeLine{128             PushBack(k);}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{131     \}}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_a06a6f5d1d81b91248b0ab3c2d65a500a}{operator<<=}}(\textcolor{keywordtype}{size\_t} shift) \{}
+\DoxyCodeLine{134         \textcolor{keywordflow}{if} (\mbox{\hyperlink{classinternal_1_1_big_integer_ae12dd6759f1f76501db3d1bcafce39cd}{IsZero}}() || shift == 0) \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136         \textcolor{keywordtype}{size\_t} offset = shift / kTypeBit;}
+\DoxyCodeLine{137         \textcolor{keywordtype}{size\_t} interShift = shift \% kTypeBit;}
+\DoxyCodeLine{138         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(count\_ + offset <= kCapacity);}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140         \textcolor{keywordflow}{if} (interShift == 0) \{}
+\DoxyCodeLine{141             std::memmove(digits\_ + offset, digits\_, count\_ * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}}));}
+\DoxyCodeLine{142             count\_ += offset;}
+\DoxyCodeLine{143         \}}
+\DoxyCodeLine{144         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{145             digits\_[count\_] = 0;}
+\DoxyCodeLine{146             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = count\_; i > 0; i-\/-\/)}
+\DoxyCodeLine{147                 digits\_[i + offset] = (digits\_[i] << interShift) | (digits\_[i -\/ 1] >> (kTypeBit -\/ interShift));}
+\DoxyCodeLine{148             digits\_[offset] = digits\_[0] << interShift;}
+\DoxyCodeLine{149             count\_ += offset;}
+\DoxyCodeLine{150             \textcolor{keywordflow}{if} (digits\_[count\_])}
+\DoxyCodeLine{151                 count\_++;}
+\DoxyCodeLine{152         \}}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154         std::memset(digits\_, 0, offset * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}}));}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{157     \}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_big_integer_a52b424669238bdebc134e793d3b470ae}{operator==}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{160         \textcolor{keywordflow}{return} count\_ == rhs.count\_ \&\& std::memcmp(digits\_, rhs.digits\_, count\_ * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}})) == 0;}
+\DoxyCodeLine{161     \}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_big_integer_a8b6ab0d652d461c1136e0388d352628b}{operator==}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}} rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{164         \textcolor{keywordflow}{return} count\_ == 1 \&\& digits\_[0] == rhs;}
+\DoxyCodeLine{165     \}}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& \mbox{\hyperlink{classinternal_1_1_big_integer_af491885747a0442492134c23a6ec4c65}{MultiplyPow5}}(\textcolor{keywordtype}{unsigned} exp) \{}
+\DoxyCodeLine{168         \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} kPow5[12] = \{}
+\DoxyCodeLine{169             5,}
+\DoxyCodeLine{170             5 * 5,}
+\DoxyCodeLine{171             5 * 5 * 5,}
+\DoxyCodeLine{172             5 * 5 * 5 * 5,}
+\DoxyCodeLine{173             5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{174             5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{175             5 * 5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{176             5 * 5 * 5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{177             5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{178             5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{179             5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5,}
+\DoxyCodeLine{180             5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5 * 5}
+\DoxyCodeLine{181         \};}
+\DoxyCodeLine{182         \textcolor{keywordflow}{if} (exp == 0) \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{183         \textcolor{keywordflow}{for} (; exp >= 27; exp -\/= 27) *\textcolor{keyword}{this} *= \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0X6765C793, 0XFA10079D); \textcolor{comment}{// 5\string^27}}
+\DoxyCodeLine{184         \textcolor{keywordflow}{for} (; exp >= 13; exp -\/= 13) *\textcolor{keyword}{this} *= \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(1220703125u); \textcolor{comment}{// 5\string^13}}
+\DoxyCodeLine{185         \textcolor{keywordflow}{if} (exp > 0)                 *\textcolor{keyword}{this} *= kPow5[exp -\/ 1];}
+\DoxyCodeLine{186         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{187     \}}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189     \textcolor{comment}{// Compute absolute difference of this and rhs.}}
+\DoxyCodeLine{190     \textcolor{comment}{// Assume this != rhs}}
+\DoxyCodeLine{191     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_big_integer_ad7ad62e6b62af38283ee940eb4015b26}{Difference}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& rhs, \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}* out)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{192         \textcolor{keywordtype}{int} cmp = \mbox{\hyperlink{classinternal_1_1_big_integer_af8e90fff5382de6c1cda5f751017200c}{Compare}}(rhs);}
+\DoxyCodeLine{193         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(cmp != 0);}
+\DoxyCodeLine{194         \textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} *\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, *b;  \textcolor{comment}{// Makes a > b}}
+\DoxyCodeLine{195         \textcolor{keywordtype}{bool} ret;}
+\DoxyCodeLine{196         \textcolor{keywordflow}{if} (cmp < 0) \{ \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} = \&rhs; b = \textcolor{keyword}{this}; ret = \textcolor{keyword}{true}; \}}
+\DoxyCodeLine{197         \textcolor{keywordflow}{else}         \{ \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} = \textcolor{keyword}{this}; b = \&rhs; ret = \textcolor{keyword}{false}; \}}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199         \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}} borrow = 0;}
+\DoxyCodeLine{200         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}-\/>count\_; i++) \{}
+\DoxyCodeLine{201             \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}} d = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}-\/>digits\_[i] -\/ borrow;}
+\DoxyCodeLine{202             \textcolor{keywordflow}{if} (i < b-\/>count\_)}
+\DoxyCodeLine{203                 d -\/= b-\/>digits\_[i];}
+\DoxyCodeLine{204             borrow = (d > \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}-\/>digits\_[i]) ? 1 : 0;}
+\DoxyCodeLine{205             out-\/>digits\_[i] = d;}
+\DoxyCodeLine{206             \textcolor{keywordflow}{if} (d != 0)}
+\DoxyCodeLine{207                 out-\/>count\_ = i + 1;}
+\DoxyCodeLine{208         \}}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210         \textcolor{keywordflow}{return} ret;}
+\DoxyCodeLine{211     \}}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213     \textcolor{keywordtype}{int} \mbox{\hyperlink{classinternal_1_1_big_integer_af8e90fff5382de6c1cda5f751017200c}{Compare}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{214         \textcolor{keywordflow}{if} (count\_ != rhs.count\_)}
+\DoxyCodeLine{215             \textcolor{keywordflow}{return} count\_ < rhs.count\_ ? -\/1 : 1;}
+\DoxyCodeLine{216 }
+\DoxyCodeLine{217         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = count\_; i-\/-\/ > 0;)}
+\DoxyCodeLine{218             \textcolor{keywordflow}{if} (digits\_[i] != rhs.digits\_[i])}
+\DoxyCodeLine{219                 \textcolor{keywordflow}{return} digits\_[i] < rhs.digits\_[i] ? -\/1 : 1;}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221         \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{222     \}}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classinternal_1_1_big_integer_aa0ad6e74839b7c7fe77c9742ec079525}{GetCount}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} count\_; \}}
+\DoxyCodeLine{225     \mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}} \mbox{\hyperlink{classinternal_1_1_big_integer_a7288eefd49735c3c3edec698f56738bd}{GetDigit}}(\textcolor{keywordtype}{size\_t} index)\textcolor{keyword}{ const }\{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(index < count\_); \textcolor{keywordflow}{return} digits\_[index]; \}}
+\DoxyCodeLine{226     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_big_integer_ae12dd6759f1f76501db3d1bcafce39cd}{IsZero}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} count\_ == 1 \&\& digits\_[0] == 0; \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{keyword}{private}:}
+\DoxyCodeLine{229     \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{230     \textcolor{keywordtype}{void} AppendDecimal64(\textcolor{keyword}{const} Ch* begin, \textcolor{keyword}{const} Ch* end) \{}
+\DoxyCodeLine{231         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u = ParseUint64(begin, end);}
+\DoxyCodeLine{232         \textcolor{keywordflow}{if} (\mbox{\hyperlink{classinternal_1_1_big_integer_ae12dd6759f1f76501db3d1bcafce39cd}{IsZero}}())}
+\DoxyCodeLine{233             *\textcolor{keyword}{this} = u;}
+\DoxyCodeLine{234         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{235             \textcolor{keywordtype}{unsigned} exp = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(end -\/ begin);}
+\DoxyCodeLine{236             (\mbox{\hyperlink{classinternal_1_1_big_integer_af491885747a0442492134c23a6ec4c65}{MultiplyPow5}}(exp) <<= exp) += u;   \textcolor{comment}{// *this = *this * 10\string^exp + u}}
+\DoxyCodeLine{237         \}}
+\DoxyCodeLine{238     \}}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240     \textcolor{keywordtype}{void} PushBack(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{Type}} digit) \{}
+\DoxyCodeLine{241         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(count\_ < kCapacity);}
+\DoxyCodeLine{242         digits\_[count\_++] = digit;}
+\DoxyCodeLine{243     \}}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245     \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{246     \textcolor{keyword}{static} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} ParseUint64(\textcolor{keyword}{const} Ch* begin, \textcolor{keyword}{const} Ch* end) \{}
+\DoxyCodeLine{247         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} r = 0;}
+\DoxyCodeLine{248         \textcolor{keywordflow}{for} (\textcolor{keyword}{const} Ch* p = begin; p != end; ++p) \{}
+\DoxyCodeLine{249             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(*p >= Ch(\textcolor{charliteral}{'0'}) \&\& *p <= Ch(\textcolor{charliteral}{'9'}));}
+\DoxyCodeLine{250             r = r * 10u + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*p -\/ Ch(\textcolor{charliteral}{'0'}));}
+\DoxyCodeLine{251         \}}
+\DoxyCodeLine{252         \textcolor{keywordflow}{return} r;}
+\DoxyCodeLine{253     \}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255     \textcolor{comment}{// Assume a * b + k < 2\string^128}}
+\DoxyCodeLine{256     \textcolor{keyword}{static} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} MulAdd64(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} b, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} k, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}* outHigh) \{}
+\DoxyCodeLine{257 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& defined(\_M\_AMD64)}}
+\DoxyCodeLine{258         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} low = \_umul128(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, b, outHigh) + k;}
+\DoxyCodeLine{259         \textcolor{keywordflow}{if} (low < k)}
+\DoxyCodeLine{260             (*outHigh)++;}
+\DoxyCodeLine{261         \textcolor{keywordflow}{return} low;}
+\DoxyCodeLine{262 \textcolor{preprocessor}{\#elif (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6)) \&\& defined(\_\_x86\_64\_\_)}}
+\DoxyCodeLine{263         \_\_extension\_\_ \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int128 uint128;}
+\DoxyCodeLine{264         uint128 p = \textcolor{keyword}{static\_cast<}uint128\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}) * \textcolor{keyword}{static\_cast<}uint128\textcolor{keyword}{>}(b);}
+\DoxyCodeLine{265         p += k;}
+\DoxyCodeLine{266         *outHigh = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(p >> 64);}
+\DoxyCodeLine{267         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(p);}
+\DoxyCodeLine{268 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{269         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} a0 = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} \& 0xFFFFFFFF, a1 = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} >> 32, b0 = b \& 0xFFFFFFFF, b1 = b >> 32;}
+\DoxyCodeLine{270         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} x0 = a0 * b0, x1 = a0 * b1, x2 = a1 * b0, x3 = a1 * b1;}
+\DoxyCodeLine{271         x1 += (x0 >> 32); \textcolor{comment}{// can't give carry}}
+\DoxyCodeLine{272         x1 += x2;}
+\DoxyCodeLine{273         \textcolor{keywordflow}{if} (x1 < x2)}
+\DoxyCodeLine{274             x3 += (\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(1) << 32);}
+\DoxyCodeLine{275         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} lo = (x1 << 32) + (x0 \& 0xFFFFFFFF);}
+\DoxyCodeLine{276         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} hi = x3 + (x1 >> 32);}
+\DoxyCodeLine{277 }
+\DoxyCodeLine{278         lo += k;}
+\DoxyCodeLine{279         \textcolor{keywordflow}{if} (lo < k)}
+\DoxyCodeLine{280             hi++;}
+\DoxyCodeLine{281         *outHigh = hi;}
+\DoxyCodeLine{282         \textcolor{keywordflow}{return} lo;}
+\DoxyCodeLine{283 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{284     \}}
+\DoxyCodeLine{285 }
+\DoxyCodeLine{286     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kBitCount = 3328;  \textcolor{comment}{// 64bit * 54 > 10\string^1000}}
+\DoxyCodeLine{287     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kCapacity = kBitCount / \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}});}
+\DoxyCodeLine{288     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kTypeBit = \textcolor{keyword}{sizeof}(\mbox{\hyperlink{classinternal_1_1_big_integer_a1310812fca26ebae77594ba08678fc4c}{Type}}) * 8;}
+\DoxyCodeLine{289 }
+\DoxyCodeLine{290     \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{Type}} digits\_[kCapacity];}
+\DoxyCodeLine{291     \textcolor{keywordtype}{size\_t} count\_;}
+\DoxyCodeLine{292 \};}
+\DoxyCodeLine{293 }
+\DoxyCodeLine{294 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{295 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{296 }
+\DoxyCodeLine{297 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_BIGINTEGER\_H\_}}
+
+\end{DoxyCode}

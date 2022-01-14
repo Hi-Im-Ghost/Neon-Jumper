@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_unittest_8h_source" xml:lang="en-US">
+<title>unittest.h</title>
+<indexterm><primary>src/rapidjson/test/unittest/unittest.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;UNITTEST_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;UNITTEST_H_</emphasis>
+17 
+18 <emphasis role="comment">//&#32;gtest&#32;indirectly&#32;included&#32;inttypes.h,&#32;without&#32;__STDC_CONSTANT_MACROS.</emphasis>
+19 <emphasis role="preprocessor">#ifndef&#32;__STDC_CONSTANT_MACROS</emphasis>
+20 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+21 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;push</emphasis>
+22 <emphasis role="preprocessor">#if&#32;__has_warning(&quot;-Wreserved-id-macro&quot;</emphasis>)
+23 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;ignored&#32;&quot;-Wreserved-id-macro&quot;</emphasis>
+24 <emphasis role="preprocessor">#endif</emphasis>
+25 <emphasis role="preprocessor">#endif</emphasis>
+26 
+27 <emphasis role="preprocessor">#&#32;&#32;define&#32;__STDC_CONSTANT_MACROS&#32;1&#32;</emphasis><emphasis role="comment">//&#32;required&#32;by&#32;C++&#32;standard</emphasis>
+28 
+29 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+30 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;pop</emphasis>
+31 <emphasis role="preprocessor">#endif</emphasis>
+32 <emphasis role="preprocessor">#endif</emphasis>
+33 
+34 <emphasis role="preprocessor">#ifdef&#32;_MSC_VER</emphasis>
+35 <emphasis role="preprocessor">#define&#32;_CRTDBG_MAP_ALLOC</emphasis>
+36 <emphasis role="preprocessor">#include&#32;&lt;crtdbg.h&gt;</emphasis>
+37 <emphasis role="preprocessor">#pragma&#32;warning(disable&#32;:&#32;4996)&#32;</emphasis><emphasis role="comment">//&#32;&apos;function&apos;:&#32;was&#32;declared&#32;deprecated</emphasis>
+38 <emphasis role="preprocessor">#endif</emphasis>
+39 
+40 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(__GNUC__)&#32;&amp;&amp;&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;2))</emphasis>
+41 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;6))</emphasis>
+42 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;push</emphasis>
+43 <emphasis role="preprocessor">#endif</emphasis>
+44 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;ignored&#32;&quot;-Weffc++&quot;</emphasis>
+45 <emphasis role="preprocessor">#endif</emphasis>
+46 
+47 <emphasis role="preprocessor">#include&#32;&quot;gtest/gtest.h&quot;</emphasis>
+48 <emphasis role="preprocessor">#include&#32;&lt;stdexcept&gt;</emphasis>
+49 
+50 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(__GNUC__)&#32;&amp;&amp;&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;6))</emphasis>
+51 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;pop</emphasis>
+52 <emphasis role="preprocessor">#endif</emphasis>
+53 
+54 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+55 <emphasis role="comment">//&#32;All&#32;TEST()&#32;macro&#32;generated&#32;this&#32;warning,&#32;disable&#32;globally</emphasis>
+56 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;ignored&#32;&quot;-Wglobal-constructors&quot;</emphasis>
+57 <emphasis role="preprocessor">#endif</emphasis>
+58 
+59 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+60 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_unittest_8h_1a158bf1a4953297866644112d81a7a3e7">StrLen</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;s)&#32;{
+61 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;p&#32;=&#32;s;
+62 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(*p)&#32;p++;
+63 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;unsigned(p&#32;-&#32;s);
+64 }
+65 
+66 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+67 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_unittest_8h_1a8d8e3cf93e9b811c207711d0b353de02">StrCmp</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;s1,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;s2)&#32;{
+68 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>(*s1&#32;&amp;&amp;&#32;(*s1&#32;==&#32;*s2))&#32;{&#32;s1++;&#32;s2++;&#32;}
+69 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(*s1)&#32;&lt;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(*s2)&#32;?&#32;-1&#32;:&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(*s1)&#32;&gt;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(*s2);
+70 }
+71 
+72 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+73 <emphasis role="keyword">inline</emphasis>&#32;Ch*&#32;<link linkend="_unittest_8h_1a0b8e1bafb97ad4a272c5cc4469a13687">StrDup</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;str)&#32;{
+74 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize&#32;=&#32;<emphasis role="keyword">sizeof</emphasis>(Ch)&#32;*&#32;(<link linkend="_unittest_8h_1a158bf1a4953297866644112d81a7a3e7">StrLen</link>(str)&#32;+&#32;1);
+75 &#32;&#32;&#32;&#32;Ch*&#32;buffer&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis>Ch*<emphasis role="keyword">&gt;</emphasis>(malloc(bufferSize));
+76 &#32;&#32;&#32;&#32;memcpy(buffer,&#32;str,&#32;bufferSize);
+77 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;buffer;
+78 }
+79 
+80 <emphasis role="keyword">inline</emphasis>&#32;FILE*&#32;<link linkend="_unittest_8h_1acb6251ae9b44050f1fcabf8d3c2e792b">TempFile</link>(<emphasis role="keywordtype">char</emphasis>&#32;*filename)&#32;{
+81 <emphasis role="preprocessor">#if&#32;defined(__WIN32__)&#32;||&#32;defined(_MSC_VER)</emphasis>
+82 &#32;&#32;&#32;&#32;filename&#32;=&#32;tmpnam(filename);
+83 
+84 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;Visual&#32;Studio,&#32;tmpnam()&#32;adds&#32;a&#32;backslash&#32;in&#32;front.&#32;Remove&#32;it.</emphasis>
+85 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(filename[0]&#32;==&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>)
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;0;&#32;filename[i]&#32;!=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;&#32;i++)
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;filename[i]&#32;=&#32;filename[i&#32;+&#32;1];
+88 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+89 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;fopen(filename,&#32;<emphasis role="stringliteral">&quot;wb&quot;</emphasis>);
+90 <emphasis role="preprocessor">#else</emphasis>
+91 &#32;&#32;&#32;&#32;strcpy(filename,&#32;<emphasis role="stringliteral">&quot;/tmp/fileXXXXXX&quot;</emphasis>);
+92 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;fd&#32;=&#32;mkstemp(filename);
+93 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;fdopen(fd,&#32;<emphasis role="stringliteral">&quot;w&quot;</emphasis>);
+94 <emphasis role="preprocessor">#endif</emphasis>
+95 }
+96 
+97 <emphasis role="comment">//&#32;Use&#32;exception&#32;for&#32;catching&#32;assert</emphasis>
+98 <emphasis role="preprocessor">#ifdef&#32;_MSC_VER</emphasis>
+99 <emphasis role="preprocessor">#pragma&#32;warning(disable&#32;:&#32;4127)</emphasis>
+100 <emphasis role="preprocessor">#endif</emphasis>
+101 
+102 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+103 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;push</emphasis>
+104 <emphasis role="preprocessor">#if&#32;__has_warning(&quot;-Wdeprecated&quot;</emphasis>)
+105 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;ignored&#32;&quot;-Wdeprecated&quot;</emphasis>
+106 <emphasis role="preprocessor">#endif</emphasis>
+107 <emphasis role="preprocessor">#endif</emphasis>
+108 
+109 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_assert_exception">AssertException</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;std::logic_error&#32;{
+110 <emphasis role="keyword">public</emphasis>:
+111 &#32;&#32;&#32;&#32;<link linkend="_class_assert_exception_1ac95b6779576904bf5932c1f7e72300c6">AssertException</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;w)&#32;:&#32;std::logic_error(w)&#32;{}
+112 &#32;&#32;&#32;&#32;<link linkend="_class_assert_exception_1a1a5812bbbb81bd04d4352e3413a5946f">AssertException</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_assert_exception">AssertException</link>&amp;&#32;rhs)&#32;:&#32;std::logic_error(rhs)&#32;{}
+113 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<link linkend="_class_assert_exception_1aba869a44de1c69d593d16d39039bd35c">~AssertException</link>()&#32;throw();
+114 };
+115 
+116 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+117 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;pop</emphasis>
+118 <emphasis role="preprocessor">#endif</emphasis>
+119 
+120 <emphasis role="comment">//&#32;Not&#32;using&#32;noexcept&#32;for&#32;testing&#32;RAPIDJSON_ASSERT()</emphasis>
+121 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_CXX11_NOEXCEPT&#32;0</emphasis>
+122 
+123 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ASSERT</emphasis>
+124 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ASSERT(x)&#32;(!(x)&#32;?&#32;throw&#32;AssertException(RAPIDJSON_STRINGIFY(x))&#32;:&#32;(void)0u)</emphasis>
+125 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ASSERT_THROWS</emphasis>
+126 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ASSERT_THROWS</emphasis>
+127 <emphasis role="preprocessor">#endif</emphasis>
+128 <emphasis role="preprocessor">#endif</emphasis>
+129 
+130 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_random">Random</link>&#32;{
+131 <emphasis role="keyword">public</emphasis>:
+132 &#32;&#32;&#32;&#32;<link linkend="_class_random_1a17f563fcd03a81b31057b71b0bdcbcdb">Random</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;seed&#32;=&#32;0)&#32;:&#32;mSeed(seed)&#32;{}
+133 
+134 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_class_random_1a881e9afda6dd041defbf4473a28bcb56">operator()</link>()&#32;{
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;mSeed&#32;=&#32;214013&#32;*&#32;mSeed&#32;+&#32;2531011;
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;mSeed;
+137 &#32;&#32;&#32;&#32;}
+138 
+139 <emphasis role="keyword">private</emphasis>:
+140 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;mSeed;
+141 };
+142 
+143 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;UNITTEST_H_</emphasis>
+</programlisting></section>

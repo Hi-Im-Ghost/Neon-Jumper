@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_stack_8h_source" xml:lang="en-US">
+<title>stack.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/stack.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_INTERNAL_STACK_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_INTERNAL_STACK_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;../allocators.h&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_swap_8h">swap.h</link>&quot;</emphasis>
+20 <emphasis role="preprocessor">#include&#32;&lt;cstddef&gt;</emphasis>
+21 
+22 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+23 RAPIDJSON_DIAG_PUSH
+24 RAPIDJSON_DIAG_OFF(c++98-compat)
+25 <emphasis role="preprocessor">#endif</emphasis>
+26 
+27 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+28 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+29 
+31 <emphasis role="comment">//&#32;Stack</emphasis>
+32 
+34 
+36 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Allocator&gt;
+37 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_stack">Stack</link>&#32;{
+38 <emphasis role="keyword">public</emphasis>:
+39 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Optimization&#32;note:&#32;Do&#32;not&#32;allocate&#32;memory&#32;for&#32;stack_&#32;in&#32;constructor.</emphasis>
+40 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Do&#32;it&#32;lazily&#32;when&#32;first&#32;Push()&#32;-&gt;&#32;Expand()&#32;-&gt;&#32;Resize().</emphasis>
+41 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;stackCapacity)&#32;:&#32;allocator_(allocator),&#32;ownAllocator_(0),&#32;stack_(0),&#32;stackTop_(0),&#32;stackEnd_(0),&#32;initialCapacity_(stackCapacity)&#32;{
+42 &#32;&#32;&#32;&#32;}
+43 
+44 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+45 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>(<link linkend="_classinternal_1_1_stack">Stack</link>&amp;&amp;&#32;rhs)
+46 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;:&#32;allocator_(rhs.allocator_),
+47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_(rhs.ownAllocator_),
+48 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stack_(rhs.stack_),
+49 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_(rhs.stackTop_),
+50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackEnd_(rhs.stackEnd_),
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;initialCapacity_(rhs.initialCapacity_)
+52 &#32;&#32;&#32;&#32;{
+53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.allocator_&#32;=&#32;0;
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.ownAllocator_&#32;=&#32;0;
+55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stack_&#32;=&#32;0;
+56 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stackTop_&#32;=&#32;0;
+57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stackEnd_&#32;=&#32;0;
+58 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.initialCapacity_&#32;=&#32;0;
+59 &#32;&#32;&#32;&#32;}
+60 <emphasis role="preprocessor">#endif</emphasis>
+61 
+62 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack_1afedce84c8816abe9277a71ebd5e1808a">~Stack</link>()&#32;{
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Destroy();
+64 &#32;&#32;&#32;&#32;}
+65 
+66 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+67 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack</link>&amp;&#32;operator=(<link linkend="_classinternal_1_1_stack">Stack</link>&amp;&amp;&#32;rhs)&#32;{
+68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(&amp;rhs&#32;!=&#32;<emphasis role="keyword">this</emphasis>)
+69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Destroy();
+71 
+72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_&#32;=&#32;rhs.allocator_;
+73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_&#32;=&#32;rhs.ownAllocator_;
+74 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stack_&#32;=&#32;rhs.stack_;
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_&#32;=&#32;rhs.stackTop_;
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackEnd_&#32;=&#32;rhs.stackEnd_;
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;initialCapacity_&#32;=&#32;rhs.initialCapacity_;
+78 
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.allocator_&#32;=&#32;0;
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.ownAllocator_&#32;=&#32;0;
+81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stack_&#32;=&#32;0;
+82 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stackTop_&#32;=&#32;0;
+83 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.stackEnd_&#32;=&#32;0;
+84 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.initialCapacity_&#32;=&#32;0;
+85 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
+87 &#32;&#32;&#32;&#32;}
+88 <emphasis role="preprocessor">#endif</emphasis>
+89 
+90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a5e601199a21d84b1ac612f558be0f2c3">Swap</link>(<link linkend="_classinternal_1_1_stack">Stack</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;{
+91 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(allocator_,&#32;rhs.allocator_);
+92 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(ownAllocator_,&#32;rhs.ownAllocator_);
+93 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(stack_,&#32;rhs.stack_);
+94 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(stackTop_,&#32;rhs.stackTop_);
+95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(stackEnd_,&#32;rhs.stackEnd_);
+96 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(initialCapacity_,&#32;rhs.initialCapacity_);
+97 &#32;&#32;&#32;&#32;}
+98 
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a02da31665a372738e81ded2f7b7d598e">Clear</link>()&#32;{&#32;stackTop_&#32;=&#32;stack_;&#32;}
+100 
+101 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a3852b8494d69c91f6a238a51572e591e">ShrinkToFit</link>()&#32;{&#32;
+102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>())&#32;{
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;If&#32;the&#32;stack&#32;is&#32;empty,&#32;completely&#32;deallocate&#32;the&#32;memory.</emphasis>
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Allocator::Free</link>(stack_);&#32;<emphasis role="comment">//&#32;NOLINT&#32;(+clang-analyzer-unix.Malloc)</emphasis>
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stack_&#32;=&#32;0;
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_&#32;=&#32;0;
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackEnd_&#32;=&#32;0;
+108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Resize(<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>());
+111 &#32;&#32;&#32;&#32;}
+112 
+113 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Optimization&#32;note:&#32;try&#32;to&#32;minimize&#32;the&#32;size&#32;of&#32;this&#32;function&#32;for&#32;force&#32;inline.</emphasis>
+114 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Expansion&#32;is&#32;run&#32;very&#32;infrequently,&#32;so&#32;it&#32;is&#32;moved&#32;to&#32;another&#32;(probably&#32;non-inline)&#32;function.</emphasis>
+115 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+116 &#32;&#32;&#32;&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a7ae5de892834b7fc16099eb5e23dd97c">Reserve</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count&#32;=&#32;1)&#32;{
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Expand&#32;the&#32;stack&#32;if&#32;needed</emphasis>
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(<emphasis role="keyword">static_cast&lt;</emphasis>std::ptrdiff_t<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>)&#32;*&#32;count)&#32;&gt;&#32;(stackEnd_&#32;-&#32;stackTop_)))
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Expand&lt;T&gt;(count);
+120 &#32;&#32;&#32;&#32;}
+121 
+122 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+123 &#32;&#32;&#32;&#32;RAPIDJSON_FORCEINLINE&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a2d3b995140893ce92e9b94ada11ee3f3">Push</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count&#32;=&#32;1)&#32;{
+124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reserve&lt;T&gt;(count);
+125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;PushUnsafe&lt;T&gt;(count);
+126 &#32;&#32;&#32;&#32;}
+127 
+128 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+129 &#32;&#32;&#32;&#32;RAPIDJSON_FORCEINLINE&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a8b82b6705a41aa259936a81b927bcac0">PushUnsafe</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count&#32;=&#32;1)&#32;{
+130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(stackTop_);
+131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">static_cast&lt;</emphasis>std::ptrdiff_t<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>)&#32;*&#32;count)&#32;&lt;=&#32;(stackEnd_&#32;-&#32;stackTop_));
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;ret&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_);
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_&#32;+=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>)&#32;*&#32;count;
+134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ret;
+135 &#32;&#32;&#32;&#32;}
+136 
+137 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+138 &#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a1cb63cab765815c0624c6676b3712b03">Pop</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;count&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>));
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_&#32;-=&#32;count&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>);
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_);
+142 &#32;&#32;&#32;&#32;}
+143 
+144 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+145 &#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a9c2611699081d74be865ebe67315dc6d">Top</link>()&#32;{&#32;
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>));
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_&#32;-&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>));
+148 &#32;&#32;&#32;&#32;}
+149 
+150 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+151 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a18e79cab61089f955d42b6c45bb51c23">Top</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>));
+153 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_&#32;-&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>));
+154 &#32;&#32;&#32;&#32;}
+155 
+156 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+157 &#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1acb8a65d110faf22be514db83524409c5">End</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_);&#32;}
+158 
+159 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+160 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a242967361d9e254d13b85cfc2161861e">End</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stackTop_);&#32;}
+161 
+162 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+163 &#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1a6acd2f7a16458184084c40d9f06f4a55">Bottom</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stack_);&#32;}
+164 
+165 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+166 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*&#32;<link linkend="_classinternal_1_1_stack_1aeb6c4af6d6de57865232e1926dc0834e">Bottom</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>*<emphasis role="keyword">&gt;</emphasis>(stack_);&#32;}
+167 
+168 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a657ae4d477b25d4e0045aee0efd809c3">HasAllocator</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;allocator_&#32;!=&#32;0;
+170 &#32;&#32;&#32;&#32;}
+171 
+172 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>&amp;&#32;<link linkend="_classinternal_1_1_stack_1aa6f933acc7ecd92a2b567db5fa8cd43a">GetAllocator</link>()&#32;{
+173 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(allocator_);
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*allocator_;
+175 &#32;&#32;&#32;&#32;}
+176 
+177 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;stackTop_&#32;==&#32;stack_;&#32;}
+178 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(stackTop_&#32;-&#32;stack_);&#32;}
+179 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1a67d5d7ee9424d3dd46cf9d001b6cdc6b">GetCapacity</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(stackEnd_&#32;-&#32;stack_);&#32;}
+180 
+181 <emphasis role="keyword">private</emphasis>:
+182 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+183 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Expand(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Only&#32;expand&#32;the&#32;capacity&#32;if&#32;the&#32;current&#32;stack&#32;exists.&#32;Otherwise&#32;just&#32;create&#32;a&#32;stack&#32;with&#32;initial&#32;capacity.</emphasis>
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;newCapacity;
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(stack_&#32;==&#32;0)&#32;{
+187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!allocator_)
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_&#32;=&#32;allocator_&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)();
+189 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;newCapacity&#32;=&#32;initialCapacity_;
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;newCapacity&#32;=&#32;<link linkend="_classinternal_1_1_stack_1a67d5d7ee9424d3dd46cf9d001b6cdc6b">GetCapacity</link>();
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;newCapacity&#32;+=&#32;(newCapacity&#32;+&#32;1)&#32;/&#32;2;
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;newSize&#32;=&#32;<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;+&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>)&#32;*&#32;count;
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(newCapacity&#32;&lt;&#32;newSize)
+196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;newCapacity&#32;=&#32;newSize;
+197 
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Resize(newCapacity);
+199 &#32;&#32;&#32;&#32;}
+200 
+201 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Resize(<emphasis role="keywordtype">size_t</emphasis>&#32;newCapacity)&#32;{
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;size&#32;=&#32;<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>();&#32;&#32;<emphasis role="comment">//&#32;Backup&#32;the&#32;current&#32;size</emphasis>
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stack_&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>(allocator_-&gt;Realloc(stack_,&#32;<link linkend="_classinternal_1_1_stack_1a67d5d7ee9424d3dd46cf9d001b6cdc6b">GetCapacity</link>(),&#32;newCapacity));
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackTop_&#32;=&#32;stack_&#32;+&#32;size;
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stackEnd_&#32;=&#32;stack_&#32;+&#32;newCapacity;
+206 &#32;&#32;&#32;&#32;}
+207 
+208 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Destroy()&#32;{
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Allocator::Free</link>(stack_);
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(ownAllocator_);&#32;<emphasis role="comment">//&#32;Only&#32;delete&#32;if&#32;it&#32;is&#32;owned&#32;by&#32;the&#32;stack</emphasis>
+211 &#32;&#32;&#32;&#32;}
+212 
+213 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prohibit&#32;copy&#32;constructor&#32;&amp;&#32;assignment&#32;operator.</emphasis>
+214 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>&amp;);
+215 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_stack_1af09ab91f9e5143deccf7c9af837f451e">Stack</link>&amp;);
+216 
+217 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator_;
+218 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;ownAllocator_;
+219 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*stack_;
+220 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*stackTop_;
+221 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*stackEnd_;
+222 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;initialCapacity_;
+223 };
+224 
+225 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+226 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+227 
+228 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+229 RAPIDJSON_DIAG_POP
+230 <emphasis role="preprocessor">#endif</emphasis>
+231 
+232 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STACK_H_</emphasis>
+</programlisting></section>

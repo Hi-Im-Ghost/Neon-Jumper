@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_encoding" xml:lang="en-US">
+
+<para>According to <link xlink:href="http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf">ECMA-404</link>,</para>
+
+<para><blockquote>
+<para>&#8205;(in Introduction) JSON text is a sequence of Unicode code points. </para>
+</blockquote>The earlier <link xlink:href="http://www.ietf.org/rfc/rfc4627.txt">RFC4627</link> stated that,</para>
+
+<para><blockquote>
+<para>&#8205;(in §3) JSON text SHALL be encoded in Unicode. The default encoding is UTF-8. </para>
+</blockquote><blockquote>
+<para>&#8205;(in §6) JSON may be represented using UTF-8, UTF-16, or UTF-32. When JSON is written in UTF-8, JSON is 8bit compatible. When JSON is written in UTF-16 or UTF-32, the binary content-transfer-encoding must be used. </para>
+</blockquote>RapidJSON supports various encodings. It can also validate the encodings of JSON, and transcoding JSON among encodings. All these features are implemented internally, without the need for external libraries (e.g. <link xlink:href="http://site.icu-project.org/">ICU</link>).</para>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1Unicode">
+<title>Unicode</title>
+
+<para>From <link xlink:href="http://www.unicode.org/standard/WhatIsUnicode.html">Unicode&apos;s official website</link>: <blockquote>
+<para>&#8205;Unicode provides a unique number for every character, no matter what the platform, no matter what the program, no matter what the language. </para>
+</blockquote>Those unique numbers are called code points, which is in the range <computeroutput>0x0</computeroutput> to <computeroutput>0x10FFFF</computeroutput>.</para>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1UTF">
+<title>Unicode Transformation Format</title>
+
+<para>There are various encodings for storing Unicode code points. These are called Unicode Transformation Format (UTF). RapidJSON supports the most commonly used UTFs, including</para>
+
+<para><itemizedlist>
+<listitem>
+<para>UTF-8: 8-bit variable-width encoding. It maps a code point to 1–4 bytes.</para>
+</listitem><listitem>
+<para>UTF-16: 16-bit variable-width encoding. It maps a code point to 1–2 16-bit code units (i.e., 2–4 bytes).</para>
+</listitem><listitem>
+<para>UTF-32: 32-bit fixed-width encoding. It directly maps a code point to a single 32-bit code unit (i.e. 4 bytes).</para>
+</listitem></itemizedlist>
+</para>
+
+<para>For UTF-16 and UTF-32, the byte order (endianness) does matter. Within computer memory, they are often stored in the computer&apos;s endianness. However, when it is stored in file or transferred over network, we need to state the byte order of the byte sequence, either little-endian (LE) or big-endian (BE).</para>
+
+<para>RapidJSON provide these encodings via the structs in <computeroutput><link linkend="_encodings_8h">rapidjson/encodings.h</link></computeroutput>:</para>
+
+<para><literallayout><computeroutput>namespace&#32;rapidjson&#32;{
+
+template&lt;typename&#32;CharType&#32;=&#32;char&gt;
+struct&#32;UTF8;
+
+template&lt;typename&#32;CharType&#32;=&#32;wchar_t&gt;
+struct&#32;UTF16;
+
+template&lt;typename&#32;CharType&#32;=&#32;wchar_t&gt;
+struct&#32;UTF16LE;
+
+template&lt;typename&#32;CharType&#32;=&#32;wchar_t&gt;
+struct&#32;UTF16BE;
+
+template&lt;typename&#32;CharType&#32;=&#32;unsigned&gt;
+struct&#32;UTF32;
+
+template&lt;typename&#32;CharType&#32;=&#32;unsigned&gt;
+struct&#32;UTF32LE;
+
+template&lt;typename&#32;CharType&#32;=&#32;unsigned&gt;
+struct&#32;UTF32BE;
+
+}&#32;//&#32;namespace&#32;rapidjson
+</computeroutput></literallayout></para>
+
+<para>For processing text in memory, we normally use <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput> or <computeroutput><link linkend="_struct_u_t_f32">UTF32</link></computeroutput>. For processing text via I/O, we may use <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16_l_e">UTF16LE</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16_b_e">UTF16BE</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f32_l_e">UTF32LE</link></computeroutput> or <computeroutput><link linkend="_struct_u_t_f32_b_e">UTF32BE</link></computeroutput>.</para>
+
+<para>When using the DOM-style API, the <computeroutput>Encoding</computeroutput> template parameter in <computeroutput><link linkend="_class_generic_value">GenericValue</link>&lt;Encoding&gt;</computeroutput> and <computeroutput><link linkend="_class_generic_document">GenericDocument</link>&lt;Encoding&gt;</computeroutput> indicates the encoding to be used to represent JSON string in memory. So normally we will use <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput> or <computeroutput><link linkend="_struct_u_t_f32">UTF32</link></computeroutput> for this template parameter. The choice depends on operating systems and other libraries that the application is using. For example, Windows API represents Unicode characters in UTF-16, while most Linux distributions and applications prefer UTF-8.</para>
+
+<para>Example of UTF-16 DOM declaration:</para>
+
+<para><literallayout><computeroutput>typedef&#32;GenericDocument&lt;UTF16&lt;&gt;&#32;&gt;&#32;WDocument;
+typedef&#32;GenericValue&lt;UTF16&lt;&gt;&#32;&gt;&#32;WValue;
+</computeroutput></literallayout></para>
+
+<para>For a detail example, please check the example in <link linkend="_stream_8md">DOM&apos;s Encoding</link> section.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1CharacterType">
+<title>Character Type</title>
+
+<para>As shown in the declaration, each encoding has a <computeroutput>CharType</computeroutput> template parameter. Actually, it may be a little bit confusing, but each <computeroutput>CharType</computeroutput> stores a code unit, not a character (code point). As mentioned in previous section, a code point may be encoded to 1–4 code units for UTF-8.</para>
+
+<para>For <computeroutput><link linkend="_struct_u_t_f16">UTF16</link>(LE|BE)</computeroutput>, <computeroutput><link linkend="_struct_u_t_f32">UTF32</link>(LE|BE)</computeroutput>, the <computeroutput>CharType</computeroutput> must be integer type of at least 2 and 4 bytes respectively.</para>
+
+<para>Note that C++11 introduces <computeroutput>char16_t</computeroutput> and <computeroutput>char32_t</computeroutput>, which can be used for <computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput> and <computeroutput><link linkend="_struct_u_t_f32">UTF32</link></computeroutput> respectively.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1AutoUTF">
+<title>AutoUTF</title>
+
+<para>Previous encodings are statically bound in compile-time. In other words, user must know exactly which encodings will be used in the memory or streams. However, sometimes we may need to read/write files of different encodings. The encoding needed to be decided in runtime.</para>
+
+<para><computeroutput><link linkend="_struct_auto_u_t_f">AutoUTF</link></computeroutput> is an encoding designed for this purpose. It chooses which encoding to be used according to the input or output stream. Currently, it should be used with <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> and <computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1ASCII">
+<title>ASCII</title>
+
+<para>Although the JSON standards did not mention about <link xlink:href="http://en.wikipedia.org/wiki/ASCII">ASCII</link>, sometimes we would like to write 7-bit <link linkend="_struct_a_s_c_i_i">ASCII</link> JSON for applications that cannot handle UTF-8. Since any JSON can represent unicode characters in escaped sequence <computeroutput>\uXXXX</computeroutput>, JSON can always be encoded in <link linkend="_struct_a_s_c_i_i">ASCII</link>.</para>
+
+<para>Here is an example for writing a UTF-8 DOM into <link linkend="_struct_a_s_c_i_i">ASCII</link>:</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+Document&#32;d;&#32;//&#32;UTF8&lt;&gt;
+//&#32;...
+StringBuffer&#32;buffer;
+Writer&lt;StringBuffer,&#32;Document::EncodingType,&#32;ASCII&lt;&gt;&#32;&gt;&#32;writer(buffer);
+d.Accept(writer);
+std::cout&#32;&lt;&lt;&#32;buffer.GetString();
+</computeroutput></literallayout></para>
+
+<para><link linkend="_struct_a_s_c_i_i">ASCII</link> can be used in input stream. If the input stream contains bytes with values above 127, it will cause <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> error.</para>
+
+<para><link linkend="_struct_a_s_c_i_i">ASCII</link> <emphasis>cannot</emphasis> be used in memory (encoding of <computeroutput>Document</computeroutput> or target encoding of <computeroutput>Reader</computeroutput>), as it cannot represent Unicode code points.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1ValidationTranscoding">
+<title>Validation &amp; Transcoding</title>
+
+<para>When RapidJSON parses a JSON, it can validate the input JSON, whether it is a valid sequence of a specified encoding. This option can be turned on by adding <computeroutput>kParseValidateEncodingFlag</computeroutput> in <computeroutput>parseFlags</computeroutput> template parameter.</para>
+
+<para>If the input encoding and output encoding is different, <computeroutput>Reader</computeroutput> and <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> will automatically transcode (convert) the text. In this case, <computeroutput>kParseValidateEncodingFlag</computeroutput> is not necessary, as it must decode the input sequence. And if the sequence was unable to be decoded, it must be invalid.</para>
+<section xml:id="_md_src_rapidjson_doc_encoding_zh_cn_1Transcoder">
+<title>Transcoder</title>
+
+<para>Although the encoding functions in RapidJSON are designed for JSON parsing/generation, user may abuse them for transcoding of non-JSON strings.</para>
+
+<para>Here is an example for transcoding a string from UTF-8 to UTF-16:</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/encodings.h&quot;
+
+using&#32;namespace&#32;rapidjson;
+
+const&#32;char*&#32;s&#32;=&#32;&quot;...&quot;;&#32;//&#32;UTF-8&#32;string
+StringStream&#32;source(s);
+GenericStringBuffer&lt;UTF16&lt;&gt;&#32;&gt;&#32;target;
+
+bool&#32;hasError&#32;=&#32;false;
+while&#32;(source.Peek()&#32;!=&#32;&apos;\0&apos;)
+&#32;&#32;&#32;&#32;if&#32;(!Transcoder&lt;UTF8&lt;&gt;,&#32;UTF16&lt;&gt;&#32;&gt;::Transcode(source,&#32;target))&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hasError&#32;=&#32;true;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;break;
+&#32;&#32;&#32;&#32;}
+
+if&#32;(!hasError)&#32;{
+&#32;&#32;&#32;&#32;const&#32;wchar_t*&#32;t&#32;=&#32;target.GetString();
+&#32;&#32;&#32;&#32;//&#32;...
+}
+</computeroutput></literallayout></para>
+
+<para>You may also use <computeroutput><link linkend="_struct_auto_u_t_f">AutoUTF</link></computeroutput> and the associated streams for setting source/target encoding in runtime. </para>
+</section>
+</section>
+</section>

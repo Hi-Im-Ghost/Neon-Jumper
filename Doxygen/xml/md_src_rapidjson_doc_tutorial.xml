@@ -1,0 +1,466 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_tutorial" kind="page">
+    <compoundname>md_src_rapidjson_doc_tutorial</compoundname>
+    <title>Tutorial</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>This tutorial introduces the basics of the Document Object Model(DOM) API.</para>
+<para>As shown in Usage at a glance, JSON can be parsed into a DOM, and then the DOM can be queried and modified easily, and finally be converted back to JSON.</para>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1ValueDocument">
+<title>Value &amp; Document</title>
+<para>Each JSON value is stored in a type called <computeroutput>Value</computeroutput>. A <computeroutput>Document</computeroutput>, representing the DOM, contains the root <computeroutput>Value</computeroutput> of the DOM tree. All public types and functions of RapidJSON are defined in the <computeroutput>rapidjson</computeroutput> namespace.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryValue">
+<title>Query Value</title>
+<para>In this section, we will use excerpt from <computeroutput><ref refid="tutorial_8cpp" kindref="compound">example/tutorial/tutorial.cpp</ref></computeroutput>.</para>
+<para>Assume we have the following JSON stored in a C string (<computeroutput>const char* json</computeroutput>): <programlisting filename=".js"><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;hello&quot;:<sp/>&quot;world&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;t&quot;:<sp/>true<sp/>,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;f&quot;:<sp/>false,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;n&quot;:<sp/>null,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;i&quot;:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;:<sp/>3.1416,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;a&quot;:<sp/>[1,<sp/>2,<sp/>3,<sp/>4]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>Parse it into a <computeroutput>Document</computeroutput>: <programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
+<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+</programlisting></para>
+<para>The JSON is now parsed into <computeroutput>document</computeroutput> as a <emphasis>DOM tree</emphasis>:</para>
+<para><image type="html" name="diagram/tutorial.png" alt="DOM in the tutorial" inline="yes"></image>
+</para>
+<para>Since the update to RFC 7159, the root of a conforming JSON document can be any JSON value. In earlier RFC 4627, only objects or arrays were allowed as root values. In this case, the root is an object. <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.IsObject());</highlight></codeline>
+</programlisting></para>
+<para>Let&apos;s query whether a <computeroutput>&quot;hello&quot;</computeroutput> member exists in the root object. Since a <computeroutput>Value</computeroutput> can contain different types of value, we may need to verify its type and use suitable API to obtain the value. In this example, <computeroutput>&quot;hello&quot;</computeroutput> member associates with a JSON string. <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.HasMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].IsString());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].GetString());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">hello<sp/>=<sp/>world</highlight></codeline>
+</programlisting></para>
+<para>JSON true/false values are represented as <computeroutput>bool</computeroutput>. <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;t&quot;</highlight><highlight class="normal">].IsBool());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;t<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;t&quot;</highlight><highlight class="normal">].GetBool()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;true&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;false&quot;</highlight><highlight class="normal">);</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">t<sp/>=<sp/>true</highlight></codeline>
+</programlisting></para>
+<para>JSON null can be queried with <computeroutput>IsNull()</computeroutput>. <programlisting filename=".cpp"><codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;n<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;n&quot;</highlight><highlight class="normal">].IsNull()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;null&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;?&quot;</highlight><highlight class="normal">);</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">n<sp/>=<sp/>null</highlight></codeline>
+</programlisting></para>
+<para>JSON number type represents all numeric values. However, C++ needs more specific type for manipulation.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].IsNumber());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>In<sp/>this<sp/>case,<sp/>IsUint()/IsInt64()/IsUint64()<sp/>also<sp/>return<sp/>true.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].IsInt());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;i<sp/>=<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">].GetInt());</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Alternatively<sp/>(int)document[&quot;i&quot;]</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].IsNumber());</highlight></codeline>
+<codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].IsDouble());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;pi<sp/>=<sp/>%g\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">].GetDouble());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">i<sp/>=<sp/>123</highlight></codeline>
+<codeline><highlight class="normal">pi<sp/>=<sp/>3.1416</highlight></codeline>
+</programlisting></para>
+<para>JSON array contains a number of elements. <programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>Using<sp/>a<sp/>reference<sp/>for<sp/>consecutive<sp/>access<sp/>is<sp/>handy<sp/>and<sp/>faster.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>document[</highlight><highlight class="stringliteral">&quot;a&quot;</highlight><highlight class="normal">];</highlight></codeline>
+<codeline><highlight class="normal">assert(<ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.IsArray());</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Size();<sp/>i++)<sp/></highlight><highlight class="comment">//<sp/>Uses<sp/>SizeType<sp/>instead<sp/>of<sp/>size_t</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;a[%d]<sp/>=<sp/>%d\n&quot;</highlight><highlight class="normal">,<sp/>i,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>[i].GetInt());</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">a[0]<sp/>=<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">a[1]<sp/>=<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">a[2]<sp/>=<sp/>3</highlight></codeline>
+<codeline><highlight class="normal">a[3]<sp/>=<sp/>4</highlight></codeline>
+</programlisting></para>
+<para>Note that, RapidJSON does not automatically convert values between JSON types. For example, if a value is a string, it is invalid to call <computeroutput>GetInt()</computeroutput>. In debug mode it will fail on assertion. In release mode, the behavior is undefined.</para>
+<para>In the following sections we discuss details about querying individual types.</para>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryArray">
+<title>Query Array</title>
+<para>By default, <computeroutput>SizeType</computeroutput> is typedef of <computeroutput>unsigned</computeroutput>. In most systems, an array is limited to store up to 2^32-1 elements.</para>
+<para>You may access the elements in an array by integer literal, for example, <computeroutput>a[0]</computeroutput>, <computeroutput>a[1]</computeroutput>, <computeroutput>a[2]</computeroutput>.</para>
+<para>Array is similar to <computeroutput>std::vector</computeroutput>: instead of using indices, you may also use iterator to access all the elements. <programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_value" kindref="compound">Value::ConstValueIterator</ref><sp/>itr<sp/>=<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Begin();<sp/>itr<sp/>!=<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.End();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%d<sp/>&quot;</highlight><highlight class="normal">,<sp/>itr-&gt;GetInt());</highlight></codeline>
+</programlisting></para>
+<para>And other familiar query functions:<itemizedlist>
+<listitem><para><computeroutput>SizeType Capacity() const</computeroutput></para>
+</listitem><listitem><para><computeroutput>bool Empty() const</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="md_src_rapidjson_doc_tutorial_1autotoc_md120">
+<title>Range-based For Loop (New in v1.1.0)</title>
+<para>When C++11 is enabled, you can use range-based for loop to access all elements in an array.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>v<sp/>:<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.GetArray())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%d<sp/>&quot;</highlight><highlight class="normal">,<sp/>v.GetInt());</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryObject">
+<title>Query Object</title>
+<para>Similar to Array, we can access all object members by iterator:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>kTypeNames[]<sp/>=<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="stringliteral">&quot;Null&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;False&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;True&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Object&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Array&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;String&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Number&quot;</highlight><highlight class="normal"><sp/>};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_member_iterator" kindref="compound">Value::ConstMemberIterator</ref><sp/>itr<sp/>=<sp/>document.MemberBegin();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>itr<sp/>!=<sp/>document.MemberEnd();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>itr-&gt;name.GetString(),<sp/>kTypeNames[itr-&gt;value.GetType()]);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><programlisting><codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>hello<sp/>is<sp/>String</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>t<sp/>is<sp/>True</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>f<sp/>is<sp/>False</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>n<sp/>is<sp/>Null</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>i<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>pi<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>a<sp/>is<sp/>Array</highlight></codeline>
+</programlisting></para>
+<para>Note that, when <computeroutput>operator[](const char*)</computeroutput> cannot find the member, it will fail on assertion.</para>
+<para>If we are unsure whether a member exists, we need to call <computeroutput>HasMember()</computeroutput> before calling <computeroutput>operator[](const char*)</computeroutput>. However, this incurs two lookup. A better way is to call <computeroutput>FindMember()</computeroutput>, which can check the existence of a member and obtain its value at once:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_member_iterator" kindref="compound">Value::ConstMemberIterator</ref><sp/>itr<sp/>=<sp/>document.FindMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(itr<sp/>!=<sp/>document.MemberEnd())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;%s\n&quot;</highlight><highlight class="normal">,<sp/>itr-&gt;value.GetString());</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_src_rapidjson_doc_tutorial_1autotoc_md121">
+<title>Range-based For Loop (New in v1.1.0)</title>
+<para>When C++11 is enabled, you can use range-based for loop to access all members in an object.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>m<sp/>:<sp/>document.GetObject())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(</highlight><highlight class="stringliteral">&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>m.name.GetString(),<sp/>kTypeNames[m.value.GetType()]);</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryNumber">
+<title>Querying Number</title>
+<para>JSON provides a single numerical type called Number. Number can be an integer or a real number. RFC 4627 says the range of Number is specified by the parser implementation.</para>
+<para>As C++ provides several integer and floating point number types, the DOM tries to handle these with the widest possible range and good performance.</para>
+<para>When a Number is parsed, it is stored in the DOM as one of the following types:</para>
+<para><table rows="6" cols="2"><row>
+<entry thead="yes"><para>Type   </para>
+</entry><entry thead="yes"><para>Description    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>unsigned</computeroutput>   </para>
+</entry><entry thead="no"><para>32-bit unsigned integer    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int</computeroutput>   </para>
+</entry><entry thead="no"><para>32-bit signed integer    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>uint64_t</computeroutput>   </para>
+</entry><entry thead="no"><para>64-bit unsigned integer    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>int64_t</computeroutput>   </para>
+</entry><entry thead="no"><para>64-bit signed integer    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>double</computeroutput>   </para>
+</entry><entry thead="no"><para>64-bit double precision floating point   </para>
+</entry></row>
+</table>
+</para>
+<para>When querying a number, you can check whether the number can be obtained as the target type:</para>
+<para><table rows="7" cols="2"><row>
+<entry thead="yes"><para>Checking   </para>
+</entry><entry thead="yes"><para>Obtaining    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsNumber()</computeroutput>   </para>
+</entry><entry thead="no"><para>N/A    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsUint()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>unsigned GetUint()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsInt()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>int GetInt()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsUint64()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>uint64_t GetUint64()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsInt64()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>int64_t GetInt64()</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>bool IsDouble()</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>double GetDouble()</computeroutput>   </para>
+</entry></row>
+</table>
+</para>
+<para>Note that, an integer value may be obtained in various ways without conversion. For example, A value <computeroutput>x</computeroutput> containing 123 will make <computeroutput>x.IsInt() == x.IsUint() == x.IsInt64() == x.IsUint64() == true</computeroutput>. But a value <computeroutput>y</computeroutput> containing -3000000000 will only make <computeroutput>x.IsInt64() == true</computeroutput>.</para>
+<para>When obtaining the numeric values, <computeroutput>GetDouble()</computeroutput> will convert internal integer representation to a <computeroutput>double</computeroutput>. Note that, <computeroutput>int</computeroutput> and <computeroutput>unsigned</computeroutput> can be safely converted to <computeroutput>double</computeroutput>, but <computeroutput>int64_t</computeroutput> and <computeroutput>uint64_t</computeroutput> may lose precision (since mantissa of <computeroutput>double</computeroutput> is only 52-bits).</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryString">
+<title>Query String</title>
+<para>In addition to <computeroutput>GetString()</computeroutput>, the <computeroutput>Value</computeroutput> class also contains <computeroutput>GetStringLength()</computeroutput>. Here explains why:</para>
+<para>According to RFC 4627, JSON strings can contain Unicode character <computeroutput>U+0000</computeroutput>, which must be escaped as <computeroutput>&quot;\u0000&quot;</computeroutput>. The problem is that, C/C++ often uses null-terminated string, which treats <computeroutput>\0</computeroutput> as the terminator symbol.</para>
+<para>To conform with RFC 4627, RapidJSON supports string containing <computeroutput>U+0000</computeroutput> character. If you need to handle this, you can use <computeroutput>GetStringLength()</computeroutput> to obtain the correct string length.</para>
+<para>For example, after parsing the following JSON to <computeroutput>Document d</computeroutput>:</para>
+<para><programlisting filename=".js"><codeline><highlight class="normal">{<sp/>&quot;s&quot;<sp/>:<sp/><sp/>&quot;a\u0000b&quot;<sp/>}</highlight></codeline>
+</programlisting> The correct length of the string <computeroutput>&quot;a\u0000b&quot;</computeroutput> is 3, as returned by <computeroutput>GetStringLength()</computeroutput>. But <computeroutput>strlen()</computeroutput> returns 1.</para>
+<para><computeroutput>GetStringLength()</computeroutput> can also improve performance, as user may often need to call <computeroutput>strlen()</computeroutput> for allocating buffer.</para>
+<para>Besides, <computeroutput>std::string</computeroutput> also support a constructor:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal">string(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>s,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>count);</highlight></codeline>
+</programlisting></para>
+<para>which accepts the length of string as parameter. This constructor supports storing null character within the string, and should also provide better performance.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_1autotoc_md122">
+<title>Comparing values</title>
+<para>You can use <computeroutput>==</computeroutput> and <computeroutput>!=</computeroutput> to compare values. Two values are equal if and only if they have same type and contents. You can also compare values with primitive types. Here is an example:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">]<sp/>==<sp/>document[</highlight><highlight class="stringliteral">&quot;n&quot;</highlight><highlight class="normal">])<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>values</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">]<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;world&quot;</highlight><highlight class="normal">)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>value<sp/>with<sp/>literal<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;i&quot;</highlight><highlight class="normal">]<sp/>!=<sp/>123)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>with<sp/>integers</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(document[</highlight><highlight class="stringliteral">&quot;pi&quot;</highlight><highlight class="normal">]<sp/>!=<sp/>3.14)<sp/></highlight><highlight class="comment">/*...*/</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>with<sp/>double.</highlight></codeline>
+</programlisting></para>
+<para>Array/object compares their elements/members in order. They are equal if and only if their whole subtrees are equal.</para>
+<para>Note that, currently if an object contains duplicated named member, comparing equality with any object is always <computeroutput>false</computeroutput>.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1CreateModifyValues">
+<title>Create/Modify Values</title>
+<para>There are several ways to create values. After a DOM tree is created and/or modified, it can be saved as JSON again using <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput>.</para>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ChangeValueType">
+<title>Change Value Type</title>
+<para>When creating a <computeroutput>Value</computeroutput> or <computeroutput>Document</computeroutput> by default constructor, its type is Null. To change its type, call <computeroutput>SetXXX()</computeroutput> or assignment operator, for example:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>Null</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.SetObject();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Null</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v.SetInt(10);</highlight></codeline>
+<codeline><highlight class="normal">v<sp/>=<sp/>10;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_src_rapidjson_doc_tutorial_1autotoc_md123">
+<title>Overloaded Constructors</title>
+<para>There are also overloaded constructors for several types:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(</highlight><highlight class="keyword">true</highlight><highlight class="normal">);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calls<sp/>Value(bool)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>i(-123);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calls<sp/>Value(int)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>u(123u);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calls<sp/>Value(unsigned)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>d(1.5);<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>calls<sp/>Value(double)</highlight></codeline>
+</programlisting></para>
+<para>To create empty object or array, you may use <computeroutput>SetObject()</computeroutput>/<computeroutput>SetArray()</computeroutput> after default constructor, or using the <computeroutput>Value(Type)</computeroutput> in one call:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1MoveSemantics">
+<title>Move Semantics</title>
+<para>A very special decision during design of RapidJSON is that, assignment of value does not copy the source value to destination value. Instead, the value from source is moved to the destination. For example,</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(123);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(456);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>b;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>b<sp/>becomes<sp/>a<sp/>Null<sp/>value,<sp/>a<sp/>becomes<sp/>number<sp/>456.</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move1.png" alt="Assignment with move semantics." inline="yes"></image>
+</para>
+<para>Why? What is the advantage of this semantics?</para>
+<para>The simple answer is performance. For fixed size JSON types (Number, True, False, Null), copying them is fast and easy. However, For variable size JSON types (String, Array, Object), copying them will incur a lot of overheads. And these overheads are often unnoticed. Especially when we need to create temporary object, copy it to another variable, and then destruct it.</para>
+<para>For example, if normal <emphasis>copy</emphasis> semantics was used:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contacts(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>adding<sp/>elements<sp/>to<sp/>contacts<sp/>array.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(</highlight><highlight class="stringliteral">&quot;contacts&quot;</highlight><highlight class="normal">,<sp/>contacts,<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/><sp/></highlight><highlight class="comment">//<sp/>deep<sp/>clone<sp/>contacts<sp/>(may<sp/>be<sp/>with<sp/>lots<sp/>of<sp/>allocations)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>destruct<sp/>contacts.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move2.png" alt="Copy semantics makes a lots of copy operations." inline="yes"></image>
+</para>
+<para>The object <computeroutput>o</computeroutput> needs to allocate a buffer of same size as contacts, makes a deep clone of it, and then finally contacts is destructed. This will incur a lot of unnecessary allocations/deallocations and memory copying.</para>
+<para>There are solutions to prevent actual copying these data, such as reference counting and garbage collection(GC).</para>
+<para>To make RapidJSON simple and fast, we chose to use <emphasis>move</emphasis> semantics for assignment. It is similar to <computeroutput>std::auto_ptr</computeroutput> which transfer ownership during assignment. Move is much faster and simpler, it just destructs the original value, <computeroutput>memcpy()</computeroutput> the source to destination, and finally sets the source as Null type.</para>
+<para>So, with move semantics, the above example becomes:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>o(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f" kindref="member">kObjectType</ref>);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contacts(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>adding<sp/>elements<sp/>to<sp/>contacts<sp/>array.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(</highlight><highlight class="stringliteral">&quot;contacts&quot;</highlight><highlight class="normal">,<sp/>contacts,<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/><sp/></highlight><highlight class="comment">//<sp/>just<sp/>memcpy()<sp/>of<sp/>contacts<sp/>itself<sp/>to<sp/>the<sp/>value<sp/>of<sp/>new<sp/>member<sp/>(16<sp/>bytes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>contacts<sp/>became<sp/>Null<sp/>here.<sp/>Its<sp/>destruction<sp/>is<sp/>trivial.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><image type="html" name="diagram/move3.png" alt="Move semantics makes no copying." inline="yes"></image>
+</para>
+<para>This is called move assignment operator in C++11. As RapidJSON supports C++03, it adopts move semantics using assignment operator, and all other modifying function like <computeroutput>AddMember()</computeroutput>, <computeroutput>PushBack()</computeroutput>.</para>
+<sect3 id="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues">
+<title>Move semantics and temporary values</title>
+<para>Sometimes, it is convenient to construct a Value in place, before passing it to one of the &quot;moving&quot; functions, like <computeroutput>PushBack()</computeroutput> or <computeroutput>AddMember()</computeroutput>. As temporary objects can&apos;t be converted to proper Value references, the convenience function <computeroutput>Move()</computeroutput> is available:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/>allocator<sp/>=<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>a.PushBack(Value(42),<sp/>allocator);<sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>will<sp/>not<sp/>compile</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>().SetInt(42),<sp/>allocator);<sp/></highlight><highlight class="comment">//<sp/>fluent<sp/>API</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(42).Move(),<sp/>allocator);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>same<sp/>as<sp/>above</highlight></codeline>
+</programlisting></para>
+</sect3>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString">
+<title>Create String</title>
+<para>RapidJSON provides two strategies for storing string.</para>
+<para><orderedlist>
+<listitem><para>copy-string: allocates a buffer, and then copy the source data into it.</para>
+</listitem><listitem><para>const-string: simply store a pointer of string.</para>
+</listitem></orderedlist>
+</para>
+<para>Copy-string is always safe because it owns a copy of the data. Const-string can be used for storing a string literal, and for in-situ parsing which will be mentioned in the DOM section.</para>
+<para>To make memory allocation customizable, RapidJSON requires users to pass an instance of allocator, whenever an operation may require allocation. This design is needed to prevent storing an allocator (or Document) pointer per Value.</para>
+<para>Therefore, when we assign a copy-string, we call this overloaded <computeroutput>SetString()</computeroutput> with allocator:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>author;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>buffer[10];</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>len<sp/>=<sp/>sprintf(buffer,<sp/></highlight><highlight class="stringliteral">&quot;%s<sp/>%s&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Milo&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Yip&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>dynamically<sp/>created<sp/>string.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">author.SetString(buffer,<sp/>len,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal">memset(buffer,<sp/>0,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(buffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>author.GetString()<sp/>still<sp/>contains<sp/>&quot;Milo<sp/>Yip&quot;<sp/>after<sp/>buffer<sp/>is<sp/>destroyed</highlight></codeline>
+</programlisting></para>
+<para>In this example, we get the allocator from a <computeroutput>Document</computeroutput> instance. This is a common idiom when using RapidJSON. But you may use other instances of allocator.</para>
+<para>Besides, the above <computeroutput>SetString()</computeroutput> requires length. This can handle null characters within a string. There is another <computeroutput>SetString()</computeroutput> overloaded function without the length parameter. And it assumes the input is null-terminated and calls a <computeroutput>strlen()</computeroutput>-like function to obtain the length.</para>
+<para>Finally, for a string literal or string with a safe life-cycle one can use the const-string version of <computeroutput>SetString()</computeroutput>, which lacks an allocator parameter. For string literals (or constant character arrays), simply passing the literal as parameter is safe and efficient:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>s;</highlight></codeline>
+<codeline><highlight class="normal">s.SetString(</highlight><highlight class="stringliteral">&quot;rapidjson&quot;</highlight><highlight class="normal">);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>can<sp/>contain<sp/>null<sp/>character,<sp/>length<sp/>derived<sp/>at<sp/>compile<sp/>time</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;rapidjson&quot;</highlight><highlight class="normal">;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+</programlisting></para>
+<para>For a character pointer, RapidJSON requires it to be marked as safe before using it without copying. This can be achieved by using the <computeroutput>StringRef</computeroutput> function:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<sp/>cstr<sp/>=<sp/>getenv(</highlight><highlight class="stringliteral">&quot;USER&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>cstr_len<sp/>=<sp/>...;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>in<sp/>case<sp/>length<sp/>is<sp/>available</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>s;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>s.SetString(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>will<sp/>not<sp/>compile</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s.SetString(<ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>ok,<sp/>assume<sp/>safe<sp/>lifetime,<sp/>null-terminated</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/><ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s.SetString(<ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr,cstr_len));<sp/></highlight><highlight class="comment">//<sp/>faster,<sp/>can<sp/>contain<sp/>null<sp/>character</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/><ref refid="struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5" kindref="member">StringRef</ref>(cstr,cstr_len);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ModifyArray">
+<title>Modify Array</title>
+<para>Value with array type provides an API similar to <computeroutput>std::vector</computeroutput>.</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>Clear()</computeroutput></para>
+</listitem><listitem><para><computeroutput>Reserve(SizeType, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; PushBack(Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>template &lt;typename T&gt; <ref refid="class_generic_value" kindref="compound">GenericValue</ref>&amp; PushBack(T, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; PopBack()</computeroutput></para>
+</listitem><listitem><para><computeroutput>ValueIterator Erase(ConstValueIterator pos)</computeroutput></para>
+</listitem><listitem><para><computeroutput>ValueIterator Erase(ConstValueIterator first, ConstValueIterator last)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para>Note that, <computeroutput>Reserve(...)</computeroutput> and <computeroutput>PushBack(...)</computeroutput> may allocate memory for the array elements, therefore requiring an allocator.</para>
+<para>Here is an example of <computeroutput>PushBack()</computeroutput>:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(<ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8" kindref="member">kArrayType</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/>allocator<sp/>=<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>5;<sp/>i<sp/>&lt;=<sp/>10;<sp/>i++)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(i,<sp/>allocator);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>allocator<sp/>is<sp/>needed<sp/>for<sp/>potential<sp/>realloc().</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Fluent<sp/>interface</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.PushBack(</highlight><highlight class="stringliteral">&quot;Lua&quot;</highlight><highlight class="normal">,<sp/>allocator).PushBack(</highlight><highlight class="stringliteral">&quot;Mio&quot;</highlight><highlight class="normal">,<sp/>allocator);</highlight></codeline>
+</programlisting></para>
+<para>This API differs from STL in that <computeroutput>PushBack()</computeroutput>/<computeroutput>PopBack()</computeroutput> return the array reference itself. This is called <emphasis>fluent interface</emphasis>.</para>
+<para>If you want to add a non-constant string or a string without sufficient lifetime (see <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString" kindref="member">Create String</ref>) to the array, you need to create a string Value by using the copy-string API. To avoid the need for an intermediate variable, you can use a <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues" kindref="member">temporary value</ref> in place:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>in-place<sp/>Value<sp/>parameter</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(</highlight><highlight class="stringliteral">&quot;copy&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>()).Move(),<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>explicit<sp/>parameters</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>val(</highlight><highlight class="stringliteral">&quot;key&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(val,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1ModifyObject">
+<title>Modify Object</title>
+<para>The Object class is a collection of key-value pairs (members). Each key must be a string value. To modify an object, either add or remove members. The following API is for adding members:</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>Value&amp; AddMember(Value&amp;, Value&amp;, Allocator&amp; allocator)</computeroutput></para>
+</listitem><listitem><para><computeroutput>Value&amp; AddMember(StringRefType, Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem><para><computeroutput>template &lt;typename T&gt; Value&amp; AddMember(StringRefType, T value, Allocator&amp;)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para>Here is an example.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>contact(kObject);</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(</highlight><highlight class="stringliteral">&quot;name&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;Milo&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(</highlight><highlight class="stringliteral">&quot;married&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+<para>The name parameter with <computeroutput>StringRefType</computeroutput> is similar to the interface of the <computeroutput>SetString</computeroutput> function for string values. These overloads are used to avoid the need for copying the <computeroutput>name</computeroutput> string, since constant key names are very common in JSON objects.</para>
+<para>If you need to create a name from a non-constant string or a string without sufficient lifetime (see <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1CreateString" kindref="member">Create String</ref>), you need to create a string Value by using the copy-string API. To avoid the need for an intermediate variable, you can use a <ref refid="md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues" kindref="member">temporary value</ref> in place:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>in-place<sp/>Value<sp/>parameter</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(<ref refid="document_8h_1a071cf97155ba72ac9a1fc4ad7e63d481" kindref="member">Value</ref>(</highlight><highlight class="stringliteral">&quot;copy&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>()).Move(),<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_generic_value" kindref="compound">Value</ref>().Move(),<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>null<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>explicit<sp/>parameters</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>key(</highlight><highlight class="stringliteral">&quot;key&quot;</highlight><highlight class="normal">,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());<sp/></highlight><highlight class="comment">//<sp/>copy<sp/>string<sp/>name</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>val(42);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>some<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(key,<sp/>val,<sp/>document.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>());</highlight></codeline>
+</programlisting></para>
+<para>For removing members, there are several choices:</para>
+<para><itemizedlist>
+<listitem><para><computeroutput>bool RemoveMember(const Ch* name)</computeroutput>: Remove a member by search its name (linear time complexity).</para>
+</listitem><listitem><para><computeroutput>bool RemoveMember(const Value&amp; name)</computeroutput>: same as above but <computeroutput>name</computeroutput> is a Value.</para>
+</listitem><listitem><para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput>: Remove a member by iterator (<emphasis>constant</emphasis> time complexity).</para>
+</listitem><listitem><para><computeroutput>MemberIterator EraseMember(MemberIterator)</computeroutput>: similar to the above but it preserves order of members (linear time complexity).</para>
+</listitem><listitem><para><computeroutput>MemberIterator EraseMember(MemberIterator first, MemberIterator last)</computeroutput>: remove a range of members, preserves order (linear time complexity).</para>
+</listitem></itemizedlist>
+</para>
+<para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput> uses a &quot;move-last&quot; trick to achieve constant time complexity. Basically the member at iterator is destructed, and then the last element is moved to that position. So the order of the remaining members are changed.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1DeepCopyValue">
+<title>Deep Copy Value</title>
+<para>If we really need to copy a DOM tree, we can use two APIs for deep copy: constructor with allocator, and <computeroutput>CopyFrom()</computeroutput>.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document_1a35155b912da66ced38d22e2551364c57" kindref="member">Document::AllocatorType</ref>&amp;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>d.<ref refid="class_generic_document_1a1362cbdcce6ca37356744a3a0dbb11d6" kindref="member">GetAllocator</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v1(</highlight><highlight class="stringliteral">&quot;foo&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Value<sp/>v2(v1);<sp/>//<sp/>not<sp/>allowed</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>v2(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>make<sp/>a<sp/>copy</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsString());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>v1<sp/>untouched</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.SetArray().PushBack(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>).PushBack(v2,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsNull()<sp/>&amp;&amp;<sp/>v2.IsNull());<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>both<sp/>moved<sp/>to<sp/>d</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v2.CopyFrom(d,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>copy<sp/>whole<sp/>document<sp/>to<sp/>v2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">assert(d.IsArray()<sp/>&amp;&amp;<sp/>d.Size()<sp/>==<sp/>2);<sp/></highlight><highlight class="comment">//<sp/>d<sp/>untouched</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">v1.SetObject().AddMember(</highlight><highlight class="stringliteral">&quot;array&quot;</highlight><highlight class="normal">,<sp/>v2,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal">d.PushBack(v1,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1SwapValues">
+<title>Swap Values</title>
+<para><computeroutput><ref refid="namespaceinternal_1a72b2c71d36273b9691487f58c671ce04" kindref="member">Swap()</ref></computeroutput> is also provided.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>(123);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>b(</highlight><highlight class="stringliteral">&quot;Hello&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.Swap(b);</highlight></codeline>
+<codeline><highlight class="normal">assert(<ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>.IsString());</highlight></codeline>
+<codeline><highlight class="normal">assert(b.IsInt());</highlight></codeline>
+</programlisting></para>
+<para>Swapping two DOM trees is fast (constant time), despite the complexity of the trees.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_tutorial_zh_cn_1WhatsNext">
+<title>What&apos;s next</title>
+<para>This tutorial shows the basics of DOM tree query and manipulation. There are several important concepts in RapidJSON:</para>
+<para><orderedlist>
+<listitem><para><ref refid="stream_8md" kindref="compound">Streams</ref> are channels for reading/writing JSON, which can be a in-memory string, or file stream, etc. User can also create their streams.</para>
+</listitem><listitem><para><ref refid="encoding_8md" kindref="compound">Encoding</ref> defines which character encoding is used in streams and memory. RapidJSON also provide Unicode conversion/validation internally.</para>
+</listitem><listitem><para><ref refid="dom_8md" kindref="compound">DOM</ref>&apos;s basics are already covered in this tutorial. Uncover more advanced features such as <emphasis>in situ</emphasis> parsing, other parsing options and advanced usages.</para>
+</listitem><listitem><para><ref refid="sax_8md" kindref="compound">SAX</ref> is the foundation of parsing/generating facility in RapidJSON. Learn how to use <computeroutput>Reader</computeroutput>/<computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> to implement even faster applications. Also try <computeroutput><ref refid="class_pretty_writer" kindref="compound">PrettyWriter</ref></computeroutput> to format the JSON.</para>
+</listitem><listitem><para><ref refid="performance_8md" kindref="compound">Performance</ref> shows some in-house and third-party benchmarks.</para>
+</listitem><listitem><para><ref refid="internals_8md" kindref="compound">Internals</ref> describes some internal designs and techniques of RapidJSON.</para>
+</listitem></orderedlist>
+</para>
+<para>You may also refer to the <ref refid="faq_8md" kindref="compound">FAQ</ref>, API documentation, examples and unit tests. </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/tutorial.md"/>
+  </compounddef>
+</doxygen>

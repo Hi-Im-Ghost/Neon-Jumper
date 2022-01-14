@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_faq_zh_cn" xml:lang="en-US">
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md60">
+<title>一般问题</title>
+
+<para><orderedlist>
+<listitem>
+<para>RapidJSON 是什么？</para>
+
+<para>RapidJSON 是一个 C++ 库，用于解析及生成 JSON。读者可参考它的所有 <link linkend="_features_8zh-cn_8md">特点</link>。</para>
+</listitem><listitem>
+<para>为什么称作 RapidJSON？</para>
+
+<para>它的灵感来自于 <link xlink:href="http://rapidxml.sourceforge.net/">RapidXML</link>，RapidXML 是一个高速的 XML DOM 解析器。</para>
+</listitem><listitem>
+<para>RapidJSON 与 RapidXML 相似么？</para>
+
+<para>RapidJSON 借镜了 RapidXML 的一些设计, 包括原位（*in situ*）解析、只有头文件的库。但两者的 API 是完全不同的。此外 RapidJSON 也提供许多 RapidXML 没有的特点。</para>
+</listitem><listitem>
+<para>RapidJSON 是免费的么？</para>
+
+<para>是的，它在 MIT 协议下免费。它可用于商业软件。详情请参看 <link xlink:href="https://github.com/Tencent/rapidjson/blob/master/license.txt">license.txt</link>。</para>
+</listitem><listitem>
+<para>RapidJSON 很小么？它有何依赖？</para>
+
+<para>是的。在 Windows 上，一个解析 JSON 并打印出统计的可执行文件少于 30KB。</para>
+
+<para>RapidJSON 仅依赖于 C++ 标准库。</para>
+</listitem><listitem>
+<para>怎样安装 RapidJSON？</para>
+
+<para>见 <link xlink:href="../readme.zh-cn.md#安装">安装一节</link>。</para>
+</listitem><listitem>
+<para>RapidJSON 能否运行于我的平台？</para>
+
+<para>社区已在多个操作系统／编译器／CPU 架构的组合上测试 RapidJSON。但我们无法确保它能运行于你特定的平台上。只需要生成及执行单元测试便能获取答案。</para>
+</listitem><listitem>
+<para>RapidJSON 支持 C++03 么？C++11 呢？</para>
+
+<para>RapidJSON 开始时在 C++03 上实现。后来加入了可选的 C++11 特性支持（如转移构造函数、<computeroutput>noexcept</computeroutput>）。RapidJSON 应该兼容所有遵从 C++03 或 C++11 的编译器。</para>
+</listitem><listitem>
+<para>RapidJSON 是否真的用于实际应用？</para>
+
+<para>是的。它被配置于前台及后台的真实应用中。一个社区成员说 RapidJSON 在他们的系统中每日解析 5 千万个 JSON。</para>
+</listitem><listitem>
+<para>RapidJSON 是如何被测试的？</para>
+
+<para>RapidJSON 包含一组单元测试去执行自动测试。<link xlink:href="https://travis-ci.org/Tencent/rapidjson/">Travis</link>（供 Linux 平台）及 <link xlink:href="https://ci.appveyor.com/project/Tencent/rapidjson/">AppVeyor</link>（供 Windows 平台）会对所有修改进行编译及执行单元测试。在 Linux 下还会使用 Valgrind 去检测内存泄漏。</para>
+</listitem><listitem>
+<para>RapidJSON 是否有完整的文档？</para>
+
+<para>RapidJSON 提供了使用手册及 API 说明文档。</para>
+</listitem><listitem>
+<para>有没有其他替代品？</para>
+
+<para>有许多替代品。例如 <link xlink:href="https://github.com/miloyip/nativejson-benchmark">nativejson-benchmark</link> 列出了一些开源的 C/C++ JSON 库。<link xlink:href="http://www.json.org/">json.org</link> 也有一个列表。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md61">
+<title>JSON</title>
+
+<para><orderedlist>
+<listitem>
+<para>什么是 JSON？</para>
+
+<para>JSON (JavaScript Object Notation) 是一个轻量的数据交换格式。它使用人类可读的文本格式。更多关于 JSON 的细节可考 <link xlink:href="http://www.ietf.org/rfc/rfc7159.txt">RFC7159</link> 及 <link xlink:href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</link>。</para>
+</listitem><listitem>
+<para>JSON 有什么应用场合？</para>
+
+<para>JSON 常用于网页应用程序，以传送结构化数据。它也可作为文件格式用于数据持久化。</para>
+</listitem><listitem>
+<para>RapidJSON 是否符合 JSON 标准？</para>
+
+<para>是。RapidJSON 完全符合 <link xlink:href="http://www.ietf.org/rfc/rfc7159.txt">RFC7159</link> 及 <link xlink:href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</link>。它能处理一些特殊情况，例如支持 JSON 字符串中含有空字符及代理对（surrogate pair）。</para>
+</listitem><listitem>
+<para>RapidJSON 是否支持宽松的语法？</para>
+
+<para>目前不支持。RapidJSON 只支持严格的标准格式。宽松语法可以在这个 <link xlink:href="https://github.com/Tencent/rapidjson/issues/36">issue</link> 中进行讨论。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md62">
+<title>DOM 与 SAX</title>
+
+<para><orderedlist>
+<listitem>
+<para>什么是 DOM 风格 API？</para>
+
+<para>Document Object Model（DOM）是一个储存于内存的 JSON 表示方式，用于查询及修改 JSON。</para>
+</listitem><listitem>
+<para>什么是 SAX 风格 API?</para>
+
+<para>SAX 是一个事件驱动的 API，用于解析及生成 JSON。</para>
+</listitem><listitem>
+<para>我应用 DOM 还是 SAX？</para>
+
+<para>DOM 易于查询及修改。SAX 则是非常快及省内存的，但通常较难使用。</para>
+</listitem><listitem>
+<para>什么是原位（*in situ*）解析？</para>
+
+<para>原位解析会把 JSON 字符串直接解码至输入的 JSON 中。这是一个优化，可减少内存消耗及提升性能，但输入的 JSON 会被更改。进一步细节请参考 <link linkend="_dom_8zh-cn_8md">原位解析</link> 。</para>
+</listitem><listitem>
+<para>什么时候会产生解析错误？</para>
+
+<para>当输入的 JSON 包含非法语法，或不能表示一个值（如 Number 太大），或解析器的处理器中断解析过程，解析器都会产生一个错误。详情请参考 <link linkend="_dom_8zh-cn_8md">解析错误</link>。</para>
+</listitem><listitem>
+<para>有什么错误信息？</para>
+
+<para>错误信息存储在 <computeroutput><link linkend="_struct_parse_result">ParseResult</link></computeroutput>，它包含错误代号及偏移值（从 JSON 开始至错误处的字符数目）。可以把错误代号翻译为人类可读的错误讯息。</para>
+</listitem><listitem>
+<para>为何不只使用 <computeroutput>double</computeroutput> 去表示 JSON number？</para>
+
+<para>一些应用需要使用 64 位无号／有号整数。这些整数不能无损地转换成 <computeroutput>double</computeroutput>。因此解析器会检测一个 JSON number 是否能转换至各种整数类型及 <computeroutput>double</computeroutput>。</para>
+</listitem><listitem>
+<para>如何清空并最小化 <computeroutput>document</computeroutput> 或 <computeroutput>value</computeroutput> 的容量？</para>
+
+<para>调用 <computeroutput>SetXXX()</computeroutput> 方法 - 这些方法会调用析构函数，并重建空的 Object 或 Array:</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+...
+d.SetObject();&#32;&#32;//&#32;clear&#32;and&#32;minimize
+</computeroutput></literallayout></para>
+
+<para>另外，也可以参考在 <link xlink:href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Clear-and-minimize">C++ swap with temporary idiom</link> 中的一种等价的方法: <literallayout><computeroutput>Value(kObjectType).Swap(d);
+</computeroutput></literallayout> 或者，使用这个稍微长一点的代码也能完成同样的事情: <literallayout><computeroutput>d.Swap(Value(kObjectType).Move());&#32;
+</computeroutput></literallayout></para>
+</listitem><listitem>
+<para>如何将一个 <computeroutput>document</computeroutput> 节点插入到另一个 <computeroutput>document</computeroutput> 中？</para>
+
+<para>比如有以下两个 document(DOM): <literallayout><computeroutput>Document&#32;person;
+person.Parse(&quot;{\&quot;person\&quot;:{\&quot;name\&quot;:{\&quot;first\&quot;:\&quot;Adam\&quot;,\&quot;last\&quot;:\&quot;Thomas\&quot;}}}&quot;);
+
+Document&#32;address;
+address.Parse(&quot;{\&quot;address\&quot;:{\&quot;city\&quot;:\&quot;Moscow\&quot;,\&quot;street\&quot;:\&quot;Quiet\&quot;}}&quot;);
+</computeroutput></literallayout> 假设我们希望将整个 <computeroutput>address</computeroutput> 插入到 <computeroutput>person</computeroutput> 中，作为其的一个子节点: <literallayout><computeroutput>{&#32;&quot;person&quot;:&#32;{
+&#32;&#32;&#32;&quot;name&quot;:&#32;{&#32;&quot;first&quot;:&#32;&quot;Adam&quot;,&#32;&quot;last&quot;:&#32;&quot;Thomas&quot;&#32;},
+&#32;&#32;&#32;&quot;address&quot;:&#32;{&#32;&quot;city&quot;:&#32;&quot;Moscow&quot;,&#32;&quot;street&quot;:&#32;&quot;Quiet&quot;&#32;}
+&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+
+<para>在插入节点的过程中需要注意 <computeroutput>document</computeroutput> 和 <computeroutput>value</computeroutput> 的生命周期并且正确地使用 allocator 进行内存分配和管理。</para>
+
+<para>一个简单有效的方法就是修改上述 <computeroutput>address</computeroutput> 变量的定义，让其使用 <computeroutput>person</computeroutput> 的 allocator 初始化，然后将其添加到根节点。</para>
+
+<para><literallayout><computeroutput>Documnet&#32;address(&amp;person.GetAllocator());
+...
+person[&quot;person&quot;].AddMember(&quot;address&quot;,&#32;address[&quot;address&quot;],&#32;person.GetAllocator());
+</computeroutput></literallayout> 当然，如果你不想通过显式地写出 <computeroutput>address</computeroutput> 的 key 来得到其值，可以使用迭代器来实现: <literallayout><computeroutput>auto&#32;addressRoot&#32;=&#32;address.MemberBegin();
+person[&quot;person&quot;].AddMember(addressRoot-&gt;name,&#32;addressRoot-&gt;value,&#32;person.GetAllocator());
+</computeroutput></literallayout></para>
+
+<para>此外，还可以通过深拷贝 address document 来实现: <literallayout><computeroutput>Value&#32;addressValue&#32;=&#32;Value(address[&quot;address&quot;],&#32;person.GetAllocator());
+person[&quot;person&quot;].AddMember(&quot;address&quot;,&#32;addressValue,&#32;person.GetAllocator());
+</computeroutput></literallayout></para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md63">
+<title>Document/Value (DOM)</title>
+
+<para><orderedlist>
+<listitem>
+<para>什么是转移语义？为什么？</para>
+
+<para><computeroutput>Value</computeroutput> 不用复制语义，而使用了转移语义。这是指，当把来源值赋值于目标值时，来源值的所有权会转移至目标值。</para>
+
+<para>由于转移快于复制，此设计决定强迫使用者注意到复制的消耗。</para>
+</listitem><listitem>
+<para>怎样去复制一个值？</para>
+
+<para>有两个 API 可用：含 allocator 的构造函数，以及 <computeroutput>CopyFrom()</computeroutput>。可参考 <link linkend="_tutorial_8zh-cn_8md">深复制 Value</link> 里的用例。</para>
+</listitem><listitem>
+<para>为什么我需要提供字符串的长度？</para>
+
+<para>由于 C 字符串是空字符结尾的，需要使用 <computeroutput>strlen()</computeroutput> 去计算其长度，这是线性复杂度的操作。若使用者已知字符串的长度，对很多操作来说会造成不必要的消耗。</para>
+
+<para>此外，RapidJSON 可处理含有 <computeroutput>\u0000</computeroutput>（空字符）的字符串。若一个字符串含有空字符，<computeroutput>strlen()</computeroutput> 便不能返回真正的字符串长度。在这种情况下使用者必须明确地提供字符串长度。</para>
+</listitem><listitem>
+<para>为什么在许多 DOM 操作 API 中要提供分配器作为参数？</para>
+
+<para>由于这些 API 是 <computeroutput>Value</computeroutput> 的成员函数，我们不希望为每个 <computeroutput>Value</computeroutput> 储存一个分配器指针。</para>
+</listitem><listitem>
+<para>它会转换各种数值类型么？</para>
+
+<para>当使用 <computeroutput>GetInt()</computeroutput>、<computeroutput>GetUint()</computeroutput> 等 API 时，可能会发生转换。对于整数至整数转换，仅当保证转换安全才会转换（否则会断言失败）。然而，当把一个 64 位有号／无号整数转换至 double 时，它会转换，但有可能会损失精度。含有小数的数字、或大于 64 位的整数，都只能使用 <computeroutput>GetDouble()</computeroutput> 获取其值。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md64">
+<title>Reader/Writer (SAX)</title>
+
+<para><orderedlist>
+<listitem>
+<para>为什么不仅仅用 <computeroutput>printf</computeroutput> 输出一个 JSON？为什么需要 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>？</para>
+
+<para>最重要的是，<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 能确保输出的 JSON 是格式正确的。错误地调用 SAX 事件（如 <computeroutput>StartObject()</computeroutput> 错配 <computeroutput>EndArray()</computeroutput>）会造成断言失败。此外，<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 会把字符串进行转义（如 <computeroutput>\n</computeroutput>）。最后，<computeroutput>printf()</computeroutput> 的数值输出可能并不是一个合法的 JSON number，特别是某些 locale 会有数字分隔符。而且 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 的数值字符串转换是使用非常快的算法来实现的，胜过 <computeroutput>printf()</computeroutput> 及 <computeroutput>iostream</computeroutput>。</para>
+</listitem><listitem>
+<para>我能否暂停解析过程，并在稍后继续？</para>
+
+<para>基于性能考虑，目前版本并不直接支持此功能。然而，若执行环境支持多线程，使用者可以在另一线程解析 JSON，并通过阻塞输入流去暂停。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md65">
+<title>Unicode</title>
+
+<para><orderedlist>
+<listitem>
+<para>它是否支持 UTF-8、UTF-16 及其他格式？</para>
+
+<para>是。它完全支持 UTF-8、UTF-16（大端／小端）、UTF-32（大端／小端）及 ASCII。</para>
+</listitem><listitem>
+<para>它能否检测编码的合法性？</para>
+
+<para>能。只需把 <computeroutput>kParseValidateEncodingFlag</computeroutput> 参考传给 <computeroutput>Parse()</computeroutput>。若发现在输入流中有非法的编码，它就会产生 <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> 错误。</para>
+</listitem><listitem>
+<para>什么是代理对（surrogate pair)？RapidJSON 是否支持？</para>
+
+<para>JSON 使用 UTF-16 编码去转义 Unicode 字符，例如 <computeroutput>\u5927</computeroutput> 表示中文字“大”。要处理基本多文种平面（basic multilingual plane，BMP）以外的字符时，UTF-16 会把那些字符编码成两个 16 位值，这称为 UTF-16 代理对。例如，绘文字字符 U+1F602 在 JSON 中可被编码成 <computeroutput>\uD83D\uDE02</computeroutput>。</para>
+
+<para>RapidJSON 完全支持解析及生成 UTF-16 代理对。</para>
+</listitem><listitem>
+<para>它能否处理 JSON 字符串中的 <computeroutput>\u0000</computeroutput>（空字符）？</para>
+
+<para>能。RapidJSON 完全支持 JSON 字符串中的空字符。然而，使用者需要注意到这件事，并使用 <computeroutput>GetStringLength()</computeroutput> 及相关 API 去取得字符串真正长度。</para>
+</listitem><listitem>
+<para>能否对所有非 <link linkend="_struct_a_s_c_i_i">ASCII</link> 字符输出成 <computeroutput>\uxxxx</computeroutput> 形式？</para>
+
+<para>可以。只要在 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 中使用 <computeroutput><link linkend="_struct_a_s_c_i_i">ASCII</link>&lt;&gt;</computeroutput> 作为输出编码参数，就可以强逼转义那些字符。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md66">
+<title>流</title>
+
+<para><orderedlist>
+<listitem>
+<para>我有一个很大的 JSON 文件。我应否把它整个载入内存中？</para>
+
+<para>使用者可使用 <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 去逐块读入文件。但若使用于原位解析，必须载入整个文件。</para>
+</listitem><listitem>
+<para>我能否解析一个从网络上串流进来的 JSON？</para>
+
+<para>可以。使用者可根据 <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 的实现，去实现一个自定义的流。</para>
+</listitem><listitem>
+<para>我不知道一些 JSON 将会使用哪种编码。怎样处理它们？</para>
+
+<para>你可以使用 <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput>，它能自动检测输入流的编码。然而，它会带来一些性能开销。</para>
+</listitem><listitem>
+<para>什么是 BOM？RapidJSON 怎样处理它？</para>
+
+<para><link xlink:href="http://en.wikipedia.org/wiki/Byte_order_mark">字节顺序标记（byte order mark, BOM）</link> 有时会出现于文件／流的开始，以表示其 UTF 编码类型。</para>
+
+<para>RapidJSON 的 <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> 可检测／跳过 BOM。<computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput> 可选择是否写入 BOM。可参考 <link linkend="_stream_8zh-cn_8md">编码流</link> 中的例子。</para>
+</listitem><listitem>
+<para>为什么会涉及大端／小端？</para>
+
+<para>流的大端／小端是 UTF-16 及 UTF-32 流要处理的问题，而 UTF-8 不需要处理。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md67">
+<title>性能</title>
+
+<para><orderedlist>
+<listitem>
+<para>RapidJSON 是否真的快？</para>
+
+<para>是。它可能是最快的开源 JSON 库。有一个 <link xlink:href="https://github.com/miloyip/nativejson-benchmark">评测</link> 评估 C/C++ JSON 库的性能。</para>
+</listitem><listitem>
+<para>为什么它会快？</para>
+
+<para>RapidJSON 的许多设计是针对时间／空间性能来设计的，这些决定可能会影响 API 的易用性。此外，它也使用了许多底层优化（内部函数／intrinsic、SIMD）及特别的算法（自定义的 double 至字符串转换、字符串至 double 的转换）。</para>
+</listitem><listitem>
+<para>什是是 SIMD？它如何用于 RapidJSON？</para>
+
+<para><link xlink:href="http://en.wikipedia.org/wiki/SIMD">SIMD</link> 指令可以在现代 CPU 中执行并行运算。RapidJSON 支持使用 Intel 的 SSE2/SSE4.2 和 ARM 的 Neon 来加速对空白符、制表符、回车符和换行符的过滤处理。在解析含缩进的 JSON 时，这能提升性能。只要定义名为 <computeroutput>RAPIDJSON_SSE2</computeroutput> ，<computeroutput>RAPIDJSON_SSE42</computeroutput> 或 <computeroutput>RAPIDJSON_NEON</computeroutput> 的宏，就能启动这个功能。然而，若在不支持这些指令集的机器上执行这些可执行文件，会导致崩溃。</para>
+</listitem><listitem>
+<para>它会消耗许多内存么？</para>
+
+<para>RapidJSON 的设计目标是减低内存占用。</para>
+
+<para>在 SAX API 中，<computeroutput>Reader</computeroutput> 消耗的内存与 JSON 树深度加上最长 JSON 字符成正比。</para>
+
+<para>在 DOM API 中，每个 <computeroutput>Value</computeroutput> 在 32/64 位架构下分别消耗 16/24 字节。RapidJSON 也使用一个特殊的内存分配器去减少分配的额外开销。</para>
+</listitem><listitem>
+<para>高性能的意义何在？</para>
+
+<para>有些应用程序需要处理非常大的 JSON 文件。而有些后台应用程序需要处理大量的 JSON。达到高性能同时改善延时及吞吐量。更广义来说，这也可以节省能源。</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_zh_cn_1autotoc_md68">
+<title>八卦</title>
+
+<para><orderedlist>
+<listitem>
+<para>谁是 RapidJSON 的开发者？</para>
+
+<para>叶劲峰（Milo Yip，<link xlink:href="https://github.com/miloyip">miloyip</link>）是 RapidJSON 的原作者。全世界许多贡献者一直在改善 RapidJSON。Philipp A. Hartmann（<link xlink:href="https://github.com/pah">pah</link>）实现了许多改进，也设置了自动化测试，而且还参与许多社区讨论。丁欧南（Don Ding，<link xlink:href="https://github.com/thebusytypist">thebusytypist</link>）实现了迭代式解析器。Andrii Senkovych（<link xlink:href="https://github.com/jollyroger">jollyroger</link>）完成了向 CMake 的迁移。Kosta（<link xlink:href="https://github.com/Kosta-Github">Kosta-Github</link>）提供了一个非常灵巧的短字符串优化。也需要感谢其他献者及社区成员。</para>
+</listitem><listitem>
+<para>为何你要开发 RapidJSON？</para>
+
+<para>在 2011 年开始这项目时，它只是一个兴趣项目。Milo Yip 是一个游戏程序员，他在那时候认识到 JSON 并希望在未来的项目中使用。由于 JSON 好像很简单，他希望写一个快速的仅有头文件的程序库。</para>
+</listitem><listitem>
+<para>为什么开发中段有一段长期空档？</para>
+
+<para>主要是个人因素，例如加入新家庭成员。另外，Milo Yip 也花了许多业余时间去翻译 Jason Gregory 的《Game Engine Architecture》至中文版《游戏引擎架构》。</para>
+</listitem><listitem>
+<para>为什么这个项目从 Google Code 搬到 GitHub？</para>
+
+<para>这是大势所趋，而且 GitHub 更为强大及方便。 </para>
+</listitem></orderedlist>
+</para>
+</section>
+</section>

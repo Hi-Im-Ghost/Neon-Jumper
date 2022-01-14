@@ -1,0 +1,255 @@
+\hypertarget{dtoa_8h_source}{}\doxysection{dtoa.\+h}
+\label{dtoa_8h_source}\index{src/rapidjson/include/rapidjson/internal/dtoa.h@{src/rapidjson/include/rapidjson/internal/dtoa.h}}
+\mbox{\hyperlink{dtoa_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{// This is a C++ header-\/only implementation of Grisu2 algorithm from the publication:}}
+\DoxyCodeLine{16 \textcolor{comment}{// Loitsch, Florian. "{}Printing floating-\/point numbers quickly and accurately with}}
+\DoxyCodeLine{17 \textcolor{comment}{// integers."{} ACM Sigplan Notices 45.6 (2010): 233-\/243.}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_DTOA\_}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define RAPIDJSON\_DTOA\_}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{itoa_8h}{itoa.h}}"{}} \textcolor{comment}{// GetDigitsLut()}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{diyfp_8h}{diyfp.h}}"{}}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{ieee754_8h}{ieee754.h}}"{}}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{27 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{30 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{31 RAPIDJSON\_DIAG\_OFF(effc++)}
+\DoxyCodeLine{32 RAPIDJSON\_DIAG\_OFF(array-\/bounds) \textcolor{comment}{// some gcc versions generate wrong warnings https://gcc.gnu.org/bugzilla/show\_bug.cgi?id=59124}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{namespaceinternal_a234e10bef097ccb2f202b7a133086e71}{GrisuRound}}(\textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{int} len, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} delta, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} rest, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} ten\_kappa, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} wp\_w) \{}
+\DoxyCodeLine{36     \textcolor{keywordflow}{while} (rest < wp\_w \&\& delta -\/ rest >= ten\_kappa \&\&}
+\DoxyCodeLine{37            (rest + ten\_kappa < wp\_w ||  }
+\DoxyCodeLine{38             wp\_w -\/ rest > rest + ten\_kappa -\/ wp\_w)) \{}
+\DoxyCodeLine{39         buffer[len -\/ 1]-\/-\/;}
+\DoxyCodeLine{40         rest += ten\_kappa;}
+\DoxyCodeLine{41     \}}
+\DoxyCodeLine{42 \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceinternal_a8aae11dbb46da9ac99e116aa2a6dbfc9}{CountDecimalDigit32}}(\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} n) \{}
+\DoxyCodeLine{45     \textcolor{comment}{// Simple pure C++ implementation was faster than \_\_builtin\_clz version in this situation.}}
+\DoxyCodeLine{46     \textcolor{keywordflow}{if} (n < 10) \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{47     \textcolor{keywordflow}{if} (n < 100) \textcolor{keywordflow}{return} 2;}
+\DoxyCodeLine{48     \textcolor{keywordflow}{if} (n < 1000) \textcolor{keywordflow}{return} 3;}
+\DoxyCodeLine{49     \textcolor{keywordflow}{if} (n < 10000) \textcolor{keywordflow}{return} 4;}
+\DoxyCodeLine{50     \textcolor{keywordflow}{if} (n < 100000) \textcolor{keywordflow}{return} 5;}
+\DoxyCodeLine{51     \textcolor{keywordflow}{if} (n < 1000000) \textcolor{keywordflow}{return} 6;}
+\DoxyCodeLine{52     \textcolor{keywordflow}{if} (n < 10000000) \textcolor{keywordflow}{return} 7;}
+\DoxyCodeLine{53     \textcolor{keywordflow}{if} (n < 100000000) \textcolor{keywordflow}{return} 8;}
+\DoxyCodeLine{54     \textcolor{comment}{// Will not reach 10 digits in DigitGen()}}
+\DoxyCodeLine{55     \textcolor{comment}{//if (n < 1000000000) return 9;}}
+\DoxyCodeLine{56     \textcolor{comment}{//return 10;}}
+\DoxyCodeLine{57     \textcolor{keywordflow}{return} 9;}
+\DoxyCodeLine{58 \}}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{namespaceinternal_a47be9aea8d0f9cae49dc03dc046d2450}{DigitGen}}(\textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}\& W, \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}\& Mp, \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} delta, \textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{int}* len, \textcolor{keywordtype}{int}* K) \{}
+\DoxyCodeLine{61     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kPow10[] = \{ 1U, 10U, 100U, 1000U, 10000U, 100000U, 1000000U, 10000000U, 100000000U,}
+\DoxyCodeLine{62                                        1000000000U, 10000000000U, 100000000000U, 1000000000000U,}
+\DoxyCodeLine{63                                        10000000000000U, 100000000000000U, 1000000000000000U,}
+\DoxyCodeLine{64                                        10000000000000000U, 100000000000000000U, 1000000000000000000U,}
+\DoxyCodeLine{65                                        10000000000000000000U \};}
+\DoxyCodeLine{66     \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} one(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}(1) << -\/Mp.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}, Mp.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}});}
+\DoxyCodeLine{67     \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} wp\_w = Mp -\/ W;}
+\DoxyCodeLine{68     \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} p1 = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(Mp.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >> -\/one.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}});}
+\DoxyCodeLine{69     \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} p2 = Mp.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& (one.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} -\/ 1);}
+\DoxyCodeLine{70     \textcolor{keywordtype}{int} kappa = \mbox{\hyperlink{namespaceinternal_a8aae11dbb46da9ac99e116aa2a6dbfc9}{CountDecimalDigit32}}(p1); \textcolor{comment}{// kappa in [0, 9]}}
+\DoxyCodeLine{71     *len = 0;}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     \textcolor{keywordflow}{while} (kappa > 0) \{}
+\DoxyCodeLine{74         \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d = 0;}
+\DoxyCodeLine{75         \textcolor{keywordflow}{switch} (kappa) \{}
+\DoxyCodeLine{76             \textcolor{keywordflow}{case}  9: d = p1 /  100000000; p1 \%=  100000000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{77             \textcolor{keywordflow}{case}  8: d = p1 /   10000000; p1 \%=   10000000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{78             \textcolor{keywordflow}{case}  7: d = p1 /    1000000; p1 \%=    1000000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{79             \textcolor{keywordflow}{case}  6: d = p1 /     100000; p1 \%=     100000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{80             \textcolor{keywordflow}{case}  5: d = p1 /      10000; p1 \%=      10000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{81             \textcolor{keywordflow}{case}  4: d = p1 /       1000; p1 \%=       1000; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{82             \textcolor{keywordflow}{case}  3: d = p1 /        100; p1 \%=        100; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{83             \textcolor{keywordflow}{case}  2: d = p1 /         10; p1 \%=         10; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{84             \textcolor{keywordflow}{case}  1: d = p1;              p1 =           0; \textcolor{keywordflow}{break};}
+\DoxyCodeLine{85             \textcolor{keywordflow}{default}:;}
+\DoxyCodeLine{86         \}}
+\DoxyCodeLine{87         \textcolor{keywordflow}{if} (d || *len)}
+\DoxyCodeLine{88             buffer[(*len)++] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(d));}
+\DoxyCodeLine{89         kappa-\/-\/;}
+\DoxyCodeLine{90         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} tmp = (\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(p1) << -\/one.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}) + p2;}
+\DoxyCodeLine{91         \textcolor{keywordflow}{if} (tmp <= delta) \{}
+\DoxyCodeLine{92             *K += kappa;}
+\DoxyCodeLine{93             \mbox{\hyperlink{namespaceinternal_a234e10bef097ccb2f202b7a133086e71}{GrisuRound}}(buffer, *len, delta, tmp, kPow10[kappa] << -\/one.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}, wp\_w.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}});}
+\DoxyCodeLine{94             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{95         \}}
+\DoxyCodeLine{96     \}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98     \textcolor{comment}{// kappa = 0}}
+\DoxyCodeLine{99     \textcolor{keywordflow}{for} (;;) \{}
+\DoxyCodeLine{100         p2 *= 10;}
+\DoxyCodeLine{101         delta *= 10;}
+\DoxyCodeLine{102         \textcolor{keywordtype}{char} d = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(p2 >> -\/one.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}});}
+\DoxyCodeLine{103         \textcolor{keywordflow}{if} (d || *len)}
+\DoxyCodeLine{104             buffer[(*len)++] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + d);}
+\DoxyCodeLine{105         p2 \&= one.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} -\/ 1;}
+\DoxyCodeLine{106         kappa-\/-\/;}
+\DoxyCodeLine{107         \textcolor{keywordflow}{if} (p2 < delta) \{}
+\DoxyCodeLine{108             *K += kappa;}
+\DoxyCodeLine{109             \textcolor{keywordtype}{int} index = -\/kappa;}
+\DoxyCodeLine{110             \mbox{\hyperlink{namespaceinternal_a234e10bef097ccb2f202b7a133086e71}{GrisuRound}}(buffer, *len, delta, p2, one.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}, wp\_w.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} * (index < 20 ? kPow10[index] : 0));}
+\DoxyCodeLine{111             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{112         \}}
+\DoxyCodeLine{113     \}}
+\DoxyCodeLine{114 \}}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{namespaceinternal_aeb7b6c0784b644968003cbd1b9da57e3}{Grisu2}}(\textcolor{keywordtype}{double} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{int}* length, \textcolor{keywordtype}{int}* K) \{}
+\DoxyCodeLine{117     \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} v(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}});}
+\DoxyCodeLine{118     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} w\_m, w\_p;}
+\DoxyCodeLine{119     v.\mbox{\hyperlink{structinternal_1_1_diy_fp_adef8bf723f24db9dc6cefa260e8c2390}{NormalizedBoundaries}}(\&w\_m, \&w\_p);}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121     \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} c\_mk = \mbox{\hyperlink{namespaceinternal_abac3dbfa1070756c37725829148f6038}{GetCachedPower}}(w\_p.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}, K);}
+\DoxyCodeLine{122     \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} W = v.\mbox{\hyperlink{structinternal_1_1_diy_fp_aa6cbacc8dfcd92cb8c57884e45548976}{Normalize}}() * c\_mk;}
+\DoxyCodeLine{123     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} Wp = w\_p * c\_mk;}
+\DoxyCodeLine{124     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} Wm = w\_m * c\_mk;}
+\DoxyCodeLine{125     Wm.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}++;}
+\DoxyCodeLine{126     Wp.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}-\/-\/;}
+\DoxyCodeLine{127     \mbox{\hyperlink{namespaceinternal_a47be9aea8d0f9cae49dc03dc046d2450}{DigitGen}}(W, Wp, Wp.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} -\/ Wm.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}, buffer, length, K);}
+\DoxyCodeLine{128 \}}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_aadc1fd5929c1c67a56c8ba480c587bac}{WriteExponent}}(\textcolor{keywordtype}{int} K, \textcolor{keywordtype}{char}* buffer) \{}
+\DoxyCodeLine{131     \textcolor{keywordflow}{if} (K < 0) \{}
+\DoxyCodeLine{132         *buffer++ = \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{133         K = -\/K;}
+\DoxyCodeLine{134     \}}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136     \textcolor{keywordflow}{if} (K >= 100) \{}
+\DoxyCodeLine{137         *buffer++ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(K / 100));}
+\DoxyCodeLine{138         K \%= 100;}
+\DoxyCodeLine{139         \textcolor{keyword}{const} \textcolor{keywordtype}{char}* d = \mbox{\hyperlink{namespaceinternal_a76ad2b55668f695effde1971d53a5ce1}{GetDigitsLut}}() + K * 2;}
+\DoxyCodeLine{140         *buffer++ = d[0];}
+\DoxyCodeLine{141         *buffer++ = d[1];}
+\DoxyCodeLine{142     \}}
+\DoxyCodeLine{143     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (K >= 10) \{}
+\DoxyCodeLine{144         \textcolor{keyword}{const} \textcolor{keywordtype}{char}* d = \mbox{\hyperlink{namespaceinternal_a76ad2b55668f695effde1971d53a5ce1}{GetDigitsLut}}() + K * 2;}
+\DoxyCodeLine{145         *buffer++ = d[0];}
+\DoxyCodeLine{146         *buffer++ = d[1];}
+\DoxyCodeLine{147     \}}
+\DoxyCodeLine{148     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{149         *buffer++ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(K));}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151     \textcolor{keywordflow}{return} buffer;}
+\DoxyCodeLine{152 \}}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a4b194248657212e94cc3f244b09dbeae}{Prettify}}(\textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{int} length, \textcolor{keywordtype}{int} k, \textcolor{keywordtype}{int} maxDecimalPlaces) \{}
+\DoxyCodeLine{155     \textcolor{keyword}{const} \textcolor{keywordtype}{int} kk = length + k;  \textcolor{comment}{// 10\string^(kk-\/1) <= v < 10\string^kk}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157     \textcolor{keywordflow}{if} (0 <= k \&\& kk <= 21) \{}
+\DoxyCodeLine{158         \textcolor{comment}{// 1234e7 -\/> 12340000000}}
+\DoxyCodeLine{159         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = length; i < kk; i++)}
+\DoxyCodeLine{160             buffer[i] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{161         buffer[kk] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{162         buffer[kk + 1] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{163         \textcolor{keywordflow}{return} \&buffer[kk + 2];}
+\DoxyCodeLine{164     \}}
+\DoxyCodeLine{165     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (0 < kk \&\& kk <= 21) \{}
+\DoxyCodeLine{166         \textcolor{comment}{// 1234e-\/2 -\/> 12.34}}
+\DoxyCodeLine{167         std::memmove(\&buffer[kk + 1], \&buffer[kk], \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(length -\/ kk));}
+\DoxyCodeLine{168         buffer[kk] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{169         \textcolor{keywordflow}{if} (0 > k + maxDecimalPlaces) \{}
+\DoxyCodeLine{170             \textcolor{comment}{// When maxDecimalPlaces = 2, 1.2345 -\/> 1.23, 1.102 -\/> 1.1}}
+\DoxyCodeLine{171             \textcolor{comment}{// Remove extra trailing zeros (at least one) after truncation.}}
+\DoxyCodeLine{172             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = kk + maxDecimalPlaces; i > kk + 1; i-\/-\/)}
+\DoxyCodeLine{173                 \textcolor{keywordflow}{if} (buffer[i] != \textcolor{charliteral}{'0'})}
+\DoxyCodeLine{174                     \textcolor{keywordflow}{return} \&buffer[i + 1];}
+\DoxyCodeLine{175             \textcolor{keywordflow}{return} \&buffer[kk + 2]; \textcolor{comment}{// Reserve one zero}}
+\DoxyCodeLine{176         \}}
+\DoxyCodeLine{177         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{178             \textcolor{keywordflow}{return} \&buffer[length + 1];}
+\DoxyCodeLine{179     \}}
+\DoxyCodeLine{180     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (-\/6 < kk \&\& kk <= 0) \{}
+\DoxyCodeLine{181         \textcolor{comment}{// 1234e-\/6 -\/> 0.001234}}
+\DoxyCodeLine{182         \textcolor{keyword}{const} \textcolor{keywordtype}{int} offset = 2 -\/ kk;}
+\DoxyCodeLine{183         std::memmove(\&buffer[offset], \&buffer[0], \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(length));}
+\DoxyCodeLine{184         buffer[0] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{185         buffer[1] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{186         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 2; i < offset; i++)}
+\DoxyCodeLine{187             buffer[i] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{188         \textcolor{keywordflow}{if} (length -\/ kk > maxDecimalPlaces) \{}
+\DoxyCodeLine{189             \textcolor{comment}{// When maxDecimalPlaces = 2, 0.123 -\/> 0.12, 0.102 -\/> 0.1}}
+\DoxyCodeLine{190             \textcolor{comment}{// Remove extra trailing zeros (at least one) after truncation.}}
+\DoxyCodeLine{191             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = maxDecimalPlaces + 1; i > 2; i-\/-\/)}
+\DoxyCodeLine{192                 \textcolor{keywordflow}{if} (buffer[i] != \textcolor{charliteral}{'0'})}
+\DoxyCodeLine{193                     \textcolor{keywordflow}{return} \&buffer[i + 1];}
+\DoxyCodeLine{194             \textcolor{keywordflow}{return} \&buffer[3]; \textcolor{comment}{// Reserve one zero}}
+\DoxyCodeLine{195         \}}
+\DoxyCodeLine{196         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{197             \textcolor{keywordflow}{return} \&buffer[length + offset];}
+\DoxyCodeLine{198     \}}
+\DoxyCodeLine{199     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (kk < -\/maxDecimalPlaces) \{}
+\DoxyCodeLine{200         \textcolor{comment}{// Truncate to zero}}
+\DoxyCodeLine{201         buffer[0] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{202         buffer[1] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{203         buffer[2] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{204         \textcolor{keywordflow}{return} \&buffer[3];}
+\DoxyCodeLine{205     \}}
+\DoxyCodeLine{206     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (length == 1) \{}
+\DoxyCodeLine{207         \textcolor{comment}{// 1e30}}
+\DoxyCodeLine{208         buffer[1] = \textcolor{charliteral}{'e'};}
+\DoxyCodeLine{209         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_aadc1fd5929c1c67a56c8ba480c587bac}{WriteExponent}}(kk -\/ 1, \&buffer[2]);}
+\DoxyCodeLine{210     \}}
+\DoxyCodeLine{211     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{212         \textcolor{comment}{// 1234e30 -\/> 1.234e33}}
+\DoxyCodeLine{213         std::memmove(\&buffer[2], \&buffer[1], \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(length -\/ 1));}
+\DoxyCodeLine{214         buffer[1] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{215         buffer[length + 1] = \textcolor{charliteral}{'e'};}
+\DoxyCodeLine{216         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_aadc1fd5929c1c67a56c8ba480c587bac}{WriteExponent}}(kk -\/ 1, \&buffer[0 + length + 2]);}
+\DoxyCodeLine{217     \}}
+\DoxyCodeLine{218 \}}
+\DoxyCodeLine{219 }
+\DoxyCodeLine{220 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a38ffd2dab9bb216948f828f3a36c801f}{dtoa}}(\textcolor{keywordtype}{double} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{int} maxDecimalPlaces = 324) \{}
+\DoxyCodeLine{221     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(maxDecimalPlaces >= 1);}
+\DoxyCodeLine{222     \mbox{\hyperlink{classinternal_1_1_double}{Double}} d(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}});}
+\DoxyCodeLine{223     \textcolor{keywordflow}{if} (d.\mbox{\hyperlink{classinternal_1_1_double_a90a3a1ca614b377b59576955ce987ce2}{IsZero}}()) \{}
+\DoxyCodeLine{224         \textcolor{keywordflow}{if} (d.\mbox{\hyperlink{classinternal_1_1_double_ab09c26873ca4c3e471a97c4559bf317d}{Sign}}())}
+\DoxyCodeLine{225             *buffer++ = \textcolor{charliteral}{'-\/'};     \textcolor{comment}{// -\/0.0, Issue \#289}}
+\DoxyCodeLine{226         buffer[0] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{227         buffer[1] = \textcolor{charliteral}{'.'};}
+\DoxyCodeLine{228         buffer[2] = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{229         \textcolor{keywordflow}{return} \&buffer[3];}
+\DoxyCodeLine{230     \}}
+\DoxyCodeLine{231     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{232         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < 0) \{}
+\DoxyCodeLine{233             *buffer++ = \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{234             \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} = -\/\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}};}
+\DoxyCodeLine{235         \}}
+\DoxyCodeLine{236         \textcolor{keywordtype}{int} length, K;}
+\DoxyCodeLine{237         \mbox{\hyperlink{namespaceinternal_aeb7b6c0784b644968003cbd1b9da57e3}{Grisu2}}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, buffer, \&length, \&K);}
+\DoxyCodeLine{238         \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_a4b194248657212e94cc3f244b09dbeae}{Prettify}}(buffer, length, K, maxDecimalPlaces);}
+\DoxyCodeLine{239     \}}
+\DoxyCodeLine{240 \}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{243 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{244 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{245 }
+\DoxyCodeLine{246 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{247 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{248 }
+\DoxyCodeLine{249 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_DTOA\_}}
+
+\end{DoxyCode}

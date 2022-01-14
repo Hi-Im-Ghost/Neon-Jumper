@@ -1,0 +1,141 @@
+.TH "MemoryStream" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MemoryStream \- Represents an in-memory input byte stream\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memorystream\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef char \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemoryStream\fP (const \fBCh\fP *src, size_t size)"
+.br
+.ti -1c
+.RI "\fBCh\fP \fBPeek\fP () const"
+.br
+.ti -1c
+.RI "\fBCh\fP \fBTake\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBTell\fP () const"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBPutBegin\fP ()"
+.br
+.ti -1c
+.RI "void \fBPut\fP (\fBCh\fP)"
+.br
+.ti -1c
+.RI "void \fBFlush\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBPutEnd\fP (\fBCh\fP *)"
+.br
+.ti -1c
+.RI "const \fBCh\fP * \fBPeek4\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBCh\fP * \fBsrc_\fP"
+.br
+.RI "Current read position\&. "
+.ti -1c
+.RI "const \fBCh\fP * \fBbegin_\fP"
+.br
+.RI "Original head of the string\&. "
+.ti -1c
+.RI "const \fBCh\fP * \fBend_\fP"
+.br
+.RI "End of stream\&. "
+.ti -1c
+.RI "size_t \fBsize_\fP"
+.br
+.RI "Size of the stream\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Represents an in-memory input byte stream\&. 
+
+This class is mainly for being wrapped by \fBEncodedInputStream\fP or \fBAutoUTFInputStream\fP\&.
+.PP
+It is similar to FileReadBuffer but the source is an in-memory buffer instead of a file\&.
+.PP
+Differences between \fBMemoryStream\fP and StringStream:
+.IP "1." 4
+StringStream has encoding but \fBMemoryStream\fP is a byte stream\&.
+.IP "2." 4
+\fBMemoryStream\fP needs size of the source buffer and the buffer don't need to be null terminated\&. StringStream assume null-terminated string as source\&.
+.IP "3." 4
+\fBMemoryStream\fP supports \fBPeek4()\fP for encoding detection\&. StringStream is specified with an encoding so it should not have \fBPeek4()\fP\&. 
+.PP
+\fBNote\fP
+.RS 4
+implements Stream concept 
+.RE
+.PP
+
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef char \fBMemoryStream::Ch\fP"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "MemoryStream::MemoryStream (const \fBCh\fP * src, size_t size)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "void MemoryStream::Flush ()\fC [inline]\fP"
+
+.SS "\fBCh\fP MemoryStream::Peek () const\fC [inline]\fP"
+
+.SS "const \fBCh\fP * MemoryStream::Peek4 () const\fC [inline]\fP"
+
+.SS "void MemoryStream::Put (\fBCh\fP)\fC [inline]\fP"
+
+.SS "\fBCh\fP * MemoryStream::PutBegin ()\fC [inline]\fP"
+
+.SS "size_t MemoryStream::PutEnd (\fBCh\fP *)\fC [inline]\fP"
+
+.SS "\fBCh\fP MemoryStream::Take ()\fC [inline]\fP"
+
+.SS "size_t MemoryStream::Tell () const\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBCh\fP* MemoryStream::begin_"
+
+.PP
+Original head of the string\&. 
+.SS "const \fBCh\fP* MemoryStream::end_"
+
+.PP
+End of stream\&. 
+.SS "size_t MemoryStream::size_"
+
+.PP
+Size of the stream\&. 
+.SS "const \fBCh\fP* MemoryStream::src_"
+
+.PP
+Current read position\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,624 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_writer_8h_source" xml:lang="en-US">
+<title>writer.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/writer.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_WRITER_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_WRITER_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stream_8h">stream.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_clzll_8h">internal/clzll.h</link>&quot;</emphasis>
+20 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_meta_8h">internal/meta.h</link>&quot;</emphasis>
+21 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stack_8h">internal/stack.h</link>&quot;</emphasis>
+22 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_strfunc_8h">internal/strfunc.h</link>&quot;</emphasis>
+23 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_dtoa_8h">internal/dtoa.h</link>&quot;</emphasis>
+24 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_itoa_8h">internal/itoa.h</link>&quot;</emphasis>
+25 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stringbuffer_8h">stringbuffer.h</link>&quot;</emphasis>
+26 <emphasis role="preprocessor">#include&#32;&lt;new&gt;</emphasis>&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;placement&#32;new</emphasis>
+27 
+28 <emphasis role="preprocessor">#if&#32;defined(RAPIDJSON_SIMD)&#32;&amp;&amp;&#32;defined(_MSC_VER)</emphasis>
+29 <emphasis role="preprocessor">#include&#32;&lt;intrin.h&gt;</emphasis>
+30 <emphasis role="preprocessor">#pragma&#32;intrinsic(_BitScanForward)</emphasis>
+31 <emphasis role="preprocessor">#endif</emphasis>
+32 <emphasis role="preprocessor">#ifdef&#32;RAPIDJSON_SSE42</emphasis>
+33 <emphasis role="preprocessor">#include&#32;&lt;nmmintrin.h&gt;</emphasis>
+34 <emphasis role="preprocessor">#elif&#32;defined(RAPIDJSON_SSE2)</emphasis>
+35 <emphasis role="preprocessor">#include&#32;&lt;emmintrin.h&gt;</emphasis>
+36 <emphasis role="preprocessor">#elif&#32;defined(RAPIDJSON_NEON)</emphasis>
+37 <emphasis role="preprocessor">#include&#32;&lt;arm_neon.h&gt;</emphasis>
+38 <emphasis role="preprocessor">#endif</emphasis>
+39 
+40 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+41 RAPIDJSON_DIAG_PUSH
+42 RAPIDJSON_DIAG_OFF(padded)
+43 RAPIDJSON_DIAG_OFF(unreachable-code)
+44 RAPIDJSON_DIAG_OFF(c++98-compat)
+45 <emphasis role="preprocessor">#elif&#32;defined(_MSC_VER)</emphasis>
+46 RAPIDJSON_DIAG_PUSH
+47 RAPIDJSON_DIAG_OFF(4127)&#32;<emphasis role="comment">//&#32;conditional&#32;expression&#32;is&#32;constant</emphasis>
+48 <emphasis role="preprocessor">#endif</emphasis>
+49 
+50 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+51 
+53 <emphasis role="comment">//&#32;WriteFlag</emphasis>
+54 
+61 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_WRITE_DEFAULT_FLAGS</emphasis>
+62 <emphasis role="preprocessor">#define&#32;RAPIDJSON_WRITE_DEFAULT_FLAGS&#32;kWriteNoFlags</emphasis>
+63 <emphasis role="preprocessor">#endif</emphasis>
+64 
+66 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5">WriteFlag</link>&#32;{
+67 &#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a840478bb69a2b99ad9a47920ba176997">kWriteNoFlags</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+68 &#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a4a41050fd3b8f133b51ced9905f839c4">kWriteValidateEncodingFlag</link>&#32;=&#32;1,&#32;
+69 &#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a1ff67a91b689ae093ce241e0301c0816">kWriteNanAndInfFlag</link>&#32;=&#32;2,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+70 &#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a63d8536bdc203be5310a1c58643f30b8">kWriteDefaultFlags</link>&#32;=&#32;<link linkend="_writer_8h_1a1975595e2f1dc20a2d4859f340ac88c6">RAPIDJSON_WRITE_DEFAULT_FLAGS</link>&#32;&#32;
+71 };
+72 
+74 
+89 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;SourceEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;<emphasis role="keyword">typename</emphasis>&#32;TargetEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;<emphasis role="keyword">typename</emphasis>&#32;StackAllocator&#32;=&#32;CrtAllocator,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;writeFlags&#32;=&#32;kWriteDefaultFlags&gt;
+90 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_writer">Writer</link>&#32;{
+91 <emphasis role="keyword">public</emphasis>:
+92 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;SourceEncoding::Ch&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>;
+93 
+94 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_class_writer_1ab46d66ae0ca78cb03ab7fb865d129934">kDefaultMaxDecimalPlaces</link>&#32;=&#32;324;
+95 
+97 
+101 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>
+102 &#32;&#32;&#32;&#32;<link linkend="_class_writer_1af4f54830d6927d9daf5bd53bfd134dd3">Writer</link>(OutputStream&amp;&#32;os,&#32;StackAllocator*&#32;stackAllocator&#32;=&#32;0,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;levelDepth&#32;=&#32;<link linkend="_class_writer_1a9cb4caeb9d8971f305edff1d70e67acb">kDefaultLevelDepth</link>)&#32;:&#32;
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>(&amp;os),&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>(stackAllocator,&#32;levelDepth&#32;*&#32;sizeof(<link linkend="_struct_writer_1_1_level">Level</link>)),&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>(<link linkend="_class_writer_1ab46d66ae0ca78cb03ab7fb865d129934">kDefaultMaxDecimalPlaces</link>),&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>(false)&#32;{}
+104 
+105 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>
+106 &#32;&#32;&#32;&#32;<link linkend="_class_writer_1a7b885cea71542fc436be80eff447fb64">Writer</link>(StackAllocator*&#32;allocator&#32;=&#32;0,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;levelDepth&#32;=&#32;<link linkend="_class_writer_1a9cb4caeb9d8971f305edff1d70e67acb">kDefaultLevelDepth</link>)&#32;:
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>(0),&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>(allocator,&#32;levelDepth&#32;*&#32;sizeof(<link linkend="_struct_writer_1_1_level">Level</link>)),&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>(<link linkend="_class_writer_1ab46d66ae0ca78cb03ab7fb865d129934">kDefaultMaxDecimalPlaces</link>),&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>(false)&#32;{}
+108 
+109 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+110 &#32;&#32;&#32;&#32;<link linkend="_class_writer_1af4f54830d6927d9daf5bd53bfd134dd3">Writer</link>(<link linkend="_class_writer">Writer</link>&amp;&amp;&#32;rhs)&#32;:
+111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>(rhs.<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>),&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>(std::move(rhs.<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>)),&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>(rhs.<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>),&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>(rhs.<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>)&#32;{
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.os_&#32;=&#32;0;
+113 &#32;&#32;&#32;&#32;}
+114 <emphasis role="preprocessor">#endif</emphasis>
+115 
+117 
+134 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_writer_1a8b53e8f137f7fcf694f5500711b3f58d">Reset</link>(OutputStream&amp;&#32;os)&#32;{
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>&#32;=&#32;&amp;os;
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1a02da31665a372738e81ded2f7b7d598e">Clear</link>();
+138 &#32;&#32;&#32;&#32;}
+139 
+141 
+144 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a07d74d36dd3191b06e0aab678c246157">IsComplete</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>&#32;&amp;&amp;&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>();
+146 &#32;&#32;&#32;&#32;}
+147 
+148 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_class_writer_1ad35ddb56c6969d9584bf1e73bebda5ab">GetMaxDecimalPlaces</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>;
+150 &#32;&#32;&#32;&#32;}
+151 
+153 
+173 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_writer_1a58e3f94dc5af1432a8eace5ba427eca7">SetMaxDecimalPlaces</link>(<emphasis role="keywordtype">int</emphasis>&#32;maxDecimalPlaces)&#32;{
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>&#32;=&#32;maxDecimalPlaces;
+175 &#32;&#32;&#32;&#32;}
+176 
+181 
+182 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1af700ed03c8810d48a4aaa3c5baeaf26c">Null</link>()&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087">kNullType</link>);&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a44862b3eba8d84b909c69aba875c9f4d">WriteNull</link>());&#32;}
+183 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ad7491f4dedb02e7456b240b23ef8c1ad">Bool</link>(<emphasis role="keywordtype">bool</emphasis>&#32;b)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(b&#32;?&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6">kTrueType</link>&#32;:&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54">kFalseType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a42ad68b6950431bb8ca0199568546eaf">WriteBool</link>(b));&#32;}
+184 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ad471415aa7741e732bab0bcfbb9522a8">Int</link>(<emphasis role="keywordtype">int</emphasis>&#32;i)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a31d0feda654ca245c41462be7dc59998">WriteInt</link>(i));&#32;}
+185 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a5fb0c3228f89f6f9bef15f3e6e6f1739">Uint</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;u)&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a2861227e93707d1478d2cf56644dca3b">WriteUint</link>(u));&#32;}
+186 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a4144d7086ed9d3d807c373de242bde45">Int64</link>(<link linkend="_stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6">int64_t</link>&#32;i64)&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1aa58d3f80c06394648de5055ecfb41587">WriteInt64</link>(i64));&#32;}
+187 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a55bb9f286ecdaf4cdb07bddb02e0cb2d">Uint64</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u64)&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1ad07b325157220e3aa791c1c8c904021e">WriteUint64</link>(u64));&#32;}
+188 
+190 
+194 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a22a43e8a7193105deec6b808736f7a1a">Double</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1ae7a0fc4740681d845d92c1213bd25aa1">WriteDouble</link>(d));&#32;}
+195 
+196 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ad462dc606fddea0f34fc0e190c3bdaee">RawNumber</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(str&#32;!=&#32;0);
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)copy;
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1acda4412ef5f4cac6e89f9544e4b10f70">WriteString</link>(str,&#32;length));
+201 &#32;&#32;&#32;&#32;}
+202 
+203 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a8b4dc44f471403a83c9959575796ceab">String</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(str&#32;!=&#32;0);
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)copy;
+206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link>);
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1acda4412ef5f4cac6e89f9544e4b10f70">WriteString</link>(str,&#32;length));
+208 &#32;&#32;&#32;&#32;}
+209 
+210 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+211 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a8b4dc44f471403a83c9959575796ceab">String</link>(<emphasis role="keyword">const</emphasis>&#32;std::basic_string&lt;Ch&gt;&amp;&#32;str)&#32;{
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a8b4dc44f471403a83c9959575796ceab">String</link>(str.data(),&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>(str.size()));
+213 &#32;&#32;&#32;&#32;}
+214 <emphasis role="preprocessor">#endif</emphasis>
+215 
+216 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1aec3200b2fc80ec87d1c37f775256b2e1">StartObject</link>()&#32;{
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f">kObjectType</link>);
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">new</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Push&lt;Level&gt;())&#32;<link linkend="_struct_writer_1_1_level">Level</link>(<emphasis role="keyword">false</emphasis>);
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a81c72a2eecd47e042f56ca93a27a5cb1">WriteStartObject</link>();
+220 &#32;&#32;&#32;&#32;}
+221 
+222 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a19096d2ccb90761f63ab1240337bf90a">Key</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a8b4dc44f471403a83c9959575796ceab">String</link>(str,&#32;length,&#32;copy);&#32;}
+223 
+224 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+225 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a19096d2ccb90761f63ab1240337bf90a">Key</link>(<emphasis role="keyword">const</emphasis>&#32;std::basic_string&lt;Ch&gt;&amp;&#32;str)
+226 &#32;&#32;&#32;&#32;{
+227 &#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a19096d2ccb90761f63ab1240337bf90a">Key</link>(str.data(),&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>(str.size()));
+228 &#32;&#32;&#32;&#32;}
+229 <emphasis role="preprocessor">#endif</emphasis>
+230 
+231 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a0771a565261564c27676b7300b11f2b5">EndObject</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;memberCount&#32;=&#32;0)&#32;{
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)memberCount;
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_writer_1_1_level">Level</link>));&#32;<emphasis role="comment">//&#32;not&#32;inside&#32;an&#32;Object</emphasis>
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(!<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Top&lt;Level&gt;()-&gt;inArray);&#32;<emphasis role="comment">//&#32;currently&#32;inside&#32;an&#32;Array,&#32;not&#32;Object</emphasis>
+235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(0&#32;==&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Top&lt;Level&gt;()-&gt;valueCount&#32;%&#32;2);&#32;<emphasis role="comment">//&#32;Object&#32;has&#32;a&#32;Key&#32;without&#32;a&#32;Value</emphasis>
+236 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Pop&lt;Level&gt;(1);
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a7e3f6760a50a72f4217a9b2d625c43ee">WriteEndObject</link>());
+238 &#32;&#32;&#32;&#32;}
+239 
+240 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a38715785194b42cd67ba5dd52bf7967e">StartArray</link>()&#32;{
+241 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>);
+242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">new</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Push&lt;Level&gt;())&#32;<link linkend="_struct_writer_1_1_level">Level</link>(<emphasis role="keyword">true</emphasis>);
+243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a3c3560a96cac58f98f4a74d6cb227204">WriteStartArray</link>();
+244 &#32;&#32;&#32;&#32;}
+245 
+246 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ac88d533095591a878500b63b351d4013">EndArray</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;elementCount&#32;=&#32;0)&#32;{
+247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)elementCount;
+248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_writer_1_1_level">Level</link>));
+249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Top&lt;Level&gt;()-&gt;inArray);
+250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Pop&lt;Level&gt;(1);
+251 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1aabda2df1be6e83cef416e9b1f042e8f4">WriteEndArray</link>());
+252 &#32;&#32;&#32;&#32;}
+254 
+257 
+259 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a2a2c6f51644b2013471aec4dac0d7466">String</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;<emphasis role="keyword">const</emphasis>&amp;&#32;str)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a2a2c6f51644b2013471aec4dac0d7466">String</link>(str,&#32;<link linkend="_namespaceinternal_1a86326fb0c9d7c7ea8edd7deedbb2b26e">internal::StrLen</link>(str));&#32;}
+260 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ab6057b7fa9737edb4da55a7afefa966d">Key</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;<emphasis role="keyword">const</emphasis>&amp;&#32;str)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1ab6057b7fa9737edb4da55a7afefa966d">Key</link>(str,&#32;<link linkend="_namespaceinternal_1a86326fb0c9d7c7ea8edd7deedbb2b26e">internal::StrLen</link>(str));&#32;}
+261 &#32;&#32;&#32;&#32;
+263 
+265 
+272 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ae0d1615104e4e88040b9640e6784008a">RawValue</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;json,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length,&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;type)&#32;{
+273 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(json&#32;!=&#32;0);
+274 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(type);
+275 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<link linkend="_class_writer_1a8ee1135b2595261819b134907f67614e">WriteRawValue</link>(json,&#32;length));
+276 &#32;&#32;&#32;&#32;}
+277 
+279 
+282 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_writer_1a8ca4e364c546b2eb526caa68dde011d2">Flush</link>()&#32;{
+283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Flush();
+284 &#32;&#32;&#32;&#32;}
+285 
+286 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_writer_1a9cb4caeb9d8971f305edff1d70e67acb">kDefaultLevelDepth</link>&#32;=&#32;32;
+287 
+288 <emphasis role="keyword">protected</emphasis>:
+290 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_writer_1_1_level">Level</link>&#32;{
+291 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_writer_1_1_level_1a0b1844a7a1b7c6c20e1964dbb67da484">Level</link>(<emphasis role="keywordtype">bool</emphasis>&#32;inArray_)&#32;:&#32;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>(0),&#32;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>(inArray_)&#32;{}
+292 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>;&#32;&#32;
+293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+294 &#32;&#32;&#32;&#32;};
+295 
+296 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a44862b3eba8d84b909c69aba875c9f4d">WriteNull</link>()&#32;&#32;{
+297 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;4);
+298 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;l&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;l&apos;</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+299 &#32;&#32;&#32;&#32;}
+300 
+301 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a42ad68b6950431bb8ca0199568546eaf">WriteBool</link>(<emphasis role="keywordtype">bool</emphasis>&#32;b)&#32;&#32;{
+302 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(b)&#32;{
+303 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;4);
+304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;t&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;r&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;e&apos;</emphasis>);
+305 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+307 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;5);
+308 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;f&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;a&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;l&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;s&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;e&apos;</emphasis>);
+309 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+310 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+311 &#32;&#32;&#32;&#32;}
+312 
+313 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a31d0feda654ca245c41462be7dc59998">WriteInt</link>(<emphasis role="keywordtype">int</emphasis>&#32;i)&#32;{
+314 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;buffer[11];
+315 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1ac6c7d763acc9ca9f15a759241640328e">internal::i32toa</link>(i,&#32;buffer);
+316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end&#32;-&#32;buffer));
+317 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;buffer;&#32;p&#32;!=&#32;end;&#32;++p)
+318 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(*p));
+319 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+320 &#32;&#32;&#32;&#32;}
+321 
+322 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a2861227e93707d1478d2cf56644dca3b">WriteUint</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;u)&#32;{
+323 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;buffer[10];
+324 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a90e3cb218b557548f361e99dc718b4b1">internal::u32toa</link>(u,&#32;buffer);
+325 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end&#32;-&#32;buffer));
+326 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;buffer;&#32;p&#32;!=&#32;end;&#32;++p)
+327 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(*p));
+328 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+329 &#32;&#32;&#32;&#32;}
+330 
+331 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1aa58d3f80c06394648de5055ecfb41587">WriteInt64</link>(<link linkend="_stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6">int64_t</link>&#32;i64)&#32;{
+332 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;buffer[21];
+333 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a527358458754f514c249c55c27b35526">internal::i64toa</link>(i64,&#32;buffer);
+334 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end&#32;-&#32;buffer));
+335 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;buffer;&#32;p&#32;!=&#32;end;&#32;++p)
+336 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(*p));
+337 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+338 &#32;&#32;&#32;&#32;}
+339 
+340 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ad07b325157220e3aa791c1c8c904021e">WriteUint64</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u64)&#32;{
+341 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;buffer[20];
+342 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a489150922c0320e4290b455bf3c6e36c">internal::u64toa</link>(u64,&#32;buffer);
+343 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end&#32;-&#32;buffer));
+344 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;buffer;&#32;p&#32;!=&#32;end;&#32;++p)
+345 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(*p));
+346 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+347 &#32;&#32;&#32;&#32;}
+348 
+349 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ae7a0fc4740681d845d92c1213bd25aa1">WriteDouble</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;{
+350 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).IsNanOrInf())&#32;{
+351 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(writeFlags&#32;&amp;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a1ff67a91b689ae093ce241e0301c0816">kWriteNanAndInfFlag</link>))
+352 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+353 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).IsNan())&#32;{
+354 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;3);
+355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;N&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;a&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;N&apos;</emphasis>);
+356 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+357 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+358 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).Sign())&#32;{
+359 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;9);
+360 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>);
+361 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+362 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+363 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;8);
+364 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;I&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;f&apos;</emphasis>);
+365 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;i&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;i&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;t&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;y&apos;</emphasis>);
+366 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+367 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+368 
+369 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;buffer[25];
+370 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a38ffd2dab9bb216948f828f3a36c801f">internal::dtoa</link>(d,&#32;buffer,&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>);
+371 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end&#32;-&#32;buffer));
+372 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;buffer;&#32;p&#32;!=&#32;end;&#32;++p)
+373 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(*p));
+374 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+375 &#32;&#32;&#32;&#32;}
+376 
+377 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1acda4412ef5f4cac6e89f9544e4b10f70">WriteString</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length)&#32;&#32;{
+378 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch&#32;hexDigits[16]&#32;=&#32;{&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;1&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;2&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;3&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;4&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;5&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;6&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;7&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;8&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;A&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;B&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;C&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;D&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;E&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;F&apos;</emphasis>&#32;};
+379 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;escape[256]&#32;=&#32;{
+380 <emphasis role="preprocessor">#define&#32;Z16&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</emphasis>
+381 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//0&#32;&#32;&#32;&#32;1&#32;&#32;&#32;&#32;2&#32;&#32;&#32;&#32;3&#32;&#32;&#32;&#32;4&#32;&#32;&#32;&#32;5&#32;&#32;&#32;&#32;6&#32;&#32;&#32;&#32;7&#32;&#32;&#32;&#32;8&#32;&#32;&#32;&#32;9&#32;&#32;&#32;&#32;A&#32;&#32;&#32;&#32;B&#32;&#32;&#32;&#32;C&#32;&#32;&#32;&#32;D&#32;&#32;&#32;&#32;E&#32;&#32;&#32;&#32;F</emphasis>
+382 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;b&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;t&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;f&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;r&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="comment">//&#32;00</emphasis>
+383 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>,&#32;<emphasis role="comment">//&#32;10</emphasis>
+384 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;<emphasis role="charliteral">&apos;&quot;&apos;</emphasis>,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;<emphasis role="comment">//&#32;20</emphasis>
+385 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;30~4F</emphasis>
+386 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;&#32;&#32;0,&#32;<emphasis role="comment">//&#32;50</emphasis>
+387 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>,&#32;<link linkend="_writer_8h_1ae2c492a0a464591893d4255ea26d5e3a">Z16</link>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;60~FF</emphasis>
+388 <emphasis role="preprocessor">#undef&#32;Z16</emphasis>
+389 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+390 
+391 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(TargetEncoding::supportUnicode)
+392 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;2&#32;+&#32;length&#32;*&#32;6);&#32;<emphasis role="comment">//&#32;&quot;\uxxxx...&quot;</emphasis>
+393 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+394 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;2&#32;+&#32;length&#32;*&#32;12);&#32;&#32;<emphasis role="comment">//&#32;&quot;\uxxxx\uyyyy...&quot;</emphasis>
+395 
+396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>);
+397 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;SourceEncoding&gt;</link>&#32;is(str);
+398 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(<link linkend="_class_writer_1a94140803bba7863a1b39c936bbe6d262">ScanWriteUnescapedString</link>(is,&#32;length))&#32;{
+399 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>&#32;c&#32;=&#32;is.<link linkend="_struct_generic_string_stream_1a0c8fea9c2740c2953af9b3bb28bd469b">Peek</link>();
+400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!TargetEncoding::supportUnicode&#32;&amp;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&gt;=&#32;0x80)&#32;{
+401 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Unicode&#32;escaping</emphasis>
+402 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+403 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(!SourceEncoding::Decode(is,&#32;&amp;codepoint)))
+404 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+405 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>);
+406 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>);
+407 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0xD7FF&#32;||&#32;(codepoint&#32;&gt;=&#32;0xE000&#32;&amp;&amp;&#32;codepoint&#32;&lt;=&#32;0xFFFF))&#32;{
+408 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(codepoint&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;15]);
+409 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(codepoint&#32;&gt;&gt;&#32;&#32;8)&#32;&amp;&#32;15]);
+410 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(codepoint&#32;&gt;&gt;&#32;&#32;4)&#32;&amp;&#32;15]);
+411 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(codepoint&#32;&#32;&#32;&#32;&#32;&#32;)&#32;&amp;&#32;15]);
+412 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+413 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+414 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&gt;=&#32;0x010000&#32;&amp;&amp;&#32;codepoint&#32;&lt;=&#32;0x10FFFF);
+415 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Surrogate&#32;pair</emphasis>
+416 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;s&#32;=&#32;codepoint&#32;-&#32;0x010000;
+417 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;lead&#32;=&#32;(s&#32;&gt;&gt;&#32;10)&#32;+&#32;0xD800;
+418 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;trail&#32;=&#32;(s&#32;&amp;&#32;0x3FF)&#32;+&#32;0xDC00;
+419 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(lead&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;15]);
+420 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(lead&#32;&gt;&gt;&#32;&#32;8)&#32;&amp;&#32;15]);
+421 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(lead&#32;&gt;&gt;&#32;&#32;4)&#32;&amp;&#32;15]);
+422 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(lead&#32;&#32;&#32;&#32;&#32;&#32;)&#32;&amp;&#32;15]);
+423 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>);
+424 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>);
+425 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(trail&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;15]);
+426 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(trail&#32;&gt;&gt;&#32;&#32;8)&#32;&amp;&#32;15]);
+427 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(trail&#32;&gt;&gt;&#32;&#32;4)&#32;&amp;&#32;15]);
+428 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[(trail&#32;&#32;&#32;&#32;&#32;&#32;)&#32;&amp;&#32;15]);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+429 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+430 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+431 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;((<emphasis role="keyword">sizeof</emphasis>(<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>)&#32;==&#32;1&#32;||&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&lt;&#32;256)&#32;&amp;&amp;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(escape[<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)]))&#32;&#32;{
+432 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;is.<link linkend="_struct_generic_string_stream_1a0d26e3e77e4fca64a87c2d71f48ac5e5">Take</link>();
+433 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>);
+434 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(escape[<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)]));
+435 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(escape[<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)]&#32;==&#32;<emphasis role="charliteral">&apos;u&apos;</emphasis>)&#32;{
+436 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>);
+437 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>);
+438 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&gt;&gt;&#32;4]);
+439 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;hexDigits[<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&amp;&#32;0xF]);
+440 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+441 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+442 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(!(writeFlags&#32;&amp;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a4a41050fd3b8f133b51ced9905f839c4">kWriteValidateEncodingFlag</link>&#32;?&#32;
+443 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_transcoder">Transcoder&lt;SourceEncoding, TargetEncoding&gt;::Validate</link>(is,&#32;*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>)&#32;:
+444 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_transcoder">Transcoder&lt;SourceEncoding, TargetEncoding&gt;::TranscodeUnsafe</link>(is,&#32;*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>))))
+445 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+446 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+447 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>);
+448 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+449 &#32;&#32;&#32;&#32;}
+450 
+451 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a94140803bba7863a1b39c936bbe6d262">ScanWriteUnescapedString</link>(<link linkend="_struct_generic_string_stream">GenericStringStream&lt;SourceEncoding&gt;</link>&amp;&#32;is,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;{
+452 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+453 &#32;&#32;&#32;&#32;}
+454 
+455 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a81c72a2eecd47e042f56ca93a27a5cb1">WriteStartObject</link>()&#32;{&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put(<emphasis role="charliteral">&apos;{&apos;</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;&#32;}
+456 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a7e3f6760a50a72f4217a9b2d625c43ee">WriteEndObject</link>()&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put(<emphasis role="charliteral">&apos;}&apos;</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;&#32;}
+457 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a3c3560a96cac58f98f4a74d6cb227204">WriteStartArray</link>()&#32;&#32;{&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put(<emphasis role="charliteral">&apos;[&apos;</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;&#32;}
+458 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1aabda2df1be6e83cef416e9b1f042e8f4">WriteEndArray</link>()&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put(<emphasis role="charliteral">&apos;]&apos;</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;&#32;}
+459 
+460 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a8ee1135b2595261819b134907f67614e">WriteRawValue</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Ch</link>*&#32;json,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;{
+461 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>,&#32;length);
+462 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;SourceEncoding&gt;</link>&#32;is(json);
+463 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length))&#32;{
+464 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(is.<link linkend="_struct_generic_string_stream_1a0c8fea9c2740c2953af9b3bb28bd469b">Peek</link>()&#32;!=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>);
+465 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(!(writeFlags&#32;&amp;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a4a41050fd3b8f133b51ced9905f839c4">kWriteValidateEncodingFlag</link>&#32;?&#32;
+466 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_transcoder">Transcoder&lt;SourceEncoding, TargetEncoding&gt;::Validate</link>(is,&#32;*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>)&#32;:
+467 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_transcoder">Transcoder&lt;SourceEncoding, TargetEncoding&gt;::TranscodeUnsafe</link>(is,&#32;*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>))))
+468 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+469 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+470 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+471 &#32;&#32;&#32;&#32;}
+472 
+473 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d">Prefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;type)&#32;{
+474 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)type;
+475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;!=&#32;0))&#32;{&#32;<emphasis role="comment">//&#32;this&#32;value&#32;is&#32;not&#32;at&#32;root</emphasis>
+476 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_writer_1_1_level">Level</link>*&#32;level&#32;=&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.template&#32;Top&lt;Level&gt;();
+477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;&gt;&#32;0)&#32;{
+478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>)&#32;
+479 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put(<emphasis role="charliteral">&apos;,&apos;</emphasis>);&#32;<emphasis role="comment">//&#32;add&#32;comma&#32;if&#32;it&#32;is&#32;not&#32;the&#32;first&#32;element&#32;in&#32;array</emphasis>
+480 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;&#32;<emphasis role="comment">//&#32;in&#32;object</emphasis>
+481 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>-&gt;Put((level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;%&#32;2&#32;==&#32;0)&#32;?&#32;<emphasis role="charliteral">&apos;,&apos;</emphasis>&#32;:&#32;<emphasis role="charliteral">&apos;:&apos;</emphasis>);
+482 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+483 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!level-&gt;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>&#32;&amp;&amp;&#32;level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;%&#32;2&#32;==&#32;0)
+484 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(type&#32;==&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link>);&#32;&#32;<emphasis role="comment">//&#32;if&#32;it&apos;s&#32;in&#32;object,&#32;then&#32;even&#32;number&#32;should&#32;be&#32;a&#32;name</emphasis>
+485 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>++;
+486 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+487 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+488 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(!<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Should&#32;only&#32;has&#32;one&#32;and&#32;only&#32;one&#32;root.</emphasis>
+489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+491 &#32;&#32;&#32;&#32;}
+492 
+493 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Flush&#32;the&#32;value&#32;if&#32;it&#32;is&#32;the&#32;top&#32;level&#32;one.</emphasis>
+494 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">EndValue</link>(<emphasis role="keywordtype">bool</emphasis>&#32;ret)&#32;{
+495 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()))&#32;&#32;&#32;<emphasis role="comment">//&#32;end&#32;of&#32;json&#32;text</emphasis>
+496 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a8ca4e364c546b2eb526caa68dde011d2">Flush</link>();
+497 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ret;
+498 &#32;&#32;&#32;&#32;}
+499 
+500 &#32;&#32;&#32;&#32;OutputStream*&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">os_</link>;
+501 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">internal::Stack&lt;StackAllocator&gt;</link>&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">level_stack_</link>;
+502 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d">maxDecimalPlaces_</link>;
+503 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">hasRoot_</link>;
+504 
+505 <emphasis role="keyword">private</emphasis>:
+506 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prohibit&#32;copy&#32;constructor&#32;&amp;&#32;assignment&#32;operator.</emphasis>
+507 &#32;&#32;&#32;&#32;<link linkend="_class_writer_1af4f54830d6927d9daf5bd53bfd134dd3">Writer</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer">Writer</link>&amp;);
+508 &#32;&#32;&#32;&#32;<link linkend="_class_writer">Writer</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_writer">Writer</link>&amp;);
+509 };
+510 
+511 <emphasis role="comment">//&#32;Full&#32;specialization&#32;for&#32;StringStream&#32;to&#32;prevent&#32;memory&#32;copying</emphasis>
+512 
+513 <emphasis role="keyword">template</emphasis>&lt;&gt;
+514 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a31d0feda654ca245c41462be7dc59998">Writer&lt;StringBuffer&gt;::WriteInt</link>(<emphasis role="keywordtype">int</emphasis>&#32;i)&#32;{
+515 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer&#32;=&#32;os_-&gt;Push(11);
+516 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1ac6c7d763acc9ca9f15a759241640328e">internal::i32toa</link>(i,&#32;buffer);
+517 &#32;&#32;&#32;&#32;os_-&gt;Pop(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(11&#32;-&#32;(end&#32;-&#32;buffer)));
+518 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+519 }
+520 
+521 <emphasis role="keyword">template</emphasis>&lt;&gt;
+522 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a2861227e93707d1478d2cf56644dca3b">Writer&lt;StringBuffer&gt;::WriteUint</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;u)&#32;{
+523 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer&#32;=&#32;os_-&gt;Push(10);
+524 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a90e3cb218b557548f361e99dc718b4b1">internal::u32toa</link>(u,&#32;buffer);
+525 &#32;&#32;&#32;&#32;os_-&gt;Pop(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(10&#32;-&#32;(end&#32;-&#32;buffer)));
+526 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+527 }
+528 
+529 <emphasis role="keyword">template</emphasis>&lt;&gt;
+530 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1aa58d3f80c06394648de5055ecfb41587">Writer&lt;StringBuffer&gt;::WriteInt64</link>(<link linkend="_stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6">int64_t</link>&#32;i64)&#32;{
+531 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer&#32;=&#32;os_-&gt;Push(21);
+532 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a527358458754f514c249c55c27b35526">internal::i64toa</link>(i64,&#32;buffer);
+533 &#32;&#32;&#32;&#32;os_-&gt;Pop(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(21&#32;-&#32;(end&#32;-&#32;buffer)));
+534 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+535 }
+536 
+537 <emphasis role="keyword">template</emphasis>&lt;&gt;
+538 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ad07b325157220e3aa791c1c8c904021e">Writer&lt;StringBuffer&gt;::WriteUint64</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;{
+539 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer&#32;=&#32;os_-&gt;Push(20);
+540 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a489150922c0320e4290b455bf3c6e36c">internal::u64toa</link>(u,&#32;buffer);
+541 &#32;&#32;&#32;&#32;os_-&gt;Pop(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(20&#32;-&#32;(end&#32;-&#32;buffer)));
+542 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+543 }
+544 
+545 <emphasis role="keyword">template</emphasis>&lt;&gt;
+546 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1ae7a0fc4740681d845d92c1213bd25aa1">Writer&lt;StringBuffer&gt;::WriteDouble</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;{
+547 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).IsNanOrInf())&#32;{
+548 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Note:&#32;This&#32;code&#32;path&#32;can&#32;only&#32;be&#32;reached&#32;if&#32;(RAPIDJSON_WRITE_DEFAULT_FLAGS&#32;&amp;&#32;kWriteNanAndInfFlag).</emphasis>
+549 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a63d8536bdc203be5310a1c58643f30b8">kWriteDefaultFlags</link>&#32;&amp;&#32;<link linkend="_writer_8h_1ab05d31260e712ed01daa80077f21e0a5a1ff67a91b689ae093ce241e0301c0816">kWriteNanAndInfFlag</link>))
+550 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+551 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).IsNan())&#32;{
+552 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*os_,&#32;3);
+553 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;N&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;a&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;N&apos;</emphasis>);
+554 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+555 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+556 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_double">internal::Double</link>(d).Sign())&#32;{
+557 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*os_,&#32;9);
+558 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>);
+559 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+560 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+561 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(*os_,&#32;8);
+562 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;I&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;f&apos;</emphasis>);
+563 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;i&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;i&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;t&apos;</emphasis>);&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(*os_,&#32;<emphasis role="charliteral">&apos;y&apos;</emphasis>);
+564 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+565 &#32;&#32;&#32;&#32;}
+566 &#32;&#32;&#32;&#32;
+567 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer&#32;=&#32;os_-&gt;Push(25);
+568 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;<link linkend="_namespaceinternal_1a38ffd2dab9bb216948f828f3a36c801f">internal::dtoa</link>(d,&#32;buffer,&#32;maxDecimalPlaces_);
+569 &#32;&#32;&#32;&#32;os_-&gt;Pop(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(25&#32;-&#32;(end&#32;-&#32;buffer)));
+570 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+571 }
+572 
+573 <emphasis role="preprocessor">#if&#32;defined(RAPIDJSON_SSE2)&#32;||&#32;defined(RAPIDJSON_SSE42)</emphasis>
+574 <emphasis role="keyword">template</emphasis>&lt;&gt;
+575 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a94140803bba7863a1b39c936bbe6d262">Writer&lt;StringBuffer&gt;::ScanWriteUnescapedString</link>(<link linkend="_struct_generic_string_stream">StringStream</link>&amp;&#32;is,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;{
+576 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(length&#32;&lt;&#32;16)
+577 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+578 
+579 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length))
+580 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+581 
+582 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>;
+583 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;is.<link linkend="_struct_generic_string_stream_1a3c86ef1e1f0655028cb8a3afce11ee4f">head_</link>&#32;+&#32;length;
+584 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;nextAligned&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>((<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(p)&#32;+&#32;15)&#32;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(~15));
+585 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;endAligned&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end)&#32;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(~15));
+586 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(nextAligned&#32;&gt;&#32;end)
+587 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+588 
+589 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(p&#32;!=&#32;nextAligned)
+590 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*p&#32;&lt;&#32;0x20&#32;||&#32;*p&#32;==&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>&#32;||&#32;*p&#32;==&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>)&#32;{
+591 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>&#32;=&#32;p;
+592 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+593 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+594 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+595 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os_-&gt;PutUnsafe(*p++);
+596 
+597 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;The&#32;rest&#32;of&#32;string&#32;using&#32;SIMD</emphasis>
+598 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;dquote[16]&#32;=&#32;{&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>&#32;};
+599 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;bslash[16]&#32;=&#32;{&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>&#32;};
+600 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;space[16]&#32;&#32;=&#32;{&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F,&#32;0x1F&#32;};
+601 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;dq&#32;=&#32;_mm_loadu_si128(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>__m128i&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;dquote[0]));
+602 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;bs&#32;=&#32;_mm_loadu_si128(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>__m128i&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;bslash[0]));
+603 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;sp&#32;=&#32;_mm_loadu_si128(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>__m128i&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;space[0]));
+604 
+605 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(;&#32;p&#32;!=&#32;endAligned;&#32;p&#32;+=&#32;16)&#32;{
+606 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;s&#32;=&#32;_mm_load_si128(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>__m128i&#32;*<emphasis role="keyword">&gt;</emphasis>(p));
+607 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;t1&#32;=&#32;_mm_cmpeq_epi8(s,&#32;dq);
+608 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;t2&#32;=&#32;_mm_cmpeq_epi8(s,&#32;bs);
+609 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;t3&#32;=&#32;_mm_cmpeq_epi8(_mm_max_epu8(s,&#32;sp),&#32;sp);&#32;<emphasis role="comment">//&#32;s&#32;&lt;&#32;0x20&#32;&lt;=&gt;&#32;max(s,&#32;0x1F)&#32;==&#32;0x1F</emphasis>
+610 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;__m128i&#32;x&#32;=&#32;_mm_or_si128(_mm_or_si128(t1,&#32;t2),&#32;t3);
+611 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">short</emphasis>&#32;r&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">short</emphasis><emphasis role="keyword">&gt;</emphasis>(_mm_movemask_epi8(x));
+612 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(r&#32;!=&#32;0))&#32;{&#32;&#32;&#32;<emphasis role="comment">//&#32;some&#32;of&#32;characters&#32;is&#32;escaped</emphasis>
+613 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;len;
+614 <emphasis role="preprocessor">#ifdef&#32;_MSC_VER&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;</emphasis><emphasis role="comment">//&#32;Find&#32;the&#32;index&#32;of&#32;first&#32;escaped</emphasis>
+615 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">long</emphasis>&#32;offset;
+616 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;_BitScanForward(&amp;offset,&#32;r);
+617 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;len&#32;=&#32;offset;
+618 <emphasis role="preprocessor">#else</emphasis>
+619 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;len&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link><emphasis role="keyword">&gt;</emphasis>(__builtin_ffs(r)&#32;-&#32;1);
+620 <emphasis role="preprocessor">#endif</emphasis>
+621 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;q&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>(os_-&gt;PushUnsafe(len));
+622 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;len;&#32;i++)
+623 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;q[i]&#32;=&#32;p[i];
+624 
+625 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p&#32;+=&#32;len;
+626 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+627 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+628 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;_mm_storeu_si128(<emphasis role="keyword">reinterpret_cast&lt;</emphasis>__m128i&#32;*<emphasis role="keyword">&gt;</emphasis>(os_-&gt;PushUnsafe(16)),&#32;s);
+629 &#32;&#32;&#32;&#32;}
+630 
+631 &#32;&#32;&#32;&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>&#32;=&#32;p;
+632 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+633 }
+634 <emphasis role="preprocessor">#elif&#32;defined(RAPIDJSON_NEON)</emphasis>
+635 <emphasis role="keyword">template</emphasis>&lt;&gt;
+636 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_writer_1a94140803bba7863a1b39c936bbe6d262">Writer&lt;StringBuffer&gt;::ScanWriteUnescapedString</link>(<link linkend="_struct_generic_string_stream">StringStream</link>&amp;&#32;is,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;{
+637 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(length&#32;&lt;&#32;16)
+638 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+639 
+640 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length))
+641 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+642 
+643 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;p&#32;=&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>;
+644 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;end&#32;=&#32;is.<link linkend="_struct_generic_string_stream_1a3c86ef1e1f0655028cb8a3afce11ee4f">head_</link>&#32;+&#32;length;
+645 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;nextAligned&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>((<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(p)&#32;+&#32;15)&#32;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(~15));
+646 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;endAligned&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(end)&#32;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(~15));
+647 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(nextAligned&#32;&gt;&#32;end)
+648 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+649 
+650 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(p&#32;!=&#32;nextAligned)
+651 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*p&#32;&lt;&#32;0x20&#32;||&#32;*p&#32;==&#32;<emphasis role="charliteral">&apos;\&quot;&apos;</emphasis>&#32;||&#32;*p&#32;==&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>)&#32;{
+652 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>&#32;=&#32;p;
+653 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+654 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+655 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+656 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os_-&gt;PutUnsafe(*p++);
+657 
+658 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;The&#32;rest&#32;of&#32;string&#32;using&#32;SIMD</emphasis>
+659 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;uint8x16_t&#32;s0&#32;=&#32;vmovq_n_u8(<emphasis role="charliteral">&apos;&quot;&apos;</emphasis>);
+660 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;uint8x16_t&#32;s1&#32;=&#32;vmovq_n_u8(<emphasis role="charliteral">&apos;\\&apos;</emphasis>);
+661 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;uint8x16_t&#32;s2&#32;=&#32;vmovq_n_u8(<emphasis role="charliteral">&apos;\b&apos;</emphasis>);
+662 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;uint8x16_t&#32;s3&#32;=&#32;vmovq_n_u8(32);
+663 
+664 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(;&#32;p&#32;!=&#32;endAligned;&#32;p&#32;+=&#32;16)&#32;{
+665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;uint8x16_t&#32;s&#32;=&#32;vld1q_u8(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;*<emphasis role="keyword">&gt;</emphasis>(p));
+666 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;uint8x16_t&#32;x&#32;=&#32;vceqq_u8(s,&#32;s0);
+667 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;x&#32;=&#32;vorrq_u8(x,&#32;vceqq_u8(s,&#32;s1));
+668 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;x&#32;=&#32;vorrq_u8(x,&#32;vceqq_u8(s,&#32;s2));
+669 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;x&#32;=&#32;vorrq_u8(x,&#32;vcltq_u8(s,&#32;s3));
+670 
+671 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;x&#32;=&#32;vrev64q_u8(x);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Rev&#32;in&#32;64</emphasis>
+672 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;low&#32;=&#32;vgetq_lane_u64(vreinterpretq_u64_u8(x),&#32;0);&#32;&#32;&#32;<emphasis role="comment">//&#32;extract</emphasis>
+673 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;high&#32;=&#32;vgetq_lane_u64(vreinterpretq_u64_u8(x),&#32;1);&#32;&#32;<emphasis role="comment">//&#32;extract</emphasis>
+674 
+675 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;len&#32;=&#32;0;
+676 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;escaped&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+677 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(low&#32;==&#32;0)&#32;{
+678 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(high&#32;!=&#32;0)&#32;{
+679 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>&#32;lz&#32;=&#32;<link linkend="_namespaceinternal_1af72bbb0200bf0166f728c7afde826286">internal::clzll</link>(high);
+680 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;len&#32;=&#32;8&#32;+&#32;(lz&#32;&gt;&gt;&#32;3);
+681 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;escaped&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+682 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+683 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+684 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>&#32;lz&#32;=&#32;<link linkend="_namespaceinternal_1af72bbb0200bf0166f728c7afde826286">internal::clzll</link>(low);
+685 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;len&#32;=&#32;lz&#32;&gt;&gt;&#32;3;
+686 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;escaped&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+687 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+688 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(escaped))&#32;{&#32;&#32;&#32;<emphasis role="comment">//&#32;some&#32;of&#32;characters&#32;is&#32;escaped</emphasis>
+689 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>*&#32;q&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis>*<emphasis role="keyword">&gt;</emphasis>(os_-&gt;PushUnsafe(len));
+690 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;len;&#32;i++)
+691 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;q[i]&#32;=&#32;p[i];
+692 
+693 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p&#32;+=&#32;len;
+694 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+695 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+696 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;vst1q_u8(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;*<emphasis role="keyword">&gt;</emphasis>(os_-&gt;PushUnsafe(16)),&#32;s);
+697 &#32;&#32;&#32;&#32;}
+698 
+699 &#32;&#32;&#32;&#32;is.<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>&#32;=&#32;p;
+700 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(is.<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()&#32;&lt;&#32;length);
+701 }
+702 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_NEON</emphasis>
+703 
+704 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+705 
+706 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;||&#32;defined(__clang__)</emphasis>
+707 RAPIDJSON_DIAG_POP
+708 <emphasis role="preprocessor">#endif</emphasis>
+709 
+710 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_RAPIDJSON_H_</emphasis>
+</programlisting></section>

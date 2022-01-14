@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_stream_8h_source" xml:lang="en-US">
+<title>stream.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/stream.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_rapidjson_8h">rapidjson.h</link>&quot;</emphasis>
+16 
+17 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_STREAM_H_</emphasis>
+18 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STREAM_H_</emphasis>
+19 
+20 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_encodings_8h">encodings.h</link>&quot;</emphasis>
+21 
+22 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+23 
+25 <emphasis role="comment">//&#32;&#32;Stream</emphasis>
+26 
+39 
+42 
+46 
+50 
+53 
+56 
+61 
+67 
+72 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Stream&gt;
+73 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_stream_traits">StreamTraits</link>&#32;{
+75 
+79 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_stream_traits_1a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac">copyOptimization</link>&#32;=&#32;0&#32;};
+80 };
+81 
+83 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Stream&gt;
+84 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(<link linkend="_classrapidjson_1_1_stream">Stream</link>&amp;&#32;stream,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{
+85 &#32;&#32;&#32;&#32;(void)stream;
+86 &#32;&#32;&#32;&#32;(void)count;
+87 }
+88 
+90 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Stream&gt;
+91 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stream_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(<link linkend="_classrapidjson_1_1_stream">Stream</link>&amp;&#32;stream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Stream::Ch&#32;c)&#32;{
+92 &#32;&#32;&#32;&#32;stream.Put(c);
+93 }
+94 
+96 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Stream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+97 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_stream_8h_1aacdd569be6f98c9d7d9ef71f79ef0fc0">PutN</link>(<link linkend="_classrapidjson_1_1_stream">Stream</link>&amp;&#32;stream,&#32;Ch&#32;c,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;n)&#32;{
+98 &#32;&#32;&#32;&#32;<link linkend="_stream_8h_1aa817b00a466bb84d96c5de1616436c95">PutReserve</link>(stream,&#32;n);
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;n;&#32;i++)
+100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stream_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(stream,&#32;c);
+101 }
+102 
+104 <emphasis role="comment">//&#32;GenericStreamWrapper</emphasis>
+105 
+107 
+112 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&lt;=&#32;1800</emphasis>
+113 RAPIDJSON_DIAG_PUSH
+114 RAPIDJSON_DIAG_OFF(4702)&#32;&#32;<emphasis role="comment">//&#32;unreachable&#32;code</emphasis>
+115 RAPIDJSON_DIAG_OFF(4512)&#32;&#32;<emphasis role="comment">//&#32;assignment&#32;operator&#32;could&#32;not&#32;be&#32;generated</emphasis>
+116 <emphasis role="preprocessor">#endif</emphasis>
+117 
+118 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding&#32;=&#32;UTF8&lt;&gt;&#32;&gt;
+119 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_generic_stream_wrapper">GenericStreamWrapper</link>&#32;{
+120 <emphasis role="keyword">public</emphasis>:
+121 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>;
+122 &#32;&#32;&#32;&#32;<link linkend="_class_generic_stream_wrapper_1a7b12b1de6337d3f8e635b650e372c803">GenericStreamWrapper</link>(InputStream&amp;&#32;is):&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>(is)&#32;{}
+123 
+124 &#32;&#32;&#32;&#32;<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>&#32;<link linkend="_class_generic_stream_wrapper_1a98d22642dfdd2626ee25ad1db9fe287e">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Peek();&#32;}
+125 &#32;&#32;&#32;&#32;<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>&#32;<link linkend="_class_generic_stream_wrapper_1a1c0bc67a233e08ed89b4ff37455e7754">Take</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Take();&#32;}
+126 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a5068a627e0a2deffa985db39f89c5378">Tell</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Tell();&#32;}
+127 &#32;&#32;&#32;&#32;<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>*&#32;<link linkend="_class_generic_stream_wrapper_1a15044e9a6874ca4caa92ed27a191345c">PutBegin</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.PutBegin();&#32;}
+128 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a458b9f3e00ad41dadb069839ab53f0ba">Put</link>(<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>&#32;ch)&#32;{&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Put(ch);&#32;}
+129 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a210c0864fbff3cc72f2f62ed461105fb">Flush</link>()&#32;{&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Flush();&#32;}
+130 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a84f8d6e1f95d53c4e8e22892d5113fd3">PutEnd</link>(<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>*&#32;ch)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.PutEnd(ch);&#32;}
+131 
+132 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;wrapper&#32;for&#32;MemoryStream</emphasis>
+133 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1aef9e89bc4997497315bde1b60e8bb848">Ch</link>*&#32;<link linkend="_class_generic_stream_wrapper_1afdfd046b769d1c2e38d9a91656e6b592">Peek4</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.Peek4();&#32;}
+134 
+135 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;wrapper&#32;for&#32;AutoUTFInputStream</emphasis>
+136 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58">UTFType</link>&#32;<link linkend="_class_generic_stream_wrapper_1a5978422ff38fbacee201d4123da37e4f">GetType</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.GetType();&#32;}
+137 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a50f13a9be06f9b29032ca6c655b099ef">HasBOM</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>.HasBOM();&#32;}
+138 
+139 <emphasis role="keyword">protected</emphasis>:
+140 &#32;&#32;&#32;&#32;InputStream&amp;&#32;<link linkend="_class_generic_stream_wrapper_1a2b44ae2c9460c2e18aca6ba25c537cc5">is_</link>;
+141 };
+142 
+143 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;_MSC_VER&#32;&lt;=&#32;1800</emphasis>
+144 RAPIDJSON_DIAG_POP
+145 <emphasis role="preprocessor">#endif</emphasis>
+146 
+148 <emphasis role="comment">//&#32;StringStream</emphasis>
+149 
+151 
+153 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+154 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_generic_string_stream">GenericStringStream</link>&#32;{
+155 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>;
+156 
+157 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream_1a6b20885ed64e33f5d081a1e83b07da06">GenericStringStream</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>&#32;*src)&#32;:&#32;<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>(src),&#32;<link linkend="_struct_generic_string_stream_1a3c86ef1e1f0655028cb8a3afce11ee4f">head_</link>(src)&#32;{}
+158 
+159 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>&#32;<link linkend="_struct_generic_string_stream_1a0c8fea9c2740c2953af9b3bb28bd469b">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>;&#32;}
+160 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>&#32;<link linkend="_struct_generic_string_stream_1a0d26e3e77e4fca64a87c2d71f48ac5e5">Take</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>++;&#32;}
+161 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_generic_string_stream_1abc73d04baf4c7c58f383bc52536e8ac4">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>&#32;-&#32;<link linkend="_struct_generic_string_stream_1a3c86ef1e1f0655028cb8a3afce11ee4f">head_</link>);&#32;}
+162 
+163 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>*&#32;<link linkend="_struct_generic_string_stream_1a546c370fa1ea14a89a0bd717e1932c06">PutBegin</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+164 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_generic_string_stream_1aaa59dc5313151a4125bf7840f87a33eb">Put</link>(<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}
+165 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_generic_string_stream_1a5ff1a870d9334cd054cf4ca34c86ddc3">Flush</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}
+166 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_generic_string_stream_1a07b942bacda494afb3b2f7629cef14af">PutEnd</link>(<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>*)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+167 
+168 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>*&#32;<link linkend="_struct_generic_string_stream_1aeda813798e3f2d6bfdac86afc11b6b80">src_</link>;&#32;&#32;&#32;&#32;&#32;
+169 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_generic_string_stream_1a4289aca895330084ff3168e37e4f08bd">Ch</link>*&#32;<link linkend="_struct_generic_string_stream_1a3c86ef1e1f0655028cb8a3afce11ee4f">head_</link>;&#32;&#32;&#32;&#32;
+170 };
+171 
+172 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+173 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_stream_traits">StreamTraits</link>&lt;<link linkend="_struct_generic_string_stream">GenericStringStream</link>&lt;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&gt;&#32;&gt;&#32;{
+174 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_stream_traits_1a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac">copyOptimization</link>&#32;=&#32;1&#32;};
+175 };
+176 
+178 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;UTF8&lt;&gt;</link>&#32;&gt;&#32;<link linkend="_stream_8h_1a269d93f9d27c2dd91bfacac05c478122">StringStream</link>;
+179 
+181 <emphasis role="comment">//&#32;InsituStringStream</emphasis>
+182 
+184 
+187 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+188 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_generic_insitu_string_stream">GenericInsituStringStream</link>&#32;{
+189 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>;
+190 
+191 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1ad8b8417f0501ac261c7232023292c183">GenericInsituStringStream</link>(<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>&#32;*src)&#32;:&#32;<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>(src),&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>(0),&#32;<link linkend="_struct_generic_insitu_string_stream_1af5a7116bdd9bfde5141c298a5b7566b0">head_</link>(src)&#32;{}
+192 
+193 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Read</emphasis>
+194 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>&#32;<link linkend="_struct_generic_insitu_string_stream_1ae21ba3ff4595ccd5caa4a9858e793f3f">Peek</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>;&#32;}
+195 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>&#32;<link linkend="_struct_generic_insitu_string_stream_1afde4e46663225e4c32cfdbcd261f321e">Take</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>++;&#32;}
+196 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1aa9a84abb24e8c93b683a2e7bfea309db">Tell</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>&#32;-&#32;<link linkend="_struct_generic_insitu_string_stream_1af5a7116bdd9bfde5141c298a5b7566b0">head_</link>);&#32;}
+197 
+198 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Write</emphasis>
+199 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1a74f92f9a4c34bd65aab4b99f519a543a">Put</link>(<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>&#32;c)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>&#32;!=&#32;0);&#32;*<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>++&#32;=&#32;c;&#32;}
+200 
+201 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;<link linkend="_struct_generic_insitu_string_stream_1a92fc7e54add4071d7941013b22ca64ed">PutBegin</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>&#32;=&#32;<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>;&#32;}
+202 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1a93702b08ff29c66bde389b0d4e9efa5a">PutEnd</link>(<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;begin)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>&#32;-&#32;begin);&#32;}
+203 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1a53597dc98a03a6a051c37c4f1046bd04">Flush</link>()&#32;{}
+204 
+205 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;<link linkend="_struct_generic_insitu_string_stream_1ae29c28193128c240b20fab0af43f9bc8">Push</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;begin&#32;=&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>;&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>&#32;+=&#32;count;&#32;<emphasis role="keywordflow">return</emphasis>&#32;begin;&#32;}
+206 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream_1ad2c56d9dd64268ad72aab95f981fd761">Pop</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;count)&#32;{&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>&#32;-=&#32;count;&#32;}
+207 
+208 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;<link linkend="_struct_generic_insitu_string_stream_1af3cc551dd07fcca39db84459f4d4e718">src_</link>;
+209 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;<link linkend="_struct_generic_insitu_string_stream_1ab0e7a73638a7a8db81aa9b26714b0e3b">dst_</link>;
+210 &#32;&#32;&#32;&#32;<link linkend="_struct_generic_insitu_string_stream_1a277308a58f551f11d0d9a20823702b5a">Ch</link>*&#32;<link linkend="_struct_generic_insitu_string_stream_1af5a7116bdd9bfde5141c298a5b7566b0">head_</link>;
+211 };
+212 
+213 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+214 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_stream_traits">StreamTraits</link>&lt;<link linkend="_struct_generic_insitu_string_stream">GenericInsituStringStream</link>&lt;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&gt;&#32;&gt;&#32;{
+215 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_stream_traits_1a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac">copyOptimization</link>&#32;=&#32;1&#32;};
+216 };
+217 
+219 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_struct_generic_insitu_string_stream">GenericInsituStringStream&lt;UTF8&lt;&gt;</link>&#32;&gt;&#32;<link linkend="_stream_8h_1a8e02982f60e5b8f697b71640ddaa144c">InsituStringStream</link>;
+220 
+221 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+222 
+223 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STREAM_H_</emphasis>
+</programlisting></section>

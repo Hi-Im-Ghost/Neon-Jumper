@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_prettywritertest_8cpp" xml:lang="en-US">
+<title>src/rapidjson/test/unittest/prettywritertest.cpp File Reference</title>
+<indexterm><primary>src/rapidjson/test/unittest/prettywritertest.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;unittest.h&quot;
+#include &quot;rapidjson/reader.h&quot;
+#include &quot;rapidjson/prettywriter.h&quot;
+#include &quot;rapidjson/stringbuffer.h&quot;
+#include &quot;rapidjson/filewritestream.h&quot;
+#include &lt;sstream&gt;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_class_o_stream_wrapper">OStreamWrapper</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>(meth,  val,  expected)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1aeb0ccc6927503be3f73aa180e9828298">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, Basic)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1aca7a8f5ce83342905379ead13c122276">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, FormatOptions)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a9f6f484811f073565bc9d5d1912b2a16">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, SetIndent)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a4ebbc2e0f8e35357c4ed285570b8f9f1">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, String)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a214ec81d3b2cab773ca02dee308920d5">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, <link linkend="_class_o_stream_wrapper">OStreamWrapper</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a85e6090680de34aa01654aed562dd226">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, <link linkend="_class_file_write_stream">FileWriteStream</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a2f008ec971ec60b45f575b040bccb845">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, RawValue)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a09fd3ae0b4f8e7dccb5421dff71b9245">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, InvalidEventSequence)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1a3108e29798ac992aa723da1c46ff8b57">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, NaN)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1afb66a00052107cf357df92dc211e87ad">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, Inf)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1aa9f976ea86c5d8d3393d4e1fc733ae5e">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, Issue_889)</para>
+</listitem>
+            <listitem><para><link linkend="_prettywritertest_8cpp_1abe0376325cacaa63085d1252790e25d7">TEST</link> (<link linkend="_class_pretty_writer">PrettyWriter</link>, Issue_1336)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf"/><section>
+    <title>T</title>
+<indexterm><primary>T</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>T</secondary></indexterm>
+<para><computeroutput>#define T( meth,  val,  expected)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringBuffer&#32;buffer;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PrettyWriter&lt;StringBuffer&gt;&#32;writer(buffer);&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;writer.meth(val);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_STREQ(expected,&#32;buffer.GetString());&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(writer.IsComplete());&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_prettywritertest_8cpp_1aeb0ccc6927503be3f73aa180e9828298"/><section>
+    <title>TEST()<computeroutput>[1/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , Basic )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a85e6090680de34aa01654aed562dd226"/><section>
+    <title>TEST()<computeroutput>[2/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , <link linkend="_class_file_write_stream">FileWriteStream</link> )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1aca7a8f5ce83342905379ead13c122276"/><section>
+    <title>TEST()<computeroutput>[3/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , FormatOptions )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1afb66a00052107cf357df92dc211e87ad"/><section>
+    <title>TEST()<computeroutput>[4/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , Inf )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a09fd3ae0b4f8e7dccb5421dff71b9245"/><section>
+    <title>TEST()<computeroutput>[5/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , InvalidEventSequence )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1abe0376325cacaa63085d1252790e25d7"/><section>
+    <title>TEST()<computeroutput>[6/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , Issue_1336 )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1aa9f976ea86c5d8d3393d4e1fc733ae5e"/><section>
+    <title>TEST()<computeroutput>[7/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , Issue_889 )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a3108e29798ac992aa723da1c46ff8b57"/><section>
+    <title>TEST()<computeroutput>[8/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , NaN )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a214ec81d3b2cab773ca02dee308920d5"/><section>
+    <title>TEST()<computeroutput>[9/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , <link linkend="_class_o_stream_wrapper">OStreamWrapper</link> )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a2f008ec971ec60b45f575b040bccb845"/><section>
+    <title>TEST()<computeroutput>[10/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , RawValue )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a9f6f484811f073565bc9d5d1912b2a16"/><section>
+    <title>TEST()<computeroutput>[11/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , SetIndent )</computeroutput></para></section>
+<anchor xml:id="_prettywritertest_8cpp_1a4ebbc2e0f8e35357c4ed285570b8f9f1"/><section>
+    <title>TEST()<computeroutput>[12/12]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>prettywritertest.cpp</secondary></indexterm>
+<indexterm><primary>prettywritertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_pretty_writer">PrettyWriter</link> , String )</computeroutput></para></section>
+</section>
+</section>

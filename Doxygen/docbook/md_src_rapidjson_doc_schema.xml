@@ -1,0 +1,750 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_schema" xml:lang="en-US">
+
+<para>(This feature was released in v1.1.0)</para>
+
+<para>JSON <link linkend="_class_schema">Schema</link> is a draft standard for describing the format of JSON data. The schema itself is also JSON data. By validating a JSON structure with JSON <link linkend="_class_schema">Schema</link>, your code can safely access the DOM without manually checking types, or whether a key exists, etc. It can also ensure that the serialized JSON conform to a specified schema.</para>
+
+<para>RapidJSON implemented a JSON <link linkend="_class_schema">Schema</link> validator for <link xlink:href="http://json-schema.org/documentation.html">JSON Schema Draft v4</link>. If you are not familiar with JSON <link linkend="_class_schema">Schema</link>, you may refer to <link xlink:href="http://spacetelescope.github.io/understanding-json-schema/">Understanding JSON Schema</link>.</para>
+<section xml:id="_md_src_rapidjson_doc_schema_1Basic">
+<title>Basic Usage</title>
+
+<para>First of all, you need to parse a JSON <link linkend="_class_schema">Schema</link> into <computeroutput>Document</computeroutput>, and then compile the <computeroutput>Document</computeroutput> into a <computeroutput>SchemaDocument</computeroutput>.</para>
+
+<para>Secondly, construct a <computeroutput>SchemaValidator</computeroutput> with the <computeroutput>SchemaDocument</computeroutput>. It is similar to a <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> in the sense of handling SAX events. So, you can use <computeroutput>document.Accept(validator)</computeroutput> to validate a document, and then check the validity.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/schema.h&quot;
+
+//&#32;...
+
+Document&#32;sd;
+if&#32;(sd.Parse(schemaJson).HasParseError())&#32;{
+&#32;&#32;&#32;&#32;//&#32;the&#32;schema&#32;is&#32;not&#32;a&#32;valid&#32;JSON.
+&#32;&#32;&#32;&#32;//&#32;...&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+}
+SchemaDocument&#32;schema(sd);&#32;//&#32;Compile&#32;a&#32;Document&#32;to&#32;SchemaDocument
+//&#32;sd&#32;is&#32;no&#32;longer&#32;needed&#32;here.
+
+Document&#32;d;
+if&#32;(d.Parse(inputJson).HasParseError())&#32;{
+&#32;&#32;&#32;&#32;//&#32;the&#32;input&#32;is&#32;not&#32;a&#32;valid&#32;JSON.
+&#32;&#32;&#32;&#32;//&#32;...&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+}
+
+SchemaValidator&#32;validator(schema);
+if&#32;(!d.Accept(validator))&#32;{
+&#32;&#32;&#32;&#32;//&#32;Input&#32;JSON&#32;is&#32;invalid&#32;according&#32;to&#32;the&#32;schema
+&#32;&#32;&#32;&#32;//&#32;Output&#32;diagnostic&#32;information
+&#32;&#32;&#32;&#32;StringBuffer&#32;sb;
+&#32;&#32;&#32;&#32;validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);
+&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;schema:&#32;%s\n&quot;,&#32;sb.GetString());
+&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;keyword:&#32;%s\n&quot;,&#32;validator.GetInvalidSchemaKeyword());
+&#32;&#32;&#32;&#32;sb.Clear();
+&#32;&#32;&#32;&#32;validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);
+&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;document:&#32;%s\n&quot;,&#32;sb.GetString());
+}
+</computeroutput></literallayout></para>
+
+<para>Some notes:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>One <computeroutput>SchemaDocument</computeroutput> can be referenced by multiple <computeroutput>SchemaValidator</computeroutput>s. It will not be modified by <computeroutput>SchemaValidator</computeroutput>s.</para>
+</listitem><listitem>
+<para>A <computeroutput>SchemaValidator</computeroutput> may be reused to validate multiple documents. To run it for other documents, call <computeroutput>validator.Reset()</computeroutput> first.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Fused">
+<title>Validation during parsing/serialization</title>
+
+<para>Unlike most JSON <link linkend="_class_schema">Schema</link> validator implementations, RapidJSON provides a SAX-based schema validator. Therefore, you can parse a JSON from a stream while validating it on the fly. If the validator encounters a JSON value that invalidates the supplied schema, the parsing will be terminated immediately. This design is especially useful for parsing large JSON files.</para>
+<section xml:id="_md_src_rapidjson_doc_schema_1DOM">
+<title>DOM parsing</title>
+
+<para>For using DOM in parsing, <computeroutput>Document</computeroutput> needs some preparation and finalizing tasks, in addition to receiving SAX events, thus it needs some work to route the reader, validator and the document. <computeroutput><link linkend="_class_schema_validating_reader">SchemaValidatingReader</link></computeroutput> is a helper class that doing such work.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filereadstream.h&quot;
+
+//&#32;...
+SchemaDocument&#32;schema(sd);&#32;//&#32;Compile&#32;a&#32;Document&#32;to&#32;SchemaDocument
+
+//&#32;Use&#32;reader&#32;to&#32;parse&#32;the&#32;JSON
+FILE*&#32;fp&#32;=&#32;fopen(&quot;big.json&quot;,&#32;&quot;r&quot;);
+FileReadStream&#32;is(fp,&#32;buffer,&#32;sizeof(buffer));
+
+//&#32;Parse&#32;JSON&#32;from&#32;reader,&#32;validate&#32;the&#32;SAX&#32;events,&#32;and&#32;store&#32;in&#32;d.
+Document&#32;d;
+SchemaValidatingReader&lt;kParseDefaultFlags,&#32;FileReadStream,&#32;UTF8&lt;&gt;&#32;&gt;&#32;reader(is,&#32;schema);
+d.Populate(reader);
+
+if&#32;(!reader.GetParseResult())&#32;{
+&#32;&#32;&#32;&#32;//&#32;Not&#32;a&#32;valid&#32;JSON
+&#32;&#32;&#32;&#32;//&#32;When&#32;reader.GetParseResult().Code()&#32;==&#32;kParseErrorTermination,
+&#32;&#32;&#32;&#32;//&#32;it&#32;may&#32;be&#32;terminated&#32;by:
+&#32;&#32;&#32;&#32;//&#32;(1)&#32;the&#32;validator&#32;found&#32;that&#32;the&#32;JSON&#32;is&#32;invalid&#32;according&#32;to&#32;schema;&#32;or
+&#32;&#32;&#32;&#32;//&#32;(2)&#32;the&#32;input&#32;stream&#32;has&#32;I/O&#32;error.
+
+&#32;&#32;&#32;&#32;//&#32;Check&#32;the&#32;validation&#32;result
+&#32;&#32;&#32;&#32;if&#32;(!reader.IsValid())&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Input&#32;JSON&#32;is&#32;invalid&#32;according&#32;to&#32;the&#32;schema
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Output&#32;diagnostic&#32;information
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringBuffer&#32;sb;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader.GetInvalidSchemaPointer().StringifyUriFragment(sb);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;schema:&#32;%s\n&quot;,&#32;sb.GetString());
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;keyword:&#32;%s\n&quot;,&#32;reader.GetInvalidSchemaKeyword());
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sb.Clear();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader.GetInvalidDocumentPointer().StringifyUriFragment(sb);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(&quot;Invalid&#32;document:&#32;%s\n&quot;,&#32;sb.GetString());
+&#32;&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1SAX">
+<title>SAX parsing</title>
+
+<para>For using SAX in parsing, it is much simpler. If it only need to validate the JSON without further processing, it is simply:</para>
+
+<para><literallayout><computeroutput>SchemaValidator&#32;validator(schema);
+Reader&#32;reader;
+if&#32;(!reader.Parse(stream,&#32;validator))&#32;{
+&#32;&#32;&#32;&#32;if&#32;(!validator.IsValid())&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;...&#32;&#32;&#32;&#32;
+&#32;&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+
+<para>This is exactly the method used in the <link xlink:href="example/schemavalidator/schemavalidator.cpp">schemavalidator</link> example. The distinct advantage is low memory usage, no matter how big the JSON was (the memory usage depends on the complexity of the schema).</para>
+
+<para>If you need to handle the SAX events further, then you need to use the template class <computeroutput><link linkend="_class_generic_schema_validator">GenericSchemaValidator</link></computeroutput> to set the output handler of the validator:</para>
+
+<para><literallayout><computeroutput>MyHandler&#32;handler;
+GenericSchemaValidator&lt;SchemaDocument,&#32;MyHandler&gt;&#32;validator(schema,&#32;handler);
+Reader&#32;reader;
+if&#32;(!reader.Parse(ss,&#32;validator))&#32;{
+&#32;&#32;&#32;&#32;if&#32;(!validator.IsValid())&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;...&#32;&#32;&#32;&#32;
+&#32;&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1Serialization">
+<title>Serialization</title>
+
+<para>It is also possible to do validation during serializing. This can ensure the result JSON is valid according to the JSON schema.</para>
+
+<para><literallayout><computeroutput>StringBuffer&#32;sb;
+Writer&lt;StringBuffer&gt;&#32;writer(sb);
+GenericSchemaValidator&lt;SchemaDocument,&#32;Writer&lt;StringBuffer&gt;&#32;&gt;&#32;validator(s,&#32;writer);
+if&#32;(!d.Accept(validator))&#32;{
+&#32;&#32;&#32;&#32;//&#32;Some&#32;problem&#32;during&#32;Accept(),&#32;it&#32;may&#32;be&#32;validation&#32;or&#32;encoding&#32;issues.
+&#32;&#32;&#32;&#32;if&#32;(!validator.IsValid())&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;...
+&#32;&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+
+<para>Of course, if your application only needs SAX-style serialization, it can simply send SAX events to <computeroutput>SchemaValidator</computeroutput> instead of <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Remote">
+<title>Remote Schema</title>
+
+<para>JSON <link linkend="_class_schema">Schema</link> supports <link xlink:href="http://spacetelescope.github.io/understanding-json-schema/structuring.html"><computeroutput>$ref</computeroutput> keyword</link>, which is a <link linkend="_pointer_8md">JSON pointer</link> referencing to a local or remote schema. Local pointer is prefixed with <computeroutput>#</computeroutput>, while remote pointer is an relative or absolute URI. For example:</para>
+
+<para><literallayout><computeroutput>{&#32;&quot;$ref&quot;:&#32;&quot;definitions.json#/address&quot;&#32;}
+</computeroutput></literallayout></para>
+
+<para>As <computeroutput>SchemaDocument</computeroutput> does not know how to resolve such URI, it needs a user-provided <computeroutput>IRemoteSchemaDocumentProvider</computeroutput> instance to do so.</para>
+
+<para><literallayout><computeroutput>class&#32;MyRemoteSchemaDocumentProvider&#32;:&#32;public&#32;IRemoteSchemaDocumentProvider&#32;{
+public:
+&#32;&#32;&#32;&#32;virtual&#32;const&#32;SchemaDocument*&#32;GetRemoteDocument(const&#32;char*&#32;uri,&#32;SizeType&#32;length)&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Resolve&#32;the&#32;uri&#32;and&#32;returns&#32;a&#32;pointer&#32;to&#32;that&#32;schema.
+&#32;&#32;&#32;&#32;}
+};
+
+//&#32;...
+
+MyRemoteSchemaDocumentProvider&#32;provider;
+SchemaDocument&#32;schema(sd,&#32;&amp;provider);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1Conformance">
+<title>Conformance</title>
+
+<para>RapidJSON passed 262 out of 263 tests in <link xlink:href="https://github.com/json-schema/JSON-Schema-Test-Suite">JSON Schema Test Suite</link> (Json <link linkend="_class_schema">Schema</link> draft 4).</para>
+
+<para>The failed test is &quot;changed scope ref invalid&quot; of &quot;change resolution scope&quot; in <computeroutput>refRemote.json</computeroutput>. It is due to that <computeroutput>id</computeroutput> schema keyword and URI combining function are not implemented.</para>
+
+<para>Besides, the <computeroutput>format</computeroutput> schema keyword for string values is ignored, since it is not required by the specification.</para>
+<section xml:id="_md_src_rapidjson_doc_schema_1Regex">
+<title>Regular Expression</title>
+
+<para>The schema keyword <computeroutput>pattern</computeroutput> and <computeroutput>patternProperties</computeroutput> uses regular expression to match the required pattern.</para>
+
+<para>RapidJSON implemented a simple NFA regular expression engine, which is used by default. It supports the following syntax.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Syntax   </para>
+</entry><entry>
+<para>Description    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>ab</computeroutput>   </para>
+</entry><entry>
+<para>Concatenation    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>a&amp;#124;b</computeroutput>   </para>
+</entry><entry>
+<para>Alternation    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>a?</computeroutput>   </para>
+</entry><entry>
+<para>Zero or one    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>a*</computeroutput>   </para>
+</entry><entry>
+<para>Zero or more    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>a+</computeroutput>   </para>
+</entry><entry>
+<para>One or more    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>a{3}</computeroutput>   </para>
+</entry><entry>
+<para>Exactly 3 times    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>a{3,}</computeroutput>   </para>
+</entry><entry>
+<para>At least 3 times    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>a{3,5}</computeroutput>   </para>
+</entry><entry>
+<para>3 to 5 times    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>(ab)</computeroutput>   </para>
+</entry><entry>
+<para>Grouping    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>^a</computeroutput>   </para>
+</entry><entry>
+<para>At the beginning    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>a$</computeroutput>   </para>
+</entry><entry>
+<para>At the end    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>.</computeroutput>   </para>
+</entry><entry>
+<para>Any character    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>[abc]</computeroutput>   </para>
+</entry><entry>
+<para>Character classes    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>[a-c]</computeroutput>   </para>
+</entry><entry>
+<para>Character class range    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>[a-z0-9_]</computeroutput>   </para>
+</entry><entry>
+<para>Character class combination    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>[^abc]</computeroutput>   </para>
+</entry><entry>
+<para>Negated character classes    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>[^a-c]</computeroutput>   </para>
+</entry><entry>
+<para>Negated character class range    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>[\b]</computeroutput>   </para>
+</entry><entry>
+<para>Backspace (U+0008)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>\&amp;#124;</computeroutput>, <computeroutput>\\</computeroutput>, ...   </para>
+</entry><entry>
+<para>Escape characters    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>\f</computeroutput>   </para>
+</entry><entry>
+<para>Form feed (U+000C)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>\n</computeroutput>   </para>
+</entry><entry>
+<para>Line feed (U+000A)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>\r</computeroutput>   </para>
+</entry><entry>
+<para>Carriage return (U+000D)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>\t</computeroutput>   </para>
+</entry><entry>
+<para>Tab (U+0009)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>\v</computeroutput>   </para>
+</entry><entry>
+<para>Vertical tab (U+000B)   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>For C++11 compiler, it is also possible to use the <computeroutput>std::regex</computeroutput> by defining <computeroutput>RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0</computeroutput> and <computeroutput>RAPIDJSON_SCHEMA_USE_STDREGEX=1</computeroutput>. If your schemas do not need <computeroutput>pattern</computeroutput> and <computeroutput>patternProperties</computeroutput>, you can set both macros to zero to disable this feature, which will reduce some code size.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1Performance">
+<title>Performance</title>
+
+<para>Most C++ JSON libraries do not yet support JSON <link linkend="_class_schema">Schema</link>. So we tried to evaluate the performance of RapidJSON&apos;s JSON <link linkend="_class_schema">Schema</link> validator according to <link xlink:href="https://github.com/ebdrup/json-schema-benchmark">json-schema-benchmark</link>, which tests 11 JavaScript libraries running on Node.js.</para>
+
+<para>That benchmark runs validations on <link xlink:href="https://github.com/json-schema/JSON-Schema-Test-Suite">JSON Schema Test Suite</link>, in which some test suites and tests are excluded. We made the same benchmarking procedure in <link xlink:href="test/perftest/schematest.cpp"><computeroutput>schematest.cpp</computeroutput></link>.</para>
+
+<para>On a Mac Book Pro (2.8 GHz Intel Core i7), the following results are collected.</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="3" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Validator   </para>
+</entry><entry align='center'>
+<para>Relative speed   </para>
+</entry><entry align='center'>
+<para>Number of test runs per second    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>RapidJSON   </para>
+</entry><entry align='center'>
+<para>155%   </para>
+</entry><entry align='center'>
+<para>30682    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/epoberezkin/ajv"><computeroutput>ajv</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>100%   </para>
+</entry><entry align='center'>
+<para>19770 (± 1.31%)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><link xlink:href="https://github.com/mafintosh/is-my-json-valid"><computeroutput>is-my-json-valid</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>70%   </para>
+</entry><entry align='center'>
+<para>13835 (± 2.84%)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/bugventure/jsen"><computeroutput>jsen</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>57.7%   </para>
+</entry><entry align='center'>
+<para>11411 (± 1.27%)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><link xlink:href="https://github.com/AlexeyGrishin/schemasaurus"><computeroutput>schemasaurus</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>26%   </para>
+</entry><entry align='center'>
+<para>5145 (± 1.62%)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/playlyfe/themis"><computeroutput>themis</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>19.9%   </para>
+</entry><entry align='center'>
+<para>3935 (± 2.69%)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><link xlink:href="https://github.com/zaggino/z-schema"><computeroutput>z-schema</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>7%   </para>
+</entry><entry align='center'>
+<para>1388 (± 0.84%)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/pandastrike/jsck#readme"><computeroutput>jsck</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>3.1%   </para>
+</entry><entry align='center'>
+<para>606 (± 2.84%)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><link xlink:href="https://github.com/tdegrunt/jsonschema#readme"><computeroutput>jsonschema</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>0.9%   </para>
+</entry><entry align='center'>
+<para>185 (± 1.01%)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/Prestaul/skeemas#readme"><computeroutput>skeemas</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>0.8%   </para>
+</entry><entry align='center'>
+<para>154 (± 0.79%)    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>tv4   </para>
+</entry><entry align='center'>
+<para>0.5%   </para>
+</entry><entry align='center'>
+<para>93 (± 0.94%)    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><link xlink:href="https://github.com/natesilva/jayschema"><computeroutput>jayschema</computeroutput></link>   </para>
+</entry><entry align='center'>
+<para>0.1%   </para>
+</entry><entry align='center'>
+<para>21 (± 1.14%)   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>That is, RapidJSON is about 1.5x faster than the fastest JavaScript library (ajv). And 1400x faster than the slowest one.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Reporting">
+<title>Schema violation reporting</title>
+
+<para>(Unreleased as of 2017-09-20)</para>
+
+<para>When validating an instance against a JSON <link linkend="_class_schema">Schema</link>, it is often desirable to report not only whether the instance is valid, but also the ways in which it violates the schema.</para>
+
+<para>The <computeroutput>SchemaValidator</computeroutput> class collects errors encountered during validation into a JSON <computeroutput>Value</computeroutput>. This error object can then be accessed as <computeroutput>validator.GetError()</computeroutput>.</para>
+
+<para>The structure of the error object is subject to change in future versions of RapidJSON, as there is no standard schema for violations. The details below this point are provisional only.</para>
+<section xml:id="_md_src_rapidjson_doc_schema_1ReportingGeneral">
+<title>General provisions</title>
+
+<para>Validation of an instance value against a schema produces an error value. The error value is always an object. An empty object <computeroutput>{}</computeroutput> indicates the instance is valid.</para>
+
+<para><itemizedlist>
+<listitem>
+<para>The name of each member corresponds to the JSON <link linkend="_class_schema">Schema</link> keyword that is violated.</para>
+</listitem><listitem>
+<para>The value is either an object describing a single violation, or an array of such objects.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>Each violation object contains two string-valued members named <computeroutput>instanceRef</computeroutput> and <computeroutput>schemaRef</computeroutput>. <computeroutput>instanceRef</computeroutput> contains the URI fragment serialization of a JSON Pointer to the instance subobject in which the violation was detected. <computeroutput>schemaRef</computeroutput> contains the URI of the schema and the fragment serialization of a JSON Pointer to the subschema that was violated.</para>
+
+<para>Individual violation objects can contain other keyword-specific members. These are detailed further.</para>
+
+<para>For example, validating this instance:</para>
+
+<para><literallayout><computeroutput>{&quot;numbers&quot;:&#32;[1,&#32;2,&#32;&quot;3&quot;,&#32;4,&#32;5]}
+</computeroutput></literallayout></para>
+
+<para>against this schema:</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&quot;type&quot;:&#32;&quot;object&quot;,
+&#32;&#32;&quot;properties&quot;:&#32;{
+&#32;&#32;&#32;&#32;&quot;numbers&quot;:&#32;{&quot;$ref&quot;:&#32;&quot;numbers.schema.json&quot;}
+&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+
+<para>where <computeroutput>numbers.schema.json</computeroutput> refers (via a suitable <computeroutput>IRemoteSchemaDocumentProvider</computeroutput>) to this schema:</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&quot;type&quot;:&#32;&quot;array&quot;,
+&#32;&#32;&quot;items&quot;:&#32;{&quot;type&quot;:&#32;&quot;number&quot;}
+}
+</computeroutput></literallayout></para>
+
+<para>produces the following error object:</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&quot;type&quot;:&#32;{
+&#32;&#32;&#32;&#32;&quot;instanceRef&quot;:&#32;&quot;#/numbers/2&quot;,
+&#32;&#32;&#32;&#32;&quot;schemaRef&quot;:&#32;&quot;numbers.schema.json#/items&quot;,
+&#32;&#32;&#32;&#32;&quot;expected&quot;:&#32;[&quot;number&quot;],
+&#32;&#32;&#32;&#32;&quot;actual&quot;:&#32;&quot;string&quot;
+&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Numbers">
+<title>Validation keywords for numbers</title>
+<section xml:id="_md_src_rapidjson_doc_schema_1multipleof">
+<title>multipleOf</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required number strictly greater than 0. The value of the <computeroutput>multipleOf</computeroutput> keyword specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required number. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1maximum">
+<title>maximum</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required number. The value of the <computeroutput>maximum</computeroutput> keyword specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>exclusiveMaximum</computeroutput>: optional boolean. This will be true if the schema specified <computeroutput>&quot;exclusiveMaximum&quot;: true</computeroutput>, and will be omitted otherwise.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required number. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1minimum">
+<title>minimum</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required number. The value of the <computeroutput>minimum</computeroutput> keyword specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>exclusiveMinimum</computeroutput>: optional boolean. This will be true if the schema specified <computeroutput>&quot;exclusiveMinimum&quot;: true</computeroutput>, and will be omitted otherwise.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required number. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Strings">
+<title>Validation keywords for strings</title>
+<section xml:id="_md_src_rapidjson_doc_schema_1maxLength">
+<title>maxLength</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required number greater than or equal to 0. The value of the <computeroutput>maxLength</computeroutput> keyword specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required string. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1minLength">
+<title>minLength</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required number greater than or equal to 0. The value of the <computeroutput>minLength</computeroutput> keyword specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required string. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1pattern">
+<title>pattern</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>actual</computeroutput>: required string. The instance value.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>(The expected pattern is not reported because the internal representation in <computeroutput>SchemaDocument</computeroutput> does not store the pattern in original string form.)</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1Arrays">
+<title>Validation keywords for arrays</title>
+<section xml:id="_md_src_rapidjson_doc_schema_1additionalItems">
+<title>additionalItems</title>
+
+<para>This keyword is reported when the value of <computeroutput>items</computeroutput> schema keyword is an array, the value of <computeroutput>additionalItems</computeroutput> is <computeroutput>false</computeroutput>, and the instance is an array with more items than specified in the <computeroutput>items</computeroutput> array.</para>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>disallowed</computeroutput>: required integer greater than or equal to 0. The index of the first item that has no corresponding schema.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1maxItems-minItems">
+<title>maxItems and minItems</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required integer greater than or equal to 0. The value of <computeroutput>maxItems</computeroutput> (respectively, <computeroutput>minItems</computeroutput>) specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required integer greater than or equal to 0. Number of items in the instance array.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1uniqueItems">
+<title>uniqueItems</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>duplicates</computeroutput>: required array whose items are integers greater than or equal to 0. Indices of items of the instance that are equal.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>(RapidJSON only reports the first two equal items, for performance reasons.)</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1autotoc_md115">
+<title>Validation keywords for objects</title>
+<section xml:id="_md_src_rapidjson_doc_schema_1maxProperties-minProperties">
+<title>maxProperties and minProperties</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required integer greater than or equal to 0. The value of <computeroutput>maxProperties</computeroutput> (respectively, <computeroutput>minProperties</computeroutput>) specified in the schema.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required integer greater than or equal to 0. Number of properties in the instance object.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1required">
+<title>required</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>missing</computeroutput>: required array of one or more unique strings. The names of properties that are listed in the value of the <computeroutput>required</computeroutput> schema keyword but not present in the instance object.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1additionalProperties">
+<title>additionalProperties</title>
+
+<para>This keyword is reported when the schema specifies <computeroutput>additionalProperties: false</computeroutput> and the name of a property of the instance is neither listed in the <computeroutput>properties</computeroutput> keyword nor matches any regular expression in the <computeroutput>patternProperties</computeroutput> keyword.</para>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>disallowed</computeroutput>: required string. Name of the offending property of the instance.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>(For performance reasons, RapidJSON only reports the first such property encountered.)</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1dependencies">
+<title>dependencies</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>errors</computeroutput>: required object with one or more properties. Names and values of its properties are described below.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>Recall that JSON <link linkend="_class_schema">Schema</link> Draft 04 supports <emphasis>schema dependencies</emphasis>, where presence of a named <emphasis>controlling</emphasis> property requires the instance object to be valid against a subschema, and <emphasis>property dependencies</emphasis>, where presence of a controlling property requires other <emphasis>dependent</emphasis> properties to be also present.</para>
+
+<para>For a violated schema dependency, <computeroutput>errors</computeroutput> will contain a property with the name of the controlling property and its value will be the error object produced by validating the instance object against the dependent schema.</para>
+
+<para>For a violated property dependency, <computeroutput>errors</computeroutput> will contain a property with the name of the controlling property and its value will be an array of one or more unique strings listing the missing dependent properties.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1AnyTypes">
+<title>Validation keywords for any instance type</title>
+<section xml:id="_md_src_rapidjson_doc_schema_1enum">
+<title>enum</title>
+
+<para>This keyword has no additional properties beyond <computeroutput>instanceRef</computeroutput> and <computeroutput>schemaRef</computeroutput>.</para>
+
+<para><itemizedlist>
+<listitem>
+<para>The allowed values are not listed because <computeroutput>SchemaDocument</computeroutput> does not store them in original form.</para>
+</listitem><listitem>
+<para>The violating value is not reported because it might be unwieldy.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>If you need to report these details to your users, you can access the necessary information by following <computeroutput>instanceRef</computeroutput> and <computeroutput>schemaRef</computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1type">
+<title>type</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>expected</computeroutput>: required array of one or more unique strings, each of which is one of the seven primitive types defined by the JSON <link linkend="_class_schema">Schema</link> Draft 04 Core specification. Lists the types allowed by the <computeroutput>type</computeroutput> schema keyword.</para>
+</listitem><listitem>
+<para><computeroutput>actual</computeroutput>: required string, also one of seven primitive types. The primitive type of the instance.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1allOf-anyOf-oneOf">
+<title>allOf, anyOf, and oneOf</title>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>errors</computeroutput>: required array of at least one object. There will be as many items as there are subschemas in the <computeroutput>allOf</computeroutput>, <computeroutput>anyOf</computeroutput> or <computeroutput>oneOf</computeroutput> schema keyword, respectively. Each item will be the error value produced by validating the instance against the corresponding subschema.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>For <computeroutput>allOf</computeroutput>, at least one error value will be non-empty. For <computeroutput>anyOf</computeroutput>, all error values will be non-empty. For <computeroutput>oneOf</computeroutput>, either all error values will be non-empty, or more than one will be empty.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_1not">
+<title>not</title>
+
+<para>This keyword has no additional properties apart from <computeroutput>instanceRef</computeroutput> and <computeroutput>schemaRef</computeroutput>. </para>
+</section>
+</section>
+</section>
+</section>

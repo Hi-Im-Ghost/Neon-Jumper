@@ -1,0 +1,78 @@
+\hypertarget{strfunc_8h_source}{}\doxysection{strfunc.\+h}
+\label{strfunc_8h_source}\index{src/rapidjson/include/rapidjson/internal/strfunc.h@{src/rapidjson/include/rapidjson/internal/strfunc.h}}
+\mbox{\hyperlink{strfunc_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_INTERNAL\_STRFUNC\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_INTERNAL\_STRFUNC\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}../stream.h"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <cwchar>}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{22 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{25 }
+\DoxyCodeLine{30 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{31 \textcolor{keyword}{inline} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{namespaceinternal_a86326fb0c9d7c7ea8edd7deedbb2b26e}{StrLen}}(\textcolor{keyword}{const} Ch* s) \{}
+\DoxyCodeLine{32     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(s != 0);}
+\DoxyCodeLine{33     \textcolor{keyword}{const} Ch* p = s;}
+\DoxyCodeLine{34     \textcolor{keywordflow}{while} (*p) ++p;}
+\DoxyCodeLine{35     \textcolor{keywordflow}{return} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(p -\/ s);}
+\DoxyCodeLine{36 \}}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 \textcolor{keyword}{template} <>}
+\DoxyCodeLine{39 \textcolor{keyword}{inline} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{namespaceinternal_a86326fb0c9d7c7ea8edd7deedbb2b26e}{StrLen}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* s) \{}
+\DoxyCodeLine{40     \textcolor{keywordflow}{return} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(std::strlen(s));}
+\DoxyCodeLine{41 \}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{keyword}{template} <>}
+\DoxyCodeLine{44 \textcolor{keyword}{inline} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{namespaceinternal_a86326fb0c9d7c7ea8edd7deedbb2b26e}{StrLen}}(\textcolor{keyword}{const} \textcolor{keywordtype}{wchar\_t}* s) \{}
+\DoxyCodeLine{45     \textcolor{keywordflow}{return} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(std::wcslen(s));}
+\DoxyCodeLine{46 \}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{49 }
+\DoxyCodeLine{54 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{55 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceinternal_a8986308d308f29092fef8a82e64debef}{StrCmp}}(\textcolor{keyword}{const} Ch* s1, \textcolor{keyword}{const} Ch* s2) \{}
+\DoxyCodeLine{56     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(s1 != 0);}
+\DoxyCodeLine{57     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(s2 != 0);}
+\DoxyCodeLine{58     \textcolor{keywordflow}{while}(*s1 \&\& (*s1 == *s2)) \{ s1++; s2++; \}}
+\DoxyCodeLine{59     \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s1) < \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s2) ? -\/1 : \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s1) > \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s2);}
+\DoxyCodeLine{60 \}}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{63 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{64 \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespaceinternal_a864bf0d412431b387aeeee9efdf0adfc}{CountStringCodePoint}}(\textcolor{keyword}{const} \textcolor{keyword}{typename} Encoding::Ch* s, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}* outCount) \{}
+\DoxyCodeLine{65     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(s != 0);}
+\DoxyCodeLine{66     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(outCount != 0);}
+\DoxyCodeLine{67     \mbox{\hyperlink{struct_generic_string_stream}{GenericStringStream<Encoding>}} is(s);}
+\DoxyCodeLine{68     \textcolor{keyword}{const} \textcolor{keyword}{typename} Encoding::Ch* end = s + length;}
+\DoxyCodeLine{69     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} count = 0;}
+\DoxyCodeLine{70     \textcolor{keywordflow}{while} (is.\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}} < end) \{}
+\DoxyCodeLine{71         \textcolor{keywordtype}{unsigned} codepoint;}
+\DoxyCodeLine{72         \textcolor{keywordflow}{if} (!Encoding::Decode(is, \&codepoint))}
+\DoxyCodeLine{73             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{74         count++;}
+\DoxyCodeLine{75     \}}
+\DoxyCodeLine{76     *outCount = count;}
+\DoxyCodeLine{77     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{78 \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{81 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_INTERNAL\_STRFUNC\_H\_}}
+
+\end{DoxyCode}

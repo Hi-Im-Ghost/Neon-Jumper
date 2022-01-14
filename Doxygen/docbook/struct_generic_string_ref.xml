@@ -1,0 +1,455 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_struct_generic_string_ref" xml:lang="en-US">
+<title>GenericStringRef&lt; CharType &gt; Struct Template Reference</title>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary></indexterm>
+<para>
+
+<para>Reference to a constant string (not taking a copy) </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;document.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef CharType <link linkend="_struct_generic_string_ref_1a16908c3fce41be380061330c14ba2140">Ch</link></para>
+
+<para>character type of the string </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>template&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> N&gt; </para><para><link linkend="_struct_generic_string_ref_1aae0c070f914d2486a560150a927c22dc">GenericStringRef</link> (const CharType(&amp;str)[N]) RAPIDJSON_NOEXCEPT</para>
+
+<para>Create string reference from <computeroutput>const</computeroutput> character array. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_string_ref_1a9e80d81d5ad49cf0fb4128ace8c548d9">GenericStringRef</link> (const CharType *str)</para>
+
+<para>Explicitly create string reference from <computeroutput>const</computeroutput> character pointer. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_string_ref_1a8b2c6a7fdc4da1e7055f7fdcf0ac517f">GenericStringRef</link> (const CharType *str, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> len)</para>
+
+<para>Create constant string reference from pointer and length. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_string_ref_1ab049693082c0b8f5066c00212e780aec">GenericStringRef</link> (const <link linkend="_struct_generic_string_ref">GenericStringRef</link> &amp;rhs)</para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_string_ref_1a4e652ee3a398d0eb8ece1835d15274d0">operator const Ch *</link> () const</para>
+
+<para>implicit conversion to plain CharType pointer </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>const <link linkend="_struct_generic_string_ref_1a16908c3fce41be380061330c14ba2140">Ch</link> *const <link linkend="_struct_generic_string_ref_1ac555994afd329bc9bc1780acf2f9d9be">s</link></para>
+
+<para>plain CharType pointer </para>
+</listitem>
+            <listitem><para>const <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_struct_generic_string_ref_1a4a96d618744ad73f766a1551b1d517fe">length</link></para>
+
+<para>length of the string (excluding the trailing NULL terminator) </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Related Functions    </title>
+
+<para>(Note that these are not member functions.) </para>
+        <itemizedlist>
+            <listitem><para>template&lt;typename CharType &gt; </para><para><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt; <link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef</link> (const CharType *str)</para>
+
+<para>Mark a character pointer as constant string. </para>
+</listitem>
+            <listitem><para>template&lt;typename CharType &gt; </para><para><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt; <link linkend="_struct_generic_string_ref_1a578c51ab574a50a9c760b9da7c7562f2">StringRef</link> (const CharType *str, size_t <link linkend="_struct_generic_string_ref_1a4a96d618744ad73f766a1551b1d517fe">length</link>)</para>
+
+<para>Mark a character pointer as constant string. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename CharType&gt;
+struct GenericStringRef&lt; CharType &gt;</title></simplesect>
+
+<para>Reference to a constant string (not taking a copy) </para>
+
+
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>CharType</entry><entry>
+<para>character type of the string</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                This helper class is used to automatically infer constant string references for string literals, especially from <computeroutput>const</computeroutput> <emphasis role="bold"></emphasis>(!) character arrays.</para>
+
+<para>The main use is for creating JSON string values without copying the source string via an <link linkend="_md_src_rapidjson_doc_dom_zh_cn_1Allocator">Allocator</link>. This requires that the referenced string pointers have a sufficient lifetime, which exceeds the lifetime of the associated <link linkend="_class_generic_value">GenericValue</link>.</para>
+
+<para><emphasis role="bold">Example</emphasis> <literallayout><computeroutput><link linkend="_class_generic_value">Value</link>&#32;v(<emphasis role="stringliteral">&quot;foo&quot;</emphasis>);&#32;&#32;&#32;<emphasis role="comment">//&#32;ok,&#32;no&#32;need&#32;to&#32;copy&#32;&amp;&#32;calculate&#32;length</emphasis>
+<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;foo[]&#32;=&#32;<emphasis role="stringliteral">&quot;foo&quot;</emphasis>;
+v.SetString(foo);&#32;<emphasis role="comment">//&#32;ok</emphasis>
+
+<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;bar&#32;=&#32;foo;
+<emphasis role="comment">//&#32;Value&#32;x(bar);&#32;//&#32;not&#32;ok,&#32;can&apos;t&#32;rely&#32;on&#32;bar&apos;s&#32;lifetime</emphasis>
+<link linkend="_class_generic_value">Value</link>&#32;x(<link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef</link>(bar));&#32;<emphasis role="comment">//&#32;lifetime&#32;explicitly&#32;guaranteed&#32;by&#32;user</emphasis>
+<link linkend="_class_generic_value">Value</link>&#32;y(<link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef</link>(bar,&#32;3));&#32;&#32;<emphasis role="comment">//&#32;ok,&#32;explicitly&#32;pass&#32;length</emphasis>
+</computeroutput></literallayout></para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef</link>, GenericValue::SetString </para>
+</formalpara>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_struct_generic_string_ref_1a16908c3fce41be380061330c14ba2140"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput>typedef CharType <link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;::Ch</computeroutput></para><para>
+
+<para>character type of the string </para>
+</para>
+</section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_struct_generic_string_ref_1aae0c070f914d2486a560150a927c22dc"/><section>
+    <title>GenericStringRef()<computeroutput>[1/4]</computeroutput></title>
+<indexterm><primary>GenericStringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>GenericStringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><computeroutput>template&lt;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> N&gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;<link linkend="_struct_generic_string_ref">::GenericStringRef</link> (const CharType(&amp;) str[N])<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Create string reference from <computeroutput>const</computeroutput> character array. </para>
+</para>
+
+<para>This constructor implicitly creates a constant string reference from a <computeroutput>const</computeroutput> character array. It has better performance than <link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef(const CharType*)</link> by inferring the string <link linkend="_struct_generic_string_ref_1a4a96d618744ad73f766a1551b1d517fe">length</link> from the array length, and also supports strings containing null characters.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>N</entry><entry>
+<para>length of the string, automatically inferred</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>str</entry><entry>
+<para>Constant character array, lifetime assumed to be longer than the use of the string in e.g. a <link linkend="_class_generic_value">GenericValue</link></para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Postcondition</title>
+
+<para><link linkend="_struct_generic_string_ref_1ac555994afd329bc9bc1780acf2f9d9be">s</link> == str</para>
+</formalpara>
+<note><title>Note</title>
+
+<para>Constant complexity. </para>
+
+<para>There is a hidden, private overload to disallow references to non-const character arrays to be created via this constructor. By this, e.g. function-scope arrays used to be filled via <computeroutput>snprintf</computeroutput> are excluded from consideration. In such cases, the referenced string should be <emphasis role="bold">copied</emphasis> to the <link linkend="_class_generic_value">GenericValue</link> instead. </para>
+</note>
+</para>
+</section>
+<anchor xml:id="_struct_generic_string_ref_1a9e80d81d5ad49cf0fb4128ace8c548d9"/><section>
+    <title>GenericStringRef()<computeroutput>[2/4]</computeroutput></title>
+<indexterm><primary>GenericStringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>GenericStringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;<link linkend="_struct_generic_string_ref">::GenericStringRef</link> (const CharType * str)<computeroutput>[inline]</computeroutput>, <computeroutput>[explicit]</computeroutput></computeroutput></para><para>
+
+<para>Explicitly create string reference from <computeroutput>const</computeroutput> character pointer. </para>
+</para>
+
+<para>This constructor can be used to <emphasis role="bold">explicitly</emphasis> create a reference to a constant string pointer.</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5">StringRef(const CharType*)</link></para>
+</formalpara>
+
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>str</entry><entry>
+<para>Constant character pointer, lifetime assumed to be longer than the use of the string in e.g. a <link linkend="_class_generic_value">GenericValue</link></para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Postcondition</title>
+
+<para><link linkend="_struct_generic_string_ref_1ac555994afd329bc9bc1780acf2f9d9be">s</link> == str</para>
+</formalpara>
+<note><title>Note</title>
+
+<para>There is a hidden, private overload to disallow references to non-const character arrays to be created via this constructor. By this, e.g. function-scope arrays used to be filled via <computeroutput>snprintf</computeroutput> are excluded from consideration. In such cases, the referenced string should be <emphasis role="bold">copied</emphasis> to the <link linkend="_class_generic_value">GenericValue</link> instead. </para>
+</note>
+</para>
+</section>
+<anchor xml:id="_struct_generic_string_ref_1a8b2c6a7fdc4da1e7055f7fdcf0ac517f"/><section>
+    <title>GenericStringRef()<computeroutput>[3/4]</computeroutput></title>
+<indexterm><primary>GenericStringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>GenericStringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;<link linkend="_struct_generic_string_ref">::GenericStringRef</link> (const CharType * str, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> len)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Create constant string reference from pointer and length. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>str</entry><entry>
+<para>constant string, lifetime assumed to be longer than the use of the string in e.g. a <link linkend="_class_generic_value">GenericValue</link> </para>
+</entry>
+                            </row>
+                            <row>
+<entry>len</entry><entry>
+<para>length of the string, excluding the trailing NULL terminator</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Postcondition</title>
+
+<para><link linkend="_struct_generic_string_ref_1ac555994afd329bc9bc1780acf2f9d9be">s</link> == str &amp;&amp; <link linkend="_struct_generic_string_ref_1a4a96d618744ad73f766a1551b1d517fe">length</link> == len </para>
+</formalpara>
+<note><title>Note</title>
+
+<para>Constant complexity. </para>
+</note>
+</para>
+</section>
+<anchor xml:id="_struct_generic_string_ref_1ab049693082c0b8f5066c00212e780aec"/><section>
+    <title>GenericStringRef()<computeroutput>[4/4]</computeroutput></title>
+<indexterm><primary>GenericStringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>GenericStringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;<link linkend="_struct_generic_string_ref">::GenericStringRef</link> (const <link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt; &amp; rhs)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_struct_generic_string_ref_1a4e652ee3a398d0eb8ece1835d15274d0"/><section>
+    <title>operator const Ch *()</title>
+<indexterm><primary>operator const Ch *</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>operator const Ch *</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;::operator const <link linkend="_struct_generic_string_ref_1a16908c3fce41be380061330c14ba2140">Ch</link> * ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>implicit conversion to plain CharType pointer </para>
+</para>
+</section>
+</section>
+<section>
+<title>Friends And Related Function Documentation</title>
+<anchor xml:id="_struct_generic_string_ref_1aa6b9fd9f6aa49405a574c362ba9af6b5"/><section>
+    <title>StringRef()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>StringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>StringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt; StringRef (const CharType * str)<computeroutput>[related]</computeroutput></computeroutput></para><para>
+
+<para>Mark a character pointer as constant string. </para>
+</para>
+
+<para>Mark a plain character pointer as a &quot;string literal&quot;. This function can be used to avoid copying a character string to be referenced as a value in a JSON <link linkend="_class_generic_value">GenericValue</link> object, if the string&apos;s lifetime is known to be valid long enough. 
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>CharType</entry><entry>
+<para>Character type of the string </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>str</entry><entry>
+<para>Constant string, lifetime assumed to be longer than the use of the string in e.g. a <link linkend="_class_generic_value">GenericValue</link> </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para><link linkend="_struct_generic_string_ref">GenericStringRef</link> string reference object</para>
+</formalpara>
+<formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_value_1abb2887958974fef1b2b5c8e32cc72ddb">GenericValue::GenericValue(StringRefType)</link>, <link linkend="_class_generic_value_1a2b7837d3adb6c0ad184269826ea78e97">GenericValue::operator=(StringRefType)</link>, GenericValue::SetString(StringRefType), GenericValue::PushBack(StringRefType, Allocator&amp;), GenericValue::AddMember </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_struct_generic_string_ref_1a578c51ab574a50a9c760b9da7c7562f2"/><section>
+    <title>StringRef()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>StringRef</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>StringRef</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt; StringRef (const CharType * str, size_t length)<computeroutput>[related]</computeroutput></computeroutput></para><para>
+
+<para>Mark a character pointer as constant string. </para>
+</para>
+
+<para>Mark a plain character pointer as a &quot;string literal&quot;. This function can be used to avoid copying a character string to be referenced as a value in a JSON <link linkend="_class_generic_value">GenericValue</link> object, if the string&apos;s lifetime is known to be valid long enough.</para>
+
+<para>This version has better performance with supplied length, and also supports string containing null characters.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>CharType</entry><entry>
+<para>character type of the string </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>str</entry><entry>
+<para>Constant string, lifetime assumed to be longer than the use of the string in e.g. a <link linkend="_class_generic_value">GenericValue</link> </para>
+</entry>
+                            </row>
+                            <row>
+<entry>length</entry><entry>
+<para>The length of source string. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para><link linkend="_struct_generic_string_ref">GenericStringRef</link> string reference object </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_struct_generic_string_ref_1a4a96d618744ad73f766a1551b1d517fe"/><section>
+    <title>length</title>
+<indexterm><primary>length</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>length</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput>const <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;::length</computeroutput></para><para>
+
+<para>length of the string (excluding the trailing NULL terminator) </para>
+</para>
+</section>
+<anchor xml:id="_struct_generic_string_ref_1ac555994afd329bc9bc1780acf2f9d9be"/><section>
+    <title>s</title>
+<indexterm><primary>s</primary><secondary>GenericStringRef&lt; CharType &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringRef&lt; CharType &gt;</primary><secondary>s</secondary></indexterm>
+<computeroutput>template&lt;typename CharType &gt; </computeroutput><para><computeroutput>const <link linkend="_struct_generic_string_ref_1a16908c3fce41be380061330c14ba2140">Ch</link>* const <link linkend="_struct_generic_string_ref">GenericStringRef</link>&lt; CharType &gt;::s</computeroutput></para><para>
+
+<para>plain CharType pointer </para>
+</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+src/rapidjson/include/rapidjson/<link linkend="_document_8h">document.h</link></section>
+</section>

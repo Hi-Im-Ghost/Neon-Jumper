@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dom_8md" kind="file" language="Markdown">
+    <compoundname>dom.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>DOM</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>Object<sp/>Model(DOM)<sp/>is<sp/>an<sp/>in-memory<sp/>representation<sp/>of<sp/>JSON<sp/>for<sp/>query<sp/>and<sp/>manipulation.<sp/>The<sp/>basic<sp/>usage<sp/>of<sp/>DOM<sp/>is<sp/>described<sp/>in<sp/>[Tutorial](doc/tutorial.md).<sp/>This<sp/>section<sp/>will<sp/>describe<sp/>some<sp/>details<sp/>and<sp/>more<sp/>advanced<sp/>usages.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Template<sp/>{#Template}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>the<sp/>tutorial,<sp/><sp/>`Value`<sp/>and<sp/>`Document`<sp/>was<sp/>used.<sp/>Similarly<sp/>to<sp/>`std::string`,<sp/>these<sp/>are<sp/>actually<sp/>`typedef`<sp/>of<sp/>template<sp/>classes:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">namespace<sp/>rapidjson<sp/>{</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;typename<sp/>Encoding,<sp/>typename<sp/>Allocator<sp/>=<sp/>MemoryPoolAllocator&lt;&gt;<sp/>&gt;</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>GenericValue<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;typename<sp/>Encoding,<sp/>typename<sp/>Allocator<sp/>=<sp/>MemoryPoolAllocator&lt;&gt;<sp/>&gt;</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>GenericDocument<sp/>:<sp/>public<sp/>GenericValue&lt;Encoding,<sp/>Allocator&gt;<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericValue&lt;UTF8&lt;&gt;<sp/>&gt;<sp/>Value;</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/>Document;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">}<sp/>//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>can<sp/>customize<sp/>these<sp/>template<sp/>parameters.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Encoding<sp/>{#Encoding}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`Encoding`<sp/>parameter<sp/>specifies<sp/>the<sp/>encoding<sp/>of<sp/>JSON<sp/>String<sp/>value<sp/>in<sp/>memory.<sp/>Possible<sp/>options<sp/>are<sp/>`UTF8`,<sp/>`UTF16`,<sp/>`UTF32`.<sp/>Note<sp/>that,<sp/>these<sp/>3<sp/>types<sp/>are<sp/>also<sp/>template<sp/>class.<sp/>`UTF8&lt;&gt;`<sp/>is<sp/>`UTF8&lt;char&gt;`,<sp/>which<sp/>means<sp/>using<sp/>char<sp/>to<sp/>store<sp/>the<sp/>characters.<sp/>You<sp/>may<sp/>refer<sp/>to<sp/>[Encoding](doc/encoding.md)<sp/>for<sp/>details.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Suppose<sp/>a<sp/>Windows<sp/>application<sp/>would<sp/>query<sp/>localization<sp/>strings<sp/>stored<sp/>in<sp/>JSON<sp/>files.<sp/>Unicode-enabled<sp/>functions<sp/>in<sp/>Windows<sp/>use<sp/>UTF-16<sp/>(wide<sp/>character)<sp/>encoding.<sp/>No<sp/>matter<sp/>what<sp/>encoding<sp/>was<sp/>used<sp/>in<sp/>JSON<sp/>files,<sp/>we<sp/>can<sp/>store<sp/>the<sp/>strings<sp/>in<sp/>UTF-16<sp/>in<sp/>memory.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericDocument&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericValue&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WValue;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;localization.json&quot;,<sp/>&quot;rb&quot;);<sp/>//<sp/>non-Windows<sp/>use<sp/>&quot;r&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">char<sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal">FileReadStream<sp/>bis(fp,<sp/>readBuffer,<sp/>sizeof(readBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">AutoUTFInputStream&lt;unsigned,<sp/>FileReadStream&gt;<sp/>eis(bis);<sp/><sp/>//<sp/>wraps<sp/>bis<sp/>into<sp/>eis</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">WDocument<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseStream&lt;0,<sp/>AutoUTF&lt;unsigned&gt;<sp/>&gt;(eis);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">const<sp/>WValue<sp/>locale(L&quot;ja&quot;);<sp/>//<sp/>Japanese</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">MessageBoxW(hWnd,<sp/>d[locale].GetString(),<sp/>L&quot;Test&quot;,<sp/>MB_OK);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Allocator<sp/>{#Allocator}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`Allocator`<sp/>defines<sp/>which<sp/>allocator<sp/>class<sp/>is<sp/>used<sp/>when<sp/>allocating/deallocating<sp/>memory<sp/>for<sp/>`Document`/`Value`.<sp/>`Document`<sp/>owns,<sp/>or<sp/>references<sp/>to<sp/>an<sp/>`Allocator`<sp/>instance.<sp/>On<sp/>the<sp/>other<sp/>hand,<sp/>`Value`<sp/>does<sp/>not<sp/>do<sp/>so,<sp/>in<sp/>order<sp/>to<sp/>reduce<sp/>memory<sp/>consumption.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>default<sp/>allocator<sp/>used<sp/>in<sp/>`GenericDocument`<sp/>is<sp/>`MemoryPoolAllocator`.<sp/>This<sp/>allocator<sp/>actually<sp/>allocate<sp/>memory<sp/>sequentially,<sp/>and<sp/>cannot<sp/>deallocate<sp/>one<sp/>by<sp/>one.<sp/>This<sp/>is<sp/>very<sp/>suitable<sp/>when<sp/>parsing<sp/>a<sp/>JSON<sp/>into<sp/>a<sp/>DOM<sp/>tree.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Another<sp/>allocator<sp/>is<sp/>`CrtAllocator`,<sp/>of<sp/>which<sp/>CRT<sp/>is<sp/>short<sp/>for<sp/>C<sp/>RunTime<sp/>library.<sp/>This<sp/>allocator<sp/>simply<sp/>calls<sp/>the<sp/>standard<sp/>`malloc()`/`realloc()`/`free()`.<sp/>When<sp/>there<sp/>is<sp/>a<sp/>lot<sp/>of<sp/>add<sp/>and<sp/>remove<sp/>operations,<sp/>this<sp/>allocator<sp/>may<sp/>be<sp/>preferred.<sp/>But<sp/>this<sp/>allocator<sp/>is<sp/>far<sp/>less<sp/>efficient<sp/>than<sp/>`MemoryPoolAllocator`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Parsing<sp/>{#Parsing}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Document`<sp/>provides<sp/>several<sp/>functions<sp/>for<sp/>parsing.<sp/>In<sp/>below,<sp/>(1)<sp/>is<sp/>the<sp/>fundamental<sp/>function,<sp/>while<sp/>the<sp/>others<sp/>are<sp/>helpers<sp/>which<sp/>call<sp/>(1).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(1)<sp/>Fundamental</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags,<sp/>typename<sp/>SourceEncoding,<sp/>typename<sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::ParseStream(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(2)<sp/>Using<sp/>the<sp/>same<sp/>Encoding<sp/>for<sp/>stream</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags,<sp/>typename<sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::ParseStream(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(3)<sp/>Using<sp/>default<sp/>parse<sp/>flags</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;typename<sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::ParseStream(InputStream&amp;<sp/>is);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(4)<sp/>In<sp/>situ<sp/>parsing</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::ParseInsitu(Ch*<sp/>str);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(5)<sp/>In<sp/>situ<sp/>parsing,<sp/>using<sp/>default<sp/>parse<sp/>flags</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::ParseInsitu(Ch*<sp/>str);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(6)<sp/>Normal<sp/>parsing<sp/>of<sp/>a<sp/>string</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags,<sp/>typename<sp/>SourceEncoding&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::Parse(const<sp/>Ch*<sp/>str);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(7)<sp/>Normal<sp/>parsing<sp/>of<sp/>a<sp/>string,<sp/>using<sp/>same<sp/>Encoding<sp/>of<sp/>Document</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags&gt;</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::Parse(const<sp/>Ch*<sp/>str);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>(8)<sp/>Normal<sp/>parsing<sp/>of<sp/>a<sp/>string,<sp/>using<sp/>default<sp/>parse<sp/>flags</highlight></codeline>
+<codeline><highlight class="normal">GenericDocument&amp;<sp/>GenericDocument::Parse(const<sp/>Ch*<sp/>str);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>examples<sp/>of<sp/>[tutorial](doc/tutorial.md)<sp/>uses<sp/>(8)<sp/>for<sp/>normal<sp/>parsing<sp/>of<sp/>string.<sp/>The<sp/>examples<sp/>of<sp/>[stream](doc/stream.md)<sp/>uses<sp/>the<sp/>first<sp/>three.<sp/>*In<sp/>situ*<sp/>parsing<sp/>will<sp/>be<sp/>described<sp/>soon.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`parseFlags`<sp/>are<sp/>combination<sp/>of<sp/>the<sp/>following<sp/>bit-flags:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parse<sp/>flags<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Meaning</highlight></codeline>
+<codeline><highlight class="normal">------------------------------|-----------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`kParseNoFlags`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>No<sp/>flag<sp/>is<sp/>set.</highlight></codeline>
+<codeline><highlight class="normal">`kParseDefaultFlags`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Default<sp/>parse<sp/>flags.<sp/>It<sp/>is<sp/>equal<sp/>to<sp/>macro<sp/>`RAPIDJSON_PARSE_DEFAULT_FLAGS`,<sp/>which<sp/>is<sp/>defined<sp/>as<sp/>`kParseNoFlags`.</highlight></codeline>
+<codeline><highlight class="normal">`kParseInsituFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>In-situ(destructive)<sp/>parsing.</highlight></codeline>
+<codeline><highlight class="normal">`kParseValidateEncodingFlag`<sp/><sp/>|<sp/>Validate<sp/>encoding<sp/>of<sp/>JSON<sp/>strings.</highlight></codeline>
+<codeline><highlight class="normal">`kParseIterativeFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Iterative(constant<sp/>complexity<sp/>in<sp/>terms<sp/>of<sp/>function<sp/>call<sp/>stack<sp/>size)<sp/>parsing.</highlight></codeline>
+<codeline><highlight class="normal">`kParseStopWhenDoneFlag`<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>After<sp/>parsing<sp/>a<sp/>complete<sp/>JSON<sp/>root<sp/>from<sp/>stream,<sp/>stop<sp/>further<sp/>processing<sp/>the<sp/>rest<sp/>of<sp/>stream.<sp/>When<sp/>this<sp/>flag<sp/>is<sp/>used,<sp/>parser<sp/>will<sp/>not<sp/>generate<sp/>`kParseErrorDocumentRootNotSingular`<sp/>error.<sp/>Using<sp/>this<sp/>flag<sp/>for<sp/>parsing<sp/>multiple<sp/>JSONs<sp/>in<sp/>the<sp/>same<sp/>stream.</highlight></codeline>
+<codeline><highlight class="normal">`kParseFullPrecisionFlag`<sp/><sp/><sp/><sp/><sp/>|<sp/>Parse<sp/>number<sp/>in<sp/>full<sp/>precision<sp/>(slower).<sp/>If<sp/>this<sp/>flag<sp/>is<sp/>not<sp/>set,<sp/>the<sp/>normal<sp/>precision<sp/>(faster)<sp/>is<sp/>used.<sp/>Normal<sp/>precision<sp/>has<sp/>maximum<sp/>3<sp/>[ULP](http://en.wikipedia.org/wiki/Unit_in_the_last_place)<sp/>error.</highlight></codeline>
+<codeline><highlight class="normal">`kParseCommentsFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Allow<sp/>one-line<sp/>`//<sp/>...`<sp/>and<sp/>multi-line<sp/>`/*<sp/>...<sp/>*/`<sp/>comments<sp/>(relaxed<sp/>JSON<sp/>syntax).</highlight></codeline>
+<codeline><highlight class="normal">`kParseNumbersAsStringsFlag`<sp/><sp/>|<sp/>Parse<sp/>numerical<sp/>type<sp/>values<sp/>as<sp/>strings.</highlight></codeline>
+<codeline><highlight class="normal">`kParseTrailingCommasFlag`<sp/><sp/><sp/><sp/>|<sp/>Allow<sp/>trailing<sp/>commas<sp/>at<sp/>the<sp/>end<sp/>of<sp/>objects<sp/>and<sp/>arrays<sp/>(relaxed<sp/>JSON<sp/>syntax).</highlight></codeline>
+<codeline><highlight class="normal">`kParseNanAndInfFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Allow<sp/>parsing<sp/>`NaN`,<sp/>`Inf`,<sp/>`Infinity`,<sp/>`-Inf`<sp/>and<sp/>`-Infinity`<sp/>as<sp/>`double`<sp/>values<sp/>(relaxed<sp/>JSON<sp/>syntax).</highlight></codeline>
+<codeline><highlight class="normal">`kParseEscapedApostropheFlag`<sp/>|<sp/>Allow<sp/>escaped<sp/>apostrophe<sp/>`\&apos;`<sp/>in<sp/>strings<sp/>(relaxed<sp/>JSON<sp/>syntax).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">By<sp/>using<sp/>a<sp/>non-type<sp/>template<sp/>parameter,<sp/>instead<sp/>of<sp/>a<sp/>function<sp/>parameter,<sp/>C++<sp/>compiler<sp/>can<sp/>generate<sp/>code<sp/>which<sp/>is<sp/>optimized<sp/>for<sp/>specified<sp/>combinations,<sp/>improving<sp/>speed,<sp/>and<sp/>reducing<sp/>code<sp/>size<sp/>(if<sp/>only<sp/>using<sp/>a<sp/>single<sp/>specialization).<sp/>The<sp/>downside<sp/>is<sp/>the<sp/>flags<sp/>needed<sp/>to<sp/>be<sp/>determined<sp/>in<sp/>compile-time.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`SourceEncoding`<sp/>parameter<sp/>defines<sp/>what<sp/>encoding<sp/>is<sp/>in<sp/>the<sp/>stream.<sp/>This<sp/>can<sp/>be<sp/>differed<sp/>to<sp/>the<sp/>`Encoding`<sp/>of<sp/>the<sp/>`Document`.<sp/>See<sp/>[Transcoding<sp/>and<sp/>Validation](#TranscodingAndValidation)<sp/>section<sp/>for<sp/>details.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">And<sp/>the<sp/>`InputStream`<sp/>is<sp/>type<sp/>of<sp/>input<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Parse<sp/>Error<sp/>{#ParseError}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>the<sp/>parse<sp/>processing<sp/>succeeded,<sp/>the<sp/>`Document`<sp/>contains<sp/>the<sp/>parse<sp/>results.<sp/>When<sp/>there<sp/>is<sp/>an<sp/>error,<sp/>the<sp/>original<sp/>DOM<sp/>is<sp/>*unchanged*.<sp/>And<sp/>the<sp/>error<sp/>state<sp/>of<sp/>parsing<sp/>can<sp/>be<sp/>obtained<sp/>by<sp/>`bool<sp/>HasParseError()`,<sp/><sp/>`ParseErrorCode<sp/>GetParseError()`<sp/>and<sp/>`size_t<sp/>GetErrorOffset()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parse<sp/>Error<sp/>Code<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Description</highlight></codeline>
+<codeline><highlight class="normal">--------------------------------------------|---------------------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorNone`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>No<sp/>error.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorDocumentEmpty`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>The<sp/>document<sp/>is<sp/>empty.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorDocumentRootNotSingular`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>The<sp/>document<sp/>root<sp/>must<sp/>not<sp/>follow<sp/>by<sp/>other<sp/>values.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorValueInvalid`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Invalid<sp/>value.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorObjectMissName`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Missing<sp/>a<sp/>name<sp/>for<sp/>object<sp/>member.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorObjectMissColon`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Missing<sp/>a<sp/>colon<sp/>after<sp/>a<sp/>name<sp/>of<sp/>object<sp/>member.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorObjectMissCommaOrCurlyBracket`<sp/><sp/>|<sp/>Missing<sp/>a<sp/>comma<sp/>or<sp/>`}`<sp/>after<sp/>an<sp/>object<sp/>member.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorArrayMissCommaOrSquareBracket`<sp/><sp/>|<sp/>Missing<sp/>a<sp/>comma<sp/>or<sp/>`]`<sp/>after<sp/>an<sp/>array<sp/>element.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorStringUnicodeEscapeInvalidHex`<sp/><sp/>|<sp/>Incorrect<sp/>hex<sp/>digit<sp/>after<sp/>`\\u`<sp/>escape<sp/>in<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorStringUnicodeSurrogateInvalid`<sp/><sp/>|<sp/>The<sp/>surrogate<sp/>pair<sp/>in<sp/>string<sp/>is<sp/>invalid.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorStringEscapeInvalid`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Invalid<sp/>escape<sp/>character<sp/>in<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorStringMissQuotationMark`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Missing<sp/>a<sp/>closing<sp/>quotation<sp/>mark<sp/>in<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorStringInvalidEncoding`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Invalid<sp/>encoding<sp/>in<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorNumberTooBig`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Number<sp/>too<sp/>big<sp/>to<sp/>be<sp/>stored<sp/>in<sp/>`double`.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorNumberMissFraction`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Miss<sp/>fraction<sp/>part<sp/>in<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal">`kParseErrorNumberMissExponent`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Miss<sp/>exponent<sp/>in<sp/>number.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>offset<sp/>of<sp/>error<sp/>is<sp/>defined<sp/>as<sp/>the<sp/>character<sp/>number<sp/>from<sp/>beginning<sp/>of<sp/>stream.<sp/>Currently<sp/>RapidJSON<sp/>does<sp/>not<sp/>keep<sp/>track<sp/>of<sp/>line<sp/>number.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>get<sp/>an<sp/>error<sp/>message,<sp/>RapidJSON<sp/>provided<sp/>a<sp/>English<sp/>messages<sp/>in<sp/>`rapidjson/error/en.h`.<sp/>User<sp/>can<sp/>customize<sp/>it<sp/>for<sp/>other<sp/>locales,<sp/>or<sp/>use<sp/>a<sp/>custom<sp/>localization<sp/>system.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>shows<sp/>an<sp/>example<sp/>of<sp/>parse<sp/>error<sp/>handling.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/document.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/error/en.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(d.Parse(json).HasParseError())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;\nError(offset<sp/>%u):<sp/>%s\n&quot;,<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(unsigned)d.GetErrorOffset(),</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GetParseError_En(d.GetParseError()));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>In<sp/>Situ<sp/>Parsing<sp/>{#InSituParsing}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">From<sp/>[Wikipedia](http://en.wikipedia.org/wiki/In_situ):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>*In<sp/>situ*<sp/>...<sp/>is<sp/>a<sp/>Latin<sp/>phrase<sp/>that<sp/>translates<sp/>literally<sp/>to<sp/>&quot;on<sp/>site&quot;<sp/>or<sp/>&quot;in<sp/>position&quot;.<sp/>It<sp/>means<sp/>&quot;locally&quot;,<sp/>&quot;on<sp/>site&quot;,<sp/>&quot;on<sp/>the<sp/>premises&quot;<sp/>or<sp/>&quot;in<sp/>place&quot;<sp/>to<sp/>describe<sp/>an<sp/>event<sp/>where<sp/>it<sp/>takes<sp/>place,<sp/>and<sp/>is<sp/>used<sp/>in<sp/>many<sp/>different<sp/>contexts.</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(In<sp/>computer<sp/>science)<sp/>An<sp/>algorithm<sp/>is<sp/>said<sp/>to<sp/>be<sp/>an<sp/>in<sp/>situ<sp/>algorithm,<sp/>or<sp/>in-place<sp/>algorithm,<sp/>if<sp/>the<sp/>extra<sp/>amount<sp/>of<sp/>memory<sp/>required<sp/>to<sp/>execute<sp/>the<sp/>algorithm<sp/>is<sp/>O(1),<sp/>that<sp/>is,<sp/>does<sp/>not<sp/>exceed<sp/>a<sp/>constant<sp/>no<sp/>matter<sp/>how<sp/>large<sp/>the<sp/>input.<sp/>For<sp/>example,<sp/>heapsort<sp/>is<sp/>an<sp/>in<sp/>situ<sp/>sorting<sp/>algorithm.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>normal<sp/>parsing<sp/>process,<sp/>a<sp/>large<sp/>overhead<sp/>is<sp/>to<sp/>decode<sp/>JSON<sp/>strings<sp/>and<sp/>copy<sp/>them<sp/>to<sp/>other<sp/>buffers.<sp/>*In<sp/>situ*<sp/>parsing<sp/>decodes<sp/>those<sp/>JSON<sp/>string<sp/>at<sp/>the<sp/>place<sp/>where<sp/>it<sp/>is<sp/>stored.<sp/>It<sp/>is<sp/>possible<sp/>in<sp/>JSON<sp/>because<sp/>the<sp/>length<sp/>of<sp/>decoded<sp/>string<sp/>is<sp/>always<sp/>shorter<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>the<sp/>one<sp/>in<sp/>JSON.<sp/>In<sp/>this<sp/>context,<sp/>decoding<sp/>a<sp/>JSON<sp/>string<sp/>means<sp/>to<sp/>process<sp/>the<sp/>escapes,<sp/>such<sp/>as<sp/>`&quot;\n&quot;`,<sp/>`&quot;\u1234&quot;`,<sp/>etc.,<sp/>and<sp/>add<sp/>a<sp/>null<sp/>terminator<sp/>(`&apos;\0&apos;`)at<sp/>the<sp/>end<sp/>of<sp/>string.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>diagrams<sp/>compare<sp/>normal<sp/>and<sp/>*in<sp/>situ*<sp/>parsing.<sp/>The<sp/>JSON<sp/>string<sp/>values<sp/>contain<sp/>pointers<sp/>to<sp/>the<sp/>decoded<sp/>string.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![normal<sp/>parsing](diagram/normalparsing.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>normal<sp/>parsing,<sp/>the<sp/>decoded<sp/>string<sp/>are<sp/>copied<sp/>to<sp/>freshly<sp/>allocated<sp/>buffers.<sp/>`&quot;\\n&quot;`<sp/>(2<sp/>characters)<sp/>is<sp/>decoded<sp/>as<sp/>`&quot;\n&quot;`<sp/>(1<sp/>character).<sp/>`&quot;\\u0073&quot;`<sp/>(6<sp/>characters)<sp/>is<sp/>decoded<sp/>as<sp/>`&quot;s&quot;`<sp/>(1<sp/>character).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![instiu<sp/>parsing](diagram/insituparsing.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*In<sp/>situ*<sp/>parsing<sp/>just<sp/>modified<sp/>the<sp/>original<sp/>JSON.<sp/>Updated<sp/>characters<sp/>are<sp/>highlighted<sp/>in<sp/>the<sp/>diagram.<sp/>If<sp/>the<sp/>JSON<sp/>string<sp/>does<sp/>not<sp/>contain<sp/>escape<sp/>character,<sp/>such<sp/>as<sp/>`&quot;msg&quot;`,<sp/>the<sp/>parsing<sp/>process<sp/>merely<sp/>replace<sp/>the<sp/>closing<sp/>double<sp/>quotation<sp/>mark<sp/>with<sp/>a<sp/>null<sp/>character.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Since<sp/>*in<sp/>situ*<sp/>parsing<sp/>modify<sp/>the<sp/>input,<sp/>the<sp/>parsing<sp/>API<sp/>needs<sp/>`char*`<sp/>instead<sp/>of<sp/>`const<sp/>char*`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Read<sp/>whole<sp/>file<sp/>into<sp/>a<sp/>buffer</highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;test.json&quot;,<sp/>&quot;r&quot;);</highlight></codeline>
+<codeline><highlight class="normal">fseek(fp,<sp/>0,<sp/>SEEK_END);</highlight></codeline>
+<codeline><highlight class="normal">size_t<sp/>filesize<sp/>=<sp/>(size_t)ftell(fp);</highlight></codeline>
+<codeline><highlight class="normal">fseek(fp,<sp/>0,<sp/>SEEK_SET);</highlight></codeline>
+<codeline><highlight class="normal">char*<sp/>buffer<sp/>=<sp/>(char*)malloc(filesize<sp/>+<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal">size_t<sp/>readLength<sp/>=<sp/>fread(buffer,<sp/>1,<sp/>filesize,<sp/>fp);</highlight></codeline>
+<codeline><highlight class="normal">buffer[readLength]<sp/>=<sp/>&apos;\0&apos;;</highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>In<sp/>situ<sp/>parsing<sp/>the<sp/>buffer<sp/>into<sp/>d,<sp/>buffer<sp/>will<sp/>also<sp/>be<sp/>modified</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.ParseInsitu(buffer);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Query/manipulate<sp/>the<sp/>DOM<sp/>here...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">free(buffer);</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Note:<sp/>At<sp/>this<sp/>point,<sp/>d<sp/>may<sp/>have<sp/>dangling<sp/>pointers<sp/>pointed<sp/>to<sp/>the<sp/>deallocated<sp/>buffer.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>JSON<sp/>strings<sp/>are<sp/>marked<sp/>as<sp/>const-string.<sp/>But<sp/>they<sp/>may<sp/>not<sp/>be<sp/>really<sp/>&quot;constant&quot;.<sp/>The<sp/>life<sp/>cycle<sp/>of<sp/>it<sp/>depends<sp/>on<sp/>the<sp/>JSON<sp/>buffer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>situ<sp/>parsing<sp/>minimizes<sp/>allocation<sp/>overheads<sp/>and<sp/>memory<sp/>copying.<sp/>Generally<sp/>this<sp/>improves<sp/>cache<sp/>coherence,<sp/>which<sp/>is<sp/>an<sp/>important<sp/>factor<sp/>of<sp/>performance<sp/>in<sp/>modern<sp/>computer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>some<sp/>limitations<sp/>of<sp/>*in<sp/>situ*<sp/>parsing:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>The<sp/>whole<sp/>JSON<sp/>is<sp/>in<sp/>memory.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>The<sp/>source<sp/>encoding<sp/>in<sp/>stream<sp/>and<sp/>target<sp/>encoding<sp/>in<sp/>document<sp/>must<sp/>be<sp/>the<sp/>same.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>The<sp/>buffer<sp/>need<sp/>to<sp/>be<sp/>retained<sp/>until<sp/>the<sp/>document<sp/>is<sp/>no<sp/>longer<sp/>used.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>If<sp/>the<sp/>DOM<sp/>need<sp/>to<sp/>be<sp/>used<sp/>for<sp/>long<sp/>period<sp/>after<sp/>parsing,<sp/>and<sp/>there<sp/>are<sp/>few<sp/>JSON<sp/>strings<sp/>in<sp/>the<sp/>DOM,<sp/>retaining<sp/>the<sp/>buffer<sp/>may<sp/>be<sp/>a<sp/>memory<sp/>waste.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*In<sp/>situ*<sp/>parsing<sp/>is<sp/>mostly<sp/>suitable<sp/>for<sp/>short-term<sp/>JSON<sp/>that<sp/>only<sp/>need<sp/>to<sp/>be<sp/>processed<sp/>once,<sp/>and<sp/>then<sp/>be<sp/>released<sp/>from<sp/>memory.<sp/>In<sp/>practice,<sp/>these<sp/>situation<sp/>is<sp/>very<sp/>common,<sp/>for<sp/>example,<sp/>deserializing<sp/>JSON<sp/>to<sp/>C++<sp/>objects,<sp/>processing<sp/>web<sp/>requests<sp/>represented<sp/>in<sp/>JSON,<sp/>etc.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Transcoding<sp/>and<sp/>Validation<sp/>{#TranscodingAndValidation}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>supports<sp/>conversion<sp/>between<sp/>Unicode<sp/>formats<sp/>(officially<sp/>termed<sp/>UCS<sp/>Transformation<sp/>Format)<sp/>internally.<sp/>During<sp/>DOM<sp/>parsing,<sp/>the<sp/>source<sp/>encoding<sp/>of<sp/>the<sp/>stream<sp/>can<sp/>be<sp/>different<sp/>from<sp/>the<sp/>encoding<sp/>of<sp/>the<sp/>DOM.<sp/>For<sp/>example,<sp/>the<sp/>source<sp/>stream<sp/>contains<sp/>a<sp/>UTF-8<sp/>JSON,<sp/>while<sp/>the<sp/>DOM<sp/>is<sp/>using<sp/>UTF-16<sp/>encoding.<sp/>There<sp/>is<sp/>an<sp/>example<sp/>code<sp/>in<sp/>[EncodedInputStream](doc/stream.md).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>writing<sp/>a<sp/>JSON<sp/>from<sp/>DOM<sp/>to<sp/>output<sp/>stream,<sp/>transcoding<sp/>can<sp/>also<sp/>be<sp/>used.<sp/>An<sp/>example<sp/>is<sp/>in<sp/>[EncodedOutputStream](doc/stream.md).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">During<sp/>transcoding,<sp/>the<sp/>source<sp/>string<sp/>is<sp/>decoded<sp/>to<sp/>into<sp/>Unicode<sp/>code<sp/>points,<sp/>and<sp/>then<sp/>the<sp/>code<sp/>points<sp/>are<sp/>encoded<sp/>in<sp/>the<sp/>target<sp/>format.<sp/>During<sp/>decoding,<sp/>it<sp/>will<sp/>validate<sp/>the<sp/>byte<sp/>sequence<sp/>in<sp/>the<sp/>source<sp/>string.<sp/>If<sp/>it<sp/>is<sp/>not<sp/>a<sp/>valid<sp/>sequence,<sp/>the<sp/>parser<sp/>will<sp/>be<sp/>stopped<sp/>with<sp/>`kParseErrorStringInvalidEncoding`<sp/>error.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>the<sp/>source<sp/>encoding<sp/>of<sp/>stream<sp/>is<sp/>the<sp/>same<sp/>as<sp/>encoding<sp/>of<sp/>DOM,<sp/>by<sp/>default,<sp/>the<sp/>parser<sp/>will<sp/>*not*<sp/>validate<sp/>the<sp/>sequence.<sp/>User<sp/>may<sp/>use<sp/>`kParseValidateEncodingFlag`<sp/>to<sp/>force<sp/>validation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Techniques<sp/>{#Techniques}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Some<sp/>techniques<sp/>about<sp/>using<sp/>DOM<sp/>API<sp/>is<sp/>discussed<sp/>here.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>DOM<sp/>as<sp/>SAX<sp/>Event<sp/>Publisher</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>RapidJSON,<sp/>stringifying<sp/>a<sp/>DOM<sp/>with<sp/>`Writer`<sp/>may<sp/>be<sp/>look<sp/>a<sp/>little<sp/>bit<sp/>weird.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">Writer&lt;StringBuffer&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Actually,<sp/>`Value::Accept()`<sp/>is<sp/>responsible<sp/>for<sp/>publishing<sp/>SAX<sp/>events<sp/>about<sp/>the<sp/>value<sp/>to<sp/>the<sp/>handler.<sp/>With<sp/>this<sp/>design,<sp/>`Value`<sp/>and<sp/>`Writer`<sp/>are<sp/>decoupled.<sp/>`Value`<sp/>can<sp/>generate<sp/>SAX<sp/>events,<sp/>and<sp/>`Writer`<sp/>can<sp/>handle<sp/>those<sp/>events.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>may<sp/>create<sp/>custom<sp/>handlers<sp/>for<sp/>transforming<sp/>the<sp/>DOM<sp/>into<sp/>other<sp/>formats.<sp/>For<sp/>example,<sp/>a<sp/>handler<sp/>which<sp/>converts<sp/>the<sp/>DOM<sp/>into<sp/>XML.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>more<sp/>about<sp/>SAX<sp/>events<sp/>and<sp/>handler,<sp/>please<sp/>refer<sp/>to<sp/>[SAX](doc/sax.md).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>User<sp/>Buffer<sp/>{#UserBuffer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Some<sp/>applications<sp/>may<sp/>try<sp/>to<sp/>avoid<sp/>memory<sp/>allocations<sp/>whenever<sp/>possible.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`MemoryPoolAllocator`<sp/>can<sp/>support<sp/>this<sp/>by<sp/>letting<sp/>user<sp/>to<sp/>provide<sp/>a<sp/>buffer.<sp/>The<sp/>buffer<sp/>can<sp/>be<sp/>on<sp/>the<sp/>program<sp/>stack,<sp/>or<sp/>a<sp/>&quot;scratch<sp/>buffer&quot;<sp/>which<sp/>is<sp/>statically<sp/>allocated<sp/>(a<sp/>static/global<sp/>array)<sp/>for<sp/>storing<sp/>temporary<sp/>data.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`MemoryPoolAllocator`<sp/>will<sp/>use<sp/>the<sp/>user<sp/>buffer<sp/>to<sp/>satisfy<sp/>allocations.<sp/>When<sp/>the<sp/>user<sp/>buffer<sp/>is<sp/>used<sp/>up,<sp/>it<sp/>will<sp/>allocate<sp/>a<sp/>chunk<sp/>of<sp/>memory<sp/>from<sp/>the<sp/>base<sp/>allocator<sp/>(by<sp/>default<sp/>the<sp/>`CrtAllocator`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example<sp/>of<sp/>using<sp/>stack<sp/>memory.<sp/>The<sp/>first<sp/>allocator<sp/>is<sp/>for<sp/>storing<sp/>values,<sp/>while<sp/>the<sp/>second<sp/>allocator<sp/>is<sp/>for<sp/>storing<sp/>temporary<sp/>data<sp/>during<sp/>parsing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericDocument&lt;UTF8&lt;&gt;,<sp/>MemoryPoolAllocator&lt;&gt;,<sp/>MemoryPoolAllocator&lt;&gt;&gt;<sp/>DocumentType;</highlight></codeline>
+<codeline><highlight class="normal">char<sp/>valueBuffer[4096];</highlight></codeline>
+<codeline><highlight class="normal">char<sp/>parseBuffer[1024];</highlight></codeline>
+<codeline><highlight class="normal">MemoryPoolAllocator&lt;&gt;<sp/>valueAllocator(valueBuffer,<sp/>sizeof(valueBuffer));</highlight></codeline>
+<codeline><highlight class="normal">MemoryPoolAllocator&lt;&gt;<sp/>parseAllocator(parseBuffer,<sp/>sizeof(parseBuffer));</highlight></codeline>
+<codeline><highlight class="normal">DocumentType<sp/>d(&amp;valueAllocator,<sp/>sizeof(parseBuffer),<sp/>&amp;parseAllocator);</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(json);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>the<sp/>total<sp/>size<sp/>of<sp/>allocation<sp/>is<sp/>less<sp/>than<sp/>4096+1024<sp/>bytes<sp/>during<sp/>parsing,<sp/>this<sp/>code<sp/>does<sp/>not<sp/>invoke<sp/>any<sp/>heap<sp/>allocation<sp/>(via<sp/>`new`<sp/>or<sp/>`malloc()`)<sp/>at<sp/>all.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>can<sp/>query<sp/>the<sp/>current<sp/>memory<sp/>consumption<sp/>in<sp/>bytes<sp/>via<sp/>`MemoryPoolAllocator::Size()`.<sp/>And<sp/>then<sp/>user<sp/>can<sp/>determine<sp/>a<sp/>suitable<sp/>size<sp/>of<sp/>user<sp/>buffer.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/dom.md"/>
+  </compounddef>
+</doxygen>

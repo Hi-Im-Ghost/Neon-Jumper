@@ -1,0 +1,636 @@
+\hypertarget{encodings_8h_source}{}\doxysection{encodings.\+h}
+\label{encodings_8h_source}\index{src/rapidjson/include/rapidjson/encodings.h@{src/rapidjson/include/rapidjson/encodings.h}}
+\mbox{\hyperlink{encodings_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ENCODINGS\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_ENCODINGS\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{rapidjson_8h}{rapidjson.h}}"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& !defined(\_\_clang\_\_)}}
+\DoxyCodeLine{21 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_OFF(4244) \textcolor{comment}{// conversion from 'type1' to 'type2', possible loss of data}}
+\DoxyCodeLine{23 RAPIDJSON\_DIAG\_OFF(4702)  \textcolor{comment}{// unreachable code}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#elif defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{25 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{26 RAPIDJSON\_DIAG\_OFF(effc++)}
+\DoxyCodeLine{27 RAPIDJSON\_DIAG\_OFF(overflow)}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{33 \textcolor{comment}{// Encoding}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{47 }
+\DoxyCodeLine{54 }
+\DoxyCodeLine{62 }
+\DoxyCodeLine{68 }
+\DoxyCodeLine{72 }
+\DoxyCodeLine{76 }
+\DoxyCodeLine{80 }
+\DoxyCodeLine{87 \textcolor{comment}{// UTF8}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{90 }
+\DoxyCodeLine{95 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{char}>}
+\DoxyCodeLine{96 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f8}{UTF8}} \{}
+\DoxyCodeLine{97     \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}};}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_u_t_f8_a6d7cd5f1f72db45d041344c35f47da74a1a78b02dbcc9ddfd12f86a51cddf8fad}{supportUnicode}} = 1 \};}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{102     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f8_af286ed19ca60d261a9b11b65bee1298b}{Encode}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{103         \textcolor{keywordflow}{if} (codepoint <= 0x7F) }
+\DoxyCodeLine{104             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(codepoint \& 0xFF));}
+\DoxyCodeLine{105         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (codepoint <= 0x7FF) \{}
+\DoxyCodeLine{106             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xC0 | ((codepoint >> 6) \& 0xFF)));}
+\DoxyCodeLine{107             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint \& 0x3F))));}
+\DoxyCodeLine{108         \}}
+\DoxyCodeLine{109         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (codepoint <= 0xFFFF) \{}
+\DoxyCodeLine{110             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xE0 | ((codepoint >> 12) \& 0xFF)));}
+\DoxyCodeLine{111             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 6) \& 0x3F)));}
+\DoxyCodeLine{112             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | (codepoint \& 0x3F)));}
+\DoxyCodeLine{113         \}}
+\DoxyCodeLine{114         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{115             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{116             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xF0 | ((codepoint >> 18) \& 0xFF)));}
+\DoxyCodeLine{117             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 12) \& 0x3F)));}
+\DoxyCodeLine{118             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 6) \& 0x3F)));}
+\DoxyCodeLine{119             os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | (codepoint \& 0x3F)));}
+\DoxyCodeLine{120         \}}
+\DoxyCodeLine{121     \}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{124     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f8_aac6bdaf03c114265384b2ae3e425e7a8}{EncodeUnsafe}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{125         \textcolor{keywordflow}{if} (codepoint <= 0x7F) }
+\DoxyCodeLine{126             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(codepoint \& 0xFF));}
+\DoxyCodeLine{127         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (codepoint <= 0x7FF) \{}
+\DoxyCodeLine{128             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xC0 | ((codepoint >> 6) \& 0xFF)));}
+\DoxyCodeLine{129             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint \& 0x3F))));}
+\DoxyCodeLine{130         \}}
+\DoxyCodeLine{131         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (codepoint <= 0xFFFF) \{}
+\DoxyCodeLine{132             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xE0 | ((codepoint >> 12) \& 0xFF)));}
+\DoxyCodeLine{133             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 6) \& 0x3F)));}
+\DoxyCodeLine{134             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | (codepoint \& 0x3F)));}
+\DoxyCodeLine{135         \}}
+\DoxyCodeLine{136         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{137             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{138             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0xF0 | ((codepoint >> 18) \& 0xFF)));}
+\DoxyCodeLine{139             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 12) \& 0x3F)));}
+\DoxyCodeLine{140             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | ((codepoint >> 6) \& 0x3F)));}
+\DoxyCodeLine{141             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(0x80 | (codepoint \& 0x3F)));}
+\DoxyCodeLine{142         \}}
+\DoxyCodeLine{143     \}}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
+\DoxyCodeLine{146     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f8_a17c6badb31acf4f784111c886737fb17}{Decode}}(InputStream\& is, \textcolor{keywordtype}{unsigned}* codepoint) \{}
+\DoxyCodeLine{147 \textcolor{preprocessor}{\#define RAPIDJSON\_COPY() c = is.Take(); *codepoint = (*codepoint << 6) | (static\_cast<unsigned char>(c) \& 0x3Fu)}}
+\DoxyCodeLine{148 \textcolor{preprocessor}{\#define RAPIDJSON\_TRANS(mask) result \&= ((GetRange(static\_cast<unsigned char>(c)) \& mask) != 0)}}
+\DoxyCodeLine{149 \textcolor{preprocessor}{\#define RAPIDJSON\_TAIL() RAPIDJSON\_COPY(); RAPIDJSON\_TRANS(0x70)}}
+\DoxyCodeLine{150         \textcolor{keyword}{typename} InputStream::Ch c = is.Take();}
+\DoxyCodeLine{151         \textcolor{keywordflow}{if} (!(c \& 0x80)) \{}
+\DoxyCodeLine{152             *codepoint = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{153             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{154         \}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} type = \mbox{\hyperlink{struct_u_t_f8_ac06bbf38df41adb0c7b9eaa93f85cc38}{GetRange}}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c));}
+\DoxyCodeLine{157         \textcolor{keywordflow}{if} (type >= 32) \{}
+\DoxyCodeLine{158             *codepoint = 0;}
+\DoxyCodeLine{159         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{160             *codepoint = (0xFFu >> type) \& \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{161         \}}
+\DoxyCodeLine{162         \textcolor{keywordtype}{bool} result = \textcolor{keyword}{true};}
+\DoxyCodeLine{163         \textcolor{keywordflow}{switch} (type) \{}
+\DoxyCodeLine{164         \textcolor{keywordflow}{case} 2: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{165         \textcolor{keywordflow}{case} 3: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{166         \textcolor{keywordflow}{case} 4: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x50); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{167         \textcolor{keywordflow}{case} 5: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x10); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{168         \textcolor{keywordflow}{case} 6: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{169         \textcolor{keywordflow}{case} 10: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x20); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{170         \textcolor{keywordflow}{case} 11: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x60); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{171         \textcolor{keywordflow}{default}: \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{172         \}}
+\DoxyCodeLine{173 \textcolor{preprocessor}{\#undef RAPIDJSON\_COPY}}
+\DoxyCodeLine{174 \textcolor{preprocessor}{\#undef RAPIDJSON\_TRANS}}
+\DoxyCodeLine{175 \textcolor{preprocessor}{\#undef RAPIDJSON\_TAIL}}
+\DoxyCodeLine{176     \}}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{179     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f8_a9e2e7e37d819baeb5e643654c6e61e33}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{180 \textcolor{preprocessor}{\#define RAPIDJSON\_COPY() os.Put(c = is.Take())}}
+\DoxyCodeLine{181 \textcolor{preprocessor}{\#define RAPIDJSON\_TRANS(mask) result \&= ((GetRange(static\_cast<unsigned char>(c)) \& mask) != 0)}}
+\DoxyCodeLine{182 \textcolor{preprocessor}{\#define RAPIDJSON\_TAIL() RAPIDJSON\_COPY(); RAPIDJSON\_TRANS(0x70)}}
+\DoxyCodeLine{183         \mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}} c;}
+\DoxyCodeLine{184         \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}();}
+\DoxyCodeLine{185         \textcolor{keywordflow}{if} (!(c \& 0x80))}
+\DoxyCodeLine{186             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188         \textcolor{keywordtype}{bool} result = \textcolor{keyword}{true};}
+\DoxyCodeLine{189         \textcolor{keywordflow}{switch} (\mbox{\hyperlink{struct_u_t_f8_ac06bbf38df41adb0c7b9eaa93f85cc38}{GetRange}}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c))) \{}
+\DoxyCodeLine{190         \textcolor{keywordflow}{case} 2: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{191         \textcolor{keywordflow}{case} 3: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{192         \textcolor{keywordflow}{case} 4: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x50); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{193         \textcolor{keywordflow}{case} 5: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x10); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{194         \textcolor{keywordflow}{case} 6: \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{195         \textcolor{keywordflow}{case} 10: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x20); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{196         \textcolor{keywordflow}{case} 11: \mbox{\hyperlink{encodings_8h_a3c5bc66bef12c668f05bbd4df5690171}{RAPIDJSON\_COPY}}(); \mbox{\hyperlink{encodings_8h_ad84116656b63c4b8d43a2264db620a4b}{RAPIDJSON\_TRANS}}(0x60); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \mbox{\hyperlink{encodings_8h_aaa13dc9e0effa5edff532c344b5b35f7}{RAPIDJSON\_TAIL}}(); \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{197         \textcolor{keywordflow}{default}: \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{198         \}}
+\DoxyCodeLine{199 \textcolor{preprocessor}{\#undef RAPIDJSON\_COPY}}
+\DoxyCodeLine{200 \textcolor{preprocessor}{\#undef RAPIDJSON\_TRANS}}
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#undef RAPIDJSON\_TAIL}}
+\DoxyCodeLine{202     \}}
+\DoxyCodeLine{203 }
+\DoxyCodeLine{204     \textcolor{keyword}{static} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} \mbox{\hyperlink{struct_u_t_f8_ac06bbf38df41adb0c7b9eaa93f85cc38}{GetRange}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} c) \{}
+\DoxyCodeLine{205         \textcolor{comment}{// Referring to DFA of http://bjoern.hoehrmann.de/utf-\/8/decoder/dfa/}}
+\DoxyCodeLine{206         \textcolor{comment}{// With new mapping 1 -\/> 0x10, 7 -\/> 0x20, 9 -\/> 0x40, such that AND operation can test multiple types.}}
+\DoxyCodeLine{207         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} type[] = \{}
+\DoxyCodeLine{208             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}
+\DoxyCodeLine{209             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}
+\DoxyCodeLine{210             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}
+\DoxyCodeLine{211             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}
+\DoxyCodeLine{212             0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,}
+\DoxyCodeLine{213             0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,}
+\DoxyCodeLine{214             0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,}
+\DoxyCodeLine{215             0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,}
+\DoxyCodeLine{216             8,8,2,2,2,2,2,2,2,2,2,2,2,2,2,2,  2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,}
+\DoxyCodeLine{217             10,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3, 11,6,6,6,5,8,8,8,8,8,8,8,8,8,8,8,}
+\DoxyCodeLine{218         \};}
+\DoxyCodeLine{219         \textcolor{keywordflow}{return} type[c];}
+\DoxyCodeLine{220     \}}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{223     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f8_a1b2359d6ea50ae32fefc9b28e9878a31}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{224         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{225         \textcolor{keyword}{typename} InputByteStream::Ch c = \mbox{\hyperlink{struct_u_t_f8_a5b2561a5031c8a699e593cd51b2c6864}{Take}}(is);}
+\DoxyCodeLine{226         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c) != 0xEFu) \textcolor{keywordflow}{return} c;}
+\DoxyCodeLine{227         c = is.Take();}
+\DoxyCodeLine{228         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c) != 0xBBu) \textcolor{keywordflow}{return} c;}
+\DoxyCodeLine{229         c = is.Take();}
+\DoxyCodeLine{230         \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c) != 0xBFu) \textcolor{keywordflow}{return} c;}
+\DoxyCodeLine{231         c = is.Take();}
+\DoxyCodeLine{232         \textcolor{keywordflow}{return} c;}
+\DoxyCodeLine{233     \}}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{236     \textcolor{keyword}{static} \mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}} \mbox{\hyperlink{struct_u_t_f8_a5b2561a5031c8a699e593cd51b2c6864}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{237         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{238         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{239     \}}
+\DoxyCodeLine{240 }
+\DoxyCodeLine{241     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{242     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f8_a6b171e5f0662ad81d498875bbdbc536a}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{243         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{244         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xEFu));}
+\DoxyCodeLine{245         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xBBu));}
+\DoxyCodeLine{246         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xBFu));}
+\DoxyCodeLine{247     \}}
+\DoxyCodeLine{248 }
+\DoxyCodeLine{249     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{250     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f8_ab24c23227413798e9be28a21eb26fe51}{Put}}(OutputByteStream\& os, \mbox{\hyperlink{struct_u_t_f8_a8e78c8113f3660178d8121b7d3e55890}{Ch}} c) \{}
+\DoxyCodeLine{251         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{252         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(c));}
+\DoxyCodeLine{253     \}}
+\DoxyCodeLine{254 \};}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{257 \textcolor{comment}{// UTF16}}
+\DoxyCodeLine{258 }
+\DoxyCodeLine{260 }
+\DoxyCodeLine{268 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{wchar\_t}>}
+\DoxyCodeLine{269 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f16}{UTF16}} \{}
+\DoxyCodeLine{270     \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{struct_u_t_f16_a811680d50447c98be4fd94c0a27504bb}{Ch}};}
+\DoxyCodeLine{271     \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_u_t_f16_a811680d50447c98be4fd94c0a27504bb}{Ch}}) >= 2);}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_u_t_f16_a286def80fa945e4d43d52fd398f981daa98b69a56ef3548af9741fff3fcb7b28c}{supportUnicode}} = 1 \};}
+\DoxyCodeLine{274 }
+\DoxyCodeLine{275     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{276     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_a9d8ded01244e30d037c4afa10ee2b30e}{Encode}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{277         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputStream::Ch) >= 2);}
+\DoxyCodeLine{278         \textcolor{keywordflow}{if} (codepoint <= 0xFFFF) \{}
+\DoxyCodeLine{279             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint < 0xD800 || codepoint > 0xDFFF); \textcolor{comment}{// Code point itself cannot be surrogate pair }}
+\DoxyCodeLine{280             os.Put(\textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}(codepoint));}
+\DoxyCodeLine{281         \}}
+\DoxyCodeLine{282         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{283             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{284             \textcolor{keywordtype}{unsigned} v = codepoint -\/ 0x10000;}
+\DoxyCodeLine{285             os.Put(\textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}((v >> 10) | 0xD800));}
+\DoxyCodeLine{286             os.Put(\textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}((v \& 0x3FF) | 0xDC00));}
+\DoxyCodeLine{287         \}}
+\DoxyCodeLine{288     \}}
+\DoxyCodeLine{289 }
+\DoxyCodeLine{290 }
+\DoxyCodeLine{291     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{292     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_aa67661e756c273871b574e7133b7fc63}{EncodeUnsafe}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{293         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputStream::Ch) >= 2);}
+\DoxyCodeLine{294         \textcolor{keywordflow}{if} (codepoint <= 0xFFFF) \{}
+\DoxyCodeLine{295             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint < 0xD800 || codepoint > 0xDFFF); \textcolor{comment}{// Code point itself cannot be surrogate pair }}
+\DoxyCodeLine{296             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}(codepoint));}
+\DoxyCodeLine{297         \}}
+\DoxyCodeLine{298         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{299             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{300             \textcolor{keywordtype}{unsigned} v = codepoint -\/ 0x10000;}
+\DoxyCodeLine{301             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}((v >> 10) | 0xD800));}
+\DoxyCodeLine{302             \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}((v \& 0x3FF) | 0xDC00));}
+\DoxyCodeLine{303         \}}
+\DoxyCodeLine{304     \}}
+\DoxyCodeLine{305 }
+\DoxyCodeLine{306     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
+\DoxyCodeLine{307     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f16_a124c79dfd9f9b4c3fb65bd55ba17b4be}{Decode}}(InputStream\& is, \textcolor{keywordtype}{unsigned}* codepoint) \{}
+\DoxyCodeLine{308         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputStream::Ch) >= 2);}
+\DoxyCodeLine{309         \textcolor{keyword}{typename} InputStream::Ch c = is.Take();}
+\DoxyCodeLine{310         \textcolor{keywordflow}{if} (c < 0xD800 || c > 0xDFFF) \{}
+\DoxyCodeLine{311             *codepoint = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{312             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{313         \}}
+\DoxyCodeLine{314         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (c <= 0xDBFF) \{}
+\DoxyCodeLine{315             *codepoint = (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) \& 0x3FF) << 10;}
+\DoxyCodeLine{316             c = is.Take();}
+\DoxyCodeLine{317             *codepoint |= (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) \& 0x3FF);}
+\DoxyCodeLine{318             *codepoint += 0x10000;}
+\DoxyCodeLine{319             \textcolor{keywordflow}{return} c >= 0xDC00 \&\& c <= 0xDFFF;}
+\DoxyCodeLine{320         \}}
+\DoxyCodeLine{321         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{322     \}}
+\DoxyCodeLine{323 }
+\DoxyCodeLine{324     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{325     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f16_a7516184ed5dce10c0e7895bec124d97d}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{326         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputStream::Ch) >= 2);}
+\DoxyCodeLine{327         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputStream::Ch) >= 2);}
+\DoxyCodeLine{328         \textcolor{keyword}{typename} InputStream::Ch c;}
+\DoxyCodeLine{329         os.Put(\textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}(c = is.Take()));}
+\DoxyCodeLine{330         \textcolor{keywordflow}{if} (c < 0xD800 || c > 0xDFFF)}
+\DoxyCodeLine{331             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{332         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (c <= 0xDBFF) \{}
+\DoxyCodeLine{333             os.Put(c = is.Take());}
+\DoxyCodeLine{334             \textcolor{keywordflow}{return} c >= 0xDC00 \&\& c <= 0xDFFF;}
+\DoxyCodeLine{335         \}}
+\DoxyCodeLine{336         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{337     \}}
+\DoxyCodeLine{338 \};}
+\DoxyCodeLine{339 }
+\DoxyCodeLine{341 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{wchar\_t}>}
+\DoxyCodeLine{342 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f16_l_e}{UTF16LE}} : \mbox{\hyperlink{struct_u_t_f16}{UTF16}}<CharType> \{}
+\DoxyCodeLine{343     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{344     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f16_l_e_ab1d5f43903815155796733f76b21deea}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{345         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{346         CharType c = \mbox{\hyperlink{struct_u_t_f16_l_e_a5927b3d75ff9ce02056d827c14bd0160}{Take}}(is);}
+\DoxyCodeLine{347         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}}\textcolor{keyword}{>}(c) == 0xFEFFu ? \mbox{\hyperlink{struct_u_t_f16_l_e_a5927b3d75ff9ce02056d827c14bd0160}{Take}}(is) : c;}
+\DoxyCodeLine{348     \}}
+\DoxyCodeLine{349 }
+\DoxyCodeLine{350     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{351     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f16_l_e_a5927b3d75ff9ce02056d827c14bd0160}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{352         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{353         \textcolor{keywordtype}{unsigned} c = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{354         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 8;}
+\DoxyCodeLine{355         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}CharType\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{356     \}}
+\DoxyCodeLine{357 }
+\DoxyCodeLine{358     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{359     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_l_e_a6bfd05f8cac35c1594c7fce47009f198}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{360         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{361         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFFu));}
+\DoxyCodeLine{362         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFEu));}
+\DoxyCodeLine{363     \}}
+\DoxyCodeLine{364 }
+\DoxyCodeLine{365     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{366     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_l_e_ac018cc43a1dba5a6ca232bd9a257072c}{Put}}(OutputByteStream\& os, CharType c) \{}
+\DoxyCodeLine{367         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{368         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) \& 0xFFu));}
+\DoxyCodeLine{369         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) >> 8) \& 0xFFu));}
+\DoxyCodeLine{370     \}}
+\DoxyCodeLine{371 \};}
+\DoxyCodeLine{372 }
+\DoxyCodeLine{374 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{wchar\_t}>}
+\DoxyCodeLine{375 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f16_b_e}{UTF16BE}} : \mbox{\hyperlink{struct_u_t_f16}{UTF16}}<CharType> \{}
+\DoxyCodeLine{376     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{377     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f16_b_e_a5d5184a373149c69b4b8baf8507f9591}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{378         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{379         CharType c = \mbox{\hyperlink{struct_u_t_f16_b_e_a671ca76d54f45aa5f62eb86c4e69738a}{Take}}(is);}
+\DoxyCodeLine{380         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}}\textcolor{keyword}{>}(c) == 0xFEFFu ? \mbox{\hyperlink{struct_u_t_f16_b_e_a671ca76d54f45aa5f62eb86c4e69738a}{Take}}(is) : c;}
+\DoxyCodeLine{381     \}}
+\DoxyCodeLine{382 }
+\DoxyCodeLine{383     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{384     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f16_b_e_a671ca76d54f45aa5f62eb86c4e69738a}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{385         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{386         \textcolor{keywordtype}{unsigned} c = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 8;}
+\DoxyCodeLine{387         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take()));}
+\DoxyCodeLine{388         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}CharType\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{389     \}}
+\DoxyCodeLine{390 }
+\DoxyCodeLine{391     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{392     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_b_e_ae109dda1ad7955049589885ea5a13652}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{393         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{394         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFEu));}
+\DoxyCodeLine{395         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFFu));}
+\DoxyCodeLine{396     \}}
+\DoxyCodeLine{397 }
+\DoxyCodeLine{398     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{399     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f16_b_e_ab0f964c3ec9ac6cc47f2875ae112dbfe}{Put}}(OutputByteStream\& os, CharType c) \{}
+\DoxyCodeLine{400         \mbox{\hyperlink{struct_u_t_f16_a04aeeefa5dcba7c5156bc78a5c1f1557}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{401         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) >> 8) \& 0xFFu));}
+\DoxyCodeLine{402         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) \& 0xFFu));}
+\DoxyCodeLine{403     \}}
+\DoxyCodeLine{404 \};}
+\DoxyCodeLine{405 }
+\DoxyCodeLine{407 \textcolor{comment}{// UTF32}}
+\DoxyCodeLine{408 }
+\DoxyCodeLine{410 }
+\DoxyCodeLine{417 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{unsigned}>}
+\DoxyCodeLine{418 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f32}{UTF32}} \{}
+\DoxyCodeLine{419     \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{struct_u_t_f32_ab4502672d56436e730ca5f647bb52be9}{Ch}};}
+\DoxyCodeLine{420     \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_u_t_f32_ab4502672d56436e730ca5f647bb52be9}{Ch}}) >= 4);}
+\DoxyCodeLine{421 }
+\DoxyCodeLine{422     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_u_t_f32_abe791c52b9d1305aacf92ddc15c11ab4ae44852fd9d88deed3a956b89108412a5}{supportUnicode}} = 1 \};}
+\DoxyCodeLine{423 }
+\DoxyCodeLine{424     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{425     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_a511d1b09672ce535085895a28d8c2f13}{Encode}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{426         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputStream::Ch) >= 4);}
+\DoxyCodeLine{427         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{428         os.Put(codepoint);}
+\DoxyCodeLine{429     \}}
+\DoxyCodeLine{430 }
+\DoxyCodeLine{431     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{432     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_ae50dd8dff92c36ee184c6d4eccb1961e}{EncodeUnsafe}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{433         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputStream::Ch) >= 4);}
+\DoxyCodeLine{434         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x10FFFF);}
+\DoxyCodeLine{435         \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, codepoint);}
+\DoxyCodeLine{436     \}}
+\DoxyCodeLine{437 }
+\DoxyCodeLine{438     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
+\DoxyCodeLine{439     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f32_a6e7258a5e982e101345dffdc355e9b53}{Decode}}(InputStream\& is, \textcolor{keywordtype}{unsigned}* codepoint) \{}
+\DoxyCodeLine{440         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputStream::Ch) >= 4);}
+\DoxyCodeLine{441         \mbox{\hyperlink{struct_u_t_f32_ab4502672d56436e730ca5f647bb52be9}{Ch}} c = is.Take();}
+\DoxyCodeLine{442         *codepoint = c;}
+\DoxyCodeLine{443         \textcolor{keywordflow}{return} c <= 0x10FFFF;}
+\DoxyCodeLine{444     \}}
+\DoxyCodeLine{445 }
+\DoxyCodeLine{446     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{447     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_u_t_f32_a71336fb0546b3079e01bbd51d2fa2e45}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{448         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputStream::Ch) >= 4);}
+\DoxyCodeLine{449         \mbox{\hyperlink{struct_u_t_f32_ab4502672d56436e730ca5f647bb52be9}{Ch}} c;}
+\DoxyCodeLine{450         os.Put(c = is.Take());}
+\DoxyCodeLine{451         \textcolor{keywordflow}{return} c <= 0x10FFFF;}
+\DoxyCodeLine{452     \}}
+\DoxyCodeLine{453 \};}
+\DoxyCodeLine{454 }
+\DoxyCodeLine{456 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{unsigned}>}
+\DoxyCodeLine{457 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f32_l_e}{UTF32LE}} : \mbox{\hyperlink{struct_u_t_f32}{UTF32}}<CharType> \{}
+\DoxyCodeLine{458     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{459     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f32_l_e_a8729612b0a8b1126c61c4f8f8c34410e}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{460         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{461         CharType c = \mbox{\hyperlink{struct_u_t_f32_l_e_ad13967549811be12897362bb37b2c819}{Take}}(is);}
+\DoxyCodeLine{462         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(c) == 0x0000FEFFu ? \mbox{\hyperlink{struct_u_t_f32_l_e_ad13967549811be12897362bb37b2c819}{Take}}(is) : c;}
+\DoxyCodeLine{463     \}}
+\DoxyCodeLine{464 }
+\DoxyCodeLine{465     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{466     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f32_l_e_ad13967549811be12897362bb37b2c819}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{467         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{468         \textcolor{keywordtype}{unsigned} c = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{469         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 8;}
+\DoxyCodeLine{470         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 16;}
+\DoxyCodeLine{471         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 24;}
+\DoxyCodeLine{472         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}CharType\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{473     \}}
+\DoxyCodeLine{474 }
+\DoxyCodeLine{475     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{476     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_l_e_accd97d45e55746c900dab356605825be}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{477         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{478         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFFu));}
+\DoxyCodeLine{479         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFEu));}
+\DoxyCodeLine{480         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0x00u));}
+\DoxyCodeLine{481         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0x00u));}
+\DoxyCodeLine{482     \}}
+\DoxyCodeLine{483 }
+\DoxyCodeLine{484     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{485     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_l_e_a61bb50e7fba27e3fe28a9f30eb366193}{Put}}(OutputByteStream\& os, CharType c) \{}
+\DoxyCodeLine{486         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{487         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(c \& 0xFFu));}
+\DoxyCodeLine{488         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 8) \& 0xFFu));}
+\DoxyCodeLine{489         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 16) \& 0xFFu));}
+\DoxyCodeLine{490         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 24) \& 0xFFu));}
+\DoxyCodeLine{491     \}}
+\DoxyCodeLine{492 \};}
+\DoxyCodeLine{493 }
+\DoxyCodeLine{495 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{unsigned}>}
+\DoxyCodeLine{496 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_u_t_f32_b_e}{UTF32BE}} : \mbox{\hyperlink{struct_u_t_f32}{UTF32}}<CharType> \{}
+\DoxyCodeLine{497     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{498     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f32_b_e_a07d228f51ad43ef83af2529ca4bd1181}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{499         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{500         CharType c = \mbox{\hyperlink{struct_u_t_f32_b_e_ace3086ece3b13417c758b5abcf3016c8}{Take}}(is);}
+\DoxyCodeLine{501         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(c) == 0x0000FEFFu ? \mbox{\hyperlink{struct_u_t_f32_b_e_ace3086ece3b13417c758b5abcf3016c8}{Take}}(is) : c; }
+\DoxyCodeLine{502     \}}
+\DoxyCodeLine{503 }
+\DoxyCodeLine{504     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{505     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_u_t_f32_b_e_ace3086ece3b13417c758b5abcf3016c8}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{506         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{507         \textcolor{keywordtype}{unsigned} c = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 24;}
+\DoxyCodeLine{508         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 16;}
+\DoxyCodeLine{509         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take())) << 8;}
+\DoxyCodeLine{510         c |= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take()));}
+\DoxyCodeLine{511         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}CharType\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{512     \}}
+\DoxyCodeLine{513 }
+\DoxyCodeLine{514     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{515     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_b_e_a8b1a216dd267ff06a9000cbe593ebd24}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{516         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{517         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0x00u));}
+\DoxyCodeLine{518         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0x00u));}
+\DoxyCodeLine{519         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFEu));}
+\DoxyCodeLine{520         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(0xFFu));}
+\DoxyCodeLine{521     \}}
+\DoxyCodeLine{522 }
+\DoxyCodeLine{523     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{524     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_u_t_f32_b_e_ad270b8b016d477f7f7354df535fa28c5}{Put}}(OutputByteStream\& os, CharType c) \{}
+\DoxyCodeLine{525         \mbox{\hyperlink{struct_u_t_f32_aae11b766f799d311679d59e9f7077f83}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{526         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 24) \& 0xFFu));}
+\DoxyCodeLine{527         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 16) \& 0xFFu));}
+\DoxyCodeLine{528         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}((c >> 8) \& 0xFFu));}
+\DoxyCodeLine{529         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(c \& 0xFFu));}
+\DoxyCodeLine{530     \}}
+\DoxyCodeLine{531 \};}
+\DoxyCodeLine{532 }
+\DoxyCodeLine{534 \textcolor{comment}{// ASCII}}
+\DoxyCodeLine{535 }
+\DoxyCodeLine{537 }
+\DoxyCodeLine{541 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType = \textcolor{keywordtype}{char}>}
+\DoxyCodeLine{542 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_a_s_c_i_i}{ASCII}} \{}
+\DoxyCodeLine{543     \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}};}
+\DoxyCodeLine{544 }
+\DoxyCodeLine{545     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_a_s_c_i_i_a2f2c796586b1f9b18c7ff5c452eba0a9a672ec36bd3404c3050a9111a934cbe00}{supportUnicode}} = 0 \};}
+\DoxyCodeLine{546 }
+\DoxyCodeLine{547     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{548     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_a_s_c_i_i_af56b1605fe233c54693facc7de457f72}{Encode}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{549         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x7F);}
+\DoxyCodeLine{550         os.Put(\textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}}\textcolor{keyword}{>}(codepoint \& 0xFF));}
+\DoxyCodeLine{551     \}}
+\DoxyCodeLine{552 }
+\DoxyCodeLine{553     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{554     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_a_s_c_i_i_afeb90d6f04771067b83b35a0f366af46}{EncodeUnsafe}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{555         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(codepoint <= 0x7F);}
+\DoxyCodeLine{556         \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}}\textcolor{keyword}{>}(codepoint \& 0xFF));}
+\DoxyCodeLine{557     \}}
+\DoxyCodeLine{558 }
+\DoxyCodeLine{559     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
+\DoxyCodeLine{560     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_a_s_c_i_i_a44844bbfd0a4fc282993fd72f3f58eee}{Decode}}(InputStream\& is, \textcolor{keywordtype}{unsigned}* codepoint) \{}
+\DoxyCodeLine{561         \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}} c = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{562         *codepoint = c;}
+\DoxyCodeLine{563         \textcolor{keywordflow}{return} c <= 0X7F;}
+\DoxyCodeLine{564     \}}
+\DoxyCodeLine{565 }
+\DoxyCodeLine{566     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{567     \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_a_s_c_i_i_a398680588a09e6ce9b56e32195047c78}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{568         \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}} c = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{569         os.Put(\textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}(c));}
+\DoxyCodeLine{570         \textcolor{keywordflow}{return} c <= 0x7F;}
+\DoxyCodeLine{571     \}}
+\DoxyCodeLine{572 }
+\DoxyCodeLine{573     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{574     \textcolor{keyword}{static} CharType \mbox{\hyperlink{struct_a_s_c_i_i_aad78500eb98f45582a4df020e3fb2278}{TakeBOM}}(InputByteStream\& is) \{}
+\DoxyCodeLine{575         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{576         \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}} c = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{struct_a_s_c_i_i_ab1b9fdf0a5c05658d62fded913d923a3}{Take}}(is));}
+\DoxyCodeLine{577         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}}\textcolor{keyword}{>}(c);}
+\DoxyCodeLine{578     \}}
+\DoxyCodeLine{579 }
+\DoxyCodeLine{580     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputByteStream>}
+\DoxyCodeLine{581     \textcolor{keyword}{static} \mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}} \mbox{\hyperlink{struct_a_s_c_i_i_ab1b9fdf0a5c05658d62fded913d923a3}{Take}}(InputByteStream\& is) \{}
+\DoxyCodeLine{582         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} InputByteStream::Ch) == 1);}
+\DoxyCodeLine{583         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}}\textcolor{keyword}{>}(is.Take());}
+\DoxyCodeLine{584     \}}
+\DoxyCodeLine{585 }
+\DoxyCodeLine{586     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{587     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_a_s_c_i_i_a3036dc1d604039c3224ca0a890ee0134}{PutBOM}}(OutputByteStream\& os) \{}
+\DoxyCodeLine{588         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{589         (void)os;}
+\DoxyCodeLine{590     \}}
+\DoxyCodeLine{591 }
+\DoxyCodeLine{592     \textcolor{keyword}{template} <\textcolor{keyword}{typename} OutputByteStream>}
+\DoxyCodeLine{593     \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_a_s_c_i_i_a218b244b9cd961ea6c5775a734cec20e}{Put}}(OutputByteStream\& os, \mbox{\hyperlink{struct_a_s_c_i_i_a1baf6e7914f165be952c30db664cefb4}{Ch}} c) \{}
+\DoxyCodeLine{594         \mbox{\hyperlink{rapidjson_8h_af95188da1d8eb6d4b148fe9ce71cd7c4}{RAPIDJSON\_STATIC\_ASSERT}}(\textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} OutputByteStream::Ch) == 1);}
+\DoxyCodeLine{595         os.Put(\textcolor{keyword}{static\_cast<}typename OutputByteStream::Ch\textcolor{keyword}{>}(c));}
+\DoxyCodeLine{596     \}}
+\DoxyCodeLine{597 \};}
+\DoxyCodeLine{598 }
+\DoxyCodeLine{600 \textcolor{comment}{// AutoUTF}}
+\DoxyCodeLine{601 }
+\DoxyCodeLine{603 \textcolor{keyword}{enum} \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58}{UTFType}} \{}
+\DoxyCodeLine{604     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58a7fd9945f1c494a4a4ee9446017e790f1}{kUTF8}} = 0,      }
+\DoxyCodeLine{605     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58ab72f5865db6af4e33757ee52ddad9fda}{kUTF16LE}} = 1,   }
+\DoxyCodeLine{606     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58a1a455c6e8be641e715de9aa8ffa6cea0}{kUTF16BE}} = 2,   }
+\DoxyCodeLine{607     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58a885dec757d256c427be6759296d482e0}{kUTF32LE}} = 3,   }
+\DoxyCodeLine{608     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58a14da8da33c9f9aa904bf0d1aac3fa76e}{kUTF32BE}} = 4    }
+\DoxyCodeLine{609 \};}
+\DoxyCodeLine{610 }
+\DoxyCodeLine{612 }
+\DoxyCodeLine{614 \textcolor{keyword}{template}<\textcolor{keyword}{typename} CharType>}
+\DoxyCodeLine{615 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_auto_u_t_f}{AutoUTF}} \{}
+\DoxyCodeLine{616     \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{struct_auto_u_t_f_a0609343de776df3bc31b4c980eb3cf1c}{Ch}};}
+\DoxyCodeLine{617 }
+\DoxyCodeLine{618     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_auto_u_t_f_a678e20a7f8d022be68adbb49fa56a094adc86ae046cd64f591495ac635a5c04c2}{supportUnicode}} = 1 \};}
+\DoxyCodeLine{619 }
+\DoxyCodeLine{620 \textcolor{preprocessor}{\#define RAPIDJSON\_ENCODINGS\_FUNC(x) UTF8<Ch>::x, UTF16LE<Ch>::x, UTF16BE<Ch>::x, UTF32LE<Ch>::x, UTF32BE<Ch>::x}}
+\DoxyCodeLine{621 }
+\DoxyCodeLine{622     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{623     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_auto_u_t_f_a414946115261f886e74dd42cb4b98781}{Encode}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{624         \textcolor{keyword}{typedef} void (*EncodeFunc)(OutputStream\&, unsigned);}
+\DoxyCodeLine{625         \textcolor{keyword}{static} \textcolor{keyword}{const} EncodeFunc f[] = \{ \mbox{\hyperlink{encodings_8h_a6530c8834a049a0ff230b56072df6c24}{RAPIDJSON\_ENCODINGS\_FUNC}}(\mbox{\hyperlink{struct_auto_u_t_f_a414946115261f886e74dd42cb4b98781}{Encode}}) \};}
+\DoxyCodeLine{626         (*f[os.GetType()])(os, codepoint);}
+\DoxyCodeLine{627     \}}
+\DoxyCodeLine{628 }
+\DoxyCodeLine{629     \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{630     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_auto_u_t_f_a05f5dcd1f153b61b763e44ed452de251}{EncodeUnsafe}}(OutputStream\& os, \textcolor{keywordtype}{unsigned} codepoint) \{}
+\DoxyCodeLine{631         \textcolor{keyword}{typedef} void (*EncodeFunc)(OutputStream\&, unsigned);}
+\DoxyCodeLine{632         \textcolor{keyword}{static} \textcolor{keyword}{const} EncodeFunc f[] = \{ \mbox{\hyperlink{encodings_8h_a6530c8834a049a0ff230b56072df6c24}{RAPIDJSON\_ENCODINGS\_FUNC}}(\mbox{\hyperlink{struct_auto_u_t_f_a05f5dcd1f153b61b763e44ed452de251}{EncodeUnsafe}}) \};}
+\DoxyCodeLine{633         (*f[os.GetType()])(os, codepoint);}
+\DoxyCodeLine{634     \}}
+\DoxyCodeLine{635 }
+\DoxyCodeLine{636     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
+\DoxyCodeLine{637     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_auto_u_t_f_aa5e3c1dc23dbb75f6442ff69500a35b0}{Decode}}(InputStream\& is, \textcolor{keywordtype}{unsigned}* codepoint) \{}
+\DoxyCodeLine{638         \textcolor{keyword}{typedef} bool (*DecodeFunc)(InputStream\&, \textcolor{keywordtype}{unsigned}*);}
+\DoxyCodeLine{639         \textcolor{keyword}{static} \textcolor{keyword}{const} DecodeFunc f[] = \{ \mbox{\hyperlink{encodings_8h_a6530c8834a049a0ff230b56072df6c24}{RAPIDJSON\_ENCODINGS\_FUNC}}(\mbox{\hyperlink{struct_auto_u_t_f_aa5e3c1dc23dbb75f6442ff69500a35b0}{Decode}}) \};}
+\DoxyCodeLine{640         \textcolor{keywordflow}{return} (*f[is.GetType()])(is, codepoint);}
+\DoxyCodeLine{641     \}}
+\DoxyCodeLine{642 }
+\DoxyCodeLine{643     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{644     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_auto_u_t_f_a36dd6f226d6a07c12161e21c0aff20b1}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{645         \textcolor{keyword}{typedef} bool (*ValidateFunc)(InputStream\&, OutputStream\&);}
+\DoxyCodeLine{646         \textcolor{keyword}{static} \textcolor{keyword}{const} ValidateFunc f[] = \{ \mbox{\hyperlink{encodings_8h_a6530c8834a049a0ff230b56072df6c24}{RAPIDJSON\_ENCODINGS\_FUNC}}(\mbox{\hyperlink{struct_auto_u_t_f_a36dd6f226d6a07c12161e21c0aff20b1}{Validate}}) \};}
+\DoxyCodeLine{647         \textcolor{keywordflow}{return} (*f[is.GetType()])(is, os);}
+\DoxyCodeLine{648     \}}
+\DoxyCodeLine{649 }
+\DoxyCodeLine{650 \textcolor{preprocessor}{\#undef RAPIDJSON\_ENCODINGS\_FUNC}}
+\DoxyCodeLine{651 \};}
+\DoxyCodeLine{652 }
+\DoxyCodeLine{654 \textcolor{comment}{// Transcoder}}
+\DoxyCodeLine{655 }
+\DoxyCodeLine{657 \textcolor{keyword}{template}<\textcolor{keyword}{typename} SourceEncoding, \textcolor{keyword}{typename} TargetEncoding>}
+\DoxyCodeLine{658 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_transcoder}{Transcoder}} \{}
+\DoxyCodeLine{660     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{661     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_a0ea2edfe35784ebf1063921d2bd5fb66}{Transcode}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{662         \textcolor{keywordtype}{unsigned} codepoint;}
+\DoxyCodeLine{663         \textcolor{keywordflow}{if} (!SourceEncoding::Decode(is, \&codepoint))}
+\DoxyCodeLine{664             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{665         TargetEncoding::Encode(os, codepoint);}
+\DoxyCodeLine{666         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{667     \}}
+\DoxyCodeLine{668 }
+\DoxyCodeLine{669     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{670     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_a16345a912c679b2ea197328eb1444f82}{TranscodeUnsafe}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{671         \textcolor{keywordtype}{unsigned} codepoint;}
+\DoxyCodeLine{672         \textcolor{keywordflow}{if} (!SourceEncoding::Decode(is, \&codepoint))}
+\DoxyCodeLine{673             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{674         TargetEncoding::EncodeUnsafe(os, codepoint);}
+\DoxyCodeLine{675         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{676     \}}
+\DoxyCodeLine{677 }
+\DoxyCodeLine{679     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{680     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_a8a64aa837f7962894a99f63232472543}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{681         \textcolor{keywordflow}{return} \mbox{\hyperlink{struct_transcoder_a0ea2edfe35784ebf1063921d2bd5fb66}{Transcode}}(is, os);   \textcolor{comment}{// Since source/target encoding is different, must transcode.}}
+\DoxyCodeLine{682     \}}
+\DoxyCodeLine{683 \};}
+\DoxyCodeLine{684 }
+\DoxyCodeLine{685 \textcolor{comment}{// Forward declaration.}}
+\DoxyCodeLine{686 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream>}
+\DoxyCodeLine{687 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(\mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& stream, \textcolor{keyword}{typename} Stream::Ch c);}
+\DoxyCodeLine{688 }
+\DoxyCodeLine{690 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{691 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_transcoder}{Transcoder}}<\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}> \{}
+\DoxyCodeLine{692     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{693     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_3_01_encoding_00_01_encoding_01_4_aad11cdc2b829123a7b9969e34d456813}{Transcode}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{694         os.Put(is.Take());  \textcolor{comment}{// Just copy one code unit. This semantic is different from primary template class.}}
+\DoxyCodeLine{695         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{696     \}}
+\DoxyCodeLine{697     }
+\DoxyCodeLine{698     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{699     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_3_01_encoding_00_01_encoding_01_4_addf67decfff7d0de510c47842eb53cef}{TranscodeUnsafe}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{700         \mbox{\hyperlink{encodings_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(os, is.Take());  \textcolor{comment}{// Just copy one code unit. This semantic is different from primary template class.}}
+\DoxyCodeLine{701         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{702     \}}
+\DoxyCodeLine{703     }
+\DoxyCodeLine{704     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
+\DoxyCodeLine{705     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_transcoder_3_01_encoding_00_01_encoding_01_4_a536aa3930251161d05e112947ec2f9c8}{Validate}}(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{706         \textcolor{keywordflow}{return} Encoding::Validate(is, os);  \textcolor{comment}{// source/target encoding are the same}}
+\DoxyCodeLine{707     \}}
+\DoxyCodeLine{708 \};}
+\DoxyCodeLine{709 }
+\DoxyCodeLine{710 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{711 }
+\DoxyCodeLine{712 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_) || (defined(\_MSC\_VER) \&\& !defined(\_\_clang\_\_))}}
+\DoxyCodeLine{713 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{714 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{715 }
+\DoxyCodeLine{716 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_ENCODINGS\_H\_}}
+
+\end{DoxyCode}

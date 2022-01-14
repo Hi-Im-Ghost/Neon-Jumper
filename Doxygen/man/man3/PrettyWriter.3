@@ -1,0 +1,278 @@
+.TH "PrettyWriter< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+PrettyWriter< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags > \- \fBWriter\fP with indentation and spacing\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <prettywriter\&.h>\fP
+.PP
+Inherits \fBWriter< OutputStream, UTF8<>, UTF8<>, CrtAllocator, kWriteDefaultFlags >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags > \fBBase\fP"
+.br
+.ti -1c
+.RI "typedef \fBBase::Ch\fP \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPrettyWriter\fP (OutputStream &os, StackAllocator *allocator=0, size_t levelDepth=\fBBase::kDefaultLevelDepth\fP)"
+.br
+.RI "Constructor\&. "
+.ti -1c
+.RI "\fBPrettyWriter\fP (StackAllocator *allocator=0, size_t levelDepth=\fBBase::kDefaultLevelDepth\fP)"
+.br
+.ti -1c
+.RI "\fBPrettyWriter\fP & \fBSetIndent\fP (\fBCh\fP indentChar, unsigned indentCharCount)"
+.br
+.RI "Set custom indentation\&. "
+.ti -1c
+.RI "\fBPrettyWriter\fP & \fBSetFormatOptions\fP (\fBPrettyFormatOptions\fP options)"
+.br
+.RI "Set pretty writer formatting options\&. "
+.in -1c
+.PP
+.RI "\fBImplementation of Handler\fP"
+.br
+
+.PP
+\fBSee also\fP
+.RS 4
+Handler 
+.RE
+.PP
+
+.PP
+.in +1c
+.in +1c
+.ti -1c
+.RI "bool \fBNull\fP ()"
+.br
+.ti -1c
+.RI "bool \fBBool\fP (bool b)"
+.br
+.ti -1c
+.RI "bool \fBInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBUint\fP (unsigned u)"
+.br
+.ti -1c
+.RI "bool \fBInt64\fP (\fBint64_t\fP i64)"
+.br
+.ti -1c
+.RI "bool \fBUint64\fP (\fBuint64_t\fP u64)"
+.br
+.ti -1c
+.RI "bool \fBDouble\fP (double d)"
+.br
+.ti -1c
+.RI "bool \fBRawNumber\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBStartObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBEndObject\fP (\fBSizeType\fP memberCount=0)"
+.br
+.ti -1c
+.RI "bool \fBStartArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEndArray\fP (\fBSizeType\fP memberCount=0)"
+.br
+.in -1c
+.in -1c
+.SS "Convenience extensions"
+
+.in +1c
+.ti -1c
+.RI "\fBCh\fP \fBindentChar_\fP"
+.br
+.ti -1c
+.RI "unsigned \fBindentCharCount_\fP"
+.br
+.ti -1c
+.RI "\fBPrettyFormatOptions\fP \fBformatOptions_\fP"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *str)"
+.br
+.RI "Simpler but slower overload\&. "
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *str)"
+.br
+.ti -1c
+.RI "bool \fBRawValue\fP (const \fBCh\fP *json, size_t length, \fBType\fP type)"
+.br
+.RI "Write a raw JSON value\&. "
+.ti -1c
+.RI "void \fBPrettyPrefix\fP (\fBType\fP type)"
+.br
+.ti -1c
+.RI "void \fBWriteIndent\fP ()"
+.br
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
+.br
+class PrettyWriter< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >"\fBWriter\fP with indentation and spacing\&. 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIOutputStream\fP Type of output os\&. 
+.br
+\fISourceEncoding\fP Encoding of source string\&. 
+.br
+\fITargetEncoding\fP Encoding of output stream\&. 
+.br
+\fIStackAllocator\fP Type of allocator for allocating memory of stack\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> typedef \fBWriter\fP<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Base"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> typedef \fBBase::Ch\fP \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Ch"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::PrettyWriter\fP (OutputStream & os, StackAllocator * allocator = \fC0\fP, size_t levelDepth = \fC\fBBase::kDefaultLevelDepth\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIos\fP Output stream\&. 
+.br
+\fIallocator\fP User supplied allocator\&. If it is null, it will create a private one\&. 
+.br
+\fIlevelDepth\fP Initial capacity of stack\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::PrettyWriter\fP (StackAllocator * allocator = \fC0\fP, size_t levelDepth = \fC\fBBase::kDefaultLevelDepth\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Bool (bool b)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Double (double d)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::EndArray (\fBSizeType\fP memberCount = \fC0\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::EndObject (\fBSizeType\fP memberCount = \fC0\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Int (int i)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Int64 (\fBint64_t\fP i64)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Key (const \fBCh\fP * str)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Key (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Null ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::PrettyPrefix (\fBType\fP type)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::RawNumber (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::RawValue (const \fBCh\fP * json, size_t length, \fBType\fP type)\fC [inline]\fP"
+
+.PP
+Write a raw JSON value\&. For user to write a stringified JSON as a value\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIjson\fP A well-formed JSON value\&. It should not contain null character within [0, length - 1] range\&. 
+.br
+\fIlength\fP Length of the json\&. 
+.br
+\fItype\fP Type of the root of json\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+When using \fBPrettyWriter::RawValue()\fP, the result json may not be indented correctly\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBPrettyWriter\fP & \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::SetFormatOptions (\fBPrettyFormatOptions\fP options)\fC [inline]\fP"
+
+.PP
+Set pretty writer formatting options\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIoptions\fP Formatting options\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBPrettyWriter\fP & \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::SetIndent (\fBCh\fP indentChar, unsigned indentCharCount)\fC [inline]\fP"
+
+.PP
+Set custom indentation\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIindentChar\fP Character for indentation\&. Must be whitespace character (' ', '\\t', '\\n', '\\r')\&. 
+.br
+\fIindentCharCount\fP Number of indent characters for each indentation level\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+The default indentation is 4 spaces\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::StartArray ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::StartObject ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::String (const \fBCh\fP * str)\fC [inline]\fP"
+
+.PP
+Simpler but slower overload\&. 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::String (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Uint (unsigned u)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Uint64 (\fBuint64_t\fP u64)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteIndent ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBPrettyFormatOptions\fP \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::formatOptions_\fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBCh\fP \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::indentChar_\fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> unsigned \fBPrettyWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::indentCharCount_\fC [protected]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

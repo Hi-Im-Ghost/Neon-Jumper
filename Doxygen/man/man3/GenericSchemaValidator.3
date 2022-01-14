@@ -1,0 +1,581 @@
+.TH "GenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator > \- JSON \fBSchema\fP Validator\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <schema\&.h>\fP
+.PP
+Inherits \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP, \fBinternal::ISchemaValidator\fP, and \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef SchemaDocumentType::SchemaType \fBSchemaType\fP"
+.br
+.ti -1c
+.RI "typedef SchemaDocumentType::PointerType \fBPointerType\fP"
+.br
+.ti -1c
+.RI "typedef SchemaType::EncodingType \fBEncodingType\fP"
+.br
+.ti -1c
+.RI "typedef SchemaType::SValue \fBSValue\fP"
+.br
+.ti -1c
+.RI "typedef EncodingType::Ch \fBCh\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericStringRef\fP< \fBCh\fP > \fBStringRefType\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericValue\fP< \fBEncodingType\fP, StateAllocator > \fBValueType\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericSchemaValidator\fP (const SchemaDocumentType &schemaDocument, StateAllocator *allocator=0, size_t schemaStackCapacity=kDefaultSchemaStackCapacity, size_t documentStackCapacity=kDefaultDocumentStackCapacity)"
+.br
+.RI "Constructor without output handler\&. "
+.ti -1c
+.RI "\fBGenericSchemaValidator\fP (const SchemaDocumentType &schemaDocument, OutputHandler &outputHandler, StateAllocator *allocator=0, size_t schemaStackCapacity=kDefaultSchemaStackCapacity, size_t documentStackCapacity=kDefaultDocumentStackCapacity)"
+.br
+.RI "Constructor with output handler\&. "
+.ti -1c
+.RI "\fB~GenericSchemaValidator\fP ()"
+.br
+.RI "Destructor\&. "
+.ti -1c
+.RI "void \fBReset\fP ()"
+.br
+.RI "Reset the internal states\&. "
+.ti -1c
+.RI "void \fBResetError\fP ()"
+.br
+.RI "Reset the error state\&. "
+.ti -1c
+.RI "void \fBSetValidateFlags\fP (unsigned flags)"
+.br
+.RI "Implementation of ISchemaValidator\&. "
+.ti -1c
+.RI "virtual unsigned \fBGetValidateFlags\fP () const"
+.br
+.ti -1c
+.RI "virtual bool \fBIsValid\fP () const"
+.br
+.RI "Checks whether the current state is valid\&. "
+.ti -1c
+.RI "\fBValueType\fP & \fBGetError\fP ()"
+.br
+.RI "Gets the error object\&. "
+.ti -1c
+.RI "const \fBValueType\fP & \fBGetError\fP () const"
+.br
+.ti -1c
+.RI "\fBPointerType\fP \fBGetInvalidSchemaPointer\fP () const"
+.br
+.RI "Gets the JSON pointer pointed to the invalid schema\&. "
+.ti -1c
+.RI "const \fBCh\fP * \fBGetInvalidSchemaKeyword\fP () const"
+.br
+.RI "Gets the keyword of invalid schema\&. "
+.ti -1c
+.RI "\fBValidateErrorCode\fP \fBGetInvalidSchemaCode\fP () const"
+.br
+.RI "Gets the error code of invalid schema\&. "
+.ti -1c
+.RI "\fBPointerType\fP \fBGetInvalidDocumentPointer\fP () const"
+.br
+.RI "Gets the JSON pointer pointed to the invalid value\&. "
+.ti -1c
+.RI "void \fBNotMultipleOf\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected)"
+.br
+.ti -1c
+.RI "void \fBNotMultipleOf\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected)"
+.br
+.ti -1c
+.RI "void \fBNotMultipleOf\fP (double actual, const \fBSValue\fP &expected)"
+.br
+.ti -1c
+.RI "void \fBAboveMaximum\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBAboveMaximum\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBAboveMaximum\fP (double actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBBelowMinimum\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBBelowMinimum\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBBelowMinimum\fP (double actual, const \fBSValue\fP &expected, bool exclusive)"
+.br
+.ti -1c
+.RI "void \fBTooLong\fP (const \fBCh\fP *str, \fBSizeType\fP length, \fBSizeType\fP expected)"
+.br
+.ti -1c
+.RI "void \fBTooShort\fP (const \fBCh\fP *str, \fBSizeType\fP length, \fBSizeType\fP expected)"
+.br
+.ti -1c
+.RI "void \fBDoesNotMatch\fP (const \fBCh\fP *str, \fBSizeType\fP length)"
+.br
+.ti -1c
+.RI "void \fBDisallowedItem\fP (\fBSizeType\fP index)"
+.br
+.ti -1c
+.RI "void \fBTooFewItems\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)"
+.br
+.ti -1c
+.RI "void \fBTooManyItems\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)"
+.br
+.ti -1c
+.RI "void \fBDuplicateItems\fP (\fBSizeType\fP index1, \fBSizeType\fP index2)"
+.br
+.ti -1c
+.RI "void \fBTooManyProperties\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)"
+.br
+.ti -1c
+.RI "void \fBTooFewProperties\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)"
+.br
+.ti -1c
+.RI "void \fBStartMissingProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddMissingProperty\fP (const \fBSValue\fP &name)"
+.br
+.ti -1c
+.RI "bool \fBEndMissingProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBPropertyViolations\fP (ISchemaValidator **subvalidators, \fBSizeType\fP count)"
+.br
+.ti -1c
+.RI "void \fBDisallowedProperty\fP (const \fBCh\fP *name, \fBSizeType\fP length)"
+.br
+.ti -1c
+.RI "void \fBStartDependencyErrors\fP ()"
+.br
+.ti -1c
+.RI "void \fBStartMissingDependentProperties\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddMissingDependentProperty\fP (const \fBSValue\fP &targetName)"
+.br
+.ti -1c
+.RI "void \fBEndMissingDependentProperties\fP (const \fBSValue\fP &sourceName)"
+.br
+.ti -1c
+.RI "void \fBAddDependencySchemaError\fP (const \fBSValue\fP &sourceName, ISchemaValidator *subvalidator)"
+.br
+.ti -1c
+.RI "bool \fBEndDependencyErrors\fP ()"
+.br
+.ti -1c
+.RI "void \fBDisallowedValue\fP (const \fBValidateErrorCode\fP code=\fBkValidateErrorEnum\fP)"
+.br
+.ti -1c
+.RI "void \fBStartDisallowedType\fP ()"
+.br
+.ti -1c
+.RI "void \fBAddExpectedType\fP (const typename \fBSchemaType::ValueType\fP &expectedType)"
+.br
+.ti -1c
+.RI "void \fBEndDisallowedType\fP (const typename \fBSchemaType::ValueType\fP &actualType)"
+.br
+.ti -1c
+.RI "void \fBNotAllOf\fP (ISchemaValidator **subvalidators, \fBSizeType\fP count)"
+.br
+.ti -1c
+.RI "void \fBNoneOf\fP (ISchemaValidator **subvalidators, \fBSizeType\fP count)"
+.br
+.ti -1c
+.RI "void \fBNotOneOf\fP (ISchemaValidator **subvalidators, \fBSizeType\fP count, bool matched=false)"
+.br
+.ti -1c
+.RI "void \fBDisallowed\fP ()"
+.br
+.ti -1c
+.RI "bool \fBNull\fP ()"
+.br
+.ti -1c
+.RI "bool \fBBool\fP (bool b)"
+.br
+.ti -1c
+.RI "bool \fBInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBUint\fP (unsigned u)"
+.br
+.ti -1c
+.RI "bool \fBInt64\fP (\fBint64_t\fP i)"
+.br
+.ti -1c
+.RI "bool \fBUint64\fP (\fBuint64_t\fP u)"
+.br
+.ti -1c
+.RI "bool \fBDouble\fP (double d)"
+.br
+.ti -1c
+.RI "bool \fBRawNumber\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBStartObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *str, \fBSizeType\fP len, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBEndObject\fP (\fBSizeType\fP memberCount)"
+.br
+.ti -1c
+.RI "bool \fBStartArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEndArray\fP (\fBSizeType\fP elementCount)"
+.br
+.ti -1c
+.RI "virtual ISchemaValidator * \fBCreateSchemaValidator\fP (const \fBSchemaType\fP &root, const bool inheritContinueOnErrors)"
+.br
+.ti -1c
+.RI "virtual void \fBDestroySchemaValidator\fP (ISchemaValidator *validator)"
+.br
+.ti -1c
+.RI "virtual void * \fBCreateHasher\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBuint64_t\fP \fBGetHashCode\fP (void *hasher)"
+.br
+.ti -1c
+.RI "virtual void \fBDestroryHasher\fP (void *hasher)"
+.br
+.ti -1c
+.RI "virtual void * \fBMallocState\fP (size_t size)"
+.br
+.ti -1c
+.RI "virtual void \fBFreeState\fP (void *p)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename SchemaDocumentType, typename OutputHandler = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator = CrtAllocator>
+.br
+class GenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >"JSON \fBSchema\fP Validator\&. 
+
+A SAX style JSON schema validator\&. It uses a \fC\fBGenericSchemaDocument\fP\fP to validate SAX events\&. It delegates the incoming SAX events to an output handler\&. The default output handler does nothing\&. It can be reused multiple times by calling \fC\fBReset()\fP\fP\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fISchemaDocumentType\fP Type of schema document\&. 
+.br
+\fIOutputHandler\fP Type of output handler\&. Default handler does nothing\&. 
+.br
+\fIStateAllocator\fP Allocator for storing the internal validation states\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef EncodingType::Ch \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Ch"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef SchemaType::EncodingType \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EncodingType"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef SchemaDocumentType::PointerType \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::PointerType"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef SchemaDocumentType::SchemaType \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::SchemaType"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef \fBGenericStringRef\fP<\fBCh\fP> \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StringRefType"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef SchemaType::SValue \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::SValue"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> typedef \fBGenericValue\fP<\fBEncodingType\fP, StateAllocator> \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >\fB::ValueType\fP"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >\fB::GenericSchemaValidator\fP (const SchemaDocumentType & schemaDocument, StateAllocator * allocator = \fC0\fP, size_t schemaStackCapacity = \fCkDefaultSchemaStackCapacity\fP, size_t documentStackCapacity = \fCkDefaultDocumentStackCapacity\fP)\fC [inline]\fP"
+
+.PP
+Constructor without output handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIschemaDocument\fP The schema document to conform to\&. 
+.br
+\fIallocator\fP Optional allocator for storing internal validation states\&. 
+.br
+\fIschemaStackCapacity\fP Optional initial capacity of schema path stack\&. 
+.br
+\fIdocumentStackCapacity\fP Optional initial capacity of document path stack\&. 
+.RE
+.PP
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >\fB::GenericSchemaValidator\fP (const SchemaDocumentType & schemaDocument, OutputHandler & outputHandler, StateAllocator * allocator = \fC0\fP, size_t schemaStackCapacity = \fCkDefaultSchemaStackCapacity\fP, size_t documentStackCapacity = \fCkDefaultDocumentStackCapacity\fP)\fC [inline]\fP"
+
+.PP
+Constructor with output handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIschemaDocument\fP The schema document to conform to\&. 
+.br
+\fIallocator\fP Optional allocator for storing internal validation states\&. 
+.br
+\fIschemaStackCapacity\fP Optional initial capacity of schema path stack\&. 
+.br
+\fIdocumentStackCapacity\fP Optional initial capacity of document path stack\&. 
+.RE
+.PP
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::~\fBGenericSchemaValidator\fP ()\fC [inline]\fP"
+
+.PP
+Destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AboveMaximum (double actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AboveMaximum (\fBint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AboveMaximum (\fBuint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AddDependencySchemaError (const \fBSValue\fP & sourceName, ISchemaValidator * subvalidator)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AddExpectedType (const typename \fBSchemaType::ValueType\fP & expectedType)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AddMissingDependentProperty (const \fBSValue\fP & targetName)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::AddMissingProperty (const \fBSValue\fP & name)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::BelowMinimum (double actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::BelowMinimum (\fBint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::BelowMinimum (\fBuint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Bool (bool b)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual void * \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::CreateHasher ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual ISchemaValidator * \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::CreateSchemaValidator (const \fBSchemaType\fP & root, const bool inheritContinueOnErrors)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DestroryHasher (void * hasher)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DestroySchemaValidator (ISchemaValidator * validator)\fC [inline]\fP, \fC [virtual]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Disallowed ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DisallowedItem (\fBSizeType\fP index)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DisallowedProperty (const \fBCh\fP * name, \fBSizeType\fP length)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DisallowedValue (const \fBValidateErrorCode\fP code = \fC\fBkValidateErrorEnum\fP\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DoesNotMatch (const \fBCh\fP * str, \fBSizeType\fP length)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Double (double d)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::DuplicateItems (\fBSizeType\fP index1, \fBSizeType\fP index2)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndArray (\fBSizeType\fP elementCount)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndDependencyErrors ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndDisallowedType (const typename \fBSchemaType::ValueType\fP & actualType)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndMissingDependentProperties (const \fBSValue\fP & sourceName)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndMissingProperties ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::EndObject (\fBSizeType\fP memberCount)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::FreeState (void * p)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBValueType\fP & \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetError ()\fC [inline]\fP"
+
+.PP
+Gets the error object\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> const \fBValueType\fP & \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetError () const\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual \fBuint64_t\fP \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetHashCode (void * hasher)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBPointerType\fP \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetInvalidDocumentPointer () const\fC [inline]\fP"
+
+.PP
+Gets the JSON pointer pointed to the invalid value\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBValidateErrorCode\fP \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetInvalidSchemaCode () const\fC [inline]\fP"
+
+.PP
+Gets the error code of invalid schema\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> const \fBCh\fP * \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetInvalidSchemaKeyword () const\fC [inline]\fP"
+
+.PP
+Gets the keyword of invalid schema\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> \fBPointerType\fP \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetInvalidSchemaPointer () const\fC [inline]\fP"
+
+.PP
+Gets the JSON pointer pointed to the invalid schema\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual unsigned \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::GetValidateFlags () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaValidator\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Int (int i)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Int64 (\fBint64_t\fP i)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::IsValid () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Checks whether the current state is valid\&. 
+.PP
+Implements \fBinternal::ISchemaValidator\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Key (const \fBCh\fP * str, \fBSizeType\fP len, bool copy)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> virtual void * \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::MallocState (size_t size)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::ISchemaStateFactory< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NoneOf (ISchemaValidator ** subvalidators, \fBSizeType\fP count)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NotAllOf (ISchemaValidator ** subvalidators, \fBSizeType\fP count)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NotMultipleOf (double actual, const \fBSValue\fP & expected)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NotMultipleOf (\fBint64_t\fP actual, const \fBSValue\fP & expected)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NotMultipleOf (\fBuint64_t\fP actual, const \fBSValue\fP & expected)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::NotOneOf (ISchemaValidator ** subvalidators, \fBSizeType\fP count, bool matched = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Null ()\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::PropertyViolations (ISchemaValidator ** subvalidators, \fBSizeType\fP count)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::RawNumber (const \fBCh\fP * str, \fBSizeType\fP length, bool copy)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Reset ()\fC [inline]\fP"
+
+.PP
+Reset the internal states\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::ResetError ()\fC [inline]\fP"
+
+.PP
+Reset the error state\&. 
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::SetValidateFlags (unsigned flags)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implementation of ISchemaValidator\&. 
+.PP
+Implements \fBinternal::ISchemaValidator\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartArray ()\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartDependencyErrors ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartDisallowedType ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartMissingDependentProperties ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartMissingProperties ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::StartObject ()\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::String (const \fBCh\fP * str, \fBSizeType\fP length, bool copy)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooFewItems (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooFewProperties (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooLong (const \fBCh\fP * str, \fBSizeType\fP length, \fBSizeType\fP expected)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooManyItems (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooManyProperties (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBinternal::IValidationErrorHandler< SchemaDocumentType::SchemaType >\fP\&.
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> void \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::TooShort (const \fBCh\fP * str, \fBSizeType\fP length, \fBSizeType\fP expected)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Uint (unsigned u)\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType , typename OutputHandler  = BaseReaderHandler<typename SchemaDocumentType::SchemaType::EncodingType>, typename StateAllocator  = CrtAllocator> bool \fBGenericSchemaValidator\fP< SchemaDocumentType, OutputHandler, StateAllocator >::Uint64 (\fBuint64_t\fP u)\fC [inline]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

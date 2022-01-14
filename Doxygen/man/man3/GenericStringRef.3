@@ -1,0 +1,265 @@
+.TH "GenericStringRef< CharType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericStringRef< CharType > \- Reference to a constant string (not taking a copy)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef CharType \fBCh\fP"
+.br
+.RI "character type of the string "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<\fBSizeType\fP N> \fBGenericStringRef\fP (const CharType(&str)[N]) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Create string reference from \fCconst\fP character array\&. "
+.ti -1c
+.RI "\fBGenericStringRef\fP (const CharType *str)"
+.br
+.RI "Explicitly create string reference from \fCconst\fP character pointer\&. "
+.ti -1c
+.RI "\fBGenericStringRef\fP (const CharType *str, \fBSizeType\fP len)"
+.br
+.RI "Create constant string reference from pointer and length\&. "
+.ti -1c
+.RI "\fBGenericStringRef\fP (const \fBGenericStringRef\fP &rhs)"
+.br
+.ti -1c
+.RI "\fBoperator const Ch *\fP () const"
+.br
+.RI "implicit conversion to plain CharType pointer "
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBCh\fP *const \fBs\fP"
+.br
+.RI "plain CharType pointer "
+.ti -1c
+.RI "const \fBSizeType\fP \fBlength\fP"
+.br
+.RI "length of the string (excluding the trailing NULL terminator) "
+.in -1c
+.SS "Related Functions"
+(Note that these are not member functions\&.) 
+.in +1c
+.ti -1c
+.RI "template<typename CharType > \fBGenericStringRef\fP< CharType > \fBStringRef\fP (const CharType *str)"
+.br
+.RI "Mark a character pointer as constant string\&. "
+.ti -1c
+.RI "template<typename CharType > \fBGenericStringRef\fP< CharType > \fBStringRef\fP (const CharType *str, size_t \fBlength\fP)"
+.br
+.RI "Mark a character pointer as constant string\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename CharType>
+.br
+struct GenericStringRef< CharType >"Reference to a constant string (not taking a copy) 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP character type of the string
+.RE
+.PP
+This helper class is used to automatically infer constant string references for string literals, especially from \fCconst\fP \fB\fP(!) character arrays\&.
+.PP
+The main use is for creating JSON string values without copying the source string via an \fBAllocator\fP\&. This requires that the referenced string pointers have a sufficient lifetime, which exceeds the lifetime of the associated \fBGenericValue\fP\&.
+.PP
+\fBExample\fP 
+.PP
+.nf
+Value v("foo");   // ok, no need to copy & calculate length
+const char foo[] = "foo";
+v\&.SetString(foo); // ok
+
+const char* bar = foo;
+// Value x(bar); // not ok, can't rely on bar's lifetime
+Value x(StringRef(bar)); // lifetime explicitly guaranteed by user
+Value y(StringRef(bar, 3));  // ok, explicitly pass length
+
+.fi
+.PP
+.PP
+\fBSee also\fP
+.RS 4
+\fBStringRef\fP, GenericValue::SetString 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename CharType > typedef CharType \fBGenericStringRef\fP< CharType >::Ch"
+
+.PP
+character type of the string 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename CharType > template<\fBSizeType\fP N> \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (const CharType(&) str[N])\fC [inline]\fP"
+
+.PP
+Create string reference from \fCconst\fP character array\&. This constructor implicitly creates a constant string reference from a \fCconst\fP character array\&. It has better performance than \fBStringRef(const CharType*)\fP by inferring the string \fBlength\fP from the array length, and also supports strings containing null characters\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIN\fP length of the string, automatically inferred
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant character array, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP
+.RE
+.PP
+\fBPostcondition\fP
+.RS 4
+\fBs\fP == str
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Constant complexity\&. 
+.PP
+There is a hidden, private overload to disallow references to non-const character arrays to be created via this constructor\&. By this, e\&.g\&. function-scope arrays used to be filled via \fCsnprintf\fP are excluded from consideration\&. In such cases, the referenced string should be \fBcopied\fP to the \fBGenericValue\fP instead\&. 
+.RE
+.PP
+
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (const CharType * str)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Explicitly create string reference from \fCconst\fP character pointer\&. This constructor can be used to \fBexplicitly\fP create a reference to a constant string pointer\&.
+.PP
+\fBSee also\fP
+.RS 4
+\fBStringRef(const CharType*)\fP
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant character pointer, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP
+.RE
+.PP
+\fBPostcondition\fP
+.RS 4
+\fBs\fP == str
+.RE
+.PP
+\fBNote\fP
+.RS 4
+There is a hidden, private overload to disallow references to non-const character arrays to be created via this constructor\&. By this, e\&.g\&. function-scope arrays used to be filled via \fCsnprintf\fP are excluded from consideration\&. In such cases, the referenced string should be \fBcopied\fP to the \fBGenericValue\fP instead\&. 
+.RE
+.PP
+
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (const CharType * str, \fBSizeType\fP len)\fC [inline]\fP"
+
+.PP
+Create constant string reference from pointer and length\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP constant string, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP 
+.br
+\fIlen\fP length of the string, excluding the trailing NULL terminator
+.RE
+.PP
+\fBPostcondition\fP
+.RS 4
+\fBs\fP == str && \fBlength\fP == len 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Constant complexity\&. 
+.RE
+.PP
+
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (const \fBGenericStringRef\fP< CharType > & rhs)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType >::operator const \fBCh\fP * () const\fC [inline]\fP"
+
+.PP
+implicit conversion to plain CharType pointer 
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType > StringRef (const CharType * str)\fC [related]\fP"
+
+.PP
+Mark a character pointer as constant string\&. Mark a plain character pointer as a 'string literal'\&. This function can be used to avoid copying a character string to be referenced as a value in a JSON \fBGenericValue\fP object, if the string's lifetime is known to be valid long enough\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP Character type of the string 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant string, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBGenericStringRef\fP string reference object
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericValue::GenericValue(StringRefType)\fP, \fBGenericValue::operator=(StringRefType)\fP, GenericValue::SetString(StringRefType), GenericValue::PushBack(StringRefType, Allocator&), GenericValue::AddMember 
+.RE
+.PP
+
+.SS "template<typename CharType > \fBGenericStringRef\fP< CharType > StringRef (const CharType * str, size_t length)\fC [related]\fP"
+
+.PP
+Mark a character pointer as constant string\&. Mark a plain character pointer as a 'string literal'\&. This function can be used to avoid copying a character string to be referenced as a value in a JSON \fBGenericValue\fP object, if the string's lifetime is known to be valid long enough\&.
+.PP
+This version has better performance with supplied length, and also supports string containing null characters\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP character type of the string 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant string, lifetime assumed to be longer than the use of the string in e\&.g\&. a \fBGenericValue\fP 
+.br
+\fIlength\fP The length of source string\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+\fBGenericStringRef\fP string reference object 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename CharType > const \fBSizeType\fP \fBGenericStringRef\fP< CharType >::length"
+
+.PP
+length of the string (excluding the trailing NULL terminator) 
+.SS "template<typename CharType > const \fBCh\fP* const \fBGenericStringRef\fP< CharType >::s"
+
+.PP
+plain CharType pointer 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

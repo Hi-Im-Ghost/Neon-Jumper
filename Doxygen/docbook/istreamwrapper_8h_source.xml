@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_istreamwrapper_8h_source" xml:lang="en-US">
+<title>istreamwrapper.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/istreamwrapper.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ISTREAMWRAPPER_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ISTREAMWRAPPER_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stream_8h">stream.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&lt;iosfwd&gt;</emphasis>
+20 <emphasis role="preprocessor">#include&#32;&lt;ios&gt;</emphasis>
+21 
+22 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+23 RAPIDJSON_DIAG_PUSH
+24 RAPIDJSON_DIAG_OFF(padded)
+25 <emphasis role="preprocessor">#elif&#32;defined(_MSC_VER)</emphasis>
+26 RAPIDJSON_DIAG_PUSH
+27 RAPIDJSON_DIAG_OFF(4351)&#32;<emphasis role="comment">//&#32;new&#32;behavior:&#32;elements&#32;of&#32;array&#32;&apos;array&apos;&#32;will&#32;be&#32;default&#32;initialized</emphasis>
+28 <emphasis role="preprocessor">#endif</emphasis>
+29 
+30 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+31 
+33 
+48 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;StreamType&gt;
+49 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>&#32;{
+50 <emphasis role="keyword">public</emphasis>:
+51 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;StreamType::char_type&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>;
+52 
+54 
+57 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a3e9a2dd2b6b28243f8f2a911f67cdf56">BasicIStreamWrapper</link>(StreamType&#32;&amp;stream)&#32;:&#32;stream_(stream),&#32;buffer_(peekBuffer_),&#32;bufferSize_(4),&#32;bufferLast_(0),&#32;current_(buffer_),&#32;readCount_(0),&#32;count_(0),&#32;eof_(false)&#32;{&#32;
+58 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Read();
+59 &#32;&#32;&#32;&#32;}
+60 
+62 
+67 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a7a87c6702f1e98256de416ee101a460f">BasicIStreamWrapper</link>(StreamType&#32;&amp;stream,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;stream_(stream),&#32;buffer_(buffer),&#32;bufferSize_(bufferSize),&#32;bufferLast_(0),&#32;current_(buffer_),&#32;readCount_(0),&#32;count_(0),&#32;eof_(false)&#32;{&#32;
+68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(bufferSize&#32;&gt;=&#32;4);
+69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Read();
+70 &#32;&#32;&#32;&#32;}
+71 
+72 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;<link linkend="_class_basic_i_stream_wrapper_1a0ad1488235b4786dd4f7a16e679dec88">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*current_;&#32;}
+73 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;<link linkend="_class_basic_i_stream_wrapper_1afb71f0329d0abbbc9b22ebeb5c1464d1">Take</link>()&#32;{&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;c&#32;=&#32;*current_;&#32;Read();&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;&#32;}
+74 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper_1ac212848265f937add49bd973de794e25">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(current_&#32;-&#32;buffer_);&#32;}
+75 
+76 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Not&#32;implemented</emphasis>
+77 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper_1afa71cb2f5b7668837d0a81e3bce55e69">Put</link>(<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}
+78 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper_1a37d5e4cd8fdf3c83dad50737e95886a9">Flush</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}&#32;
+79 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>*&#32;<link linkend="_class_basic_i_stream_wrapper_1a10999721c014eea987d28a1ef9762351">PutBegin</link>()&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+80 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper_1ab2ead53490207a1cb0bdd674a03957f3">PutEnd</link>(<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>*)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;&#32;}
+81 
+82 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;encoding&#32;detection&#32;only.</emphasis>
+83 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>*&#32;<link linkend="_class_basic_i_stream_wrapper_1a461ed82951afefd68ce9ba446031aa60">Peek4</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+84 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(current_&#32;+&#32;4&#32;-&#32;!eof_&#32;&lt;=&#32;bufferLast_)&#32;?&#32;current_&#32;:&#32;0;
+85 &#32;&#32;&#32;&#32;}
+86 
+87 <emphasis role="keyword">private</emphasis>:
+88 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>();
+89 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>&amp;);
+90 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper</link>&amp;);
+91 
+92 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Read()&#32;{
+93 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current_&#32;&lt;&#32;bufferLast_)
+94 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++current_;
+95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!eof_)&#32;{
+96 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;+=&#32;readCount_;
+97 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;readCount_&#32;=&#32;bufferSize_;
+98 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bufferLast_&#32;=&#32;buffer_&#32;+&#32;readCount_&#32;-&#32;1;
+99 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;=&#32;buffer_;
+100 
+101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!stream_.read(buffer_,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>std::streamsize<emphasis role="keyword">&gt;</emphasis>(bufferSize_)))&#32;{
+102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;readCount_&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(stream_.gcount());
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*(bufferLast_&#32;=&#32;buffer_&#32;+&#32;readCount_)&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;eof_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+107 &#32;&#32;&#32;&#32;}
+108 
+109 &#32;&#32;&#32;&#32;StreamType&#32;&amp;stream_;
+110 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;peekBuffer_[4],&#32;*buffer_;
+111 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize_;
+112 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;*bufferLast_;
+113 &#32;&#32;&#32;&#32;<link linkend="_class_basic_i_stream_wrapper_1a88e4288ecdaa0d31ddf4e5917b9aa8d7">Ch</link>&#32;*current_;
+114 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;readCount_;
+115 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count_;&#32;&#32;
+116 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;eof_;
+117 };
+118 
+119 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper&lt;std::istream&gt;</link>&#32;<link linkend="_istreamwrapper_8h_1a2b3f48c475480aedd18b5da1b6fafc72">IStreamWrapper</link>;
+120 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_basic_i_stream_wrapper">BasicIStreamWrapper&lt;std::wistream&gt;</link>&#32;<link linkend="_istreamwrapper_8h_1a4b2b528a127684f04b5bdbd6a9c9b39c">WIStreamWrapper</link>;
+121 
+122 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(_MSC_VER)</emphasis>
+123 RAPIDJSON_DIAG_POP
+124 <emphasis role="preprocessor">#endif</emphasis>
+125 
+126 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+127 
+128 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ISTREAMWRAPPER_H_</emphasis>
+</programlisting></section>

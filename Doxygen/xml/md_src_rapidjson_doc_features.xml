@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_features" kind="page">
+    <compoundname>md_src_rapidjson_doc_features</compoundname>
+    <title>Features</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md70">
+<title>General</title>
+<para><itemizedlist>
+<listitem><para>Cross-platform<itemizedlist>
+<listitem><para>Compilers: Visual Studio, gcc, clang, etc.</para>
+</listitem><listitem><para>Architectures: x86, x64, ARM, etc.</para>
+</listitem><listitem><para>Operating systems: Windows, Mac OS X, Linux, iOS, Android, etc.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Easy installation<itemizedlist>
+<listitem><para>Header files only library. Just copy the headers to your project.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Self-contained, minimal dependences<itemizedlist>
+<listitem><para>No STL, BOOST, etc.</para>
+</listitem><listitem><para>Only included <computeroutput>&lt;cstdio&gt;</computeroutput>, <computeroutput>&lt;cstdlib&gt;</computeroutput>, <computeroutput>&lt;cstring&gt;</computeroutput>, <computeroutput>&lt;<ref refid="inttypes_8h" kindref="compound">inttypes.h</ref>&gt;</computeroutput>, <computeroutput>&lt;new&gt;</computeroutput>, <computeroutput>&lt;<ref refid="stdint_8h" kindref="compound">stdint.h</ref>&gt;</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Without C++ exception, RTTI</para>
+</listitem><listitem><para>High performance<itemizedlist>
+<listitem><para>Use template and inline functions to reduce function call overheads.</para>
+</listitem><listitem><para>Internal optimized Grisu2 and floating point parsing implementations.</para>
+</listitem><listitem><para>Optional SSE2/SSE4.2 support.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md71">
+<title>Standard compliance</title>
+<para><itemizedlist>
+<listitem><para>RapidJSON should be fully RFC4627/ECMA-404 compliance.</para>
+</listitem><listitem><para>Support JSON Pointer (RFC6901).</para>
+</listitem><listitem><para>Support JSON <ref refid="class_schema" kindref="compound">Schema</ref> Draft v4.</para>
+</listitem><listitem><para>Support Unicode surrogate.</para>
+</listitem><listitem><para>Support null character (<computeroutput>&quot;\u0000&quot;</computeroutput>)<itemizedlist>
+<listitem><para>For example, <computeroutput>[&quot;Hello\u0000World&quot;]</computeroutput> can be parsed and handled gracefully. There is API for getting/setting lengths of string.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support optional relaxed syntax.<itemizedlist>
+<listitem><para>Single line (<computeroutput>// ...</computeroutput>) and multiple line (<computeroutput>/* ... */</computeroutput>) comments (<computeroutput>kParseCommentsFlag</computeroutput>).</para>
+</listitem><listitem><para>Trailing commas at the end of objects and arrays (<computeroutput>kParseTrailingCommasFlag</computeroutput>).</para>
+</listitem><listitem><para><computeroutput>NaN</computeroutput>, <computeroutput>Inf</computeroutput>, <computeroutput>Infinity</computeroutput>, <computeroutput>-Inf</computeroutput> and <computeroutput>-Infinity</computeroutput> as <computeroutput>double</computeroutput> values (<computeroutput>kParseNanAndInfFlag</computeroutput>)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><ulink url="http://github.com/Tencent/rapidjson/blob/master/doc/npm.md">NPM compliant</ulink>.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md72">
+<title>Unicode</title>
+<para><itemizedlist>
+<listitem><para>Support UTF-8, UTF-16, UTF-32 encodings, including little endian and big endian.<itemizedlist>
+<listitem><para>These encodings are used in input/output streams and in-memory representation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support automatic detection of encodings in input stream.</para>
+</listitem><listitem><para>Support transcoding between encodings internally.<itemizedlist>
+<listitem><para>For example, you can read a UTF-8 file and let RapidJSON transcode the JSON strings into UTF-16 in the DOM.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support encoding validation internally.<itemizedlist>
+<listitem><para>For example, you can read a UTF-8 file, and let RapidJSON check whether all JSON strings are valid UTF-8 byte sequence.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support custom character types.<itemizedlist>
+<listitem><para>By default the character types are <computeroutput>char</computeroutput> for <ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>, <computeroutput>wchar_t</computeroutput> for <ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>, <computeroutput>uint32_t</computeroutput> for <ref refid="struct_u_t_f32" kindref="compound">UTF32</ref>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support custom encodings.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md73">
+<title>API styles</title>
+<para><itemizedlist>
+<listitem><para>SAX (Simple API for XML) style API<itemizedlist>
+<listitem><para>Similar to <ulink url="http://en.wikipedia.org/wiki/Simple_API_for_XML">SAX</ulink>, RapidJSON provides a event sequential access parser API (<computeroutput>rapidjson::GenericReader</computeroutput>). It also provides a generator API (<computeroutput>rapidjson::Writer</computeroutput>) which consumes the same set of events.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>DOM (Document Object Model) style API<itemizedlist>
+<listitem><para>Similar to <ulink url="http://en.wikipedia.org/wiki/Document_Object_Model">DOM</ulink> for HTML/XML, RapidJSON can parse JSON into a DOM representation (<computeroutput>rapidjson::GenericDocument</computeroutput>), for easy manipulation, and finally stringify back to JSON if needed.</para>
+</listitem><listitem><para>The DOM style API (<computeroutput>rapidjson::GenericDocument</computeroutput>) is actually implemented with SAX style API (<computeroutput>rapidjson::GenericReader</computeroutput>). SAX is faster but sometimes DOM is easier. Users can pick their choices according to scenarios.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md74">
+<title>Parsing</title>
+<para><itemizedlist>
+<listitem><para>Recursive (default) and iterative parser<itemizedlist>
+<listitem><para>Recursive parser is faster but prone to stack overflow in extreme cases.</para>
+</listitem><listitem><para>Iterative parser use custom stack to keep parsing state.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support <emphasis>in situ</emphasis> parsing.<itemizedlist>
+<listitem><para>Parse JSON string values in-place at the source JSON, and then the DOM points to addresses of those strings.</para>
+</listitem><listitem><para>Faster than convention parsing: no allocation for strings, no copy (if string does not contain escapes), cache-friendly.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support 32-bit/64-bit signed/unsigned integer and <computeroutput>double</computeroutput> for JSON number type.</para>
+</listitem><listitem><para>Support parsing multiple JSONs in input stream (<computeroutput>kParseStopWhenDoneFlag</computeroutput>).</para>
+</listitem><listitem><para>Error Handling<itemizedlist>
+<listitem><para>Support comprehensive error code if parsing failed.</para>
+</listitem><listitem><para>Support error message localization.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md75">
+<title>DOM (Document)</title>
+<para><itemizedlist>
+<listitem><para>RapidJSON checks range of numerical values for conversions.</para>
+</listitem><listitem><para>Optimization for string literal<itemizedlist>
+<listitem><para>Only store pointer instead of copying</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Optimization for &quot;short&quot; strings<itemizedlist>
+<listitem><para>Store short string in <computeroutput>Value</computeroutput> internally without additional allocation.</para>
+</listitem><listitem><para>For UTF-8 string: maximum 11 characters in 32-bit, 21 characters in 64-bit (13 characters in x86-64).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Optionally support <computeroutput>std::string</computeroutput> (define <computeroutput>RAPIDJSON_HAS_STDSTRING=1</computeroutput>)</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md76">
+<title>Generation</title>
+<para><itemizedlist>
+<listitem><para>Support <computeroutput>rapidjson::PrettyWriter</computeroutput> for adding newlines and indentations.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md77">
+<title>Stream</title>
+<para><itemizedlist>
+<listitem><para>Support <computeroutput>rapidjson::GenericStringBuffer</computeroutput> for storing the output JSON as string.</para>
+</listitem><listitem><para>Support <computeroutput>rapidjson::FileReadStream</computeroutput> and <computeroutput>rapidjson::FileWriteStream</computeroutput> for input/output <computeroutput>FILE</computeroutput> object.</para>
+</listitem><listitem><para>Support custom streams.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md78">
+<title>Memory</title>
+<para><itemizedlist>
+<listitem><para>Minimize memory overheads for DOM.<itemizedlist>
+<listitem><para>Each JSON value occupies exactly 16/20 bytes for most 32/64-bit machines (excluding text string).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support fast default allocator.<itemizedlist>
+<listitem><para>A stack-based allocator (allocate sequentially, prohibit to free individual allocations, suitable for parsing).</para>
+</listitem><listitem><para>User can provide a pre-allocated buffer. (Possible to parse a number of JSONs without any CRT allocation)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Support standard CRT(C-runtime) allocator.</para>
+</listitem><listitem><para>Support custom allocators.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_features_1autotoc_md79">
+<title>Miscellaneous</title>
+<para><itemizedlist>
+<listitem><para>Some C++11 support (optional)<itemizedlist>
+<listitem><para>Rvalue reference</para>
+</listitem><listitem><para><computeroutput>noexcept</computeroutput> specifier</para>
+</listitem><listitem><para>Range-based for loop </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/features.md"/>
+  </compounddef>
+</doxygen>

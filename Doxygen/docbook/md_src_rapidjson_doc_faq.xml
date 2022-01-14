@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_faq" xml:lang="en-US">
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md50">
+<title>General</title>
+
+<para><orderedlist>
+<listitem>
+<para>What is RapidJSON?</para>
+
+<para>RapidJSON is a C++ library for parsing and generating JSON. You may check all <link linkend="_features_8md">features</link> of it.</para>
+</listitem><listitem>
+<para>Why is RapidJSON named so?</para>
+
+<para>It is inspired by <link xlink:href="http://rapidxml.sourceforge.net/">RapidXML</link>, which is a fast XML DOM parser.</para>
+</listitem><listitem>
+<para>Is RapidJSON similar to RapidXML?</para>
+
+<para>RapidJSON borrowed some designs of RapidXML, including <emphasis>in situ</emphasis> parsing, header-only library. But the two APIs are completely different. Also RapidJSON provide many features that are not in RapidXML.</para>
+</listitem><listitem>
+<para>Is RapidJSON free?</para>
+
+<para>Yes, it is free under MIT license. It can be used in commercial applications. Please check the details in <link xlink:href="https://github.com/Tencent/rapidjson/blob/master/license.txt">license.txt</link>.</para>
+</listitem><listitem>
+<para>Is RapidJSON small? What are its dependencies?</para>
+
+<para>Yes. A simple executable which parses a JSON and prints its statistics is less than 30KB on Windows.</para>
+
+<para>RapidJSON depends on C++ standard library only.</para>
+</listitem><listitem>
+<para>How to install RapidJSON?</para>
+
+<para>Check <link xlink:href="https://miloyip.github.io/rapidjson/">Installation section</link>.</para>
+</listitem><listitem>
+<para>Can RapidJSON run on my platform?</para>
+
+<para>RapidJSON has been tested in many combinations of operating systems, compilers and CPU architecture by the community. But we cannot ensure that it can be run on your particular platform. Building and running the unit test suite will give you the answer.</para>
+</listitem><listitem>
+<para>Does RapidJSON support C++03? C++11?</para>
+
+<para>RapidJSON was firstly implemented for C++03. Later it added optional support of some C++11 features (e.g., move constructor, <computeroutput>noexcept</computeroutput>). RapidJSON shall be compatible with C++03 or C++11 compliant compilers.</para>
+</listitem><listitem>
+<para>Does RapidJSON really work in real applications?</para>
+
+<para>Yes. It is deployed in both client and server real applications. A community member reported that RapidJSON in their system parses 50 million JSONs daily.</para>
+</listitem><listitem>
+<para>How RapidJSON is tested?</para>
+
+<para>RapidJSON contains a unit test suite for automatic testing. <link xlink:href="https://travis-ci.org/Tencent/rapidjson/">Travis</link>(for Linux) and <link xlink:href="https://ci.appveyor.com/project/Tencent/rapidjson/">AppVeyor</link>(for Windows) will compile and run the unit test suite for all modifications. The test process also uses Valgrind (in Linux) to detect memory leaks.</para>
+</listitem><listitem>
+<para>Is RapidJSON well documented?</para>
+
+<para>RapidJSON provides user guide and API documentationn.</para>
+</listitem><listitem>
+<para>Are there alternatives?</para>
+
+<para>Yes, there are a lot alternatives. For example, <link xlink:href="https://github.com/miloyip/nativejson-benchmark">nativejson-benchmark</link> has a listing of open-source C/C++ JSON libraries. <link xlink:href="http://www.json.org/">json.org</link> also has a list.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md51">
+<title>JSON</title>
+
+<para><orderedlist>
+<listitem>
+<para>What is JSON?</para>
+
+<para>JSON (JavaScript Object Notation) is a lightweight data-interchange format. It uses human readable text format. More details of JSON can be referred to <link xlink:href="http://www.ietf.org/rfc/rfc7159.txt">RFC7159</link> and <link xlink:href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</link>.</para>
+</listitem><listitem>
+<para>What are applications of JSON?</para>
+
+<para>JSON are commonly used in web applications for transferring structured data. It is also used as a file format for data persistence.</para>
+</listitem><listitem>
+<para>Does RapidJSON conform to the JSON standard?</para>
+
+<para>Yes. RapidJSON is fully compliance with <link xlink:href="http://www.ietf.org/rfc/rfc7159.txt">RFC7159</link> and <link xlink:href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</link>. It can handle corner cases, such as supporting null character and surrogate pairs in JSON strings.</para>
+</listitem><listitem>
+<para>Does RapidJSON support relaxed syntax?</para>
+
+<para>Currently no. RapidJSON only support the strict standardized format. Support on related syntax is under discussion in this <link xlink:href="https://github.com/Tencent/rapidjson/issues/36">issue</link>.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md52">
+<title>DOM and SAX</title>
+
+<para><orderedlist>
+<listitem>
+<para>What is DOM style API?</para>
+
+<para>Document Object Model (DOM) is an in-memory representation of JSON for query and manipulation.</para>
+</listitem><listitem>
+<para>What is SAX style API?</para>
+
+<para>SAX is an event-driven API for parsing and generation.</para>
+</listitem><listitem>
+<para>Should I choose DOM or SAX?</para>
+
+<para>DOM is easy for query and manipulation. SAX is very fast and memory-saving but often more difficult to be applied.</para>
+</listitem><listitem>
+<para>What is <emphasis>in situ</emphasis> parsing?</para>
+
+<para><emphasis>in situ</emphasis> parsing decodes the JSON strings directly into the input JSON. This is an optimization which can reduce memory consumption and improve performance, but the input JSON will be modified. Check <link linkend="_dom_8md">in-situ parsing</link> for details.</para>
+</listitem><listitem>
+<para>When does parsing generate an error?</para>
+
+<para>The parser generates an error when the input JSON contains invalid syntax, or a value can not be represented (a number is too big), or the handler of parsers terminate the parsing. Check <link linkend="_dom_8md">parse error</link> for details.</para>
+</listitem><listitem>
+<para>What error information is provided?</para>
+
+<para>The error is stored in <computeroutput><link linkend="_struct_parse_result">ParseResult</link></computeroutput>, which includes the error code and offset (number of characters from the beginning of JSON). The error code can be translated into human-readable error message.</para>
+</listitem><listitem>
+<para>Why not just using <computeroutput>double</computeroutput> to represent JSON number?</para>
+
+<para>Some applications use 64-bit unsigned/signed integers. And these integers cannot be converted into <computeroutput>double</computeroutput> without loss of precision. So the parsers detects whether a JSON number is convertible to different types of integers and/or <computeroutput>double</computeroutput>.</para>
+</listitem><listitem>
+<para>How to clear-and-minimize a document or value?</para>
+
+<para>Call one of the <computeroutput>SetXXX()</computeroutput> methods - they call destructor which deallocates DOM data:</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+...
+d.SetObject();&#32;&#32;//&#32;clear&#32;and&#32;minimize
+</computeroutput></literallayout></para>
+
+<para>Alternatively, use equivalent of the <link xlink:href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Clear-and-minimize">C++ swap with temporary idiom</link>: <literallayout><computeroutput>Value(kObjectType).Swap(d);
+</computeroutput></literallayout> or equivalent, but slightly longer to type: <literallayout><computeroutput>d.Swap(Value(kObjectType).Move());&#32;
+</computeroutput></literallayout></para>
+</listitem><listitem>
+<para>How to insert a document node into another document?</para>
+
+<para>Let&apos;s take the following two DOM trees represented as JSON documents: <literallayout><computeroutput>Document&#32;person;
+person.Parse(&quot;{\&quot;person\&quot;:{\&quot;name\&quot;:{\&quot;first\&quot;:\&quot;Adam\&quot;,\&quot;last\&quot;:\&quot;Thomas\&quot;}}}&quot;);
+
+Document&#32;address;
+address.Parse(&quot;{\&quot;address\&quot;:{\&quot;city\&quot;:\&quot;Moscow\&quot;,\&quot;street\&quot;:\&quot;Quiet\&quot;}}&quot;);
+</computeroutput></literallayout> Let&apos;s assume we want to merge them in such way that the whole <computeroutput>address</computeroutput> document becomes a node of the <computeroutput>person</computeroutput>: <literallayout><computeroutput>{&#32;&quot;person&quot;:&#32;{
+&#32;&#32;&#32;&quot;name&quot;:&#32;{&#32;&quot;first&quot;:&#32;&quot;Adam&quot;,&#32;&quot;last&quot;:&#32;&quot;Thomas&quot;&#32;},
+&#32;&#32;&#32;&quot;address&quot;:&#32;{&#32;&quot;city&quot;:&#32;&quot;Moscow&quot;,&#32;&quot;street&quot;:&#32;&quot;Quiet&quot;&#32;}
+&#32;&#32;&#32;}
+}
+</computeroutput></literallayout></para>
+
+<para>The most important requirement to take care of document and value life-cycle as well as consistent memory management using the right allocator during the value transfer.</para>
+
+<para>Simple yet most efficient way to achieve that is to modify the <computeroutput>address</computeroutput> definition above to initialize it with allocator of the <computeroutput>person</computeroutput> document, then we just add the root member of the value: <literallayout><computeroutput>Document&#32;address(&amp;person.GetAllocator());
+...
+person[&quot;person&quot;].AddMember(&quot;address&quot;,&#32;address[&quot;address&quot;],&#32;person.GetAllocator());
+</computeroutput></literallayout> Alternatively, if we don&apos;t want to explicitly refer to the root value of <computeroutput>address</computeroutput> by name, we can refer to it via iterator: <literallayout><computeroutput>auto&#32;addressRoot&#32;=&#32;address.MemberBegin();
+person[&quot;person&quot;].AddMember(addressRoot-&gt;name,&#32;addressRoot-&gt;value,&#32;person.GetAllocator());
+</computeroutput></literallayout></para>
+
+<para>Second way is to deep-clone the value from the address document: <literallayout><computeroutput>Value&#32;addressValue&#32;=&#32;Value(address[&quot;address&quot;],&#32;person.GetAllocator());
+person[&quot;person&quot;].AddMember(&quot;address&quot;,&#32;addressValue,&#32;person.GetAllocator());
+</computeroutput></literallayout></para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md53">
+<title>Document/Value (DOM)</title>
+
+<para><orderedlist>
+<listitem>
+<para>What is move semantics? Why?</para>
+
+<para>Instead of copy semantics, move semantics is used in <computeroutput>Value</computeroutput>. That means, when assigning a source value to a target value, the ownership of source value is moved to the target value.</para>
+
+<para>Since moving is faster than copying, this design decision forces user to aware of the copying overhead.</para>
+</listitem><listitem>
+<para>How to copy a value?</para>
+
+<para>There are two APIs: constructor with allocator, and <computeroutput>CopyFrom()</computeroutput>. See <link linkend="_tutorial_8md">Deep Copy Value</link> for an example.</para>
+</listitem><listitem>
+<para>Why do I need to provide the length of string?</para>
+
+<para>Since C string is null-terminated, the length of string needs to be computed via <computeroutput>strlen()</computeroutput>, with linear runtime complexity. This incurs an unnecessary overhead of many operations, if the user already knows the length of string.</para>
+
+<para>Also, RapidJSON can handle <computeroutput>\u0000</computeroutput> (null character) within a string. If a string contains null characters, <computeroutput>strlen()</computeroutput> cannot return the true length of it. In such case user must provide the length of string explicitly.</para>
+</listitem><listitem>
+<para>Why do I need to provide allocator parameter in many DOM manipulation API?</para>
+
+<para>Since the APIs are member functions of <computeroutput>Value</computeroutput>, we do not want to save an allocator pointer in every <computeroutput>Value</computeroutput>.</para>
+</listitem><listitem>
+<para>Does it convert between numerical types?</para>
+
+<para>When using <computeroutput>GetInt()</computeroutput>, <computeroutput>GetUint()</computeroutput>, ... conversion may occur. For integer-to-integer conversion, it only convert when it is safe (otherwise it will assert). However, when converting a 64-bit signed/unsigned integer to double, it will convert but be aware that it may lose precision. A number with fraction, or an integer larger than 64-bit, can only be obtained by <computeroutput>GetDouble()</computeroutput>.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md54">
+<title>Reader/Writer (SAX)</title>
+
+<para><orderedlist>
+<listitem>
+<para>Why don&apos;t we just <computeroutput>printf</computeroutput> a JSON? Why do we need a <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>?</para>
+
+<para>Most importantly, <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> will ensure the output JSON is well-formed. Calling SAX events incorrectly (e.g. <computeroutput>StartObject()</computeroutput> pairing with <computeroutput>EndArray()</computeroutput>) will assert. Besides, <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> will escapes strings (e.g., <computeroutput>\n</computeroutput>). Finally, the numeric output of <computeroutput>printf()</computeroutput> may not be a valid JSON number, especially in some locale with digit delimiters. And the number-to-string conversion in <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> is implemented with very fast algorithms, which outperforms than <computeroutput>printf()</computeroutput> or <computeroutput>iostream</computeroutput>.</para>
+</listitem><listitem>
+<para>Can I pause the parsing process and resume it later?</para>
+
+<para>This is not directly supported in the current version due to performance consideration. However, if the execution environment supports multi-threading, user can parse a JSON in a separate thread, and pause it by blocking in the input stream.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md55">
+<title>Unicode</title>
+
+<para><orderedlist>
+<listitem>
+<para>Does it support UTF-8, UTF-16 and other format?</para>
+
+<para>Yes. It fully support UTF-8, UTF-16 (LE/BE), UTF-32 (LE/BE) and <link linkend="_struct_a_s_c_i_i">ASCII</link>.</para>
+</listitem><listitem>
+<para>Can it validate the encoding?</para>
+
+<para>Yes, just pass <computeroutput>kParseValidateEncodingFlag</computeroutput> to <computeroutput>Parse()</computeroutput>. If there is invalid encoding in the stream, it will generate <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> error.</para>
+</listitem><listitem>
+<para>What is surrogate pair? Does RapidJSON support it?</para>
+
+<para>JSON uses UTF-16 encoding when escaping unicode character, e.g. <computeroutput>\u5927</computeroutput> representing Chinese character &quot;big&quot;. To handle characters other than those in basic multilingual plane (BMP), UTF-16 encodes those characters with two 16-bit values, which is called UTF-16 surrogate pair. For example, the Emoji character U+1F602 can be encoded as <computeroutput>\uD83D\uDE02</computeroutput> in JSON.</para>
+
+<para>RapidJSON fully support parsing/generating UTF-16 surrogates.</para>
+</listitem><listitem>
+<para>Can it handle <computeroutput>\u0000</computeroutput> (null character) in JSON string?</para>
+
+<para>Yes. RapidJSON fully support null character in JSON string. However, user need to be aware of it and using <computeroutput>GetStringLength()</computeroutput> and related APIs to obtain the true length of string.</para>
+</listitem><listitem>
+<para>Can I output <computeroutput>\uxxxx</computeroutput> for all non-ASCII character?</para>
+
+<para>Yes, use <computeroutput><link linkend="_struct_a_s_c_i_i">ASCII</link>&lt;&gt;</computeroutput> as output encoding template parameter in <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> can enforce escaping those characters.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md56">
+<title>Stream</title>
+
+<para><orderedlist>
+<listitem>
+<para>I have a big JSON file. Should I load the whole file to memory?</para>
+
+<para>User can use <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> to read the file chunk-by-chunk. But for <emphasis>in situ</emphasis> parsing, the whole file must be loaded.</para>
+</listitem><listitem>
+<para>Can I parse JSON while it is streamed from network?</para>
+
+<para>Yes. User can implement a custom stream for this. Please refer to the implementation of <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput>.</para>
+</listitem><listitem>
+<para>I don&apos;t know what encoding will the JSON be. How to handle them?</para>
+
+<para>You may use <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> which detects the encoding of input stream automatically. However, it will incur some performance overhead.</para>
+</listitem><listitem>
+<para>What is BOM? How RapidJSON handle it?</para>
+
+<para><link xlink:href="http://en.wikipedia.org/wiki/Byte_order_mark">Byte order mark (BOM)</link> sometimes reside at the beginning of file/stream to indicate the UTF encoding type of it.</para>
+
+<para>RapidJSON&apos;s <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> can detect/consume BOM. <computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput> can optionally write a BOM. See <link linkend="_stream_8md">Encoded Streams</link> for example.</para>
+</listitem><listitem>
+<para>Why little/big endian is related?</para>
+
+<para>little/big endian of stream is an issue for UTF-16 and UTF-32 streams, but not UTF-8 stream.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md57">
+<title>Performance</title>
+
+<para><orderedlist>
+<listitem>
+<para>Is RapidJSON really fast?</para>
+
+<para>Yes. It may be the fastest open source JSON library. There is a <link xlink:href="https://github.com/miloyip/nativejson-benchmark">benchmark</link> for evaluating performance of C/C++ JSON libraries.</para>
+</listitem><listitem>
+<para>Why is it fast?</para>
+
+<para>Many design decisions of RapidJSON is aimed at time/space performance. These may reduce user-friendliness of APIs. Besides, it also employs low-level optimizations (intrinsics, SIMD) and special algorithms (custom double-to-string, string-to-double conversions).</para>
+</listitem><listitem>
+<para>What is SIMD? How it is applied in RapidJSON?</para>
+
+<para><link xlink:href="http://en.wikipedia.org/wiki/SIMD">SIMD</link> instructions can perform parallel computation in modern CPUs. RapidJSON support Intel&apos;s SSE2/SSE4.2 and ARM&apos;s Neon to accelerate whitespace/tabspace/carriage-return/line-feed skipping. This improves performance of parsing indent formatted JSON. Define <computeroutput>RAPIDJSON_SSE2</computeroutput>, <computeroutput>RAPIDJSON_SSE42</computeroutput> or <computeroutput>RAPIDJSON_NEON</computeroutput> macro to enable this feature. However, running the executable on a machine without such instruction set support will make it crash.</para>
+</listitem><listitem>
+<para>Does it consume a lot of memory?</para>
+
+<para>The design of RapidJSON aims at reducing memory footprint.</para>
+
+<para>In the SAX API, <computeroutput>Reader</computeroutput> consumes memory proportional to maximum depth of JSON tree, plus maximum length of JSON string.</para>
+
+<para>In the DOM API, each <computeroutput>Value</computeroutput> consumes exactly 16/24 bytes for 32/64-bit architecture respectively. RapidJSON also uses a special memory allocator to minimize overhead of allocations.</para>
+</listitem><listitem>
+<para>What is the purpose of being high performance?</para>
+
+<para>Some applications need to process very large JSON files. Some server-side applications need to process huge amount of JSONs. Being high performance can improve both latency and throughput. In a broad sense, it will also save energy.</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_faq_1autotoc_md58">
+<title>Gossip</title>
+
+<para><orderedlist>
+<listitem>
+<para>Who are the developers of RapidJSON?</para>
+
+<para>Milo Yip (<link xlink:href="https://github.com/miloyip">miloyip</link>) is the original author of RapidJSON. Many contributors from the world have improved RapidJSON. Philipp A. Hartmann (<link xlink:href="https://github.com/pah">pah</link>) has implemented a lot of improvements, setting up automatic testing and also involves in a lot of discussions for the community. Don Ding (<link xlink:href="https://github.com/thebusytypist">thebusytypist</link>) implemented the iterative parser. Andrii Senkovych (<link xlink:href="https://github.com/jollyroger">jollyroger</link>) completed the CMake migration. Kosta (<link xlink:href="https://github.com/Kosta-Github">Kosta-Github</link>) provided a very neat short-string optimization. Thank you for all other contributors and community members as well.</para>
+</listitem><listitem>
+<para>Why do you develop RapidJSON?</para>
+
+<para>It was just a hobby project initially in 2011. Milo Yip is a game programmer and he just knew about JSON at that time and would like to apply JSON in future projects. As JSON seems very simple he would like to write a header-only and fast library.</para>
+</listitem><listitem>
+<para>Why there is a long empty period of development?</para>
+
+<para>It is basically due to personal issues, such as getting new family members. Also, Milo Yip has spent a lot of spare time on translating &quot;Game Engine Architecture&quot; by Jason Gregory into Chinese.</para>
+</listitem><listitem>
+<para>Why did the repository move from Google Code to GitHub?</para>
+
+<para>This is the trend. And GitHub is much more powerful and convenient. </para>
+</listitem></orderedlist>
+</para>
+</section>
+</section>

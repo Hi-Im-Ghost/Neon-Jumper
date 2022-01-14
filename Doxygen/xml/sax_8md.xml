@@ -1,0 +1,522 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="sax_8md" kind="file" language="Markdown">
+    <compoundname>sax.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>SAX</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>term<sp/>&quot;SAX&quot;<sp/>originated<sp/>from<sp/>[Simple<sp/>API<sp/>for<sp/>XML](http://en.wikipedia.org/wiki/Simple_API_for_XML).<sp/>We<sp/>borrowed<sp/>this<sp/>term<sp/>for<sp/>JSON<sp/>parsing<sp/>and<sp/>generation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>RapidJSON,<sp/>`Reader`<sp/>(typedef<sp/>of<sp/>`GenericReader&lt;...&gt;`)<sp/>is<sp/>the<sp/>SAX-style<sp/>parser<sp/>for<sp/>JSON,<sp/>and<sp/>`Writer`<sp/>(typedef<sp/>of<sp/>`GenericWriter&lt;...&gt;`)<sp/>is<sp/>the<sp/>SAX-style<sp/>generator<sp/>for<sp/>JSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Reader<sp/>{#Reader}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Reader`<sp/>parses<sp/>a<sp/>JSON<sp/>from<sp/>a<sp/>stream.<sp/>While<sp/>it<sp/>reads<sp/>characters<sp/>from<sp/>the<sp/>stream,<sp/>it<sp/>analyzes<sp/>the<sp/>characters<sp/>according<sp/>to<sp/>the<sp/>syntax<sp/>of<sp/>JSON,<sp/>and<sp/>publishes<sp/>events<sp/>to<sp/>a<sp/>handler.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>example,<sp/>here<sp/>is<sp/>a<sp/>JSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~js</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;hello&quot;:<sp/>&quot;world&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;t&quot;:<sp/>true<sp/>,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;f&quot;:<sp/>false,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;n&quot;:<sp/>null,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;i&quot;:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;:<sp/>3.1416,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;a&quot;:<sp/>[1,<sp/>2,<sp/>3,<sp/>4]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>a<sp/>`Reader`<sp/>parses<sp/>this<sp/>JSON,<sp/>it<sp/>publishes<sp/>the<sp/>following<sp/>events<sp/>to<sp/>the<sp/>handler<sp/>sequentially:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">StartObject()</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;hello&quot;,<sp/>5,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">String(&quot;world&quot;,<sp/>5,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;t&quot;,<sp/>1,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">Bool(true)</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;f&quot;,<sp/>1,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">Bool(false)</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;n&quot;,<sp/>1,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">Null()</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;i&quot;)</highlight></codeline>
+<codeline><highlight class="normal">Uint(123)</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;pi&quot;)</highlight></codeline>
+<codeline><highlight class="normal">Double(3.1416)</highlight></codeline>
+<codeline><highlight class="normal">Key(&quot;a&quot;)</highlight></codeline>
+<codeline><highlight class="normal">StartArray()</highlight></codeline>
+<codeline><highlight class="normal">Uint(1)</highlight></codeline>
+<codeline><highlight class="normal">Uint(2)</highlight></codeline>
+<codeline><highlight class="normal">Uint(3)</highlight></codeline>
+<codeline><highlight class="normal">Uint(4)</highlight></codeline>
+<codeline><highlight class="normal">EndArray(4)</highlight></codeline>
+<codeline><highlight class="normal">EndObject(7)</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">These<sp/>events<sp/>can<sp/>be<sp/>easily<sp/>matched<sp/>with<sp/>the<sp/>JSON,<sp/>but<sp/>some<sp/>event<sp/>parameters<sp/>need<sp/>further<sp/>explanation.<sp/>Let&apos;s<sp/>see<sp/>the<sp/>`simplereader`<sp/>example<sp/>which<sp/>produces<sp/>exactly<sp/>the<sp/>same<sp/>output<sp/>as<sp/>above:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/reader.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;iostream&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>std;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">struct<sp/>MyHandler<sp/>:<sp/>public<sp/>BaseReaderHandler&lt;UTF8&lt;&gt;,<sp/>MyHandler&gt;<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Null()<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Null()&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Bool(bool<sp/>b)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Bool(&quot;<sp/>&lt;&lt;<sp/>boolalpha<sp/>&lt;&lt;<sp/>b<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int(int<sp/>i)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Int(&quot;<sp/>&lt;&lt;<sp/>i<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint(unsigned<sp/>u)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Uint(&quot;<sp/>&lt;&lt;<sp/>u<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int64(int64_t<sp/>i)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Int64(&quot;<sp/>&lt;&lt;<sp/>i<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint64(uint64_t<sp/>u)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Uint64(&quot;<sp/>&lt;&lt;<sp/>u<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Double(double<sp/>d)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;Double(&quot;<sp/>&lt;&lt;<sp/>d<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>String(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy)<sp/>{<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>&quot;String(&quot;<sp/>&lt;&lt;<sp/>str<sp/>&lt;&lt;<sp/>&quot;,<sp/>&quot;<sp/>&lt;&lt;<sp/>length<sp/>&lt;&lt;<sp/>&quot;,<sp/>&quot;<sp/>&lt;&lt;<sp/>boolalpha<sp/>&lt;&lt;<sp/>copy<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartObject()<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;StartObject()&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Key(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy)<sp/>{<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>&quot;Key(&quot;<sp/>&lt;&lt;<sp/>str<sp/>&lt;&lt;<sp/>&quot;,<sp/>&quot;<sp/>&lt;&lt;<sp/>length<sp/>&lt;&lt;<sp/>&quot;,<sp/>&quot;<sp/>&lt;&lt;<sp/>boolalpha<sp/>&lt;&lt;<sp/>copy<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndObject(SizeType<sp/>memberCount)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;EndObject(&quot;<sp/>&lt;&lt;<sp/>memberCount<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartArray()<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;StartArray()&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndArray(SizeType<sp/>elementCount)<sp/>{<sp/>cout<sp/>&lt;&lt;<sp/>&quot;EndArray(&quot;<sp/>&lt;&lt;<sp/>elementCount<sp/>&lt;&lt;<sp/>&quot;)&quot;<sp/>&lt;&lt;<sp/>endl;<sp/>return<sp/>true;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>main()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>const<sp/>char<sp/>json[]<sp/>=<sp/>&quot;<sp/>{<sp/>\&quot;hello\&quot;<sp/>:<sp/>\&quot;world\&quot;,<sp/>\&quot;t\&quot;<sp/>:<sp/>true<sp/>,<sp/>\&quot;f\&quot;<sp/>:<sp/>false,<sp/>\&quot;n\&quot;:<sp/>null,<sp/>\&quot;i\&quot;:123,<sp/>\&quot;pi\&quot;:<sp/>3.1416,<sp/>\&quot;a\&quot;:[1,<sp/>2,<sp/>3,<sp/>4]<sp/>}<sp/>&quot;;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyHandler<sp/>handler;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Reader<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>StringStream<sp/>ss(json);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>reader.Parse(ss,<sp/>handler);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that<sp/>RapidJSON<sp/>uses<sp/>templates<sp/>to<sp/>statically<sp/>bind<sp/>the<sp/>`Reader`<sp/>type<sp/>and<sp/>the<sp/>handler<sp/>type,<sp/>instead<sp/>of<sp/>using<sp/>classes<sp/>with<sp/>virtual<sp/>functions.<sp/>This<sp/>paradigm<sp/>can<sp/>improve<sp/>performance<sp/>by<sp/>inlining<sp/>functions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Handler<sp/>{#Handler}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>shown<sp/>in<sp/>the<sp/>previous<sp/>example,<sp/>the<sp/>user<sp/>needs<sp/>to<sp/>implement<sp/>a<sp/>handler<sp/>which<sp/>consumes<sp/>the<sp/>events<sp/>(via<sp/>function<sp/>calls)<sp/>from<sp/>the<sp/>`Reader`.<sp/>The<sp/>handler<sp/>must<sp/>contain<sp/>the<sp/>following<sp/>member<sp/>functions.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>Handler<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Null();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Bool(bool<sp/>b);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int(int<sp/>i);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint(unsigned<sp/>i);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int64(int64_t<sp/>i);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint64(uint64_t<sp/>i);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Double(double<sp/>d);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>RawNumber(const<sp/>Ch*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>String(const<sp/>Ch*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartObject();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Key(const<sp/>Ch*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndObject(SizeType<sp/>memberCount);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartArray();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndArray(SizeType<sp/>elementCount);</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Null()`<sp/>is<sp/>called<sp/>when<sp/>the<sp/>`Reader`<sp/>encounters<sp/>a<sp/>JSON<sp/>null<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Bool(bool)`<sp/>is<sp/>called<sp/>when<sp/>the<sp/>`Reader`<sp/>encounters<sp/>a<sp/>JSON<sp/>true<sp/>or<sp/>false<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>the<sp/>`Reader`<sp/>encounters<sp/>a<sp/>JSON<sp/>number,<sp/>it<sp/>chooses<sp/>a<sp/>suitable<sp/>C++<sp/>type<sp/>mapping.<sp/>And<sp/>then<sp/>it<sp/>calls<sp/>*one*<sp/>function<sp/>out<sp/>of<sp/>`Int(int)`,<sp/>`Uint(unsigned)`,<sp/>`Int64(int64_t)`,<sp/>`Uint64(uint64_t)`<sp/>and<sp/>`Double(double)`.<sp/>If<sp/>`kParseNumbersAsStrings`<sp/>is<sp/>enabled,<sp/>`Reader`<sp/>will<sp/>always<sp/>calls<sp/>`RawNumber()`<sp/>instead.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`String(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy)`<sp/>is<sp/>called<sp/>when<sp/>the<sp/>`Reader`<sp/>encounters<sp/>a<sp/>string.<sp/>The<sp/>first<sp/>parameter<sp/>is<sp/>pointer<sp/>to<sp/>the<sp/>string.<sp/>The<sp/>second<sp/>parameter<sp/>is<sp/>the<sp/>length<sp/>of<sp/>the<sp/>string<sp/>(excluding<sp/>the<sp/>null<sp/>terminator).<sp/>Note<sp/>that<sp/>RapidJSON<sp/>supports<sp/>null<sp/>character<sp/>`\0`<sp/>inside<sp/>a<sp/>string.<sp/>If<sp/>such<sp/>situation<sp/>happens,<sp/>`strlen(str)<sp/>&lt;<sp/>length`.<sp/>The<sp/>last<sp/>`copy`<sp/>indicates<sp/>whether<sp/>the<sp/>handler<sp/>needs<sp/>to<sp/>make<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>string.<sp/>For<sp/>normal<sp/>parsing,<sp/>`copy<sp/>=<sp/>true`.<sp/>Only<sp/>when<sp/>*insitu*<sp/>parsing<sp/>is<sp/>used,<sp/>`copy<sp/>=<sp/>false`.<sp/>And<sp/>be<sp/>aware<sp/>that<sp/>the<sp/>character<sp/>type<sp/>depends<sp/>on<sp/>the<sp/>target<sp/>encoding,<sp/>which<sp/>will<sp/>be<sp/>explained<sp/>later.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>the<sp/>`Reader`<sp/>encounters<sp/>the<sp/>beginning<sp/>of<sp/>an<sp/>object,<sp/>it<sp/>calls<sp/>`StartObject()`.<sp/>An<sp/>object<sp/>in<sp/>JSON<sp/>is<sp/>a<sp/>set<sp/>of<sp/>name-value<sp/>pairs.<sp/>If<sp/>the<sp/>object<sp/>contains<sp/>members<sp/>it<sp/>first<sp/>calls<sp/>`Key()`<sp/>for<sp/>the<sp/>name<sp/>of<sp/>member,<sp/>and<sp/>then<sp/>calls<sp/>functions<sp/>depending<sp/>on<sp/>the<sp/>type<sp/>of<sp/>the<sp/>value.<sp/>These<sp/>calls<sp/>of<sp/>name-value<sp/>pairs<sp/>repeat<sp/>until<sp/>calling<sp/>`EndObject(SizeType<sp/>memberCount)`.<sp/>Note<sp/>that<sp/>the<sp/>`memberCount`<sp/>parameter<sp/>is<sp/>just<sp/>an<sp/>aid<sp/>for<sp/>the<sp/>handler;<sp/>users<sp/>who<sp/>do<sp/>not<sp/>need<sp/>this<sp/>parameter<sp/>may<sp/>ignore<sp/>it.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Arrays<sp/>are<sp/>similar<sp/>to<sp/>objects,<sp/>but<sp/>simpler.<sp/>At<sp/>the<sp/>beginning<sp/>of<sp/>an<sp/>array,<sp/>the<sp/>`Reader`<sp/>calls<sp/>`BeginArray()`.<sp/>If<sp/>there<sp/>is<sp/>elements,<sp/>it<sp/>calls<sp/>functions<sp/>according<sp/>to<sp/>the<sp/>types<sp/>of<sp/>element.<sp/>Similarly,<sp/>in<sp/>the<sp/>last<sp/>call<sp/>`EndArray(SizeType<sp/>elementCount)`,<sp/>the<sp/>parameter<sp/>`elementCount`<sp/>is<sp/>just<sp/>an<sp/>aid<sp/>for<sp/>the<sp/>handler.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Every<sp/>handler<sp/>function<sp/>returns<sp/>a<sp/>`bool`.<sp/>Normally<sp/>it<sp/>should<sp/>return<sp/>`true`.<sp/>If<sp/>the<sp/>handler<sp/>encounters<sp/>an<sp/>error,<sp/>it<sp/>can<sp/>return<sp/>`false`<sp/>to<sp/>notify<sp/>the<sp/>event<sp/>publisher<sp/>to<sp/>stop<sp/>further<sp/>processing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>example,<sp/>when<sp/>we<sp/>parse<sp/>a<sp/>JSON<sp/>with<sp/>`Reader`<sp/>and<sp/>the<sp/>handler<sp/>detects<sp/>that<sp/>the<sp/>JSON<sp/>does<sp/>not<sp/>conform<sp/>to<sp/>the<sp/>required<sp/>schema,<sp/>the<sp/>handler<sp/>can<sp/>return<sp/>`false`<sp/>and<sp/>let<sp/>the<sp/>`Reader`<sp/>stop<sp/>further<sp/>parsing.<sp/>This<sp/>will<sp/>place<sp/>the<sp/>`Reader`<sp/>in<sp/>an<sp/>error<sp/>state,<sp/>with<sp/>error<sp/>code<sp/>`kParseErrorTermination`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>GenericReader<sp/>{#GenericReader}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>mentioned<sp/>before,<sp/>`Reader`<sp/>is<sp/>a<sp/>typedef<sp/>of<sp/>a<sp/>template<sp/>class<sp/>`GenericReader`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">namespace<sp/>rapidjson<sp/>{</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;typename<sp/>SourceEncoding,<sp/>typename<sp/>TargetEncoding,<sp/>typename<sp/>Allocator<sp/>=<sp/>MemoryPoolAllocator&lt;&gt;<sp/>&gt;</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>GenericReader<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericReader&lt;UTF8&lt;&gt;,<sp/>UTF8&lt;&gt;<sp/>&gt;<sp/>Reader;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">}<sp/>//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`Reader`<sp/>uses<sp/>UTF-8<sp/>as<sp/>both<sp/>source<sp/>and<sp/>target<sp/>encoding.<sp/>The<sp/>source<sp/>encoding<sp/>means<sp/>the<sp/>encoding<sp/>in<sp/>the<sp/>JSON<sp/>stream.<sp/>The<sp/>target<sp/>encoding<sp/>means<sp/>the<sp/>encoding<sp/>of<sp/>the<sp/>`str`<sp/>parameter<sp/>in<sp/>`String()`<sp/>calls.<sp/>For<sp/>example,<sp/>to<sp/>parse<sp/>a<sp/>UTF-8<sp/>stream<sp/>and<sp/>output<sp/>UTF-16<sp/>string<sp/>events,<sp/>you<sp/>can<sp/>define<sp/>a<sp/>reader<sp/>by:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">GenericReader&lt;UTF8&lt;&gt;,<sp/>UTF16&lt;&gt;<sp/>&gt;<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>the<sp/>default<sp/>character<sp/>type<sp/>of<sp/>`UTF16`<sp/>is<sp/>`wchar_t`.<sp/>So<sp/>this<sp/>`reader`<sp/>needs<sp/>to<sp/>call<sp/>`String(const<sp/>wchar_t*,<sp/>SizeType,<sp/>bool)`<sp/>of<sp/>the<sp/>handler.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>third<sp/>template<sp/>parameter<sp/>`Allocator`<sp/>is<sp/>the<sp/>allocator<sp/>type<sp/>for<sp/>internal<sp/>data<sp/>structure<sp/>(actually<sp/>a<sp/>stack).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Parsing<sp/>{#SaxParsing}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>main<sp/>function<sp/>of<sp/>`Reader`<sp/>is<sp/>used<sp/>to<sp/>parse<sp/>JSON.<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;unsigned<sp/>parseFlags,<sp/>typename<sp/>InputStream,<sp/>typename<sp/>Handler&gt;</highlight></codeline>
+<codeline><highlight class="normal">bool<sp/>Parse(InputStream&amp;<sp/>is,<sp/>Handler&amp;<sp/>handler);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>with<sp/>parseFlags<sp/>=<sp/>kDefaultParseFlags</highlight></codeline>
+<codeline><highlight class="normal">template<sp/>&lt;typename<sp/>InputStream,<sp/>typename<sp/>Handler&gt;</highlight></codeline>
+<codeline><highlight class="normal">bool<sp/>Parse(InputStream&amp;<sp/>is,<sp/>Handler&amp;<sp/>handler);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>an<sp/>error<sp/>occurs<sp/>during<sp/>parsing,<sp/>it<sp/>will<sp/>return<sp/>`false`.<sp/>User<sp/>can<sp/>also<sp/>call<sp/>`bool<sp/>HasParseError()`,<sp/>`ParseErrorCode<sp/>GetParseErrorCode()`<sp/>and<sp/>`size_t<sp/>GetErrorOffset()`<sp/>to<sp/>obtain<sp/>the<sp/>error<sp/>states.<sp/>In<sp/>fact,<sp/>`Document`<sp/>uses<sp/>these<sp/>`Reader`<sp/>functions<sp/>to<sp/>obtain<sp/>parse<sp/>errors.<sp/>Please<sp/>refer<sp/>to<sp/>[DOM](doc/dom.md)<sp/>for<sp/>details<sp/>about<sp/>parse<sp/>errors.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Token-by-Token<sp/>Parsing<sp/>{#TokenByTokenParsing}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Some<sp/>users<sp/>may<sp/>wish<sp/>to<sp/>parse<sp/>a<sp/>JSON<sp/>input<sp/>stream<sp/>a<sp/>single<sp/>token<sp/>at<sp/>a<sp/>time,<sp/>instead<sp/>of<sp/>immediately<sp/>parsing<sp/>an<sp/>entire<sp/>document<sp/>without<sp/>stopping.<sp/>To<sp/>parse<sp/>JSON<sp/>this<sp/>way,<sp/>instead<sp/>of<sp/>calling<sp/>`Parse`,<sp/>you<sp/>can<sp/>use<sp/>the<sp/>`IterativeParse`<sp/>set<sp/>of<sp/>functions:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>IterativeParseInit();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>template<sp/>&lt;unsigned<sp/>parseFlags,<sp/>typename<sp/>InputStream,<sp/>typename<sp/>Handler&gt;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>IterativeParseNext(InputStream&amp;<sp/>is,<sp/>Handler&amp;<sp/>handler);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>IterativeParseComplete();</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example<sp/>of<sp/>iteratively<sp/>parsing<sp/>JSON,<sp/>token<sp/>by<sp/>token:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>reader.IterativeParseInit();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>while<sp/>(!reader.IterativeParseComplete())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reader.IterativeParseNext&lt;kParseDefaultFlags&gt;(is,<sp/>handler);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Your<sp/>handler<sp/>has<sp/>been<sp/>called<sp/>once.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Writer<sp/>{#Writer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Reader`<sp/>converts<sp/>(parses)<sp/>JSON<sp/>into<sp/>events.<sp/>`Writer`<sp/>does<sp/>exactly<sp/>the<sp/>opposite.<sp/>It<sp/>converts<sp/>events<sp/>into<sp/>JSON.<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Writer`<sp/>is<sp/>very<sp/>easy<sp/>to<sp/>use.<sp/>If<sp/>your<sp/>application<sp/>only<sp/>need<sp/>to<sp/>converts<sp/>some<sp/>data<sp/>into<sp/>JSON,<sp/>it<sp/>may<sp/>be<sp/>a<sp/>good<sp/>choice<sp/>to<sp/>use<sp/>`Writer`<sp/>directly,<sp/>instead<sp/>of<sp/>building<sp/>a<sp/>`Document`<sp/>and<sp/>then<sp/>stringifying<sp/>it<sp/>with<sp/>a<sp/>`Writer`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>`simplewriter`<sp/>example,<sp/>we<sp/>do<sp/>exactly<sp/>the<sp/>reverse<sp/>of<sp/>`simplereader`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/writer.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/stringbuffer.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;iostream&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>std;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>main()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>StringBuffer<sp/>s;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Writer&lt;StringBuffer&gt;<sp/>writer(s);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.StartObject();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;hello&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.String(&quot;world&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;t&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Bool(true);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;f&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Bool(false);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;n&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Null();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;i&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Uint(123);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;pi&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Double(3.1416);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.Key(&quot;a&quot;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.StartArray();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>for<sp/>(unsigned<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>4;<sp/>i++)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>writer.Uint(i);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.EndArray();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>writer.EndObject();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>s.GetString()<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">{&quot;hello&quot;:&quot;world&quot;,&quot;t&quot;:true,&quot;f&quot;:false,&quot;n&quot;:null,&quot;i&quot;:123,&quot;pi&quot;:3.1416,&quot;a&quot;:[0,1,2,3]}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>two<sp/>`String()`<sp/>and<sp/>`Key()`<sp/>overloads.<sp/>One<sp/>is<sp/>the<sp/>same<sp/>as<sp/>defined<sp/>in<sp/>handler<sp/>concept<sp/>with<sp/>3<sp/>parameters.<sp/>It<sp/>can<sp/>handle<sp/>string<sp/>with<sp/>null<sp/>characters.<sp/>Another<sp/>one<sp/>is<sp/>the<sp/>simpler<sp/>version<sp/>used<sp/>in<sp/>the<sp/>above<sp/>example.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>the<sp/>example<sp/>code<sp/>does<sp/>not<sp/>pass<sp/>any<sp/>parameters<sp/>in<sp/>`EndArray()`<sp/>and<sp/>`EndObject()`.<sp/>An<sp/>`SizeType`<sp/>can<sp/>be<sp/>passed<sp/>but<sp/>it<sp/>will<sp/>be<sp/>simply<sp/>ignored<sp/>by<sp/>`Writer`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>doubt<sp/>that,<sp/>why<sp/>not<sp/>just<sp/>using<sp/>`sprintf()`<sp/>or<sp/>`std::stringstream`<sp/>to<sp/>build<sp/>a<sp/>JSON?</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>various<sp/>reasons:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>`Writer`<sp/>must<sp/>output<sp/>a<sp/>well-formed<sp/>JSON.<sp/>If<sp/>there<sp/>is<sp/>incorrect<sp/>event<sp/>sequence<sp/>(e.g.<sp/>`Int()`<sp/>just<sp/>after<sp/>`StartObject()`),<sp/>it<sp/>generates<sp/>assertion<sp/>fail<sp/>in<sp/>debug<sp/>mode.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`Writer::String()`<sp/>can<sp/>handle<sp/>string<sp/>escaping<sp/>(e.g.<sp/>converting<sp/>code<sp/>point<sp/>`U+000A`<sp/>to<sp/>`\n`)<sp/>and<sp/>Unicode<sp/>transcoding.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>`Writer`<sp/>handles<sp/>number<sp/>output<sp/>consistently.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>`Writer`<sp/>implements<sp/>the<sp/>event<sp/>handler<sp/>concept.<sp/>It<sp/>can<sp/>be<sp/>used<sp/>to<sp/>handle<sp/>events<sp/>from<sp/>`Reader`,<sp/>`Document`<sp/>or<sp/>other<sp/>event<sp/>publisher.</highlight></codeline>
+<codeline><highlight class="normal">5.<sp/>`Writer`<sp/>can<sp/>be<sp/>optimized<sp/>for<sp/>different<sp/>platforms.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Anyway,<sp/>using<sp/>`Writer`<sp/>API<sp/>is<sp/>even<sp/>simpler<sp/>than<sp/>generating<sp/>a<sp/>JSON<sp/>by<sp/>ad<sp/>hoc<sp/>methods.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Template<sp/>{#WriterTemplate}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Writer`<sp/>has<sp/>a<sp/>minor<sp/>design<sp/>difference<sp/>to<sp/>`Reader`.<sp/>`Writer`<sp/>is<sp/>a<sp/>template<sp/>class,<sp/>not<sp/>a<sp/>typedef.<sp/>There<sp/>is<sp/>no<sp/>`GenericWriter`.<sp/>The<sp/>following<sp/>is<sp/>the<sp/>declaration.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">namespace<sp/>rapidjson<sp/>{</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>OutputStream,<sp/>typename<sp/>SourceEncoding<sp/>=<sp/>UTF8&lt;&gt;,<sp/>typename<sp/>TargetEncoding<sp/>=<sp/>UTF8&lt;&gt;,<sp/>typename<sp/>Allocator<sp/>=<sp/>CrtAllocator&lt;&gt;,<sp/>unsigned<sp/>writeFlags<sp/>=<sp/>kWriteDefaultFlags&gt;</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>Writer<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Writer(OutputStream&amp;<sp/>os,<sp/>Allocator*<sp/>allocator<sp/>=<sp/>0,<sp/>size_t<sp/>levelDepth<sp/>=<sp/>kDefaultLevelDepth)</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">}<sp/>//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`OutputStream`<sp/>template<sp/>parameter<sp/>is<sp/>the<sp/>type<sp/>of<sp/>output<sp/>stream.<sp/>It<sp/>cannot<sp/>be<sp/>deduced<sp/>and<sp/>must<sp/>be<sp/>specified<sp/>by<sp/>user.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`SourceEncoding`<sp/>template<sp/>parameter<sp/>specifies<sp/>the<sp/>encoding<sp/>to<sp/>be<sp/>used<sp/>in<sp/>`String(const<sp/>Ch*,<sp/>...)`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`TargetEncoding`<sp/>template<sp/>parameter<sp/>specifies<sp/>the<sp/>encoding<sp/>in<sp/>the<sp/>output<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`Allocator`<sp/>is<sp/>the<sp/>type<sp/>of<sp/>allocator,<sp/>which<sp/>is<sp/>used<sp/>for<sp/>allocating<sp/>internal<sp/>data<sp/>structure<sp/>(a<sp/>stack).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`writeFlags`<sp/>are<sp/>combination<sp/>of<sp/>the<sp/>following<sp/>bit-flags:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parse<sp/>flags<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Meaning</highlight></codeline>
+<codeline><highlight class="normal">------------------------------|-----------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`kWriteNoFlags`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>No<sp/>flag<sp/>is<sp/>set.</highlight></codeline>
+<codeline><highlight class="normal">`kWriteDefaultFlags`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Default<sp/>write<sp/>flags.<sp/>It<sp/>is<sp/>equal<sp/>to<sp/>macro<sp/>`RAPIDJSON_WRITE_DEFAULT_FLAGS`,<sp/>which<sp/>is<sp/>defined<sp/>as<sp/>`kWriteNoFlags`.</highlight></codeline>
+<codeline><highlight class="normal">`kWriteValidateEncodingFlag`<sp/><sp/>|<sp/>Validate<sp/>encoding<sp/>of<sp/>JSON<sp/>strings.</highlight></codeline>
+<codeline><highlight class="normal">`kWriteNanAndInfFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Allow<sp/>writing<sp/>of<sp/>`Infinity`,<sp/>`-Infinity`<sp/>and<sp/>`NaN`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>the<sp/>constructor<sp/>of<sp/>`Writer`<sp/>has<sp/>a<sp/>`levelDepth`<sp/>parameter.<sp/>This<sp/>parameter<sp/>affects<sp/>the<sp/>initial<sp/>memory<sp/>allocated<sp/>for<sp/>storing<sp/>information<sp/>per<sp/>hierarchy<sp/>level.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>PrettyWriter<sp/>{#PrettyWriter}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">While<sp/>the<sp/>output<sp/>of<sp/>`Writer`<sp/>is<sp/>the<sp/>most<sp/>condensed<sp/>JSON<sp/>without<sp/>white-spaces,<sp/>suitable<sp/>for<sp/>network<sp/>transfer<sp/>or<sp/>storage,<sp/>it<sp/>is<sp/>not<sp/>easily<sp/>readable<sp/>by<sp/>human.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Therefore,<sp/>RapidJSON<sp/>provides<sp/>a<sp/>`PrettyWriter`,<sp/>which<sp/>adds<sp/>indentation<sp/>and<sp/>line<sp/>feeds<sp/>in<sp/>the<sp/>output.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>usage<sp/>of<sp/>`PrettyWriter`<sp/>is<sp/>exactly<sp/>the<sp/>same<sp/>as<sp/>`Writer`,<sp/>expect<sp/>that<sp/>`PrettyWriter`<sp/>provides<sp/>a<sp/>`SetIndent(Ch<sp/>indentChar,<sp/>unsigned<sp/>indentCharCount)`<sp/>function.<sp/>The<sp/>default<sp/>is<sp/>4<sp/>spaces.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Completeness<sp/>and<sp/>Reset<sp/>{#CompletenessReset}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>`Writer`<sp/>can<sp/>only<sp/>output<sp/>a<sp/>single<sp/>JSON,<sp/>which<sp/>can<sp/>be<sp/>any<sp/>JSON<sp/>type<sp/>at<sp/>the<sp/>root.<sp/>Once<sp/>the<sp/>singular<sp/>event<sp/>for<sp/>root<sp/>(e.g.<sp/>`String()`),<sp/>or<sp/>the<sp/>last<sp/>matching<sp/>`EndObject()`<sp/>or<sp/>`EndArray()`<sp/>event,<sp/>is<sp/>handled,<sp/>the<sp/>output<sp/>JSON<sp/>is<sp/>well-formed<sp/>and<sp/>complete.<sp/>User<sp/>can<sp/>detect<sp/>this<sp/>state<sp/>by<sp/>calling<sp/>`Writer::IsComplete()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>a<sp/>JSON<sp/>is<sp/>complete,<sp/>the<sp/>`Writer`<sp/>cannot<sp/>accept<sp/>any<sp/>new<sp/>events.<sp/>Otherwise<sp/>the<sp/>output<sp/>will<sp/>be<sp/>invalid<sp/>(i.e.<sp/>having<sp/>more<sp/>than<sp/>one<sp/>root).<sp/>To<sp/>reuse<sp/>the<sp/>`Writer`<sp/>object,<sp/>user<sp/>can<sp/>call<sp/>`Writer::Reset(OutputStream&amp;<sp/>os)`<sp/>to<sp/>reset<sp/>all<sp/>internal<sp/>states<sp/>of<sp/>the<sp/>`Writer`<sp/>with<sp/>a<sp/>new<sp/>output<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Techniques<sp/>{#SaxTechniques}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Parsing<sp/>JSON<sp/>to<sp/>Custom<sp/>Data<sp/>Structure<sp/>{#CustomDataStructure}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Document`&apos;s<sp/>parsing<sp/>capability<sp/>is<sp/>completely<sp/>based<sp/>on<sp/>`Reader`.<sp/>Actually<sp/>`Document`<sp/>is<sp/>a<sp/>handler<sp/>which<sp/>receives<sp/>events<sp/>from<sp/>a<sp/>reader<sp/>to<sp/>build<sp/>a<sp/>DOM<sp/>during<sp/>parsing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">User<sp/>may<sp/>uses<sp/>`Reader`<sp/>to<sp/>build<sp/>other<sp/>data<sp/>structures<sp/>directly.<sp/>This<sp/>eliminates<sp/>building<sp/>of<sp/>DOM,<sp/>thus<sp/>reducing<sp/>memory<sp/>and<sp/>improving<sp/>performance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>the<sp/>following<sp/>`messagereader`<sp/>example,<sp/>`ParseMessages()`<sp/>parses<sp/>a<sp/>JSON<sp/>which<sp/>should<sp/>be<sp/>an<sp/>object<sp/>with<sp/>key-string<sp/>pairs.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/reader.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/error/en.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;iostream&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;string&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;map&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>std;</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">typedef<sp/>map&lt;string,<sp/>string&gt;<sp/>MessageMap;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">struct<sp/>MessageHandler</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>:<sp/>public<sp/>BaseReaderHandler&lt;UTF8&lt;&gt;,<sp/>MessageHandler&gt;<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MessageHandler()<sp/>:<sp/>state_(kExpectObjectStart)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartObject()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>switch<sp/>(state_)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>case<sp/>kExpectObjectStart:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state_<sp/>=<sp/>kExpectNameOrObjectEnd;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>default:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>false;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>String(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>switch<sp/>(state_)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>case<sp/>kExpectNameOrObjectEnd:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>name_<sp/>=<sp/>string(str,<sp/>length);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state_<sp/>=<sp/>kExpectValue;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>case<sp/>kExpectValue:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>messages_.insert(MessageMap::value_type(name_,<sp/>string(str,<sp/>length)));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state_<sp/>=<sp/>kExpectNameOrObjectEnd;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>default:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>false;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndObject(SizeType)<sp/>{<sp/>return<sp/>state_<sp/>==<sp/>kExpectNameOrObjectEnd;<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Default()<sp/>{<sp/>return<sp/>false;<sp/>}<sp/>//<sp/>All<sp/>other<sp/>events<sp/>are<sp/>invalid.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MessageMap<sp/>messages_;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>enum<sp/>State<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kExpectObjectStart,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kExpectNameOrObjectEnd,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>kExpectValue,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}state_;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::string<sp/>name_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">void<sp/>ParseMessages(const<sp/>char*<sp/>json,<sp/>MessageMap&amp;<sp/>messages)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Reader<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MessageHandler<sp/>handler;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>StringStream<sp/>ss(json);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(reader.Parse(ss,<sp/>handler))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>messages.swap(handler.messages_);<sp/><sp/><sp/>//<sp/>Only<sp/>change<sp/>it<sp/>if<sp/>success.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>else<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ParseErrorCode<sp/>e<sp/>=<sp/>reader.GetParseErrorCode();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>size_t<sp/>o<sp/>=<sp/>reader.GetErrorOffset();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>&quot;Error:<sp/>&quot;<sp/>&lt;&lt;<sp/>GetParseError_En(e)<sp/>&lt;&lt;<sp/>endl;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>&quot;<sp/>at<sp/>offset<sp/>&quot;<sp/>&lt;&lt;<sp/>o<sp/>&lt;&lt;<sp/>&quot;<sp/>near<sp/>&apos;&quot;<sp/>&lt;&lt;<sp/>string(json).substr(o,<sp/>10)<sp/>&lt;&lt;<sp/>&quot;...&apos;&quot;<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>main()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MessageMap<sp/>messages;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>const<sp/>char*<sp/>json1<sp/>=<sp/>&quot;{<sp/>\&quot;greeting\&quot;<sp/>:<sp/>\&quot;Hello!\&quot;,<sp/>\&quot;farewell\&quot;<sp/>:<sp/>\&quot;bye-bye!\&quot;<sp/>}&quot;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>json1<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ParseMessages(json1,<sp/>messages);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>for<sp/>(MessageMap::const_iterator<sp/>itr<sp/>=<sp/>messages.begin();<sp/>itr<sp/>!=<sp/>messages.end();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>itr-&gt;first<sp/>&lt;&lt;<sp/>&quot;:<sp/>&quot;<sp/>&lt;&lt;<sp/>itr-&gt;second<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>endl<sp/>&lt;&lt;<sp/>&quot;Parse<sp/>a<sp/>JSON<sp/>with<sp/>invalid<sp/>schema.&quot;<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>const<sp/>char*<sp/>json2<sp/>=<sp/>&quot;{<sp/>\&quot;greeting\&quot;<sp/>:<sp/>\&quot;Hello!\&quot;,<sp/>\&quot;farewell\&quot;<sp/>:<sp/>\&quot;bye-bye!\&quot;,<sp/>\&quot;foo\&quot;<sp/>:<sp/>{}<sp/>}&quot;;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cout<sp/>&lt;&lt;<sp/>json2<sp/>&lt;&lt;<sp/>endl;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ParseMessages(json2,<sp/>messages);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>0;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">{<sp/>&quot;greeting&quot;<sp/>:<sp/>&quot;Hello!&quot;,<sp/>&quot;farewell&quot;<sp/>:<sp/>&quot;bye-bye!&quot;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">farewell:<sp/>bye-bye!</highlight></codeline>
+<codeline><highlight class="normal">greeting:<sp/>Hello!</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parse<sp/>a<sp/>JSON<sp/>with<sp/>invalid<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">{<sp/>&quot;greeting&quot;<sp/>:<sp/>&quot;Hello!&quot;,<sp/>&quot;farewell&quot;<sp/>:<sp/>&quot;bye-bye!&quot;,<sp/>&quot;foo&quot;<sp/>:<sp/>{}<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">Error:<sp/>Terminate<sp/>parsing<sp/>due<sp/>to<sp/>Handler<sp/>error.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>at<sp/>offset<sp/>59<sp/>near<sp/>&apos;}<sp/>}...&apos;</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>first<sp/>JSON<sp/>(`json1`)<sp/>was<sp/>successfully<sp/>parsed<sp/>into<sp/>`MessageMap`.<sp/>Since<sp/>`MessageMap`<sp/>is<sp/>a<sp/>`std::map`,<sp/>the<sp/>printing<sp/>order<sp/>are<sp/>sorted<sp/>by<sp/>the<sp/>key.<sp/>This<sp/>order<sp/>is<sp/>different<sp/>from<sp/>the<sp/>JSON&apos;s<sp/>order.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>the<sp/>second<sp/>JSON<sp/>(`json2`),<sp/>`foo`&apos;s<sp/>value<sp/>is<sp/>an<sp/>empty<sp/>object.<sp/>As<sp/>it<sp/>is<sp/>an<sp/>object,<sp/>`MessageHandler::StartObject()`<sp/>will<sp/>be<sp/>called.<sp/>However,<sp/>at<sp/>that<sp/>moment<sp/>`state_<sp/>=<sp/>kExpectValue`,<sp/>so<sp/>that<sp/>function<sp/>returns<sp/>`false`<sp/>and<sp/>cause<sp/>the<sp/>parsing<sp/>process<sp/>be<sp/>terminated.<sp/>The<sp/>error<sp/>code<sp/>is<sp/>`kParseErrorTermination`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Filtering<sp/>of<sp/>JSON<sp/>{#Filtering}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>mentioned<sp/>earlier,<sp/>`Writer`<sp/>can<sp/>handle<sp/>the<sp/>events<sp/>published<sp/>by<sp/>`Reader`.<sp/>`condense`<sp/>example<sp/>simply<sp/>set<sp/>a<sp/>`Writer`<sp/>as<sp/>handler<sp/>of<sp/>a<sp/>`Reader`,<sp/>so<sp/>it<sp/>can<sp/>remove<sp/>all<sp/>white-spaces<sp/>in<sp/>JSON.<sp/>`pretty`<sp/>example<sp/>uses<sp/>the<sp/>same<sp/>relationship,<sp/>but<sp/>replacing<sp/>`Writer`<sp/>by<sp/>`PrettyWriter`.<sp/>So<sp/>`pretty`<sp/>can<sp/>be<sp/>used<sp/>to<sp/>reformat<sp/>a<sp/>JSON<sp/>with<sp/>indentation<sp/>and<sp/>line<sp/>feed.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Actually,<sp/>we<sp/>can<sp/>add<sp/>intermediate<sp/>layer(s)<sp/>to<sp/>filter<sp/>the<sp/>contents<sp/>of<sp/>JSON<sp/>via<sp/>these<sp/>SAX-style<sp/>API.<sp/>For<sp/>example,<sp/>`capitalize`<sp/>example<sp/>capitalize<sp/>all<sp/>strings<sp/>in<sp/>a<sp/>JSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/reader.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/writer.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filereadstream.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filewritestream.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/error/en.h&quot;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;vector&gt;</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&lt;cctype&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>OutputHandler&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>CapitalizeFilter<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>CapitalizeFilter(OutputHandler&amp;<sp/>out)<sp/>:<sp/>out_(out),<sp/>buffer_()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Null()<sp/>{<sp/>return<sp/>out_.Null();<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Bool(bool<sp/>b)<sp/>{<sp/>return<sp/>out_.Bool(b);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int(int<sp/>i)<sp/>{<sp/>return<sp/>out_.Int(i);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint(unsigned<sp/>u)<sp/>{<sp/>return<sp/>out_.Uint(u);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Int64(int64_t<sp/>i)<sp/>{<sp/>return<sp/>out_.Int64(i);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Uint64(uint64_t<sp/>u)<sp/>{<sp/>return<sp/>out_.Uint64(u);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Double(double<sp/>d)<sp/>{<sp/>return<sp/>out_.Double(d);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>RawNumber(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy)<sp/>{<sp/>return<sp/>out_.RawNumber(str,<sp/>length,<sp/>copy);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>String(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool)<sp/>{<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_.clear();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>for<sp/>(SizeType<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>length;<sp/>i++)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer_.push_back(std::toupper(str[i]));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>out_.String(&amp;buffer_.front(),<sp/>length,<sp/>true);<sp/>//<sp/>true<sp/>=<sp/>output<sp/>handler<sp/>need<sp/>to<sp/>copy<sp/>the<sp/>string</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartObject()<sp/>{<sp/>return<sp/>out_.StartObject();<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>Key(const<sp/>char*<sp/>str,<sp/>SizeType<sp/>length,<sp/>bool<sp/>copy)<sp/>{<sp/>return<sp/>String(str,<sp/>length,<sp/>copy);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndObject(SizeType<sp/>memberCount)<sp/>{<sp/>return<sp/>out_.EndObject(memberCount);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>StartArray()<sp/>{<sp/>return<sp/>out_.StartArray();<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>bool<sp/>EndArray(SizeType<sp/>elementCount)<sp/>{<sp/>return<sp/>out_.EndArray(elementCount);<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>OutputHandler&amp;<sp/>out_;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;char&gt;<sp/>buffer_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">int<sp/>main(int,<sp/>char*[])<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Prepare<sp/>JSON<sp/>reader<sp/>and<sp/>input<sp/>stream.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Reader<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>char<sp/>readBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>FileReadStream<sp/>is(stdin,<sp/>readBuffer,<sp/>sizeof(readBuffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Prepare<sp/>JSON<sp/>writer<sp/>and<sp/>output<sp/>stream.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>char<sp/>writeBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>FileWriteStream<sp/>os(stdout,<sp/>writeBuffer,<sp/>sizeof(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Writer&lt;FileWriteStream&gt;<sp/>writer(os);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>JSON<sp/>reader<sp/>parse<sp/>from<sp/>the<sp/>input<sp/>stream<sp/>and<sp/>let<sp/>writer<sp/>generate<sp/>the<sp/>output.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>CapitalizeFilter&lt;Writer&lt;FileWriteStream&gt;<sp/>&gt;<sp/>filter(writer);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!reader.Parse(is,<sp/>filter))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fprintf(stderr,<sp/>&quot;\nError(%u):<sp/>%s\n&quot;,<sp/>(unsigned)reader.GetErrorOffset(),<sp/>GetParseError_En(reader.GetParseErrorCode()));</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>1;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>0;</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>it<sp/>is<sp/>incorrect<sp/>to<sp/>simply<sp/>capitalize<sp/>the<sp/>JSON<sp/>as<sp/>a<sp/>string.<sp/>For<sp/>example:</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">[&quot;Hello\nWorld&quot;]</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Simply<sp/>capitalizing<sp/>the<sp/>whole<sp/>JSON<sp/>would<sp/>contain<sp/>incorrect<sp/>escape<sp/>character:</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">[&quot;HELLO\NWORLD&quot;]</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>correct<sp/>result<sp/>by<sp/>`capitalize`:</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">[&quot;HELLO\nWORLD&quot;]</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">More<sp/>complicated<sp/>filters<sp/>can<sp/>be<sp/>developed.<sp/>However,<sp/>since<sp/>SAX-style<sp/>API<sp/>can<sp/>only<sp/>provide<sp/>information<sp/>about<sp/>a<sp/>single<sp/>event<sp/>at<sp/>a<sp/>time,<sp/>user<sp/>may<sp/>need<sp/>to<sp/>book-keeping<sp/>the<sp/>contextual<sp/>information<sp/>(e.g.<sp/>the<sp/>path<sp/>from<sp/>root<sp/>value,<sp/>storage<sp/>of<sp/>other<sp/>related<sp/>values).<sp/>Some<sp/>processing<sp/>may<sp/>be<sp/>easier<sp/>to<sp/>be<sp/>implemented<sp/>in<sp/>DOM<sp/>than<sp/>SAX.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/sax.md"/>
+  </compounddef>
+</doxygen>

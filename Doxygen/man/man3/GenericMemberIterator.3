@@ -1,0 +1,326 @@
+.TH "GenericMemberIterator< Const, Encoding, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericMemberIterator< Const, Encoding, Allocator > \- (Constant) member iterator for a JSON object value  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP \fBIterator\fP"
+.br
+.RI "Iterator type itself\&. "
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< true, \fBEncoding\fP, \fBAllocator\fP > \fBConstIterator\fP"
+.br
+.RI "Constant iterator type\&. "
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< false, \fBEncoding\fP, \fBAllocator\fP > \fBNonConstIterator\fP"
+.br
+.RI "Non-constant iterator type\&. "
+.in -1c
+.SS "Public Member Functions"
+
+.PP
+.RI "\fBstepping\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "\fBIterator\fP & \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "\fBIterator\fP & \fBoperator\-\-\fP ()"
+.br
+.ti -1c
+.RI "\fBIterator\fP \fBoperator++\fP (int)"
+.br
+.ti -1c
+.RI "\fBIterator\fP \fBoperator\-\-\fP (int)"
+.br
+.in -1c
+.in -1c
+.PP
+.RI "\fBincrement/decrement\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "\fBIterator\fP \fBoperator+\fP (\fBDifferenceType\fP n) const"
+.br
+.ti -1c
+.RI "\fBIterator\fP \fBoperator\-\fP (\fBDifferenceType\fP n) const"
+.br
+.ti -1c
+.RI "\fBIterator\fP & \fBoperator+=\fP (\fBDifferenceType\fP n)"
+.br
+.ti -1c
+.RI "\fBIterator\fP & \fBoperator\-=\fP (\fBDifferenceType\fP n)"
+.br
+.in -1c
+.in -1c
+.PP
+.RI "\fBrelations\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator==\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator!=\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator<=\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator>=\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator<\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.ti -1c
+.RI "template<bool Const_> bool \fBoperator>\fP (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > &that) const"
+.br
+.in -1c
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBGenericValue< Encoding, Allocator >\fP"
+.br
+.ti -1c
+.RI "template<bool , typename , typename > class \fBGenericMemberIterator\fP"
+.br
+.in -1c
+.SS "std::iterator_traits support"
+
+.in +1c
+.ti -1c
+.RI "typedef ValueType \fBvalue_type\fP"
+.br
+.ti -1c
+.RI "typedef ValueType * \fBpointer\fP"
+.br
+.ti -1c
+.RI "typedef ValueType & \fBreference\fP"
+.br
+.ti -1c
+.RI "typedef std::ptrdiff_t \fBdifference_type\fP"
+.br
+.ti -1c
+.RI "typedef std::random_access_iterator_tag \fBiterator_category\fP"
+.br
+.ti -1c
+.RI "typedef \fBpointer\fP \fBPointer\fP"
+.br
+.RI "Pointer to (const) \fBGenericMember\fP\&. "
+.ti -1c
+.RI "typedef \fBreference\fP \fBReference\fP"
+.br
+.RI "Reference to (const) \fBGenericMember\fP\&. "
+.ti -1c
+.RI "typedef \fBdifference_type\fP \fBDifferenceType\fP"
+.br
+.RI "Signed integer type (e\&.g\&. \fCptrdiff_t\fP) "
+.ti -1c
+.RI "\fBGenericMemberIterator\fP ()"
+.br
+.RI "Default constructor (singular value) "
+.ti -1c
+.RI "\fBGenericMemberIterator\fP (const \fBNonConstIterator\fP &it)"
+.br
+.RI "Iterator conversions to more const\&. "
+.ti -1c
+.RI "\fBIterator\fP & \fBoperator=\fP (const \fBNonConstIterator\fP &it)"
+.br
+.in -1c
+.SS "dereference"
+
+.in +1c
+.ti -1c
+.RI "\fBReference\fP \fBoperator*\fP () const"
+.br
+.ti -1c
+.RI "\fBPointer\fP \fBoperator\->\fP () const"
+.br
+.ti -1c
+.RI "\fBReference\fP \fBoperator[]\fP (\fBDifferenceType\fP n) const"
+.br
+.ti -1c
+.RI "\fBDifferenceType\fP \fBoperator\-\fP (\fBConstIterator\fP that) const"
+.br
+.RI "Distance\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<bool Const, typename \fBEncoding\fP, typename \fBAllocator\fP>
+.br
+class GenericMemberIterator< Const, Encoding, Allocator >"(Constant) member iterator for a JSON object value 
+
+
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIConst\fP Is this a constant iterator? 
+.br
+\fIEncoding\fP Encoding of the value\&. (Even non-string values need to have the same encoding in a document) 
+.br
+\fIAllocator\fP Allocator type for allocating memory of object, array and string\&.
+.RE
+.PP
+This class implements a \fBRandom\fP Access Iterator for \fBGenericMember\fP elements of a \fBGenericValue\fP, see ISO/IEC 14882:2003(E) C++ standard, 24\&.1 [lib\&.iterator\&.requirements]\&.
+.PP
+\fBNote\fP
+.RS 4
+This iterator implementation is mainly intended to avoid implicit conversions from iterator values to \fCNULL\fP, e\&.g\&. from GenericValue::FindMember\&.
+.PP
+Define \fCRAPIDJSON_NOMEMBERITERATORCLASS\fP to fall back to a pointer-based implementation, if your platform doesn't provide the C++ <iterator> header\&.
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericMember\fP, \fBGenericValue::MemberIterator\fP, \fBGenericValue::ConstMemberIterator\fP 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBGenericMemberIterator\fP<true,\fBEncoding\fP,\fBAllocator\fP> \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::ConstIterator"
+
+.PP
+Constant iterator type\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef std::ptrdiff_t \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::difference_type"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBdifference_type\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::DifferenceType"
+
+.PP
+Signed integer type (e\&.g\&. \fCptrdiff_t\fP) 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBGenericMemberIterator\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::Iterator"
+
+.PP
+Iterator type itself\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef std::random_access_iterator_tag \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::iterator_category"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBGenericMemberIterator\fP<false,\fBEncoding\fP,\fBAllocator\fP> \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::NonConstIterator"
+
+.PP
+Non-constant iterator type\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType* \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::pointer"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBpointer\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::Pointer\fP"
+
+.PP
+Pointer to (const) \fBGenericMember\fP\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType& \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::reference"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBreference\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::Reference"
+
+.PP
+Reference to (const) \fBGenericMember\fP\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::value_type"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::GenericMemberIterator\fP ()\fC [inline]\fP"
+
+.PP
+Default constructor (singular value) Creates an iterator pointing to no element\&. 
+.PP
+\fBNote\fP
+.RS 4
+All operations, except for comparisons, are undefined on such values\&. 
+.RE
+.PP
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::GenericMemberIterator\fP (const \fBNonConstIterator\fP & it)\fC [inline]\fP"
+
+.PP
+Iterator conversions to more const\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIit\fP (Non-const) iterator to copy from
+.RE
+.PP
+Allows the creation of an iterator from another \fBGenericMemberIterator\fP that is 'less const'\&. Especially, creating a non-constant iterator from a constant iterator are disabled: 
+.PD 0
+
+.IP "\(bu" 2
+const -> non-const (not ok) 
+.IP "\(bu" 2
+const -> const (ok) 
+.IP "\(bu" 2
+non-const -> const (ok) 
+.IP "\(bu" 2
+non-const -> non-const (ok)
+.PP
+\fBNote\fP
+.RS 4
+If the \fCConst\fP template parameter is already \fCfalse\fP, this constructor effectively defines a regular copy-constructor\&. Otherwise, the copy constructor is implicitly defined\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator!= (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBReference\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator* () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator+ (\fBDifferenceType\fP n) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP & \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator++ ()\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator++ (int)\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP & \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator+= (\fBDifferenceType\fP n)\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBDifferenceType\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\- (\fBConstIterator\fP that) const\fC [inline]\fP"
+
+.PP
+Distance\&. 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\- (\fBDifferenceType\fP n) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP & \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\-\- ()\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\-\- (int)\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP & \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\-= (\fBDifferenceType\fP n)\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBPointer\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator\-> () const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator< (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator<= (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBIterator\fP & \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator= (const \fBNonConstIterator\fP & it)\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator== (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator> (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator>= (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBReference\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator[] (\fBDifferenceType\fP n) const\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool , typename , typename > friend class \fBGenericMemberIterator\fP\fC [friend]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > friend class \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fC [friend]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,635 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_encodings_8h_source" xml:lang="en-US">
+<title>encodings.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/encodings.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_ENCODINGS_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ENCODINGS_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_rapidjson_8h">rapidjson.h</link>&quot;</emphasis>
+19 
+20 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;!defined(__clang__)</emphasis>
+21 RAPIDJSON_DIAG_PUSH
+22 RAPIDJSON_DIAG_OFF(4244)&#32;<emphasis role="comment">//&#32;conversion&#32;from&#32;&apos;type1&apos;&#32;to&#32;&apos;type2&apos;,&#32;possible&#32;loss&#32;of&#32;data</emphasis>
+23 RAPIDJSON_DIAG_OFF(4702)&#32;&#32;<emphasis role="comment">//&#32;unreachable&#32;code</emphasis>
+24 <emphasis role="preprocessor">#elif&#32;defined(__GNUC__)</emphasis>
+25 RAPIDJSON_DIAG_PUSH
+26 RAPIDJSON_DIAG_OFF(effc++)
+27 RAPIDJSON_DIAG_OFF(overflow)
+28 <emphasis role="preprocessor">#endif</emphasis>
+29 
+30 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+31 
+33 <emphasis role="comment">//&#32;Encoding</emphasis>
+34 
+47 
+54 
+62 
+68 
+72 
+76 
+80 
+87 <emphasis role="comment">//&#32;UTF8</emphasis>
+88 
+90 
+95 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">char</emphasis>&gt;
+96 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f8">UTF8</link>&#32;{
+97 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link>;
+98 
+99 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_u_t_f8_1a6d7cd5f1f72db45d041344c35f47da74a1a78b02dbcc9ddfd12f86a51cddf8fad">supportUnicode</link>&#32;=&#32;1&#32;};
+100 
+101 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+102 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f8_1af286ed19ca60d261a9b11b65bee1298b">Encode</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0x7F)&#32;
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(codepoint&#32;&amp;&#32;0xFF));
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0x7FF)&#32;{
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xC0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0xFF)));
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&amp;&#32;0x3F))));
+108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0xFFFF)&#32;{
+110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xE0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;0xFF)));
+111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0x3F)));
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;(codepoint&#32;&amp;&#32;0x3F)));
+113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+115 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xF0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;18)&#32;&amp;&#32;0xFF)));
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;0x3F)));
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0x3F)));
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;(codepoint&#32;&amp;&#32;0x3F)));
+120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+121 &#32;&#32;&#32;&#32;}
+122 
+123 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+124 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f8_1aac6bdaf03c114265384b2ae3e425e7a8">EncodeUnsafe</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0x7F)&#32;
+126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(codepoint&#32;&amp;&#32;0xFF));
+127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0x7FF)&#32;{
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xC0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0xFF)));
+129 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&amp;&#32;0x3F))));
+130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0xFFFF)&#32;{
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xE0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;0xFF)));
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0x3F)));
+134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;(codepoint&#32;&amp;&#32;0x3F)));
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0xF0&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;18)&#32;&amp;&#32;0xFF)));
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;12)&#32;&amp;&#32;0x3F)));
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;((codepoint&#32;&gt;&gt;&#32;6)&#32;&amp;&#32;0x3F)));
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(0x80&#32;|&#32;(codepoint&#32;&amp;&#32;0x3F)));
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+143 &#32;&#32;&#32;&#32;}
+144 
+145 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f8_1a17c6badb31acf4f784111c886737fb17">Decode</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;codepoint)&#32;{
+147 <emphasis role="preprocessor">#define&#32;RAPIDJSON_COPY()&#32;c&#32;=&#32;is.Take();&#32;*codepoint&#32;=&#32;(*codepoint&#32;&lt;&lt;&#32;6)&#32;|&#32;(static_cast&lt;unsigned&#32;char&gt;(c)&#32;&amp;&#32;0x3Fu)</emphasis>
+148 <emphasis role="preprocessor">#define&#32;RAPIDJSON_TRANS(mask)&#32;result&#32;&amp;=&#32;((GetRange(static_cast&lt;unsigned&#32;char&gt;(c))&#32;&amp;&#32;mask)&#32;!=&#32;0)</emphasis>
+149 <emphasis role="preprocessor">#define&#32;RAPIDJSON_TAIL()&#32;RAPIDJSON_COPY();&#32;RAPIDJSON_TRANS(0x70)</emphasis>
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch&#32;c&#32;=&#32;is.Take();
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(c&#32;&amp;&#32;0x80))&#32;{
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c);
+153 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+155 
+156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;type&#32;=&#32;<link linkend="_struct_u_t_f8_1ac06bbf38df41adb0c7b9eaa93f85cc38">GetRange</link>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c));
+157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(type&#32;&gt;=&#32;32)&#32;{
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;0;
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;(0xFFu&#32;&gt;&gt;&#32;type)&#32;&amp;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c);
+161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;result&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(type)&#32;{
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;2:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;3:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;4:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x50);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+167 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;5:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x10);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+168 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;6:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;10:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x20);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;11:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x60);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+173 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_COPY</emphasis>
+174 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_TRANS</emphasis>
+175 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_TAIL</emphasis>
+176 &#32;&#32;&#32;&#32;}
+177 
+178 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+179 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f8_1a9e2e7e37d819baeb5e643654c6e61e33">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+180 <emphasis role="preprocessor">#define&#32;RAPIDJSON_COPY()&#32;os.Put(c&#32;=&#32;is.Take())</emphasis>
+181 <emphasis role="preprocessor">#define&#32;RAPIDJSON_TRANS(mask)&#32;result&#32;&amp;=&#32;((GetRange(static_cast&lt;unsigned&#32;char&gt;(c))&#32;&amp;&#32;mask)&#32;!=&#32;0)</emphasis>
+182 <emphasis role="preprocessor">#define&#32;RAPIDJSON_TAIL()&#32;RAPIDJSON_COPY();&#32;RAPIDJSON_TRANS(0x70)</emphasis>
+183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link>&#32;c;
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(c&#32;&amp;&#32;0x80))
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+187 
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;result&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+189 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(<link linkend="_struct_u_t_f8_1ac06bbf38df41adb0c7b9eaa93f85cc38">GetRange</link>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)))&#32;{
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;2:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;3:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;4:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x50);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;5:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x10);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;6:&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;10:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x20);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;11:&#32;<link linkend="_encodings_8h_1a3c5bc66bef12c668f05bbd4df5690171">RAPIDJSON_COPY</link>();&#32;<link linkend="_encodings_8h_1ad84116656b63c4b8d43a2264db620a4b">RAPIDJSON_TRANS</link>(0x60);&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<link linkend="_encodings_8h_1aaa13dc9e0effa5edff532c344b5b35f7">RAPIDJSON_TAIL</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+199 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_COPY</emphasis>
+200 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_TRANS</emphasis>
+201 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_TAIL</emphasis>
+202 &#32;&#32;&#32;&#32;}
+203 
+204 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_struct_u_t_f8_1ac06bbf38df41adb0c7b9eaa93f85cc38">GetRange</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;c)&#32;{
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Referring&#32;to&#32;DFA&#32;of&#32;http://bjoern.hoehrmann.de/utf-8/decoder/dfa/</emphasis>
+206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;With&#32;new&#32;mapping&#32;1&#32;-&gt;&#32;0x10,&#32;7&#32;-&gt;&#32;0x20,&#32;9&#32;-&gt;&#32;0x40,&#32;such&#32;that&#32;AND&#32;operation&#32;can&#32;test&#32;multiple&#32;types.</emphasis>
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;type[]&#32;=&#32;{
+208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,&#32;&#32;0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,0x10,
+213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,0x20,
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;8,8,2,2,2,2,2,2,2,2,2,2,2,2,2,2,&#32;&#32;2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10,3,3,3,3,3,3,3,3,3,3,3,3,4,3,3,&#32;11,6,6,6,5,8,8,8,8,8,8,8,8,8,8,8,
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;type[c];
+220 &#32;&#32;&#32;&#32;}
+221 
+222 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+223 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f8_1a1b2359d6ea50ae32fefc9b28e9878a31">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch&#32;c&#32;=&#32;<link linkend="_struct_u_t_f8_1a5b2561a5031c8a699e593cd51b2c6864">Take</link>(is);
+226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;!=&#32;0xEFu)&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
+227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;=&#32;is.Take();
+228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;!=&#32;0xBBu)&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;=&#32;is.Take();
+230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;!=&#32;0xBFu)&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
+231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;=&#32;is.Take();
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
+233 &#32;&#32;&#32;&#32;}
+234 
+235 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+236 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link>&#32;<link linkend="_struct_u_t_f8_1a5b2561a5031c8a699e593cd51b2c6864">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+239 &#32;&#32;&#32;&#32;}
+240 
+241 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+242 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f8_1a6b171e5f0662ad81d498875bbdbc536a">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+244 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xEFu));
+245 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xBBu));
+246 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xBFu));
+247 &#32;&#32;&#32;&#32;}
+248 
+249 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+250 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f8_1ab24c23227413798e9be28a21eb26fe51">Put</link>(OutputByteStream&amp;&#32;os,&#32;<link linkend="_struct_u_t_f8_1a8e78c8113f3660178d8121b7d3e55890">Ch</link>&#32;c)&#32;{
+251 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+252 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(c));
+253 &#32;&#32;&#32;&#32;}
+254 };
+255 
+257 <emphasis role="comment">//&#32;UTF16</emphasis>
+258 
+260 
+268 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">wchar_t</emphasis>&gt;
+269 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f16">UTF16</link>&#32;{
+270 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f16_1a811680d50447c98be4fd94c0a27504bb">Ch</link>;
+271 &#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_u_t_f16_1a811680d50447c98be4fd94c0a27504bb">Ch</link>)&#32;&gt;=&#32;2);
+272 
+273 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_u_t_f16_1a286def80fa945e4d43d52fd398f981daa98b69a56ef3548af9741fff3fcb7b28c">supportUnicode</link>&#32;=&#32;1&#32;};
+274 
+275 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+276 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_1a9d8ded01244e30d037c4afa10ee2b30e">Encode</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch)&#32;&gt;=&#32;2);
+278 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0xFFFF)&#32;{
+279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;&#32;0xD800&#32;||&#32;codepoint&#32;&gt;&#32;0xDFFF);&#32;<emphasis role="comment">//&#32;Code&#32;point&#32;itself&#32;cannot&#32;be&#32;surrogate&#32;pair&#32;</emphasis>
+280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(codepoint));
+281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+282 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;v&#32;=&#32;codepoint&#32;-&#32;0x10000;
+285 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>((v&#32;&gt;&gt;&#32;10)&#32;|&#32;0xD800));
+286 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>((v&#32;&amp;&#32;0x3FF)&#32;|&#32;0xDC00));
+287 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+288 &#32;&#32;&#32;&#32;}
+289 
+290 
+291 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+292 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_1aa67661e756c273871b574e7133b7fc63">EncodeUnsafe</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch)&#32;&gt;=&#32;2);
+294 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&lt;=&#32;0xFFFF)&#32;{
+295 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;&#32;0xD800&#32;||&#32;codepoint&#32;&gt;&#32;0xDFFF);&#32;<emphasis role="comment">//&#32;Code&#32;point&#32;itself&#32;cannot&#32;be&#32;surrogate&#32;pair&#32;</emphasis>
+296 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(codepoint));
+297 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+298 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+299 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+300 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;v&#32;=&#32;codepoint&#32;-&#32;0x10000;
+301 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>((v&#32;&gt;&gt;&#32;10)&#32;|&#32;0xD800));
+302 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>((v&#32;&amp;&#32;0x3FF)&#32;|&#32;0xDC00));
+303 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+304 &#32;&#32;&#32;&#32;}
+305 
+306 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+307 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f16_1a124c79dfd9f9b4c3fb65bd55ba17b4be">Decode</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;codepoint)&#32;{
+308 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch)&#32;&gt;=&#32;2);
+309 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch&#32;c&#32;=&#32;is.Take();
+310 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c&#32;&lt;&#32;0xD800&#32;||&#32;c&#32;&gt;&#32;0xDFFF)&#32;{
+311 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c);
+312 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+313 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+314 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c&#32;&lt;=&#32;0xDBFF)&#32;{
+315 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&amp;&#32;0x3FF)&#32;&lt;&lt;&#32;10;
+316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;=&#32;is.Take();
+317 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;|=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&amp;&#32;0x3FF);
+318 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;+=&#32;0x10000;
+319 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&gt;=&#32;0xDC00&#32;&amp;&amp;&#32;c&#32;&lt;=&#32;0xDFFF;
+320 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+322 &#32;&#32;&#32;&#32;}
+323 
+324 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+325 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f16_1a7516184ed5dce10c0e7895bec124d97d">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+326 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch)&#32;&gt;=&#32;2);
+327 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch)&#32;&gt;=&#32;2);
+328 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch&#32;c;
+329 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(c&#32;=&#32;is.Take()));
+330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c&#32;&lt;&#32;0xD800&#32;||&#32;c&#32;&gt;&#32;0xDFFF)
+331 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+332 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c&#32;&lt;=&#32;0xDBFF)&#32;{
+333 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(c&#32;=&#32;is.Take());
+334 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&gt;=&#32;0xDC00&#32;&amp;&amp;&#32;c&#32;&lt;=&#32;0xDFFF;
+335 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+336 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+337 &#32;&#32;&#32;&#32;}
+338 };
+339 
+341 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">wchar_t</emphasis>&gt;
+342 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f16_l_e">UTF16LE</link>&#32;:&#32;<link linkend="_struct_u_t_f16">UTF16</link>&lt;CharType&gt;&#32;{
+343 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+344 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f16_l_e_1ab1d5f43903815155796733f76b21deea">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+345 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+346 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CharType&#32;c&#32;=&#32;<link linkend="_struct_u_t_f16_l_e_1a5927b3d75ff9ce02056d827c14bd0160">Take</link>(is);
+347 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1a273cf69d639a59973b6019625df33e30">uint16_t</link><emphasis role="keyword">&gt;</emphasis>(c)&#32;==&#32;0xFEFFu&#32;?&#32;<link linkend="_struct_u_t_f16_l_e_1a5927b3d75ff9ce02056d827c14bd0160">Take</link>(is)&#32;:&#32;c;
+348 &#32;&#32;&#32;&#32;}
+349 
+350 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+351 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f16_l_e_1a5927b3d75ff9ce02056d827c14bd0160">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+352 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+353 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+354 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;8;
+355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis>CharType<emphasis role="keyword">&gt;</emphasis>(c);
+356 &#32;&#32;&#32;&#32;}
+357 
+358 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+359 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_l_e_1a6bfd05f8cac35c1594c7fce47009f198">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+360 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+361 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFFu));
+362 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFEu));
+363 &#32;&#32;&#32;&#32;}
+364 
+365 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+366 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_l_e_1ac018cc43a1dba5a6ca232bd9a257072c">Put</link>(OutputByteStream&amp;&#32;os,&#32;CharType&#32;c)&#32;{
+367 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+368 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&amp;&#32;0xFFu));
+369 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&gt;&gt;&#32;8)&#32;&amp;&#32;0xFFu));
+370 &#32;&#32;&#32;&#32;}
+371 };
+372 
+374 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">wchar_t</emphasis>&gt;
+375 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f16_b_e">UTF16BE</link>&#32;:&#32;<link linkend="_struct_u_t_f16">UTF16</link>&lt;CharType&gt;&#32;{
+376 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+377 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f16_b_e_1a5d5184a373149c69b4b8baf8507f9591">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+378 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+379 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CharType&#32;c&#32;=&#32;<link linkend="_struct_u_t_f16_b_e_1a671ca76d54f45aa5f62eb86c4e69738a">Take</link>(is);
+380 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1a273cf69d639a59973b6019625df33e30">uint16_t</link><emphasis role="keyword">&gt;</emphasis>(c)&#32;==&#32;0xFEFFu&#32;?&#32;<link linkend="_struct_u_t_f16_b_e_1a671ca76d54f45aa5f62eb86c4e69738a">Take</link>(is)&#32;:&#32;c;
+381 &#32;&#32;&#32;&#32;}
+382 
+383 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+384 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f16_b_e_1a671ca76d54f45aa5f62eb86c4e69738a">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+385 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+386 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;8;
+387 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()));
+388 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis>CharType<emphasis role="keyword">&gt;</emphasis>(c);
+389 &#32;&#32;&#32;&#32;}
+390 
+391 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+392 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_b_e_1ae109dda1ad7955049589885ea5a13652">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+393 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+394 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFEu));
+395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFFu));
+396 &#32;&#32;&#32;&#32;}
+397 
+398 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+399 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f16_b_e_1ab0f964c3ec9ac6cc47f2875ae112dbfe">Put</link>(OutputByteStream&amp;&#32;os,&#32;CharType&#32;c)&#32;{
+400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f16_1a04aeeefa5dcba7c5156bc78a5c1f1557">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+401 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&gt;&gt;&#32;8)&#32;&amp;&#32;0xFFu));
+402 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(c)&#32;&amp;&#32;0xFFu));
+403 &#32;&#32;&#32;&#32;}
+404 };
+405 
+407 <emphasis role="comment">//&#32;UTF32</emphasis>
+408 
+410 
+417 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">unsigned</emphasis>&gt;
+418 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f32">UTF32</link>&#32;{
+419 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f32_1ab4502672d56436e730ca5f647bb52be9">Ch</link>;
+420 &#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_u_t_f32_1ab4502672d56436e730ca5f647bb52be9">Ch</link>)&#32;&gt;=&#32;4);
+421 
+422 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_u_t_f32_1abe791c52b9d1305aacf92ddc15c11ab4ae44852fd9d88deed3a956b89108412a5">supportUnicode</link>&#32;=&#32;1&#32;};
+423 
+424 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+425 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_1a511d1b09672ce535085895a28d8c2f13">Encode</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+426 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch)&#32;&gt;=&#32;4);
+427 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+428 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(codepoint);
+429 &#32;&#32;&#32;&#32;}
+430 
+431 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+432 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_1ae50dd8dff92c36ee184c6d4eccb1961e">EncodeUnsafe</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+433 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputStream::Ch)&#32;&gt;=&#32;4);
+434 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x10FFFF);
+435 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;codepoint);
+436 &#32;&#32;&#32;&#32;}
+437 
+438 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+439 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f32_1a6e7258a5e982e101345dffdc355e9b53">Decode</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;codepoint)&#32;{
+440 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch)&#32;&gt;=&#32;4);
+441 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1ab4502672d56436e730ca5f647bb52be9">Ch</link>&#32;c&#32;=&#32;is.Take();
+442 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;c;
+443 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&lt;=&#32;0x10FFFF;
+444 &#32;&#32;&#32;&#32;}
+445 
+446 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+447 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_u_t_f32_1a71336fb0546b3079e01bbd51d2fa2e45">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+448 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputStream::Ch)&#32;&gt;=&#32;4);
+449 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1ab4502672d56436e730ca5f647bb52be9">Ch</link>&#32;c;
+450 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(c&#32;=&#32;is.Take());
+451 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&lt;=&#32;0x10FFFF;
+452 &#32;&#32;&#32;&#32;}
+453 };
+454 
+456 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">unsigned</emphasis>&gt;
+457 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f32_l_e">UTF32LE</link>&#32;:&#32;<link linkend="_struct_u_t_f32">UTF32</link>&lt;CharType&gt;&#32;{
+458 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+459 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f32_l_e_1a8729612b0a8b1126c61c4f8f8c34410e">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+460 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+461 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CharType&#32;c&#32;=&#32;<link linkend="_struct_u_t_f32_l_e_1ad13967549811be12897362bb37b2c819">Take</link>(is);
+462 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link><emphasis role="keyword">&gt;</emphasis>(c)&#32;==&#32;0x0000FEFFu&#32;?&#32;<link linkend="_struct_u_t_f32_l_e_1ad13967549811be12897362bb37b2c819">Take</link>(is)&#32;:&#32;c;
+463 &#32;&#32;&#32;&#32;}
+464 
+465 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+466 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f32_l_e_1ad13967549811be12897362bb37b2c819">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+467 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+468 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+469 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;8;
+470 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;16;
+471 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;24;
+472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis>CharType<emphasis role="keyword">&gt;</emphasis>(c);
+473 &#32;&#32;&#32;&#32;}
+474 
+475 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+476 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_l_e_1accd97d45e55746c900dab356605825be">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFFu));
+479 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFEu));
+480 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0x00u));
+481 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0x00u));
+482 &#32;&#32;&#32;&#32;}
+483 
+484 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+485 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_l_e_1a61bb50e7fba27e3fe28a9f30eb366193">Put</link>(OutputByteStream&amp;&#32;os,&#32;CharType&#32;c)&#32;{
+486 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+487 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(c&#32;&amp;&#32;0xFFu));
+488 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;8)&#32;&amp;&#32;0xFFu));
+489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;16)&#32;&amp;&#32;0xFFu));
+490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;24)&#32;&amp;&#32;0xFFu));
+491 &#32;&#32;&#32;&#32;}
+492 };
+493 
+495 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">unsigned</emphasis>&gt;
+496 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_u_t_f32_b_e">UTF32BE</link>&#32;:&#32;<link linkend="_struct_u_t_f32">UTF32</link>&lt;CharType&gt;&#32;{
+497 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+498 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f32_b_e_1a07d228f51ad43ef83af2529ca4bd1181">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+499 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CharType&#32;c&#32;=&#32;<link linkend="_struct_u_t_f32_b_e_1ace3086ece3b13417c758b5abcf3016c8">Take</link>(is);
+501 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link><emphasis role="keyword">&gt;</emphasis>(c)&#32;==&#32;0x0000FEFFu&#32;?&#32;<link linkend="_struct_u_t_f32_b_e_1ace3086ece3b13417c758b5abcf3016c8">Take</link>(is)&#32;:&#32;c;&#32;
+502 &#32;&#32;&#32;&#32;}
+503 
+504 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+505 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_u_t_f32_b_e_1ace3086ece3b13417c758b5abcf3016c8">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+506 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+507 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;24;
+508 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;16;
+509 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()))&#32;&lt;&lt;&#32;8;
+510 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;c&#32;|=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take()));
+511 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis>CharType<emphasis role="keyword">&gt;</emphasis>(c);
+512 &#32;&#32;&#32;&#32;}
+513 
+514 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+515 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_b_e_1a8b1a216dd267ff06a9000cbe593ebd24">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+516 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+517 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0x00u));
+518 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0x00u));
+519 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFEu));
+520 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(0xFFu));
+521 &#32;&#32;&#32;&#32;}
+522 
+523 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+524 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_u_t_f32_b_e_1ad270b8b016d477f7f7354df535fa28c5">Put</link>(OutputByteStream&amp;&#32;os,&#32;CharType&#32;c)&#32;{
+525 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_u_t_f32_1aae11b766f799d311679d59e9f7077f83">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+526 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;24)&#32;&amp;&#32;0xFFu));
+527 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;16)&#32;&amp;&#32;0xFFu));
+528 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>((c&#32;&gt;&gt;&#32;8)&#32;&amp;&#32;0xFFu));
+529 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(c&#32;&amp;&#32;0xFFu));
+530 &#32;&#32;&#32;&#32;}
+531 };
+532 
+534 <emphasis role="comment">//&#32;ASCII</emphasis>
+535 
+537 
+541 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&#32;=&#32;<emphasis role="keywordtype">char</emphasis>&gt;
+542 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_a_s_c_i_i">ASCII</link>&#32;{
+543 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;CharType&#32;<link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link>;
+544 
+545 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_a_s_c_i_i_1a2f2c796586b1f9b18c7ff5c452eba0a9a672ec36bd3404c3050a9111a934cbe00">supportUnicode</link>&#32;=&#32;0&#32;};
+546 
+547 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+548 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1af56b1605fe233c54693facc7de457f72">Encode</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+549 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x7F);
+550 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link><emphasis role="keyword">&gt;</emphasis>(codepoint&#32;&amp;&#32;0xFF));
+551 &#32;&#32;&#32;&#32;}
+552 
+553 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+554 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1afeb90d6f04771067b83b35a0f366af46">EncodeUnsafe</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+555 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(codepoint&#32;&lt;=&#32;0x7F);
+556 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link><emphasis role="keyword">&gt;</emphasis>(codepoint&#32;&amp;&#32;0xFF));
+557 &#32;&#32;&#32;&#32;}
+558 
+559 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+560 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1a44844bbfd0a4fc282993fd72f3f58eee">Decode</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;codepoint)&#32;{
+561 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+562 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*codepoint&#32;=&#32;c;
+563 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&lt;=&#32;0X7F;
+564 &#32;&#32;&#32;&#32;}
+565 
+566 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+567 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1a398680588a09e6ce9b56e32195047c78">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+568 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+569 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(c));
+570 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c&#32;&lt;=&#32;0x7F;
+571 &#32;&#32;&#32;&#32;}
+572 
+573 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+574 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;CharType&#32;<link linkend="_struct_a_s_c_i_i_1aad78500eb98f45582a4df020e3fb2278">TakeBOM</link>(InputByteStream&amp;&#32;is)&#32;{
+575 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+576 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;c&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link><emphasis role="keyword">&gt;</emphasis>(<link linkend="_struct_a_s_c_i_i_1ab1b9fdf0a5c05658d62fded913d923a3">Take</link>(is));
+577 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link><emphasis role="keyword">&gt;</emphasis>(c);
+578 &#32;&#32;&#32;&#32;}
+579 
+580 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputByteStream&gt;
+581 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link>&#32;<link linkend="_struct_a_s_c_i_i_1ab1b9fdf0a5c05658d62fded913d923a3">Take</link>(InputByteStream&amp;&#32;is)&#32;{
+582 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;InputByteStream::Ch)&#32;==&#32;1);
+583 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link><emphasis role="keyword">&gt;</emphasis>(is.Take());
+584 &#32;&#32;&#32;&#32;}
+585 
+586 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+587 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1a3036dc1d604039c3224ca0a890ee0134">PutBOM</link>(OutputByteStream&amp;&#32;os)&#32;{
+588 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+589 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)os;
+590 &#32;&#32;&#32;&#32;}
+591 
+592 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream&gt;
+593 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_a_s_c_i_i_1a218b244b9cd961ea6c5775a734cec20e">Put</link>(OutputByteStream&amp;&#32;os,&#32;<link linkend="_struct_a_s_c_i_i_1a1baf6e7914f165be952c30db664cefb4">Ch</link>&#32;c)&#32;{
+594 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;OutputByteStream::Ch)&#32;==&#32;1);
+595 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputByteStream::Ch<emphasis role="keyword">&gt;</emphasis>(c));
+596 &#32;&#32;&#32;&#32;}
+597 };
+598 
+600 <emphasis role="comment">//&#32;AutoUTF</emphasis>
+601 
+603 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58">UTFType</link>&#32;{
+604 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58a7fd9945f1c494a4a4ee9446017e790f1">kUTF8</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;
+605 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58ab72f5865db6af4e33757ee52ddad9fda">kUTF16LE</link>&#32;=&#32;1,&#32;&#32;&#32;
+606 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58a1a455c6e8be641e715de9aa8ffa6cea0">kUTF16BE</link>&#32;=&#32;2,&#32;&#32;&#32;
+607 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58a885dec757d256c427be6759296d482e0">kUTF32LE</link>&#32;=&#32;3,&#32;&#32;&#32;
+608 &#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58a14da8da33c9f9aa904bf0d1aac3fa76e">kUTF32BE</link>&#32;=&#32;4&#32;&#32;&#32;&#32;
+609 };
+610 
+612 
+614 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;CharType&gt;
+615 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_auto_u_t_f">AutoUTF</link>&#32;{
+616 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;CharType&#32;<link linkend="_struct_auto_u_t_f_1a0609343de776df3bc31b4c980eb3cf1c">Ch</link>;
+617 
+618 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;{&#32;<link linkend="_struct_auto_u_t_f_1a678e20a7f8d022be68adbb49fa56a094adc86ae046cd64f591495ac635a5c04c2">supportUnicode</link>&#32;=&#32;1&#32;};
+619 
+620 <emphasis role="preprocessor">#define&#32;RAPIDJSON_ENCODINGS_FUNC(x)&#32;UTF8&lt;Ch&gt;::x,&#32;UTF16LE&lt;Ch&gt;::x,&#32;UTF16BE&lt;Ch&gt;::x,&#32;UTF32LE&lt;Ch&gt;::x,&#32;UTF32BE&lt;Ch&gt;::x</emphasis>
+621 
+622 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+623 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_auto_u_t_f_1a414946115261f886e74dd42cb4b98781">Encode</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+624 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;void&#32;(*EncodeFunc)(OutputStream&amp;,&#32;unsigned);
+625 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;EncodeFunc&#32;f[]&#32;=&#32;{&#32;<link linkend="_encodings_8h_1a6530c8834a049a0ff230b56072df6c24">RAPIDJSON_ENCODINGS_FUNC</link>(<link linkend="_struct_auto_u_t_f_1a414946115261f886e74dd42cb4b98781">Encode</link>)&#32;};
+626 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(*f[os.GetType()])(os,&#32;codepoint);
+627 &#32;&#32;&#32;&#32;}
+628 
+629 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+630 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_struct_auto_u_t_f_1a05f5dcd1f153b61b763e44ed452de251">EncodeUnsafe</link>(OutputStream&amp;&#32;os,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+631 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;void&#32;(*EncodeFunc)(OutputStream&amp;,&#32;unsigned);
+632 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;EncodeFunc&#32;f[]&#32;=&#32;{&#32;<link linkend="_encodings_8h_1a6530c8834a049a0ff230b56072df6c24">RAPIDJSON_ENCODINGS_FUNC</link>(<link linkend="_struct_auto_u_t_f_1a05f5dcd1f153b61b763e44ed452de251">EncodeUnsafe</link>)&#32;};
+633 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(*f[os.GetType()])(os,&#32;codepoint);
+634 &#32;&#32;&#32;&#32;}
+635 
+636 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+637 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_auto_u_t_f_1aa5e3c1dc23dbb75f6442ff69500a35b0">Decode</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;codepoint)&#32;{
+638 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;bool&#32;(*DecodeFunc)(InputStream&amp;,&#32;<emphasis role="keywordtype">unsigned</emphasis>*);
+639 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;DecodeFunc&#32;f[]&#32;=&#32;{&#32;<link linkend="_encodings_8h_1a6530c8834a049a0ff230b56072df6c24">RAPIDJSON_ENCODINGS_FUNC</link>(<link linkend="_struct_auto_u_t_f_1aa5e3c1dc23dbb75f6442ff69500a35b0">Decode</link>)&#32;};
+640 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(*f[is.GetType()])(is,&#32;codepoint);
+641 &#32;&#32;&#32;&#32;}
+642 
+643 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+644 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_auto_u_t_f_1a36dd6f226d6a07c12161e21c0aff20b1">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+645 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;bool&#32;(*ValidateFunc)(InputStream&amp;,&#32;OutputStream&amp;);
+646 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;ValidateFunc&#32;f[]&#32;=&#32;{&#32;<link linkend="_encodings_8h_1a6530c8834a049a0ff230b56072df6c24">RAPIDJSON_ENCODINGS_FUNC</link>(<link linkend="_struct_auto_u_t_f_1a36dd6f226d6a07c12161e21c0aff20b1">Validate</link>)&#32;};
+647 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(*f[is.GetType()])(is,&#32;os);
+648 &#32;&#32;&#32;&#32;}
+649 
+650 <emphasis role="preprocessor">#undef&#32;RAPIDJSON_ENCODINGS_FUNC</emphasis>
+651 };
+652 
+654 <emphasis role="comment">//&#32;Transcoder</emphasis>
+655 
+657 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;SourceEncoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;TargetEncoding&gt;
+658 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_transcoder">Transcoder</link>&#32;{
+660 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+661 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_1a0ea2edfe35784ebf1063921d2bd5fb66">Transcode</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+662 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+663 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!SourceEncoding::Decode(is,&#32;&amp;codepoint))
+664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;TargetEncoding::Encode(os,&#32;codepoint);
+666 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+667 &#32;&#32;&#32;&#32;}
+668 
+669 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+670 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_1a16345a912c679b2ea197328eb1444f82">TranscodeUnsafe</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+671 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+672 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!SourceEncoding::Decode(is,&#32;&amp;codepoint))
+673 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+674 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;TargetEncoding::EncodeUnsafe(os,&#32;codepoint);
+675 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+676 &#32;&#32;&#32;&#32;}
+677 
+679 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+680 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_1a8a64aa837f7962894a99f63232472543">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+681 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_struct_transcoder_1a0ea2edfe35784ebf1063921d2bd5fb66">Transcode</link>(is,&#32;os);&#32;&#32;&#32;<emphasis role="comment">//&#32;Since&#32;source/target&#32;encoding&#32;is&#32;different,&#32;must&#32;transcode.</emphasis>
+682 &#32;&#32;&#32;&#32;}
+683 };
+684 
+685 <emphasis role="comment">//&#32;Forward&#32;declaration.</emphasis>
+686 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Stream&gt;
+687 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(<link linkend="_classrapidjson_1_1_stream">Stream</link>&amp;&#32;stream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Stream::Ch&#32;c);
+688 
+690 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+691 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_transcoder">Transcoder</link>&lt;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,&#32;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&gt;&#32;{
+692 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+693 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_3_01_encoding_00_01_encoding_01_4_1aad11cdc2b829123a7b9969e34d456813">Transcode</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+694 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os.Put(is.Take());&#32;&#32;<emphasis role="comment">//&#32;Just&#32;copy&#32;one&#32;code&#32;unit.&#32;This&#32;semantic&#32;is&#32;different&#32;from&#32;primary&#32;template&#32;class.</emphasis>
+695 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+696 &#32;&#32;&#32;&#32;}
+697 &#32;&#32;&#32;&#32;
+698 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+699 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_3_01_encoding_00_01_encoding_01_4_1addf67decfff7d0de510c47842eb53cef">TranscodeUnsafe</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+700 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_encodings_8h_1ad57ba7f2912c5509924b69dec7db4396">PutUnsafe</link>(os,&#32;is.Take());&#32;&#32;<emphasis role="comment">//&#32;Just&#32;copy&#32;one&#32;code&#32;unit.&#32;This&#32;semantic&#32;is&#32;different&#32;from&#32;primary&#32;template&#32;class.</emphasis>
+701 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+702 &#32;&#32;&#32;&#32;}
+703 &#32;&#32;&#32;&#32;
+704 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
+705 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;RAPIDJSON_FORCEINLINE&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_transcoder_3_01_encoding_00_01_encoding_01_4_1a536aa3930251161d05e112947ec2f9c8">Validate</link>(InputStream&amp;&#32;is,&#32;OutputStream&amp;&#32;os)&#32;{
+706 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;Encoding::Validate(is,&#32;os);&#32;&#32;<emphasis role="comment">//&#32;source/target&#32;encoding&#32;are&#32;the&#32;same</emphasis>
+707 &#32;&#32;&#32;&#32;}
+708 };
+709 
+710 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+711 
+712 <emphasis role="preprocessor">#if&#32;defined(__GNUC__)&#32;||&#32;(defined(_MSC_VER)&#32;&amp;&amp;&#32;!defined(__clang__))</emphasis>
+713 RAPIDJSON_DIAG_POP
+714 <emphasis role="preprocessor">#endif</emphasis>
+715 
+716 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_ENCODINGS_H_</emphasis>
+</programlisting></section>

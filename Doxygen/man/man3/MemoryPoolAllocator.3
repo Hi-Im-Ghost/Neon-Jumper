@@ -1,0 +1,230 @@
+.TH "MemoryPoolAllocator< BaseAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+MemoryPoolAllocator< BaseAllocator > \- Default memory allocator used by the parser and DOM\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <allocators\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemoryPoolAllocator\fP (size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)"
+.br
+.RI "Constructor with chunkSize\&. "
+.ti -1c
+.RI "\fBMemoryPoolAllocator\fP (void *buffer, size_t size, size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)"
+.br
+.RI "Constructor with user-supplied buffer\&. "
+.ti -1c
+.RI "\fBMemoryPoolAllocator\fP (const \fBMemoryPoolAllocator\fP &rhs) RAPIDJSON_NOEXCEPT"
+.br
+.ti -1c
+.RI "\fBMemoryPoolAllocator\fP & \fBoperator=\fP (const \fBMemoryPoolAllocator\fP &rhs) RAPIDJSON_NOEXCEPT"
+.br
+.ti -1c
+.RI "\fB~MemoryPoolAllocator\fP () RAPIDJSON_NOEXCEPT"
+.br
+.RI "Destructor\&. "
+.ti -1c
+.RI "void \fBClear\fP () RAPIDJSON_NOEXCEPT"
+.br
+.RI "Deallocates all memory chunks, excluding the first/user one\&. "
+.ti -1c
+.RI "size_t \fBCapacity\fP () const RAPIDJSON_NOEXCEPT"
+.br
+.RI "Computes the total capacity of allocated memory chunks\&. "
+.ti -1c
+.RI "size_t \fBSize\fP () const RAPIDJSON_NOEXCEPT"
+.br
+.RI "Computes the memory blocks allocated\&. "
+.ti -1c
+.RI "bool \fBShared\fP () const RAPIDJSON_NOEXCEPT"
+.br
+.RI "Whether the allocator is shared\&. "
+.ti -1c
+.RI "void * \fBMalloc\fP (size_t size)"
+.br
+.RI "Allocates a memory block\&. (concept Allocator) "
+.ti -1c
+.RI "void * \fBRealloc\fP (void *originalPtr, size_t originalSize, size_t newSize)"
+.br
+.RI "Resizes a memory block (concept Allocator) "
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBMemoryPoolAllocator\fP &rhs) const RAPIDJSON_NOEXCEPT"
+.br
+.RI "Compare (equality) with another \fBMemoryPoolAllocator\fP\&. "
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBMemoryPoolAllocator\fP &rhs) const RAPIDJSON_NOEXCEPT"
+.br
+.RI "Compare (inequality) with another \fBMemoryPoolAllocator\fP\&. "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBFree\fP (void *ptr) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Frees a memory block (concept Allocator) "
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const bool \fBkNeedFree\fP = false"
+.br
+.RI "Tell users that no need to call \fBFree()\fP with this allocator\&. (concept Allocator) "
+.ti -1c
+.RI "static const bool \fBkRefCounted\fP = true"
+.br
+.RI "Tell users that this allocator is reference counted on copy\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename BaseAllocator = CrtAllocator>
+.br
+class MemoryPoolAllocator< BaseAllocator >"Default memory allocator used by the parser and DOM\&. 
+
+This allocator allocate memory blocks from pre-allocated memory chunks\&.
+.PP
+It does not free memory blocks\&. And \fBRealloc()\fP only allocate new memory\&.
+.PP
+The memory chunks are allocated by BaseAllocator, which is \fBCrtAllocator\fP by default\&.
+.PP
+User may also supply a buffer as the first chunk\&.
+.PP
+If the user-buffer is full then additional chunks are allocated by BaseAllocator\&.
+.PP
+The user-buffer is not deallocated by this allocator\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIBaseAllocator\fP the allocator type for allocating memory chunks\&. Default is \fBCrtAllocator\fP\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+implements Allocator concept 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (size_t chunkSize = \fCkDefaultChunkCapacity\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor with chunkSize\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIchunkSize\fP The size of memory chunk\&. The default is kDefaultChunkSize\&. 
+.br
+\fIbaseAllocator\fP The allocator for allocating memory chunks\&. 
+.RE
+.PP
+
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (void * buffer, size_t size, size_t chunkSize = \fCkDefaultChunkCapacity\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Constructor with user-supplied buffer\&. The user buffer will be used firstly\&. When it is full, memory pool allocates new chunk with chunk size\&.
+.PP
+The user buffer will not be deallocated when this allocator is destructed\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIbuffer\fP User supplied buffer\&. 
+.br
+\fIsize\fP Size of the buffer in bytes\&. It must at least larger than sizeof(ChunkHeader)\&. 
+.br
+\fIchunkSize\fP The size of memory chunk\&. The default is kDefaultChunkSize\&. 
+.br
+\fIbaseAllocator\fP The allocator for allocating memory chunks\&. 
+.RE
+.PP
+
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (const \fBMemoryPoolAllocator\fP< BaseAllocator > & rhs)\fC [inline]\fP"
+
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >::~\fBMemoryPoolAllocator\fP ()\fC [inline]\fP"
+
+.PP
+Destructor\&. This deallocates all memory chunks, excluding the user-supplied buffer\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename BaseAllocator  = CrtAllocator> size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::Capacity () const\fC [inline]\fP"
+
+.PP
+Computes the total capacity of allocated memory chunks\&. 
+.PP
+\fBReturns\fP
+.RS 4
+total capacity in bytes\&. 
+.RE
+.PP
+
+.SS "template<typename BaseAllocator  = CrtAllocator> void \fBMemoryPoolAllocator\fP< BaseAllocator >::Clear ()\fC [inline]\fP"
+
+.PP
+Deallocates all memory chunks, excluding the first/user one\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> static void \fBMemoryPoolAllocator\fP< BaseAllocator >::Free (void * ptr)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Frees a memory block (concept Allocator) 
+.SS "template<typename BaseAllocator  = CrtAllocator> void * \fBMemoryPoolAllocator\fP< BaseAllocator >::Malloc (size_t size)\fC [inline]\fP"
+
+.PP
+Allocates a memory block\&. (concept Allocator) 
+.SS "template<typename BaseAllocator  = CrtAllocator> bool \fBMemoryPoolAllocator\fP< BaseAllocator >::operator!= (const \fBMemoryPoolAllocator\fP< BaseAllocator > & rhs) const\fC [inline]\fP"
+
+.PP
+Compare (inequality) with another \fBMemoryPoolAllocator\fP\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP & \fBMemoryPoolAllocator\fP< BaseAllocator >::operator= (const \fBMemoryPoolAllocator\fP< BaseAllocator > & rhs)\fC [inline]\fP"
+
+.SS "template<typename BaseAllocator  = CrtAllocator> bool \fBMemoryPoolAllocator\fP< BaseAllocator >::operator== (const \fBMemoryPoolAllocator\fP< BaseAllocator > & rhs) const\fC [inline]\fP"
+
+.PP
+Compare (equality) with another \fBMemoryPoolAllocator\fP\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> void * \fBMemoryPoolAllocator\fP< BaseAllocator >::Realloc (void * originalPtr, size_t originalSize, size_t newSize)\fC [inline]\fP"
+
+.PP
+Resizes a memory block (concept Allocator) 
+.SS "template<typename BaseAllocator  = CrtAllocator> bool \fBMemoryPoolAllocator\fP< BaseAllocator >::Shared () const\fC [inline]\fP"
+
+.PP
+Whether the allocator is shared\&. 
+.PP
+\fBReturns\fP
+.RS 4
+true or false\&. 
+.RE
+.PP
+
+.SS "template<typename BaseAllocator  = CrtAllocator> size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::Size () const\fC [inline]\fP"
+
+.PP
+Computes the memory blocks allocated\&. 
+.PP
+\fBReturns\fP
+.RS 4
+total used bytes\&. 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename BaseAllocator  = CrtAllocator> const bool \fBMemoryPoolAllocator\fP< BaseAllocator >::kNeedFree = false\fC [static]\fP"
+
+.PP
+Tell users that no need to call \fBFree()\fP with this allocator\&. (concept Allocator) 
+.SS "template<typename BaseAllocator  = CrtAllocator> const bool \fBMemoryPoolAllocator\fP< BaseAllocator >::kRefCounted = true\fC [static]\fP"
+
+.PP
+Tell users that this allocator is reference counted on copy\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_generic_string_buffer" xml:lang="en-US">
+<title>GenericStringBuffer&lt; Encoding, Allocator &gt; Class Template Reference</title>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary></indexterm>
+<para>
+
+<para>Represents an in-memory output stream. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;stringbuffer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef Encoding::Ch <link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_generic_string_buffer_1a62f5ea1a53a2a3f98088f8c152b6183e">GenericStringBuffer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> *allocator=0, size_t capacity=<link linkend="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22">kDefaultCapacity</link>)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a8be5c8fadccacdcf40e20220f38e0afa">Put</link> (<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> c)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a9225468d11fdddfc3a9a4e48bf4d3ba4">PutUnsafe</link> (<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> c)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a28bb539487db17b07314a532f3b8847c">Flush</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a42f15c959046d899cb74c3120a6995f9">Clear</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a0dbdb77489b95923795011a24f705be5">ShrinkToFit</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a4d6becae201b98c122746298882a318f">Reserve</link> (size_t count)</para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer_1a80af78c43da93126a940a40d1889278a">Push</link> (size_t count)</para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer_1a67bbdeb1f0f7c539f85ca36857a62ca3">PushUnsafe</link> (size_t count)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_string_buffer_1a0038e53ba03c271bc4cbbac403ec4de4">Pop</link> (size_t count)</para>
+</listitem>
+            <listitem><para>const <link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719">GetString</link> () const</para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_generic_string_buffer_1a725e862b9a78375f5363b0b61ad789f3">GetSize</link> () const</para>
+
+<para>Get the size of string in bytes in the string buffer. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_generic_string_buffer_1ad324b8154be3354dda3aa4a0a7361499">GetLength</link> () const</para>
+
+<para>Get the length of string in Ch in the string buffer. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; <link linkend="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409">stack_</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const size_t <link linkend="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22">kDefaultCapacity</link> = 256</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link> = CrtAllocator&gt;
+class GenericStringBuffer&lt; Encoding, Allocator &gt;</title></simplesect>
+
+<para>Represents an in-memory output stream. </para>
+
+
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>Encoding</entry><entry>
+<para>Encoding of the stream. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>Allocator</entry><entry>
+<para>type for allocating memory buffer. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>implements Stream concept </para>
+</note>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef Encoding::Ch <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Ch</computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_generic_string_buffer_1a62f5ea1a53a2a3f98088f8c152b6183e"/><section>
+    <title>GenericStringBuffer()</title>
+<indexterm><primary>GenericStringBuffer</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>GenericStringBuffer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_string_buffer">::GenericStringBuffer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+, size_t capacity = <computeroutput><link linkend="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22">kDefaultCapacity</link></computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_generic_string_buffer_1a42f15c959046d899cb74c3120a6995f9"/><section>
+    <title>Clear()</title>
+<indexterm><primary>Clear</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Clear</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Clear ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a28bb539487db17b07314a532f3b8847c"/><section>
+    <title>Flush()</title>
+<indexterm><primary>Flush</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Flush</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Flush ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1ad324b8154be3354dda3aa4a0a7361499"/><section>
+    <title>GetLength()</title>
+<indexterm><primary>GetLength</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>GetLength</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetLength ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Get the length of string in Ch in the string buffer. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_string_buffer_1a725e862b9a78375f5363b0b61ad789f3"/><section>
+    <title>GetSize()</title>
+<indexterm><primary>GetSize</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>GetSize</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetSize ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Get the size of string in bytes in the string buffer. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719"/><section>
+    <title>GetString()</title>
+<indexterm><primary>GetString</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>GetString</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetString ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a0038e53ba03c271bc4cbbac403ec4de4"/><section>
+    <title>Pop()</title>
+<indexterm><primary>Pop</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Pop</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Pop (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a80af78c43da93126a940a40d1889278a"/><section>
+    <title>Push()</title>
+<indexterm><primary>Push</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Push</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Push (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a67bbdeb1f0f7c539f85ca36857a62ca3"/><section>
+    <title>PushUnsafe()</title>
+<indexterm><primary>PushUnsafe</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>PushUnsafe</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> * <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::PushUnsafe (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a8be5c8fadccacdcf40e20220f38e0afa"/><section>
+    <title>Put()</title>
+<indexterm><primary>Put</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Put</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Put (<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> c)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a9225468d11fdddfc3a9a4e48bf4d3ba4"/><section>
+    <title>PutUnsafe()</title>
+<indexterm><primary>PutUnsafe</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>PutUnsafe</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::PutUnsafe (<link linkend="_class_generic_string_buffer_1a735b75db076ffe86d0d294be49655d46">Ch</link> c)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a4d6becae201b98c122746298882a318f"/><section>
+    <title>Reserve()</title>
+<indexterm><primary>Reserve</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>Reserve</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Reserve (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1a0dbdb77489b95923795011a24f705be5"/><section>
+    <title>ShrinkToFit()</title>
+<indexterm><primary>ShrinkToFit</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>ShrinkToFit</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ShrinkToFit ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_generic_string_buffer_1ae74f9df854dd5a7db4315ef44b016d22"/><section>
+    <title>kDefaultCapacity</title>
+<indexterm><primary>kDefaultCapacity</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>kDefaultCapacity</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kDefaultCapacity = 256<computeroutput>[static]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_string_buffer_1aaef716643febb9de5957dbf8ff904409"/><section>
+    <title>stack_</title>
+<indexterm><primary>stack_</primary><secondary>GenericStringBuffer&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericStringBuffer&lt; Encoding, Allocator &gt;</primary><secondary>stack_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>&gt; <link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::stack_<computeroutput>[mutable]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/rapidjson/include/rapidjson/<link linkend="_fwd_8h">fwd.h</link>src/rapidjson/include/rapidjson/<link linkend="_stringbuffer_8h">stringbuffer.h</link></section>
+</section>

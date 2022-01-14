@@ -1,0 +1,549 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="tutorial_8md" kind="file" language="Markdown">
+    <compoundname>tutorial.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Tutorial</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>tutorial<sp/>introduces<sp/>the<sp/>basics<sp/>of<sp/>the<sp/>Document<sp/>Object<sp/>Model(DOM)<sp/>API.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>shown<sp/>in<sp/>[Usage<sp/>at<sp/>a<sp/>glance](@ref<sp/>index),<sp/>JSON<sp/>can<sp/>be<sp/>parsed<sp/>into<sp/>a<sp/>DOM,<sp/>and<sp/>then<sp/>the<sp/>DOM<sp/>can<sp/>be<sp/>queried<sp/>and<sp/>modified<sp/>easily,<sp/>and<sp/>finally<sp/>be<sp/>converted<sp/>back<sp/>to<sp/>JSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Value<sp/>&amp;<sp/>Document<sp/>{#ValueDocument}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Each<sp/>JSON<sp/>value<sp/>is<sp/>stored<sp/>in<sp/>a<sp/>type<sp/>called<sp/>`Value`.<sp/>A<sp/>`Document`,<sp/>representing<sp/>the<sp/>DOM,<sp/>contains<sp/>the<sp/>root<sp/>`Value`<sp/>of<sp/>the<sp/>DOM<sp/>tree.<sp/>All<sp/>public<sp/>types<sp/>and<sp/>functions<sp/>of<sp/>RapidJSON<sp/>are<sp/>defined<sp/>in<sp/>the<sp/>`rapidjson`<sp/>namespace.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Query<sp/>Value<sp/>{#QueryValue}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>this<sp/>section,<sp/>we<sp/>will<sp/>use<sp/>excerpt<sp/>from<sp/>`example/tutorial/tutorial.cpp`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Assume<sp/>we<sp/>have<sp/>the<sp/>following<sp/>JSON<sp/>stored<sp/>in<sp/>a<sp/>C<sp/>string<sp/>(`const<sp/>char*<sp/>json`):</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~js</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;hello&quot;:<sp/>&quot;world&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;t&quot;:<sp/>true<sp/>,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;f&quot;:<sp/>false,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;n&quot;:<sp/>null,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;i&quot;:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;:<sp/>3.1416,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;a&quot;:<sp/>[1,<sp/>2,<sp/>3,<sp/>4]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parse<sp/>it<sp/>into<sp/>a<sp/>`Document`:</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/document.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>document;</highlight></codeline>
+<codeline><highlight class="normal">document.Parse(json);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>JSON<sp/>is<sp/>now<sp/>parsed<sp/>into<sp/>`document`<sp/>as<sp/>a<sp/>*DOM<sp/>tree*:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![DOM<sp/>in<sp/>the<sp/>tutorial](diagram/tutorial.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Since<sp/>the<sp/>update<sp/>to<sp/>RFC<sp/>7159,<sp/>the<sp/>root<sp/>of<sp/>a<sp/>conforming<sp/>JSON<sp/>document<sp/>can<sp/>be<sp/>any<sp/>JSON<sp/>value.<sp/><sp/>In<sp/>earlier<sp/>RFC<sp/>4627,<sp/>only<sp/>objects<sp/>or<sp/>arrays<sp/>were<sp/>allowed<sp/>as<sp/>root<sp/>values.<sp/>In<sp/>this<sp/>case,<sp/>the<sp/>root<sp/>is<sp/>an<sp/>object.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">assert(document.IsObject());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Let&apos;s<sp/>query<sp/>whether<sp/>a<sp/>`&quot;hello&quot;`<sp/>member<sp/>exists<sp/>in<sp/>the<sp/>root<sp/>object.<sp/>Since<sp/>a<sp/>`Value`<sp/>can<sp/>contain<sp/>different<sp/>types<sp/>of<sp/>value,<sp/>we<sp/>may<sp/>need<sp/>to<sp/>verify<sp/>its<sp/>type<sp/>and<sp/>use<sp/>suitable<sp/>API<sp/>to<sp/>obtain<sp/>the<sp/>value.<sp/>In<sp/>this<sp/>example,<sp/>`&quot;hello&quot;`<sp/>member<sp/>associates<sp/>with<sp/>a<sp/>JSON<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">assert(document.HasMember(&quot;hello&quot;));</highlight></codeline>
+<codeline><highlight class="normal">assert(document[&quot;hello&quot;].IsString());</highlight></codeline>
+<codeline><highlight class="normal">printf(&quot;hello<sp/>=<sp/>%s\n&quot;,<sp/>document[&quot;hello&quot;].GetString());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">hello<sp/>=<sp/>world</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>true/false<sp/>values<sp/>are<sp/>represented<sp/>as<sp/>`bool`.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">assert(document[&quot;t&quot;].IsBool());</highlight></codeline>
+<codeline><highlight class="normal">printf(&quot;t<sp/>=<sp/>%s\n&quot;,<sp/>document[&quot;t&quot;].GetBool()<sp/>?<sp/>&quot;true&quot;<sp/>:<sp/>&quot;false&quot;);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">t<sp/>=<sp/>true</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>null<sp/>can<sp/>be<sp/>queried<sp/>with<sp/>`IsNull()`.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">printf(&quot;n<sp/>=<sp/>%s\n&quot;,<sp/>document[&quot;n&quot;].IsNull()<sp/>?<sp/>&quot;null&quot;<sp/>:<sp/>&quot;?&quot;);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">n<sp/>=<sp/>null</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>number<sp/>type<sp/>represents<sp/>all<sp/>numeric<sp/>values.<sp/>However,<sp/>C++<sp/>needs<sp/>more<sp/>specific<sp/>type<sp/>for<sp/>manipulation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">assert(document[&quot;i&quot;].IsNumber());</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>In<sp/>this<sp/>case,<sp/>IsUint()/IsInt64()/IsUint64()<sp/>also<sp/>return<sp/>true.</highlight></codeline>
+<codeline><highlight class="normal">assert(document[&quot;i&quot;].IsInt());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">printf(&quot;i<sp/>=<sp/>%d\n&quot;,<sp/>document[&quot;i&quot;].GetInt());</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Alternatively<sp/>(int)document[&quot;i&quot;]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">assert(document[&quot;pi&quot;].IsNumber());</highlight></codeline>
+<codeline><highlight class="normal">assert(document[&quot;pi&quot;].IsDouble());</highlight></codeline>
+<codeline><highlight class="normal">printf(&quot;pi<sp/>=<sp/>%g\n&quot;,<sp/>document[&quot;pi&quot;].GetDouble());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">i<sp/>=<sp/>123</highlight></codeline>
+<codeline><highlight class="normal">pi<sp/>=<sp/>3.1416</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>array<sp/>contains<sp/>a<sp/>number<sp/>of<sp/>elements.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Using<sp/>a<sp/>reference<sp/>for<sp/>consecutive<sp/>access<sp/>is<sp/>handy<sp/>and<sp/>faster.</highlight></codeline>
+<codeline><highlight class="normal">const<sp/>Value&amp;<sp/>a<sp/>=<sp/>document[&quot;a&quot;];</highlight></codeline>
+<codeline><highlight class="normal">assert(a.IsArray());</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>(SizeType<sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>a.Size();<sp/>i++)<sp/>//<sp/>Uses<sp/>SizeType<sp/>instead<sp/>of<sp/>size_t</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(&quot;a[%d]<sp/>=<sp/>%d\n&quot;,<sp/>i,<sp/>a[i].GetInt());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">a[0]<sp/>=<sp/>1</highlight></codeline>
+<codeline><highlight class="normal">a[1]<sp/>=<sp/>2</highlight></codeline>
+<codeline><highlight class="normal">a[2]<sp/>=<sp/>3</highlight></codeline>
+<codeline><highlight class="normal">a[3]<sp/>=<sp/>4</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>RapidJSON<sp/>does<sp/>not<sp/>automatically<sp/>convert<sp/>values<sp/>between<sp/>JSON<sp/>types.<sp/>For<sp/>example,<sp/>if<sp/>a<sp/>value<sp/>is<sp/>a<sp/>string,<sp/>it<sp/>is<sp/>invalid<sp/>to<sp/>call<sp/>`GetInt()`.<sp/>In<sp/>debug<sp/>mode<sp/>it<sp/>will<sp/>fail<sp/>on<sp/>assertion.<sp/>In<sp/>release<sp/>mode,<sp/>the<sp/>behavior<sp/>is<sp/>undefined.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>the<sp/>following<sp/>sections<sp/>we<sp/>discuss<sp/>details<sp/>about<sp/>querying<sp/>individual<sp/>types.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Query<sp/>Array<sp/>{#QueryArray}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>`SizeType`<sp/>is<sp/>typedef<sp/>of<sp/>`unsigned`.<sp/>In<sp/>most<sp/>systems,<sp/>an<sp/>array<sp/>is<sp/>limited<sp/>to<sp/>store<sp/>up<sp/>to<sp/>2^32-1<sp/>elements.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>access<sp/>the<sp/>elements<sp/>in<sp/>an<sp/>array<sp/>by<sp/>integer<sp/>literal,<sp/>for<sp/>example,<sp/>`a[0]`,<sp/>`a[1]`,<sp/>`a[2]`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Array<sp/>is<sp/>similar<sp/>to<sp/>`std::vector`:<sp/>instead<sp/>of<sp/>using<sp/>indices,<sp/>you<sp/>may<sp/>also<sp/>use<sp/>iterator<sp/>to<sp/>access<sp/>all<sp/>the<sp/>elements.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>(Value::ConstValueIterator<sp/>itr<sp/>=<sp/>a.Begin();<sp/>itr<sp/>!=<sp/>a.End();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;%d<sp/>&quot;,<sp/>itr-&gt;GetInt());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">And<sp/>other<sp/>familiar<sp/>query<sp/>functions:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`SizeType<sp/>Capacity()<sp/>const`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`bool<sp/>Empty()<sp/>const`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Range-based<sp/>For<sp/>Loop<sp/>(New<sp/>in<sp/>v1.1.0)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>C++11<sp/>is<sp/>enabled,<sp/>you<sp/>can<sp/>use<sp/>range-based<sp/>for<sp/>loop<sp/>to<sp/>access<sp/>all<sp/>elements<sp/>in<sp/>an<sp/>array.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>(auto&amp;<sp/>v<sp/>:<sp/>a.GetArray())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;%d<sp/>&quot;,<sp/>v.GetInt());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Query<sp/>Object<sp/>{#QueryObject}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Similar<sp/>to<sp/>Array,<sp/>we<sp/>can<sp/>access<sp/>all<sp/>object<sp/>members<sp/>by<sp/>iterator:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">static<sp/>const<sp/>char*<sp/>kTypeNames[]<sp/>=<sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/>&quot;Null&quot;,<sp/>&quot;False&quot;,<sp/>&quot;True&quot;,<sp/>&quot;Object&quot;,<sp/>&quot;Array&quot;,<sp/>&quot;String&quot;,<sp/>&quot;Number&quot;<sp/>};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">for<sp/>(Value::ConstMemberIterator<sp/>itr<sp/>=<sp/>document.MemberBegin();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>itr<sp/>!=<sp/>document.MemberEnd();<sp/>++itr)</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>itr-&gt;name.GetString(),<sp/>kTypeNames[itr-&gt;value.GetType()]);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>hello<sp/>is<sp/>String</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>t<sp/>is<sp/>True</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>f<sp/>is<sp/>False</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>n<sp/>is<sp/>Null</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>i<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>pi<sp/>is<sp/>Number</highlight></codeline>
+<codeline><highlight class="normal">Type<sp/>of<sp/>member<sp/>a<sp/>is<sp/>Array</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>when<sp/>`operator[](const<sp/>char*)`<sp/>cannot<sp/>find<sp/>the<sp/>member,<sp/>it<sp/>will<sp/>fail<sp/>on<sp/>assertion.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>we<sp/>are<sp/>unsure<sp/>whether<sp/>a<sp/>member<sp/>exists,<sp/>we<sp/>need<sp/>to<sp/>call<sp/>`HasMember()`<sp/>before<sp/>calling<sp/>`operator[](const<sp/>char*)`.<sp/>However,<sp/>this<sp/>incurs<sp/>two<sp/>lookup.<sp/>A<sp/>better<sp/>way<sp/>is<sp/>to<sp/>call<sp/>`FindMember()`,<sp/>which<sp/>can<sp/>check<sp/>the<sp/>existence<sp/>of<sp/>a<sp/>member<sp/>and<sp/>obtain<sp/>its<sp/>value<sp/>at<sp/>once:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value::ConstMemberIterator<sp/>itr<sp/>=<sp/>document.FindMember(&quot;hello&quot;);</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(itr<sp/>!=<sp/>document.MemberEnd())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;%s\n&quot;,<sp/>itr-&gt;value.GetString());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Range-based<sp/>For<sp/>Loop<sp/>(New<sp/>in<sp/>v1.1.0)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>C++11<sp/>is<sp/>enabled,<sp/>you<sp/>can<sp/>use<sp/>range-based<sp/>for<sp/>loop<sp/>to<sp/>access<sp/>all<sp/>members<sp/>in<sp/>an<sp/>object.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>(auto&amp;<sp/>m<sp/>:<sp/>document.GetObject())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;Type<sp/>of<sp/>member<sp/>%s<sp/>is<sp/>%s\n&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>m.name.GetString(),<sp/>kTypeNames[m.value.GetType()]);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Querying<sp/>Number<sp/>{#QueryNumber}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>provides<sp/>a<sp/>single<sp/>numerical<sp/>type<sp/>called<sp/>Number.<sp/>Number<sp/>can<sp/>be<sp/>an<sp/>integer<sp/>or<sp/>a<sp/>real<sp/>number.<sp/>RFC<sp/>4627<sp/>says<sp/>the<sp/>range<sp/>of<sp/>Number<sp/>is<sp/>specified<sp/>by<sp/>the<sp/>parser<sp/>implementation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>C++<sp/>provides<sp/>several<sp/>integer<sp/>and<sp/>floating<sp/>point<sp/>number<sp/>types,<sp/>the<sp/>DOM<sp/>tries<sp/>to<sp/>handle<sp/>these<sp/>with<sp/>the<sp/>widest<sp/>possible<sp/>range<sp/>and<sp/>good<sp/>performance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>a<sp/>Number<sp/>is<sp/>parsed,<sp/>it<sp/>is<sp/>stored<sp/>in<sp/>the<sp/>DOM<sp/>as<sp/>one<sp/>of<sp/>the<sp/>following<sp/>types:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Type<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Description</highlight></codeline>
+<codeline><highlight class="normal">-----------|---------------------------------------</highlight></codeline>
+<codeline><highlight class="normal">`unsigned`<sp/>|<sp/>32-bit<sp/>unsigned<sp/>integer</highlight></codeline>
+<codeline><highlight class="normal">`int`<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>32-bit<sp/>signed<sp/>integer</highlight></codeline>
+<codeline><highlight class="normal">`uint64_t`<sp/>|<sp/>64-bit<sp/>unsigned<sp/>integer</highlight></codeline>
+<codeline><highlight class="normal">`int64_t`<sp/><sp/>|<sp/>64-bit<sp/>signed<sp/>integer</highlight></codeline>
+<codeline><highlight class="normal">`double`<sp/><sp/><sp/>|<sp/>64-bit<sp/>double<sp/>precision<sp/>floating<sp/>point</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>querying<sp/>a<sp/>number,<sp/>you<sp/>can<sp/>check<sp/>whether<sp/>the<sp/>number<sp/>can<sp/>be<sp/>obtained<sp/>as<sp/>the<sp/>target<sp/>type:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Checking<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Obtaining</highlight></codeline>
+<codeline><highlight class="normal">------------------|---------------------</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsNumber()`<sp/>|<sp/>N/A</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsUint()`<sp/><sp/><sp/>|<sp/>`unsigned<sp/>GetUint()`</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsInt()`<sp/><sp/><sp/><sp/>|<sp/>`int<sp/>GetInt()`</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsUint64()`<sp/>|<sp/>`uint64_t<sp/>GetUint64()`</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsInt64()`<sp/><sp/>|<sp/>`int64_t<sp/>GetInt64()`</highlight></codeline>
+<codeline><highlight class="normal">`bool<sp/>IsDouble()`<sp/>|<sp/>`double<sp/>GetDouble()`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>an<sp/>integer<sp/>value<sp/>may<sp/>be<sp/>obtained<sp/>in<sp/>various<sp/>ways<sp/>without<sp/>conversion.<sp/>For<sp/>example,<sp/>A<sp/>value<sp/>`x`<sp/>containing<sp/>123<sp/>will<sp/>make<sp/>`x.IsInt()<sp/>==<sp/>x.IsUint()<sp/>==<sp/>x.IsInt64()<sp/>==<sp/>x.IsUint64()<sp/>==<sp/>true`.<sp/>But<sp/>a<sp/>value<sp/>`y`<sp/>containing<sp/>-3000000000<sp/>will<sp/>only<sp/>make<sp/>`x.IsInt64()<sp/>==<sp/>true`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>obtaining<sp/>the<sp/>numeric<sp/>values,<sp/>`GetDouble()`<sp/>will<sp/>convert<sp/>internal<sp/>integer<sp/>representation<sp/>to<sp/>a<sp/>`double`.<sp/>Note<sp/>that,<sp/>`int`<sp/>and<sp/>`unsigned`<sp/>can<sp/>be<sp/>safely<sp/>converted<sp/>to<sp/>`double`,<sp/>but<sp/>`int64_t`<sp/>and<sp/>`uint64_t`<sp/>may<sp/>lose<sp/>precision<sp/>(since<sp/>mantissa<sp/>of<sp/>`double`<sp/>is<sp/>only<sp/>52-bits).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Query<sp/>String<sp/>{#QueryString}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>addition<sp/>to<sp/>`GetString()`,<sp/>the<sp/>`Value`<sp/>class<sp/>also<sp/>contains<sp/>`GetStringLength()`.<sp/>Here<sp/>explains<sp/>why:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">According<sp/>to<sp/>RFC<sp/>4627,<sp/>JSON<sp/>strings<sp/>can<sp/>contain<sp/>Unicode<sp/>character<sp/>`U+0000`,<sp/>which<sp/>must<sp/>be<sp/>escaped<sp/>as<sp/>`&quot;\u0000&quot;`.<sp/>The<sp/>problem<sp/>is<sp/>that,<sp/>C/C++<sp/>often<sp/>uses<sp/>null-terminated<sp/>string,<sp/>which<sp/>treats<sp/>`\0`<sp/>as<sp/>the<sp/>terminator<sp/>symbol.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>conform<sp/>with<sp/>RFC<sp/>4627,<sp/>RapidJSON<sp/>supports<sp/>string<sp/>containing<sp/>`U+0000`<sp/>character.<sp/>If<sp/>you<sp/>need<sp/>to<sp/>handle<sp/>this,<sp/>you<sp/>can<sp/>use<sp/>`GetStringLength()`<sp/>to<sp/>obtain<sp/>the<sp/>correct<sp/>string<sp/>length.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>example,<sp/>after<sp/>parsing<sp/>the<sp/>following<sp/>JSON<sp/>to<sp/>`Document<sp/>d`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~js</highlight></codeline>
+<codeline><highlight class="normal">{<sp/>&quot;s&quot;<sp/>:<sp/><sp/>&quot;a\u0000b&quot;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>correct<sp/>length<sp/>of<sp/>the<sp/>string<sp/>`&quot;a\u0000b&quot;`<sp/>is<sp/>3,<sp/>as<sp/>returned<sp/>by<sp/>`GetStringLength()`.<sp/>But<sp/>`strlen()`<sp/>returns<sp/>1.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`GetStringLength()`<sp/>can<sp/>also<sp/>improve<sp/>performance,<sp/>as<sp/>user<sp/>may<sp/>often<sp/>need<sp/>to<sp/>call<sp/>`strlen()`<sp/>for<sp/>allocating<sp/>buffer.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>`std::string`<sp/>also<sp/>support<sp/>a<sp/>constructor:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">string(const<sp/>char*<sp/>s,<sp/>size_t<sp/>count);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">which<sp/>accepts<sp/>the<sp/>length<sp/>of<sp/>string<sp/>as<sp/>parameter.<sp/>This<sp/>constructor<sp/>supports<sp/>storing<sp/>null<sp/>character<sp/>within<sp/>the<sp/>string,<sp/>and<sp/>should<sp/>also<sp/>provide<sp/>better<sp/>performance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Comparing<sp/>values</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>use<sp/>`==`<sp/>and<sp/>`!=`<sp/>to<sp/>compare<sp/>values.<sp/>Two<sp/>values<sp/>are<sp/>equal<sp/>if<sp/>and<sp/>only<sp/>if<sp/>they<sp/>have<sp/>same<sp/>type<sp/>and<sp/>contents.<sp/>You<sp/>can<sp/>also<sp/>compare<sp/>values<sp/>with<sp/>primitive<sp/>types.<sp/>Here<sp/>is<sp/>an<sp/>example:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(document[&quot;hello&quot;]<sp/>==<sp/>document[&quot;n&quot;])<sp/>/*...*/;<sp/><sp/><sp/><sp/>//<sp/>Compare<sp/>values</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(document[&quot;hello&quot;]<sp/>==<sp/>&quot;world&quot;)<sp/>/*...*/;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Compare<sp/>value<sp/>with<sp/>literal<sp/>string</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(document[&quot;i&quot;]<sp/>!=<sp/>123)<sp/>/*...*/;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Compare<sp/>with<sp/>integers</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(document[&quot;pi&quot;]<sp/>!=<sp/>3.14)<sp/>/*...*/;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Compare<sp/>with<sp/>double.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Array/object<sp/>compares<sp/>their<sp/>elements/members<sp/>in<sp/>order.<sp/>They<sp/>are<sp/>equal<sp/>if<sp/>and<sp/>only<sp/>if<sp/>their<sp/>whole<sp/>subtrees<sp/>are<sp/>equal.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>currently<sp/>if<sp/>an<sp/>object<sp/>contains<sp/>duplicated<sp/>named<sp/>member,<sp/>comparing<sp/>equality<sp/>with<sp/>any<sp/>object<sp/>is<sp/>always<sp/>`false`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Create/Modify<sp/>Values<sp/>{#CreateModifyValues}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>several<sp/>ways<sp/>to<sp/>create<sp/>values.<sp/>After<sp/>a<sp/>DOM<sp/>tree<sp/>is<sp/>created<sp/>and/or<sp/>modified,<sp/>it<sp/>can<sp/>be<sp/>saved<sp/>as<sp/>JSON<sp/>again<sp/>using<sp/>`Writer`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Change<sp/>Value<sp/>Type<sp/>{#ChangeValueType}</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>creating<sp/>a<sp/>`Value`<sp/>or<sp/>`Document`<sp/>by<sp/>default<sp/>constructor,<sp/>its<sp/>type<sp/>is<sp/>Null.<sp/>To<sp/>change<sp/>its<sp/>type,<sp/>call<sp/>`SetXXX()`<sp/>or<sp/>assignment<sp/>operator,<sp/>for<sp/>example:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/>//<sp/>Null</highlight></codeline>
+<codeline><highlight class="normal">d.SetObject();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value<sp/>v;<sp/><sp/><sp/><sp/>//<sp/>Null</highlight></codeline>
+<codeline><highlight class="normal">v.SetInt(10);</highlight></codeline>
+<codeline><highlight class="normal">v<sp/>=<sp/>10;<sp/><sp/><sp/><sp/><sp/>//<sp/>Shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Overloaded<sp/>Constructors</highlight></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>also<sp/>overloaded<sp/>constructors<sp/>for<sp/>several<sp/>types:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>b(true);<sp/><sp/><sp/><sp/>//<sp/>calls<sp/>Value(bool)</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>i(-123);<sp/><sp/><sp/><sp/>//<sp/>calls<sp/>Value(int)</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>u(123u);<sp/><sp/><sp/><sp/>//<sp/>calls<sp/>Value(unsigned)</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>d(1.5);<sp/><sp/><sp/><sp/><sp/>//<sp/>calls<sp/>Value(double)</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>create<sp/>empty<sp/>object<sp/>or<sp/>array,<sp/>you<sp/>may<sp/>use<sp/>`SetObject()`/`SetArray()`<sp/>after<sp/>default<sp/>constructor,<sp/>or<sp/>using<sp/>the<sp/>`Value(Type)`<sp/>in<sp/>one<sp/>call:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>o(kObjectType);</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>a(kArrayType);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Move<sp/>Semantics<sp/>{#MoveSemantics}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>very<sp/>special<sp/>decision<sp/>during<sp/>design<sp/>of<sp/>RapidJSON<sp/>is<sp/>that,<sp/>assignment<sp/>of<sp/>value<sp/>does<sp/>not<sp/>copy<sp/>the<sp/>source<sp/>value<sp/>to<sp/>destination<sp/>value.<sp/>Instead,<sp/>the<sp/>value<sp/>from<sp/>source<sp/>is<sp/>moved<sp/>to<sp/>the<sp/>destination.<sp/>For<sp/>example,</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>a(123);</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>b(456);</highlight></codeline>
+<codeline><highlight class="normal">a<sp/>=<sp/>b;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>b<sp/>becomes<sp/>a<sp/>Null<sp/>value,<sp/>a<sp/>becomes<sp/>number<sp/>456.</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![Assignment<sp/>with<sp/>move<sp/>semantics.](diagram/move1.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Why?<sp/>What<sp/>is<sp/>the<sp/>advantage<sp/>of<sp/>this<sp/>semantics?</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>simple<sp/>answer<sp/>is<sp/>performance.<sp/>For<sp/>fixed<sp/>size<sp/>JSON<sp/>types<sp/>(Number,<sp/>True,<sp/>False,<sp/>Null),<sp/>copying<sp/>them<sp/>is<sp/>fast<sp/>and<sp/>easy.<sp/>However,<sp/>For<sp/>variable<sp/>size<sp/>JSON<sp/>types<sp/>(String,<sp/>Array,<sp/>Object),<sp/>copying<sp/>them<sp/>will<sp/>incur<sp/>a<sp/>lot<sp/>of<sp/>overheads.<sp/>And<sp/>these<sp/>overheads<sp/>are<sp/>often<sp/>unnoticed.<sp/>Especially<sp/>when<sp/>we<sp/>need<sp/>to<sp/>create<sp/>temporary<sp/>object,<sp/>copy<sp/>it<sp/>to<sp/>another<sp/>variable,<sp/>and<sp/>then<sp/>destruct<sp/>it.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>example,<sp/>if<sp/>normal<sp/>*copy*<sp/>semantics<sp/>was<sp/>used:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>o(kObjectType);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Value<sp/>contacts(kArrayType);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>adding<sp/>elements<sp/>to<sp/>contacts<sp/>array.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(&quot;contacts&quot;,<sp/>contacts,<sp/>d.GetAllocator());<sp/><sp/>//<sp/>deep<sp/>clone<sp/>contacts<sp/>(may<sp/>be<sp/>with<sp/>lots<sp/>of<sp/>allocations)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>destruct<sp/>contacts.</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![Copy<sp/>semantics<sp/>makes<sp/>a<sp/>lots<sp/>of<sp/>copy<sp/>operations.](diagram/move2.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>object<sp/>`o`<sp/>needs<sp/>to<sp/>allocate<sp/>a<sp/>buffer<sp/>of<sp/>same<sp/>size<sp/>as<sp/>contacts,<sp/>makes<sp/>a<sp/>deep<sp/>clone<sp/>of<sp/>it,<sp/>and<sp/>then<sp/>finally<sp/>contacts<sp/>is<sp/>destructed.<sp/>This<sp/>will<sp/>incur<sp/>a<sp/>lot<sp/>of<sp/>unnecessary<sp/>allocations/deallocations<sp/>and<sp/>memory<sp/>copying.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>solutions<sp/>to<sp/>prevent<sp/>actual<sp/>copying<sp/>these<sp/>data,<sp/>such<sp/>as<sp/>reference<sp/>counting<sp/>and<sp/>garbage<sp/>collection(GC).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>make<sp/>RapidJSON<sp/>simple<sp/>and<sp/>fast,<sp/>we<sp/>chose<sp/>to<sp/>use<sp/>*move*<sp/>semantics<sp/>for<sp/>assignment.<sp/>It<sp/>is<sp/>similar<sp/>to<sp/>`std::auto_ptr`<sp/>which<sp/>transfer<sp/>ownership<sp/>during<sp/>assignment.<sp/>Move<sp/>is<sp/>much<sp/>faster<sp/>and<sp/>simpler,<sp/>it<sp/>just<sp/>destructs<sp/>the<sp/>original<sp/>value,<sp/>`memcpy()`<sp/>the<sp/>source<sp/>to<sp/>destination,<sp/>and<sp/>finally<sp/>sets<sp/>the<sp/>source<sp/>as<sp/>Null<sp/>type.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">So,<sp/>with<sp/>move<sp/>semantics,<sp/>the<sp/>above<sp/>example<sp/>becomes:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>o(kObjectType);</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Value<sp/>contacts(kArrayType);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>adding<sp/>elements<sp/>to<sp/>contacts<sp/>array.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>o.AddMember(&quot;contacts&quot;,<sp/>contacts,<sp/>d.GetAllocator());<sp/><sp/>//<sp/>just<sp/>memcpy()<sp/>of<sp/>contacts<sp/>itself<sp/>to<sp/>the<sp/>value<sp/>of<sp/>new<sp/>member<sp/>(16<sp/>bytes)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>contacts<sp/>became<sp/>Null<sp/>here.<sp/>Its<sp/>destruction<sp/>is<sp/>trivial.</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![Move<sp/>semantics<sp/>makes<sp/>no<sp/>copying.](diagram/move3.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>called<sp/>move<sp/>assignment<sp/>operator<sp/>in<sp/>C++11.<sp/>As<sp/>RapidJSON<sp/>supports<sp/>C++03,<sp/>it<sp/>adopts<sp/>move<sp/>semantics<sp/>using<sp/>assignment<sp/>operator,<sp/>and<sp/>all<sp/>other<sp/>modifying<sp/>function<sp/>like<sp/>`AddMember()`,<sp/>`PushBack()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Move<sp/>semantics<sp/>and<sp/>temporary<sp/>values<sp/>{#TemporaryValues}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Sometimes,<sp/>it<sp/>is<sp/>convenient<sp/>to<sp/>construct<sp/>a<sp/>Value<sp/>in<sp/>place,<sp/>before<sp/>passing<sp/>it<sp/>to<sp/>one<sp/>of<sp/>the<sp/>&quot;moving&quot;<sp/>functions,<sp/>like<sp/>`PushBack()`<sp/>or<sp/>`AddMember()`.<sp/><sp/>As<sp/>temporary<sp/>objects<sp/>can&apos;t<sp/>be<sp/>converted<sp/>to<sp/>proper<sp/>Value<sp/>references,<sp/>the<sp/>convenience<sp/>function<sp/>`Move()`<sp/>is<sp/>available:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>a(kArrayType);</highlight></codeline>
+<codeline><highlight class="normal">Document::AllocatorType&amp;<sp/>allocator<sp/>=<sp/>document.GetAllocator();</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>a.PushBack(Value(42),<sp/>allocator);<sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>will<sp/>not<sp/>compile</highlight></codeline>
+<codeline><highlight class="normal">a.PushBack(Value().SetInt(42),<sp/>allocator);<sp/>//<sp/>fluent<sp/>API</highlight></codeline>
+<codeline><highlight class="normal">a.PushBack(Value(42).Move(),<sp/>allocator);<sp/><sp/><sp/>//<sp/>same<sp/>as<sp/>above</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Create<sp/>String<sp/>{#CreateString}</highlight></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>provides<sp/>two<sp/>strategies<sp/>for<sp/>storing<sp/>string.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>copy-string:<sp/>allocates<sp/>a<sp/>buffer,<sp/>and<sp/>then<sp/>copy<sp/>the<sp/>source<sp/>data<sp/>into<sp/>it.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>const-string:<sp/>simply<sp/>store<sp/>a<sp/>pointer<sp/>of<sp/>string.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Copy-string<sp/>is<sp/>always<sp/>safe<sp/>because<sp/>it<sp/>owns<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>data.<sp/>Const-string<sp/>can<sp/>be<sp/>used<sp/>for<sp/>storing<sp/>a<sp/>string<sp/>literal,<sp/>and<sp/>for<sp/>in-situ<sp/>parsing<sp/>which<sp/>will<sp/>be<sp/>mentioned<sp/>in<sp/>the<sp/>DOM<sp/>section.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>make<sp/>memory<sp/>allocation<sp/>customizable,<sp/>RapidJSON<sp/>requires<sp/>users<sp/>to<sp/>pass<sp/>an<sp/>instance<sp/>of<sp/>allocator,<sp/>whenever<sp/>an<sp/>operation<sp/>may<sp/>require<sp/>allocation.<sp/>This<sp/>design<sp/>is<sp/>needed<sp/>to<sp/>prevent<sp/>storing<sp/>an<sp/>allocator<sp/>(or<sp/>Document)<sp/>pointer<sp/>per<sp/>Value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Therefore,<sp/>when<sp/>we<sp/>assign<sp/>a<sp/>copy-string,<sp/>we<sp/>call<sp/>this<sp/>overloaded<sp/>`SetString()`<sp/>with<sp/>allocator:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>document;</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>author;</highlight></codeline>
+<codeline><highlight class="normal">char<sp/>buffer[10];</highlight></codeline>
+<codeline><highlight class="normal">int<sp/>len<sp/>=<sp/>sprintf(buffer,<sp/>&quot;%s<sp/>%s&quot;,<sp/>&quot;Milo&quot;,<sp/>&quot;Yip&quot;);<sp/>//<sp/>dynamically<sp/>created<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal">author.SetString(buffer,<sp/>len,<sp/>document.GetAllocator());</highlight></codeline>
+<codeline><highlight class="normal">memset(buffer,<sp/>0,<sp/>sizeof(buffer));</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>author.GetString()<sp/>still<sp/>contains<sp/>&quot;Milo<sp/>Yip&quot;<sp/>after<sp/>buffer<sp/>is<sp/>destroyed</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>this<sp/>example,<sp/>we<sp/>get<sp/>the<sp/>allocator<sp/>from<sp/>a<sp/>`Document`<sp/>instance.<sp/>This<sp/>is<sp/>a<sp/>common<sp/>idiom<sp/>when<sp/>using<sp/>RapidJSON.<sp/>But<sp/>you<sp/>may<sp/>use<sp/>other<sp/>instances<sp/>of<sp/>allocator.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>the<sp/>above<sp/>`SetString()`<sp/>requires<sp/>length.<sp/>This<sp/>can<sp/>handle<sp/>null<sp/>characters<sp/>within<sp/>a<sp/>string.<sp/>There<sp/>is<sp/>another<sp/>`SetString()`<sp/>overloaded<sp/>function<sp/>without<sp/>the<sp/>length<sp/>parameter.<sp/>And<sp/>it<sp/>assumes<sp/>the<sp/>input<sp/>is<sp/>null-terminated<sp/>and<sp/>calls<sp/>a<sp/>`strlen()`-like<sp/>function<sp/>to<sp/>obtain<sp/>the<sp/>length.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Finally,<sp/>for<sp/>a<sp/>string<sp/>literal<sp/>or<sp/>string<sp/>with<sp/>a<sp/>safe<sp/>life-cycle<sp/>one<sp/>can<sp/>use<sp/>the<sp/>const-string<sp/>version<sp/>of<sp/>`SetString()`,<sp/>which<sp/>lacks<sp/>an<sp/>allocator<sp/>parameter.<sp/><sp/>For<sp/>string<sp/>literals<sp/>(or<sp/>constant<sp/>character<sp/>arrays),<sp/>simply<sp/>passing<sp/>the<sp/>literal<sp/>as<sp/>parameter<sp/>is<sp/>safe<sp/>and<sp/>efficient:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>s;</highlight></codeline>
+<codeline><highlight class="normal">s.SetString(&quot;rapidjson&quot;);<sp/><sp/><sp/><sp/>//<sp/>can<sp/>contain<sp/>null<sp/>character,<sp/>length<sp/>derived<sp/>at<sp/>compile<sp/>time</highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/>&quot;rapidjson&quot;;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>character<sp/>pointer,<sp/>RapidJSON<sp/>requires<sp/>it<sp/>to<sp/>be<sp/>marked<sp/>as<sp/>safe<sp/>before<sp/>using<sp/>it<sp/>without<sp/>copying.<sp/>This<sp/>can<sp/>be<sp/>achieved<sp/>by<sp/>using<sp/>the<sp/>`StringRef`<sp/>function:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">const<sp/>char<sp/>*<sp/>cstr<sp/>=<sp/>getenv(&quot;USER&quot;);</highlight></codeline>
+<codeline><highlight class="normal">size_t<sp/>cstr_len<sp/>=<sp/>...;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>in<sp/>case<sp/>length<sp/>is<sp/>available</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>s;</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>s.SetString(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>will<sp/>not<sp/>compile</highlight></codeline>
+<codeline><highlight class="normal">s.SetString(StringRef(cstr));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>ok,<sp/>assume<sp/>safe<sp/>lifetime,<sp/>null-terminated</highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/>StringRef(cstr);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+<codeline><highlight class="normal">s.SetString(StringRef(cstr,cstr_len));<sp/>//<sp/>faster,<sp/>can<sp/>contain<sp/>null<sp/>character</highlight></codeline>
+<codeline><highlight class="normal">s<sp/>=<sp/>StringRef(cstr,cstr_len);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>shortcut,<sp/>same<sp/>as<sp/>above</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Modify<sp/>Array<sp/>{#ModifyArray}</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>with<sp/>array<sp/>type<sp/>provides<sp/>an<sp/>API<sp/>similar<sp/>to<sp/>`std::vector`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`Clear()`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`Reserve(SizeType,<sp/>Allocator&amp;)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`Value&amp;<sp/>PushBack(Value&amp;,<sp/>Allocator&amp;)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`template<sp/>&lt;typename<sp/>T&gt;<sp/>GenericValue&amp;<sp/>PushBack(T,<sp/>Allocator&amp;)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`Value&amp;<sp/>PopBack()`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`ValueIterator<sp/>Erase(ConstValueIterator<sp/>pos)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`ValueIterator<sp/>Erase(ConstValueIterator<sp/>first,<sp/>ConstValueIterator<sp/>last)`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>`Reserve(...)`<sp/>and<sp/>`PushBack(...)`<sp/>may<sp/>allocate<sp/>memory<sp/>for<sp/>the<sp/>array<sp/>elements,<sp/>therefore<sp/>requiring<sp/>an<sp/>allocator.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example<sp/>of<sp/>`PushBack()`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>a(kArrayType);</highlight></codeline>
+<codeline><highlight class="normal">Document::AllocatorType&amp;<sp/>allocator<sp/>=<sp/>document.GetAllocator();</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">for<sp/>(int<sp/>i<sp/>=<sp/>5;<sp/>i<sp/>&lt;=<sp/>10;<sp/>i++)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>a.PushBack(i,<sp/>allocator);<sp/><sp/><sp/>//<sp/>allocator<sp/>is<sp/>needed<sp/>for<sp/>potential<sp/>realloc().</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Fluent<sp/>interface</highlight></codeline>
+<codeline><highlight class="normal">a.PushBack(&quot;Lua&quot;,<sp/>allocator).PushBack(&quot;Mio&quot;,<sp/>allocator);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>API<sp/>differs<sp/>from<sp/>STL<sp/>in<sp/>that<sp/>`PushBack()`/`PopBack()`<sp/>return<sp/>the<sp/>array<sp/>reference<sp/>itself.<sp/>This<sp/>is<sp/>called<sp/>_fluent<sp/>interface_.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>want<sp/>to<sp/>add<sp/>a<sp/>non-constant<sp/>string<sp/>or<sp/>a<sp/>string<sp/>without<sp/>sufficient<sp/>lifetime<sp/>(see<sp/>[Create<sp/>String](#CreateString))<sp/>to<sp/>the<sp/>array,<sp/>you<sp/>need<sp/>to<sp/>create<sp/>a<sp/>string<sp/>Value<sp/>by<sp/>using<sp/>the<sp/>copy-string<sp/>API.<sp/><sp/>To<sp/>avoid<sp/>the<sp/>need<sp/>for<sp/>an<sp/>intermediate<sp/>variable,<sp/>you<sp/>can<sp/>use<sp/>a<sp/>[temporary<sp/>value](#TemporaryValues)<sp/>in<sp/>place:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>in-place<sp/>Value<sp/>parameter</highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(Value(&quot;copy&quot;,<sp/>document.GetAllocator()).Move(),<sp/>//<sp/>copy<sp/>string</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.GetAllocator());</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>explicit<sp/>parameters</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>val(&quot;key&quot;,<sp/>document.GetAllocator());<sp/>//<sp/>copy<sp/>string</highlight></codeline>
+<codeline><highlight class="normal">contact.PushBack(val,<sp/>document.GetAllocator());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Modify<sp/>Object<sp/>{#ModifyObject}</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>Object<sp/>class<sp/>is<sp/>a<sp/>collection<sp/>of<sp/>key-value<sp/>pairs<sp/>(members).<sp/>Each<sp/>key<sp/>must<sp/>be<sp/>a<sp/>string<sp/>value.<sp/>To<sp/>modify<sp/>an<sp/>object,<sp/>either<sp/>add<sp/>or<sp/>remove<sp/>members.<sp/>The<sp/>following<sp/>API<sp/>is<sp/>for<sp/>adding<sp/>members:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`Value&amp;<sp/>AddMember(Value&amp;,<sp/>Value&amp;,<sp/>Allocator&amp;<sp/>allocator)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`Value&amp;<sp/>AddMember(StringRefType,<sp/>Value&amp;,<sp/>Allocator&amp;)`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`template<sp/>&lt;typename<sp/>T&gt;<sp/>Value&amp;<sp/>AddMember(StringRefType,<sp/>T<sp/>value,<sp/>Allocator&amp;)`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>contact(kObject);</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(&quot;name&quot;,<sp/>&quot;Milo&quot;,<sp/>document.GetAllocator());</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(&quot;married&quot;,<sp/>true,<sp/>document.GetAllocator());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>name<sp/>parameter<sp/>with<sp/>`StringRefType`<sp/>is<sp/>similar<sp/>to<sp/>the<sp/>interface<sp/>of<sp/>the<sp/>`SetString`<sp/>function<sp/>for<sp/>string<sp/>values.<sp/>These<sp/>overloads<sp/>are<sp/>used<sp/>to<sp/>avoid<sp/>the<sp/>need<sp/>for<sp/>copying<sp/>the<sp/>`name`<sp/>string,<sp/>since<sp/>constant<sp/>key<sp/>names<sp/>are<sp/>very<sp/>common<sp/>in<sp/>JSON<sp/>objects.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>need<sp/>to<sp/>create<sp/>a<sp/>name<sp/>from<sp/>a<sp/>non-constant<sp/>string<sp/>or<sp/>a<sp/>string<sp/>without<sp/>sufficient<sp/>lifetime<sp/>(see<sp/>[Create<sp/>String](#CreateString)),<sp/>you<sp/>need<sp/>to<sp/>create<sp/>a<sp/>string<sp/>Value<sp/>by<sp/>using<sp/>the<sp/>copy-string<sp/>API.<sp/><sp/>To<sp/>avoid<sp/>the<sp/>need<sp/>for<sp/>an<sp/>intermediate<sp/>variable,<sp/>you<sp/>can<sp/>use<sp/>a<sp/>[temporary<sp/>value](#TemporaryValues)<sp/>in<sp/>place:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>in-place<sp/>Value<sp/>parameter</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(Value(&quot;copy&quot;,<sp/>document.GetAllocator()).Move(),<sp/>//<sp/>copy<sp/>string</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Value().Move(),<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>null<sp/>value</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document.GetAllocator());</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>explicit<sp/>parameters</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>key(&quot;key&quot;,<sp/>document.GetAllocator());<sp/>//<sp/>copy<sp/>string<sp/>name</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>val(42);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>some<sp/>value</highlight></codeline>
+<codeline><highlight class="normal">contact.AddMember(key,<sp/>val,<sp/>document.GetAllocator());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>removing<sp/>members,<sp/>there<sp/>are<sp/>several<sp/>choices:<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`bool<sp/>RemoveMember(const<sp/>Ch*<sp/>name)`:<sp/>Remove<sp/>a<sp/>member<sp/>by<sp/>search<sp/>its<sp/>name<sp/>(linear<sp/>time<sp/>complexity).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`bool<sp/>RemoveMember(const<sp/>Value&amp;<sp/>name)`:<sp/>same<sp/>as<sp/>above<sp/>but<sp/>`name`<sp/>is<sp/>a<sp/>Value.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`MemberIterator<sp/>RemoveMember(MemberIterator)`:<sp/>Remove<sp/>a<sp/>member<sp/>by<sp/>iterator<sp/>(_constant_<sp/>time<sp/>complexity).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`MemberIterator<sp/>EraseMember(MemberIterator)`:<sp/>similar<sp/>to<sp/>the<sp/>above<sp/>but<sp/>it<sp/>preserves<sp/>order<sp/>of<sp/>members<sp/>(linear<sp/>time<sp/>complexity).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`MemberIterator<sp/>EraseMember(MemberIterator<sp/>first,<sp/>MemberIterator<sp/>last)`:<sp/>remove<sp/>a<sp/>range<sp/>of<sp/>members,<sp/>preserves<sp/>order<sp/>(linear<sp/>time<sp/>complexity).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`MemberIterator<sp/>RemoveMember(MemberIterator)`<sp/>uses<sp/>a<sp/>&quot;move-last&quot;<sp/>trick<sp/>to<sp/>achieve<sp/>constant<sp/>time<sp/>complexity.<sp/>Basically<sp/>the<sp/>member<sp/>at<sp/>iterator<sp/>is<sp/>destructed,<sp/>and<sp/>then<sp/>the<sp/>last<sp/>element<sp/>is<sp/>moved<sp/>to<sp/>that<sp/>position.<sp/>So<sp/>the<sp/>order<sp/>of<sp/>the<sp/>remaining<sp/>members<sp/>are<sp/>changed.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Deep<sp/>Copy<sp/>Value<sp/>{#DeepCopyValue}</highlight></codeline>
+<codeline><highlight class="normal">If<sp/>we<sp/>really<sp/>need<sp/>to<sp/>copy<sp/>a<sp/>DOM<sp/>tree,<sp/>we<sp/>can<sp/>use<sp/>two<sp/>APIs<sp/>for<sp/>deep<sp/>copy:<sp/>constructor<sp/>with<sp/>allocator,<sp/>and<sp/>`CopyFrom()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">Document::AllocatorType&amp;<sp/>a<sp/>=<sp/>d.GetAllocator();</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>v1(&quot;foo&quot;);</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Value<sp/>v2(v1);<sp/>//<sp/>not<sp/>allowed</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value<sp/>v2(v1,<sp/>a);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>make<sp/>a<sp/>copy</highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsString());<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>v1<sp/>untouched</highlight></codeline>
+<codeline><highlight class="normal">d.SetArray().PushBack(v1,<sp/>a).PushBack(v2,<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal">assert(v1.IsNull()<sp/>&amp;&amp;<sp/>v2.IsNull());<sp/><sp/><sp/>//<sp/>both<sp/>moved<sp/>to<sp/>d</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">v2.CopyFrom(d,<sp/>a);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>copy<sp/>whole<sp/>document<sp/>to<sp/>v2</highlight></codeline>
+<codeline><highlight class="normal">assert(d.IsArray()<sp/>&amp;&amp;<sp/>d.Size()<sp/>==<sp/>2);<sp/>//<sp/>d<sp/>untouched</highlight></codeline>
+<codeline><highlight class="normal">v1.SetObject().AddMember(&quot;array&quot;,<sp/>v2,<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal">d.PushBack(v1,<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Swap<sp/>Values<sp/>{#SwapValues}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Swap()`<sp/>is<sp/>also<sp/>provided.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>a(123);</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>b(&quot;Hello&quot;);</highlight></codeline>
+<codeline><highlight class="normal">a.Swap(b);</highlight></codeline>
+<codeline><highlight class="normal">assert(a.IsString());</highlight></codeline>
+<codeline><highlight class="normal">assert(b.IsInt());</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Swapping<sp/>two<sp/>DOM<sp/>trees<sp/>is<sp/>fast<sp/>(constant<sp/>time),<sp/>despite<sp/>the<sp/>complexity<sp/>of<sp/>the<sp/>trees.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>What&apos;s<sp/>next<sp/>{#WhatsNext}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>tutorial<sp/>shows<sp/>the<sp/>basics<sp/>of<sp/>DOM<sp/>tree<sp/>query<sp/>and<sp/>manipulation.<sp/>There<sp/>are<sp/>several<sp/>important<sp/>concepts<sp/>in<sp/>RapidJSON:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>[Streams](doc/stream.md)<sp/>are<sp/>channels<sp/>for<sp/>reading/writing<sp/>JSON,<sp/>which<sp/>can<sp/>be<sp/>a<sp/>in-memory<sp/>string,<sp/>or<sp/>file<sp/>stream,<sp/>etc.<sp/>User<sp/>can<sp/>also<sp/>create<sp/>their<sp/>streams.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>[Encoding](doc/encoding.md)<sp/>defines<sp/>which<sp/>character<sp/>encoding<sp/>is<sp/>used<sp/>in<sp/>streams<sp/>and<sp/>memory.<sp/>RapidJSON<sp/>also<sp/>provide<sp/>Unicode<sp/>conversion/validation<sp/>internally.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>[DOM](doc/dom.md)&apos;s<sp/>basics<sp/>are<sp/>already<sp/>covered<sp/>in<sp/>this<sp/>tutorial.<sp/>Uncover<sp/>more<sp/>advanced<sp/>features<sp/>such<sp/>as<sp/>*in<sp/>situ*<sp/>parsing,<sp/>other<sp/>parsing<sp/>options<sp/>and<sp/>advanced<sp/>usages.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>[SAX](doc/sax.md)<sp/>is<sp/>the<sp/>foundation<sp/>of<sp/>parsing/generating<sp/>facility<sp/>in<sp/>RapidJSON.<sp/>Learn<sp/>how<sp/>to<sp/>use<sp/>`Reader`/`Writer`<sp/>to<sp/>implement<sp/>even<sp/>faster<sp/>applications.<sp/>Also<sp/>try<sp/>`PrettyWriter`<sp/>to<sp/>format<sp/>the<sp/>JSON.</highlight></codeline>
+<codeline><highlight class="normal">5.<sp/>[Performance](doc/performance.md)<sp/>shows<sp/>some<sp/>in-house<sp/>and<sp/>third-party<sp/>benchmarks.</highlight></codeline>
+<codeline><highlight class="normal">6.<sp/>[Internals](doc/internals.md)<sp/>describes<sp/>some<sp/>internal<sp/>designs<sp/>and<sp/>techniques<sp/>of<sp/>RapidJSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>also<sp/>refer<sp/>to<sp/>the<sp/>[FAQ](doc/faq.md),<sp/>API<sp/>documentation,<sp/>examples<sp/>and<sp/>unit<sp/>tests.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/tutorial.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,97 @@
+\hypertarget{filereadstream_8h_source}{}\doxysection{filereadstream.\+h}
+\label{filereadstream_8h_source}\index{src/rapidjson/include/rapidjson/filereadstream.h@{src/rapidjson/include/rapidjson/filereadstream.h}}
+\mbox{\hyperlink{filereadstream_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_FILEREADSTREAM\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_FILEREADSTREAM\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stream_8h}{stream.h}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <cstdio>}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{23 RAPIDJSON\_DIAG\_OFF(padded)}
+\DoxyCodeLine{24 RAPIDJSON\_DIAG\_OFF(unreachable-\/code)}
+\DoxyCodeLine{25 RAPIDJSON\_DIAG\_OFF(missing-\/noreturn)}
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{31 }
+\DoxyCodeLine{34 \textcolor{keyword}{class }\mbox{\hyperlink{class_file_read_stream}{FileReadStream}} \{}
+\DoxyCodeLine{35 \textcolor{keyword}{public}:}
+\DoxyCodeLine{36     \textcolor{keyword}{typedef} \textcolor{keywordtype}{char} \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}};    }
+\DoxyCodeLine{37 }
+\DoxyCodeLine{39 }
+\DoxyCodeLine{44     \mbox{\hyperlink{class_file_read_stream_adf91191843d50b900f43cb4f35f16f67}{FileReadStream}}(std::FILE* fp, \textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{size\_t} bufferSize) : fp\_(fp), buffer\_(buffer), bufferSize\_(bufferSize), bufferLast\_(0), current\_(buffer\_), readCount\_(0), count\_(0), eof\_(false) \{ }
+\DoxyCodeLine{45         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(fp\_ != 0);}
+\DoxyCodeLine{46         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(bufferSize >= 4);}
+\DoxyCodeLine{47         Read();}
+\DoxyCodeLine{48     \}}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} \mbox{\hyperlink{class_file_read_stream_ab7d47da8952d3fe5856a261ec3c020c9}{Peek}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} *current\_; \}}
+\DoxyCodeLine{51     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} \mbox{\hyperlink{class_file_read_stream_addcbccc9d86ccbbe6d8e876ba595dbcb}{Take}}() \{ \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} c = *current\_; Read(); \textcolor{keywordflow}{return} c; \}}
+\DoxyCodeLine{52     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_file_read_stream_ae82cfaafe347286b3af8976548bedf86}{Tell}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} count\_ + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(current\_ -\/ buffer\_); \}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54     \textcolor{comment}{// Not implemented}}
+\DoxyCodeLine{55     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_file_read_stream_a4f2eac5b08033b1527bff517be657a36}{Put}}(\mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}}) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{56     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_file_read_stream_acd031e3f578b23bc2a792ac41e1e95ae}{Flush}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \} }
+\DoxyCodeLine{57     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}}* \mbox{\hyperlink{class_file_read_stream_a21421afa5b1f41f7349f633f290aa223}{PutBegin}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{58     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_file_read_stream_a886660c89f698ff913d641d61466108f}{PutEnd}}(\mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}}*) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{comment}{// For encoding detection only.}}
+\DoxyCodeLine{61     \textcolor{keyword}{const} \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}}* \mbox{\hyperlink{class_file_read_stream_a1989429ffa42111e6f56ee14a3916cac}{Peek4}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{62         \textcolor{keywordflow}{return} (current\_ + 4 -\/ !eof\_ <= bufferLast\_) ? current\_ : 0;}
+\DoxyCodeLine{63     \}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{keyword}{private}:}
+\DoxyCodeLine{66     \textcolor{keywordtype}{void} Read() \{}
+\DoxyCodeLine{67         \textcolor{keywordflow}{if} (current\_ < bufferLast\_)}
+\DoxyCodeLine{68             ++current\_;}
+\DoxyCodeLine{69         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (!eof\_) \{}
+\DoxyCodeLine{70             count\_ += readCount\_;}
+\DoxyCodeLine{71             readCount\_ = std::fread(buffer\_, 1, bufferSize\_, fp\_);}
+\DoxyCodeLine{72             bufferLast\_ = buffer\_ + readCount\_ -\/ 1;}
+\DoxyCodeLine{73             current\_ = buffer\_;}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75             \textcolor{keywordflow}{if} (readCount\_ < bufferSize\_) \{}
+\DoxyCodeLine{76                 buffer\_[readCount\_] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{77                 ++bufferLast\_;}
+\DoxyCodeLine{78                 eof\_ = \textcolor{keyword}{true};}
+\DoxyCodeLine{79             \}}
+\DoxyCodeLine{80         \}}
+\DoxyCodeLine{81     \}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83     std::FILE* fp\_;}
+\DoxyCodeLine{84     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} *buffer\_;}
+\DoxyCodeLine{85     \textcolor{keywordtype}{size\_t} bufferSize\_;}
+\DoxyCodeLine{86     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} *bufferLast\_;}
+\DoxyCodeLine{87     \mbox{\hyperlink{class_file_read_stream_ae1f83d9ca3c76d1d151af0b6c427f046}{Ch}} *current\_;}
+\DoxyCodeLine{88     \textcolor{keywordtype}{size\_t} readCount\_;}
+\DoxyCodeLine{89     \textcolor{keywordtype}{size\_t} count\_;  }
+\DoxyCodeLine{90     \textcolor{keywordtype}{bool} eof\_;}
+\DoxyCodeLine{91 \};}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{93 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{96 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{97 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_FILESTREAM\_H\_}}
+
+\end{DoxyCode}

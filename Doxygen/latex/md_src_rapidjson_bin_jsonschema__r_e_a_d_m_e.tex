@@ -1,0 +1,111 @@
+This repository contains a set of JSON objects that implementors of JSON \mbox{\hyperlink{class_schema}{Schema}} validation libraries can use to test their validators.
+
+It is meant to be language agnostic and should require only a JSON parser.
+
+The conversion of the JSON objects into tests within your test framework of choice is still the job of the validator implementor.\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md1}{}\doxysection{Structure of a Test}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md1}
+If you\textquotesingle{}re going to use this suite, you need to know how tests are laid out. The tests are contained in the {\ttfamily tests} directory at the root of this repository.
+
+Inside that directory is a subdirectory for each draft or version of the schema. We\textquotesingle{}ll use {\ttfamily draft3} as an example.
+
+If you look inside the draft directory, there are a number of {\ttfamily .json} files, which logically group a set of test cases together. Often the grouping is by property under test, but not always, especially within optional test files (discussed below).
+
+Inside each {\ttfamily .json} file is a single array containing objects. It\textquotesingle{}s easiest to illustrate the structure of these with an example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{    "{}description"{}: "{}the description of the test case"{},}
+\DoxyCodeLine{    "{}schema"{}: \{"{}the schema that should"{} : "{}be validated against"{}\},}
+\DoxyCodeLine{    "{}tests"{}: [}
+\DoxyCodeLine{        \{}
+\DoxyCodeLine{            "{}description"{}: "{}a specific test of a valid instance"{},}
+\DoxyCodeLine{            "{}data"{}: "{}the instance"{},}
+\DoxyCodeLine{            "{}valid"{}: true}
+\DoxyCodeLine{        \},}
+\DoxyCodeLine{        \{}
+\DoxyCodeLine{            "{}description"{}: "{}another specific test this time, invalid"{},}
+\DoxyCodeLine{            "{}data"{}: 15,}
+\DoxyCodeLine{            "{}valid"{}: false}
+\DoxyCodeLine{        \}}
+\DoxyCodeLine{    ]}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+So a description, a schema, and some tests, where tests is an array containing one or more objects with descriptions, data, and a boolean indicating whether they should be valid or invalid.\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md2}{}\doxysection{Coverage}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md2}
+Draft 3 and 4 should have full coverage. If you see anything missing or think there is a useful test missing, please send a pull request or open an issue.\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md3}{}\doxysection{Who Uses the Test Suite}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md3}
+This suite is being used by\+:\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{Coffeescript}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md4}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/pandastrike/jsck}{\texttt{ jsck}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{Dart}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md5}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/patefacio/json_schema}{\texttt{ json\+\_\+schema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md6}{}\doxysubsection{Erlang}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md6}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/klarna/jesse}{\texttt{ jesse}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md7}{}\doxysubsection{Go}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md7}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/sigu-399/gojsonschema}{\texttt{ gojsonschema}}
+\item \href{https://github.com/cesanta/validate-json}{\texttt{ validate-\/json}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md8}{}\doxysubsection{Haskell}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md8}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/timjb/aeson-schema}{\texttt{ aeson-\/schema}}
+\item \href{https://github.com/seagreen/hjsonschema}{\texttt{ hjsonschema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{Java}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md9}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/fge/json-schema-validator}{\texttt{ json-\/schema-\/validator}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md10}{}\doxysubsection{Java\+Script}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md10}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/Muscula/json-schema-benchmark}{\texttt{ json-\/schema-\/benchmark}}
+\item \href{https://github.com/IreneKnapp/direct-schema}{\texttt{ direct-\/schema}}
+\item \href{https://github.com/mafintosh/is-my-json-valid}{\texttt{ is-\/my-\/json-\/valid}}
+\item \href{https://github.com/iclanzan/jassi}{\texttt{ jassi}}
+\item \href{https://github.com/natesilva/jayschema}{\texttt{ Jay\+Schema}}
+\item \href{https://github.com/ericgj/json-schema-valid}{\texttt{ json-\/schema-\/valid}}
+\item \href{https://github.com/jsonary-js/jsonary}{\texttt{ Jsonary}}
+\item \href{https://github.com/tdegrunt/jsonschema}{\texttt{ jsonschema}}
+\item \href{https://github.com/bugventure/request-validator}{\texttt{ request-\/validator}}
+\item \href{https://github.com/Prestaul/skeemas}{\texttt{ skeemas}}
+\item \href{https://github.com/geraintluff/tv4}{\texttt{ tv4}}
+\item \href{https://github.com/zaggino/z-schema}{\texttt{ z-\/schema}}
+\item \href{https://github.com/bugventure/jsen}{\texttt{ jsen}}
+\item \href{https://github.com/epoberezkin/ajv}{\texttt{ ajv}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md11}{}\doxysubsection{Node.\+js}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md11}
+The JSON \mbox{\hyperlink{class_schema}{Schema}} Test Suite is also available as an \href{https://www.npmjs.com/package/json-schema-test-suite}{\texttt{ npm}} package. Node-\/specific support is maintained on the \href{https://github.com/json-schema/JSON-Schema-Test-Suite/tree/node}{\texttt{ node branch}}. See \href{https://github.com/json-schema/JSON-Schema-Test-Suite/blob/node/NODE-README.md}{\texttt{ NODE-\/\+README.\+md}} for more information.\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md12}{}\doxysubsection{.\+NET}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md12}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/JamesNK/Newtonsoft.Json.Schema}{\texttt{ Newtonsoft.\+Json.\+Schema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md13}{}\doxysubsection{PHP}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md13}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/justinrainbow/json-schema}{\texttt{ json-\/schema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md14}{}\doxysubsection{Python}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md14}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/Julian/jsonschema}{\texttt{ jsonschema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md15}{}\doxysubsection{Ruby}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md15}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/hoxworth/json-schema}{\texttt{ json-\/schema}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md16}{}\doxysubsection{Rust}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md16}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/rustless/valico}{\texttt{ valico}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md17}{}\doxysubsection{Swift}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md17}
+
+\begin{DoxyItemize}
+\item \href{https://github.com/kylef/JSONSchema.swift}{\texttt{ JSONSchema}}
+\end{DoxyItemize}
+
+If you use it as well, please fork and send a pull request adding yourself to the list \+:).\hypertarget{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md18}{}\doxysection{Contributing}\label{md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_autotoc_md18}
+If you see something missing or incorrect, a pull request is most welcome!
+
+There are some sanity checks in place for testing the test suite. You can run them with {\ttfamily bin/jsonschema\+\_\+suite check} or {\ttfamily tox}. They will be run automatically by \href{https://travis-ci.org/}{\texttt{ Travis CI}} as well. 

@@ -1,0 +1,314 @@
+\hypertarget{itoa_8h_source}{}\doxysection{itoa.\+h}
+\label{itoa_8h_source}\index{src/rapidjson/include/rapidjson/internal/itoa.h@{src/rapidjson/include/rapidjson/internal/itoa.h}}
+\mbox{\hyperlink{itoa_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ITOA\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_ITOA\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}../rapidjson.h"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{21 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23 \textcolor{keyword}{inline} \textcolor{keyword}{const} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a76ad2b55668f695effde1971d53a5ce1}{GetDigitsLut}}() \{}
+\DoxyCodeLine{24     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} cDigitsLut[200] = \{}
+\DoxyCodeLine{25         \textcolor{charliteral}{'0'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{26         \textcolor{charliteral}{'1'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{27         \textcolor{charliteral}{'2'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{28         \textcolor{charliteral}{'3'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{29         \textcolor{charliteral}{'4'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{30         \textcolor{charliteral}{'5'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{31         \textcolor{charliteral}{'6'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{32         \textcolor{charliteral}{'7'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{33         \textcolor{charliteral}{'8'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'9'},}
+\DoxyCodeLine{34         \textcolor{charliteral}{'9'},\textcolor{charliteral}{'0'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'1'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'2'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'3'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'4'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'5'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'6'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'7'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'8'},\textcolor{charliteral}{'9'},\textcolor{charliteral}{'9'}}
+\DoxyCodeLine{35     \};}
+\DoxyCodeLine{36     \textcolor{keywordflow}{return} cDigitsLut;}
+\DoxyCodeLine{37 \}}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a90e3cb218b557548f361e99dc718b4b1}{u32toa}}(\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer) \{}
+\DoxyCodeLine{40     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(buffer != 0);}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* cDigitsLut = \mbox{\hyperlink{namespaceinternal_a76ad2b55668f695effde1971d53a5ce1}{GetDigitsLut}}();}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < 10000) \{}
+\DoxyCodeLine{45         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / 100) << 1;}
+\DoxyCodeLine{46         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \% 100) << 1;}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 1000)}
+\DoxyCodeLine{49             *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{50         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 100)}
+\DoxyCodeLine{51             *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{52         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 10)}
+\DoxyCodeLine{53             *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{54         *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{55     \}}
+\DoxyCodeLine{56     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < 100000000) \{}
+\DoxyCodeLine{57         \textcolor{comment}{// value = bbbbcccc}}
+\DoxyCodeLine{58         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b = \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / 10000;}
+\DoxyCodeLine{59         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c = \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \% 10000;}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (b / 100) << 1;}
+\DoxyCodeLine{62         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (b \% 100) << 1;}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d3 = (c / 100) << 1;}
+\DoxyCodeLine{65         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d4 = (c \% 100) << 1;}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 10000000)}
+\DoxyCodeLine{68             *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{69         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 1000000)}
+\DoxyCodeLine{70             *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{71         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 100000)}
+\DoxyCodeLine{72             *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{73         *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75         *buffer++ = cDigitsLut[d3];}
+\DoxyCodeLine{76         *buffer++ = cDigitsLut[d3 + 1];}
+\DoxyCodeLine{77         *buffer++ = cDigitsLut[d4];}
+\DoxyCodeLine{78         *buffer++ = cDigitsLut[d4 + 1];}
+\DoxyCodeLine{79     \}}
+\DoxyCodeLine{80     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{81         \textcolor{comment}{// value = aabbbbcccc in decimal}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} = \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / 100000000; \textcolor{comment}{// 1 to 42}}
+\DoxyCodeLine{84         \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \%= 100000000;}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} >= 10) \{}
+\DoxyCodeLine{87             \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} i = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} << 1;}
+\DoxyCodeLine{88             *buffer++ = cDigitsLut[i];}
+\DoxyCodeLine{89             *buffer++ = cDigitsLut[i + 1];}
+\DoxyCodeLine{90         \}}
+\DoxyCodeLine{91         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{92             *buffer++ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}));}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b = \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / 10000; \textcolor{comment}{// 0 to 9999}}
+\DoxyCodeLine{95         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c = \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \% 10000; \textcolor{comment}{// 0 to 9999}}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (b / 100) << 1;}
+\DoxyCodeLine{98         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (b \% 100) << 1;}
+\DoxyCodeLine{99 }
+\DoxyCodeLine{100         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d3 = (c / 100) << 1;}
+\DoxyCodeLine{101         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d4 = (c \% 100) << 1;}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103         *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{104         *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{105         *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{106         *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{107         *buffer++ = cDigitsLut[d3];}
+\DoxyCodeLine{108         *buffer++ = cDigitsLut[d3 + 1];}
+\DoxyCodeLine{109         *buffer++ = cDigitsLut[d4];}
+\DoxyCodeLine{110         *buffer++ = cDigitsLut[d4 + 1];}
+\DoxyCodeLine{111     \}}
+\DoxyCodeLine{112     \textcolor{keywordflow}{return} buffer;}
+\DoxyCodeLine{113 \}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_ac6c7d763acc9ca9f15a759241640328e}{i32toa}}(\mbox{\hyperlink{stdint_8h_ab1967d8591af1a4e48c37fd2b0f184d0}{int32\_t}} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer) \{}
+\DoxyCodeLine{116     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(buffer != 0);}
+\DoxyCodeLine{117     \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} u = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}});}
+\DoxyCodeLine{118     \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < 0) \{}
+\DoxyCodeLine{119         *buffer++ = \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{120         u = \string~u + 1;}
+\DoxyCodeLine{121     \}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_a90e3cb218b557548f361e99dc718b4b1}{u32toa}}(u, buffer);}
+\DoxyCodeLine{124 \}}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a489150922c0320e4290b455bf3c6e36c}{u64toa}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer) \{}
+\DoxyCodeLine{127     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(buffer != 0);}
+\DoxyCodeLine{128     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* cDigitsLut = \mbox{\hyperlink{namespaceinternal_a76ad2b55668f695effde1971d53a5ce1}{GetDigitsLut}}();}
+\DoxyCodeLine{129     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}  kTen8 = 100000000;}
+\DoxyCodeLine{130     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}  kTen9 = kTen8 * 10;}
+\DoxyCodeLine{131     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen10 = kTen8 * 100;}
+\DoxyCodeLine{132     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen11 = kTen8 * 1000;}
+\DoxyCodeLine{133     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen12 = kTen8 * 10000;}
+\DoxyCodeLine{134     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen13 = kTen8 * 100000;}
+\DoxyCodeLine{135     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen14 = kTen8 * 1000000;}
+\DoxyCodeLine{136     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen15 = kTen8 * 10000000;}
+\DoxyCodeLine{137     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kTen16 = kTen8 * kTen8;}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139     \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < kTen8) \{}
+\DoxyCodeLine{140         \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} v = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}});}
+\DoxyCodeLine{141         \textcolor{keywordflow}{if} (v < 10000) \{}
+\DoxyCodeLine{142             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (v / 100) << 1;}
+\DoxyCodeLine{143             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (v \% 100) << 1;}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145             \textcolor{keywordflow}{if} (v >= 1000)}
+\DoxyCodeLine{146                 *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{147             \textcolor{keywordflow}{if} (v >= 100)}
+\DoxyCodeLine{148                 *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{149             \textcolor{keywordflow}{if} (v >= 10)}
+\DoxyCodeLine{150                 *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{151             *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{152         \}}
+\DoxyCodeLine{153         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{154             \textcolor{comment}{// value = bbbbcccc}}
+\DoxyCodeLine{155             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b = v / 10000;}
+\DoxyCodeLine{156             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c = v \% 10000;}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (b / 100) << 1;}
+\DoxyCodeLine{159             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (b \% 100) << 1;}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d3 = (c / 100) << 1;}
+\DoxyCodeLine{162             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d4 = (c \% 100) << 1;}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164             \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 10000000)}
+\DoxyCodeLine{165                 *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{166             \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 1000000)}
+\DoxyCodeLine{167                 *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{168             \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= 100000)}
+\DoxyCodeLine{169                 *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{170             *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172             *buffer++ = cDigitsLut[d3];}
+\DoxyCodeLine{173             *buffer++ = cDigitsLut[d3 + 1];}
+\DoxyCodeLine{174             *buffer++ = cDigitsLut[d4];}
+\DoxyCodeLine{175             *buffer++ = cDigitsLut[d4 + 1];}
+\DoxyCodeLine{176         \}}
+\DoxyCodeLine{177     \}}
+\DoxyCodeLine{178     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < kTen16) \{}
+\DoxyCodeLine{179         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} v0 = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / kTen8);}
+\DoxyCodeLine{180         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} v1 = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \% kTen8);}
+\DoxyCodeLine{181 }
+\DoxyCodeLine{182         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b0 = v0 / 10000;}
+\DoxyCodeLine{183         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c0 = v0 \% 10000;}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (b0 / 100) << 1;}
+\DoxyCodeLine{186         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (b0 \% 100) << 1;}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d3 = (c0 / 100) << 1;}
+\DoxyCodeLine{189         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d4 = (c0 \% 100) << 1;}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b1 = v1 / 10000;}
+\DoxyCodeLine{192         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c1 = v1 \% 10000;}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d5 = (b1 / 100) << 1;}
+\DoxyCodeLine{195         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d6 = (b1 \% 100) << 1;}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d7 = (c1 / 100) << 1;}
+\DoxyCodeLine{198         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d8 = (c1 \% 100) << 1;}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen15)}
+\DoxyCodeLine{201             *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{202         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen14)}
+\DoxyCodeLine{203             *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{204         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen13)}
+\DoxyCodeLine{205             *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{206         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen12)}
+\DoxyCodeLine{207             *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{208         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen11)}
+\DoxyCodeLine{209             *buffer++ = cDigitsLut[d3];}
+\DoxyCodeLine{210         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen10)}
+\DoxyCodeLine{211             *buffer++ = cDigitsLut[d3 + 1];}
+\DoxyCodeLine{212         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} >= kTen9)}
+\DoxyCodeLine{213             *buffer++ = cDigitsLut[d4];}
+\DoxyCodeLine{214 }
+\DoxyCodeLine{215         *buffer++ = cDigitsLut[d4 + 1];}
+\DoxyCodeLine{216         *buffer++ = cDigitsLut[d5];}
+\DoxyCodeLine{217         *buffer++ = cDigitsLut[d5 + 1];}
+\DoxyCodeLine{218         *buffer++ = cDigitsLut[d6];}
+\DoxyCodeLine{219         *buffer++ = cDigitsLut[d6 + 1];}
+\DoxyCodeLine{220         *buffer++ = cDigitsLut[d7];}
+\DoxyCodeLine{221         *buffer++ = cDigitsLut[d7 + 1];}
+\DoxyCodeLine{222         *buffer++ = cDigitsLut[d8];}
+\DoxyCodeLine{223         *buffer++ = cDigitsLut[d8 + 1];}
+\DoxyCodeLine{224     \}}
+\DoxyCodeLine{225     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{226         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / kTen16); \textcolor{comment}{// 1 to 1844}}
+\DoxyCodeLine{227         \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \%= kTen16;}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} < 10)}
+\DoxyCodeLine{230             *buffer++ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}));}
+\DoxyCodeLine{231         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} < 100) \{}
+\DoxyCodeLine{232             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} i = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} << 1;}
+\DoxyCodeLine{233             *buffer++ = cDigitsLut[i];}
+\DoxyCodeLine{234             *buffer++ = cDigitsLut[i + 1];}
+\DoxyCodeLine{235         \}}
+\DoxyCodeLine{236         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} < 1000) \{}
+\DoxyCodeLine{237             *buffer++ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\textcolor{charliteral}{'0'} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} / 100));}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} i = (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} \% 100) << 1;}
+\DoxyCodeLine{240             *buffer++ = cDigitsLut[i];}
+\DoxyCodeLine{241             *buffer++ = cDigitsLut[i + 1];}
+\DoxyCodeLine{242         \}}
+\DoxyCodeLine{243         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{244             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} i = (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} / 100) << 1;}
+\DoxyCodeLine{245             \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} j = (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} \% 100) << 1;}
+\DoxyCodeLine{246             *buffer++ = cDigitsLut[i];}
+\DoxyCodeLine{247             *buffer++ = cDigitsLut[i + 1];}
+\DoxyCodeLine{248             *buffer++ = cDigitsLut[j];}
+\DoxyCodeLine{249             *buffer++ = cDigitsLut[j + 1];}
+\DoxyCodeLine{250         \}}
+\DoxyCodeLine{251 }
+\DoxyCodeLine{252         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} v0 = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} / kTen8);}
+\DoxyCodeLine{253         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} v1 = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} \% kTen8);}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b0 = v0 / 10000;}
+\DoxyCodeLine{256         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c0 = v0 \% 10000;}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d1 = (b0 / 100) << 1;}
+\DoxyCodeLine{259         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d2 = (b0 \% 100) << 1;}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d3 = (c0 / 100) << 1;}
+\DoxyCodeLine{262         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d4 = (c0 \% 100) << 1;}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} b1 = v1 / 10000;}
+\DoxyCodeLine{265         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} c1 = v1 \% 10000;}
+\DoxyCodeLine{266 }
+\DoxyCodeLine{267         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d5 = (b1 / 100) << 1;}
+\DoxyCodeLine{268         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d6 = (b1 \% 100) << 1;}
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d7 = (c1 / 100) << 1;}
+\DoxyCodeLine{271         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}} d8 = (c1 \% 100) << 1;}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273         *buffer++ = cDigitsLut[d1];}
+\DoxyCodeLine{274         *buffer++ = cDigitsLut[d1 + 1];}
+\DoxyCodeLine{275         *buffer++ = cDigitsLut[d2];}
+\DoxyCodeLine{276         *buffer++ = cDigitsLut[d2 + 1];}
+\DoxyCodeLine{277         *buffer++ = cDigitsLut[d3];}
+\DoxyCodeLine{278         *buffer++ = cDigitsLut[d3 + 1];}
+\DoxyCodeLine{279         *buffer++ = cDigitsLut[d4];}
+\DoxyCodeLine{280         *buffer++ = cDigitsLut[d4 + 1];}
+\DoxyCodeLine{281         *buffer++ = cDigitsLut[d5];}
+\DoxyCodeLine{282         *buffer++ = cDigitsLut[d5 + 1];}
+\DoxyCodeLine{283         *buffer++ = cDigitsLut[d6];}
+\DoxyCodeLine{284         *buffer++ = cDigitsLut[d6 + 1];}
+\DoxyCodeLine{285         *buffer++ = cDigitsLut[d7];}
+\DoxyCodeLine{286         *buffer++ = cDigitsLut[d7 + 1];}
+\DoxyCodeLine{287         *buffer++ = cDigitsLut[d8];}
+\DoxyCodeLine{288         *buffer++ = cDigitsLut[d8 + 1];}
+\DoxyCodeLine{289     \}}
+\DoxyCodeLine{290 }
+\DoxyCodeLine{291     \textcolor{keywordflow}{return} buffer;}
+\DoxyCodeLine{292 \}}
+\DoxyCodeLine{293 }
+\DoxyCodeLine{294 \textcolor{keyword}{inline} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespaceinternal_a527358458754f514c249c55c27b35526}{i64toa}}(\mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}} \mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}}, \textcolor{keywordtype}{char}* buffer) \{}
+\DoxyCodeLine{295     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(buffer != 0);}
+\DoxyCodeLine{296     \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}});}
+\DoxyCodeLine{297     \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_a32aff7c6c4cd253fdf6563677afab5ce}{value}} < 0) \{}
+\DoxyCodeLine{298         *buffer++ = \textcolor{charliteral}{'-\/'};}
+\DoxyCodeLine{299         u = \string~u + 1;}
+\DoxyCodeLine{300     \}}
+\DoxyCodeLine{301 }
+\DoxyCodeLine{302     \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_a489150922c0320e4290b455bf3c6e36c}{u64toa}}(u, buffer);}
+\DoxyCodeLine{303 \}}
+\DoxyCodeLine{304 }
+\DoxyCodeLine{305 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{306 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{307 }
+\DoxyCodeLine{308 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_ITOA\_}}
+
+\end{DoxyCode}

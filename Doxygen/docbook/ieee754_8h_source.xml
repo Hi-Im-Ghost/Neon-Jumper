@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_ieee754_8h_source" xml:lang="en-US">
+<title>ieee754.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/ieee754.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_IEEE754_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_IEEE754_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;../rapidjson.h&quot;</emphasis>
+19 
+20 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+21 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+22 
+23 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_double">Double</link>&#32;{
+24 <emphasis role="keyword">public</emphasis>:
+25 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_double_1a98e2cff9880cd032d174e9721ae40ddd">Double</link>()&#32;{}
+26 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_double_1ad66f3b914570ce62e9f16083117f3e4f">Double</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;:&#32;<link linkend="_classinternal_1_1_double_1a9ed5b5245664da8abe6cdeefaed6452e">d_</link>(d)&#32;{}
+27 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_double_1a293a7ca841d847ea3e83ffa28b68601f">Double</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;:&#32;<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>(u)&#32;{}
+28 
+29 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a665c64824d1046528cbc4066a9ed0ef8">Value</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a9ed5b5245664da8abe6cdeefaed6452e">d_</link>;&#32;}
+30 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_double_1a1a35be6344c886f159cb36a1498a62ac">Uint64Value</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>;&#32;}
+31 
+32 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a6ffee23d82d9c606b1a53ed87e393e90">NextPositiveDouble</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+33 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(!<link linkend="_classinternal_1_1_double_1ab09c26873ca4c3e471a97c4559bf317d">Sign</link>());
+34 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a98e2cff9880cd032d174e9721ae40ddd">Double</link>(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;+&#32;1).Value();
+35 &#32;&#32;&#32;&#32;}
+36 
+37 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1ab09c26873ca4c3e471a97c4559bf317d">Sign</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kSignMask)&#32;!=&#32;0;&#32;}
+38 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kSignificandMask;&#32;}
+39 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classinternal_1_1_double_1ae091055d96d8730f654170613f2cf265">Exponent</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(((<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kExponentMask)&#32;&gt;&gt;&#32;kSignificandSize)&#32;-&#32;kExponentBias);&#32;}
+40 
+41 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a312312ab2798ee85cbd0e739fcefa386">IsNan</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kExponentMask)&#32;==&#32;kExponentMask&#32;&amp;&amp;&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>()&#32;!=&#32;0;&#32;}
+42 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1afe1ce48f7fb9797e1a2044c58a6b226c">IsInf</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kExponentMask)&#32;==&#32;kExponentMask&#32;&amp;&amp;&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>()&#32;==&#32;0;&#32;}
+43 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a8b9a82e8b99783b7e98b5307756021c0">IsNanOrInf</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kExponentMask)&#32;==&#32;kExponentMask;&#32;}
+44 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a8a39cd42010c69681da35d87f1331381">IsNormal</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kExponentMask)&#32;!=&#32;0&#32;||&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>()&#32;==&#32;0;&#32;}
+45 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a90a3a1ca614b377b59576955ce987ce2">IsZero</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;(kExponentMask&#32;|&#32;kSignificandMask))&#32;==&#32;0;&#32;}
+46 
+47 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_double_1a1bf89d77be843f69facec9f2bc4dbc72">IntegerSignificand</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a8a39cd42010c69681da35d87f1331381">IsNormal</link>()&#32;?&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>()&#32;|&#32;kHiddenBit&#32;:&#32;<link linkend="_classinternal_1_1_double_1ade5d3e893dd6884ccd37632109dae1a6">Significand</link>();&#32;}
+48 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a9721e0fdedef4d0fe6c7b411492a88fb">IntegerExponent</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1a8a39cd42010c69681da35d87f1331381">IsNormal</link>()&#32;?&#32;<link linkend="_classinternal_1_1_double_1ae091055d96d8730f654170613f2cf265">Exponent</link>()&#32;:&#32;kDenormalExponent)&#32;-&#32;kSignificandSize;&#32;}
+49 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_double_1ab3d3a81274e4f4b9b415db7c664d3ac9">ToBias</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;&amp;&#32;kSignMask)&#32;?&#32;~u_&#32;+&#32;1&#32;:&#32;<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>&#32;|&#32;kSignMask;&#32;}
+50 
+51 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classinternal_1_1_double_1aa710fa4f5e06b0ff4348a13475688f13">EffectiveSignificandSize</link>(<emphasis role="keywordtype">int</emphasis>&#32;order)&#32;{
+52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(order&#32;&gt;=&#32;-1021)
+53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;53;
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(order&#32;&lt;=&#32;-1074)
+55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;
+56 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;order&#32;+&#32;1074;
+58 &#32;&#32;&#32;&#32;}
+59 
+60 <emphasis role="keyword">private</emphasis>:
+61 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kSignificandSize&#32;=&#32;52;
+62 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kExponentBias&#32;=&#32;0x3FF;
+63 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kDenormalExponent&#32;=&#32;1&#32;-&#32;kExponentBias;
+64 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kSignMask&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x80000000,&#32;0x00000000);
+65 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kExponentMask&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x7FF00000,&#32;0x00000000);
+66 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kSignificandMask&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x000FFFFF,&#32;0xFFFFFFFF);
+67 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kHiddenBit&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x00100000,&#32;0x00000000);
+68 
+69 &#32;&#32;&#32;&#32;<emphasis role="keyword">union&#32;</emphasis>{
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_classinternal_1_1_double_1a9ed5b5245664da8abe6cdeefaed6452e">d_</link>;
+71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_double_1ad7523f7fe0c47d6aabe34f68b00a3250">u_</link>;
+72 &#32;&#32;&#32;&#32;};
+73 };
+74 
+75 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+76 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+77 
+78 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_IEEE754_</emphasis>
+</programlisting></section>

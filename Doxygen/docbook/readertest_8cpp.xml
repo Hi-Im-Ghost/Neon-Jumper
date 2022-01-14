@@ -1,0 +1,805 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_readertest_8cpp" xml:lang="en-US">
+<title>src/rapidjson/test/unittest/readertest.cpp File Reference</title>
+<indexterm><primary>src/rapidjson/test/unittest/readertest.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;unittest.h&quot;
+#include &quot;rapidjson/reader.h&quot;
+#include &quot;rapidjson/internal/dtoa.h&quot;
+#include &quot;rapidjson/internal/itoa.h&quot;
+#include &quot;rapidjson/memorystream.h&quot;
+#include &lt;limits&gt;
+#include &lt;sstream&gt;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_parse_bool_handler">ParseBoolHandler&lt; expect &gt;</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_int_handler">ParseIntHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_uint_handler">ParseUintHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_int64_handler">ParseInt64Handler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_uint64_handler">ParseUint64Handler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_double_handler">ParseDoubleHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_string_handler">ParseStringHandler&lt; Encoding &gt;</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_array_handler">ParseArrayHandler&lt; count &gt;</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_object_handler">ParseObjectHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_empty_object_handler">ParseEmptyObjectHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_parse_multiple_root_handler">ParseMultipleRootHandler</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_custom_string_stream">CustomStringStream&lt; Encoding &gt;</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_i_stream_wrapper">IStreamWrapper</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_w_i_stream_wrapper">WIStreamWrapper</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_iterative_parsing_reader_handler">IterativeParsingReaderHandler&lt; Encoding &gt;</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_handler_terminate_at_start_object">HandlerTerminateAtStartObject</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_handler_terminate_at_start_array">HandlerTerminateAtStartArray</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_handler_terminate_at_end_object">HandlerTerminateAtEndObject</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_handler_terminate_at_end_array">HandlerTerminateAtEndArray</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_terminate_handler">TerminateHandler&lt; e &gt;</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_numbers_as_strings_handler">NumbersAsStringsHandler</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_numbers_as_strings_handler_w_char__t">NumbersAsStringsHandlerWChar_t</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1aa487c2e30c2c0abec07c6ef75baf3aee">TEST_INTEGER</link>(<link linkend="_classrapidjson_1_1_handler">Handler</link>,  str,  x)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a21b994bed3341147071a62be3e1c592f">TEST_DOUBLE</link>(fullPrecision,  str,  x)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a0915e2497a66e1c6569fbc2346abc4a7">TEST_NUMBER_ERROR</link>(errorCode,  str,  errorOffset,  streamPos)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a9d7119f7924a0a61bdd167748c770dae">TEST_STRING</link>(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  e,  x)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a5d00524e55c84dee4a584e0536b2da71">ARRAY</link>(...)   { __VA_ARGS__ }</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1aca32d23ddbdec658bb1ca388b6f6bb97">TEST_STRINGARRAY</link>(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  utype,  array,  x)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1afe94ee74dfe8222d034c1c8924b51080">TEST_STRINGARRAY2</link>(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  utype,  earray,  xarray)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a5f47d54ec9d33d6d02cf84fbf375b393">TEST_STRING_ERROR</link>(errorCode,  str,  errorOffset,  streamPos)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a5d00524e55c84dee4a584e0536b2da71">ARRAY</link>(...)   { __VA_ARGS__ }</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a61f78b99d29fd8c3f30ba08cdd193d32">TEST_STRINGENCODING_ERROR</link>(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  TargetEncoding,  utype,  array)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1aab63dea66734b992ac716833984e6a6e">TEST_ARRAY_ERROR</link>(errorCode,  str,  errorOffset)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1af0cc358a05148bd414d612047eda8637">TEST_ERROR</link>(errorCode,  str,  errorOffset)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a42611f55159ca2d7b080ee7b5995a51e">TESTERRORHANDLING</link>(text,  errorCode,  offset)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a59abe708b636f5305e064d40eca97f6e">TEST_TERMINATION</link>(e,  json)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a0cb67eee4e9c25329656c6c6359073d7">TEST_NAN_INF</link>(str,  x)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a49931364fff3592ba2dcb37ac90d3b10">TEST_NAN_INF_ERROR</link>(errorCode,  str,  errorOffset)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_readertest_8cpp_1acd0e3395c882a9ffffd0cd3e541f737e">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseTrue)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a89b2294cf02d35650e58af5b803143b3">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseFalse)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a0f338ae50a463adeddde167f9409bedc">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_Integer)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aa293384d534e668619d44318d3d77d5e">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_NormalPrecisionDouble)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aa2ce5bf11a889af8f9efe3fd77240fd5">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_FullPrecisionDouble)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a2be15887d12d0e7bb634d6807da64b17">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_NormalPrecisionError)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a0a70a215ad0f6c5484dfbcb0d32dec72">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumberError_NormalPrecisionDouble)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a2bbd1606be48d3fa85117a864ec9c9e4">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumberError_FullPrecisionDouble)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a15e169b6344e504df0eea4b5121060da">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseString)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a74f5978d08350eef0b4c9e458f9fb811">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseString_Transcoding)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1ab541be9d37347bb83774aa2bc99a7482">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseString_TranscodingWithValidation)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a90cebede6f67a54e178e049793bf0d98">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseString_NonDestructive)</para>
+</listitem>
+            <listitem><para>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; </para><para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> <link linkend="_readertest_8cpp_1aecbde81eaceef1ab965fbccc9c6a2cc1">TestString</link> (const typename Encoding::Ch *str)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1abd8b31cbdcf64777f9389eb782096914">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseString_Error)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a351a887dbc1a7a7edc582e45e8c0e2e8">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseEmptyArray)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1af99e41513ed14fec7e1d4d3e2f610819">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseArray)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a2bbae6820b8599a03c91235a3b96e141">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseArray_Error)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a2c25bdca73b3dcbf73aa441f9277384f">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseObject)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a18bca8296eaae111c4373dfa381a1c36">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, Parse_EmptyObject)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1a43a70800373051361573d37f95bb433e">TestMultipleRoot</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a5b7ceca8eb13509ac2015a74c90b004a">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, Parse_MultipleRoot)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a190231ffaeee049afcbe613dbbc5751b">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseIterative_MultipleRoot)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1a3e697a5cd8deeff851239ddc33e9466f">TestInsituMultipleRoot</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aa237ee4974ab4463734b51bc308d53bb">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseInsitu_MultipleRoot)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a341f256b64084922f5f08d42b610a183">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseInsituIterative_MultipleRoot)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a903c1326dbf0e8ce889aaee534ce5c6d">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseDocument_Error)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1abb4708dbc92034ce8428154fc3446ac4">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseValue_Error)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aae5733e8671508fb38ac9e90911e1be7">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseObject_Error)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1abfa886640a194ac6dbdd83d87d6d6501">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, <link linkend="_reader_8h_1aeddf0374b22926be76140ec6708dc203">SkipWhitespace</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a9fb049586354f7af008ba7f57cb7932c">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, <link linkend="_class_custom_string_stream">CustomStringStream</link>)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a90f7ee3e65bb9a8d14555eb2dd6e4393">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, Parse_IStreamWrapper_StringStream)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aeaebdcc79099df91507f5f015d762569">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IterativeParsing_ErrorHandling)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a2112c6391e74b80c3d2db6e327d88e04">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IterativeParsing_General)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a993a1536dc41d6024e435a2c48b24923">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IterativeParsing_Count)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a70dd9ea1fe24447f13125e256e315086">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IterativePullParsing_General)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a870329d14861214eb2ae5a9a8609bf8f">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IterativeParsing_ShortCircuit)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a854d1d6e5e6ac5e209a75851b64f6085">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, BaseReaderHandler_Default)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a37d7b918c516febe122eb98fd95d835d">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseTerminationByHandler)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a8dc48b304866b695871d888ea0a2592d">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseComments)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a3f3480cf5d13c5818b549265bf3ac1ca">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseEmptyInlineComment)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a56fcadf8f03df7af57cad7acadf504ab">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseEmptyOnelineComment)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1afd6d8f1c19c09ae0d6f919f61bbad887">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseMultipleCommentsInARow)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a942f3e82ad0c2e74f2ed0d5bb92d5495">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, InlineCommentsAreDisabledByDefault)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a877aa3d42a2ee1b20d26c2480b1104ba">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, OnelineCommentsAreDisabledByDefault)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a5df37d2665c76b6becee133720872a39">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, EofAfterOneLineComment)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a6e04bdedbeaf39e022d22054f399af8a">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IncompleteMultilineComment)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a4ed130c1c10e5e9c32bb00ca9fb715ce">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, IncompleteMultilineComment2)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a287de0c3676e77b625b3984de3c8018d">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, UnrecognizedComment)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a54ff7ac35c2b6ed78f427e77b9ba2b39">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, NumbersAsStrings)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1ae854759d4b07a3e1f82705d7e577787e">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, NumbersAsStringsWChar_t)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned extraFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1a53b9204ec8bf882697790d11e728f81f">TestTrailingCommas</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a6915cfb99ca350fe96d8d3bcfdd8cd88">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, TrailingCommas)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a682347bb2b9e7237a432cc36c07c81a0">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, TrailingCommasIterative)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned extraFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1a655f124d90808a045e7fb01f27c56c7b">TestMultipleTrailingCommaErrors</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a5f560a3f67d416d54dcfded7ecfbd04f">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, MultipleTrailingCommaErrors)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a41e6c386bd804991906f8e7420df4635">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, MultipleTrailingCommaErrorsIterative)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned extraFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1a32605d0e16ee73d21ab6009f266e3593">TestEmptyExceptForCommaErrors</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1aa18cc109c75368968b1be3c938ad2e97">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, EmptyExceptForCommaErrors)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1ab5c9b6f1601c378c4448ceba82e07e09">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, EmptyExceptForCommaErrorsIterative)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned extraFlags&gt; </para><para>void <link linkend="_readertest_8cpp_1aee91bf3d9cd695a8cbe30cecb97e8351">TestTrailingCommaHandlerTermination</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a5cf2c15500cac34d39712e79413904b5">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, TrailingCommaHandlerTermination)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1ad85517af92c65a0853f67ad7d1609513">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, TrailingCommaHandlerTerminationIterative)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a317013469a1faa845f73423bcf057668">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNanAndInfinity)</para>
+</listitem>
+            <listitem><para><link linkend="_readertest_8cpp_1a29547e2b6fa655bc161c074a0a183c2e">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, EscapedApostrophe)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_readertest_8cpp_1a5d00524e55c84dee4a584e0536b2da71"/><section>
+    <title>ARRAY<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>ARRAY</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>ARRAY</secondary></indexterm>
+<para><computeroutput>#define ARRAY( ...)   { __VA_ARGS__ }</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5d00524e55c84dee4a584e0536b2da71"/><section>
+    <title>ARRAY<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>ARRAY</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>ARRAY</secondary></indexterm>
+<para><computeroutput>#define ARRAY( ...)   { __VA_ARGS__ }</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aab63dea66734b992ac716833984e6a6e"/><section>
+    <title>TEST_ARRAY_ERROR</title>
+<indexterm><primary>TEST_ARRAY_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_ARRAY_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_ARRAY_ERROR( errorCode,  str,  errorOffset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;unsigned&#32;streamPos&#32;=&#32;errorOffset;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char&#32;buffer[1001];&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;strncpy(buffer,&#32;str,&#32;1000);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericReader&lt;UTF8&lt;&gt;,&#32;<link linkend="_struct_u_t_f8">UTF8&lt;&gt;</link>,&#32;<link linkend="_class_crt_allocator">CrtAllocator</link>&gt;&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorOffset,&#32;reader.GetErrorOffset());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;s.Tell());\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a21b994bed3341147071a62be3e1c592f"/><section>
+    <title>TEST_DOUBLE</title>
+<indexterm><primary>TEST_DOUBLE</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_DOUBLE</secondary></indexterm>
+<para><computeroutput>#define TEST_DOUBLE( fullPrecision,  str,  x)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ParseDoubleHandler&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>,&#32;reader.Parse&lt;fullPrecision&#32;?&#32;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46">kParseFullPrecisionFlag</link>&#32;:&#32;0&gt;(s,&#32;h).Code());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(1u,&#32;h.step_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;internal::Double&#32;e(x),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>(h.actual_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;if&#32;(fullPrecision)&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.Uint64Value(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Uint64Value());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;if&#32;(e.Uint64Value()&#32;!=&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Uint64Value())&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;&#32;&#32;String:&#32;%s\n&#32;&#32;Actual:&#32;%.17g\nExpected:&#32;%.17g\n&quot;</emphasis>,&#32;str,&#32;h.actual_,&#32;x);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;else&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.Sign(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Sign());&#32;<emphasis role="comment">/*&#32;for&#32;0.0&#32;!=&#32;-0.0&#32;*/</emphasis>&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_DOUBLE_EQ(x,&#32;h.actual_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1af0cc358a05148bd414d612047eda8637"/><section>
+    <title>TEST_ERROR</title>
+<indexterm><primary>TEST_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_ERROR( errorCode,  str,  errorOffset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;unsigned&#32;streamPos&#32;=&#32;errorOffset;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char&#32;buffer[1001];&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;strncpy(buffer,&#32;str,&#32;1000);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorOffset,&#32;reader.GetErrorOffset());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;s.Tell());\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1aa487c2e30c2c0abec07c6ef75baf3aee"/><section>
+    <title>TEST_INTEGER</title>
+<indexterm><primary>TEST_INTEGER</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_INTEGER</secondary></indexterm>
+<para><computeroutput>#define TEST_INTEGER( <link linkend="_classrapidjson_1_1_handler">Handler</link>,  str,  x)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Handler&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader.Parse(s,&#32;h);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(1u,&#32;h.step_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(x,&#32;h.actual_);&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a0cb67eee4e9c25329656c6c6359073d7"/><section>
+    <title>TEST_NAN_INF</title>
+<indexterm><primary>TEST_NAN_INF</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_NAN_INF</secondary></indexterm>
+<para><computeroutput>#define TEST_NAN_INF( str,  x)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ParseDoubleHandler&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link>,&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h).Code());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(1u,&#32;h.step_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;internal::Double&#32;e(x),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>(h.actual_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.IsNan(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.IsNan());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.IsInf(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.IsInf());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;if&#32;(!e.IsNan())&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.Sign(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Sign());&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;const&#32;<emphasis role="keywordtype">char</emphasis>*&#32;json&#32;=&#32;<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;NumbersAsStringsHandler&#32;h(str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01">kParseNumbersAsStringsFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char*&#32;json&#32;=&#32;<link linkend="_unittest_8h_1a0b8e1bafb97ad4a272c5cc4469a13687">StrDup</link>(<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;NumbersAsStringsHandler&#32;h(str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01">kParseInsituFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01">kParseNumbersAsStringsFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a49931364fff3592ba2dcb37ac90d3b10"/><section>
+    <title>TEST_NAN_INF_ERROR</title>
+<indexterm><primary>TEST_NAN_INF_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_NAN_INF_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_NAN_INF_ERROR( errorCode,  str,  errorOffset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;unsigned&#32;streamPos&#32;=&#32;errorOffset;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char&#32;buffer[1001];&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;strncpy(buffer,&#32;str,&#32;1000);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorOffset,&#32;reader.GetErrorOffset());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;s.Tell());\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a0915e2497a66e1c6569fbc2346abc4a7"/><section>
+    <title>TEST_NUMBER_ERROR</title>
+<indexterm><primary>TEST_NUMBER_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_NUMBER_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_NUMBER_ERROR( errorCode,  str,  errorOffset,  streamPos)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char&#32;buffer[2048];&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_LT(std::strlen(str),&#32;2048u);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sprintf(buffer,&#32;<emphasis role="stringliteral">&quot;%s&quot;</emphasis>,&#32;str);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse&lt;fullPrecision&#32;?&#32;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46">kParseFullPrecisionFlag</link>&#32;:&#32;0&gt;(s,&#32;h));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(errorOffset,&#32;reader.GetErrorOffset());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;s.Tell());\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a9d7119f7924a0a61bdd167748c770dae"/><section>
+    <title>TEST_STRING</title>
+<indexterm><primary>TEST_STRING</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_STRING</secondary></indexterm>
+<para><computeroutput>#define TEST_STRING( <link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  e,  x)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Encoding::Ch*&#32;buffer&#32;=&#32;<link linkend="_unittest_8h_1a0b8e1bafb97ad4a272c5cc4469a13687">StrDup</link>(x);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericInsituStringStream&lt;Encoding&gt;&#32;is(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ParseStringHandler&lt;Encoding&gt;&#32;h;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericReader&lt;Encoding,&#32;Encoding&gt;&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01">kParseInsituFlag</link>&#32;|&#32;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928">kParseValidateEncodingFlag</link>&gt;(is,&#32;h);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(0,&#32;StrCmp&lt;Encoding::Ch&gt;(e,&#32;h.str_));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_unittest_8h_1a158bf1a4953297866644112d81a7a3e7">StrLen</link>(e),&#32;h.length_);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(buffer);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericStringStream&lt;Encoding&gt;&#32;s(x);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ParseStringHandler&lt;Encoding&gt;&#32;h2;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericReader&lt;Encoding,&#32;Encoding&gt;&#32;reader2;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader2.Parse(s,&#32;h2);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(0,&#32;StrCmp&lt;Encoding::Ch&gt;(e,&#32;h2.str_));&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_unittest_8h_1a158bf1a4953297866644112d81a7a3e7">StrLen</link>(e),&#32;h2.length_);&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a5f47d54ec9d33d6d02cf84fbf375b393"/><section>
+    <title>TEST_STRING_ERROR</title>
+<indexterm><primary>TEST_STRING_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_STRING_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_STRING_ERROR( errorCode,  str,  errorOffset,  streamPos)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;GenericStringStream&lt;UTF8&lt;&gt;&#32;&gt;&#32;s(str);\
+&#32;&#32;&#32;&#32;BaseReaderHandler&lt;UTF8&lt;&gt;&#32;&gt;&#32;h;\
+&#32;&#32;&#32;&#32;GenericReader&lt;UTF8&lt;&gt;&#32;,&#32;<link linkend="_struct_u_t_f8">UTF8&lt;&gt;</link>&#32;&gt;&#32;reader;\
+&#32;&#32;&#32;&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928">kParseValidateEncodingFlag</link>&gt;(s,&#32;h);\
+&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;EXPECT_EQ(errorOffset,&#32;reader.GetErrorOffset());\
+&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;s.Tell());\
+}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1aca32d23ddbdec658bb1ca388b6f6bb97"/><section>
+    <title>TEST_STRINGARRAY</title>
+<indexterm><primary>TEST_STRINGARRAY</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_STRINGARRAY</secondary></indexterm>
+<para><computeroutput>#define TEST_STRINGARRAY( <link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  utype,  array,  x)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;utype&#32;ue[]&#32;=&#32;array;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;Encoding::Ch*&#32;e&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>Encoding::Ch&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;ue[0]);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;TEST_STRING(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,&#32;e,&#32;x);&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1afe94ee74dfe8222d034c1c8924b51080"/><section>
+    <title>TEST_STRINGARRAY2</title>
+<indexterm><primary>TEST_STRINGARRAY2</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_STRINGARRAY2</secondary></indexterm>
+<para><computeroutput>#define TEST_STRINGARRAY2( <link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  utype,  earray,  xarray)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;utype&#32;ue[]&#32;=&#32;earray;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;utype&#32;xe[]&#32;=&#32;xarray;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;Encoding::Ch*&#32;e&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>Encoding::Ch&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;ue[0]);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;Encoding::Ch*&#32;x&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>Encoding::Ch&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;xe[0]);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;TEST_STRING(<link linkend="_classrapidjson_1_1_encoding">Encoding</link>,&#32;e,&#32;x);&#32;\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a61f78b99d29fd8c3f30ba08cdd193d32"/><section>
+    <title>TEST_STRINGENCODING_ERROR</title>
+<indexterm><primary>TEST_STRINGENCODING_ERROR</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_STRINGENCODING_ERROR</secondary></indexterm>
+<para><computeroutput>#define TEST_STRINGENCODING_ERROR( <link linkend="_classrapidjson_1_1_encoding">Encoding</link>,  TargetEncoding,  utype,  array)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;{&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;utype&#32;ue[]&#32;=&#32;array;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;static&#32;<emphasis role="keyword">const</emphasis>&#32;Encoding::Ch*&#32;e&#32;=&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><emphasis role="keyword">const&#32;</emphasis>Encoding::Ch&#32;*<emphasis role="keyword">&gt;</emphasis>(&amp;ue[0]);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456">kParseErrorStringInvalidEncoding</link>,&#32;TestString&lt;Encoding&gt;(e));\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;decode&#32;error&#32;*/</emphasis>\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericStringStream&lt;Encoding&gt;&#32;s(e);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseReaderHandler&lt;TargetEncoding&gt;&#32;h;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GenericReader&lt;Encoding,&#32;TargetEncoding&gt;&#32;reader;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;reader.Parse(s,&#32;h);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456">kParseErrorStringInvalidEncoding</link>,&#32;reader.GetParseErrorCode());\
+&#32;&#32;&#32;&#32;}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a59abe708b636f5305e064d40eca97f6e"/><section>
+    <title>TEST_TERMINATION</title>
+<indexterm><primary>TEST_TERMINATION</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST_TERMINATION</secondary></indexterm>
+<para><computeroutput>#define TEST_TERMINATION( e,  json)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;Reader&#32;reader;\
+&#32;&#32;&#32;&#32;TerminateHandler&lt;e&gt;&#32;h;\
+&#32;&#32;&#32;&#32;StringStream&#32;is(json);\
+&#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse(is,&#32;h));\
+&#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6">kParseErrorTermination</link>,&#32;reader.GetParseErrorCode());\
+}
+</programlisting></section>
+<anchor xml:id="_readertest_8cpp_1a42611f55159ca2d7b080ee7b5995a51e"/><section>
+    <title>TESTERRORHANDLING</title>
+<indexterm><primary>TESTERRORHANDLING</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TESTERRORHANDLING</secondary></indexterm>
+<para><computeroutput>#define TESTERRORHANDLING( text,  errorCode,  offset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;unsigned&#32;streamPos&#32;=&#32;offset;&#32;\
+&#32;&#32;&#32;&#32;StringStream&#32;json(text);&#32;\
+&#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;handler;&#32;\
+&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
+&#32;&#32;&#32;&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9">kParseIterativeFlag</link>&gt;(json,&#32;handler);&#32;\
+&#32;&#32;&#32;&#32;EXPECT_TRUE(reader.HasParseError());&#32;\
+&#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());&#32;\
+&#32;&#32;&#32;&#32;EXPECT_EQ(offset,&#32;reader.GetErrorOffset());&#32;\
+&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;json.Tell());&#32;\
+}
+</programlisting></section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_readertest_8cpp_1a854d1d6e5e6ac5e209a75851b64f6085"/><section>
+    <title>TEST()<computeroutput>[1/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , BaseReaderHandler_Default )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a9fb049586354f7af008ba7f57cb7932c"/><section>
+    <title>TEST()<computeroutput>[2/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , <link linkend="_class_custom_string_stream">CustomStringStream</link> )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aa18cc109c75368968b1be3c938ad2e97"/><section>
+    <title>TEST()<computeroutput>[3/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , EmptyExceptForCommaErrors )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1ab5c9b6f1601c378c4448ceba82e07e09"/><section>
+    <title>TEST()<computeroutput>[4/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , EmptyExceptForCommaErrorsIterative )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5df37d2665c76b6becee133720872a39"/><section>
+    <title>TEST()<computeroutput>[5/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , EofAfterOneLineComment )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a29547e2b6fa655bc161c074a0a183c2e"/><section>
+    <title>TEST()<computeroutput>[6/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , EscapedApostrophe )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a6e04bdedbeaf39e022d22054f399af8a"/><section>
+    <title>TEST()<computeroutput>[7/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IncompleteMultilineComment )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a4ed130c1c10e5e9c32bb00ca9fb715ce"/><section>
+    <title>TEST()<computeroutput>[8/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IncompleteMultilineComment2 )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a942f3e82ad0c2e74f2ed0d5bb92d5495"/><section>
+    <title>TEST()<computeroutput>[9/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , InlineCommentsAreDisabledByDefault )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a993a1536dc41d6024e435a2c48b24923"/><section>
+    <title>TEST()<computeroutput>[10/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IterativeParsing_Count )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aeaebdcc79099df91507f5f015d762569"/><section>
+    <title>TEST()<computeroutput>[11/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IterativeParsing_ErrorHandling )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a2112c6391e74b80c3d2db6e327d88e04"/><section>
+    <title>TEST()<computeroutput>[12/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IterativeParsing_General )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a870329d14861214eb2ae5a9a8609bf8f"/><section>
+    <title>TEST()<computeroutput>[13/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IterativeParsing_ShortCircuit )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a70dd9ea1fe24447f13125e256e315086"/><section>
+    <title>TEST()<computeroutput>[14/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , IterativePullParsing_General )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5f560a3f67d416d54dcfded7ecfbd04f"/><section>
+    <title>TEST()<computeroutput>[15/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , MultipleTrailingCommaErrors )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a41e6c386bd804991906f8e7420df4635"/><section>
+    <title>TEST()<computeroutput>[16/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , MultipleTrailingCommaErrorsIterative )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a54ff7ac35c2b6ed78f427e77b9ba2b39"/><section>
+    <title>TEST()<computeroutput>[17/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , NumbersAsStrings )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1ae854759d4b07a3e1f82705d7e577787e"/><section>
+    <title>TEST()<computeroutput>[18/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , NumbersAsStringsWChar_t )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a877aa3d42a2ee1b20d26c2480b1104ba"/><section>
+    <title>TEST()<computeroutput>[19/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , OnelineCommentsAreDisabledByDefault )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a18bca8296eaae111c4373dfa381a1c36"/><section>
+    <title>TEST()<computeroutput>[20/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , Parse_EmptyObject )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a90f7ee3e65bb9a8d14555eb2dd6e4393"/><section>
+    <title>TEST()<computeroutput>[21/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , Parse_IStreamWrapper_StringStream )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5b7ceca8eb13509ac2015a74c90b004a"/><section>
+    <title>TEST()<computeroutput>[22/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , Parse_MultipleRoot )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1af99e41513ed14fec7e1d4d3e2f610819"/><section>
+    <title>TEST()<computeroutput>[23/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseArray )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a2bbae6820b8599a03c91235a3b96e141"/><section>
+    <title>TEST()<computeroutput>[24/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseArray_Error )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a8dc48b304866b695871d888ea0a2592d"/><section>
+    <title>TEST()<computeroutput>[25/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseComments )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a903c1326dbf0e8ce889aaee534ce5c6d"/><section>
+    <title>TEST()<computeroutput>[26/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseDocument_Error )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a351a887dbc1a7a7edc582e45e8c0e2e8"/><section>
+    <title>TEST()<computeroutput>[27/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseEmptyArray )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a3f3480cf5d13c5818b549265bf3ac1ca"/><section>
+    <title>TEST()<computeroutput>[28/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseEmptyInlineComment )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a56fcadf8f03df7af57cad7acadf504ab"/><section>
+    <title>TEST()<computeroutput>[29/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseEmptyOnelineComment )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a89b2294cf02d35650e58af5b803143b3"/><section>
+    <title>TEST()<computeroutput>[30/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseFalse )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aa237ee4974ab4463734b51bc308d53bb"/><section>
+    <title>TEST()<computeroutput>[31/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseInsitu_MultipleRoot )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a341f256b64084922f5f08d42b610a183"/><section>
+    <title>TEST()<computeroutput>[32/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseInsituIterative_MultipleRoot )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a190231ffaeee049afcbe613dbbc5751b"/><section>
+    <title>TEST()<computeroutput>[33/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseIterative_MultipleRoot )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1afd6d8f1c19c09ae0d6f919f61bbad887"/><section>
+    <title>TEST()<computeroutput>[34/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseMultipleCommentsInARow )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a317013469a1faa845f73423bcf057668"/><section>
+    <title>TEST()<computeroutput>[35/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNanAndInfinity )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aa2ce5bf11a889af8f9efe3fd77240fd5"/><section>
+    <title>TEST()<computeroutput>[36/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumber_FullPrecisionDouble )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a0f338ae50a463adeddde167f9409bedc"/><section>
+    <title>TEST()<computeroutput>[37/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumber_Integer )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aa293384d534e668619d44318d3d77d5e"/><section>
+    <title>TEST()<computeroutput>[38/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumber_NormalPrecisionDouble )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a2be15887d12d0e7bb634d6807da64b17"/><section>
+    <title>TEST()<computeroutput>[39/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumber_NormalPrecisionError )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a2bbd1606be48d3fa85117a864ec9c9e4"/><section>
+    <title>TEST()<computeroutput>[40/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumberError_FullPrecisionDouble )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a0a70a215ad0f6c5484dfbcb0d32dec72"/><section>
+    <title>TEST()<computeroutput>[41/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseNumberError_NormalPrecisionDouble )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a2c25bdca73b3dcbf73aa441f9277384f"/><section>
+    <title>TEST()<computeroutput>[42/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseObject )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aae5733e8671508fb38ac9e90911e1be7"/><section>
+    <title>TEST()<computeroutput>[43/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseObject_Error )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a15e169b6344e504df0eea4b5121060da"/><section>
+    <title>TEST()<computeroutput>[44/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseString )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1abd8b31cbdcf64777f9389eb782096914"/><section>
+    <title>TEST()<computeroutput>[45/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseString_Error )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a90cebede6f67a54e178e049793bf0d98"/><section>
+    <title>TEST()<computeroutput>[46/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseString_NonDestructive )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a74f5978d08350eef0b4c9e458f9fb811"/><section>
+    <title>TEST()<computeroutput>[47/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseString_Transcoding )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1ab541be9d37347bb83774aa2bc99a7482"/><section>
+    <title>TEST()<computeroutput>[48/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseString_TranscodingWithValidation )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a37d7b918c516febe122eb98fd95d835d"/><section>
+    <title>TEST()<computeroutput>[49/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseTerminationByHandler )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1acd0e3395c882a9ffffd0cd3e541f737e"/><section>
+    <title>TEST()<computeroutput>[50/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseTrue )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1abb4708dbc92034ce8428154fc3446ac4"/><section>
+    <title>TEST()<computeroutput>[51/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , ParseValue_Error )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1abfa886640a194ac6dbdd83d87d6d6501"/><section>
+    <title>TEST()<computeroutput>[52/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , <link linkend="_reader_8h_1aeddf0374b22926be76140ec6708dc203">SkipWhitespace</link> )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5cf2c15500cac34d39712e79413904b5"/><section>
+    <title>TEST()<computeroutput>[53/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , TrailingCommaHandlerTermination )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1ad85517af92c65a0853f67ad7d1609513"/><section>
+    <title>TEST()<computeroutput>[54/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , TrailingCommaHandlerTerminationIterative )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a6915cfb99ca350fe96d8d3bcfdd8cd88"/><section>
+    <title>TEST()<computeroutput>[55/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , TrailingCommas )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a682347bb2b9e7237a432cc36c07c81a0"/><section>
+    <title>TEST()<computeroutput>[56/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , TrailingCommasIterative )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a287de0c3676e77b625b3984de3c8018d"/><section>
+    <title>TEST()<computeroutput>[57/57]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link> , UnrecognizedComment )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a32605d0e16ee73d21ab6009f266e3593"/><section>
+    <title>TestEmptyExceptForCommaErrors()</title>
+<indexterm><primary>TestEmptyExceptForCommaErrors</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestEmptyExceptForCommaErrors</secondary></indexterm>
+<computeroutput>template&lt;unsigned extraFlags&gt; </computeroutput><para><computeroutput>void TestEmptyExceptForCommaErrors ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a3e697a5cd8deeff851239ddc33e9466f"/><section>
+    <title>TestInsituMultipleRoot()</title>
+<indexterm><primary>TestInsituMultipleRoot</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestInsituMultipleRoot</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags&gt; </computeroutput><para><computeroutput>void TestInsituMultipleRoot ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a43a70800373051361573d37f95bb433e"/><section>
+    <title>TestMultipleRoot()</title>
+<indexterm><primary>TestMultipleRoot</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestMultipleRoot</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags&gt; </computeroutput><para><computeroutput>void TestMultipleRoot ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a655f124d90808a045e7fb01f27c56c7b"/><section>
+    <title>TestMultipleTrailingCommaErrors()</title>
+<indexterm><primary>TestMultipleTrailingCommaErrors</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestMultipleTrailingCommaErrors</secondary></indexterm>
+<computeroutput>template&lt;unsigned extraFlags&gt; </computeroutput><para><computeroutput>void TestMultipleTrailingCommaErrors ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aecbde81eaceef1ab965fbccc9c6a2cc1"/><section>
+    <title>TestString()</title>
+<indexterm><primary>TestString</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestString</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; </computeroutput><para><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> TestString (const typename Encoding::Ch * str)</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1aee91bf3d9cd695a8cbe30cecb97e8351"/><section>
+    <title>TestTrailingCommaHandlerTermination()</title>
+<indexterm><primary>TestTrailingCommaHandlerTermination</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestTrailingCommaHandlerTermination</secondary></indexterm>
+<computeroutput>template&lt;unsigned extraFlags&gt; </computeroutput><para><computeroutput>void TestTrailingCommaHandlerTermination ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a53b9204ec8bf882697790d11e728f81f"/><section>
+    <title>TestTrailingCommas()</title>
+<indexterm><primary>TestTrailingCommas</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestTrailingCommas</secondary></indexterm>
+<computeroutput>template&lt;unsigned extraFlags&gt; </computeroutput><para><computeroutput>void TestTrailingCommas ( )</computeroutput></para></section>
+</section>
+</section>

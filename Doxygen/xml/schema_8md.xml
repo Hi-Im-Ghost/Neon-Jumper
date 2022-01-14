@@ -1,0 +1,518 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="schema_8md" kind="file" language="Markdown">
+    <compoundname>schema.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Schema</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(This<sp/>feature<sp/>was<sp/>released<sp/>in<sp/>v1.1.0)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>Schema<sp/>is<sp/>a<sp/>draft<sp/>standard<sp/>for<sp/>describing<sp/>the<sp/>format<sp/>of<sp/>JSON<sp/>data.<sp/>The<sp/>schema<sp/>itself<sp/>is<sp/>also<sp/>JSON<sp/>data.<sp/>By<sp/>validating<sp/>a<sp/>JSON<sp/>structure<sp/>with<sp/>JSON<sp/>Schema,<sp/>your<sp/>code<sp/>can<sp/>safely<sp/>access<sp/>the<sp/>DOM<sp/>without<sp/>manually<sp/>checking<sp/>types,<sp/>or<sp/>whether<sp/>a<sp/>key<sp/>exists,<sp/>etc.<sp/>It<sp/>can<sp/>also<sp/>ensure<sp/>that<sp/>the<sp/>serialized<sp/>JSON<sp/>conform<sp/>to<sp/>a<sp/>specified<sp/>schema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>implemented<sp/>a<sp/>JSON<sp/>Schema<sp/>validator<sp/>for<sp/>[JSON<sp/>Schema<sp/>Draft<sp/>v4](http://json-schema.org/documentation.html).<sp/>If<sp/>you<sp/>are<sp/>not<sp/>familiar<sp/>with<sp/>JSON<sp/>Schema,<sp/>you<sp/>may<sp/>refer<sp/>to<sp/>[Understanding<sp/>JSON<sp/>Schema](http://spacetelescope.github.io/understanding-json-schema/).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Basic<sp/>Usage<sp/>{#Basic}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">First<sp/>of<sp/>all,<sp/>you<sp/>need<sp/>to<sp/>parse<sp/>a<sp/>JSON<sp/>Schema<sp/>into<sp/>`Document`,<sp/>and<sp/>then<sp/>compile<sp/>the<sp/>`Document`<sp/>into<sp/>a<sp/>`SchemaDocument`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Secondly,<sp/>construct<sp/>a<sp/>`SchemaValidator`<sp/>with<sp/>the<sp/>`SchemaDocument`.<sp/>It<sp/>is<sp/>similar<sp/>to<sp/>a<sp/>`Writer`<sp/>in<sp/>the<sp/>sense<sp/>of<sp/>handling<sp/>SAX<sp/>events.<sp/>So,<sp/>you<sp/>can<sp/>use<sp/>`document.Accept(validator)`<sp/>to<sp/>validate<sp/>a<sp/>document,<sp/>and<sp/>then<sp/>check<sp/>the<sp/>validity.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/schema.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>sd;</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(sd.Parse(schemaJson).HasParseError())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>the<sp/>schema<sp/>is<sp/>not<sp/>a<sp/>valid<sp/>JSON.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">SchemaDocument<sp/>schema(sd);<sp/>//<sp/>Compile<sp/>a<sp/>Document<sp/>to<sp/>SchemaDocument</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>sd<sp/>is<sp/>no<sp/>longer<sp/>needed<sp/>here.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(d.Parse(inputJson).HasParseError())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>the<sp/>input<sp/>is<sp/>not<sp/>a<sp/>valid<sp/>JSON.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">SchemaValidator<sp/>validator(schema);</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(!d.Accept(validator))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Input<sp/>JSON<sp/>is<sp/>invalid<sp/>according<sp/>to<sp/>the<sp/>schema</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Output<sp/>diagnostic<sp/>information</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>schema:<sp/>%s\n&quot;,<sp/>sb.GetString());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>keyword:<sp/>%s\n&quot;,<sp/>validator.GetInvalidSchemaKeyword());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>sb.Clear();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>document:<sp/>%s\n&quot;,<sp/>sb.GetString());</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Some<sp/>notes:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>One<sp/>`SchemaDocument`<sp/>can<sp/>be<sp/>referenced<sp/>by<sp/>multiple<sp/>`SchemaValidator`s.<sp/>It<sp/>will<sp/>not<sp/>be<sp/>modified<sp/>by<sp/>`SchemaValidator`s.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>A<sp/>`SchemaValidator`<sp/>may<sp/>be<sp/>reused<sp/>to<sp/>validate<sp/>multiple<sp/>documents.<sp/>To<sp/>run<sp/>it<sp/>for<sp/>other<sp/>documents,<sp/>call<sp/>`validator.Reset()`<sp/>first.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Validation<sp/>during<sp/>parsing/serialization<sp/>{#Fused}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Unlike<sp/>most<sp/>JSON<sp/>Schema<sp/>validator<sp/>implementations,<sp/>RapidJSON<sp/>provides<sp/>a<sp/>SAX-based<sp/>schema<sp/>validator.<sp/>Therefore,<sp/>you<sp/>can<sp/>parse<sp/>a<sp/>JSON<sp/>from<sp/>a<sp/>stream<sp/>while<sp/>validating<sp/>it<sp/>on<sp/>the<sp/>fly.<sp/>If<sp/>the<sp/>validator<sp/>encounters<sp/>a<sp/>JSON<sp/>value<sp/>that<sp/>invalidates<sp/>the<sp/>supplied<sp/>schema,<sp/>the<sp/>parsing<sp/>will<sp/>be<sp/>terminated<sp/>immediately.<sp/>This<sp/>design<sp/>is<sp/>especially<sp/>useful<sp/>for<sp/>parsing<sp/>large<sp/>JSON<sp/>files.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>DOM<sp/>parsing<sp/>{#DOM}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>using<sp/>DOM<sp/>in<sp/>parsing,<sp/>`Document`<sp/>needs<sp/>some<sp/>preparation<sp/>and<sp/>finalizing<sp/>tasks,<sp/>in<sp/>addition<sp/>to<sp/>receiving<sp/>SAX<sp/>events,<sp/>thus<sp/>it<sp/>needs<sp/>some<sp/>work<sp/>to<sp/>route<sp/>the<sp/>reader,<sp/>validator<sp/>and<sp/>the<sp/>document.<sp/>`SchemaValidatingReader`<sp/>is<sp/>a<sp/>helper<sp/>class<sp/>that<sp/>doing<sp/>such<sp/>work.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/filereadstream.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">SchemaDocument<sp/>schema(sd);<sp/>//<sp/>Compile<sp/>a<sp/>Document<sp/>to<sp/>SchemaDocument</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Use<sp/>reader<sp/>to<sp/>parse<sp/>the<sp/>JSON</highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(&quot;big.json&quot;,<sp/>&quot;r&quot;);</highlight></codeline>
+<codeline><highlight class="normal">FileReadStream<sp/>is(fp,<sp/>buffer,<sp/>sizeof(buffer));</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Parse<sp/>JSON<sp/>from<sp/>reader,<sp/>validate<sp/>the<sp/>SAX<sp/>events,<sp/>and<sp/>store<sp/>in<sp/>d.</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">SchemaValidatingReader&lt;kParseDefaultFlags,<sp/>FileReadStream,<sp/>UTF8&lt;&gt;<sp/>&gt;<sp/>reader(is,<sp/>schema);</highlight></codeline>
+<codeline><highlight class="normal">d.Populate(reader);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">if<sp/>(!reader.GetParseResult())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Not<sp/>a<sp/>valid<sp/>JSON</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>When<sp/>reader.GetParseResult().Code()<sp/>==<sp/>kParseErrorTermination,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>it<sp/>may<sp/>be<sp/>terminated<sp/>by:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>(1)<sp/>the<sp/>validator<sp/>found<sp/>that<sp/>the<sp/>JSON<sp/>is<sp/>invalid<sp/>according<sp/>to<sp/>schema;<sp/>or</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>(2)<sp/>the<sp/>input<sp/>stream<sp/>has<sp/>I/O<sp/>error.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Check<sp/>the<sp/>validation<sp/>result</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!reader.IsValid())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Input<sp/>JSON<sp/>is<sp/>invalid<sp/>according<sp/>to<sp/>the<sp/>schema</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Output<sp/>diagnostic<sp/>information</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reader.GetInvalidSchemaPointer().StringifyUriFragment(sb);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>schema:<sp/>%s\n&quot;,<sp/>sb.GetString());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>keyword:<sp/>%s\n&quot;,<sp/>reader.GetInvalidSchemaKeyword());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sb.Clear();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reader.GetInvalidDocumentPointer().StringifyUriFragment(sb);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>printf(&quot;Invalid<sp/>document:<sp/>%s\n&quot;,<sp/>sb.GetString());</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>SAX<sp/>parsing<sp/>{#SAX}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>using<sp/>SAX<sp/>in<sp/>parsing,<sp/>it<sp/>is<sp/>much<sp/>simpler.<sp/>If<sp/>it<sp/>only<sp/>need<sp/>to<sp/>validate<sp/>the<sp/>JSON<sp/>without<sp/>further<sp/>processing,<sp/>it<sp/>is<sp/>simply:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">SchemaValidator<sp/>validator(schema);</highlight></codeline>
+<codeline><highlight class="normal">Reader<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(!reader.Parse(stream,<sp/>validator))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!validator.IsValid())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>...<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>exactly<sp/>the<sp/>method<sp/>used<sp/>in<sp/>the<sp/>[schemavalidator](example/schemavalidator/schemavalidator.cpp)<sp/>example.<sp/>The<sp/>distinct<sp/>advantage<sp/>is<sp/>low<sp/>memory<sp/>usage,<sp/>no<sp/>matter<sp/>how<sp/>big<sp/>the<sp/>JSON<sp/>was<sp/>(the<sp/>memory<sp/>usage<sp/>depends<sp/>on<sp/>the<sp/>complexity<sp/>of<sp/>the<sp/>schema).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>need<sp/>to<sp/>handle<sp/>the<sp/>SAX<sp/>events<sp/>further,<sp/>then<sp/>you<sp/>need<sp/>to<sp/>use<sp/>the<sp/>template<sp/>class<sp/>`GenericSchemaValidator`<sp/>to<sp/>set<sp/>the<sp/>output<sp/>handler<sp/>of<sp/>the<sp/>validator:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">MyHandler<sp/>handler;</highlight></codeline>
+<codeline><highlight class="normal">GenericSchemaValidator&lt;SchemaDocument,<sp/>MyHandler&gt;<sp/>validator(schema,<sp/>handler);</highlight></codeline>
+<codeline><highlight class="normal">Reader<sp/>reader;</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(!reader.Parse(ss,<sp/>validator))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!validator.IsValid())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>...<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Serialization<sp/>{#Serialization}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">It<sp/>is<sp/>also<sp/>possible<sp/>to<sp/>do<sp/>validation<sp/>during<sp/>serializing.<sp/>This<sp/>can<sp/>ensure<sp/>the<sp/>result<sp/>JSON<sp/>is<sp/>valid<sp/>according<sp/>to<sp/>the<sp/>JSON<sp/>schema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal">Writer&lt;StringBuffer&gt;<sp/>writer(sb);</highlight></codeline>
+<codeline><highlight class="normal">GenericSchemaValidator&lt;SchemaDocument,<sp/>Writer&lt;StringBuffer&gt;<sp/>&gt;<sp/>validator(s,<sp/>writer);</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(!d.Accept(validator))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Some<sp/>problem<sp/>during<sp/>Accept(),<sp/>it<sp/>may<sp/>be<sp/>validation<sp/>or<sp/>encoding<sp/>issues.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!validator.IsValid())<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Of<sp/>course,<sp/>if<sp/>your<sp/>application<sp/>only<sp/>needs<sp/>SAX-style<sp/>serialization,<sp/>it<sp/>can<sp/>simply<sp/>send<sp/>SAX<sp/>events<sp/>to<sp/>`SchemaValidator`<sp/>instead<sp/>of<sp/>`Writer`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Remote<sp/>Schema<sp/>{#Remote}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>Schema<sp/>supports<sp/>[`$ref`<sp/>keyword](http://spacetelescope.github.io/understanding-json-schema/structuring.html),<sp/>which<sp/>is<sp/>a<sp/>[JSON<sp/>pointer](doc/pointer.md)<sp/>referencing<sp/>to<sp/>a<sp/>local<sp/>or<sp/>remote<sp/>schema.<sp/>Local<sp/>pointer<sp/>is<sp/>prefixed<sp/>with<sp/>`#`,<sp/>while<sp/>remote<sp/>pointer<sp/>is<sp/>an<sp/>relative<sp/>or<sp/>absolute<sp/>URI.<sp/>For<sp/>example:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~js</highlight></codeline>
+<codeline><highlight class="normal">{<sp/>&quot;$ref&quot;:<sp/>&quot;definitions.json#/address&quot;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>`SchemaDocument`<sp/>does<sp/>not<sp/>know<sp/>how<sp/>to<sp/>resolve<sp/>such<sp/>URI,<sp/>it<sp/>needs<sp/>a<sp/>user-provided<sp/>`IRemoteSchemaDocumentProvider`<sp/>instance<sp/>to<sp/>do<sp/>so.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>MyRemoteSchemaDocumentProvider<sp/>:<sp/>public<sp/>IRemoteSchemaDocumentProvider<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>virtual<sp/>const<sp/>SchemaDocument*<sp/>GetRemoteDocument(const<sp/>char*<sp/>uri,<sp/>SizeType<sp/>length)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>Resolve<sp/>the<sp/>uri<sp/>and<sp/>returns<sp/>a<sp/>pointer<sp/>to<sp/>that<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">MyRemoteSchemaDocumentProvider<sp/>provider;</highlight></codeline>
+<codeline><highlight class="normal">SchemaDocument<sp/>schema(sd,<sp/>&amp;provider);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Conformance<sp/>{#Conformance}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>passed<sp/>262<sp/>out<sp/>of<sp/>263<sp/>tests<sp/>in<sp/>[JSON<sp/>Schema<sp/>Test<sp/>Suite](https://github.com/json-schema/JSON-Schema-Test-Suite)<sp/>(Json<sp/>Schema<sp/>draft<sp/>4).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>failed<sp/>test<sp/>is<sp/>&quot;changed<sp/>scope<sp/>ref<sp/>invalid&quot;<sp/>of<sp/>&quot;change<sp/>resolution<sp/>scope&quot;<sp/>in<sp/>`refRemote.json`.<sp/>It<sp/>is<sp/>due<sp/>to<sp/>that<sp/>`id`<sp/>schema<sp/>keyword<sp/>and<sp/>URI<sp/>combining<sp/>function<sp/>are<sp/>not<sp/>implemented.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Besides,<sp/>the<sp/>`format`<sp/>schema<sp/>keyword<sp/>for<sp/>string<sp/>values<sp/>is<sp/>ignored,<sp/>since<sp/>it<sp/>is<sp/>not<sp/>required<sp/>by<sp/>the<sp/>specification.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Regular<sp/>Expression<sp/>{#Regex}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>schema<sp/>keyword<sp/>`pattern`<sp/>and<sp/>`patternProperties`<sp/>uses<sp/>regular<sp/>expression<sp/>to<sp/>match<sp/>the<sp/>required<sp/>pattern.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>implemented<sp/>a<sp/>simple<sp/>NFA<sp/>regular<sp/>expression<sp/>engine,<sp/>which<sp/>is<sp/>used<sp/>by<sp/>default.<sp/>It<sp/>supports<sp/>the<sp/>following<sp/>syntax.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|Syntax|Description|</highlight></codeline>
+<codeline><highlight class="normal">|------|-----------|</highlight></codeline>
+<codeline><highlight class="normal">|`ab`<sp/><sp/><sp/><sp/>|<sp/>Concatenation<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|&lt;code&gt;a&amp;#124;b&lt;/code&gt;<sp/><sp/><sp/>|<sp/>Alternation<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a?`<sp/><sp/><sp/><sp/>|<sp/>Zero<sp/>or<sp/>one<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a*`<sp/><sp/><sp/><sp/>|<sp/>Zero<sp/>or<sp/>more<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a+`<sp/><sp/><sp/><sp/>|<sp/>One<sp/>or<sp/>more<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a{3}`<sp/><sp/>|<sp/>Exactly<sp/>3<sp/>times<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a{3,}`<sp/>|<sp/>At<sp/>least<sp/>3<sp/>times<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a{3,5}`|<sp/>3<sp/>to<sp/>5<sp/>times<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`(ab)`<sp/><sp/>|<sp/>Grouping<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`^a`<sp/><sp/><sp/><sp/>|<sp/>At<sp/>the<sp/>beginning<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`a$`<sp/><sp/><sp/><sp/>|<sp/>At<sp/>the<sp/>end<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`.`<sp/><sp/><sp/><sp/><sp/>|<sp/>Any<sp/>character<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[abc]`<sp/>|<sp/>Character<sp/>classes<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[a-c]`<sp/>|<sp/>Character<sp/>class<sp/>range<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[a-z0-9_]`<sp/>|<sp/>Character<sp/>class<sp/>combination<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[^abc]`<sp/>|<sp/>Negated<sp/>character<sp/>classes<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[^a-c]`<sp/>|<sp/>Negated<sp/>character<sp/>class<sp/>range<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`[\b]`<sp/><sp/><sp/>|<sp/>Backspace<sp/>(U+0008)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|&lt;code&gt;\\&amp;#124;&lt;/code&gt;,<sp/>`\\`,<sp/>...<sp/><sp/>|<sp/>Escape<sp/>characters<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`\f`<sp/>|<sp/>Form<sp/>feed<sp/>(U+000C)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`\n`<sp/>|<sp/>Line<sp/>feed<sp/>(U+000A)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`\r`<sp/>|<sp/>Carriage<sp/>return<sp/>(U+000D)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`\t`<sp/>|<sp/>Tab<sp/>(U+0009)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|`\v`<sp/>|<sp/>Vertical<sp/>tab<sp/>(U+000B)<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>C++11<sp/>compiler,<sp/>it<sp/>is<sp/>also<sp/>possible<sp/>to<sp/>use<sp/>the<sp/>`std::regex`<sp/>by<sp/>defining<sp/>`RAPIDJSON_SCHEMA_USE_INTERNALREGEX=0`<sp/>and<sp/>`RAPIDJSON_SCHEMA_USE_STDREGEX=1`.<sp/>If<sp/>your<sp/>schemas<sp/>do<sp/>not<sp/>need<sp/>`pattern`<sp/>and<sp/>`patternProperties`,<sp/>you<sp/>can<sp/>set<sp/>both<sp/>macros<sp/>to<sp/>zero<sp/>to<sp/>disable<sp/>this<sp/>feature,<sp/>which<sp/>will<sp/>reduce<sp/>some<sp/>code<sp/>size.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Performance<sp/>{#Performance}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Most<sp/>C++<sp/>JSON<sp/>libraries<sp/>do<sp/>not<sp/>yet<sp/>support<sp/>JSON<sp/>Schema.<sp/>So<sp/>we<sp/>tried<sp/>to<sp/>evaluate<sp/>the<sp/>performance<sp/>of<sp/>RapidJSON&apos;s<sp/>JSON<sp/>Schema<sp/>validator<sp/>according<sp/>to<sp/>[json-schema-benchmark](https://github.com/ebdrup/json-schema-benchmark),<sp/>which<sp/>tests<sp/>11<sp/>JavaScript<sp/>libraries<sp/>running<sp/>on<sp/>Node.js.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">That<sp/>benchmark<sp/>runs<sp/>validations<sp/>on<sp/>[JSON<sp/>Schema<sp/>Test<sp/>Suite](https://github.com/json-schema/JSON-Schema-Test-Suite),<sp/>in<sp/>which<sp/>some<sp/>test<sp/>suites<sp/>and<sp/>tests<sp/>are<sp/>excluded.<sp/>We<sp/>made<sp/>the<sp/>same<sp/>benchmarking<sp/>procedure<sp/>in<sp/>[`schematest.cpp`](test/perftest/schematest.cpp).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">On<sp/>a<sp/>Mac<sp/>Book<sp/>Pro<sp/>(2.8<sp/>GHz<sp/>Intel<sp/>Core<sp/>i7),<sp/>the<sp/>following<sp/>results<sp/>are<sp/>collected.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|Validator|Relative<sp/>speed|Number<sp/>of<sp/>test<sp/>runs<sp/>per<sp/>second|</highlight></codeline>
+<codeline><highlight class="normal">|---------|:------------:|:----------------------------:|</highlight></codeline>
+<codeline><highlight class="normal">|RapidJSON|155%|30682|</highlight></codeline>
+<codeline><highlight class="normal">|[`ajv`](https://github.com/epoberezkin/ajv)|100%|19770<sp/>(±<sp/>1.31%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`is-my-json-valid`](https://github.com/mafintosh/is-my-json-valid)|70%|13835<sp/>(±<sp/>2.84%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`jsen`](https://github.com/bugventure/jsen)|57.7%|11411<sp/>(±<sp/>1.27%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`schemasaurus`](https://github.com/AlexeyGrishin/schemasaurus)|26%|5145<sp/>(±<sp/>1.62%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`themis`](https://github.com/playlyfe/themis)|19.9%|3935<sp/>(±<sp/>2.69%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`z-schema`](https://github.com/zaggino/z-schema)|7%|1388<sp/>(±<sp/>0.84%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`jsck`](https://github.com/pandastrike/jsck#readme)|3.1%|606<sp/>(±<sp/>2.84%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`jsonschema`](https://github.com/tdegrunt/jsonschema#readme)|0.9%|185<sp/>(±<sp/>1.01%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`skeemas`](https://github.com/Prestaul/skeemas#readme)|0.8%|154<sp/>(±<sp/>0.79%)|</highlight></codeline>
+<codeline><highlight class="normal">|tv4|0.5%|93<sp/>(±<sp/>0.94%)|</highlight></codeline>
+<codeline><highlight class="normal">|[`jayschema`](https://github.com/natesilva/jayschema)|0.1%|21<sp/>(±<sp/>1.14%)|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">That<sp/>is,<sp/>RapidJSON<sp/>is<sp/>about<sp/>1.5x<sp/>faster<sp/>than<sp/>the<sp/>fastest<sp/>JavaScript<sp/>library<sp/>(ajv).<sp/>And<sp/>1400x<sp/>faster<sp/>than<sp/>the<sp/>slowest<sp/>one.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Schema<sp/>violation<sp/>reporting<sp/>{#Reporting}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(Unreleased<sp/>as<sp/>of<sp/>2017-09-20)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>validating<sp/>an<sp/>instance<sp/>against<sp/>a<sp/>JSON<sp/>Schema,</highlight></codeline>
+<codeline><highlight class="normal">it<sp/>is<sp/>often<sp/>desirable<sp/>to<sp/>report<sp/>not<sp/>only<sp/>whether<sp/>the<sp/>instance<sp/>is<sp/>valid,</highlight></codeline>
+<codeline><highlight class="normal">but<sp/>also<sp/>the<sp/>ways<sp/>in<sp/>which<sp/>it<sp/>violates<sp/>the<sp/>schema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>`SchemaValidator`<sp/>class</highlight></codeline>
+<codeline><highlight class="normal">collects<sp/>errors<sp/>encountered<sp/>during<sp/>validation</highlight></codeline>
+<codeline><highlight class="normal">into<sp/>a<sp/>JSON<sp/>`Value`.</highlight></codeline>
+<codeline><highlight class="normal">This<sp/>error<sp/>object<sp/>can<sp/>then<sp/>be<sp/>accessed<sp/>as<sp/>`validator.GetError()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>structure<sp/>of<sp/>the<sp/>error<sp/>object<sp/>is<sp/>subject<sp/>to<sp/>change</highlight></codeline>
+<codeline><highlight class="normal">in<sp/>future<sp/>versions<sp/>of<sp/>RapidJSON,</highlight></codeline>
+<codeline><highlight class="normal">as<sp/>there<sp/>is<sp/>no<sp/>standard<sp/>schema<sp/>for<sp/>violations.</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>details<sp/>below<sp/>this<sp/>point<sp/>are<sp/>provisional<sp/>only.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>General<sp/>provisions<sp/>{#ReportingGeneral}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Validation<sp/>of<sp/>an<sp/>instance<sp/>value<sp/>against<sp/>a<sp/>schema</highlight></codeline>
+<codeline><highlight class="normal">produces<sp/>an<sp/>error<sp/>value.</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>error<sp/>value<sp/>is<sp/>always<sp/>an<sp/>object.</highlight></codeline>
+<codeline><highlight class="normal">An<sp/>empty<sp/>object<sp/>`{}`<sp/>indicates<sp/>the<sp/>instance<sp/>is<sp/>valid.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>name<sp/>of<sp/>each<sp/>member</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>corresponds<sp/>to<sp/>the<sp/>JSON<sp/>Schema<sp/>keyword<sp/>that<sp/>is<sp/>violated.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>value<sp/>is<sp/>either<sp/>an<sp/>object<sp/>describing<sp/>a<sp/>single<sp/>violation,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>or<sp/>an<sp/>array<sp/>of<sp/>such<sp/>objects.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Each<sp/>violation<sp/>object<sp/>contains<sp/>two<sp/>string-valued<sp/>members</highlight></codeline>
+<codeline><highlight class="normal">named<sp/>`instanceRef`<sp/>and<sp/>`schemaRef`.</highlight></codeline>
+<codeline><highlight class="normal">`instanceRef`<sp/>contains<sp/>the<sp/>URI<sp/>fragment<sp/>serialization</highlight></codeline>
+<codeline><highlight class="normal">of<sp/>a<sp/>JSON<sp/>Pointer<sp/>to<sp/>the<sp/>instance<sp/>subobject</highlight></codeline>
+<codeline><highlight class="normal">in<sp/>which<sp/>the<sp/>violation<sp/>was<sp/>detected.</highlight></codeline>
+<codeline><highlight class="normal">`schemaRef`<sp/>contains<sp/>the<sp/>URI<sp/>of<sp/>the<sp/>schema</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>the<sp/>fragment<sp/>serialization<sp/>of<sp/>a<sp/>JSON<sp/>Pointer</highlight></codeline>
+<codeline><highlight class="normal">to<sp/>the<sp/>subschema<sp/>that<sp/>was<sp/>violated.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Individual<sp/>violation<sp/>objects<sp/>can<sp/>contain<sp/>other<sp/>keyword-specific<sp/>members.</highlight></codeline>
+<codeline><highlight class="normal">These<sp/>are<sp/>detailed<sp/>further.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>example,<sp/>validating<sp/>this<sp/>instance:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~json</highlight></codeline>
+<codeline><highlight class="normal">{&quot;numbers&quot;:<sp/>[1,<sp/>2,<sp/>&quot;3&quot;,<sp/>4,<sp/>5]}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">against<sp/>this<sp/>schema:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~json</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>&quot;type&quot;:<sp/>&quot;object&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>&quot;properties&quot;:<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;numbers&quot;:<sp/>{&quot;$ref&quot;:<sp/>&quot;numbers.schema.json&quot;}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">where<sp/>`numbers.schema.json`<sp/>refers</highlight></codeline>
+<codeline><highlight class="normal">(via<sp/>a<sp/>suitable<sp/>`IRemoteSchemaDocumentProvider`)</highlight></codeline>
+<codeline><highlight class="normal">to<sp/>this<sp/>schema:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~json</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>&quot;type&quot;:<sp/>&quot;array&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>&quot;items&quot;:<sp/>{&quot;type&quot;:<sp/>&quot;number&quot;}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">produces<sp/>the<sp/>following<sp/>error<sp/>object:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~json</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>&quot;type&quot;:<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;instanceRef&quot;:<sp/>&quot;#/numbers/2&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;schemaRef&quot;:<sp/>&quot;numbers.schema.json#/items&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;expected&quot;:<sp/>[&quot;number&quot;],</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;actual&quot;:<sp/>&quot;string&quot;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Validation<sp/>keywords<sp/>for<sp/>numbers<sp/>{#Numbers}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>multipleOf<sp/>{#multipleof}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>number<sp/>strictly<sp/>greater<sp/>than<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>the<sp/>`multipleOf`<sp/>keyword<sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>maximum<sp/>{#maximum}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>the<sp/>`maximum`<sp/>keyword<sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`exclusiveMaximum`:<sp/>optional<sp/>boolean.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>This<sp/>will<sp/>be<sp/>true<sp/>if<sp/>the<sp/>schema<sp/>specified<sp/>`&quot;exclusiveMaximum&quot;:<sp/>true`,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>and<sp/>will<sp/>be<sp/>omitted<sp/>otherwise.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>minimum<sp/>{#minimum}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>the<sp/>`minimum`<sp/>keyword<sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`exclusiveMinimum`:<sp/>optional<sp/>boolean.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>This<sp/>will<sp/>be<sp/>true<sp/>if<sp/>the<sp/>schema<sp/>specified<sp/>`&quot;exclusiveMinimum&quot;:<sp/>true`,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>and<sp/>will<sp/>be<sp/>omitted<sp/>otherwise.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>number.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Validation<sp/>keywords<sp/>for<sp/>strings<sp/>{#Strings}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>maxLength<sp/>{#maxLength}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>number<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>the<sp/>`maxLength`<sp/>keyword<sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>minLength<sp/>{#minLength}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>number<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>the<sp/>`minLength`<sp/>keyword<sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>pattern<sp/>{#pattern}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>instance<sp/>value.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(The<sp/>expected<sp/>pattern<sp/>is<sp/>not<sp/>reported</highlight></codeline>
+<codeline><highlight class="normal">because<sp/>the<sp/>internal<sp/>representation<sp/>in<sp/>`SchemaDocument`</highlight></codeline>
+<codeline><highlight class="normal">does<sp/>not<sp/>store<sp/>the<sp/>pattern<sp/>in<sp/>original<sp/>string<sp/>form.)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Validation<sp/>keywords<sp/>for<sp/>arrays<sp/>{#Arrays}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>additionalItems<sp/>{#additionalItems}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>keyword<sp/>is<sp/>reported</highlight></codeline>
+<codeline><highlight class="normal">when<sp/>the<sp/>value<sp/>of<sp/>`items`<sp/>schema<sp/>keyword<sp/>is<sp/>an<sp/>array,</highlight></codeline>
+<codeline><highlight class="normal">the<sp/>value<sp/>of<sp/>`additionalItems`<sp/>is<sp/>`false`,</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>the<sp/>instance<sp/>is<sp/>an<sp/>array</highlight></codeline>
+<codeline><highlight class="normal">with<sp/>more<sp/>items<sp/>than<sp/>specified<sp/>in<sp/>the<sp/>`items`<sp/>array.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`disallowed`:<sp/>required<sp/>integer<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>index<sp/>of<sp/>the<sp/>first<sp/>item<sp/>that<sp/>has<sp/>no<sp/>corresponding<sp/>schema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>maxItems<sp/>and<sp/>minItems<sp/>{#maxItems-minItems}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>integer<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>`maxItems`<sp/>(respectively,<sp/>`minItems`)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>integer<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Number<sp/>of<sp/>items<sp/>in<sp/>the<sp/>instance<sp/>array.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>uniqueItems<sp/>{#uniqueItems}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`duplicates`:<sp/>required<sp/>array</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>whose<sp/>items<sp/>are<sp/>integers<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Indices<sp/>of<sp/>items<sp/>of<sp/>the<sp/>instance<sp/>that<sp/>are<sp/>equal.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(RapidJSON<sp/>only<sp/>reports<sp/>the<sp/>first<sp/>two<sp/>equal<sp/>items,</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>performance<sp/>reasons.)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Validation<sp/>keywords<sp/>for<sp/>objects</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>maxProperties<sp/>and<sp/>minProperties<sp/>{#maxProperties-minProperties}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>integer<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>value<sp/>of<sp/>`maxProperties`<sp/>(respectively,<sp/>`minProperties`)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>specified<sp/>in<sp/>the<sp/>schema.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>integer<sp/>greater<sp/>than<sp/>or<sp/>equal<sp/>to<sp/>0.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Number<sp/>of<sp/>properties<sp/>in<sp/>the<sp/>instance<sp/>object.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>required<sp/>{#required}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`missing`:<sp/>required<sp/>array<sp/>of<sp/>one<sp/>or<sp/>more<sp/>unique<sp/>strings.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>names<sp/>of<sp/>properties</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>that<sp/>are<sp/>listed<sp/>in<sp/>the<sp/>value<sp/>of<sp/>the<sp/>`required`<sp/>schema<sp/>keyword</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>but<sp/>not<sp/>present<sp/>in<sp/>the<sp/>instance<sp/>object.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>additionalProperties<sp/>{#additionalProperties}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>keyword<sp/>is<sp/>reported</highlight></codeline>
+<codeline><highlight class="normal">when<sp/>the<sp/>schema<sp/>specifies<sp/>`additionalProperties:<sp/>false`</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>the<sp/>name<sp/>of<sp/>a<sp/>property<sp/>of<sp/>the<sp/>instance<sp/>is</highlight></codeline>
+<codeline><highlight class="normal">neither<sp/>listed<sp/>in<sp/>the<sp/>`properties`<sp/>keyword</highlight></codeline>
+<codeline><highlight class="normal">nor<sp/>matches<sp/>any<sp/>regular<sp/>expression<sp/>in<sp/>the<sp/>`patternProperties`<sp/>keyword.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`disallowed`:<sp/>required<sp/>string.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Name<sp/>of<sp/>the<sp/>offending<sp/>property<sp/>of<sp/>the<sp/>instance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(For<sp/>performance<sp/>reasons,</highlight></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>only<sp/>reports<sp/>the<sp/>first<sp/>such<sp/>property<sp/>encountered.)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>dependencies<sp/>{#dependencies}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`errors`:<sp/>required<sp/>object<sp/>with<sp/>one<sp/>or<sp/>more<sp/>properties.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Names<sp/>and<sp/>values<sp/>of<sp/>its<sp/>properties<sp/>are<sp/>described<sp/>below.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Recall<sp/>that<sp/>JSON<sp/>Schema<sp/>Draft<sp/>04<sp/>supports</highlight></codeline>
+<codeline><highlight class="normal">*schema<sp/>dependencies*,</highlight></codeline>
+<codeline><highlight class="normal">where<sp/>presence<sp/>of<sp/>a<sp/>named<sp/>*controlling*<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">requires<sp/>the<sp/>instance<sp/>object<sp/>to<sp/>be<sp/>valid<sp/>against<sp/>a<sp/>subschema,</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>*property<sp/>dependencies*,</highlight></codeline>
+<codeline><highlight class="normal">where<sp/>presence<sp/>of<sp/>a<sp/>controlling<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">requires<sp/>other<sp/>*dependent*<sp/>properties<sp/>to<sp/>be<sp/>also<sp/>present.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>violated<sp/>schema<sp/>dependency,</highlight></codeline>
+<codeline><highlight class="normal">`errors`<sp/>will<sp/>contain<sp/>a<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">with<sp/>the<sp/>name<sp/>of<sp/>the<sp/>controlling<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>its<sp/>value<sp/>will<sp/>be<sp/>the<sp/>error<sp/>object</highlight></codeline>
+<codeline><highlight class="normal">produced<sp/>by<sp/>validating<sp/>the<sp/>instance<sp/>object</highlight></codeline>
+<codeline><highlight class="normal">against<sp/>the<sp/>dependent<sp/>schema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>violated<sp/>property<sp/>dependency,</highlight></codeline>
+<codeline><highlight class="normal">`errors`<sp/>will<sp/>contain<sp/>a<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">with<sp/>the<sp/>name<sp/>of<sp/>the<sp/>controlling<sp/>property</highlight></codeline>
+<codeline><highlight class="normal">and<sp/>its<sp/>value<sp/>will<sp/>be<sp/>an<sp/>array<sp/>of<sp/>one<sp/>or<sp/>more<sp/>unique<sp/>strings</highlight></codeline>
+<codeline><highlight class="normal">listing<sp/>the<sp/>missing<sp/>dependent<sp/>properties.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Validation<sp/>keywords<sp/>for<sp/>any<sp/>instance<sp/>type<sp/>{#AnyTypes}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>enum<sp/>{#enum}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>keyword<sp/>has<sp/>no<sp/>additional<sp/>properties</highlight></codeline>
+<codeline><highlight class="normal">beyond<sp/>`instanceRef`<sp/>and<sp/>`schemaRef`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>allowed<sp/>values<sp/>are<sp/>not<sp/>listed</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>because<sp/>`SchemaDocument`<sp/>does<sp/>not<sp/>store<sp/>them<sp/>in<sp/>original<sp/>form.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>violating<sp/>value<sp/>is<sp/>not<sp/>reported</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>because<sp/>it<sp/>might<sp/>be<sp/>unwieldy.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>need<sp/>to<sp/>report<sp/>these<sp/>details<sp/>to<sp/>your<sp/>users,</highlight></codeline>
+<codeline><highlight class="normal">you<sp/>can<sp/>access<sp/>the<sp/>necessary<sp/>information</highlight></codeline>
+<codeline><highlight class="normal">by<sp/>following<sp/>`instanceRef`<sp/>and<sp/>`schemaRef`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>type<sp/>{#type}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`expected`:<sp/>required<sp/>array<sp/>of<sp/>one<sp/>or<sp/>more<sp/>unique<sp/>strings,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>each<sp/>of<sp/>which<sp/>is<sp/>one<sp/>of<sp/>the<sp/>seven<sp/>primitive<sp/>types</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>defined<sp/>by<sp/>the<sp/>JSON<sp/>Schema<sp/>Draft<sp/>04<sp/>Core<sp/>specification.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Lists<sp/>the<sp/>types<sp/>allowed<sp/>by<sp/>the<sp/>`type`<sp/>schema<sp/>keyword.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>`actual`:<sp/>required<sp/>string,<sp/>also<sp/>one<sp/>of<sp/>seven<sp/>primitive<sp/>types.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>The<sp/>primitive<sp/>type<sp/>of<sp/>the<sp/>instance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>allOf,<sp/>anyOf,<sp/>and<sp/>oneOf<sp/>{#allOf-anyOf-oneOf}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>`errors`:<sp/>required<sp/>array<sp/>of<sp/>at<sp/>least<sp/>one<sp/>object.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>There<sp/>will<sp/>be<sp/>as<sp/>many<sp/>items<sp/>as<sp/>there<sp/>are<sp/>subschemas</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>in<sp/>the<sp/>`allOf`,<sp/>`anyOf`<sp/>or<sp/>`oneOf`<sp/>schema<sp/>keyword,<sp/>respectively.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Each<sp/>item<sp/>will<sp/>be<sp/>the<sp/>error<sp/>value</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>produced<sp/>by<sp/>validating<sp/>the<sp/>instance</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>against<sp/>the<sp/>corresponding<sp/>subschema.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>`allOf`,<sp/>at<sp/>least<sp/>one<sp/>error<sp/>value<sp/>will<sp/>be<sp/>non-empty.</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>`anyOf`,<sp/>all<sp/>error<sp/>values<sp/>will<sp/>be<sp/>non-empty.</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>`oneOf`,<sp/>either<sp/>all<sp/>error<sp/>values<sp/>will<sp/>be<sp/>non-empty,</highlight></codeline>
+<codeline><highlight class="normal">or<sp/>more<sp/>than<sp/>one<sp/>will<sp/>be<sp/>empty.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>not<sp/>{#not}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>keyword<sp/>has<sp/>no<sp/>additional<sp/>properties</highlight></codeline>
+<codeline><highlight class="normal">apart<sp/>from<sp/>`instanceRef`<sp/>and<sp/>`schemaRef`.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/schema.md"/>
+  </compounddef>
+</doxygen>

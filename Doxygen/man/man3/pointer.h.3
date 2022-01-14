@@ -1,0 +1,294 @@
+.TH "src/rapidjson/include/rapidjson/pointer.h" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/include/rapidjson/pointer.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'document\&.h'\fP
+.br
+\fC#include 'uri\&.h'\fP
+.br
+\fC#include 'internal/itoa\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBGenericPointer< ValueType, Allocator >\fP"
+.br
+.RI "Represents a JSON Pointer\&. Use Pointer for \fBUTF8\fP encoding and default allocator\&. "
+.ti -1c
+.RI "struct \fBGenericPointer< ValueType, Allocator >::Token\fP"
+.br
+.RI "A token is the basic units of internal representation\&. "
+.ti -1c
+.RI "class \fBGenericPointer< ValueType, Allocator >::PercentEncodeStream< OutputStream >\fP"
+.br
+.RI "A helper stream to encode character (UTF-8 code unit) into percent-encoded sequence\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericPointer\fP< \fBValue\fP > \fBPointer\fP"
+.br
+.RI "\fBGenericPointer\fP for Value (UTF-8, default allocator)\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBPointerParseErrorCode\fP { \fBkPointerParseErrorNone\fP = 0, \fBkPointerParseErrorTokenMustBeginWithSolidus\fP, \fBkPointerParseErrorInvalidEscape\fP, \fBkPointerParseErrorInvalidPercentEncoding\fP, \fBkPointerParseErrorCharacterMustPercentEncode\fP }"
+.br
+.RI "Error code of parsing\&. "
+.in -1c
+.SS "Helper functions for GenericPointer"
+
+.in +1c
+.ti -1c
+.RI "const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & \fBpointer\fP"
+.br
+.ti -1c
+.RI "const \fBGenericPointer\fP< typename \fBT::ValueType\fP > T2 \fBdefaultValue\fP"
+.br
+.ti -1c
+.RI "const \fBGenericPointer\fP< typename \fBT::ValueType\fP > T2 T::AllocatorType & \fBa\fP"
+.br
+.ti -1c
+.RI "const CharType(& \fBsource\fP )[N]"
+.br
+.ti -1c
+.RI "const \fBGenericPointer\fP< typename \fBT::ValueType\fP > T2 \fBvalue\fP"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBCreateValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBCreateValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBCreateValueByPointer\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBCreateValueByPointer\fP (DocumentType &document, const CharType(&\fBsource\fP)[N])"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP * \fBGetValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, size_t *unresolvedTokenIndex=0)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > const \fBT::ValueType\fP * \fBGetValueByPointer\fP (const \fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, size_t *unresolvedTokenIndex=0)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP * \fBGetValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], size_t *unresolvedTokenIndex=0)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> const \fBT::ValueType\fP * \fBGetValueByPointer\fP (const \fBT\fP &root, const CharType(&\fBsource\fP)[N], size_t *unresolvedTokenIndex=0)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBGetValueByPointerWithDefault\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, const typename \fBT::ValueType\fP &\fBdefaultValue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBGetValueByPointerWithDefault\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, const typename T::Ch *\fBdefaultValue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename T2 > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >),(typename \fBT::ValueType\fP &)) \fBGetValueByPointerWithDefault\fP(\fBT\fP &root"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBGetValueByPointerWithDefault\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], const typename \fBT::ValueType\fP &\fBdefaultValue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBGetValueByPointerWithDefault\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], const typename T::Ch *\fBdefaultValue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N, typename T2 > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >),(typename \fBT::ValueType\fP &)) \fBGetValueByPointerWithDefault\fP(\fBT\fP &root"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBGetValueByPointerWithDefault\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, const typename \fBDocumentType::ValueType\fP &\fBdefaultValue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBGetValueByPointerWithDefault\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, const typename DocumentType::Ch *\fBdefaultValue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename T2 > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >),(typename \fBDocumentType::ValueType\fP &)) \fBGetValueByPointerWithDefault\fP(DocumentType &document"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBGetValueByPointerWithDefault\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], const typename \fBDocumentType::ValueType\fP &\fBdefaultValue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBGetValueByPointerWithDefault\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], const typename DocumentType::Ch *\fBdefaultValue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N, typename T2 > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >),(typename \fBDocumentType::ValueType\fP &)) \fBGetValueByPointerWithDefault\fP(DocumentType &document"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, const typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, const typename T::Ch *\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], const typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBSetValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], const typename T::Ch *\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, const typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, const typename DocumentType::Ch *\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], const typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBSetValueByPointer\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], const typename DocumentType::Ch *\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT::ValueType\fP & \fBSwapValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP, typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & \fBSwapValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N], typename \fBT::ValueType\fP &\fBvalue\fP, typename T::AllocatorType &\fBa\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType > \fBDocumentType::ValueType\fP & \fBSwapValueByPointer\fP (DocumentType &document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > &\fBpointer\fP, typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & \fBSwapValueByPointer\fP (DocumentType &document, const CharType(&\fBsource\fP)[N], typename \fBDocumentType::ValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > bool \fBEraseValueByPointer\fP (\fBT\fP &root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > &\fBpointer\fP)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename CharType , size_t N> bool \fBEraseValueByPointer\fP (\fBT\fP &root, const CharType(&\fBsource\fP)[N])"
+.br
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef \fBGenericPointer\fP<\fBValue\fP> \fBPointer\fP"
+
+.PP
+\fBGenericPointer\fP for Value (UTF-8, default allocator)\&. 
+.SH "Function Documentation"
+.PP 
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & CreateValueByPointer (DocumentType & document, const CharType(&) source[N])"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & CreateValueByPointer (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & CreateValueByPointer (\fBT\fP & root, const CharType(&) source[N], typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & CreateValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> bool EraseValueByPointer (\fBT\fP & root, const CharType(&) source[N])"
+
+.SS "template<typename \fBT\fP > bool EraseValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> const \fBT::ValueType\fP * GetValueByPointer (const \fBT\fP & root, const CharType(&) source[N], size_t * unresolvedTokenIndex = \fC0\fP)"
+
+.SS "template<typename \fBT\fP > const \fBT::ValueType\fP * GetValueByPointer (const \fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, size_t * unresolvedTokenIndex = \fC0\fP)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP * GetValueByPointer (\fBT\fP & root, const CharType(&) source[N], size_t * unresolvedTokenIndex = \fC0\fP)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP * GetValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, size_t * unresolvedTokenIndex = \fC0\fP)"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & GetValueByPointerWithDefault (DocumentType & document, const CharType(&) source[N], const typename DocumentType::Ch * defaultValue)"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & GetValueByPointerWithDefault (DocumentType & document, const CharType(&) source[N], const typename \fBDocumentType::ValueType\fP & defaultValue)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & GetValueByPointerWithDefault (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, const typename DocumentType::Ch * defaultValue)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & GetValueByPointerWithDefault (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, const typename \fBDocumentType::ValueType\fP & defaultValue)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & GetValueByPointerWithDefault (\fBT\fP & root, const CharType(&) source[N], const typename T::Ch * defaultValue, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & GetValueByPointerWithDefault (\fBT\fP & root, const CharType(&) source[N], const typename \fBT::ValueType\fP & defaultValue, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & GetValueByPointerWithDefault (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, const typename T::Ch * defaultValue, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & GetValueByPointerWithDefault (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, const typename \fBT::ValueType\fP & defaultValue, typename T::AllocatorType & a)"
+
+.SS "template<typename DocumentType , typename T2 > RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >), (typename \fBDocumentType::ValueType\fP &)) &"
+
+.SS "template<typename DocumentType , typename CharType , size_t N, typename T2 > RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >), (typename \fBDocumentType::ValueType\fP &)) &"
+
+.SS "template<typename \fBT\fP , typename T2 > RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >), (typename \fBT::ValueType\fP &)) &"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N, typename T2 > RAPIDJSON_DISABLEIF_RETURN ((internal::OrExpr< internal::IsPointer< T2 >, \fBinternal::IsGenericValue\fP< T2 > >), (typename \fBT::ValueType\fP &)) &"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const CharType(&) source[N], const typename DocumentType::Ch * value)"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const CharType(&) source[N], const typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const CharType(&) source[N], typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, const typename DocumentType::Ch * value)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, const typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & SetValueByPointer (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const CharType(&) source[N], const typename T::Ch * value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const CharType(&) source[N], const typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const CharType(&) source[N], typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, const typename T::Ch * value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, const typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & SetValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SS "template<typename DocumentType , typename CharType , size_t N> \fBDocumentType::ValueType\fP & SwapValueByPointer (DocumentType & document, const CharType(&) source[N], typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename DocumentType > \fBDocumentType::ValueType\fP & SwapValueByPointer (DocumentType & document, const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer, typename \fBDocumentType::ValueType\fP & value)"
+
+.SS "template<typename \fBT\fP , typename CharType , size_t N> \fBT::ValueType\fP & SwapValueByPointer (\fBT\fP & root, const CharType(&) source[N], typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SS "template<typename \fBT\fP > \fBT::ValueType\fP & SwapValueByPointer (\fBT\fP & root, const \fBGenericPointer\fP< typename \fBT::ValueType\fP > & pointer, typename \fBT::ValueType\fP & value, typename T::AllocatorType & a)"
+
+.SH "Variable Documentation"
+.PP 
+.SS "const \fBGenericPointer\fP< typename \fBT::ValueType\fP > T2 T::AllocatorType & a"
+\fBInitial value:\fP
+.PP
+.nf
+{
+    return pointer\&.GetWithDefault(root, defaultValue, a)
+.fi
+.SS "const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > T2 defaultValue"
+\fBInitial value:\fP
+.PP
+.nf
+{
+    return pointer\&.GetWithDefault(document, defaultValue)
+.fi
+.SS "const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > & pointer"
+
+.SS "const CharType(& source"
+
+.SS "const \fBGenericPointer\fP< typename \fBDocumentType::ValueType\fP > T2 value"
+\fBInitial value:\fP
+.PP
+.nf
+{
+    return pointer\&.Set(document, value)
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

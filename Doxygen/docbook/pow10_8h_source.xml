@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_pow10_8h_source" xml:lang="en-US">
+<title>pow10.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/pow10.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_POW10_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_POW10_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;../rapidjson.h&quot;</emphasis>
+19 
+20 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+21 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+22 
+24 
+28 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_namespaceinternal_1af01c41d045d596e2f8d1888cf6fbecb6">Pow10</link>(<emphasis role="keywordtype">int</emphasis>&#32;n)&#32;{
+29 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;e[]&#32;=&#32;{&#32;<emphasis role="comment">//&#32;1e-0...1e308:&#32;309&#32;*&#32;8&#32;bytes&#32;=&#32;2472&#32;bytes</emphasis>
+30 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+0,&#32;&#32;
+31 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+1,&#32;&#32;1e+2,&#32;&#32;1e+3,&#32;&#32;1e+4,&#32;&#32;1e+5,&#32;&#32;1e+6,&#32;&#32;1e+7,&#32;&#32;1e+8,&#32;&#32;1e+9,&#32;&#32;1e+10,&#32;1e+11,&#32;1e+12,&#32;1e+13,&#32;1e+14,&#32;1e+15,&#32;1e+16,&#32;1e+17,&#32;1e+18,&#32;1e+19,&#32;1e+20,&#32;
+32 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+21,&#32;1e+22,&#32;1e+23,&#32;1e+24,&#32;1e+25,&#32;1e+26,&#32;1e+27,&#32;1e+28,&#32;1e+29,&#32;1e+30,&#32;1e+31,&#32;1e+32,&#32;1e+33,&#32;1e+34,&#32;1e+35,&#32;1e+36,&#32;1e+37,&#32;1e+38,&#32;1e+39,&#32;1e+40,
+33 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+41,&#32;1e+42,&#32;1e+43,&#32;1e+44,&#32;1e+45,&#32;1e+46,&#32;1e+47,&#32;1e+48,&#32;1e+49,&#32;1e+50,&#32;1e+51,&#32;1e+52,&#32;1e+53,&#32;1e+54,&#32;1e+55,&#32;1e+56,&#32;1e+57,&#32;1e+58,&#32;1e+59,&#32;1e+60,
+34 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+61,&#32;1e+62,&#32;1e+63,&#32;1e+64,&#32;1e+65,&#32;1e+66,&#32;1e+67,&#32;1e+68,&#32;1e+69,&#32;1e+70,&#32;1e+71,&#32;1e+72,&#32;1e+73,&#32;1e+74,&#32;1e+75,&#32;1e+76,&#32;1e+77,&#32;1e+78,&#32;1e+79,&#32;1e+80,
+35 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+81,&#32;1e+82,&#32;1e+83,&#32;1e+84,&#32;1e+85,&#32;1e+86,&#32;1e+87,&#32;1e+88,&#32;1e+89,&#32;1e+90,&#32;1e+91,&#32;1e+92,&#32;1e+93,&#32;1e+94,&#32;1e+95,&#32;1e+96,&#32;1e+97,&#32;1e+98,&#32;1e+99,&#32;1e+100,
+36 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+101,1e+102,1e+103,1e+104,1e+105,1e+106,1e+107,1e+108,1e+109,1e+110,1e+111,1e+112,1e+113,1e+114,1e+115,1e+116,1e+117,1e+118,1e+119,1e+120,
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+121,1e+122,1e+123,1e+124,1e+125,1e+126,1e+127,1e+128,1e+129,1e+130,1e+131,1e+132,1e+133,1e+134,1e+135,1e+136,1e+137,1e+138,1e+139,1e+140,
+38 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+141,1e+142,1e+143,1e+144,1e+145,1e+146,1e+147,1e+148,1e+149,1e+150,1e+151,1e+152,1e+153,1e+154,1e+155,1e+156,1e+157,1e+158,1e+159,1e+160,
+39 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+161,1e+162,1e+163,1e+164,1e+165,1e+166,1e+167,1e+168,1e+169,1e+170,1e+171,1e+172,1e+173,1e+174,1e+175,1e+176,1e+177,1e+178,1e+179,1e+180,
+40 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+181,1e+182,1e+183,1e+184,1e+185,1e+186,1e+187,1e+188,1e+189,1e+190,1e+191,1e+192,1e+193,1e+194,1e+195,1e+196,1e+197,1e+198,1e+199,1e+200,
+41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+201,1e+202,1e+203,1e+204,1e+205,1e+206,1e+207,1e+208,1e+209,1e+210,1e+211,1e+212,1e+213,1e+214,1e+215,1e+216,1e+217,1e+218,1e+219,1e+220,
+42 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+221,1e+222,1e+223,1e+224,1e+225,1e+226,1e+227,1e+228,1e+229,1e+230,1e+231,1e+232,1e+233,1e+234,1e+235,1e+236,1e+237,1e+238,1e+239,1e+240,
+43 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+241,1e+242,1e+243,1e+244,1e+245,1e+246,1e+247,1e+248,1e+249,1e+250,1e+251,1e+252,1e+253,1e+254,1e+255,1e+256,1e+257,1e+258,1e+259,1e+260,
+44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+261,1e+262,1e+263,1e+264,1e+265,1e+266,1e+267,1e+268,1e+269,1e+270,1e+271,1e+272,1e+273,1e+274,1e+275,1e+276,1e+277,1e+278,1e+279,1e+280,
+45 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+281,1e+282,1e+283,1e+284,1e+285,1e+286,1e+287,1e+288,1e+289,1e+290,1e+291,1e+292,1e+293,1e+294,1e+295,1e+296,1e+297,1e+298,1e+299,1e+300,
+46 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1e+301,1e+302,1e+303,1e+304,1e+305,1e+306,1e+307,1e+308
+47 &#32;&#32;&#32;&#32;};
+48 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(n&#32;&gt;=&#32;0&#32;&amp;&amp;&#32;n&#32;&lt;=&#32;308);
+49 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;e[n];
+50 }
+51 
+52 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+53 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+54 
+55 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_POW10_</emphasis>
+</programlisting></section>

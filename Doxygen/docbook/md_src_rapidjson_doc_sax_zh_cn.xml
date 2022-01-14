@@ -1,0 +1,519 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_sax_zh_cn" xml:lang="en-US">
+
+<para>&quot;SAX&quot; 此术语源于 <link xlink:href="http://en.wikipedia.org/wiki/Simple_API_for_XML">Simple API for XML</link>。我们借了此术语去套用在 JSON 的解析及生成。</para>
+
+<para>在 RapidJSON 中，<computeroutput>Reader</computeroutput>（<computeroutput><link linkend="_class_generic_reader">GenericReader</link>&lt;...&gt;</computeroutput> 的 typedef）是 JSON 的 SAX 风格解析器，而 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>（<computeroutput>GenericWriter&lt;...&gt;</computeroutput> 的 typedef）则是 JSON 的 SAX 风格生成器。</para>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1Reader">
+<title>Reader</title>
+
+<para><computeroutput>Reader</computeroutput> 从输入流解析一个 JSON。当它从流中读取字符时，它会基于 JSON 的语法去分析字符，并向处理器发送事件。</para>
+
+<para>例如，以下是一个 JSON。</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;hello&quot;:&#32;&quot;world&quot;,
+&#32;&#32;&#32;&#32;&quot;t&quot;:&#32;true&#32;,
+&#32;&#32;&#32;&#32;&quot;f&quot;:&#32;false,
+&#32;&#32;&#32;&#32;&quot;n&quot;:&#32;null,
+&#32;&#32;&#32;&#32;&quot;i&quot;:&#32;123,
+&#32;&#32;&#32;&#32;&quot;pi&quot;:&#32;3.1416,
+&#32;&#32;&#32;&#32;&quot;a&quot;:&#32;[1,&#32;2,&#32;3,&#32;4]
+}
+</computeroutput></literallayout></para>
+
+<para>当一个 <computeroutput>Reader</computeroutput> 解析此 JSON 时，它会顺序地向处理器发送以下的事件：</para>
+
+<para><literallayout><computeroutput>StartObject()
+Key(&quot;hello&quot;,&#32;5,&#32;true)
+String(&quot;world&quot;,&#32;5,&#32;true)
+Key(&quot;t&quot;,&#32;1,&#32;true)
+Bool(true)
+Key(&quot;f&quot;,&#32;1,&#32;true)
+Bool(false)
+Key(&quot;n&quot;,&#32;1,&#32;true)
+Null()
+Key(&quot;i&quot;)
+Uint(123)
+Key(&quot;pi&quot;)
+Double(3.1416)
+Key(&quot;a&quot;)
+StartArray()
+Uint(1)
+Uint(2)
+Uint(3)
+Uint(4)
+EndArray(4)
+EndObject(7)
+</computeroutput></literallayout></para>
+
+<para>除了一些事件参数需要再作解释，这些事件可以轻松地与 JSON 对上。我们可以看看 <computeroutput>simplereader</computeroutput> 例子怎样产生和以上完全相同的结果：</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/reader.h&quot;
+#include&#32;&lt;iostream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+struct&#32;MyHandler&#32;:&#32;public&#32;BaseReaderHandler&lt;UTF8&lt;&gt;,&#32;MyHandler&gt;&#32;{
+&#32;&#32;&#32;&#32;bool&#32;Null()&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Null()&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Bool(bool&#32;b)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Bool(&quot;&#32;&lt;&lt;&#32;boolalpha&#32;&lt;&lt;&#32;b&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Int(int&#32;i)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Int(&quot;&#32;&lt;&lt;&#32;i&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Uint(unsigned&#32;u)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Uint(&quot;&#32;&lt;&lt;&#32;u&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Int64(int64_t&#32;i)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Int64(&quot;&#32;&lt;&lt;&#32;i&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Uint64(uint64_t&#32;u)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Uint64(&quot;&#32;&lt;&lt;&#32;u&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Double(double&#32;d)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;Double(&quot;&#32;&lt;&lt;&#32;d&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;String(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy)&#32;{&#32;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;&quot;String(&quot;&#32;&lt;&lt;&#32;str&#32;&lt;&lt;&#32;&quot;,&#32;&quot;&#32;&lt;&lt;&#32;length&#32;&lt;&lt;&#32;&quot;,&#32;&quot;&#32;&lt;&lt;&#32;boolalpha&#32;&lt;&lt;&#32;copy&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;true;
+&#32;&#32;&#32;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;StartObject()&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;StartObject()&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Key(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy)&#32;{&#32;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;&quot;Key(&quot;&#32;&lt;&lt;&#32;str&#32;&lt;&lt;&#32;&quot;,&#32;&quot;&#32;&lt;&lt;&#32;length&#32;&lt;&lt;&#32;&quot;,&#32;&quot;&#32;&lt;&lt;&#32;boolalpha&#32;&lt;&lt;&#32;copy&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;true;
+&#32;&#32;&#32;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;EndObject(SizeType&#32;memberCount)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;EndObject(&quot;&#32;&lt;&lt;&#32;memberCount&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;StartArray()&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;StartArray()&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;EndArray(SizeType&#32;elementCount)&#32;{&#32;cout&#32;&lt;&lt;&#32;&quot;EndArray(&quot;&#32;&lt;&lt;&#32;elementCount&#32;&lt;&lt;&#32;&quot;)&quot;&#32;&lt;&lt;&#32;endl;&#32;return&#32;true;&#32;}
+};
+
+void&#32;main()&#32;{
+&#32;&#32;&#32;&#32;const&#32;char&#32;json[]&#32;=&#32;&quot;&#32;{&#32;\&quot;hello\&quot;&#32;:&#32;\&quot;world\&quot;,&#32;\&quot;t\&quot;&#32;:&#32;true&#32;,&#32;\&quot;f\&quot;&#32;:&#32;false,&#32;\&quot;n\&quot;:&#32;null,&#32;\&quot;i\&quot;:123,&#32;\&quot;pi\&quot;:&#32;3.1416,&#32;\&quot;a\&quot;:[1,&#32;2,&#32;3,&#32;4]&#32;}&#32;&quot;;
+
+&#32;&#32;&#32;&#32;MyHandler&#32;handler;
+&#32;&#32;&#32;&#32;Reader&#32;reader;
+&#32;&#32;&#32;&#32;StringStream&#32;ss(json);
+&#32;&#32;&#32;&#32;reader.Parse(ss,&#32;handler);
+}
+</computeroutput></literallayout></para>
+
+<para>注意 RapidJSON 使用模板去静态挷定 <computeroutput>Reader</computeroutput> 类型及处理器的类型，而不是使用含虚函数的类。这个范式可以通过把函数内联而改善性能。</para>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1Handler">
+<title>Handler</title>
+
+<para>如前例所示，使用者需要实现一个处理器（handler），用于处理来自 <computeroutput>Reader</computeroutput> 的事件（函数调用）。处理器必须包含以下的成员函数。</para>
+
+<para><literallayout><computeroutput>class&#32;Handler&#32;{
+&#32;&#32;&#32;&#32;bool&#32;Null();
+&#32;&#32;&#32;&#32;bool&#32;Bool(bool&#32;b);
+&#32;&#32;&#32;&#32;bool&#32;Int(int&#32;i);
+&#32;&#32;&#32;&#32;bool&#32;Uint(unsigned&#32;i);
+&#32;&#32;&#32;&#32;bool&#32;Int64(int64_t&#32;i);
+&#32;&#32;&#32;&#32;bool&#32;Uint64(uint64_t&#32;i);
+&#32;&#32;&#32;&#32;bool&#32;Double(double&#32;d);
+&#32;&#32;&#32;&#32;bool&#32;RawNumber(const&#32;Ch*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy);
+&#32;&#32;&#32;&#32;bool&#32;String(const&#32;Ch*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy);
+&#32;&#32;&#32;&#32;bool&#32;StartObject();
+&#32;&#32;&#32;&#32;bool&#32;Key(const&#32;Ch*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy);
+&#32;&#32;&#32;&#32;bool&#32;EndObject(SizeType&#32;memberCount);
+&#32;&#32;&#32;&#32;bool&#32;StartArray();
+&#32;&#32;&#32;&#32;bool&#32;EndArray(SizeType&#32;elementCount);
+};
+</computeroutput></literallayout></para>
+
+<para>当 <computeroutput>Reader</computeroutput> 遇到 JSON null 值时会调用 <computeroutput>Null()</computeroutput>。</para>
+
+<para>当 <computeroutput>Reader</computeroutput> 遇到 JSON true 或 false 值时会调用 <computeroutput>Bool(bool)</computeroutput>。</para>
+
+<para>当 <computeroutput>Reader</computeroutput> 遇到 JSON number，它会选择一个合适的 C++ 类型映射，然后调用 <computeroutput>Int(int)</computeroutput>、<computeroutput>Uint(unsigned)</computeroutput>、<computeroutput>Int64(int64_t)</computeroutput>、<computeroutput>Uint64(uint64_t)</computeroutput> 及 <computeroutput>Double(double)</computeroutput> 的 * 其中之一个 *。 若开启了 <computeroutput>kParseNumbersAsStrings</computeroutput> 选项，<computeroutput>Reader</computeroutput> 便会改为调用 <computeroutput>RawNumber()</computeroutput>。</para>
+
+<para>当 <computeroutput>Reader</computeroutput> 遇到 JSON string，它会调用 <computeroutput>String(const char* str, SizeType length, bool copy)</computeroutput>。第一个参数是字符串的指针。第二个参数是字符串的长度（不包含空终止符号）。注意 RapidJSON 支持字串中含有空字符 <computeroutput>\0</computeroutput>。若出现这种情况，便会有 <computeroutput>strlen(str) &lt; length</computeroutput>。最后的 <computeroutput>copy</computeroutput> 参数表示处理器是否需要复制该字符串。在正常解析时，<computeroutput>copy = true</computeroutput>。仅当使用原位解析时，<computeroutput>copy = false</computeroutput>。此外，还要注意字符的类型与目标编码相关，我们稍后会再谈这一点。</para>
+
+<para>当 <computeroutput>Reader</computeroutput> 遇到 JSON object 的开始之时，它会调用 <computeroutput>StartObject()</computeroutput>。JSON 的 object 是一个键值对（成员）的集合。若 object 包含成员，它会先为成员的名字调用 <computeroutput>Key()</computeroutput>，然后再按值的类型调用函数。它不断调用这些键值对，直至最终调用 <computeroutput>EndObject(SizeType memberCount)</computeroutput>。注意 <computeroutput>memberCount</computeroutput> 参数对处理器来说只是协助性质，使用者可能不需要此参数。</para>
+
+<para>JSON array 与 object 相似，但更简单。在 array 开始时，<computeroutput>Reader</computeroutput> 会调用 <computeroutput>BeginArary()</computeroutput>。若 array 含有元素，它会按元素的类型来读用函数。相似地，最后它会调用 <computeroutput>EndArray(SizeType elementCount)</computeroutput>，其中 <computeroutput>elementCount</computeroutput> 参数对处理器来说只是协助性质。</para>
+
+<para>每个处理器函数都返回一个 <computeroutput>bool</computeroutput>。正常它们应返回 <computeroutput>true</computeroutput>。若处理器遇到错误，它可以返回 <computeroutput>false</computeroutput> 去通知事件发送方停止继续处理。</para>
+
+<para>例如，当我们用 <computeroutput>Reader</computeroutput> 解析一个 JSON 时，处理器检测到该 JSON 并不符合所需的 schema，那么处理器可以返回 <computeroutput>false</computeroutput>，令 <computeroutput>Reader</computeroutput> 停止之后的解析工作。而 <computeroutput>Reader</computeroutput> 会进入一个错误状态，并以 <computeroutput>kParseErrorTermination</computeroutput> 错误码标识。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1GenericReader">
+<title>GenericReader</title>
+
+<para>前面提及，<computeroutput>Reader</computeroutput> 是 <computeroutput><link linkend="_class_generic_reader">GenericReader</link></computeroutput> 模板类的 typedef：</para>
+
+<para><literallayout><computeroutput>namespace&#32;rapidjson&#32;{
+
+template&#32;&lt;typename&#32;SourceEncoding,&#32;typename&#32;TargetEncoding,&#32;typename&#32;Allocator&#32;=&#32;MemoryPoolAllocator&lt;&gt;&#32;&gt;
+class&#32;GenericReader&#32;{
+&#32;&#32;&#32;&#32;//&#32;...
+};
+
+typedef&#32;GenericReader&lt;UTF8&lt;&gt;,&#32;UTF8&lt;&gt;&#32;&gt;&#32;Reader;
+
+}&#32;//&#32;namespace&#32;rapidjson
+</computeroutput></literallayout></para>
+
+<para><computeroutput>Reader</computeroutput> 使用 UTF-8 作为来源及目标编码。来源编码是指 JSON 流的编码。目标编码是指 <computeroutput>String()</computeroutput> 的 <computeroutput>str</computeroutput> 参数所用的编码。例如，要解析一个 UTF-8 流并输出至 UTF-16 string 事件，你需要这么定义一个 reader：</para>
+
+<para><literallayout><computeroutput>GenericReader&lt;UTF8&lt;&gt;,&#32;UTF16&lt;&gt;&#32;&gt;&#32;reader;
+</computeroutput></literallayout></para>
+
+<para>注意到 <computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput> 的缺省类型是 <computeroutput>wchar_t</computeroutput>。因此这个 <computeroutput>reader</computeroutput> 需要调用处理器的 <computeroutput>String(const wchar_t*, SizeType, bool)</computeroutput>。</para>
+
+<para>第三个模板参数 <computeroutput>Allocator</computeroutput> 是内部数据结构（实际上是一个堆栈）的分配器类型。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1SaxParsing">
+<title>Parsing</title>
+
+<para><computeroutput>Reader</computeroutput> 的唯一功能就是解析 JSON。</para>
+
+<para><literallayout><computeroutput>template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;InputStream,&#32;typename&#32;Handler&gt;
+bool&#32;Parse(InputStream&amp;&#32;is,&#32;Handler&amp;&#32;handler);
+
+//&#32;使用&#32;parseFlags&#32;=&#32;kDefaultParseFlags
+template&#32;&lt;typename&#32;InputStream,&#32;typename&#32;Handler&gt;
+bool&#32;Parse(InputStream&amp;&#32;is,&#32;Handler&amp;&#32;handler);
+</computeroutput></literallayout></para>
+
+<para>若在解析中出现错误，它会返回 <computeroutput>false</computeroutput>。使用者可调用 <computeroutput>bool HasParseEror()</computeroutput>, <computeroutput>ParseErrorCode GetParseErrorCode()</computeroutput> 及 <computeroutput>size_t GetErrorOffset()</computeroutput> 获取错误状态。实际上 <computeroutput>Document</computeroutput> 使用这些 <computeroutput>Reader</computeroutput> 函数去获取解析错误。请参考 <link linkend="_dom_8zh-cn_8md">DOM</link> 去了解有关解析错误的细节。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1Writer">
+<title>Writer</title>
+
+<para><computeroutput>Reader</computeroutput> 把 JSON 转换（解析）成为事件。<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 做完全相反的事情。它把事件转换成 JSON。</para>
+
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 是非常容易使用的。若你的应用程序只需把一些数据转换成 JSON，可能直接使用 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>，会比建立一个 <computeroutput>Document</computeroutput> 然后用 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 把它转换成 JSON 更加方便。</para>
+
+<para>在 <computeroutput>simplewriter</computeroutput> 例子里，我们做 <computeroutput>simplereader</computeroutput> 完全相反的事情。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/writer.h&quot;
+#include&#32;&quot;rapidjson/stringbuffer.h&quot;
+#include&#32;&lt;iostream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+void&#32;main()&#32;{
+&#32;&#32;&#32;&#32;StringBuffer&#32;s;
+&#32;&#32;&#32;&#32;Writer&lt;StringBuffer&gt;&#32;writer(s);
+&#32;&#32;&#32;&#32;
+&#32;&#32;&#32;&#32;writer.StartObject();
+&#32;&#32;&#32;&#32;writer.Key(&quot;hello&quot;);
+&#32;&#32;&#32;&#32;writer.String(&quot;world&quot;);
+&#32;&#32;&#32;&#32;writer.Key(&quot;t&quot;);
+&#32;&#32;&#32;&#32;writer.Bool(true);
+&#32;&#32;&#32;&#32;writer.Key(&quot;f&quot;);
+&#32;&#32;&#32;&#32;writer.Bool(false);
+&#32;&#32;&#32;&#32;writer.Key(&quot;n&quot;);
+&#32;&#32;&#32;&#32;writer.Null();
+&#32;&#32;&#32;&#32;writer.Key(&quot;i&quot;);
+&#32;&#32;&#32;&#32;writer.Uint(123);
+&#32;&#32;&#32;&#32;writer.Key(&quot;pi&quot;);
+&#32;&#32;&#32;&#32;writer.Double(3.1416);
+&#32;&#32;&#32;&#32;writer.Key(&quot;a&quot;);
+&#32;&#32;&#32;&#32;writer.StartArray();
+&#32;&#32;&#32;&#32;for&#32;(unsigned&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;4;&#32;i++)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;writer.Uint(i);
+&#32;&#32;&#32;&#32;writer.EndArray();
+&#32;&#32;&#32;&#32;writer.EndObject();
+
+&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;s.GetString()&#32;&lt;&lt;&#32;endl;
+}
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>{&quot;hello&quot;:&quot;world&quot;,&quot;t&quot;:true,&quot;f&quot;:false,&quot;n&quot;:null,&quot;i&quot;:123,&quot;pi&quot;:3.1416,&quot;a&quot;:[0,1,2,3]}
+</computeroutput></literallayout></para>
+
+<para><computeroutput>String()</computeroutput> 及 <computeroutput>Key()</computeroutput> 各有两个重载。一个是如处理器 concept 般，有 3 个参数。它能处理含空字符的字符串。另一个是如上中使用的较简单版本。</para>
+
+<para>注意到，例子代码中的 <computeroutput>EndArray()</computeroutput> 及 <computeroutput>EndObject()</computeroutput> 并没有参数。可以传递一个 <computeroutput>SizeType</computeroutput> 的参数，但它会被 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 忽略。</para>
+
+<para>你可能会怀疑，为什么不使用 <computeroutput>sprintf()</computeroutput> 或 <computeroutput>std::stringstream</computeroutput> 去建立一个 JSON？</para>
+
+<para>这有几个原因：<orderedlist>
+<listitem>
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 必然会输出一个结构良好（well-formed）的 JSON。若然有错误的事件次序（如 <computeroutput>Int()</computeroutput> 紧随 <computeroutput>StartObject()</computeroutput> 出现），它会在调试模式中产生断言失败。</para>
+</listitem><listitem>
+<para><computeroutput><link linkend="_class_writer_1a8b4dc44f471403a83c9959575796ceab">Writer::String()</link></computeroutput> 可处理字符串转义（如把码点 <computeroutput>U+000A</computeroutput> 转换成 <computeroutput>\n</computeroutput>）及进行 Unicode 转码。</para>
+</listitem><listitem>
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 一致地处理 number 的输出。</para>
+</listitem><listitem>
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 实现了事件处理器 concept。可用于处理来自 <computeroutput>Reader</computeroutput>、<computeroutput>Document</computeroutput> 或其他事件发生器。</para>
+</listitem><listitem>
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 可对不同平台进行优化。</para>
+</listitem></orderedlist>
+</para>
+
+<para>无论如何，使用 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> API 去生成 JSON 甚至乎比这些临时方法更简单。</para>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1WriterTemplate">
+<title>Template</title>
+
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 与 <computeroutput>Reader</computeroutput> 有少许设计区别。<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 是一个模板类，而不是一个 typedef。 并没有 <computeroutput>GenericWriter</computeroutput>。以下是 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 的声明。</para>
+
+<para><literallayout><computeroutput>namespace&#32;rapidjson&#32;{
+
+template&lt;typename&#32;OutputStream,&#32;typename&#32;SourceEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;typename&#32;TargetEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;typename&#32;Allocator&#32;=&#32;CrtAllocator&lt;&gt;&#32;&gt;
+class&#32;Writer&#32;{
+public:
+&#32;&#32;&#32;&#32;Writer(OutputStream&amp;&#32;os,&#32;Allocator*&#32;allocator&#32;=&#32;0,&#32;size_t&#32;levelDepth&#32;=&#32;kDefaultLevelDepth)
+//&#32;...
+};
+
+}&#32;//&#32;namespace&#32;rapidjson
+</computeroutput></literallayout></para>
+
+<para><computeroutput>OutputStream</computeroutput> 模板参数是输出流的类型。它的类型不可以被自动推断，必须由使用者提供。</para>
+
+<para><computeroutput>SourceEncoding</computeroutput> 模板参数指定了 <computeroutput>String(const Ch*, ...)</computeroutput> 的编码。</para>
+
+<para><computeroutput>TargetEncoding</computeroutput> 模板参数指定输出流的编码。</para>
+
+<para><computeroutput>Allocator</computeroutput> 是分配器的类型，用于分配内部数据结构（一个堆栈）。</para>
+
+<para><computeroutput>writeFlags</computeroutput> 是以下位标志的组合：</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>写入位标志   </para>
+</entry><entry>
+<para>意义    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kWriteNoFlags</computeroutput>   </para>
+</entry><entry>
+<para>没有任何标志。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kWriteDefaultFlags</computeroutput>   </para>
+</entry><entry>
+<para>缺省的解析选项。它等于 <computeroutput>RAPIDJSON_WRITE_DEFAULT_FLAGS</computeroutput> 宏，此宏定义为 <computeroutput>kWriteNoFlags</computeroutput>。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kWriteValidateEncodingFlag</computeroutput>   </para>
+</entry><entry>
+<para>校验 JSON 字符串的编码。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kWriteNanAndInfFlag</computeroutput>   </para>
+</entry><entry>
+<para>容许写入 <computeroutput>Infinity</computeroutput>, <computeroutput>-Infinity</computeroutput> 及 <computeroutput>NaN</computeroutput>。   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>此外，<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 的构造函数有一 <computeroutput>levelDepth</computeroutput> 参数。存储每层阶信息的初始内存分配量受此参数影响。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1PrettyWriter">
+<title>PrettyWriter</title>
+
+<para><computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 所输出的是没有空格字符的最紧凑 JSON，适合网络传输或储存，但不适合人类阅读。</para>
+
+<para>因此，RapidJSON 提供了一个 <computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput>，它在输出中加入缩进及换行。</para>
+
+<para><computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput> 的用法与 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 几乎一样，不同之处是 <computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput> 提供了一个 <computeroutput>SetIndent(Ch indentChar, unsigned indentCharCount)</computeroutput> 函数。缺省的缩进是 4 个空格。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1CompletenessReset">
+<title>Completeness and Reset</title>
+
+<para>一个 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 只可输出单个 JSON，其根节点可以是任何 JSON 类型。当处理完单个根节点事件（如 <computeroutput>String()</computeroutput>），或匹配的最后 <computeroutput>EndObject()</computeroutput> 或 <computeroutput>EndArray()</computeroutput> 事件，输出的 JSON 是结构完整（well-formed）及完整的。使用者可调用 <computeroutput><link linkend="_class_writer_1a07d74d36dd3191b06e0aab678c246157">Writer::IsComplete()</link></computeroutput> 去检测完整性。</para>
+
+<para>当 JSON 完整时，<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 不能再接受新的事件。不然其输出便会是不合法的（例如有超过一个根节点）。为了重新利用 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 对象，使用者可调用 <computeroutput><link linkend="_class_writer_1a8b53e8f137f7fcf694f5500711b3f58d">Writer::Reset(OutputStream&amp; os)</link></computeroutput> 去重置其所有内部状态及设置新的输出流。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1SaxTechniques">
+<title>Techniques</title>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1CustomDataStructure">
+<title>Parsing JSON to Custom Data Structure</title>
+
+<para><computeroutput>Document</computeroutput> 的解析功能完全依靠 <computeroutput>Reader</computeroutput>。实际上 <computeroutput>Document</computeroutput> 是一个处理器，在解析 JSON 时接收事件去建立一个 DOM。</para>
+
+<para>使用者可以直接使用 <computeroutput>Reader</computeroutput> 去建立其他数据结构。这消除了建立 DOM 的步骤，从而减少了内存开销并改善性能。</para>
+
+<para>在以下的 <computeroutput>messagereader</computeroutput> 例子中，<computeroutput>ParseMessages()</computeroutput> 解析一个 JSON，该 JSON 应该是一个含键值对的 object。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/reader.h&quot;
+#include&#32;&quot;rapidjson/error/en.h&quot;
+#include&#32;&lt;iostream&gt;
+#include&#32;&lt;string&gt;
+#include&#32;&lt;map&gt;
+
+using&#32;namespace&#32;std;
+using&#32;namespace&#32;rapidjson;
+
+typedef&#32;map&lt;string,&#32;string&gt;&#32;MessageMap;
+
+struct&#32;MessageHandler
+&#32;&#32;&#32;&#32;:&#32;public&#32;BaseReaderHandler&lt;UTF8&lt;&gt;,&#32;MessageHandler&gt;&#32;{
+&#32;&#32;&#32;&#32;MessageHandler()&#32;:&#32;state_(kExpectObjectStart)&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;bool&#32;StartObject()&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;switch&#32;(state_)&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;case&#32;kExpectObjectStart:
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state_&#32;=&#32;kExpectNameOrObjectEnd;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;true;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;default:
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;false;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;bool&#32;String(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool)&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;switch&#32;(state_)&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;case&#32;kExpectNameOrObjectEnd:
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;name_&#32;=&#32;string(str,&#32;length);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state_&#32;=&#32;kExpectValue;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;true;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;case&#32;kExpectValue:
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;messages_.insert(MessageMap::value_type(name_,&#32;string(str,&#32;length)));
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state_&#32;=&#32;kExpectNameOrObjectEnd;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;true;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;default:
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;false;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;bool&#32;EndObject(SizeType)&#32;{&#32;return&#32;state_&#32;==&#32;kExpectNameOrObjectEnd;&#32;}
+
+&#32;&#32;&#32;&#32;bool&#32;Default()&#32;{&#32;return&#32;false;&#32;}&#32;//&#32;All&#32;other&#32;events&#32;are&#32;invalid.
+
+&#32;&#32;&#32;&#32;MessageMap&#32;messages_;
+&#32;&#32;&#32;&#32;enum&#32;State&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kExpectObjectStart,
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kExpectNameOrObjectEnd,
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kExpectValue,
+&#32;&#32;&#32;&#32;}state_;
+&#32;&#32;&#32;&#32;std::string&#32;name_;
+};
+
+void&#32;ParseMessages(const&#32;char*&#32;json,&#32;MessageMap&amp;&#32;messages)&#32;{
+&#32;&#32;&#32;&#32;Reader&#32;reader;
+&#32;&#32;&#32;&#32;MessageHandler&#32;handler;
+&#32;&#32;&#32;&#32;StringStream&#32;ss(json);
+&#32;&#32;&#32;&#32;if&#32;(reader.Parse(ss,&#32;handler))
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;messages.swap(handler.messages_);&#32;&#32;&#32;//&#32;Only&#32;change&#32;it&#32;if&#32;success.
+&#32;&#32;&#32;&#32;else&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ParseErrorCode&#32;e&#32;=&#32;reader.GetParseErrorCode();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;size_t&#32;o&#32;=&#32;reader.GetErrorOffset();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;&quot;Error:&#32;&quot;&#32;&lt;&lt;&#32;GetParseError_En(e)&#32;&lt;&lt;&#32;endl;;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;&quot;&#32;at&#32;offset&#32;&quot;&#32;&lt;&lt;&#32;o&#32;&lt;&lt;&#32;&quot;&#32;near&#32;&apos;&quot;&#32;&lt;&lt;&#32;string(json).substr(o,&#32;10)&#32;&lt;&lt;&#32;&quot;...&apos;&quot;&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;}
+}
+
+int&#32;main()&#32;{
+&#32;&#32;&#32;&#32;MessageMap&#32;messages;
+
+&#32;&#32;&#32;&#32;const&#32;char*&#32;json1&#32;=&#32;&quot;{&#32;\&quot;greeting\&quot;&#32;:&#32;\&quot;Hello!\&quot;,&#32;\&quot;farewell\&quot;&#32;:&#32;\&quot;bye-bye!\&quot;&#32;}&quot;;
+&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;json1&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;ParseMessages(json1,&#32;messages);
+
+&#32;&#32;&#32;&#32;for&#32;(MessageMap::const_iterator&#32;itr&#32;=&#32;messages.begin();&#32;itr&#32;!=&#32;messages.end();&#32;++itr)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;itr-&gt;first&#32;&lt;&lt;&#32;&quot;:&#32;&quot;&#32;&lt;&lt;&#32;itr-&gt;second&#32;&lt;&lt;&#32;endl;
+
+&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;endl&#32;&lt;&lt;&#32;&quot;Parse&#32;a&#32;JSON&#32;with&#32;invalid&#32;schema.&quot;&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;const&#32;char*&#32;json2&#32;=&#32;&quot;{&#32;\&quot;greeting\&quot;&#32;:&#32;\&quot;Hello!\&quot;,&#32;\&quot;farewell\&quot;&#32;:&#32;\&quot;bye-bye!\&quot;,&#32;\&quot;foo\&quot;&#32;:&#32;{}&#32;}&quot;;
+&#32;&#32;&#32;&#32;cout&#32;&lt;&lt;&#32;json2&#32;&lt;&lt;&#32;endl;
+&#32;&#32;&#32;&#32;ParseMessages(json2,&#32;messages);
+
+&#32;&#32;&#32;&#32;return&#32;0;
+}
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>{&#32;&quot;greeting&quot;&#32;:&#32;&quot;Hello!&quot;,&#32;&quot;farewell&quot;&#32;:&#32;&quot;bye-bye!&quot;&#32;}
+farewell:&#32;bye-bye!
+greeting:&#32;Hello!
+
+Parse&#32;a&#32;JSON&#32;with&#32;invalid&#32;schema.
+{&#32;&quot;greeting&quot;&#32;:&#32;&quot;Hello!&quot;,&#32;&quot;farewell&quot;&#32;:&#32;&quot;bye-bye!&quot;,&#32;&quot;foo&quot;&#32;:&#32;{}&#32;}
+Error:&#32;Terminate&#32;parsing&#32;due&#32;to&#32;Handler&#32;error.
+&#32;at&#32;offset&#32;59&#32;near&#32;&apos;}&#32;}...&apos;
+</computeroutput></literallayout></para>
+
+<para>第一个 JSON（<computeroutput>json1</computeroutput>）被成功地解析至 <computeroutput>MessageMap</computeroutput>。由于 <computeroutput>MessageMap</computeroutput> 是一个 <computeroutput>std::map</computeroutput>，打印次序按键值排序。此次序与 JSON 中的次序不同。</para>
+
+<para>在第二个 JSON（<computeroutput>json2</computeroutput>）中，<computeroutput>foo</computeroutput> 的值是一个空 object。由于它是一个 object，<computeroutput><link linkend="_struct_message_handler_1a3d7e691831748287252e10ced02061f5">MessageHandler::StartObject()</link></computeroutput> 会被调用。然而，在 <computeroutput>state_ = kExpectValue</computeroutput> 的情况下，该函数会返回 <computeroutput>false</computeroutput>，并导致解析过程终止。错误代码是 <computeroutput>kParseErrorTermination</computeroutput>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_sax_zh_cn_1Filtering">
+<title>Filtering of JSON</title>
+
+<para>如前面提及过，<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 可处理 <computeroutput>Reader</computeroutput> 发出的事件。<computeroutput><link linkend="_condense_8cpp">example/condense/condense.cpp</link></computeroutput> 例子简单地设置 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 作为一个 <computeroutput>Reader</computeroutput> 的处理器，因此它能移除 JSON 中的所有空白字符。<computeroutput><link linkend="_pretty_8cpp">example/pretty/pretty.cpp</link></computeroutput> 例子使用同样的关系，只是以 <computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput> 取代 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>。因此 <computeroutput>pretty</computeroutput> 能够重新格式化 JSON，加入缩进及换行。</para>
+
+<para>实际上，我们可以使用 SAX 风格 API 去加入（多个）中间层去过滤 JSON 的内容。例如 <computeroutput>capitalize</computeroutput> 例子可以把所有 JSON string 改为大写。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/reader.h&quot;
+#include&#32;&quot;rapidjson/writer.h&quot;
+#include&#32;&quot;rapidjson/filereadstream.h&quot;
+#include&#32;&quot;rapidjson/filewritestream.h&quot;
+#include&#32;&quot;rapidjson/error/en.h&quot;
+#include&#32;&lt;vector&gt;
+#include&#32;&lt;cctype&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+template&lt;typename&#32;OutputHandler&gt;
+struct&#32;CapitalizeFilter&#32;{
+&#32;&#32;&#32;&#32;CapitalizeFilter(OutputHandler&amp;&#32;out)&#32;:&#32;out_(out),&#32;buffer_()&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;bool&#32;Null()&#32;{&#32;return&#32;out_.Null();&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Bool(bool&#32;b)&#32;{&#32;return&#32;out_.Bool(b);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Int(int&#32;i)&#32;{&#32;return&#32;out_.Int(i);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Uint(unsigned&#32;u)&#32;{&#32;return&#32;out_.Uint(u);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Int64(int64_t&#32;i)&#32;{&#32;return&#32;out_.Int64(i);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Uint64(uint64_t&#32;u)&#32;{&#32;return&#32;out_.Uint64(u);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Double(double&#32;d)&#32;{&#32;return&#32;out_.Double(d);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;RawNumber(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy)&#32;{&#32;return&#32;out_.RawNumber(str,&#32;length,&#32;copy);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;String(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool)&#32;{&#32;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer_.clear();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;for&#32;(SizeType&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;length;&#32;i++)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer_.push_back(std::toupper(str[i]));
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;out_.String(&amp;buffer_.front(),&#32;length,&#32;true);&#32;//&#32;true&#32;=&#32;output&#32;handler&#32;need&#32;to&#32;copy&#32;the&#32;string
+&#32;&#32;&#32;&#32;}
+&#32;&#32;&#32;&#32;bool&#32;StartObject()&#32;{&#32;return&#32;out_.StartObject();&#32;}
+&#32;&#32;&#32;&#32;bool&#32;Key(const&#32;char*&#32;str,&#32;SizeType&#32;length,&#32;bool&#32;copy)&#32;{&#32;return&#32;String(str,&#32;length,&#32;copy);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;EndObject(SizeType&#32;memberCount)&#32;{&#32;return&#32;out_.EndObject(memberCount);&#32;}
+&#32;&#32;&#32;&#32;bool&#32;StartArray()&#32;{&#32;return&#32;out_.StartArray();&#32;}
+&#32;&#32;&#32;&#32;bool&#32;EndArray(SizeType&#32;elementCount)&#32;{&#32;return&#32;out_.EndArray(elementCount);&#32;}
+
+&#32;&#32;&#32;&#32;OutputHandler&amp;&#32;out_;
+&#32;&#32;&#32;&#32;std::vector&lt;char&gt;&#32;buffer_;
+};
+
+int&#32;main(int,&#32;char*[])&#32;{
+&#32;&#32;&#32;&#32;//&#32;Prepare&#32;JSON&#32;reader&#32;and&#32;input&#32;stream.
+&#32;&#32;&#32;&#32;Reader&#32;reader;
+&#32;&#32;&#32;&#32;char&#32;readBuffer[65536];
+&#32;&#32;&#32;&#32;FileReadStream&#32;is(stdin,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+&#32;&#32;&#32;&#32;//&#32;Prepare&#32;JSON&#32;writer&#32;and&#32;output&#32;stream.
+&#32;&#32;&#32;&#32;char&#32;writeBuffer[65536];
+&#32;&#32;&#32;&#32;FileWriteStream&#32;os(stdout,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+&#32;&#32;&#32;&#32;Writer&lt;FileWriteStream&gt;&#32;writer(os);
+
+&#32;&#32;&#32;&#32;//&#32;JSON&#32;reader&#32;parse&#32;from&#32;the&#32;input&#32;stream&#32;and&#32;let&#32;writer&#32;generate&#32;the&#32;output.
+&#32;&#32;&#32;&#32;CapitalizeFilter&lt;Writer&lt;FileWriteStream&gt;&#32;&gt;&#32;filter(writer);
+&#32;&#32;&#32;&#32;if&#32;(!reader.Parse(is,&#32;filter))&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fprintf(stderr,&#32;&quot;\nError(%u):&#32;%s\n&quot;,&#32;(unsigned)reader.GetErrorOffset(),&#32;GetParseError_En(reader.GetParseErrorCode()));
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;1;
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;return&#32;0;
+}
+</computeroutput></literallayout></para>
+
+<para>注意到，不可简单地把 JSON 当作字符串去改为大写。例如： <literallayout><computeroutput>[&quot;Hello\nWorld&quot;]
+</computeroutput></literallayout></para>
+
+<para>简单地把整个 JSON 转为大写的话会产生错误的转义符： <literallayout><computeroutput>[&quot;HELLO\NWORLD&quot;]
+</computeroutput></literallayout></para>
+
+<para>而 <computeroutput>capitalize</computeroutput> 就会产生正确的结果： <literallayout><computeroutput>[&quot;HELLO\nWORLD&quot;]
+</computeroutput></literallayout></para>
+
+<para>我们还可以开发更复杂的过滤器。然而，由于 SAX 风格 API 在某一时间点只能提供单一事件的信息，使用者需要自行记录一些上下文信息（例如从根节点起的路径、储存其他相关值）。对于处理某些情况，用 DOM 会比 SAX 更容易实现。 </para>
+</section>
+</section>
+</section>

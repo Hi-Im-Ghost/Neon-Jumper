@@ -1,0 +1,118 @@
+\hypertarget{stringbuffer_8h_source}{}\doxysection{stringbuffer.\+h}
+\label{stringbuffer_8h_source}\index{src/rapidjson/include/rapidjson/stringbuffer.h@{src/rapidjson/include/rapidjson/stringbuffer.h}}
+\mbox{\hyperlink{stringbuffer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_STRINGBUFFER\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_STRINGBUFFER\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stream_8h}{stream.h}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stack_8h}{internal/stack.h}}"{}}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include <utility>} \textcolor{comment}{// std::move}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stack_8h}{internal/stack.h}}"{}}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{28 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{29 RAPIDJSON\_DIAG\_OFF(c++98-\/compat)}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{35 }
+\DoxyCodeLine{40 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Encoding, \textcolor{keyword}{typename} Allocator = CrtAllocator>}
+\DoxyCodeLine{41 \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}} \{}
+\DoxyCodeLine{42 \textcolor{keyword}{public}:}
+\DoxyCodeLine{43     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} Encoding::Ch \mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}};}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45     \mbox{\hyperlink{class_generic_string_buffer_a62f5ea1a53a2a3f98088f8c152b6183e}{GenericStringBuffer}}(\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0, \textcolor{keywordtype}{size\_t} capacity = \mbox{\hyperlink{class_generic_string_buffer_ae74f9df854dd5a7db4315ef44b016d22}{kDefaultCapacity}}) : \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}(allocator, capacity) \{\}}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{48     \mbox{\hyperlink{class_generic_string_buffer_a62f5ea1a53a2a3f98088f8c152b6183e}{GenericStringBuffer}}(\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\&\& rhs) : \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}(std::move(rhs.\mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}})) \{\}}
+\DoxyCodeLine{49     \mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\& operator=(\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\&\& rhs) \{}
+\DoxyCodeLine{50         \textcolor{keywordflow}{if} (\&rhs != \textcolor{keyword}{this})}
+\DoxyCodeLine{51             \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}} = std::move(rhs.stack\_);}
+\DoxyCodeLine{52         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{53     \}}
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a8be5c8fadccacdcf40e20220f38e0afa}{Put}}(\mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}} c) \{ *\mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Push<Ch>() = c; \}}
+\DoxyCodeLine{57     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a9225468d11fdddfc3a9a4e48bf4d3ba4}{PutUnsafe}}(\mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}} c) \{ *\mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template PushUnsafe<Ch>() = c; \}}
+\DoxyCodeLine{58     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a28bb539487db17b07314a532f3b8847c}{Flush}}() \{\}}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a42f15c959046d899cb74c3120a6995f9}{Clear}}() \{ \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.Clear(); \}}
+\DoxyCodeLine{61     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a0dbdb77489b95923795011a24f705be5}{ShrinkToFit}}() \{}
+\DoxyCodeLine{62         \textcolor{comment}{// Push and pop a null terminator. This is safe.}}
+\DoxyCodeLine{63         *\mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Push<Ch>() = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{64         \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.ShrinkToFit();}
+\DoxyCodeLine{65         \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Pop<Ch>(1);}
+\DoxyCodeLine{66     \}}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a4d6becae201b98c122746298882a318f}{Reserve}}(\textcolor{keywordtype}{size\_t} count) \{ \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Reserve<Ch>(count); \}}
+\DoxyCodeLine{69     \mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}}* \mbox{\hyperlink{class_generic_string_buffer_a80af78c43da93126a940a40d1889278a}{Push}}(\textcolor{keywordtype}{size\_t} count) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Push<Ch>(count); \}}
+\DoxyCodeLine{70     \mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}}* \mbox{\hyperlink{class_generic_string_buffer_a67bbdeb1f0f7c539f85ca36857a62ca3}{PushUnsafe}}(\textcolor{keywordtype}{size\_t} count) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template PushUnsafe<Ch>(count); \}}
+\DoxyCodeLine{71     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_string_buffer_a0038e53ba03c271bc4cbbac403ec4de4}{Pop}}(\textcolor{keywordtype}{size\_t} count) \{ \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Pop<Ch>(count); \}}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{73     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}}* \mbox{\hyperlink{class_generic_string_buffer_a42079865bab1deb930c6cff7d491c719}{GetString}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{74         \textcolor{comment}{// Push and pop a null terminator. This is safe.}}
+\DoxyCodeLine{75         *\mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Push<Ch>() = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{76         \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Pop<Ch>(1);}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.template Bottom<Ch>();}
+\DoxyCodeLine{79     \}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{82     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_string_buffer_a725e862b9a78375f5363b0b61ad789f3}{GetSize}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.GetSize(); \}}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{85     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_string_buffer_ad324b8154be3354dda3aa4a0a7361499}{GetLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}}.GetSize() / \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_string_buffer_a735b75db076ffe86d0d294be49655d46}{Ch}}); \}}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_string_buffer_ae74f9df854dd5a7db4315ef44b016d22}{kDefaultCapacity}} = 256;}
+\DoxyCodeLine{88     \textcolor{keyword}{mutable} \mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<Allocator>}} \mbox{\hyperlink{class_generic_string_buffer_aaef716643febb9de5957dbf8ff904409}{stack\_}};}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90 \textcolor{keyword}{private}:}
+\DoxyCodeLine{91     \textcolor{comment}{// Prohibit copy constructor \& assignment operator.}}
+\DoxyCodeLine{92     \mbox{\hyperlink{class_generic_string_buffer_a62f5ea1a53a2a3f98088f8c152b6183e}{GenericStringBuffer}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\&);}
+\DoxyCodeLine{93     \mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}\&);}
+\DoxyCodeLine{94 \};}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{97 \textcolor{keyword}{typedef} \mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer<UTF8<>}} > \mbox{\hyperlink{stringbuffer_8h_a88f2d61781c8daefde48a81bdeac6ecd}{StringBuffer}};}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Encoding, \textcolor{keyword}{typename} Allocator>}
+\DoxyCodeLine{100 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stringbuffer_8h_a76f1b69abd71a248a55c8a55792dfd69}{PutReserve}}(\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer<Encoding, Allocator>}}\& stream, \textcolor{keywordtype}{size\_t} count) \{}
+\DoxyCodeLine{101     stream.\mbox{\hyperlink{class_generic_string_buffer_a4d6becae201b98c122746298882a318f}{Reserve}}(count);}
+\DoxyCodeLine{102 \}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Encoding, \textcolor{keyword}{typename} Allocator>}
+\DoxyCodeLine{105 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stringbuffer_8h_a2ff92a4ec7c5995738cfaf39fe99f31a}{PutUnsafe}}(\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer<Encoding, Allocator>}}\& stream, \textcolor{keyword}{typename} Encoding::Ch c) \{}
+\DoxyCodeLine{106     stream.\mbox{\hyperlink{class_generic_string_buffer_a9225468d11fdddfc3a9a4e48bf4d3ba4}{PutUnsafe}}(c);}
+\DoxyCodeLine{107 \}}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{110 \textcolor{keyword}{template}<>}
+\DoxyCodeLine{111 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stringbuffer_8h_a4bcf83273503d7b834ec530e84914f8c}{PutN}}(\mbox{\hyperlink{class_generic_string_buffer}{GenericStringBuffer}}<\mbox{\hyperlink{struct_u_t_f8}{UTF8<>}} >\& stream, \textcolor{keywordtype}{char} c, \textcolor{keywordtype}{size\_t} n) \{}
+\DoxyCodeLine{112     std::memset(stream.stack\_.Push<\textcolor{keywordtype}{char}>(n), c, n * \textcolor{keyword}{sizeof}(c));}
+\DoxyCodeLine{113 \}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{118 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{119 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STRINGBUFFER\_H\_}}
+
+\end{DoxyCode}

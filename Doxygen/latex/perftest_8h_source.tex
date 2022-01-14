@@ -1,0 +1,190 @@
+\hypertarget{perftest_8h_source}{}\doxysection{perftest.\+h}
+\label{perftest_8h_source}\index{src/rapidjson/test/perftest/perftest.h@{src/rapidjson/test/perftest/perftest.h}}
+\mbox{\hyperlink{perftest_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef PERFTEST\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define PERFTEST\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#define TEST\_RAPIDJSON  1}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#define TEST\_PLATFORM   0}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define TEST\_MISC       0}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#define TEST\_VERSION\_CODE(x,y,z) \(\backslash\)}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{  (((x)*100000) + ((y)*100) + (z))}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{comment}{// \_\_SSE2\_\_ and \_\_SSE4\_2\_\_ are recognized by gcc, clang, and the Intel compiler.}}
+\DoxyCodeLine{26 \textcolor{comment}{// We use -\/march=native with gmake to enable -\/msse2 and -\/msse4.2, if supported.}}
+\DoxyCodeLine{27 \textcolor{comment}{// Likewise, \_\_ARM\_NEON is used to detect Neon.}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#if defined(\_\_SSE4\_2\_\_)}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#  define RAPIDJSON\_SSE42}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#elif defined(\_\_SSE2\_\_)}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#  define RAPIDJSON\_SSE2}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#elif defined(\_\_ARM\_NEON)}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#  define RAPIDJSON\_NEON}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_STDSTRING 1}}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{39 \textcolor{comment}{// Google Test}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#ifdef \_\_cplusplus}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{comment}{// gtest indirectly included inttypes.h, without \_\_STDC\_CONSTANT\_MACROS.}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#ifndef \_\_STDC\_CONSTANT\_MACROS}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#  define \_\_STDC\_CONSTANT\_MACROS 1 }\textcolor{comment}{// required by C++ standard}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || defined(\_\_GNUC\_\_) \&\& (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 2))}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6))}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#pragma GCC diagnostic push}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#pragma GCC diagnostic ignored "{}-\/Weffc++"{}}}
+\DoxyCodeLine{53 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 \textcolor{preprocessor}{\#include "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || defined(\_\_GNUC\_\_) \&\& (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6))}}
+\DoxyCodeLine{58 \textcolor{preprocessor}{\#pragma GCC diagnostic pop}}
+\DoxyCodeLine{59 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 \textcolor{preprocessor}{\#ifdef \_MSC\_VER}}
+\DoxyCodeLine{62 \textcolor{preprocessor}{\#define \_CRTDBG\_MAP\_ALLOC}}
+\DoxyCodeLine{63 \textcolor{preprocessor}{\#include <crtdbg.h>}}
+\DoxyCodeLine{64 \textcolor{preprocessor}{\#pragma warning(disable : 4996) }\textcolor{comment}{// 'function': was declared deprecated}}
+\DoxyCodeLine{65 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{68 \textcolor{keyword}{class }PerfTest : \textcolor{keyword}{public} ::testing::Test \{}
+\DoxyCodeLine{69 \textcolor{keyword}{public}:}
+\DoxyCodeLine{70     PerfTest() : filename\_(), json\_(), length\_(), whitespace\_(), whitespace\_length\_() \{\}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} SetUp() \{}
+\DoxyCodeLine{73         \{}
+\DoxyCodeLine{74             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *paths[] = \{}
+\DoxyCodeLine{75                 \textcolor{stringliteral}{"{}data/sample.json"{}},}
+\DoxyCodeLine{76                 \textcolor{stringliteral}{"{}bin/data/sample.json"{}},}
+\DoxyCodeLine{77                 \textcolor{stringliteral}{"{}../bin/data/sample.json"{}},}
+\DoxyCodeLine{78                 \textcolor{stringliteral}{"{}../../bin/data/sample.json"{}},}
+\DoxyCodeLine{79                 \textcolor{stringliteral}{"{}../../../bin/data/sample.json"{}}}
+\DoxyCodeLine{80             \};}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82             FILE *fp = 0;}
+\DoxyCodeLine{83             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < \textcolor{keyword}{sizeof}(paths) / \textcolor{keyword}{sizeof}(paths[0]); i++) \{}
+\DoxyCodeLine{84                 fp = fopen(filename\_ = paths[i], \textcolor{stringliteral}{"{}rb"{}});}
+\DoxyCodeLine{85                 \textcolor{keywordflow}{if} (fp)}
+\DoxyCodeLine{86                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{87             \}}
+\DoxyCodeLine{88             ASSERT\_TRUE(fp != 0);}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90             fseek(fp, 0, SEEK\_END);}
+\DoxyCodeLine{91             length\_ = (size\_t)ftell(fp);}
+\DoxyCodeLine{92             fseek(fp, 0, SEEK\_SET);}
+\DoxyCodeLine{93             json\_ = (\textcolor{keywordtype}{char}*)malloc(length\_ + 1);}
+\DoxyCodeLine{94             ASSERT\_EQ(length\_, fread(json\_, 1, length\_, fp));}
+\DoxyCodeLine{95             json\_[length\_] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{96             fclose(fp);}
+\DoxyCodeLine{97         \}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99         \textcolor{comment}{// whitespace test}}
+\DoxyCodeLine{100         \{}
+\DoxyCodeLine{101             whitespace\_length\_ = 1024 * 1024;}
+\DoxyCodeLine{102             whitespace\_ = (\textcolor{keywordtype}{char} *)malloc(whitespace\_length\_  + 4);}
+\DoxyCodeLine{103             \textcolor{keywordtype}{char} *p = whitespace\_;}
+\DoxyCodeLine{104             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < whitespace\_length\_; i += 4) \{}
+\DoxyCodeLine{105                 *p++ = \textcolor{charliteral}{' '};}
+\DoxyCodeLine{106                 *p++ = \textcolor{charliteral}{'\(\backslash\)n'};}
+\DoxyCodeLine{107                 *p++ = \textcolor{charliteral}{'\(\backslash\)r'};}
+\DoxyCodeLine{108                 *p++ = \textcolor{charliteral}{'\(\backslash\)t'};}
+\DoxyCodeLine{109             \}}
+\DoxyCodeLine{110             *p++ = \textcolor{charliteral}{'['};}
+\DoxyCodeLine{111             *p++ = \textcolor{charliteral}{'0'};}
+\DoxyCodeLine{112             *p++ = \textcolor{charliteral}{']'};}
+\DoxyCodeLine{113             *p++ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{114         \}}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116         \textcolor{comment}{// types test}}
+\DoxyCodeLine{117         \{}
+\DoxyCodeLine{118             \textcolor{keyword}{const} \textcolor{keywordtype}{char} *typespaths[] = \{}
+\DoxyCodeLine{119                 \textcolor{stringliteral}{"{}data/types"{}},}
+\DoxyCodeLine{120                 \textcolor{stringliteral}{"{}bin/types"{}},}
+\DoxyCodeLine{121                 \textcolor{stringliteral}{"{}../bin/types"{}},}
+\DoxyCodeLine{122                 \textcolor{stringliteral}{"{}../../bin/types/"{}},}
+\DoxyCodeLine{123                 \textcolor{stringliteral}{"{}../../../bin/types"{}}}
+\DoxyCodeLine{124             \};}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126             \textcolor{keyword}{const} \textcolor{keywordtype}{char}* typesfilenames[] = \{}
+\DoxyCodeLine{127                 \textcolor{stringliteral}{"{}booleans.json"{}},}
+\DoxyCodeLine{128                 \textcolor{stringliteral}{"{}floats.json"{}},}
+\DoxyCodeLine{129                 \textcolor{stringliteral}{"{}guids.json"{}},}
+\DoxyCodeLine{130                 \textcolor{stringliteral}{"{}integers.json"{}},}
+\DoxyCodeLine{131                 \textcolor{stringliteral}{"{}mixed.json"{}},}
+\DoxyCodeLine{132                 \textcolor{stringliteral}{"{}nulls.json"{}},}
+\DoxyCodeLine{133                 \textcolor{stringliteral}{"{}paragraphs.json"{}},}
+\DoxyCodeLine{134                 \textcolor{stringliteral}{"{}alotofkeys.json"{}}}
+\DoxyCodeLine{135             \};}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < \textcolor{keyword}{sizeof}(typesfilenames) / \textcolor{keyword}{sizeof}(typesfilenames[0]); j++) \{}
+\DoxyCodeLine{138                 types\_[j] = 0;}
+\DoxyCodeLine{139                 \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < \textcolor{keyword}{sizeof}(typespaths) / \textcolor{keyword}{sizeof}(typespaths[0]); i++) \{}
+\DoxyCodeLine{140                     \textcolor{keywordtype}{char} filename[256];}
+\DoxyCodeLine{141                     sprintf(filename, \textcolor{stringliteral}{"{}\%s/\%s"{}}, typespaths[i], typesfilenames[j]);}
+\DoxyCodeLine{142                     \textcolor{keywordflow}{if} (FILE* fp = fopen(filename, \textcolor{stringliteral}{"{}rb"{}})) \{}
+\DoxyCodeLine{143                         fseek(fp, 0, SEEK\_END);}
+\DoxyCodeLine{144                         typesLength\_[j] = (size\_t)ftell(fp);}
+\DoxyCodeLine{145                         fseek(fp, 0, SEEK\_SET);}
+\DoxyCodeLine{146                         types\_[j] = (\textcolor{keywordtype}{char}*)malloc(typesLength\_[j] + 1);}
+\DoxyCodeLine{147                         ASSERT\_EQ(typesLength\_[j], fread(types\_[j], 1, typesLength\_[j], fp));}
+\DoxyCodeLine{148                         types\_[j][typesLength\_[j]] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{149                         fclose(fp);}
+\DoxyCodeLine{150                         \textcolor{keywordflow}{break};}
+\DoxyCodeLine{151                     \}}
+\DoxyCodeLine{152                 \}}
+\DoxyCodeLine{153             \}}
+\DoxyCodeLine{154         \}}
+\DoxyCodeLine{155     \}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} TearDown() \{}
+\DoxyCodeLine{158         free(json\_);}
+\DoxyCodeLine{159         free(whitespace\_);}
+\DoxyCodeLine{160         json\_ = 0;}
+\DoxyCodeLine{161         whitespace\_ = 0;}
+\DoxyCodeLine{162         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < 8; i++) \{}
+\DoxyCodeLine{163             free(types\_[i]);}
+\DoxyCodeLine{164             types\_[i] = 0;}
+\DoxyCodeLine{165         \}}
+\DoxyCodeLine{166     \}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168 \textcolor{keyword}{private}:}
+\DoxyCodeLine{169     PerfTest(\textcolor{keyword}{const} PerfTest\&);}
+\DoxyCodeLine{170     PerfTest\& operator=(\textcolor{keyword}{const} PerfTest\&);}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{173     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* filename\_;}
+\DoxyCodeLine{174     \textcolor{keywordtype}{char} *json\_;}
+\DoxyCodeLine{175     \textcolor{keywordtype}{size\_t} length\_;}
+\DoxyCodeLine{176     \textcolor{keywordtype}{char} *whitespace\_;}
+\DoxyCodeLine{177     \textcolor{keywordtype}{size\_t} whitespace\_length\_;}
+\DoxyCodeLine{178     \textcolor{keywordtype}{char} *types\_[8];}
+\DoxyCodeLine{179     \textcolor{keywordtype}{size\_t} typesLength\_[8];}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kTrialCount = 1000;}
+\DoxyCodeLine{182 \};}
+\DoxyCodeLine{183 }
+\DoxyCodeLine{184 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_cplusplus}}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// PERFTEST\_H\_}}
+
+\end{DoxyCode}

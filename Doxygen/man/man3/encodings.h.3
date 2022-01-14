@@ -1,0 +1,149 @@
+.TH "src/rapidjson/include/rapidjson/encodings.h" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/include/rapidjson/encodings.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'rapidjson\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBUTF8< CharType >\fP"
+.br
+.RI "UTF-8 encoding\&. "
+.ti -1c
+.RI "struct \fBUTF16< CharType >\fP"
+.br
+.RI "UTF-16 encoding\&. "
+.ti -1c
+.RI "struct \fBUTF16LE< CharType >\fP"
+.br
+.RI "UTF-16 little endian encoding\&. "
+.ti -1c
+.RI "struct \fBUTF16BE< CharType >\fP"
+.br
+.RI "UTF-16 big endian encoding\&. "
+.ti -1c
+.RI "struct \fBUTF32< CharType >\fP"
+.br
+.RI "UTF-32 encoding\&. "
+.ti -1c
+.RI "struct \fBUTF32LE< CharType >\fP"
+.br
+.RI "UTF-32 little endian enocoding\&. "
+.ti -1c
+.RI "struct \fBUTF32BE< CharType >\fP"
+.br
+.RI "UTF-32 big endian encoding\&. "
+.ti -1c
+.RI "struct \fBASCII< CharType >\fP"
+.br
+.RI "\fBASCII\fP encoding\&. "
+.ti -1c
+.RI "struct \fBAutoUTF< CharType >\fP"
+.br
+.RI "Dynamically select encoding according to stream's runtime-specified UTF encoding type\&. "
+.ti -1c
+.RI "struct \fBTranscoder< SourceEncoding, TargetEncoding >\fP"
+.br
+.RI "Encoding conversion\&. "
+.ti -1c
+.RI "struct \fBTranscoder< Encoding, Encoding >\fP"
+.br
+.RI "Specialization of \fBTranscoder\fP with same source and target encoding\&. "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_COPY\fP()   c = is\&.Take(); *codepoint = (*codepoint << 6) | (static_cast<unsigned char>(c) & 0x3Fu)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_TRANS\fP(mask)   result &= ((GetRange(static_cast<unsigned char>(c)) & mask) != 0)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_TAIL\fP()   \fBRAPIDJSON_COPY\fP(); \fBRAPIDJSON_TRANS\fP(0x70)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_COPY\fP()   os\&.Put(c = is\&.Take())"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_TRANS\fP(mask)   result &= ((GetRange(static_cast<unsigned char>(c)) & mask) != 0)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_TAIL\fP()   \fBRAPIDJSON_COPY\fP(); \fBRAPIDJSON_TRANS\fP(0x70)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_ENCODINGS_FUNC\fP(x)   \fBUTF8\fP<Ch>::x, \fBUTF16LE\fP<Ch>::x, \fBUTF16BE\fP<Ch>::x, \fBUTF32LE\fP<Ch>::x, \fBUTF32BE\fP<Ch>::x"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBUTFType\fP { \fBkUTF8\fP = 0, \fBkUTF16LE\fP = 1, \fBkUTF16BE\fP = 2, \fBkUTF32LE\fP = 3, \fBkUTF32BE\fP = 4 }"
+.br
+.RI "Runtime-specified UTF encoding type of a stream\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename \fBStream\fP > void \fBPutUnsafe\fP (\fBStream\fP &stream, typename Stream::Ch c)"
+.br
+.RI "Write character to a stream, presuming buffer is reserved\&. "
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define RAPIDJSON_COPY()   c = is\&.Take(); *codepoint = (*codepoint << 6) | (static_cast<unsigned char>(c) & 0x3Fu)"
+
+.SS "#define RAPIDJSON_COPY()   os\&.Put(c = is\&.Take())"
+
+.SS "#define RAPIDJSON_ENCODINGS_FUNC(x)   \fBUTF8\fP<Ch>::x, \fBUTF16LE\fP<Ch>::x, \fBUTF16BE\fP<Ch>::x, \fBUTF32LE\fP<Ch>::x, \fBUTF32BE\fP<Ch>::x"
+
+.SS "#define RAPIDJSON_TAIL()   \fBRAPIDJSON_COPY\fP(); \fBRAPIDJSON_TRANS\fP(0x70)"
+
+.SS "#define RAPIDJSON_TAIL()   \fBRAPIDJSON_COPY\fP(); \fBRAPIDJSON_TRANS\fP(0x70)"
+
+.SS "#define RAPIDJSON_TRANS(mask)   result &= ((GetRange(static_cast<unsigned char>(c)) & mask) != 0)"
+
+.SS "#define RAPIDJSON_TRANS(mask)   result &= ((GetRange(static_cast<unsigned char>(c)) & mask) != 0)"
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBUTFType\fP"
+
+.PP
+Runtime-specified UTF encoding type of a stream\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkUTF8 \fP\fP
+UTF-8\&. 
+.TP
+\fB\fIkUTF16LE \fP\fP
+UTF-16 little endian\&. 
+.TP
+\fB\fIkUTF16BE \fP\fP
+UTF-16 big endian\&. 
+.TP
+\fB\fIkUTF32LE \fP\fP
+UTF-32 little endian\&. 
+.TP
+\fB\fIkUTF32BE \fP\fP
+UTF-32 big endian\&. 
+.SH "Function Documentation"
+.PP 
+.SS "template<typename \fBStream\fP > void PutUnsafe (\fBStream\fP & stream, typename Stream::Ch c)\fC [inline]\fP"
+
+.PP
+Write character to a stream, presuming buffer is reserved\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

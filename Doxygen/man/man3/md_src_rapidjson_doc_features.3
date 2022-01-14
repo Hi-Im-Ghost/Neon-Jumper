@@ -1,0 +1,223 @@
+.TH "md_src_rapidjson_doc_features" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_features \- Features 
+
+.SH "General"
+.PP
+.IP "\(bu" 2
+Cross-platform
+.IP "  \(bu" 4
+Compilers: Visual Studio, gcc, clang, etc\&.
+.IP "  \(bu" 4
+Architectures: x86, x64, ARM, etc\&.
+.IP "  \(bu" 4
+Operating systems: Windows, Mac OS X, Linux, iOS, Android, etc\&.
+.PP
+
+.IP "\(bu" 2
+Easy installation
+.IP "  \(bu" 4
+Header files only library\&. Just copy the headers to your project\&.
+.PP
+
+.IP "\(bu" 2
+Self-contained, minimal dependences
+.IP "  \(bu" 4
+No STL, BOOST, etc\&.
+.IP "  \(bu" 4
+Only included \fC<cstdio>\fP, \fC<cstdlib>\fP, \fC<cstring>\fP, \fC<\fBinttypes\&.h\fP>\fP, \fC<new>\fP, \fC<\fBstdint\&.h\fP>\fP\&.
+.PP
+
+.IP "\(bu" 2
+Without C++ exception, RTTI
+.IP "\(bu" 2
+High performance
+.IP "  \(bu" 4
+Use template and inline functions to reduce function call overheads\&.
+.IP "  \(bu" 4
+Internal optimized Grisu2 and floating point parsing implementations\&.
+.IP "  \(bu" 4
+Optional SSE2/SSE4\&.2 support\&.
+.PP
+
+.PP
+.SH "Standard compliance"
+.PP
+.IP "\(bu" 2
+RapidJSON should be fully RFC4627/ECMA-404 compliance\&.
+.IP "\(bu" 2
+Support JSON Pointer (RFC6901)\&.
+.IP "\(bu" 2
+Support JSON \fBSchema\fP Draft v4\&.
+.IP "\(bu" 2
+Support Unicode surrogate\&.
+.IP "\(bu" 2
+Support null character (\fC'\\u0000'\fP)
+.IP "  \(bu" 4
+For example, \fC['Hello\\u0000World']\fP can be parsed and handled gracefully\&. There is API for getting/setting lengths of string\&.
+.PP
+
+.IP "\(bu" 2
+Support optional relaxed syntax\&.
+.IP "  \(bu" 4
+Single line (\fC// \&.\&.\&.\fP) and multiple line (\fC/* \&.\&.\&. */\fP) comments (\fCkParseCommentsFlag\fP)\&.
+.IP "  \(bu" 4
+Trailing commas at the end of objects and arrays (\fCkParseTrailingCommasFlag\fP)\&.
+.IP "  \(bu" 4
+\fCNaN\fP, \fCInf\fP, \fCInfinity\fP, \fC-Inf\fP and \fC-Infinity\fP as \fCdouble\fP values (\fCkParseNanAndInfFlag\fP)
+.PP
+
+.IP "\(bu" 2
+\fCNPM compliant\fP\&.
+.PP
+.SH "Unicode"
+.PP
+.IP "\(bu" 2
+Support UTF-8, UTF-16, UTF-32 encodings, including little endian and big endian\&.
+.IP "  \(bu" 4
+These encodings are used in input/output streams and in-memory representation\&.
+.PP
+
+.IP "\(bu" 2
+Support automatic detection of encodings in input stream\&.
+.IP "\(bu" 2
+Support transcoding between encodings internally\&.
+.IP "  \(bu" 4
+For example, you can read a UTF-8 file and let RapidJSON transcode the JSON strings into UTF-16 in the DOM\&.
+.PP
+
+.IP "\(bu" 2
+Support encoding validation internally\&.
+.IP "  \(bu" 4
+For example, you can read a UTF-8 file, and let RapidJSON check whether all JSON strings are valid UTF-8 byte sequence\&.
+.PP
+
+.IP "\(bu" 2
+Support custom character types\&.
+.IP "  \(bu" 4
+By default the character types are \fCchar\fP for \fBUTF8\fP, \fCwchar_t\fP for \fBUTF16\fP, \fCuint32_t\fP for \fBUTF32\fP\&.
+.PP
+
+.IP "\(bu" 2
+Support custom encodings\&.
+.PP
+.SH "API styles"
+.PP
+.IP "\(bu" 2
+SAX (Simple API for XML) style API
+.IP "  \(bu" 4
+Similar to \fCSAX\fP, RapidJSON provides a event sequential access parser API (\fCrapidjson::GenericReader\fP)\&. It also provides a generator API (\fCrapidjson::Writer\fP) which consumes the same set of events\&.
+.PP
+
+.IP "\(bu" 2
+DOM (Document Object Model) style API
+.IP "  \(bu" 4
+Similar to \fCDOM\fP for HTML/XML, RapidJSON can parse JSON into a DOM representation (\fCrapidjson::GenericDocument\fP), for easy manipulation, and finally stringify back to JSON if needed\&.
+.IP "  \(bu" 4
+The DOM style API (\fCrapidjson::GenericDocument\fP) is actually implemented with SAX style API (\fCrapidjson::GenericReader\fP)\&. SAX is faster but sometimes DOM is easier\&. Users can pick their choices according to scenarios\&.
+.PP
+
+.PP
+.SH "Parsing"
+.PP
+.IP "\(bu" 2
+Recursive (default) and iterative parser
+.IP "  \(bu" 4
+Recursive parser is faster but prone to stack overflow in extreme cases\&.
+.IP "  \(bu" 4
+Iterative parser use custom stack to keep parsing state\&.
+.PP
+
+.IP "\(bu" 2
+Support \fIin situ\fP parsing\&.
+.IP "  \(bu" 4
+Parse JSON string values in-place at the source JSON, and then the DOM points to addresses of those strings\&.
+.IP "  \(bu" 4
+Faster than convention parsing: no allocation for strings, no copy (if string does not contain escapes), cache-friendly\&.
+.PP
+
+.IP "\(bu" 2
+Support 32-bit/64-bit signed/unsigned integer and \fCdouble\fP for JSON number type\&.
+.IP "\(bu" 2
+Support parsing multiple JSONs in input stream (\fCkParseStopWhenDoneFlag\fP)\&.
+.IP "\(bu" 2
+Error Handling
+.IP "  \(bu" 4
+Support comprehensive error code if parsing failed\&.
+.IP "  \(bu" 4
+Support error message localization\&.
+.PP
+
+.PP
+.SH "DOM (Document)"
+.PP
+.IP "\(bu" 2
+RapidJSON checks range of numerical values for conversions\&.
+.IP "\(bu" 2
+Optimization for string literal
+.IP "  \(bu" 4
+Only store pointer instead of copying
+.PP
+
+.IP "\(bu" 2
+Optimization for 'short' strings
+.IP "  \(bu" 4
+Store short string in \fCValue\fP internally without additional allocation\&.
+.IP "  \(bu" 4
+For UTF-8 string: maximum 11 characters in 32-bit, 21 characters in 64-bit (13 characters in x86-64)\&.
+.PP
+
+.IP "\(bu" 2
+Optionally support \fCstd::string\fP (define \fCRAPIDJSON_HAS_STDSTRING=1\fP)
+.PP
+.SH "Generation"
+.PP
+.IP "\(bu" 2
+Support \fCrapidjson::PrettyWriter\fP for adding newlines and indentations\&.
+.PP
+.SH "Stream"
+.PP
+.IP "\(bu" 2
+Support \fCrapidjson::GenericStringBuffer\fP for storing the output JSON as string\&.
+.IP "\(bu" 2
+Support \fCrapidjson::FileReadStream\fP and \fCrapidjson::FileWriteStream\fP for input/output \fCFILE\fP object\&.
+.IP "\(bu" 2
+Support custom streams\&.
+.PP
+.SH "Memory"
+.PP
+.IP "\(bu" 2
+Minimize memory overheads for DOM\&.
+.IP "  \(bu" 4
+Each JSON value occupies exactly 16/20 bytes for most 32/64-bit machines (excluding text string)\&.
+.PP
+
+.IP "\(bu" 2
+Support fast default allocator\&.
+.IP "  \(bu" 4
+A stack-based allocator (allocate sequentially, prohibit to free individual allocations, suitable for parsing)\&.
+.IP "  \(bu" 4
+User can provide a pre-allocated buffer\&. (Possible to parse a number of JSONs without any CRT allocation)
+.PP
+
+.IP "\(bu" 2
+Support standard CRT(C-runtime) allocator\&.
+.IP "\(bu" 2
+Support custom allocators\&.
+.PP
+.SH "Miscellaneous"
+.PP
+.IP "\(bu" 2
+Some C++11 support (optional)
+.IP "  \(bu" 4
+Rvalue reference
+.IP "  \(bu" 4
+\fCnoexcept\fP specifier
+.IP "  \(bu" 4
+Range-based for loop 
+.PP
+
+.PP
+

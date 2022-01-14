@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_encoding_zh_cn" kind="page">
+    <compoundname>md_src_rapidjson_doc_encoding_zh_cn</compoundname>
+    <title>编码</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>根据 <ulink url="http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf">ECMA-404</ulink>：</para>
+<para><blockquote><para><zwj/>(in Introduction) JSON text is a sequence of Unicode code points.</para>
+<para>翻译：JSON 文本是 Unicode 码点的序列。 </para>
+</blockquote>较早的 <ulink url="http://www.ietf.org/rfc/rfc4627.txt">RFC4627</ulink> 申明：</para>
+<para><blockquote><para><zwj/>(in §3) JSON text SHALL be encoded in Unicode. The default encoding is UTF-8.</para>
+<para>翻译：JSON 文本应该以 Unicode 编码。缺省的编码为 UTF-8。 </para>
+</blockquote><blockquote><para><zwj/>(in §6) JSON may be represented using UTF-8, UTF-16, or UTF-32. When JSON is written in UTF-8, JSON is 8bit compatible. When JSON is written in UTF-16 or UTF-32, the binary content-transfer-encoding must be used.</para>
+<para>翻译：JSON 可使用 UTF-8、UTF-16 或 UTF-32 表示。当 JSON 以 UTF-8 写入，该 JSON 是 8 位兼容的。当 JSON 以 UTF-16 或 UTF-32 写入，就必须使用二进制的内容传送编码。 </para>
+</blockquote>RapidJSON 支持多种编码。它也能检查 JSON 的编码，以及在不同编码中进行转码。所有这些功能都是在内部实现，无需使用外部的程序库（如 <ulink url="http://site.icu-project.org/">ICU</ulink>）。</para>
+<sect1 id="md_src_rapidjson_doc_encoding_zh_cn_1Unicode">
+<title>Unicode</title>
+<para>根据 <ulink url="http://www.unicode.org/standard/translations/t-chinese.html">Unicode 的官方网站</ulink>： &gt;Unicode 给每个字符提供了一个唯一的数字， 不论是什么平台、 不论是什么程序、 不论是什么语言。</para>
+<para>这些唯一数字称为码点（code point），其范围介乎 <computeroutput>0x0</computeroutput> 至 <computeroutput>0x10FFFF</computeroutput> 之间。</para>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1UTF">
+<title>Unicode Transformation Format</title>
+<para>存储 Unicode 码点有多种编码方式。这些称为 Unicode 转换格式（Unicode Transformation Format, UTF）。RapidJSON 支持最常用的 UTF，包括：</para>
+<para><itemizedlist>
+<listitem><para>UTF-8：8 位可变长度编码。它把一个码点映射至 1 至 4 个字节。</para>
+</listitem><listitem><para>UTF-16：16 位可变长度编码。它把一个码点映射至 1 至 2 个 16 位编码单元（即 2 至 4 个字节）。</para>
+</listitem><listitem><para>UTF-32：32 位固定长度编码。它直接把码点映射至单个 32 位编码单元（即 4 字节）。</para>
+</listitem></itemizedlist>
+</para>
+<para>对于 UTF-16 及 UTF-32 来说，字节序（endianness）是有影响的。在内存中，它们通常都是以该计算机的字节序来存储。然而，当要储存在文件中或在网上传输，我们需要指明字节序列的字节序，是小端（little endian, LE）还是大端（big-endian, BE）。</para>
+<para>RapidJSON 通过 <computeroutput><ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref></computeroutput> 中的 struct 去提供各种编码：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16_b_e" kindref="compound">UTF16BE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32_b_e" kindref="compound">UTF32BE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+</programlisting></para>
+<para>对于在内存中的文本，我们正常会使用 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> 或 <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput>。对于处理经过 I/O 的文本，我们可使用 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16_b_e" kindref="compound">UTF16BE</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE</ref></computeroutput> 或 <computeroutput><ref refid="struct_u_t_f32_b_e" kindref="compound">UTF32BE</ref></computeroutput>。</para>
+<para>当使用 DOM 风格的 API，<computeroutput><ref refid="class_generic_value" kindref="compound">GenericValue</ref>&lt;Encoding&gt;</computeroutput> 及 <computeroutput><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&lt;Encoding&gt;</computeroutput> 里的 <computeroutput>Encoding</computeroutput> 模板参数是用于指明内存中存储的 JSON 字符串使用哪种编码。因此通常我们会在此参数中使用 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> 或 <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput>。如何选择，视乎应用软件所使用的操作系统及其他程序库。例如，Windows API 使用 UTF-16 表示 Unicode 字符，而多数的 Linux 发行版本及应用软件则更喜欢 UTF-8。</para>
+<para>使用 UTF-16 的 DOM 声明例子：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">GenericDocument&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">GenericValue&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WValue;</highlight></codeline>
+</programlisting></para>
+<para>可以在 <ref refid="stream_8zh-cn_8md" kindref="compound">DOM&apos;s Encoding</ref> 一节看到更详细的使用例子。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1CharacterType">
+<title>Character Type</title>
+<para>从之前的声明中可以看到，每个编码都有一个 <computeroutput>CharType</computeroutput> 模板参数。这可能比较容易混淆，实际上，每个 <computeroutput>CharType</computeroutput> 存储一个编码单元，而不是一个字符（码点）。如之前所谈及，在 UTF-8 中一个码点可能会编码成 1 至 4 个编码单元。</para>
+<para>对于 <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>(LE|BE)</computeroutput> 及 <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref>(LE|BE)</computeroutput> 来说，<computeroutput>CharType</computeroutput> 必须分别是一个至少 2 及 4 字节的整数类型。</para>
+<para>注意 C++11 新添了 <computeroutput>char16_t</computeroutput> 及 <computeroutput>char32_t</computeroutput> 类型，也可分别用于 <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> 及 <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput>。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1AutoUTF">
+<title>AutoUTF</title>
+<para>上述所介绍的编码都是在编译期静态挷定的。换句话说，使用者必须知道内存或流之中使用了哪种编码。然而，有时候我们可能需要读写不同编码的文件，而且这些编码需要在运行时才能决定。</para>
+<para><computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref></computeroutput> 是为此而设计的编码。它根据输入或输出流来选择使用哪种编码。目前它应该与 <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> 及 <computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput> 结合使用。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1ASCII">
+<title>ASCII</title>
+<para>虽然 JSON 标准并未提及 <ulink url="http://en.wikipedia.org/wiki/ASCII">ASCII</ulink>，有时候我们希望写入 7 位的 <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> JSON，以供未能处理 UTF-8 的应用程序使用。由于任 JSON 都可以把 Unicode 字符表示为 <computeroutput>\uXXXX</computeroutput> 转义序列，JSON 总是可用 <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> 来编码。</para>
+<para>以下的例子把 UTF-8 的 DOM 写成 <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> 的 JSON：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>UTF8&lt;&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer, Document::EncodingType, ASCII&lt;&gt;</ref><sp/>&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>buffer.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+</programlisting></para>
+<para><ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> 可用于输入流。当输入流包含大于 127 的字节，就会导致 <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> 错误。</para>
+<para><ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> * 不能 * 用于内存（<computeroutput>Document</computeroutput> 的编码，或 <computeroutput>Reader</computeroutput> 的目标编码)，因为它不能表示 Unicode 码点。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_encoding_zh_cn_1ValidationTranscoding">
+<title>Validation &amp; Transcoding</title>
+<para>当 RapidJSON 解析一个 JSON 时，它能校验输入 JSON，判断它是否所标明编码的合法序列。要开启此选项，请把 <computeroutput>kParseValidateEncodingFlag</computeroutput> 加入 <computeroutput>parseFlags</computeroutput> 模板参数。</para>
+<para>若输入编码和输出编码并不相同，<computeroutput>Reader</computeroutput> 及 <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> 会算把文本转码。在这种情况下，并不需要 <computeroutput>kParseValidateEncodingFlag</computeroutput>，因为它必须解码输入序列。若序列不能被解码，它必然是不合法的。</para>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1Transcoder">
+<title>Transcoder</title>
+<para>虽然 RapidJSON 的编码功能是为 JSON 解析／生成而设计，使用者也可以“滥用”它们来为非 JSON 字符串转码。</para>
+<para>以下的例子把 UTF-8 字符串转码成 UTF-16：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>s<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;...&quot;</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>UTF-8<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="struct_generic_string_stream" kindref="compound">StringStream</ref><sp/><ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>(s);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">GenericStringBuffer&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>target;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>hasError<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>.Peek()<sp/>!=<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="struct_transcoder" kindref="compound">Transcoder</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_u_t_f16" kindref="compound">UTF16&lt;&gt;</ref><sp/>&gt;::Transcode(<ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>,<sp/>target))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hasError<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!hasError)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">*<sp/>t<sp/>=<sp/>target.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>你也可以用 <computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref></computeroutput> 及对应的流来在运行时设置内源／目的之编码。 </para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/encoding.zh-cn.md"/>
+  </compounddef>
+</doxygen>

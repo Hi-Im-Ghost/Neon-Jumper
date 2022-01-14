@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['z16_0',['Z16',['../writer_8h.html#ae2c492a0a464591893d4255ea26d5e3a',1,'writer.h']]],
+  ['zerovelocity_1',['zeroVelocity',['../class_player.html#a8127e94cc6c15d49f28ad840126a4ae5',1,'Player']]]
+];

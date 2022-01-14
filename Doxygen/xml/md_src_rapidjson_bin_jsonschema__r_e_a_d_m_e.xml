@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e" kind="page">
+    <compoundname>md_src_rapidjson_bin_jsonschema_README</compoundname>
+    <title>JSON Schema Test Suite &lt;a href=&quot;https://travis-ci.org/json-schema/JSON-Schema-Test-Suite&quot; &gt;&lt;img src=&quot;https://travis-ci.org/json-schema/JSON-Schema-Test-Suite.png?branch=develop&quot; alt=&quot;Build Status&quot;/&gt;&lt;/a&gt;</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>This repository contains a set of JSON objects that implementors of JSON <ref refid="class_schema" kindref="compound">Schema</ref> validation libraries can use to test their validators.</para>
+<para>It is meant to be language agnostic and should require only a JSON parser.</para>
+<para>The conversion of the JSON objects into tests within your test framework of choice is still the job of the validator implementor.</para>
+<sect1 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md1">
+<title>Structure of a Test</title>
+<para>If you&apos;re going to use this suite, you need to know how tests are laid out. The tests are contained in the <computeroutput>tests</computeroutput> directory at the root of this repository.</para>
+<para>Inside that directory is a subdirectory for each draft or version of the schema. We&apos;ll use <computeroutput>draft3</computeroutput> as an example.</para>
+<para>If you look inside the draft directory, there are a number of <computeroutput>.json</computeroutput> files, which logically group a set of test cases together. Often the grouping is by property under test, but not always, especially within optional test files (discussed below).</para>
+<para>Inside each <computeroutput>.json</computeroutput> file is a single array containing objects. It&apos;s easiest to illustrate the structure of these with an example:</para>
+<para><programlisting filename=".json"><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;the<sp/>description<sp/>of<sp/>the<sp/>test<sp/>case&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;schema&quot;:<sp/>{&quot;the<sp/>schema<sp/>that<sp/>should&quot;<sp/>:<sp/>&quot;be<sp/>validated<sp/>against&quot;},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;tests&quot;:<sp/>[</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;a<sp/>specific<sp/>test<sp/>of<sp/>a<sp/>valid<sp/>instance&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;data&quot;:<sp/>&quot;the<sp/>instance&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;valid&quot;:<sp/>true</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;another<sp/>specific<sp/>test<sp/>this<sp/>time,<sp/>invalid&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;data&quot;:<sp/>15,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;valid&quot;:<sp/>false</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>So a description, a schema, and some tests, where tests is an array containing one or more objects with descriptions, data, and a boolean indicating whether they should be valid or invalid.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md2">
+<title>Coverage</title>
+<para>Draft 3 and 4 should have full coverage. If you see anything missing or think there is a useful test missing, please send a pull request or open an issue.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md3">
+<title>Who Uses the Test Suite</title>
+<para>This suite is being used by:</para>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md4">
+<title>Coffeescript</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/pandastrike/jsck">jsck</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md5">
+<title>Dart</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/patefacio/json_schema">json_schema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md6">
+<title>Erlang</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/klarna/jesse">jesse</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md7">
+<title>Go</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/sigu-399/gojsonschema">gojsonschema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/cesanta/validate-json">validate-json</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md8">
+<title>Haskell</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/timjb/aeson-schema">aeson-schema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/seagreen/hjsonschema">hjsonschema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md9">
+<title>Java</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/fge/json-schema-validator">json-schema-validator</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md10">
+<title>JavaScript</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/Muscula/json-schema-benchmark">json-schema-benchmark</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/IreneKnapp/direct-schema">direct-schema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/mafintosh/is-my-json-valid">is-my-json-valid</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/iclanzan/jassi">jassi</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/natesilva/jayschema">JaySchema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/ericgj/json-schema-valid">json-schema-valid</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/jsonary-js/jsonary">Jsonary</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/tdegrunt/jsonschema">jsonschema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/bugventure/request-validator">request-validator</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/Prestaul/skeemas">skeemas</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/geraintluff/tv4">tv4</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/zaggino/z-schema">z-schema</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/bugventure/jsen">jsen</ulink></para>
+</listitem><listitem><para><ulink url="https://github.com/epoberezkin/ajv">ajv</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md11">
+<title>Node.js</title>
+<para>The JSON <ref refid="class_schema" kindref="compound">Schema</ref> Test Suite is also available as an <ulink url="https://www.npmjs.com/package/json-schema-test-suite">npm</ulink> package. Node-specific support is maintained on the <ulink url="https://github.com/json-schema/JSON-Schema-Test-Suite/tree/node">node branch</ulink>. See <ulink url="https://github.com/json-schema/JSON-Schema-Test-Suite/blob/node/NODE-README.md">NODE-README.md</ulink> for more information.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md12">
+<title>.NET</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/JamesNK/Newtonsoft.Json.Schema">Newtonsoft.Json.Schema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md13">
+<title>PHP</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/justinrainbow/json-schema">json-schema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md14">
+<title>Python</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/Julian/jsonschema">jsonschema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md15">
+<title>Ruby</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/hoxworth/json-schema">json-schema</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md16">
+<title>Rust</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/rustless/valico">valico</ulink></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md17">
+<title>Swift</title>
+<para><itemizedlist>
+<listitem><para><ulink url="https://github.com/kylef/JSONSchema.swift">JSONSchema</ulink></para>
+</listitem></itemizedlist>
+</para>
+<para>If you use it as well, please fork and send a pull request adding yourself to the list :).</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_bin_jsonschema__r_e_a_d_m_e_1autotoc_md18">
+<title>Contributing</title>
+<para>If you see something missing or incorrect, a pull request is most welcome!</para>
+<para>There are some sanity checks in place for testing the test suite. You can run them with <computeroutput>bin/jsonschema_suite check</computeroutput> or <computeroutput>tox</computeroutput>. They will be run automatically by <ulink url="https://travis-ci.org/">Travis CI</ulink> as well. </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/bin/jsonschema/README.md"/>
+  </compounddef>
+</doxygen>
