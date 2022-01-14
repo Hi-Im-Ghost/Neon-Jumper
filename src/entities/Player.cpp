@@ -24,8 +24,15 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
 
     if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
         timeStart();
-    if (tsValue < 1.0f && !_bTimeStopped)
+    if (tsValue < 1.0f && !_bTimeStopped) {
         tsValue += dt * tsFillRate;
+    }
+    if(getTimeStopValue()>=1.0f){
+        isReady= true;
+    }else{
+        isReady= false;
+    }
+
 }
 
 void Player::render(sf::RenderTarget &window) {

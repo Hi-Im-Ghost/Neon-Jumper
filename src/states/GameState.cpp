@@ -67,3 +67,15 @@ void GameState::initTextPause() {
 
     this->nameTextPause.setPosition(960 - nameTextPause.getGlobalBounds().width/2, 300);
 }
+
+void GameState::initTextPlay() {
+    if (!nameFontGame.loadFromFile("../resources/Platinum_Sign.ttf"))
+        std::printf("Could not load the menu font\n");
+    this->nameTextPlay.setFont(nameFontGame);
+    sf::Color color(21, 235, 53);
+    this->nameTextPlay.setFillColor(color);
+    nameTextPlay.setCharacterSize(20);
+    this->nameTextPlay.setString("A-D - PORUSZANIE \n\n SPACE - SKOK \n\n ENTER - UMIEJETNOSC \n\n ESC - PAUZA");
+
+    this->nameTextPlay.setPosition(300 - nameTextPlay.getGlobalBounds().width/2, 100);
+}

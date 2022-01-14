@@ -11,6 +11,7 @@ LevelOneState::LevelOneState(std::stack<GameState*>* states)
     initPauseButtons();
     initVirtualCursor();
     initTextGame();
+    initTextPlay();
     initTextPause();
     musicGame.play();
 }
@@ -31,7 +32,7 @@ void LevelOneState::update(float dt) {
         updateDeadTrigger();
         killPlayerTriggers();
         hud->setPosition(player->getPosition().x,player->getPosition().y);
-        hud->update(player);
+        hud->update(player,player->isReady);
     } else{
         if(bPaused)
             updatePaused();
@@ -44,6 +45,7 @@ void LevelOneState::render(sf::RenderTarget &window) {
 
     initViewPlayer(window);
     map.draw(window);
+    window.draw(nameTextPlay);
     renderEntities(window);
     hud->render(window);
 

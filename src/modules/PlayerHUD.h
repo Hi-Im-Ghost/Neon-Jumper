@@ -5,8 +5,6 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/System/Time.hpp>
-#include <SFML/System/Clock.hpp>
 #include "Damageable.h"
 
 /**
@@ -16,14 +14,18 @@ class PlayerHUD {
 private:
     ///Tablica przechowująca ilość naszych tekstur życia
     sf::RectangleShape hearths[3];
+    sf::RectangleShape stopwatch;
     ///Tekstura dla ilości żyć gracza
     sf::Texture htfull;
+    ///Tekstura dla umiejetności gracza
+    sf::Texture stopTime;
 
-    ///Metoda służąca do inicjalizacji tekstury życia
-    void initHeartTexture();
+    ///Metoda służąca do inicjalizacji tekstur dla hud gracza
+    void initTexture();
     ///Metoda służąca do inicjalizacji właściwości tekstury życia
     void initHearts();
-
+    ///Metoda służąca do inicjalizacji właściwości tekstury umiejętności zatrzymania czasu
+    void initStopTime();
 protected:
 
 public:
@@ -33,11 +35,13 @@ public:
     /// Wyświetla tekstury HUD na ekranie
     void render(sf::RenderTarget& window);
     /// Odświeża stan naszych tekstur HUD
-    void update(Damageable* damageableModule);
+    void update(Damageable* damageableModule, bool playerReady);
     /// Pozwala ustawić pozycje dla tekstur HUD
     void setPosition(float x, float y);
     /// Zmienna pozwalająca sprawdzić czy otrzymaliśmy jakieś obrażenia
     bool takedDmg;
+
+
 };
 
 

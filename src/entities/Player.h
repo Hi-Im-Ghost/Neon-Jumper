@@ -105,6 +105,8 @@ public:
     void setPosition(sf::Vector2f);
     /// Zmienia stan animacji gracza na podany
     void switchAnimation(Animation newAnimation);
+
+    bool isReady;
 };
 
 

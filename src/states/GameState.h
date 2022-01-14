@@ -17,8 +17,10 @@ private:
 protected:
     /// Tekst przechowujący napis do gry
     sf::Text nameTextGame;
-    /// Tekst przechowujący napis do gry
+    /// Tekst przechowujący napis do pauzy
     sf::Text nameTextPause;
+    /// Tekst przechowujący napis do instrukcji gry
+    sf::Text nameTextPlay;
     /// Czciona używana do tekstu gry
     sf::Font nameFontGame;
     /// Przechowuje muzykę graną w menu
@@ -82,8 +84,10 @@ protected:
     void initMusicGame();
     /// Inicjacja tekstu do gry
     void initTextGame();
-    /// Inicjacja tekstu do gry
+    /// Inicjacja tekstu do pauzy
     void initTextPause();
+    /// Inicjacja tekstu do instrukcji gry
+    void initTextPlay();
 
 public:
     /// Konstruktor przyjmuje odniesienie do stosu wszystkich stanów
