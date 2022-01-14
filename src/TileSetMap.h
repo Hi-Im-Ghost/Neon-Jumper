@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 27.11.2021.
-//
-
 #ifndef PLATFORMER2D_TILESETMAP_H
 #define PLATFORMER2D_TILESETMAP_H
 

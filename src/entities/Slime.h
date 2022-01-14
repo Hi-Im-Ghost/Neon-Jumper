@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 09.01.2022.
-//
-
 #ifndef TREES_JSON_SLIME_H
 #define TREES_JSON_SLIME_H
 

@@ -1,7 +1,3 @@
-//
-// Created by R2-D2 on 29.12.2021.
-//
-
 #include "LoadMap.h"
 #include "Entities/Player.h"
 #include <iostream>

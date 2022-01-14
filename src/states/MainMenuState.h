@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 30.12.2021.
-//
-
 #ifndef TREES_JSON_MAINMENUSTATE_H
 #define TREES_JSON_MAINMENUSTATE_H
 

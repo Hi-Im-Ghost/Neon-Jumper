@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 04.01.2022.
-//
-
 #ifndef TREES_JSON_ANIMATED_H
 #define TREES_JSON_ANIMATED_H
 

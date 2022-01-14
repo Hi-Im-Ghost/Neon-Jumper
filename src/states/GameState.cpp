@@ -1,7 +1,3 @@
-//
-// Created by ToQly on 30.12.2021.
-//
-
 #include <SFML/Window/Mouse.hpp>
 #include "GameState.h"
 
