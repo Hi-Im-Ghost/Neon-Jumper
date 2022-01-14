@@ -4,7 +4,7 @@
 PlayerHUD::PlayerHUD() {
     initHeartTexture();
     initHearts();
-    takedDmg=false;
+    takedDmg = false;
 }
 
 void PlayerHUD::initHearts() {
@@ -31,13 +31,14 @@ void PlayerHUD::update(Damageable *damageableModule) {
     for (int i=0; i<3; ++i)
     {
         if(takedDmg) {
-            if (i < hp)
+            if (i < hp) {
+                hearths[i].setFillColor(sf::Color::White);
                 hearths[i].setTexture(&htfull);
+            }
             else
                 hearths[i].setFillColor(sf::Color::Transparent);
-        }else{
+        }else
             hearths[i].setFillColor(sf::Color::Transparent);
-        }
     }
 
 }

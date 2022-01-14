@@ -52,12 +52,16 @@ protected:
     /// Kursor wirtualny, czyli hitbox służący do wykrywania obiektów pod kursorem myszy
     sf::RectangleShape virtualCursor;
 
+    ///Zmienna sprawdzająca aktualny lvl
     int checkLevel;
+    ///Zmienna do której zapisywana jest pozycja x gracza dla zapisu stanu gry i wczytywania
     float playerPositionX;
+    ///Zmienna do której zapisywana jest pozycja y gracza dla zapisu stanu gry i wczytywania
     float playerPositionY;
+    ///Zmienna do której zapisywana jest ilość hp gracza dla zapisu stanu gry i wczytywania
     int playerHP;
+    ///Zmienna określająca czy wczytaliśmy grę
     bool loadSave = false;
-    bool lvl1 = true;
 
     /// Pozwala na aktualizowanie pozycji myszy na ekranie
     void updateMousePosition();

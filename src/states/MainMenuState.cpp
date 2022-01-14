@@ -70,7 +70,8 @@ void MainMenuState::initText() {
     if (!gamenameFont.loadFromFile("../resources/Platinum_Sign.ttf"))
         std::printf("Could not load the menu font\n");
     this->gamenameText.setFont(gamenameFont);
-    this->gamenameText.setFillColor(sf::Color::White);
+    sf::Color color(255, 77, 255);
+    this->gamenameText.setFillColor(color);
     gamenameText.setCharacterSize(47);
     this->gamenameText.setString("NEON JUMPER");
 

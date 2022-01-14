@@ -10,7 +10,7 @@ int main()
 {
     std::stack<GameState*> states;
 
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Game", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Neon Jumper", sf::Style::Fullscreen);
 
     window.setFramerateLimit(60.0f);
 

@@ -306,9 +306,14 @@ void LevelTwoState::updateDmgTriggers() {
     {
         if (player->checkForIntersection(h)) {
             // Do damage
-            deathGame.play();
-            std::cout << "Player damage detected!\n";
             player->takeDamage(1);
+            i=0;
+            x=0;
+            std::cout << "Player damage detected!\n";
+        }else if(i==1000){
+            hud->takedDmg = false;
+        }else{
+            i++;
         }
     }
 }
@@ -320,7 +325,7 @@ void LevelTwoState::killPlayerTriggers(){
             sf::sleep(sf::seconds(0.1f));
             deathGame.stop();
         }
-        player->takeDamage(player->getHP());
+        player->takeDamage(player->getMaxHP());
         std::cout << "Player killed!\n";
     }
 }
@@ -402,7 +407,15 @@ void LevelTwoState::updateEntities(float dt) {
     // Update enemy collision with player
     for (auto & e : enemies) {
         if (player->checkForIntersection(e->getHitbox())) {
+            deathGame.play();
+            hud->takedDmg = true;
+            i=0;
+            x=0;
             player->takeDamage(1);
+        }else if(x==1000){
+            hud->takedDmg = false;
+        }else{
+            x++;
         }
     }
 }

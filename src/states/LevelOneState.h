@@ -38,6 +38,11 @@ private:
     Button* saveBtn;
     /// Zmienna debug służąca do renderowania hitbox-ów
     bool renderHitboxes = false;
+    ///zmienna okreslajaca czas widocznosci hud
+    int i = 1;
+    ///zmienna okreslajaca czas widocznosci hud
+    int x = 1;
+
 
     /// Obszar wykrywający czy gracz powinien przejść do następnego poziomu
     sf::RectangleShape endLevelTrigger;

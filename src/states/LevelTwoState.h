@@ -37,8 +37,12 @@ private:
     /// Zmienna debug służąca do renderowania hitbox-ów
     bool renderHitboxes = false;
 
-    ///
+    ///zmienna okreslajaca czy jestesmy na lvl2
     bool level2;
+    ///zmienna okreslajaca czas widocznosci hud
+    int i = 1;
+    ///zmienna okreslajaca czas widocznosci hud
+    int x = 1;
 
     /// Obszar wykrywający czy gracz przeszedł poziom
     sf::RectangleShape endLevelTrigger;
