@@ -61,9 +61,13 @@ private:
     void initDeadButtons();
     /// Inicjalizacja obszaru przejścia do następnego poziomu
     void initEndTrigger();
-    ///
+    /**
+     * @param window
+     */
     void initView(sf::RenderTarget& window);
-    /// inicjalizacja kamery gracza
+    /** inicjalizacja kamery gracza
+     * @param window
+     */
     void initViewPlayer(sf::RenderTarget &window);
     /// Rozmieszczenie wrogów na mapie
     void initEnemies();
@@ -74,13 +78,21 @@ private:
     void updatePaused();
     /// Aktualizacja logiki gry podczas, gdy postać straci wszystkie punkty życia
     void updateDead();
-    /// Aktualizacja logiki przeciwników
+    /** Aktualizacja logiki przeciwników
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     */
     void updateEntities(float deltaTime);
-    /// Wyświetlanie na ekranie elementów, gdy rozgrywka jest spauzowana
+    /** Wyświetlanie na ekranie elementów, gdy rozgrywka jest spauzowana
+     * @param window okno na którym elementy mają być wyświetlane
+     */
     void renderPaused(sf::RenderTarget& window);
-    /// Wyświetlanie elementów gdy gracz nie żyje
+    /** Wyświetlanie elementów gdy gracz nie żyje
+     * @param window okno na którym elementy mają być wyświetlane
+     */
     void renderDead(sf::RenderTarget& window);
-    /// Wyświetlanie przeciwników i gracza na ekranie
+    /** Wyświetlanie przeciwników i gracza na ekranie
+     * @param window okno na którym elementy mają być wyświetlane
+     */
     void renderEntities(sf::RenderTarget& window);
 
     /// Sprawdza czy gracz nie wszedł na teren obszaru kończącego poziom
@@ -98,12 +110,18 @@ private:
     void loadGame();
 
 public:
-    /// Konstruktor przyjmujący odniesienie do stosu stanów aplikacji
+    /** Konstruktor przyjmujący odniesienie do stosu stanów aplikacji
+     * @param states odniesienie do stosu wszystkich stanów aplikacji
+     */
     explicit LevelOneState(std::stack<GameState*>* states);
 
-    /// Odświeża logikę stanu
+    /** Odświeża logikę stanu
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     */
     void update(float deltaTime) override;
-    /// Wyświetla elementy stanu na ekranie
+    /** Wyświetla elementy stanu na ekranie
+     * @param window okno na którym elementy mają być wyświetlane
+     */
     void render(sf::RenderTarget& window) override;
 };
 

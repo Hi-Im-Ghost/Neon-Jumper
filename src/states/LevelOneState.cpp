@@ -19,6 +19,7 @@ LevelOneState::LevelOneState(std::stack<GameState*>* states)
 void LevelOneState::initValues() {
     player = new Player(10*3, 250*3);
     hud = new PlayerHUD();
+    //ProjectileBucket::initProjectileBucket( new std::list<Projectile*>() );
 }
 
 void LevelOneState::update(float dt) {
@@ -32,7 +33,7 @@ void LevelOneState::update(float dt) {
         updateDeadTrigger();
         killPlayerTriggers();
         hud->setPosition(player->getPosition().x,player->getPosition().y);
-        hud->update(player,player->isReady);
+        hud->update(player,player->bTimeStopReady);
     } else{
         if(bPaused)
             updatePaused();

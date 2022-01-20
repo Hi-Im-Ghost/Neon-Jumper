@@ -1,10 +1,10 @@
 #ifndef TREES_JSON_PLAYER_H
 #define TREES_JSON_PLAYER_H
 
-#include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <list>
 #include <SFML/Audio.hpp>
+#include "projectiles/Bullet.h"
 
 #include "../modules/Damageable.h"
 #include "../modules/Animated.h"
@@ -42,6 +42,13 @@ private:
     /// Pokazuje czy gracz stoi na jakimś podłożu
     bool _bIsGrounded;
 
+    // Shooting values
+    /// Pozycja punktu z którego gracz wykonuje strzał
+    sf::Vector2f shootingPoint;
+    /// Odstęp czasowy pomiędzy strzałami
+    float shootingCooldown;
+
+    // Time stop values
     /// Pozwala określić, czy czas jest w tej chwili zatrzymany
     bool _bTimeStopped;
     /// Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się
@@ -60,51 +67,96 @@ private:
     /// Wczytuje z pliku i zapisuje dźwięki dla gracza
     void initSoundGame();
 
-    /// Sprawdza, czy użytkownik nacisnął odpowiedni przycisk oraz wykonuje odpowiednią akcję
+    /** Sprawdza, czy użytkownik nacisnął odpowiedni przycisk oraz wykonuje odpowiednią akcję
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     */
     void handleInput(float deltaTime);
-    /// Sprawdza kolizję gracza ze wszystkimi obiektami terenu i w przypadku kolizji zeruje prędkość gracza
+    /** Sprawdza kolizję gracza ze wszystkimi obiektami terenu i w przypadku kolizji zeruje prędkość gracza
+     * @param allHitboxes lista wszystkich hitboksów otoczenia na mapie
+     */
     void handleCollision(const std::list<sf::RectangleShape>& allHitboxes);
     /// Aplikuje prędkość do pozycji gracza.
     void moveFinal();
-    /// Dodaje do prędkości wartość grawitacji
+    /** Dodaje do prędkości wartość grawitacji
+     * @param deltaSeconds czas pomiędzy klatkami aplikacji
+     */
     void applyGravity(float deltaSeconds);
     /// Wykonuje skok
     void jump();
     /// Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza
     void animateMovement();
 
+    // Shooting functions
+    /// Wykonuje strzał
+    void shoot();
+
+    // Time stop functions
     /// Służy do zatrzymywania czasu
     void timeStop();
     /// Służy do wznawiania czasu
     void timeStart();
 
 public:
-    /// Konstruktor gracza z opcją podania lokalizacji początkowej na mapie
+    /** Konstruktor gracza z opcją podania lokalizacji początkowej na mapie
+     * @param x początkowa pozycja x gracza na mapie
+     * @param y początkowa pozycja y gracza na mapie
+     */
     explicit Player(float x = 0, float y = 0);
 
-    /// Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób.
+    // Position and logic
+    /** Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób.
+     * Podanie do parametrów wartości 1, lub -1 jest domyślnym sposobem korzystania z metody.
+     * Podanie większej, lub mniejszej wartości skutkować będzie zmianą prędkości poruszania się.
+     * Podane wartości nie zmieniają prędkości bezpośrednio, a tylko dodają wartość do wektora prędkości.
+     * @param x wartość o którą gracz zostanie poruszony poziomo
+     * @param y wartość o którą gracz zostanie poruszony pionowo
+     */
     void move(float x, float y);
-    /// Zwraca pozycję gracza
+    /** Zwraca pozycję gracza
+     * @return Pozycja gracza
+     */
     sf::Vector2f getPosition();
-    /// Zeruje x - poziomą, y - pionową prędkość gracza
+    /** Zerowanie wektora prędkości na osi
+     * @param x zerowanie zmiennej x wektora
+     * @param y zerowanie zmiennej y wektora
+     */
     void zeroVelocity(bool x, bool y);
-    /// Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze
+    /** Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze
+     * @param shape hitbox, który ma być sprawdzany pod kątem nachodzenia na hitbox gracza
+     * @return true - jeżeli hitboxy na siebie nachodzą, false - jeżeli hitboxy na siebie nie nachodzą
+     */
     bool checkForIntersection(sf::RectangleShape& shape);
-    /// Pozwala sprawdzić czy czas jest zatrzymany
+
+    // Time stop
+    /** Pozwala sprawdzić czy czas jest zatrzymany
+     * @return true - jeżeli czas jest zatrzymany, false - jeżeli czas płynie
+     */
     bool getTimeStopped() const {return _bTimeStopped;}
-    /// Zwraca wartość 0-1 reprezentującą stopień naładowania umiejętności zatrzymania czasu
+    /** Pobiera stopień naładowania umiejętności zatrzymania czasu
+     * @return wartość od 0 do 1 reprezentująca stopień naładowania umiejętności
+     */
     float getTimeStopValue() const {return tsValue;}
 
-    /// Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd.
+    /** Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd.
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     * @param allHitboxes lista wszystkich hitboksów otoczenia na mapie
+     */
     void update(float deltaTime, const std::list<sf::RectangleShape>& allHitboxes);
-    /// Wyświetla postać gracza na ekranie
+    /** Wyświetla postać gracza na ekranie
+     * @param window okno na którym renderowany jest gracz
+     */
     void render(sf::RenderTarget& window);
-    /// Ustawia pozycję postaci gracza a mapie
-    void setPosition(sf::Vector2f);
-    /// Zmienia stan animacji gracza na podany
-    void switchAnimation(Animation newAnimation);
+    /** Ustawia pozycję postaci gracza a mapie
+     * @param position nowa pozycja gracza
+     */
+    void setPosition(sf::Vector2f position);
+    /** Zmienia stan animacji gracza na podany
+     * @param newAnimation nowa animacja typu enum Animation zdefiniowanego w Animated.h
+     */
+    void switchAnimation(Animation newAnimation) override;
 
-    bool isReady;
+    /// Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia
+    bool bTimeStopReady;
 };
 
 

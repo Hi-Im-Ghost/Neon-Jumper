@@ -7,18 +7,28 @@
  */
 class Slime : public Enemy {
 private:
-    /// Implementacja funkcji initPath z Enemy.h
+    /** Nadaje odpowiednie parametry granicy ruchu
+     * @param pointA wartość x lewego punktu patrolowego
+     * @param pointB wartość x prawego punktu patrolowego
+     */
     void initPath(float pointA, float pointB) override;
 public:
-    /// Konstruktor przeciwnika slime.
-    /// x i y to pozycja na mapie,
-    /// pathPointA i pathPointB określają zakres patrolu dla przeciwnika
-    /// moveRight określa czy początkowo przeciwnik porusza się w lewo czy w prawo
+    /** Konstruktor przeciwnika slime.
+     * @param x pozycja x na mapie
+     * @param y pozycja y na mapie
+     * @param pathPointA wartość x lewego punktu patrolowego
+     * @param pathPointB wartość x prawego punktu patrolowego
+     * @param moveRight określa czy początkowo przeciwnik porusza się w lewo czy w prawo
+     */
     explicit Slime(float x, float y, float pathPointA, float pathPointB, bool moveRight);
 
-    /// Implementacja wirtualnej metody update z Enemy.h
+    /** Odpowiada za odświeżanie logiki przeciwnika
+     * @param deltaSeconds czas pomiędzy klatkami aplikacji
+     */
     void update(float deltaSeconds) override;
-    /// Implementacja wirtualnej metody render z Enemy.h
+    /** Wyświetla przeciwnika na ekranie
+     * @param window okno na którym wyświetlony zostanie przeciwnik
+     */
     void render(sf::RenderTarget &window) override;
 };
 

@@ -39,11 +39,17 @@ private:
     void initText();
 
 public:
-    /// Konstruktor przyjmujący stos stanów programu
+    /** Konstruktor przyjmujący stos stanów programu
+     * @param states odniesienie do stosu wszystkich stanów aplikacji
+     */
     explicit MainMenuState(std::stack<GameState *> *states);
-    /// Definicja funkcji render klasy GameState
+    /** Definicja funkcji render klasy GameState
+     * @param window okno na którym renderowane są elementy
+     */
     void render(sf::RenderTarget &window) override;
-    /// Definicja funkcji update klasy GameState
+    /** Definicja funkcji update klasy GameState
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     */
     void update(float deltaTime) override;
 };
 

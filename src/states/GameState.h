@@ -90,7 +90,9 @@ protected:
     void initTextPlay();
 
 public:
-    /// Konstruktor przyjmuje odniesienie do stosu wszystkich stanów
+    /** Konstruktor przyjmuje odniesienie do stosu wszystkich stanów
+     * @param states odniesienie do stosu wszystkich stanów aplikacji
+     */
     explicit GameState(std::stack<GameState*>* states);
 
     /// Komunikuje o chęci zakończenia stanu
@@ -101,9 +103,13 @@ public:
     bool getGoNextLevel() const {return bnextLevel;}
     //bool isPaused() const {return bPaused;}
 
-    /// Funkcja zarządzająca odświeżaniem logiki stanu
+    /** Funkcja zarządzająca odświeżaniem logiki stanu
+     * @param deltaTime czas pomiędzy klatkami aplikacji
+     */
     virtual void update(float deltaTime) = 0;
-    /// Funkcja zarządzająca renderowaniem grafiki stanu
+    /** Funkcja zarządzająca renderowaniem grafiki stanu
+     * @param window okno na którym wyświetlony zostanie przeciwnik
+     */
     virtual void render(sf::RenderTarget& window) {};
 };
 

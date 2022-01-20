@@ -28,10 +28,13 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
         tsValue += dt * tsFillRate;
     }
     if(getTimeStopValue()>=1.0f){
-        isReady= true;
+        bTimeStopReady= true;
     }else{
-        isReady= false;
+        bTimeStopReady= false;
     }
+
+    if (shootingCooldown > 0.0f)
+        shootingCooldown -= dt;
 
 }
 
@@ -53,6 +56,9 @@ void Player::initValues() {
     _bTimeStopped = false;
     tsValue = 0;
     tsFillRate = 0.1;
+
+    shootingPoint = {30, 10};
+    shootingCooldown = 0.7f;
 }
 
 void Player::initSprite() {
@@ -107,7 +113,7 @@ void Player::handleInput(float dt) {
         bMoving = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         if (_bIsGrounded)
             jump();
@@ -125,6 +131,13 @@ void Player::handleInput(float dt) {
     && tsValue >= 1.0f)
     {
         timeStop();
+    }
+
+    // Shooting
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && shootingCooldown <= 0.0f) {
+        shoot();
+        shootingCooldown = 0.7f;
+        std::cout << "Shot!" << "\n";
     }
 }
 
@@ -269,4 +282,12 @@ void Player::timeStop() {
 
 void Player::timeStart() {
     _bTimeStopped = false;
+}
+
+void Player::shoot() {
+    if ( _bIsFlipped ) {
+        Bullet* b = new Bullet(getPosition() + shootingPoint, _bIsFlipped);
+        //ProjectileBucket::addProjectile(b);
+    }
+
 }
