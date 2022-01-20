@@ -18,7 +18,6 @@ protected:
     sf::RectangleShape _path;
     /// Określa kierunek ruchu przeciwnika
     bool movingRight = false;
-
     /**
      *  Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury
      * @param filePath ścieżka do pliku tekstury

@@ -8,7 +8,13 @@
  */
 class LayerObject {
 public:
-    ///Konstruktor który przyjmuje współrzędne x,y oraz szerokość i wysokość dla obiektu warstwy
+    /***
+     * Konstruktor który przyjmuje współrzędne x,y oraz szerokość i wysokość dla obiektu warstwy
+     * @param x - współrzędna x
+     * @param y - współrzędna y
+     * @param width - szerokość obiektu
+     * @param height - wysokość obiektu
+     */
     LayerObject(float x, float y, float width, float height);
 
     ///Zmienna przechowująca współrzędna x
@@ -27,34 +33,73 @@ class Layer {
 public:
     ///Konstruktor pusty
     Layer(){};
-    ///Konstruktor który przyjmuje sparsowane wartości z json'a
+    /***
+     * Konstruktor który przyjmuje sparsowane wartości z json'a
+     * @param value - sparsowane wartości json
+     */
     Layer(rapidjson::Value& value);
     ///Destruktor
     ~Layer();
 
-    ///Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy
+    /***
+     * Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy
+     * @return zwraca date, ktora zawiera informacje o wystapieniach na mapie danej warstwy
+     */
     std::vector<int> getData() { return data; }
-    ///Zwraca wysokość warstwy
+    /***
+     * Zwraca wysokość warstwy
+     * @return zwraca liczbę oznaczająca wysokość
+     */
     int getHeight() { return height; }
-    ///Zwraca id warstwy
+    /***
+     * Zwraca id warstwy
+     * @return zwraca liczbę która reprezentuje id dla warstwy
+     */
     int getId() { return id; }
-    ///Zwraca sciezke do obrazka
+    /***
+     * Zwraca sciezke do obrazka
+     * @return zwraca tekst, który reprezentuje ścieżke do obrazka
+     */
     std::string getImage() { return image; }
-    ///Zwraca nazwe
+    /***
+     * Zwraca nazwe
+     * @return zwraca tekst, który reprezentuje nazwe warstwy
+     */
     std::string getName() { return name; }
-    ///Zwraca informacje o przezroczystości
+    /***
+     * Zwraca informacje o przezroczystości
+     * @return zwraca liczbe, która reprezentuje przezroczystość dla warstwy
+     */
     int getOpacity() { return opacity; }
-    ///Zwraca informacje o typie
+    /***
+     * Zwraca informacje o typie
+     * @return zwraca tekst, który reprezentuje typ dla warstwy
+     */
     std::string getType() { return type; }
-    ///Zwraca informacje o widoczności
+    /***
+     * Zwraca informacje o widoczności
+     * @return zwraca true jeśli warstwa jest widoczna lub false jeśli nie widoczna
+     */
     bool isVisible() { return visible; }
-    ///Zwraca szerokość warstwy
+    /***
+     * Zwraca szerokość warstwy
+     * @return zwraca liczbę która reprezentuje szerokość warstwy
+     */
     int getWidth() { return width; }
-    ///Zwraca współrzędną x
+    /***
+     * Zwraca współrzędną x
+     * @return zwraca liczbę, która reprezentuje współrzedną x dla warstwy
+     */
     int getX() { return x; }
-    ///Zwraca współrzędną y
+    /***
+     * Zwraca współrzędną y
+     * @return zwraca liczbę, która reprezentuje współrzedną y dla warstwy
+     */
     int getY() { return y; }
-    ///Zwraca obiekty występujące w warstwie
+    /***
+     * Zwraca obiekty występujące w warstwie
+     * @return zwraca obiekty, które występują w warstwie
+     */
     std::vector<LayerObject> getObjects() {return objects;}
 
 private:

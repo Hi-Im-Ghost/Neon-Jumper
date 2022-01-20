@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Platformer2D.dir/src/entities/Enemy.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/entities/Player.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/entities/Slime.cpp.obj"
+  "CMakeFiles/Platformer2D.dir/src/entities/projectiles/Bullet.cpp.obj"
+  "CMakeFiles/Platformer2D.dir/src/entities/projectiles/Projectile.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/main.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/modules/Animated.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/modules/Damageable.cpp.obj"

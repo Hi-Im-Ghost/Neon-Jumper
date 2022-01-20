@@ -18,7 +18,7 @@ private:
     std::list<sf::RectangleShape> hitboxes;
     /// Lista obszarów zadających obrażenia
     std::list<sf::RectangleShape> dmgboxes;
-    ///
+    /// Odniesienie do wybranej przez nas mapy
     LoadMap map;
 
     /// Lista odniesień do wszystkich wrogów
@@ -61,7 +61,7 @@ private:
     void initEndButtons();
     /// Inicjalizacja obszaru zakończenia gry
     void initEndTrigger();
-    /**
+    /** Inicjalizacja kamery dla menu pauzy
      * @param window
      */
     void initView(sf::RenderTarget& window);
@@ -99,7 +99,7 @@ private:
     void updateEndTrigger();
     /// Sprawdza czy gracz nie wszedł na teren obszaru zadającego obrażenia
     void updateDmgTriggers();
-    ///
+    /// Sprawdza czy gracz nie utonął, jeśli tak to zabija go
     void killPlayerTriggers();
 
     /// Zapisuje grę

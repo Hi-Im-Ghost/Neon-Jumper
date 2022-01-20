@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper
+# Install script for directory: D:/Dokumenty/studia/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon-Jumper
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon Jumper/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/Dokumenty/studia/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon-Jumper/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

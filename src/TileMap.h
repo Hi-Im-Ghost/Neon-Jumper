@@ -5,9 +5,17 @@
 #include "TileSet.h"
 #include "Layer.h"
 #include <cmath>
-
+/**
+ * @class TileMap - Klasa, która przechowuje kafelki i je wczytuje
+ */
 class TileMap : public sf::Drawable, public sf::Transformable {
 public:
+    /***
+     * Służy do ładowania kafelków użytych w wskazanej przez parametr warstwie
+     * @param tileset - obiekt z kafelkami
+     * @param layer - warstwa
+     * @return zwraca true w przypadku załadowania poprawnego lub false w przypadku niepowodzenia
+     */
     bool load(TileSet tileset, Layer layer) {
         tex.loadFromFile(tileset.getImage());
 
@@ -53,13 +61,19 @@ public:
         return true;
     }
 private:
+    /***
+     * Wirtualna metoda, który służy do przenoszenia elemntów do wyrenderowania na ekran
+     * @param target - element do wyrenderowania
+     * @param states - stany używane do renderowania
+     */
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         states.transform *= getTransform();
         states.texture = &tex;
         target.draw(verts, states);
     }
-
+    ///Tablica która przechowuje wierzchołki
     sf::VertexArray verts;
+    ///Przechowuje teksture kafelków
     sf::Texture tex;
 };
 

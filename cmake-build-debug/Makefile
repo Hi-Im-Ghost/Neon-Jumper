@@ -47,19 +47,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe"
+CMAKE_COMMAND = "D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f
+RM = "D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper"
+CMAKE_SOURCE_DIR = "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug"
+CMAKE_BINARY_DIR = "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -67,7 +67,7 @@ CMAKE_BINARY_DIR = "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki kom
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+	"D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -77,7 +77,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\CMakeFiles" "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\CMakeFiles" "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\\CMakeFiles\progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\R2-D2\Desktop\STUDIA\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon Jumper\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -368,6 +368,54 @@ src/entities/Slime.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/Slime.cpp.s
 .PHONY : src/entities/Slime.cpp.s
 
+src/entities/projectiles/Bullet.obj: src/entities/projectiles/Bullet.cpp.obj
+.PHONY : src/entities/projectiles/Bullet.obj
+
+# target to build an object file
+src/entities/projectiles/Bullet.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Bullet.cpp.obj
+.PHONY : src/entities/projectiles/Bullet.cpp.obj
+
+src/entities/projectiles/Bullet.i: src/entities/projectiles/Bullet.cpp.i
+.PHONY : src/entities/projectiles/Bullet.i
+
+# target to preprocess a source file
+src/entities/projectiles/Bullet.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Bullet.cpp.i
+.PHONY : src/entities/projectiles/Bullet.cpp.i
+
+src/entities/projectiles/Bullet.s: src/entities/projectiles/Bullet.cpp.s
+.PHONY : src/entities/projectiles/Bullet.s
+
+# target to generate assembly for a file
+src/entities/projectiles/Bullet.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Bullet.cpp.s
+.PHONY : src/entities/projectiles/Bullet.cpp.s
+
+src/entities/projectiles/Projectile.obj: src/entities/projectiles/Projectile.cpp.obj
+.PHONY : src/entities/projectiles/Projectile.obj
+
+# target to build an object file
+src/entities/projectiles/Projectile.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Projectile.cpp.obj
+.PHONY : src/entities/projectiles/Projectile.cpp.obj
+
+src/entities/projectiles/Projectile.i: src/entities/projectiles/Projectile.cpp.i
+.PHONY : src/entities/projectiles/Projectile.i
+
+# target to preprocess a source file
+src/entities/projectiles/Projectile.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Projectile.cpp.i
+.PHONY : src/entities/projectiles/Projectile.cpp.i
+
+src/entities/projectiles/Projectile.s: src/entities/projectiles/Projectile.cpp.s
+.PHONY : src/entities/projectiles/Projectile.s
+
+# target to generate assembly for a file
+src/entities/projectiles/Projectile.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/entities/projectiles/Projectile.cpp.s
+.PHONY : src/entities/projectiles/Projectile.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -599,6 +647,12 @@ help:
 	@echo ... src/entities/Slime.obj
 	@echo ... src/entities/Slime.i
 	@echo ... src/entities/Slime.s
+	@echo ... src/entities/projectiles/Bullet.obj
+	@echo ... src/entities/projectiles/Bullet.i
+	@echo ... src/entities/projectiles/Bullet.s
+	@echo ... src/entities/projectiles/Projectile.obj
+	@echo ... src/entities/projectiles/Projectile.i
+	@echo ... src/entities/projectiles/Projectile.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

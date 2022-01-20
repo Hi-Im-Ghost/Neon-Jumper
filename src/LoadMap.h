@@ -24,19 +24,37 @@ private:
     Layer damageLayer;
 
 public:
-    ///Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy
+    /***
+     * Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy
+     * @param mapFileName - nazwa pliku json w której to znajdują się elementy mapy
+     */
     LoadMap(std::string mapFileName);
-    ///Metoda która słuzy do wczytywania danych z pliku
+    /***
+     * Metoda która słuzy do wczytywania danych z pliku
+     * @return zwraca tekst wczytany z pliku
+     */
     std::ifstream readFile(std::string);
-    ///Metoda która służy do znalezienia przekazanej w parametrze warstwy
+    /***
+     * Metoda która służy do znalezienia przekazanej w parametrze warstwy
+     * @return zwraca warstwie kafelków
+     */
     TileSet findTileSet(Layer&, std::vector<TileSet>&);
 
-    ///Metoda klasy Layer która zwraca warstwe hitboxow dla terenu
+    /***
+     * Metoda klasy Layer która zwraca warstwe hitboxow dla terenu
+     * @return zwraca warstwe, która reprezentuje hitboxy terenu
+     */
     Layer getSolidLayer();
-    ///Metoda klasy Layer która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia
+    /***
+     * Metoda klasy Layer która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia
+     * @return zwraca warstwie, która reprezentuje hitboxy dla obiektów zadających obrażenia
+     */
     Layer getDamageLayer();
 
-    ///Służy do wyświetlania na ekranie warstw
+    /***
+     * Służy do wyświetlania na ekranie warstw
+     * @param window - okno na którym elementy mają być wyświetlane
+     */
     void draw(sf::RenderTarget& window);
 
 };
