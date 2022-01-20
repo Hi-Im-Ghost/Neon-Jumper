@@ -20,7 +20,6 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
     applyGravity(dt);
     handleCollision(allHitboxes);
     moveFinal();
-    //animateMovement();
 
     if (_bTimeStopped && tsClock.getElapsedTime().asSeconds() > 5)
         timeStart();
@@ -36,6 +35,10 @@ void Player::update(float dt, const std::list<sf::RectangleShape>& allHitboxes) 
     if (shootingCooldown > 0.0f)
         shootingCooldown -= dt;
 
+    updateProjectiles(dt);
+    for (auto& h : allHitboxes)
+        if (checkIsProjectileColliding(h))
+            std::cout << "col";
 }
 
 void Player::render(sf::RenderTarget &window) {
@@ -43,6 +46,7 @@ void Player::render(sf::RenderTarget &window) {
     animate(_sprite);
     window.draw(_sprite);
     //window.draw(_hitbox);
+    renderProjectiles(window);
 }
 
 void Player::initValues() {
@@ -57,7 +61,7 @@ void Player::initValues() {
     tsValue = 0;
     tsFillRate = 0.1;
 
-    shootingPoint = {30, 10};
+    shootingPoint = {10, 30};
     shootingCooldown = 0.7f;
 }
 
@@ -285,9 +289,8 @@ void Player::timeStart() {
 }
 
 void Player::shoot() {
-    if ( _bIsFlipped ) {
-        Bullet* b = new Bullet(getPosition() + shootingPoint, _bIsFlipped);
-        //ProjectileBucket::addProjectile(b);
-    }
-
+    sf::Vector2f sp = shootingPoint;
+    sp.x *= (_bIsFlipped) ? -1 : 1;
+    Bullet* b = new Bullet(getPosition() + sp, !_bIsFlipped);
+    addToList(b);
 }

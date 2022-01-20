@@ -13,9 +13,8 @@ private:
     bool _bShouldBeDestroyed = false;
 
 protected:
-    virtual void move(float x, float y) = 0;
+    virtual void move() = 0;
     void setPosition(float x, float y);
-    void markForDestruction() {_bShouldBeDestroyed = true;}
 
     void initTexture(const std::string& path, sf::IntRect textureRect);
 public:
@@ -24,6 +23,8 @@ public:
     sf::Vector2f getPosition();
     bool getIsMovingRight() const {return _bMovingRight;}
     bool getShouldBeDestroyed() const {return _bShouldBeDestroyed;}
+    bool isColliding(const sf::RectangleShape& recShape);
+    void markForDestruction() {_bShouldBeDestroyed = true;}
 
     virtual void update(float deltaTime);
     void render(sf::RenderTarget& window);

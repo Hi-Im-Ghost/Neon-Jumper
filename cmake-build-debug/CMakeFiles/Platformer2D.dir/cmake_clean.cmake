@@ -15,6 +15,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Platformer2D.dir/src/modules/Animated.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/modules/Damageable.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/modules/PlayerHUD.cpp.obj"
+  "CMakeFiles/Platformer2D.dir/src/modules/Shooter.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/states/GameState.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/states/LevelOneState.cpp.obj"
   "CMakeFiles/Platformer2D.dir/src/states/LevelTwoState.cpp.obj"

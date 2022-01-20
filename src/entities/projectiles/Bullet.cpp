@@ -1,14 +1,14 @@
 #include "Bullet.h"
 
 Bullet::Bullet(sf::Vector2f pos, bool movingRight) : Projectile(pos, movingRight) {
-    initTexture("../resources/shot.png", {0,0,8,8});
+    initTexture("../resources/shot.png", {0,0,4,4});
 
-    speed = 1.0f;
-    speedRate = 1.0f;
-    speedFallRate = 0.0f;
+    speed = 10.0f;
+    speedRate = 3.0f;
+    speedFallRate = 10.0f;
 }
 
-void Bullet::move(float x, float y) {
+void Bullet::move() {
     setPosition(
             getPosition().x + (speed * speedRate * ((getIsMovingRight()) ? 1.0f : -1.0f) ),
             getPosition().y
@@ -18,9 +18,10 @@ void Bullet::move(float x, float y) {
 void Bullet::update(float deltaTime) {
     Projectile::update(deltaTime);
 
-    speedRate -= deltaTime;
-
-    if (speed * speedRate < 0.001f) {
+    if (speedRate < 0.001f) {
         markForDestruction();
+    } else {
+        speedRate -= speedFallRate * deltaTime;
     }
+    move();
 }

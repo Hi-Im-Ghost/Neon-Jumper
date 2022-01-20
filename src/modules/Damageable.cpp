@@ -9,11 +9,12 @@ void Damageable::takeDamage(int damage) {
     }
 }
 
-void Damageable::setMaxHP(unsigned int newMax) {
+void Damageable::setMaxHP(int newMax) {
     maxHP = newMax;
+    setHP(maxHP);
 }
 
-void Damageable::setHP(unsigned int newHP) {
+void Damageable::setHP(int newHP) {
     hp = newHP;
 }
 
@@ -31,20 +32,17 @@ void Damageable::updateInvincibilityTimer(float dt) {
         invTime -= dt;
         if (invTime < 0.0f)
         {
-            invTime = 1.0f;
+            invTime = defaultInvincibilityTime;
             _bIsInvincible = false;
         }
     }
     else
     {
-        invTime = 1.0f;
+        invTime = defaultInvincibilityTime;
     }
 }
 
-bool Damageable::isDead() {
-    if(hp < 1)
-        return true;
-    else
-        return false;
+bool Damageable::isDead() const {
+    return hp < 1;
 }
 

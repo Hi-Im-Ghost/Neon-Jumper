@@ -6,12 +6,20 @@ Slime::Slime(float x, float y, float pathPointA, float pathPointB, bool moveRigh
     initHitbox({16*3, 10*3});
     initPath(pathPointA, pathPointB);
     this->movingRight = moveRight;
+
+    setMaxHP(5);
+    defaultInvincibilityTime = 0.2f;
 }
 
 void Slime::update(float deltaSeconds) {
     _sprite.setPosition(getPosition().x, getPosition().y);
     animate(_sprite);
 
+    if (isDead()) {
+        setPosition(0, -100);
+    }
+
+    updateInvincibilityTimer(deltaSeconds);
     moveHorizontal(100 * deltaSeconds); //30
 }
 

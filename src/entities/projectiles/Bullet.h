@@ -9,7 +9,7 @@ private:
     float speedRate;
     float speedFallRate;
 
-    void move(float x, float y) override;
+    void move() override;
 
 public:
     Bullet(sf::Vector2f pos, bool movingRight);

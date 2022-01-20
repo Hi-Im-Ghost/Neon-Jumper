@@ -8,11 +8,12 @@
 
 #include "../modules/Damageable.h"
 #include "../modules/Animated.h"
+#include "../modules/Shooter.h"
 
 /**
  * @class Reprezentuje postać gracza
  */
-class Player : public Damageable, public Animated {
+class Player : public Damageable, public Animated, public Shooter {
 private:
     /// Bufor dla dźwięku skoku
     sf::SoundBuffer bufGame;
@@ -41,12 +42,6 @@ private:
     float _gravityDelta;
     /// Pokazuje czy gracz stoi na jakimś podłożu
     bool _bIsGrounded;
-
-    // Shooting values
-    /// Pozycja punktu z którego gracz wykonuje strzał
-    sf::Vector2f shootingPoint;
-    /// Odstęp czasowy pomiędzy strzałami
-    float shootingCooldown;
 
     // Time stop values
     /// Pozwala określić, czy czas jest w tej chwili zatrzymany
@@ -86,9 +81,8 @@ private:
     /// Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza
     void animateMovement();
 
-    // Shooting functions
-    /// Wykonuje strzał
-    void shoot();
+    // Shooting
+    void shoot() override;
 
     // Time stop functions
     /// Służy do zatrzymywania czasu

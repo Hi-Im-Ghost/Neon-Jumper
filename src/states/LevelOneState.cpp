@@ -27,11 +27,16 @@ void LevelOneState::update(float dt) {
         updateInput();
         if (!player->getTimeStopped())
             updateEntities(dt);
+
         player->update(dt, hitboxes);
+
+        // triggers
         updateEndTrigger();
         updateDmgTriggers();
         updateDeadTrigger();
         killPlayerTriggers();
+
+        // hud
         hud->setPosition(player->getPosition().x,player->getPosition().y);
         hud->update(player,player->bTimeStopReady);
     } else{
@@ -411,11 +416,13 @@ void LevelOneState::updateEntities(float dt) {
     // Update every enemy
     for (auto& e : enemies) {
         e->update(dt);
-    }
+        // check collision with projectiles
+        if (player->checkIsProjectileColliding(e->getHitbox())) {
+            e->takeDamage(1);
+            break;
+        }
 
-    // Update enemy collision with player
-    for (auto & e : enemies) {
-
+        // check collision with player
         if (player->checkForIntersection(e->getHitbox())) {
             deathGame.play();
             hud->takedDmg = true;

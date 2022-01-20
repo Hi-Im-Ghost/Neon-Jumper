@@ -47,19 +47,19 @@ cmake_force:
 SHELL = cmd.exe
 
 # The CMake executable.
-CMAKE_COMMAND = "D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe"
+CMAKE_COMMAND = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe"
 
 # The command to remove a file.
-RM = "D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f
+RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper"
+CMAKE_SOURCE_DIR = C:\Users\ACER\Documents\CLionProjects\Neon-Jumper
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug"
+CMAKE_BINARY_DIR = C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -67,7 +67,7 @@ CMAKE_BINARY_DIR = "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+	"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -77,7 +77,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"D:\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\CMakeFiles" "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\CMakeFiles C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "D:\Dokumenty\studia\Semestr 5\Podstawy grafiki komputerowej\Projekt\Neon-Jumper\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\ACER\Documents\CLionProjects\Neon-Jumper\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -512,6 +512,30 @@ src/modules/PlayerHUD.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/modules/PlayerHUD.cpp.s
 .PHONY : src/modules/PlayerHUD.cpp.s
 
+src/modules/Shooter.obj: src/modules/Shooter.cpp.obj
+.PHONY : src/modules/Shooter.obj
+
+# target to build an object file
+src/modules/Shooter.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/modules/Shooter.cpp.obj
+.PHONY : src/modules/Shooter.cpp.obj
+
+src/modules/Shooter.i: src/modules/Shooter.cpp.i
+.PHONY : src/modules/Shooter.i
+
+# target to preprocess a source file
+src/modules/Shooter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/modules/Shooter.cpp.i
+.PHONY : src/modules/Shooter.cpp.i
+
+src/modules/Shooter.s: src/modules/Shooter.cpp.s
+.PHONY : src/modules/Shooter.s
+
+# target to generate assembly for a file
+src/modules/Shooter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Platformer2D.dir\build.make CMakeFiles/Platformer2D.dir/src/modules/Shooter.cpp.s
+.PHONY : src/modules/Shooter.cpp.s
+
 src/states/GameState.obj: src/states/GameState.cpp.obj
 .PHONY : src/states/GameState.obj
 
@@ -665,6 +689,9 @@ help:
 	@echo ... src/modules/PlayerHUD.obj
 	@echo ... src/modules/PlayerHUD.i
 	@echo ... src/modules/PlayerHUD.s
+	@echo ... src/modules/Shooter.obj
+	@echo ... src/modules/Shooter.i
+	@echo ... src/modules/Shooter.s
 	@echo ... src/states/GameState.obj
 	@echo ... src/states/GameState.i
 	@echo ... src/states/GameState.s
