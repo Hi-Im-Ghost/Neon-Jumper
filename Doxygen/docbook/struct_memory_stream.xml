@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_struct_memory_stream" xml:lang="en-US">
+<title>MemoryStream Struct Reference</title>
+<indexterm><primary>MemoryStream</primary></indexterm>
+<para>
+
+<para>Represents an in-memory input byte stream. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;memorystream.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef char <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_struct_memory_stream_1a2472317ef00fcd44e5cc209e04c49756">MemoryStream</link> (const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> *src, size_t size)</para>
+</listitem>
+            <listitem><para><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> <link linkend="_struct_memory_stream_1a707014bbfd303838b6a7b90be24f6adc">Peek</link> () const</para>
+</listitem>
+            <listitem><para><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> <link linkend="_struct_memory_stream_1a14ff92deda5d39c9b166aaa07e82a0ee">Take</link> ()</para>
+</listitem>
+            <listitem><para>size_t <link linkend="_struct_memory_stream_1a2de1486742f0d44decda90a56bc43268">Tell</link> () const</para>
+</listitem>
+            <listitem><para><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * <link linkend="_struct_memory_stream_1a4fd6e7a293bd3ec76e649d8e853dd38f">PutBegin</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_memory_stream_1ac445f93c23c9e85f1f5381911c4ed870">Put</link> (<link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link>)</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_memory_stream_1a305e141314ae0e3afacb04aaf2d8bcc6">Flush</link> ()</para>
+</listitem>
+            <listitem><para>size_t <link linkend="_struct_memory_stream_1a74fb36c1f6f95d189502cf7a6be79135">PutEnd</link> (<link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> *)</para>
+</listitem>
+            <listitem><para>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * <link linkend="_struct_memory_stream_1a81dd4a86148b0af9527083cdef3d31d8">Peek4</link> () const</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * <link linkend="_struct_memory_stream_1a57cf6cb5766e931a62928b9f92507443">src_</link></para>
+
+<para>Current read position. </para>
+</listitem>
+            <listitem><para>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * <link linkend="_struct_memory_stream_1a91f0767b4f0ed2476d835e8344848a2f">begin_</link></para>
+
+<para>Original head of the string. </para>
+</listitem>
+            <listitem><para>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * <link linkend="_struct_memory_stream_1a55fb302ba0492419757e3ba318c8c654">end_</link></para>
+
+<para>End of stream. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_struct_memory_stream_1ab26a1b5c6d5e8f52c0f6982feba47f36">size_</link></para>
+
+<para>Size of the stream. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Represents an in-memory input byte stream. </para>
+
+
+
+<para>This class is mainly for being wrapped by <link linkend="_class_encoded_input_stream">EncodedInputStream</link> or <link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link>.</para>
+
+<para>It is similar to FileReadBuffer but the source is an in-memory buffer instead of a file.</para>
+
+<para>Differences between <link linkend="_struct_memory_stream">MemoryStream</link> and StringStream:<orderedlist>
+<listitem>
+<para>StringStream has encoding but <link linkend="_struct_memory_stream">MemoryStream</link> is a byte stream.</para>
+</listitem><listitem>
+<para><link linkend="_struct_memory_stream">MemoryStream</link> needs size of the source buffer and the buffer don&apos;t need to be null terminated. StringStream assume null-terminated string as source.</para>
+</listitem><listitem>
+<para><link linkend="_struct_memory_stream">MemoryStream</link> supports <link linkend="_struct_memory_stream_1a81dd4a86148b0af9527083cdef3d31d8">Peek4()</link> for encoding detection. StringStream is specified with an encoding so it should not have <link linkend="_struct_memory_stream_1a81dd4a86148b0af9527083cdef3d31d8">Peek4()</link>. <note><title>Note</title>
+
+<para>implements Stream concept </para>
+</note>
+</para>
+</listitem></orderedlist>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Ch</secondary></indexterm>
+<para><computeroutput>typedef char <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">MemoryStream::Ch</link></computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_struct_memory_stream_1a2472317ef00fcd44e5cc209e04c49756"/><section>
+    <title>MemoryStream()</title>
+<indexterm><primary>MemoryStream</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>MemoryStream</secondary></indexterm>
+<para><computeroutput>MemoryStream::MemoryStream (const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * src, size_t size)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_struct_memory_stream_1a305e141314ae0e3afacb04aaf2d8bcc6"/><section>
+    <title>Flush()</title>
+<indexterm><primary>Flush</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Flush</secondary></indexterm>
+<para><computeroutput>void MemoryStream::Flush ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a707014bbfd303838b6a7b90be24f6adc"/><section>
+    <title>Peek()</title>
+<indexterm><primary>Peek</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Peek</secondary></indexterm>
+<para><computeroutput><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> MemoryStream::Peek ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a81dd4a86148b0af9527083cdef3d31d8"/><section>
+    <title>Peek4()</title>
+<indexterm><primary>Peek4</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Peek4</secondary></indexterm>
+<para><computeroutput>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * MemoryStream::Peek4 ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1ac445f93c23c9e85f1f5381911c4ed870"/><section>
+    <title>Put()</title>
+<indexterm><primary>Put</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Put</secondary></indexterm>
+<para><computeroutput>void MemoryStream::Put (<link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a4fd6e7a293bd3ec76e649d8e853dd38f"/><section>
+    <title>PutBegin()</title>
+<indexterm><primary>PutBegin</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>PutBegin</secondary></indexterm>
+<para><computeroutput><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * MemoryStream::PutBegin ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a74fb36c1f6f95d189502cf7a6be79135"/><section>
+    <title>PutEnd()</title>
+<indexterm><primary>PutEnd</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>PutEnd</secondary></indexterm>
+<para><computeroutput>size_t MemoryStream::PutEnd (<link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> * )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a14ff92deda5d39c9b166aaa07e82a0ee"/><section>
+    <title>Take()</title>
+<indexterm><primary>Take</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Take</secondary></indexterm>
+<para><computeroutput><link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link> MemoryStream::Take ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_memory_stream_1a2de1486742f0d44decda90a56bc43268"/><section>
+    <title>Tell()</title>
+<indexterm><primary>Tell</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>Tell</secondary></indexterm>
+<para><computeroutput>size_t MemoryStream::Tell ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_struct_memory_stream_1a91f0767b4f0ed2476d835e8344848a2f"/><section>
+    <title>begin_</title>
+<indexterm><primary>begin_</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>begin_</secondary></indexterm>
+<para><computeroutput>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link>* MemoryStream::begin_</computeroutput></para><para>
+
+<para>Original head of the string. </para>
+</para>
+</section>
+<anchor xml:id="_struct_memory_stream_1a55fb302ba0492419757e3ba318c8c654"/><section>
+    <title>end_</title>
+<indexterm><primary>end_</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>end_</secondary></indexterm>
+<para><computeroutput>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link>* MemoryStream::end_</computeroutput></para><para>
+
+<para>End of stream. </para>
+</para>
+</section>
+<anchor xml:id="_struct_memory_stream_1ab26a1b5c6d5e8f52c0f6982feba47f36"/><section>
+    <title>size_</title>
+<indexterm><primary>size_</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>size_</secondary></indexterm>
+<para><computeroutput>size_t MemoryStream::size_</computeroutput></para><para>
+
+<para>Size of the stream. </para>
+</para>
+</section>
+<anchor xml:id="_struct_memory_stream_1a57cf6cb5766e931a62928b9f92507443"/><section>
+    <title>src_</title>
+<indexterm><primary>src_</primary><secondary>MemoryStream</secondary></indexterm>
+<indexterm><primary>MemoryStream</primary><secondary>src_</secondary></indexterm>
+<para><computeroutput>const <link linkend="_struct_memory_stream_1a62a1cbd052c325c83dbdb387d2f89088">Ch</link>* MemoryStream::src_</computeroutput></para><para>
+
+<para>Current read position. </para>
+</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+src/rapidjson/include/rapidjson/<link linkend="_memorystream_8h">memorystream.h</link></section>
+</section>

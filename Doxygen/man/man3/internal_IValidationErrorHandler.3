@@ -1,0 +1,284 @@
+.TH "internal::IValidationErrorHandler< SchemaType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+internal::IValidationErrorHandler< SchemaType >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <schema\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef SchemaType::Ch \fBCh\fP"
+.br
+.ti -1c
+.RI "typedef SchemaType::SValue \fBSValue\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~IValidationErrorHandler\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBNotMultipleOf\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected)=0"
+.br
+.ti -1c
+.RI "virtual void \fBNotMultipleOf\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected)=0"
+.br
+.ti -1c
+.RI "virtual void \fBNotMultipleOf\fP (double actual, const \fBSValue\fP &expected)=0"
+.br
+.ti -1c
+.RI "virtual void \fBAboveMaximum\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBAboveMaximum\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBAboveMaximum\fP (double actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBBelowMinimum\fP (\fBint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBBelowMinimum\fP (\fBuint64_t\fP actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBBelowMinimum\fP (double actual, const \fBSValue\fP &expected, bool exclusive)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooLong\fP (const \fBCh\fP *str, \fBSizeType\fP length, \fBSizeType\fP expected)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooShort\fP (const \fBCh\fP *str, \fBSizeType\fP length, \fBSizeType\fP expected)=0"
+.br
+.ti -1c
+.RI "virtual void \fBDoesNotMatch\fP (const \fBCh\fP *str, \fBSizeType\fP length)=0"
+.br
+.ti -1c
+.RI "virtual void \fBDisallowedItem\fP (\fBSizeType\fP index)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooFewItems\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooManyItems\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)=0"
+.br
+.ti -1c
+.RI "virtual void \fBDuplicateItems\fP (\fBSizeType\fP index1, \fBSizeType\fP index2)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooManyProperties\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)=0"
+.br
+.ti -1c
+.RI "virtual void \fBTooFewProperties\fP (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)=0"
+.br
+.ti -1c
+.RI "virtual void \fBStartMissingProperties\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBAddMissingProperty\fP (const \fBSValue\fP &name)=0"
+.br
+.ti -1c
+.RI "virtual bool \fBEndMissingProperties\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBPropertyViolations\fP (\fBISchemaValidator\fP **subvalidators, \fBSizeType\fP count)=0"
+.br
+.ti -1c
+.RI "virtual void \fBDisallowedProperty\fP (const \fBCh\fP *name, \fBSizeType\fP length)=0"
+.br
+.ti -1c
+.RI "virtual void \fBStartDependencyErrors\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBStartMissingDependentProperties\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBAddMissingDependentProperty\fP (const \fBSValue\fP &targetName)=0"
+.br
+.ti -1c
+.RI "virtual void \fBEndMissingDependentProperties\fP (const \fBSValue\fP &sourceName)=0"
+.br
+.ti -1c
+.RI "virtual void \fBAddDependencySchemaError\fP (const \fBSValue\fP &souceName, \fBISchemaValidator\fP *subvalidator)=0"
+.br
+.ti -1c
+.RI "virtual bool \fBEndDependencyErrors\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBDisallowedValue\fP (const \fBValidateErrorCode\fP code)=0"
+.br
+.ti -1c
+.RI "virtual void \fBStartDisallowedType\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBAddExpectedType\fP (const typename \fBSchemaType::ValueType\fP &expectedType)=0"
+.br
+.ti -1c
+.RI "virtual void \fBEndDisallowedType\fP (const typename \fBSchemaType::ValueType\fP &actualType)=0"
+.br
+.ti -1c
+.RI "virtual void \fBNotAllOf\fP (\fBISchemaValidator\fP **subvalidators, \fBSizeType\fP count)=0"
+.br
+.ti -1c
+.RI "virtual void \fBNoneOf\fP (\fBISchemaValidator\fP **subvalidators, \fBSizeType\fP count)=0"
+.br
+.ti -1c
+.RI "virtual void \fBNotOneOf\fP (\fBISchemaValidator\fP **subvalidators, \fBSizeType\fP count, bool matched)=0"
+.br
+.ti -1c
+.RI "virtual void \fBDisallowed\fP ()=0"
+.br
+.in -1c
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename SchemaType > typedef SchemaType::Ch \fBinternal::IValidationErrorHandler\fP< SchemaType >::Ch"
+
+.SS "template<typename SchemaType > typedef SchemaType::SValue \fBinternal::IValidationErrorHandler\fP< SchemaType >::SValue"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename SchemaType > virtual \fBinternal::IValidationErrorHandler\fP< SchemaType >::~\fBIValidationErrorHandler\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AboveMaximum (double actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AboveMaximum (\fBint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AboveMaximum (\fBuint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AddDependencySchemaError (const \fBSValue\fP & souceName, \fBISchemaValidator\fP * subvalidator)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AddExpectedType (const typename \fBSchemaType::ValueType\fP & expectedType)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AddMissingDependentProperty (const \fBSValue\fP & targetName)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::AddMissingProperty (const \fBSValue\fP & name)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::BelowMinimum (double actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::BelowMinimum (\fBint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::BelowMinimum (\fBuint64_t\fP actual, const \fBSValue\fP & expected, bool exclusive)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::Disallowed ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::DisallowedItem (\fBSizeType\fP index)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::DisallowedProperty (const \fBCh\fP * name, \fBSizeType\fP length)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::DisallowedValue (const \fBValidateErrorCode\fP code)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::DoesNotMatch (const \fBCh\fP * str, \fBSizeType\fP length)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::DuplicateItems (\fBSizeType\fP index1, \fBSizeType\fP index2)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual bool \fBinternal::IValidationErrorHandler\fP< SchemaType >::EndDependencyErrors ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::EndDisallowedType (const typename \fBSchemaType::ValueType\fP & actualType)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::EndMissingDependentProperties (const \fBSValue\fP & sourceName)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual bool \fBinternal::IValidationErrorHandler\fP< SchemaType >::EndMissingProperties ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NoneOf (\fBISchemaValidator\fP ** subvalidators, \fBSizeType\fP count)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NotAllOf (\fBISchemaValidator\fP ** subvalidators, \fBSizeType\fP count)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NotMultipleOf (double actual, const \fBSValue\fP & expected)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NotMultipleOf (\fBint64_t\fP actual, const \fBSValue\fP & expected)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NotMultipleOf (\fBuint64_t\fP actual, const \fBSValue\fP & expected)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::NotOneOf (\fBISchemaValidator\fP ** subvalidators, \fBSizeType\fP count, bool matched)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::PropertyViolations (\fBISchemaValidator\fP ** subvalidators, \fBSizeType\fP count)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::StartDependencyErrors ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::StartDisallowedType ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::StartMissingDependentProperties ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::StartMissingProperties ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooFewItems (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooFewProperties (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooLong (const \fBCh\fP * str, \fBSizeType\fP length, \fBSizeType\fP expected)\fC [pure virtual]\fP"
+
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooManyItems (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooManyProperties (\fBSizeType\fP actualCount, \fBSizeType\fP expectedCount)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP\&.
+.SS "template<typename SchemaType > virtual void \fBinternal::IValidationErrorHandler\fP< SchemaType >::TooShort (const \fBCh\fP * str, \fBSizeType\fP length, \fBSizeType\fP expected)\fC [pure virtual]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

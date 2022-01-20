@@ -1,0 +1,696 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_unittest_2schematest_8cpp" xml:lang="en-US">
+<title>src/rapidjson/test/unittest/schematest.cpp File Reference</title>
+<indexterm><primary>src/rapidjson/test/unittest/schematest.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;unittest.h&quot;
+#include &quot;rapidjson/schema.h&quot;
+#include &quot;rapidjson/stringbuffer.h&quot;
+#include &quot;rapidjson/writer.h&quot;
+#include &quot;rapidjson/error/error.h&quot;
+#include &quot;rapidjson/error/en.h&quot;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_class_remote_schema_document_provider">RemoteSchemaDocumentProvider&lt; SchemaDocumentType &gt;</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1a40c690b6fd0b7ae8d8484b613255cc72">RAPIDJSON_SCHEMA_VERBOSE</link>   0</para>
+</listitem>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1a2f2eef0ee4477f3fe5874703a66e997f">RAPIDJSON_HAS_STDSTRING</link>   1</para>
+</listitem>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1ac2380747eaa06591b96946cb428d8f6c">TEST_HASHER</link>(json1,  json2,  expected)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1a194a45f4962b9041572c3672fb81d970">VALIDATE</link>(schema,  json,  expected)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1a25cada1f601c49f2d1f8b3123b34f8f8">INVALIDATE</link>(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_unittest_2schematest_8cpp_1a820e98f7387641b1f9fc66595bde8e80">INVALIDATE_</link>(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error,  flags,  SchemaValidatorType,  PointerType)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a2145f5b7b025d2451b0d6faa24b12773">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Hasher)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a4ea1d18d983f566d99cad13cdce905a0">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Typeless)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a2772367ef59fe9a2b9bcb36b14aacaee">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, MultiType)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a5143b31c397868cff3f66fd857581481">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Enum_Typed)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1af2c4fba8cda306efd996a5390a30a72f">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Enum_Typless)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ad01c4239bf82f3a212cea33989d05253">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Enum_InvalidType)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a6fb32e476010a3596ce3cde287991ad7">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, AllOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ae4b8aa67c2e72c0c65f51496fd5e9a27">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, AnyOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a5e38fae4652648edf696b574522394b6">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, OneOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a858ba1d066ac9a7592185e89ef090578">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Not)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a5c3ff210c009f245e4717a3634b372b9">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a12d6ccf9a6e914c14bae8b4cf7f28bbd">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_AllOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a4e3cbd3e86d111331407f2850d5e115e">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, String)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aea5d2c782e1a6efbea93209ae4b51388">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, String_LengthRange)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a592fe521fb9ef24a2bd3b61775e99661">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a518af66eea9117dbdfc0a1a73f452908">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_Range)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a0c6127eb27a0e4914b1f35d0a5c680e6">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_Range64Boundary)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1acfd58f4671584a1ca5ed25739d355b17">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_RangeU64Boundary)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1afc98ec73631ff82d9a000eea116a5fc9">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_Range64BoundaryExclusive)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aba72231779dc91f6c9a10f81f183d663">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_MultipleOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a6fe545f53e479240085e6cd8039d4eb3">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Integer_MultipleOf64Boundary)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aebec84661c8ba0d606f1784558eb67ba">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_Range)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a72bd50ab509941ef63d6392d4c0abba2">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_RangeInt)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a4cc9884e3fef6544d7406217e1818b6d">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_RangeDouble)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1acfa3801d3bd6d7eece9825488192e4cd">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_RangeDoubleU64Boundary)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a79c711f4538b8fddf4552c544cb6e1e6">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_MultipleOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ab0f5b8149e8f81509392c0fa0e69ce48">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Number_MultipleOfOne)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aea2a86c83fbcc44a838f2555bc80cb04">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a229115f8a876b75d5b2604864742a1a1">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_Properties)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a34950de4c154a920b6a31200aebb191d">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_AdditionalPropertiesBoolean)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a29473e40ab139614db9942b0b7705bee">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_AdditionalPropertiesObject)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a64e37095188026098505ef8a22614662">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_Required)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a56f18082f23887f6c72142475eb5e446">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_Required_PassWithDefault)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a732b4eea8fcdbb720e8dfd0f3e0b0005">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_PropertiesRange)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a19703935d224fea0a5de461ce2cfe2ce">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_PropertyDependencies)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a50de77939f5ad6e51288bca38d6c6163">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Object_SchemaDependencies)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a1f2adcb35ce05034e08c6689be235fbd">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ae35a10f0f6202aac23253455ae36c96f">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array_ItemsList)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a3f89e87f2bd576780c33bb7d7fa46725">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array_ItemsTuple)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1afc7ecb52bd4b8982f367e1a5c42d3212">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array_AdditionalItems)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a5871c1648e550a4bf99ea34d029ca5b7">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array_ItemsRange)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ae9e1a2cb06c4eba5bb306d8d8acbe167">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Array_UniqueItems)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1acf4755544d10a86608bd12bb579b7bd6">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Boolean)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a04ac1ffb7901e2cc0409d52b4fbf4468">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Null)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aa5f3b857773bcd080f14e9866179efd7">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ObjectInArray)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aa51cd14d96f7243b966d4c74c610de60">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, MultiTypeInObject)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aaadfefe52481bf4674d099626c7fe91c">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, MultiTypeWithObject)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a5d67690d6a1370f8f702d77ee9000111">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, AllOf_Nested)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a257be5db7755b9b2ffb30b426084cea2">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, EscapedPointer)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a24a0274173fb8d7b961cbebd084633fb">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, SchemaPointer)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1af9a9615be9c5c97cf9cda31f294e1b8e">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ValidateMetaSchema)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a4b5d442a177c960aa33790bb3f64c315">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ValidateMetaSchema_UTF16)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ad5dcf99ad5149b042298ea200495c701">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, TestSuite)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a8cae34a7428349210e56ac974f98e91b">TEST</link> (<link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>, Simple)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a00d58655bbb7f86b4190665373514c89">TEST</link> (<link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>, Invalid)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ac186f00696812780b761e09d26c1dc14">TEST</link> (SchemaValidatingWriter, Simple)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1af1a05dc6ff927a4a79d864fa5306e693">TEST</link> (<link linkend="_class_schema">Schema</link>, Issue848)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a9f781b950bec69a1ae7795cd0f940c67">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Issue608)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ae9658cdbc915241fb16dda49fbf54472">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Issue728_AllOfRef)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1af206b545c3256c60e2f95ecfb8390ff4">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Issue1017_allOfHandler)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a653d622d4ce9b76181b78ea19f799e69">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a6c7382dadcc893e9e50ab4e404a7c3e8">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote_change_resolution_scope_uri)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a77663f123e78a502ac130ca6f5aa085d">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote_change_resolution_scope_relative_path)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a2133fed511c76f88a52835a899a4184a">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote_change_resolution_scope_absolute_path)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a84a3f57e8564af4286913c8e62275565">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote_change_resolution_scope_absolute_path_document)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ab0b532fc4b1c9791ffe48029102319f7">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_internal_id_1)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1accb03948973004caf200916c14780464">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_internal_id_2)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a9635a74a33041d58aae440b50ce4b27d">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_internal_id_in_array)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a67762c47f776de47ceadf87a28560043">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_internal_id_and_schema_pointer)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a940a5d188b5bde695defb45a694b05dc">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_internal_multiple_ids)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a054763dad710ea6c359f49299cedcb65">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Ref_remote_issue1210)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ac63d62b726dec11161ded0b4f2ba59b0">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a31bd265b679a87818d53d06322c7d902">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_OneOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aa860413deb5f33fec5d1716540fafc98">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_AllOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1acad87863663da65fea646959eb8a15a5">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_AnyOf)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a68757959491b7ee3fda7d9ac05719524">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_UniqueItems)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1abe32f402f4659fe65ec4fb8629b802ec">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_Enum)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1aa4ea20f1f861b2e81c1ea99ee874e0bc">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_RogueArray)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ae1776947308a008b638646ee01103025">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_RogueObject)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a55338963580698b5281415f85943b894">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_RogueString)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1a69ec11b922ec23a0e2405ac5d1f1a59e">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, ContinueOnErrors_Issue2)</para>
+</listitem>
+            <listitem><para><link linkend="_unittest_2schematest_8cpp_1ad514ff43e4c9764a9f2f4fa5b540e8b3">TEST</link> (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link>, Schema_UnknownError)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_unittest_2schematest_8cpp_1a25cada1f601c49f2d1f8b3123b34f8f8"/><section>
+    <title>INVALIDATE</title>
+<indexterm><primary>INVALIDATE</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>INVALIDATE</secondary></indexterm>
+<para><computeroutput>#define INVALIDATE( schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;INVALIDATE_(schema,&#32;json,&#32;invalidSchemaPointer,&#32;invalidSchemaKeyword,&#32;invalidDocumentPointer,&#32;error,&#32;<link linkend="_schema_8h_1a380a56f9b589025b27a565de4c4a2942a70564fe50c13963b485000be542c52c9">kValidateDefaultFlags</link>,&#32;<link linkend="_class_generic_schema_validator">SchemaValidator</link>,&#32;<link linkend="_class_generic_pointer">Pointer</link>)&#32;\
+}
+</programlisting></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a820e98f7387641b1f9fc66595bde8e80"/><section>
+    <title>INVALIDATE_</title>
+<indexterm><primary>INVALIDATE_</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>INVALIDATE_</secondary></indexterm>
+<para><computeroutput>#define INVALIDATE_( schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error,  flags,  SchemaValidatorType,  PointerType)</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a2f2eef0ee4477f3fe5874703a66e997f"/><section>
+    <title>RAPIDJSON_HAS_STDSTRING</title>
+<indexterm><primary>RAPIDJSON_HAS_STDSTRING</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>RAPIDJSON_HAS_STDSTRING</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_HAS_STDSTRING   1</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a40c690b6fd0b7ae8d8484b613255cc72"/><section>
+    <title>RAPIDJSON_SCHEMA_VERBOSE</title>
+<indexterm><primary>RAPIDJSON_SCHEMA_VERBOSE</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>RAPIDJSON_SCHEMA_VERBOSE</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_SCHEMA_VERBOSE   0</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ac2380747eaa06591b96946cb428d8f6c"/><section>
+    <title>TEST_HASHER</title>
+<indexterm><primary>TEST_HASHER</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST_HASHER</secondary></indexterm>
+<para><computeroutput>#define TEST_HASHER( json1,  json2,  expected)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;Document&#32;d1,&#32;d2;\
+&#32;&#32;&#32;&#32;d1.Parse(json1);\
+&#32;&#32;&#32;&#32;ASSERT_FALSE(d1.HasParseError());\
+&#32;&#32;&#32;&#32;d2.Parse(json2);\
+&#32;&#32;&#32;&#32;ASSERT_FALSE(d2.HasParseError());\
+&#32;&#32;&#32;&#32;internal::Hasher&lt;Value,&#32;CrtAllocator&gt;&#32;h1,&#32;h2;\
+&#32;&#32;&#32;&#32;d1.Accept(h1);\
+&#32;&#32;&#32;&#32;d2.Accept(h2);\
+&#32;&#32;&#32;&#32;ASSERT_TRUE(h1.IsValid());\
+&#32;&#32;&#32;&#32;ASSERT_TRUE(h2.IsValid());\
+&#32;&#32;&#32;&#32;<emphasis role="comment">/*printf(&quot;%s:&#32;0x%016llx\n%s:&#32;0x%016llx\n\n&quot;,&#32;json1,&#32;h1.GetHashCode(),&#32;json2,&#32;h2.GetHashCode());*/</emphasis>\
+&#32;&#32;&#32;&#32;EXPECT_TRUE(expected&#32;==&#32;(h1.GetHashCode()&#32;==&#32;h2.GetHashCode()));\
+}
+</programlisting></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a194a45f4962b9041572c3672fb81d970"/><section>
+    <title>VALIDATE</title>
+<indexterm><primary>VALIDATE</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>VALIDATE</secondary></indexterm>
+<para><computeroutput>#define VALIDATE( schema,  json,  expected)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+&#32;&#32;&#32;&#32;SchemaValidator&#32;validator(schema);\
+&#32;&#32;&#32;&#32;Document&#32;d;\
+&#32;&#32;&#32;&#32;<emphasis role="comment">/*printf(&quot;\n%s\n&quot;,&#32;json);*/</emphasis>\
+&#32;&#32;&#32;&#32;d.Parse(json);\
+&#32;&#32;&#32;&#32;EXPECT_FALSE(d.HasParseError());\
+&#32;&#32;&#32;&#32;EXPECT_TRUE(expected&#32;==&#32;d.Accept(validator));\
+&#32;&#32;&#32;&#32;EXPECT_TRUE(expected&#32;==&#32;validator.IsValid());\
+&#32;&#32;&#32;&#32;ValidateErrorCode&#32;code&#32;=&#32;validator.GetInvalidSchemaCode();\
+&#32;&#32;&#32;&#32;if&#32;(expected)&#32;{\
+&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(code&#32;==&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aac15ca121db8911126960c0672dfe2a2e">kValidateErrorNone</link>);\
+&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(validator.GetInvalidSchemaKeyword()&#32;==&#32;0);\
+&#32;&#32;&#32;&#32;}\
+&#32;&#32;&#32;&#32;if&#32;((expected)&#32;&amp;&amp;&#32;!validator.IsValid())&#32;{\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringBuffer&#32;sb;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;validator.GetInvalidSchemaPointer().StringifyUriFragment(sb);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Invalid&#32;schema:&#32;%s\n&quot;</emphasis>,&#32;sb.GetString());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Invalid&#32;keyword:&#32;%s\n&quot;</emphasis>,&#32;validator.GetInvalidSchemaKeyword());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Invalid&#32;code:&#32;%d\n&quot;</emphasis>,&#32;code);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Invalid&#32;message:&#32;%s\n&quot;</emphasis>,&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga05ec22ea9bae6f1a0eb0fa8cb1bde709">GetValidateError_En</link>(code));\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sb.Clear();\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;validator.GetInvalidDocumentPointer().StringifyUriFragment(sb);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Invalid&#32;document:&#32;%s\n&quot;</emphasis>,&#32;sb.GetString());\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sb.Clear();\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Writer&lt;StringBuffer&gt;&#32;w(sb);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;validator.GetError().Accept(w);\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;Validation&#32;error:&#32;%s\n&quot;</emphasis>,&#32;sb.GetString());\
+&#32;&#32;&#32;&#32;}\
+}
+</programlisting></section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_unittest_2schematest_8cpp_1af1a05dc6ff927a4a79d864fa5306e693"/><section>
+    <title>TEST()<computeroutput>[1/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_schema">Schema</link> , Issue848 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a00d58655bbb7f86b4190665373514c89"/><section>
+    <title>TEST()<computeroutput>[2/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_schema_validating_reader">SchemaValidatingReader</link> , Invalid )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a8cae34a7428349210e56ac974f98e91b"/><section>
+    <title>TEST()<computeroutput>[3/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_class_schema_validating_reader">SchemaValidatingReader</link> , Simple )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ac186f00696812780b761e09d26c1dc14"/><section>
+    <title>TEST()<computeroutput>[4/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (SchemaValidatingWriter , Simple )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a6fb32e476010a3596ce3cde287991ad7"/><section>
+    <title>TEST()<computeroutput>[5/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , AllOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a5d67690d6a1370f8f702d77ee9000111"/><section>
+    <title>TEST()<computeroutput>[6/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , AllOf_Nested )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ae4b8aa67c2e72c0c65f51496fd5e9a27"/><section>
+    <title>TEST()<computeroutput>[7/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , AnyOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a1f2adcb35ce05034e08c6689be235fbd"/><section>
+    <title>TEST()<computeroutput>[8/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1afc7ecb52bd4b8982f367e1a5c42d3212"/><section>
+    <title>TEST()<computeroutput>[9/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array_AdditionalItems )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ae35a10f0f6202aac23253455ae36c96f"/><section>
+    <title>TEST()<computeroutput>[10/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array_ItemsList )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a5871c1648e550a4bf99ea34d029ca5b7"/><section>
+    <title>TEST()<computeroutput>[11/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array_ItemsRange )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a3f89e87f2bd576780c33bb7d7fa46725"/><section>
+    <title>TEST()<computeroutput>[12/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array_ItemsTuple )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ae9e1a2cb06c4eba5bb306d8d8acbe167"/><section>
+    <title>TEST()<computeroutput>[13/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Array_UniqueItems )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1acf4755544d10a86608bd12bb579b7bd6"/><section>
+    <title>TEST()<computeroutput>[14/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Boolean )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ac63d62b726dec11161ded0b4f2ba59b0"/><section>
+    <title>TEST()<computeroutput>[15/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aa860413deb5f33fec5d1716540fafc98"/><section>
+    <title>TEST()<computeroutput>[16/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_AllOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1acad87863663da65fea646959eb8a15a5"/><section>
+    <title>TEST()<computeroutput>[17/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_AnyOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1abe32f402f4659fe65ec4fb8629b802ec"/><section>
+    <title>TEST()<computeroutput>[18/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_Enum )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a69ec11b922ec23a0e2405ac5d1f1a59e"/><section>
+    <title>TEST()<computeroutput>[19/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_Issue2 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a31bd265b679a87818d53d06322c7d902"/><section>
+    <title>TEST()<computeroutput>[20/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_OneOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aa4ea20f1f861b2e81c1ea99ee874e0bc"/><section>
+    <title>TEST()<computeroutput>[21/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_RogueArray )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ae1776947308a008b638646ee01103025"/><section>
+    <title>TEST()<computeroutput>[22/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_RogueObject )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a55338963580698b5281415f85943b894"/><section>
+    <title>TEST()<computeroutput>[23/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_RogueString )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a68757959491b7ee3fda7d9ac05719524"/><section>
+    <title>TEST()<computeroutput>[24/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ContinueOnErrors_UniqueItems )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ad01c4239bf82f3a212cea33989d05253"/><section>
+    <title>TEST()<computeroutput>[25/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Enum_InvalidType )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a5143b31c397868cff3f66fd857581481"/><section>
+    <title>TEST()<computeroutput>[26/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Enum_Typed )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1af2c4fba8cda306efd996a5390a30a72f"/><section>
+    <title>TEST()<computeroutput>[27/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Enum_Typless )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a257be5db7755b9b2ffb30b426084cea2"/><section>
+    <title>TEST()<computeroutput>[28/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , EscapedPointer )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a2145f5b7b025d2451b0d6faa24b12773"/><section>
+    <title>TEST()<computeroutput>[29/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Hasher )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a592fe521fb9ef24a2bd3b61775e99661"/><section>
+    <title>TEST()<computeroutput>[30/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aba72231779dc91f6c9a10f81f183d663"/><section>
+    <title>TEST()<computeroutput>[31/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_MultipleOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a6fe545f53e479240085e6cd8039d4eb3"/><section>
+    <title>TEST()<computeroutput>[32/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_MultipleOf64Boundary )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a518af66eea9117dbdfc0a1a73f452908"/><section>
+    <title>TEST()<computeroutput>[33/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_Range )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a0c6127eb27a0e4914b1f35d0a5c680e6"/><section>
+    <title>TEST()<computeroutput>[34/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_Range64Boundary )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1afc98ec73631ff82d9a000eea116a5fc9"/><section>
+    <title>TEST()<computeroutput>[35/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_Range64BoundaryExclusive )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1acfd58f4671584a1ca5ed25739d355b17"/><section>
+    <title>TEST()<computeroutput>[36/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Integer_RangeU64Boundary )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1af206b545c3256c60e2f95ecfb8390ff4"/><section>
+    <title>TEST()<computeroutput>[37/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Issue1017_allOfHandler )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a9f781b950bec69a1ae7795cd0f940c67"/><section>
+    <title>TEST()<computeroutput>[38/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Issue608 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ae9658cdbc915241fb16dda49fbf54472"/><section>
+    <title>TEST()<computeroutput>[39/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Issue728_AllOfRef )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a2772367ef59fe9a2b9bcb36b14aacaee"/><section>
+    <title>TEST()<computeroutput>[40/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , MultiType )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aa51cd14d96f7243b966d4c74c610de60"/><section>
+    <title>TEST()<computeroutput>[41/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , MultiTypeInObject )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aaadfefe52481bf4674d099626c7fe91c"/><section>
+    <title>TEST()<computeroutput>[42/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , MultiTypeWithObject )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a858ba1d066ac9a7592185e89ef090578"/><section>
+    <title>TEST()<computeroutput>[43/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Not )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a04ac1ffb7901e2cc0409d52b4fbf4468"/><section>
+    <title>TEST()<computeroutput>[44/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Null )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a79c711f4538b8fddf4552c544cb6e1e6"/><section>
+    <title>TEST()<computeroutput>[45/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_MultipleOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ab0f5b8149e8f81509392c0fa0e69ce48"/><section>
+    <title>TEST()<computeroutput>[46/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_MultipleOfOne )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aebec84661c8ba0d606f1784558eb67ba"/><section>
+    <title>TEST()<computeroutput>[47/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_Range )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a4cc9884e3fef6544d7406217e1818b6d"/><section>
+    <title>TEST()<computeroutput>[48/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_RangeDouble )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1acfa3801d3bd6d7eece9825488192e4cd"/><section>
+    <title>TEST()<computeroutput>[49/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_RangeDoubleU64Boundary )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a72bd50ab509941ef63d6392d4c0abba2"/><section>
+    <title>TEST()<computeroutput>[50/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Number_RangeInt )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aea2a86c83fbcc44a838f2555bc80cb04"/><section>
+    <title>TEST()<computeroutput>[51/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a34950de4c154a920b6a31200aebb191d"/><section>
+    <title>TEST()<computeroutput>[52/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_AdditionalPropertiesBoolean )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a29473e40ab139614db9942b0b7705bee"/><section>
+    <title>TEST()<computeroutput>[53/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_AdditionalPropertiesObject )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a229115f8a876b75d5b2604864742a1a1"/><section>
+    <title>TEST()<computeroutput>[54/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_Properties )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a732b4eea8fcdbb720e8dfd0f3e0b0005"/><section>
+    <title>TEST()<computeroutput>[55/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_PropertiesRange )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a19703935d224fea0a5de461ce2cfe2ce"/><section>
+    <title>TEST()<computeroutput>[56/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_PropertyDependencies )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a64e37095188026098505ef8a22614662"/><section>
+    <title>TEST()<computeroutput>[57/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_Required )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a56f18082f23887f6c72142475eb5e446"/><section>
+    <title>TEST()<computeroutput>[58/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_Required_PassWithDefault )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a50de77939f5ad6e51288bca38d6c6163"/><section>
+    <title>TEST()<computeroutput>[59/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Object_SchemaDependencies )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aa5f3b857773bcd080f14e9866179efd7"/><section>
+    <title>TEST()<computeroutput>[60/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ObjectInArray )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a5e38fae4652648edf696b574522394b6"/><section>
+    <title>TEST()<computeroutput>[61/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , OneOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a5c3ff210c009f245e4717a3634b372b9"/><section>
+    <title>TEST()<computeroutput>[62/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a12d6ccf9a6e914c14bae8b4cf7f28bbd"/><section>
+    <title>TEST()<computeroutput>[63/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_AllOf )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ab0b532fc4b1c9791ffe48029102319f7"/><section>
+    <title>TEST()<computeroutput>[64/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_internal_id_1 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1accb03948973004caf200916c14780464"/><section>
+    <title>TEST()<computeroutput>[65/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_internal_id_2 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a67762c47f776de47ceadf87a28560043"/><section>
+    <title>TEST()<computeroutput>[66/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_internal_id_and_schema_pointer )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a9635a74a33041d58aae440b50ce4b27d"/><section>
+    <title>TEST()<computeroutput>[67/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_internal_id_in_array )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a940a5d188b5bde695defb45a694b05dc"/><section>
+    <title>TEST()<computeroutput>[68/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_internal_multiple_ids )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a653d622d4ce9b76181b78ea19f799e69"/><section>
+    <title>TEST()<computeroutput>[69/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a2133fed511c76f88a52835a899a4184a"/><section>
+    <title>TEST()<computeroutput>[70/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote_change_resolution_scope_absolute_path )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a84a3f57e8564af4286913c8e62275565"/><section>
+    <title>TEST()<computeroutput>[71/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote_change_resolution_scope_absolute_path_document )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a77663f123e78a502ac130ca6f5aa085d"/><section>
+    <title>TEST()<computeroutput>[72/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote_change_resolution_scope_relative_path )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a6c7382dadcc893e9e50ab4e404a7c3e8"/><section>
+    <title>TEST()<computeroutput>[73/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote_change_resolution_scope_uri )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a054763dad710ea6c359f49299cedcb65"/><section>
+    <title>TEST()<computeroutput>[74/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Ref_remote_issue1210 )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ad514ff43e4c9764a9f2f4fa5b540e8b3"/><section>
+    <title>TEST()<computeroutput>[75/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Schema_UnknownError )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a24a0274173fb8d7b961cbebd084633fb"/><section>
+    <title>TEST()<computeroutput>[76/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , SchemaPointer )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a4e3cbd3e86d111331407f2850d5e115e"/><section>
+    <title>TEST()<computeroutput>[77/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , String )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1aea5d2c782e1a6efbea93209ae4b51388"/><section>
+    <title>TEST()<computeroutput>[78/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , String_LengthRange )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1ad5dcf99ad5149b042298ea200495c701"/><section>
+    <title>TEST()<computeroutput>[79/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , TestSuite )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a4ea1d18d983f566d99cad13cdce905a0"/><section>
+    <title>TEST()<computeroutput>[80/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , Typeless )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1af9a9615be9c5c97cf9cda31f294e1b8e"/><section>
+    <title>TEST()<computeroutput>[81/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ValidateMetaSchema )</computeroutput></para></section>
+<anchor xml:id="_unittest_2schematest_8cpp_1a4b5d442a177c960aa33790bb3f64c315"/><section>
+    <title>TEST()<computeroutput>[82/82]</computeroutput></title>
+<indexterm><primary>TEST</primary><secondary>schematest.cpp</secondary></indexterm>
+<indexterm><primary>schematest.cpp</primary><secondary>TEST</secondary></indexterm>
+<para><computeroutput>TEST (<link linkend="_fwd_8h_1a2c91a2e7dd109dba1803ed2280a2dfa4">SchemaValidator</link> , ValidateMetaSchema_UTF16 )</computeroutput></para></section>
+</section>
+</section>

@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_readme" xml:lang="en-US">
+
+<para></para>
+
+<para></para>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md129">
+<title>A fast JSON parser/generator for C++ with both SAX/DOM style API</title>
+
+<para>Tencent is pleased to support the open source community by making RapidJSON available.</para>
+
+<para>Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.</para>
+
+<para><itemizedlist>
+<listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/">RapidJSON GitHub</link></para>
+</listitem><listitem>
+<para>RapidJSON Documentation<itemizedlist>
+<listitem>
+<para><link xlink:href="http://rapidjson.org/">English</link></para>
+</listitem><listitem>
+<para><link xlink:href="http://rapidjson.org/zh-cn/">简体中文</link></para>
+</listitem><listitem>
+<para><link xlink:href="https://www.gitbook.com/book/miloyip/rapidjson/">GitBook</link> with downloadable PDF/EPUB/MOBI, without API reference.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md130">
+<title>Build status</title>
+
+<para><informaltable frame="all">
+    <tgroup cols="3" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para><link xlink:href="https://travis-ci.org/Tencent/rapidjson">Linux</link>   </para>
+</entry><entry align='center'>
+<para><link xlink:href="https://ci.appveyor.com/project/miloyip/rapidjson-0fdqj/branch/master">Windows</link>   </para>
+</entry><entry align='center'>
+<para><link xlink:href="https://coveralls.io/r/Tencent/rapidjson?branch=master">Coveralls</link>    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>   </para>
+</entry><entry align='center'>
+<para>   </para>
+</entry><entry align='center'>
+<para>   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md131">
+<title>Introduction</title>
+
+<para>RapidJSON is a JSON parser and generator for C++. It was inspired by <link xlink:href="http://rapidxml.sourceforge.net/">RapidXml</link>.</para>
+
+<para><itemizedlist>
+<listitem>
+<para>RapidJSON is <emphasis role="bold">small</emphasis> but <emphasis role="bold">complete</emphasis>. It supports both SAX and DOM style API. The SAX parser is only a half thousand lines of code.</para>
+</listitem><listitem>
+<para>RapidJSON is <emphasis role="bold">fast</emphasis>. Its performance can be comparable to <computeroutput>strlen()</computeroutput>. It also optionally supports SSE2/SSE4.2 for acceleration.</para>
+</listitem><listitem>
+<para>RapidJSON is <emphasis role="bold">self-contained</emphasis> and <emphasis role="bold">header-only</emphasis>. It does not depend on external libraries such as BOOST. It even does not depend on STL.</para>
+</listitem><listitem>
+<para>RapidJSON is <emphasis role="bold">memory-friendly</emphasis>. Each JSON value occupies exactly 16 bytes for most 32/64-bit machines (excluding text string). By default it uses a fast memory allocator, and the parser allocates memory compactly during parsing.</para>
+</listitem><listitem>
+<para>RapidJSON is <emphasis role="bold">Unicode-friendly</emphasis>. It supports UTF-8, UTF-16, UTF-32 (LE &amp; BE), and their detection, validation and transcoding internally. For example, you can read a UTF-8 file and let RapidJSON transcode the JSON strings into UTF-16 in the DOM. It also supports surrogates and &quot;\u0000&quot; (null character).</para>
+</listitem></itemizedlist>
+</para>
+
+<para>More features can be read C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="_features_8md">Jumper/src/rapidjson/doc/features.md</link> &quot;here&quot;.</para>
+
+<para>JSON(JavaScript Object Notation) is a light-weight data exchange format. RapidJSON should be in full compliance with RFC7159/ECMA-404, with optional support of relaxed syntax. More information about JSON can be obtained at<itemizedlist>
+<listitem>
+<para><link xlink:href="http://json.org/">Introducing JSON</link></para>
+</listitem><listitem>
+<para><link xlink:href="https://tools.ietf.org/html/rfc7159">RFC7159: The JavaScript Object Notation (JSON) Data Interchange Format</link></para>
+</listitem><listitem>
+<para><link xlink:href="https://www.ecma-international.org/publications/standards/Ecma-404.htm">Standard ECMA-404: The JSON Data Interchange Format</link></para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md132">
+<title>Highlights in v1.1 (2016-8-25)</title>
+
+<para><itemizedlist>
+<listitem>
+<para>Added C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="_pointer_8md">Jumper/src/rapidjson/doc/pointer.md</link> &quot;JSON Pointer&quot;</para>
+</listitem><listitem>
+<para>Added C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="_schema_8md">Jumper/src/rapidjson/doc/schema.md</link> &quot;JSON Schema&quot;</para>
+</listitem><listitem>
+<para>Added C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="_dom_8md">Jumper/src/rapidjson/doc/dom.md</link> &quot;relaxed JSON syntax&quot; (comment, trailing comma, NaN/Infinity)</para>
+</listitem><listitem>
+<para>Iterating array/object with C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="_tutorial_8md">Jumper/src/rapidjson/doc/tutorial.md</link> &quot;C++11 Range-based for loop&quot;</para>
+</listitem><listitem>
+<para>Reduce memory overhead of each <computeroutput>Value</computeroutput> from 24 bytes to 16 bytes in x86-64 architecture.</para>
+</listitem></itemizedlist>
+</para>
+
+<para>For other changes please refer to C:/Users/R2-D2/Desktop/STUDIA/Semestr 5/Podstawy grafiki komputerowej/Projekt/Neon <link linkend="__c_h_a_n_g_e_l_o_g_8md">Jumper/src/rapidjson/CHANGELOG.md</link> &quot;change log&quot;.</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md133">
+<title>Compatibility</title>
+
+<para>RapidJSON is cross-platform. Some platform/compiler combinations which have been tested are shown as follows.<itemizedlist>
+<listitem>
+<para>Visual C++ 2008/2010/2013 on Windows (32/64-bit)</para>
+</listitem><listitem>
+<para>GNU C++ 3.8.x on Cygwin</para>
+</listitem><listitem>
+<para>Clang 3.4 on Mac OS X (32/64-bit) and iOS</para>
+</listitem><listitem>
+<para>Clang 3.4 on Android NDK</para>
+</listitem></itemizedlist>
+</para>
+
+<para>Users can build and run the unit tests on their platform/compiler.</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md134">
+<title>Installation</title>
+
+<para>RapidJSON is a header-only C++ library. Just copy the <computeroutput>include/rapidjson</computeroutput> folder to system or project&apos;s include path.</para>
+
+<para>Alternatively, if you are using the <link xlink:href="https://github.com/Microsoft/vcpkg/">vcpkg</link> dependency manager you can download and install rapidjson with CMake integration in a single command:<itemizedlist>
+<listitem>
+<para>vcpkg install rapidjson</para>
+</listitem></itemizedlist>
+</para>
+
+<para>RapidJSON uses following software as its dependencies:<itemizedlist>
+<listitem>
+<para><link xlink:href="https://cmake.org/">CMake</link> as a general build tool</para>
+</listitem><listitem>
+<para>(optional) <link xlink:href="http://www.doxygen.org">Doxygen</link> to build documentation</para>
+</listitem><listitem>
+<para>(optional) <link xlink:href="https://github.com/google/googletest">googletest</link> for unit and performance testing</para>
+</listitem></itemizedlist>
+</para>
+
+<para>To generate user documentation and run tests please proceed with the steps below:</para>
+
+<para><orderedlist>
+<listitem>
+<para>Execute <computeroutput>git submodule update --init</computeroutput> to get the files of thirdparty submodules (google test).</para>
+</listitem><listitem>
+<para>Create directory called <computeroutput>build</computeroutput> in rapidjson source directory.</para>
+</listitem><listitem>
+<para>Change to <computeroutput>build</computeroutput> directory and run <computeroutput>cmake ..</computeroutput> command to configure your build. Windows users can do the same with cmake-gui application.</para>
+</listitem><listitem>
+<para>On Windows, build the solution found in the build directory. On Linux, run <computeroutput>make</computeroutput> from the build directory.</para>
+</listitem></orderedlist>
+</para>
+
+<para>On successful build you will find compiled test and example binaries in <computeroutput>bin</computeroutput> directory. The generated documentation will be available in <computeroutput>doc/html</computeroutput> directory of the build tree. To run tests after finished build please run <computeroutput>make test</computeroutput> or <computeroutput>ctest</computeroutput> from your build tree. You can get detailed output using <computeroutput>ctest -V</computeroutput> command.</para>
+
+<para>It is possible to install library system-wide by running <computeroutput>make install</computeroutput> command from the build tree with administrative privileges. This will install all files according to system preferences. Once RapidJSON is installed, it is possible to use it from other CMake projects by adding <computeroutput>find_package(RapidJSON)</computeroutput> line to your CMakeLists.txt.</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md135">
+<title>Usage at a glance</title>
+
+<para>This simple example parses a JSON string into a document (DOM), make a simple modification of the DOM, and finally stringify the DOM to a JSON string.</para>
+
+<para><literallayout><computeroutput>//&#32;rapidjson/example/simpledom/simpledom.cpp`
+#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/writer.h&quot;
+#include&#32;&quot;rapidjson/stringbuffer.h&quot;
+#include&#32;&lt;iostream&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+int&#32;main()&#32;{
+&#32;&#32;&#32;&#32;//&#32;1.&#32;Parse&#32;a&#32;JSON&#32;string&#32;into&#32;DOM.
+&#32;&#32;&#32;&#32;const&#32;char*&#32;json&#32;=&#32;&quot;{\&quot;project\&quot;:\&quot;rapidjson\&quot;,\&quot;stars\&quot;:10}&quot;;
+&#32;&#32;&#32;&#32;Document&#32;d;
+&#32;&#32;&#32;&#32;d.Parse(json);
+
+&#32;&#32;&#32;&#32;//&#32;2.&#32;Modify&#32;it&#32;by&#32;DOM.
+&#32;&#32;&#32;&#32;Value&amp;&#32;s&#32;=&#32;d[&quot;stars&quot;];
+&#32;&#32;&#32;&#32;s.SetInt(s.GetInt()&#32;+&#32;1);
+
+&#32;&#32;&#32;&#32;//&#32;3.&#32;Stringify&#32;the&#32;DOM
+&#32;&#32;&#32;&#32;StringBuffer&#32;buffer;
+&#32;&#32;&#32;&#32;Writer&lt;StringBuffer&gt;&#32;writer(buffer);
+&#32;&#32;&#32;&#32;d.Accept(writer);
+
+&#32;&#32;&#32;&#32;//&#32;Output&#32;{&quot;project&quot;:&quot;rapidjson&quot;,&quot;stars&quot;:11}
+&#32;&#32;&#32;&#32;std::cout&#32;&lt;&lt;&#32;buffer.GetString()&#32;&lt;&lt;&#32;std::endl;
+&#32;&#32;&#32;&#32;return&#32;0;
+}
+</computeroutput></literallayout></para>
+
+<para>Note that this example did not handle potential errors.</para>
+
+<para>The following diagram shows the process.</para>
+
+<para></para>
+
+<para>More <link xlink:href="https://github.com/Tencent/rapidjson/tree/master/example">examples</link> are available:</para>
+
+<para><itemizedlist>
+<listitem>
+<para>DOM API<itemizedlist>
+<listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/tutorial/tutorial.cpp">tutorial</link>: Basic usage of DOM API.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>SAX API<itemizedlist>
+<listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/simplereader/simplereader.cpp">simplereader</link>: Dumps all SAX events while parsing a JSON by <computeroutput>Reader</computeroutput>.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/condense/condense.cpp">condense</link>: A command line tool to rewrite a JSON, with all whitespaces removed.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp">pretty</link>: A command line tool to rewrite a JSON with indents and newlines by <computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput>.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/capitalize/capitalize.cpp">capitalize</link>: A command line tool to capitalize strings in JSON.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/messagereader/messagereader.cpp">messagereader</link>: Parse a JSON message with SAX API.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/serialize/serialize.cpp">serialize</link>: Serialize a C++ object into JSON with SAX API.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/jsonx/jsonx.cpp">jsonx</link>: Implements a <computeroutput><link linkend="_class_jsonx_writer">JsonxWriter</link></computeroutput> which stringify SAX events into <link xlink:href="https://www-01.ibm.com/support/knowledgecenter/SS9H2Y_7.1.0/com.ibm.dp.doc/json_jsonx.html">JSONx</link> (a kind of XML) format. The example is a command line tool which converts input JSON into JSONx format.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para><link linkend="_class_schema">Schema</link><itemizedlist>
+<listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/schemavalidator/schemavalidator.cpp">schemavalidator</link> : A command line tool to validate a JSON with a JSON schema.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>Advanced<itemizedlist>
+<listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/prettyauto/prettyauto.cpp">prettyauto</link>: A modified version of <link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp">pretty</link> to automatically handle JSON with any UTF encodings.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/parsebyparts/parsebyparts.cpp">parsebyparts</link>: Implements an <computeroutput>AsyncDocumentParser</computeroutput> which can parse JSON in parts, using C++11 thread.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/filterkey/filterkey.cpp">filterkey</link>: A command line tool to remove all values with user-specified key.</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/example/filterkeydom/filterkeydom.cpp">filterkeydom</link>: Same tool as above, but it demonstrates how to use a generator to populate a <computeroutput>Document</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md136">
+<title>Contributing</title>
+
+<para>RapidJSON welcomes contributions. When contributing, please follow the code below.</para>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md137">
+<title>Issues</title>
+
+<para>Feel free to submit issues and enhancement requests.</para>
+
+<para>Please help us by providing <emphasis role="bold">minimal reproducible examples</emphasis>, because source code is easier to let other people understand what happens. For crash problems on certain platforms, please bring stack dump content with the detail of the OS, compiler, etc.</para>
+
+<para>Please try breakpoint debugging first, tell us what you found, see if we can start exploring based on more information been prepared.</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md138">
+<title>Workflow</title>
+
+<para>In general, we follow the &quot;fork-and-pull&quot; Git workflow.</para>
+
+<para><orderedlist>
+<listitem>
+<para><emphasis role="bold">Fork</emphasis> the repo on GitHub</para>
+</listitem><listitem>
+<para><emphasis role="bold">Clone</emphasis> the project to your own machine</para>
+</listitem><listitem>
+<para><emphasis role="bold">Checkout</emphasis> a new branch on your fork, start developing on the branch</para>
+</listitem><listitem>
+<para><emphasis role="bold">Test</emphasis> the change before commit, Make sure the changes pass all the tests, including <computeroutput>unittest</computeroutput> and <computeroutput>preftest</computeroutput>, please add test case for each new feature or bug-fix if needed.</para>
+</listitem><listitem>
+<para><emphasis role="bold">Commit</emphasis> changes to your own branch</para>
+</listitem><listitem>
+<para><emphasis role="bold">Push</emphasis> your work back up to your fork</para>
+</listitem><listitem>
+<para>Submit a <emphasis role="bold">Pull request</emphasis> so that we can review your changes</para>
+</listitem></orderedlist>
+</para>
+
+<para>NOTE: Be sure to merge the latest from &quot;upstream&quot; before making a pull request!</para>
+</section>
+<section xml:id="_md_src_rapidjson_readme_1autotoc_md139">
+<title>Copyright and Licensing</title>
+
+<para>You can copy and paste the license summary from below.</para>
+
+<para><literallayout><computeroutput>Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.
+
+Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.
+
+Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except
+in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at
+
+http://opensource.org/licenses/MIT
+
+Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;
+under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;
+CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;
+specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.
+</computeroutput></literallayout> </para>
+</section>
+</section>
+</section>

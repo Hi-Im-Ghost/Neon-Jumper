@@ -1,0 +1,421 @@
+.TH "md_src_rapidjson_doc_stream" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_stream \- Stream 
+In RapidJSON, \fC\fBrapidjson::Stream\fP\fP is a concept for reading/writing JSON\&. Here we'll first show you how to use provided streams\&. And then see how to create a custom stream\&.
+.SH "Memory Streams"
+.PP
+Memory streams store JSON in memory\&.
+.SS "StringStream (Input)"
+\fCStringStream\fP is the most basic input stream\&. It represents a complete, read-only JSON stored in memory\&. It is defined in \fC\fBrapidjson/rapidjson\&.h\fP\fP\&.
+.PP
+.PP
+.nf
+#include "rapidjson/document\&.h" // will include "rapidjson/rapidjson\&.h"
+
+using namespace rapidjson;
+
+// \&.\&.\&.
+const char json[] = "[1, 2, 3, 4]";
+StringStream s(json);
+
+Document d;
+d\&.ParseStream(s);
+.fi
+.PP
+.PP
+Since this is very common usage, \fCDocument::Parse(const char*)\fP is provided to do exactly the same as above:
+.PP
+.PP
+.nf
+// \&.\&.\&.
+const char json[] = "[1, 2, 3, 4]";
+Document d;
+d\&.Parse(json);
+.fi
+.PP
+.PP
+Note that, \fCStringStream\fP is a typedef of \fC\fBGenericStringStream\fP<\fBUTF8\fP<> >\fP, user may use another encodings to represent the character set of the stream\&.
+.SS "StringBuffer (Output)"
+\fCStringBuffer\fP is a simple output stream\&. It allocates a memory buffer for writing the whole JSON\&. Use \fCGetString()\fP to obtain the buffer\&.
+.PP
+.PP
+.nf
+#include "rapidjson/stringbuffer\&.h"
+#include <rapidjson/writer\&.h>
+
+StringBuffer buffer;
+Writer<StringBuffer> writer(buffer);
+d\&.Accept(writer);
+
+const char* output = buffer\&.GetString();
+.fi
+.PP
+.PP
+When the buffer is full, it will increases the capacity automatically\&. The default capacity is 256 characters (256 bytes for \fBUTF8\fP, 512 bytes for \fBUTF16\fP, etc\&.)\&. User can provide an allocator and an initial capacity\&.
+.PP
+.PP
+.nf
+StringBuffer buffer1(0, 1024); // Use its allocator, initial size = 1024
+StringBuffer buffer2(allocator, 1024);
+.fi
+.PP
+.PP
+By default, \fCStringBuffer\fP will instantiate an internal allocator\&.
+.PP
+Similarly, \fCStringBuffer\fP is a typedef of \fC\fBGenericStringBuffer\fP<\fBUTF8\fP<> >\fP\&.
+.SH "File Streams"
+.PP
+When parsing a JSON from file, you may read the whole JSON into memory and use \fCStringStream\fP above\&.
+.PP
+However, if the JSON is big, or memory is limited, you can use \fC\fBFileReadStream\fP\fP\&. It only read a part of JSON from file into buffer, and then let the part be parsed\&. If it runs out of characters in the buffer, it will read the next part from file\&.
+.SS "FileReadStream (Input)"
+\fC\fBFileReadStream\fP\fP reads the file via a \fCFILE\fP pointer\&. And user need to provide a buffer\&.
+.PP
+.PP
+.nf
+#include "rapidjson/filereadstream\&.h"
+#include <cstdio>
+
+using namespace rapidjson;
+
+FILE* fp = fopen("big\&.json", "rb"); // non-Windows use "r"
+
+char readBuffer[65536];
+FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+
+Document d;
+d\&.ParseStream(is);
+
+fclose(fp);
+.fi
+.PP
+.PP
+Different from string streams, \fC\fBFileReadStream\fP\fP is byte stream\&. It does not handle encodings\&. If the file is not UTF-8, the byte stream can be wrapped in a \fC\fBEncodedInputStream\fP\fP\&. We will discuss more about this later in this tutorial\&.
+.PP
+Apart from reading file, user can also use \fC\fBFileReadStream\fP\fP to read \fCstdin\fP\&.
+.SS "FileWriteStream (Output)"
+\fC\fBFileWriteStream\fP\fP is buffered output stream\&. Its usage is very similar to \fC\fBFileReadStream\fP\fP\&.
+.PP
+.PP
+.nf
+#include "rapidjson/filewritestream\&.h"
+#include <rapidjson/writer\&.h>
+#include <cstdio>
+
+using namespace rapidjson;
+
+Document d;
+d\&.Parse(json);
+// \&.\&.\&.
+
+FILE* fp = fopen("output\&.json", "wb"); // non-Windows use "w"
+
+char writeBuffer[65536];
+FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+Writer<FileWriteStream> writer(os);
+d\&.Accept(writer);
+
+fclose(fp);
+.fi
+.PP
+.PP
+It can also redirect the output to \fCstdout\fP\&.
+.SH "iostream Wrapper"
+.PP
+Due to users' requests, RapidJSON also provides official wrappers for \fCstd::basic_istream\fP and \fCstd::basic_ostream\fP\&. However, please note that the performance will be much lower than the other streams above\&.
+.SS "IStreamWrapper"
+\fC\fBIStreamWrapper\fP\fP wraps any class derived from \fCstd::istream\fP, such as \fCstd::istringstream\fP, \fCstd::stringstream\fP, \fCstd::ifstream\fP, \fCstd::fstream\fP, into RapidJSON's input stream\&.
+.PP
+.PP
+.nf
+#include <rapidjson/document\&.h>
+#include <rapidjson/istreamwrapper\&.h>
+#include <fstream>
+
+using namespace rapidjson;
+using namespace std;
+
+ifstream ifs("test\&.json");
+IStreamWrapper isw(ifs);
+
+Document d;
+d\&.ParseStream(isw);
+.fi
+.PP
+.PP
+For classes derived from \fCstd::wistream\fP, use \fC\fBWIStreamWrapper\fP\fP\&.
+.SS "OStreamWrapper"
+Similarly, \fC\fBOStreamWrapper\fP\fP wraps any class derived from \fCstd::ostream\fP, such as \fCstd::ostringstream\fP, \fCstd::stringstream\fP, \fCstd::ofstream\fP, \fCstd::fstream\fP, into RapidJSON's input stream\&.
+.PP
+.PP
+.nf
+#include <rapidjson/document\&.h>
+#include <rapidjson/ostreamwrapper\&.h>
+#include <rapidjson/writer\&.h>
+#include <fstream>
+
+using namespace rapidjson;
+using namespace std;
+
+Document d;
+d\&.Parse(json);
+
+// \&.\&.\&.
+
+ofstream ofs("output\&.json");
+OStreamWrapper osw(ofs);
+
+Writer<OStreamWrapper> writer(osw);
+d\&.Accept(writer);
+.fi
+.PP
+.PP
+For classes derived from \fCstd::wostream\fP, use \fCWOStreamWrapper\fP\&.
+.SH "Encoded Streams"
+.PP
+Encoded streams do not contain JSON itself, but they wrap byte streams to provide basic encoding/decoding function\&.
+.PP
+As mentioned above, UTF-8 byte streams can be read directly\&. However, UTF-16 and UTF-32 have endian issue\&. To handle endian correctly, it needs to convert bytes into characters (e\&.g\&. \fCwchar_t\fP for UTF-16) while reading, and characters into bytes while writing\&.
+.PP
+Besides, it also need to handle \fCbyte order mark (BOM)\fP\&. When reading from a byte stream, it is needed to detect or just consume the BOM if exists\&. When writing to a byte stream, it can optionally write BOM\&.
+.PP
+If the encoding of stream is known during compile-time, you may use \fC\fBEncodedInputStream\fP\fP and \fC\fBEncodedOutputStream\fP\fP\&. If the stream can be UTF-8, UTF-16LE, UTF-16BE, UTF-32LE, UTF-32BE JSON, and it is only known in runtime, you may use \fC\fBAutoUTFInputStream\fP\fP and \fC\fBAutoUTFOutputStream\fP\fP\&. These streams are defined in \fC\fBrapidjson/encodedstream\&.h\fP\fP\&.
+.PP
+Note that, these encoded streams can be applied to streams other than file\&. For example, you may have a file in memory, or a custom byte stream, be wrapped in encoded streams\&.
+.SS "EncodedInputStream"
+\fC\fBEncodedInputStream\fP\fP has two template parameters\&. The first one is a \fCEncoding\fP class, such as \fC\fBUTF8\fP\fP, \fC\fBUTF16LE\fP\fP, defined in \fC\fBrapidjson/encodings\&.h\fP\fP\&. The second one is the class of stream to be wrapped\&.
+.PP
+.PP
+.nf
+#include "rapidjson/document\&.h"
+#include "rapidjson/filereadstream\&.h"   // FileReadStream
+#include "rapidjson/encodedstream\&.h"    // EncodedInputStream
+#include <cstdio>
+
+using namespace rapidjson;
+
+FILE* fp = fopen("utf16le\&.json", "rb"); // non-Windows use "r"
+
+char readBuffer[256];
+FileReadStream bis(fp, readBuffer, sizeof(readBuffer));
+
+EncodedInputStream<UTF16LE<>, FileReadStream> eis(bis);  // wraps bis into eis
+
+Document d; // Document is GenericDocument<UTF8<> > 
+d\&.ParseStream<0, UTF16LE<> >(eis);  // Parses UTF-16LE file into UTF-8 in memory
+
+fclose(fp);
+.fi
+.PP
+.SS "EncodedOutputStream"
+\fC\fBEncodedOutputStream\fP\fP is similar but it has a \fCbool putBOM\fP parameter in the constructor, controlling whether to write BOM into output byte stream\&.
+.PP
+.PP
+.nf
+#include "rapidjson/filewritestream\&.h"  // FileWriteStream
+#include "rapidjson/encodedstream\&.h"    // EncodedOutputStream
+#include <rapidjson/writer\&.h>
+#include <cstdio>
+
+Document d;         // Document is GenericDocument<UTF8<> > 
+// \&.\&.\&.
+
+FILE* fp = fopen("output_utf32le\&.json", "wb"); // non-Windows use "w"
+
+char writeBuffer[256];
+FileWriteStream bos(fp, writeBuffer, sizeof(writeBuffer));
+
+typedef EncodedOutputStream<UTF32LE<>, FileWriteStream> OutputStream;
+OutputStream eos(bos, true);   // Write BOM
+
+Writer<OutputStream, UTF8<>, UTF32LE<>> writer(eos);
+d\&.Accept(writer);   // This generates UTF32-LE file from UTF-8 in memory
+
+fclose(fp);
+.fi
+.PP
+.SS "AutoUTFInputStream"
+Sometimes an application may want to handle all supported JSON encoding\&. \fC\fBAutoUTFInputStream\fP\fP will detection encoding by BOM first\&. If BOM is unavailable, it will use characteristics of valid JSON to make detection\&. If neither method success, it falls back to the UTF type provided in constructor\&.
+.PP
+Since the characters (code units) may be 8-bit, 16-bit or 32-bit\&. \fC\fBAutoUTFInputStream\fP\fP requires a character type which can hold at least 32-bit\&. We may use \fCunsigned\fP, as in the template parameter:
+.PP
+.PP
+.nf
+#include "rapidjson/document\&.h"
+#include "rapidjson/filereadstream\&.h"   // FileReadStream
+#include "rapidjson/encodedstream\&.h"    // AutoUTFInputStream
+#include <cstdio>
+
+using namespace rapidjson;
+
+FILE* fp = fopen("any\&.json", "rb"); // non-Windows use "r"
+
+char readBuffer[256];
+FileReadStream bis(fp, readBuffer, sizeof(readBuffer));
+
+AutoUTFInputStream<unsigned, FileReadStream> eis(bis);  // wraps bis into eis
+
+Document d;         // Document is GenericDocument<UTF8<> > 
+d\&.ParseStream<0, AutoUTF<unsigned> >(eis); // This parses any UTF file into UTF-8 in memory
+
+fclose(fp);
+.fi
+.PP
+.PP
+When specifying the encoding of stream, uses \fC\fBAutoUTF\fP<CharType>\fP as in \fCParseStream()\fP above\&.
+.PP
+You can obtain the type of UTF via \fCUTFType GetType()\fP\&. And check whether a BOM is found by \fCHasBOM()\fP
+.SS "AutoUTFOutputStream"
+Similarly, to choose encoding for output during runtime, we can use \fC\fBAutoUTFOutputStream\fP\fP\&. This class is not automatic \fIper se\fP\&. You need to specify the UTF type and whether to write BOM in runtime\&.
+.PP
+.PP
+.nf
+using namespace rapidjson;
+
+void WriteJSONFile(FILE* fp, UTFType type, bool putBOM, const Document& d) {
+    char writeBuffer[256];
+    FileWriteStream bos(fp, writeBuffer, sizeof(writeBuffer));
+
+    typedef AutoUTFOutputStream<unsigned, FileWriteStream> OutputStream;
+    OutputStream eos(bos, type, putBOM);
+    
+    Writer<OutputStream, UTF8<>, AutoUTF<> > writer;
+    d\&.Accept(writer);
+}
+.fi
+.PP
+.PP
+\fC\fBAutoUTFInputStream\fP\fP and \fC\fBAutoUTFOutputStream\fP\fP is more convenient than \fC\fBEncodedInputStream\fP\fP and \fC\fBEncodedOutputStream\fP\fP\&. They just incur a little bit runtime overheads\&.
+.SH "Custom Stream"
+.PP
+In addition to memory/file streams, user can create their own stream classes which fits RapidJSON's API\&. For example, you may create network stream, stream from compressed file, etc\&.
+.PP
+RapidJSON combines different types using templates\&. A class containing all required interface can be a stream\&. The Stream interface is defined in comments of \fC\fBrapidjson/rapidjson\&.h\fP\fP:
+.PP
+.PP
+.nf
+concept Stream {
+    typename Ch;    
+
+    Ch Peek() const;
+
+    Ch Take();
+
+    size_t Tell();
+
+    Ch* PutBegin();
+
+    void Put(Ch c);
+
+    void Flush();
+
+    size_t PutEnd(Ch* begin);
+}
+.fi
+.PP
+.PP
+For input stream, they must implement \fCPeek()\fP, \fCTake()\fP and \fCTell()\fP\&. For output stream, they must implement \fCPut()\fP and \fCFlush()\fP\&. There are two special interface, \fCPutBegin()\fP and \fCPutEnd()\fP, which are only for \fIin situ\fP parsing\&. Normal streams do not implement them\&. However, if the interface is not needed for a particular stream, it is still need to a dummy implementation, otherwise will generate compilation error\&.
+.SS "Example: istream wrapper"
+The following example is a simple wrapper of \fCstd::istream\fP, which only implements 3 functions\&.
+.PP
+.PP
+.nf
+class MyIStreamWrapper {
+public:
+    typedef char Ch;
+
+    MyIStreamWrapper(std::istream& is) : is_(is) {
+    }
+
+    Ch Peek() const { // 1
+        int c = is_\&.peek();
+        return c == std::char_traits<char>::eof() ? '\0' : (Ch)c;
+    }
+
+    Ch Take() { // 2
+        int c = is_\&.get();
+        return c == std::char_traits<char>::eof() ? '\0' : (Ch)c;
+    }
+
+    size_t Tell() const { return (size_t)is_\&.tellg(); } // 3
+
+    Ch* PutBegin() { assert(false); return 0; }
+    void Put(Ch) { assert(false); }
+    void Flush() { assert(false); }
+    size_t PutEnd(Ch*) { assert(false); return 0; }
+
+private:
+    MyIStreamWrapper(const MyIStreamWrapper&);
+    MyIStreamWrapper& operator=(const MyIStreamWrapper&);
+
+    std::istream& is_;
+};
+.fi
+.PP
+.PP
+User can use it to wrap instances of \fCstd::stringstream\fP, \fCstd::ifstream\fP\&.
+.PP
+.PP
+.nf
+const char* json = "[1,2,3,4]";
+std::stringstream ss(json);
+MyIStreamWrapper is(ss);
+
+Document d;
+d\&.ParseStream(is);
+.fi
+.PP
+.PP
+Note that, this implementation may not be as efficient as RapidJSON's memory or file streams, due to internal overheads of the standard library\&.
+.SS "Example: ostream wrapper"
+The following example is a simple wrapper of \fCstd::istream\fP, which only implements 2 functions\&.
+.PP
+.PP
+.nf
+class MyOStreamWrapper {
+public:
+    typedef char Ch;
+
+    MyOStreamWrapper(std::ostream& os) : os_(os) {
+    }
+
+    Ch Peek() const { assert(false); return '\0'; }
+    Ch Take() { assert(false); return '\0'; }
+    size_t Tell() const {  }
+
+    Ch* PutBegin() { assert(false); return 0; }
+    void Put(Ch c) { os_\&.put(c); }                  // 1
+    void Flush() { os_\&.flush(); }                   // 2
+    size_t PutEnd(Ch*) { assert(false); return 0; }
+
+private:
+    MyOStreamWrapper(const MyOStreamWrapper&);
+    MyOStreamWrapper& operator=(const MyOStreamWrapper&);
+
+    std::ostream& os_;
+};
+.fi
+.PP
+.PP
+User can use it to wrap instances of \fCstd::stringstream\fP, \fCstd::ofstream\fP\&.
+.PP
+.PP
+.nf
+Document d;
+// \&.\&.\&.
+
+std::stringstream ss;
+MyOStreamWrapper os(ss);
+
+Writer<MyOStreamWrapper> writer(os);
+d\&.Accept(writer);
+.fi
+.PP
+.PP
+Note that, this implementation may not be as efficient as RapidJSON's memory or file streams, due to internal overheads of the standard library\&.
+.SH "Summary"
+.PP
+This section describes stream classes available in RapidJSON\&. Memory streams are simple\&. File stream can reduce the memory required during JSON parsing and generation, if the JSON is stored in file system\&. Encoded streams converts between byte streams and character streams\&. Finally, user may create custom streams using a simple interface\&. 

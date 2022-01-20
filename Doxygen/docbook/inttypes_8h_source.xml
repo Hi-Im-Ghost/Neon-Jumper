@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_inttypes_8h_source" xml:lang="en-US">
+<title>inttypes.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/msinttypes/inttypes.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;ISO&#32;C9x&#32;&#32;compliant&#32;inttypes.h&#32;for&#32;Microsoft&#32;Visual&#32;Studio</emphasis>
+2 <emphasis role="comment">//&#32;Based&#32;on&#32;ISO/IEC&#32;9899:TC2&#32;Committee&#32;draft&#32;(May&#32;6,&#32;2005)&#32;WG14/N1124&#32;</emphasis>
+3 <emphasis role="comment">//&#32;</emphasis>
+4 <emphasis role="comment">//&#32;&#32;Copyright&#32;(c)&#32;2006-2013&#32;Alexander&#32;Chemeris</emphasis>
+5 <emphasis role="comment">//&#32;</emphasis>
+6 <emphasis role="comment">//&#32;Redistribution&#32;and&#32;use&#32;in&#32;source&#32;and&#32;binary&#32;forms,&#32;with&#32;or&#32;without</emphasis>
+7 <emphasis role="comment">//&#32;modification,&#32;are&#32;permitted&#32;provided&#32;that&#32;the&#32;following&#32;conditions&#32;are&#32;met:</emphasis>
+8 <emphasis role="comment">//&#32;</emphasis>
+9 <emphasis role="comment">//&#32;&#32;&#32;1.&#32;Redistributions&#32;of&#32;source&#32;code&#32;must&#32;retain&#32;the&#32;above&#32;copyright&#32;notice,</emphasis>
+10 <emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;&#32;this&#32;list&#32;of&#32;conditions&#32;and&#32;the&#32;following&#32;disclaimer.</emphasis>
+11 <emphasis role="comment">//&#32;</emphasis>
+12 <emphasis role="comment">//&#32;&#32;&#32;2.&#32;Redistributions&#32;in&#32;binary&#32;form&#32;must&#32;reproduce&#32;the&#32;above&#32;copyright</emphasis>
+13 <emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;&#32;notice,&#32;this&#32;list&#32;of&#32;conditions&#32;and&#32;the&#32;following&#32;disclaimer&#32;in&#32;the</emphasis>
+14 <emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;&#32;documentation&#32;and/or&#32;other&#32;materials&#32;provided&#32;with&#32;the&#32;distribution.</emphasis>
+15 <emphasis role="comment">//&#32;</emphasis>
+16 <emphasis role="comment">//&#32;&#32;&#32;3.&#32;Neither&#32;the&#32;name&#32;of&#32;the&#32;product&#32;nor&#32;the&#32;names&#32;of&#32;its&#32;contributors&#32;may</emphasis>
+17 <emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;&#32;be&#32;used&#32;to&#32;endorse&#32;or&#32;promote&#32;products&#32;derived&#32;from&#32;this&#32;software</emphasis>
+18 <emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;&#32;without&#32;specific&#32;prior&#32;written&#32;permission.</emphasis>
+19 <emphasis role="comment">//&#32;</emphasis>
+20 <emphasis role="comment">//&#32;THIS&#32;SOFTWARE&#32;IS&#32;PROVIDED&#32;BY&#32;THE&#32;AUTHOR&#32;``AS&#32;IS&apos;&apos;&#32;AND&#32;ANY&#32;EXPRESS&#32;OR&#32;IMPLIED</emphasis>
+21 <emphasis role="comment">//&#32;WARRANTIES,&#32;INCLUDING,&#32;BUT&#32;NOT&#32;LIMITED&#32;TO,&#32;THE&#32;IMPLIED&#32;WARRANTIES&#32;OF</emphasis>
+22 <emphasis role="comment">//&#32;MERCHANTABILITY&#32;AND&#32;FITNESS&#32;FOR&#32;A&#32;PARTICULAR&#32;PURPOSE&#32;ARE&#32;DISCLAIMED.&#32;IN&#32;NO</emphasis>
+23 <emphasis role="comment">//&#32;EVENT&#32;SHALL&#32;THE&#32;AUTHOR&#32;BE&#32;LIABLE&#32;FOR&#32;ANY&#32;DIRECT,&#32;INDIRECT,&#32;INCIDENTAL,</emphasis>
+24 <emphasis role="comment">//&#32;SPECIAL,&#32;EXEMPLARY,&#32;OR&#32;CONSEQUENTIAL&#32;DAMAGES&#32;(INCLUDING,&#32;BUT&#32;NOT&#32;LIMITED&#32;TO,</emphasis>
+25 <emphasis role="comment">//&#32;PROCUREMENT&#32;OF&#32;SUBSTITUTE&#32;GOODS&#32;OR&#32;SERVICES;&#32;LOSS&#32;OF&#32;USE,&#32;DATA,&#32;OR&#32;PROFITS;</emphasis>
+26 <emphasis role="comment">//&#32;OR&#32;BUSINESS&#32;INTERRUPTION)&#32;HOWEVER&#32;CAUSED&#32;AND&#32;ON&#32;ANY&#32;THEORY&#32;OF&#32;LIABILITY,&#32;</emphasis>
+27 <emphasis role="comment">//&#32;WHETHER&#32;IN&#32;CONTRACT,&#32;STRICT&#32;LIABILITY,&#32;OR&#32;TORT&#32;(INCLUDING&#32;NEGLIGENCE&#32;OR</emphasis>
+28 <emphasis role="comment">//&#32;OTHERWISE)&#32;ARISING&#32;IN&#32;ANY&#32;WAY&#32;OUT&#32;OF&#32;THE&#32;USE&#32;OF&#32;THIS&#32;SOFTWARE,&#32;EVEN&#32;IF</emphasis>
+29 <emphasis role="comment">//&#32;ADVISED&#32;OF&#32;THE&#32;POSSIBILITY&#32;OF&#32;SUCH&#32;DAMAGE.</emphasis>
+30 <emphasis role="comment">//&#32;</emphasis>
+32 <emphasis role="comment"></emphasis>
+33 <emphasis role="comment">//&#32;The&#32;above&#32;software&#32;in&#32;this&#32;distribution&#32;may&#32;have&#32;been&#32;modified&#32;by&#32;</emphasis>
+34 <emphasis role="comment">//&#32;THL&#32;A29&#32;Limited&#32;(&quot;Tencent&#32;Modifications&quot;).&#32;</emphasis>
+35 <emphasis role="comment">//&#32;All&#32;Tencent&#32;Modifications&#32;are&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited.</emphasis>
+36 
+37 <emphasis role="preprocessor">#ifndef&#32;_MSC_VER&#32;</emphasis><emphasis role="comment">//&#32;[</emphasis>
+38 <emphasis role="preprocessor">#error&#32;&quot;Use&#32;this&#32;header&#32;only&#32;with&#32;Microsoft&#32;Visual&#32;C++&#32;compilers!&quot;</emphasis>
+39 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;_MSC_VER&#32;]</emphasis>
+40 
+41 <emphasis role="preprocessor">#ifndef&#32;_MSC_INTTYPES_H_&#32;</emphasis><emphasis role="comment">//&#32;[</emphasis>
+42 <emphasis role="preprocessor">#define&#32;_MSC_INTTYPES_H_</emphasis>
+43 
+44 <emphasis role="preprocessor">#if&#32;_MSC_VER&#32;&gt;&#32;1000</emphasis>
+45 <emphasis role="preprocessor">#pragma&#32;once</emphasis>
+46 <emphasis role="preprocessor">#endif</emphasis>
+47 
+48 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stdint_8h">stdint.h</link>&quot;</emphasis>
+49 
+50 <emphasis role="comment">//&#32;miloyip:&#32;VC&#32;supports&#32;inttypes.h&#32;since&#32;VC2013</emphasis>
+51 <emphasis role="preprocessor">#if&#32;_MSC_VER&#32;&gt;=&#32;1800</emphasis>
+52 <emphasis role="preprocessor">#include&#32;&lt;<link linkend="_inttypes_8h">inttypes.h</link>&gt;</emphasis>
+53 <emphasis role="preprocessor">#else</emphasis>
+54 
+55 <emphasis role="comment">//&#32;7.8&#32;Format&#32;conversion&#32;of&#32;integer&#32;types</emphasis>
+56 
+57 <emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">struct&#32;</emphasis>{
+58 &#32;&#32;&#32;<link linkend="_stdint_8h_1a036cd61bb4b30bb510b9538af4cebd1d">intmax_t</link>&#32;<link linkend="_structimaxdiv__t_1a9339814cbb7610c72fb7d30c6573b393">quot</link>;
+59 &#32;&#32;&#32;<link linkend="_stdint_8h_1a036cd61bb4b30bb510b9538af4cebd1d">intmax_t</link>&#32;<link linkend="_structimaxdiv__t_1a6c9701ad10bff81edae7ff679cae7850">rem</link>;
+60 }&#32;<link linkend="_structimaxdiv__t">imaxdiv_t</link>;
+61 
+62 <emphasis role="comment">//&#32;7.8.1&#32;Macros&#32;for&#32;format&#32;specifiers</emphasis>
+63 
+64 <emphasis role="preprocessor">#if&#32;!defined(__cplusplus)&#32;||&#32;defined(__STDC_FORMAT_MACROS)&#32;</emphasis><emphasis role="comment">//&#32;[&#32;&#32;&#32;See&#32;footnote&#32;185&#32;at&#32;page&#32;198</emphasis>
+65 
+66 <emphasis role="comment">//&#32;The&#32;fprintf&#32;macros&#32;for&#32;signed&#32;integers&#32;are:</emphasis>
+67 <emphasis role="preprocessor">#define&#32;PRId8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;d&quot;</emphasis>
+68 <emphasis role="preprocessor">#define&#32;PRIi8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;i&quot;</emphasis>
+69 <emphasis role="preprocessor">#define&#32;PRIdLEAST8&#32;&#32;&quot;d&quot;</emphasis>
+70 <emphasis role="preprocessor">#define&#32;PRIiLEAST8&#32;&#32;&quot;i&quot;</emphasis>
+71 <emphasis role="preprocessor">#define&#32;PRIdFAST8&#32;&#32;&#32;&quot;d&quot;</emphasis>
+72 <emphasis role="preprocessor">#define&#32;PRIiFAST8&#32;&#32;&#32;&quot;i&quot;</emphasis>
+73 
+74 <emphasis role="preprocessor">#define&#32;PRId16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hd&quot;</emphasis>
+75 <emphasis role="preprocessor">#define&#32;PRIi16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hi&quot;</emphasis>
+76 <emphasis role="preprocessor">#define&#32;PRIdLEAST16&#32;&#32;&quot;hd&quot;</emphasis>
+77 <emphasis role="preprocessor">#define&#32;PRIiLEAST16&#32;&#32;&quot;hi&quot;</emphasis>
+78 <emphasis role="preprocessor">#define&#32;PRIdFAST16&#32;&#32;&#32;&quot;hd&quot;</emphasis>
+79 <emphasis role="preprocessor">#define&#32;PRIiFAST16&#32;&#32;&#32;&quot;hi&quot;</emphasis>
+80 
+81 <emphasis role="preprocessor">#define&#32;PRId32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32d&quot;</emphasis>
+82 <emphasis role="preprocessor">#define&#32;PRIi32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32i&quot;</emphasis>
+83 <emphasis role="preprocessor">#define&#32;PRIdLEAST32&#32;&#32;&quot;I32d&quot;</emphasis>
+84 <emphasis role="preprocessor">#define&#32;PRIiLEAST32&#32;&#32;&quot;I32i&quot;</emphasis>
+85 <emphasis role="preprocessor">#define&#32;PRIdFAST32&#32;&#32;&#32;&quot;I32d&quot;</emphasis>
+86 <emphasis role="preprocessor">#define&#32;PRIiFAST32&#32;&#32;&#32;&quot;I32i&quot;</emphasis>
+87 
+88 <emphasis role="preprocessor">#define&#32;PRId64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+89 <emphasis role="preprocessor">#define&#32;PRIi64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+90 <emphasis role="preprocessor">#define&#32;PRIdLEAST64&#32;&#32;&quot;I64d&quot;</emphasis>
+91 <emphasis role="preprocessor">#define&#32;PRIiLEAST64&#32;&#32;&quot;I64i&quot;</emphasis>
+92 <emphasis role="preprocessor">#define&#32;PRIdFAST64&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+93 <emphasis role="preprocessor">#define&#32;PRIiFAST64&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+94 
+95 <emphasis role="preprocessor">#define&#32;PRIdMAX&#32;&#32;&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+96 <emphasis role="preprocessor">#define&#32;PRIiMAX&#32;&#32;&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+97 
+98 <emphasis role="preprocessor">#define&#32;PRIdPTR&#32;&#32;&#32;&#32;&#32;&quot;Id&quot;</emphasis>
+99 <emphasis role="preprocessor">#define&#32;PRIiPTR&#32;&#32;&#32;&#32;&#32;&quot;Ii&quot;</emphasis>
+100 
+101 <emphasis role="comment">//&#32;The&#32;fprintf&#32;macros&#32;for&#32;unsigned&#32;integers&#32;are:</emphasis>
+102 <emphasis role="preprocessor">#define&#32;PRIo8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;o&quot;</emphasis>
+103 <emphasis role="preprocessor">#define&#32;PRIu8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;u&quot;</emphasis>
+104 <emphasis role="preprocessor">#define&#32;PRIx8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;x&quot;</emphasis>
+105 <emphasis role="preprocessor">#define&#32;PRIX8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;X&quot;</emphasis>
+106 <emphasis role="preprocessor">#define&#32;PRIoLEAST8&#32;&#32;&quot;o&quot;</emphasis>
+107 <emphasis role="preprocessor">#define&#32;PRIuLEAST8&#32;&#32;&quot;u&quot;</emphasis>
+108 <emphasis role="preprocessor">#define&#32;PRIxLEAST8&#32;&#32;&quot;x&quot;</emphasis>
+109 <emphasis role="preprocessor">#define&#32;PRIXLEAST8&#32;&#32;&quot;X&quot;</emphasis>
+110 <emphasis role="preprocessor">#define&#32;PRIoFAST8&#32;&#32;&#32;&quot;o&quot;</emphasis>
+111 <emphasis role="preprocessor">#define&#32;PRIuFAST8&#32;&#32;&#32;&quot;u&quot;</emphasis>
+112 <emphasis role="preprocessor">#define&#32;PRIxFAST8&#32;&#32;&#32;&quot;x&quot;</emphasis>
+113 <emphasis role="preprocessor">#define&#32;PRIXFAST8&#32;&#32;&#32;&quot;X&quot;</emphasis>
+114 
+115 <emphasis role="preprocessor">#define&#32;PRIo16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;ho&quot;</emphasis>
+116 <emphasis role="preprocessor">#define&#32;PRIu16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hu&quot;</emphasis>
+117 <emphasis role="preprocessor">#define&#32;PRIx16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hx&quot;</emphasis>
+118 <emphasis role="preprocessor">#define&#32;PRIX16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hX&quot;</emphasis>
+119 <emphasis role="preprocessor">#define&#32;PRIoLEAST16&#32;&#32;&quot;ho&quot;</emphasis>
+120 <emphasis role="preprocessor">#define&#32;PRIuLEAST16&#32;&#32;&quot;hu&quot;</emphasis>
+121 <emphasis role="preprocessor">#define&#32;PRIxLEAST16&#32;&#32;&quot;hx&quot;</emphasis>
+122 <emphasis role="preprocessor">#define&#32;PRIXLEAST16&#32;&#32;&quot;hX&quot;</emphasis>
+123 <emphasis role="preprocessor">#define&#32;PRIoFAST16&#32;&#32;&#32;&quot;ho&quot;</emphasis>
+124 <emphasis role="preprocessor">#define&#32;PRIuFAST16&#32;&#32;&#32;&quot;hu&quot;</emphasis>
+125 <emphasis role="preprocessor">#define&#32;PRIxFAST16&#32;&#32;&#32;&quot;hx&quot;</emphasis>
+126 <emphasis role="preprocessor">#define&#32;PRIXFAST16&#32;&#32;&#32;&quot;hX&quot;</emphasis>
+127 
+128 <emphasis role="preprocessor">#define&#32;PRIo32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32o&quot;</emphasis>
+129 <emphasis role="preprocessor">#define&#32;PRIu32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32u&quot;</emphasis>
+130 <emphasis role="preprocessor">#define&#32;PRIx32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32x&quot;</emphasis>
+131 <emphasis role="preprocessor">#define&#32;PRIX32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I32X&quot;</emphasis>
+132 <emphasis role="preprocessor">#define&#32;PRIoLEAST32&#32;&#32;&quot;I32o&quot;</emphasis>
+133 <emphasis role="preprocessor">#define&#32;PRIuLEAST32&#32;&#32;&quot;I32u&quot;</emphasis>
+134 <emphasis role="preprocessor">#define&#32;PRIxLEAST32&#32;&#32;&quot;I32x&quot;</emphasis>
+135 <emphasis role="preprocessor">#define&#32;PRIXLEAST32&#32;&#32;&quot;I32X&quot;</emphasis>
+136 <emphasis role="preprocessor">#define&#32;PRIoFAST32&#32;&#32;&#32;&quot;I32o&quot;</emphasis>
+137 <emphasis role="preprocessor">#define&#32;PRIuFAST32&#32;&#32;&#32;&quot;I32u&quot;</emphasis>
+138 <emphasis role="preprocessor">#define&#32;PRIxFAST32&#32;&#32;&#32;&quot;I32x&quot;</emphasis>
+139 <emphasis role="preprocessor">#define&#32;PRIXFAST32&#32;&#32;&#32;&quot;I32X&quot;</emphasis>
+140 
+141 <emphasis role="preprocessor">#define&#32;PRIo64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+142 <emphasis role="preprocessor">#define&#32;PRIu64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+143 <emphasis role="preprocessor">#define&#32;PRIx64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+144 <emphasis role="preprocessor">#define&#32;PRIX64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+145 <emphasis role="preprocessor">#define&#32;PRIoLEAST64&#32;&#32;&quot;I64o&quot;</emphasis>
+146 <emphasis role="preprocessor">#define&#32;PRIuLEAST64&#32;&#32;&quot;I64u&quot;</emphasis>
+147 <emphasis role="preprocessor">#define&#32;PRIxLEAST64&#32;&#32;&quot;I64x&quot;</emphasis>
+148 <emphasis role="preprocessor">#define&#32;PRIXLEAST64&#32;&#32;&quot;I64X&quot;</emphasis>
+149 <emphasis role="preprocessor">#define&#32;PRIoFAST64&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+150 <emphasis role="preprocessor">#define&#32;PRIuFAST64&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+151 <emphasis role="preprocessor">#define&#32;PRIxFAST64&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+152 <emphasis role="preprocessor">#define&#32;PRIXFAST64&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+153 
+154 <emphasis role="preprocessor">#define&#32;PRIoMAX&#32;&#32;&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+155 <emphasis role="preprocessor">#define&#32;PRIuMAX&#32;&#32;&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+156 <emphasis role="preprocessor">#define&#32;PRIxMAX&#32;&#32;&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+157 <emphasis role="preprocessor">#define&#32;PRIXMAX&#32;&#32;&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+158 
+159 <emphasis role="preprocessor">#define&#32;PRIoPTR&#32;&#32;&#32;&#32;&#32;&quot;Io&quot;</emphasis>
+160 <emphasis role="preprocessor">#define&#32;PRIuPTR&#32;&#32;&#32;&#32;&#32;&quot;Iu&quot;</emphasis>
+161 <emphasis role="preprocessor">#define&#32;PRIxPTR&#32;&#32;&#32;&#32;&#32;&quot;Ix&quot;</emphasis>
+162 <emphasis role="preprocessor">#define&#32;PRIXPTR&#32;&#32;&#32;&#32;&#32;&quot;IX&quot;</emphasis>
+163 
+164 <emphasis role="comment">//&#32;The&#32;fscanf&#32;macros&#32;for&#32;signed&#32;integers&#32;are:</emphasis>
+165 <emphasis role="preprocessor">#define&#32;SCNd8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;d&quot;</emphasis>
+166 <emphasis role="preprocessor">#define&#32;SCNi8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;i&quot;</emphasis>
+167 <emphasis role="preprocessor">#define&#32;SCNdLEAST8&#32;&#32;&quot;d&quot;</emphasis>
+168 <emphasis role="preprocessor">#define&#32;SCNiLEAST8&#32;&#32;&quot;i&quot;</emphasis>
+169 <emphasis role="preprocessor">#define&#32;SCNdFAST8&#32;&#32;&#32;&quot;d&quot;</emphasis>
+170 <emphasis role="preprocessor">#define&#32;SCNiFAST8&#32;&#32;&#32;&quot;i&quot;</emphasis>
+171 
+172 <emphasis role="preprocessor">#define&#32;SCNd16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hd&quot;</emphasis>
+173 <emphasis role="preprocessor">#define&#32;SCNi16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hi&quot;</emphasis>
+174 <emphasis role="preprocessor">#define&#32;SCNdLEAST16&#32;&#32;&quot;hd&quot;</emphasis>
+175 <emphasis role="preprocessor">#define&#32;SCNiLEAST16&#32;&#32;&quot;hi&quot;</emphasis>
+176 <emphasis role="preprocessor">#define&#32;SCNdFAST16&#32;&#32;&#32;&quot;hd&quot;</emphasis>
+177 <emphasis role="preprocessor">#define&#32;SCNiFAST16&#32;&#32;&#32;&quot;hi&quot;</emphasis>
+178 
+179 <emphasis role="preprocessor">#define&#32;SCNd32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;ld&quot;</emphasis>
+180 <emphasis role="preprocessor">#define&#32;SCNi32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;li&quot;</emphasis>
+181 <emphasis role="preprocessor">#define&#32;SCNdLEAST32&#32;&#32;&quot;ld&quot;</emphasis>
+182 <emphasis role="preprocessor">#define&#32;SCNiLEAST32&#32;&#32;&quot;li&quot;</emphasis>
+183 <emphasis role="preprocessor">#define&#32;SCNdFAST32&#32;&#32;&#32;&quot;ld&quot;</emphasis>
+184 <emphasis role="preprocessor">#define&#32;SCNiFAST32&#32;&#32;&#32;&quot;li&quot;</emphasis>
+185 
+186 <emphasis role="preprocessor">#define&#32;SCNd64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+187 <emphasis role="preprocessor">#define&#32;SCNi64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+188 <emphasis role="preprocessor">#define&#32;SCNdLEAST64&#32;&#32;&quot;I64d&quot;</emphasis>
+189 <emphasis role="preprocessor">#define&#32;SCNiLEAST64&#32;&#32;&quot;I64i&quot;</emphasis>
+190 <emphasis role="preprocessor">#define&#32;SCNdFAST64&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+191 <emphasis role="preprocessor">#define&#32;SCNiFAST64&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+192 
+193 <emphasis role="preprocessor">#define&#32;SCNdMAX&#32;&#32;&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+194 <emphasis role="preprocessor">#define&#32;SCNiMAX&#32;&#32;&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+195 
+196 <emphasis role="preprocessor">#ifdef&#32;_WIN64&#32;</emphasis><emphasis role="comment">//&#32;[</emphasis>
+197 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNdPTR&#32;&#32;&#32;&#32;&#32;&quot;I64d&quot;</emphasis>
+198 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNiPTR&#32;&#32;&#32;&#32;&#32;&quot;I64i&quot;</emphasis>
+199 <emphasis role="preprocessor">#else&#32;&#32;</emphasis><emphasis role="comment">//&#32;_WIN64&#32;][</emphasis>
+200 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNdPTR&#32;&#32;&#32;&#32;&#32;&quot;ld&quot;</emphasis>
+201 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNiPTR&#32;&#32;&#32;&#32;&#32;&quot;li&quot;</emphasis>
+202 <emphasis role="preprocessor">#endif&#32;&#32;</emphasis><emphasis role="comment">//&#32;_WIN64&#32;]</emphasis>
+203 
+204 <emphasis role="comment">//&#32;The&#32;fscanf&#32;macros&#32;for&#32;unsigned&#32;integers&#32;are:</emphasis>
+205 <emphasis role="preprocessor">#define&#32;SCNo8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;o&quot;</emphasis>
+206 <emphasis role="preprocessor">#define&#32;SCNu8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;u&quot;</emphasis>
+207 <emphasis role="preprocessor">#define&#32;SCNx8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;x&quot;</emphasis>
+208 <emphasis role="preprocessor">#define&#32;SCNX8&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;X&quot;</emphasis>
+209 <emphasis role="preprocessor">#define&#32;SCNoLEAST8&#32;&#32;&quot;o&quot;</emphasis>
+210 <emphasis role="preprocessor">#define&#32;SCNuLEAST8&#32;&#32;&quot;u&quot;</emphasis>
+211 <emphasis role="preprocessor">#define&#32;SCNxLEAST8&#32;&#32;&quot;x&quot;</emphasis>
+212 <emphasis role="preprocessor">#define&#32;SCNXLEAST8&#32;&#32;&quot;X&quot;</emphasis>
+213 <emphasis role="preprocessor">#define&#32;SCNoFAST8&#32;&#32;&#32;&quot;o&quot;</emphasis>
+214 <emphasis role="preprocessor">#define&#32;SCNuFAST8&#32;&#32;&#32;&quot;u&quot;</emphasis>
+215 <emphasis role="preprocessor">#define&#32;SCNxFAST8&#32;&#32;&#32;&quot;x&quot;</emphasis>
+216 <emphasis role="preprocessor">#define&#32;SCNXFAST8&#32;&#32;&#32;&quot;X&quot;</emphasis>
+217 
+218 <emphasis role="preprocessor">#define&#32;SCNo16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;ho&quot;</emphasis>
+219 <emphasis role="preprocessor">#define&#32;SCNu16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hu&quot;</emphasis>
+220 <emphasis role="preprocessor">#define&#32;SCNx16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hx&quot;</emphasis>
+221 <emphasis role="preprocessor">#define&#32;SCNX16&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;hX&quot;</emphasis>
+222 <emphasis role="preprocessor">#define&#32;SCNoLEAST16&#32;&#32;&quot;ho&quot;</emphasis>
+223 <emphasis role="preprocessor">#define&#32;SCNuLEAST16&#32;&#32;&quot;hu&quot;</emphasis>
+224 <emphasis role="preprocessor">#define&#32;SCNxLEAST16&#32;&#32;&quot;hx&quot;</emphasis>
+225 <emphasis role="preprocessor">#define&#32;SCNXLEAST16&#32;&#32;&quot;hX&quot;</emphasis>
+226 <emphasis role="preprocessor">#define&#32;SCNoFAST16&#32;&#32;&#32;&quot;ho&quot;</emphasis>
+227 <emphasis role="preprocessor">#define&#32;SCNuFAST16&#32;&#32;&#32;&quot;hu&quot;</emphasis>
+228 <emphasis role="preprocessor">#define&#32;SCNxFAST16&#32;&#32;&#32;&quot;hx&quot;</emphasis>
+229 <emphasis role="preprocessor">#define&#32;SCNXFAST16&#32;&#32;&#32;&quot;hX&quot;</emphasis>
+230 
+231 <emphasis role="preprocessor">#define&#32;SCNo32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;lo&quot;</emphasis>
+232 <emphasis role="preprocessor">#define&#32;SCNu32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;lu&quot;</emphasis>
+233 <emphasis role="preprocessor">#define&#32;SCNx32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;lx&quot;</emphasis>
+234 <emphasis role="preprocessor">#define&#32;SCNX32&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;lX&quot;</emphasis>
+235 <emphasis role="preprocessor">#define&#32;SCNoLEAST32&#32;&#32;&quot;lo&quot;</emphasis>
+236 <emphasis role="preprocessor">#define&#32;SCNuLEAST32&#32;&#32;&quot;lu&quot;</emphasis>
+237 <emphasis role="preprocessor">#define&#32;SCNxLEAST32&#32;&#32;&quot;lx&quot;</emphasis>
+238 <emphasis role="preprocessor">#define&#32;SCNXLEAST32&#32;&#32;&quot;lX&quot;</emphasis>
+239 <emphasis role="preprocessor">#define&#32;SCNoFAST32&#32;&#32;&#32;&quot;lo&quot;</emphasis>
+240 <emphasis role="preprocessor">#define&#32;SCNuFAST32&#32;&#32;&#32;&quot;lu&quot;</emphasis>
+241 <emphasis role="preprocessor">#define&#32;SCNxFAST32&#32;&#32;&#32;&quot;lx&quot;</emphasis>
+242 <emphasis role="preprocessor">#define&#32;SCNXFAST32&#32;&#32;&#32;&quot;lX&quot;</emphasis>
+243 
+244 <emphasis role="preprocessor">#define&#32;SCNo64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+245 <emphasis role="preprocessor">#define&#32;SCNu64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+246 <emphasis role="preprocessor">#define&#32;SCNx64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+247 <emphasis role="preprocessor">#define&#32;SCNX64&#32;&#32;&#32;&#32;&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+248 <emphasis role="preprocessor">#define&#32;SCNoLEAST64&#32;&#32;&quot;I64o&quot;</emphasis>
+249 <emphasis role="preprocessor">#define&#32;SCNuLEAST64&#32;&#32;&quot;I64u&quot;</emphasis>
+250 <emphasis role="preprocessor">#define&#32;SCNxLEAST64&#32;&#32;&quot;I64x&quot;</emphasis>
+251 <emphasis role="preprocessor">#define&#32;SCNXLEAST64&#32;&#32;&quot;I64X&quot;</emphasis>
+252 <emphasis role="preprocessor">#define&#32;SCNoFAST64&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+253 <emphasis role="preprocessor">#define&#32;SCNuFAST64&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+254 <emphasis role="preprocessor">#define&#32;SCNxFAST64&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+255 <emphasis role="preprocessor">#define&#32;SCNXFAST64&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+256 
+257 <emphasis role="preprocessor">#define&#32;SCNoMAX&#32;&#32;&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+258 <emphasis role="preprocessor">#define&#32;SCNuMAX&#32;&#32;&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+259 <emphasis role="preprocessor">#define&#32;SCNxMAX&#32;&#32;&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+260 <emphasis role="preprocessor">#define&#32;SCNXMAX&#32;&#32;&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+261 
+262 <emphasis role="preprocessor">#ifdef&#32;_WIN64&#32;</emphasis><emphasis role="comment">//&#32;[</emphasis>
+263 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNoPTR&#32;&#32;&#32;&#32;&#32;&quot;I64o&quot;</emphasis>
+264 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNuPTR&#32;&#32;&#32;&#32;&#32;&quot;I64u&quot;</emphasis>
+265 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNxPTR&#32;&#32;&#32;&#32;&#32;&quot;I64x&quot;</emphasis>
+266 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNXPTR&#32;&#32;&#32;&#32;&#32;&quot;I64X&quot;</emphasis>
+267 <emphasis role="preprocessor">#else&#32;&#32;</emphasis><emphasis role="comment">//&#32;_WIN64&#32;][</emphasis>
+268 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNoPTR&#32;&#32;&#32;&#32;&#32;&quot;lo&quot;</emphasis>
+269 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNuPTR&#32;&#32;&#32;&#32;&#32;&quot;lu&quot;</emphasis>
+270 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNxPTR&#32;&#32;&#32;&#32;&#32;&quot;lx&quot;</emphasis>
+271 <emphasis role="preprocessor">#&#32;&#32;define&#32;SCNXPTR&#32;&#32;&#32;&#32;&#32;&quot;lX&quot;</emphasis>
+272 <emphasis role="preprocessor">#endif&#32;&#32;</emphasis><emphasis role="comment">//&#32;_WIN64&#32;]</emphasis>
+273 
+274 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;__STDC_FORMAT_MACROS&#32;]</emphasis>
+275 
+276 <emphasis role="comment">//&#32;7.8.2&#32;Functions&#32;for&#32;greatest-width&#32;integer&#32;types</emphasis>
+277 
+278 <emphasis role="comment">//&#32;7.8.2.1&#32;The&#32;imaxabs&#32;function</emphasis>
+279 <emphasis role="preprocessor">#define&#32;imaxabs&#32;_abs64</emphasis>
+280 
+281 <emphasis role="comment">//&#32;7.8.2.2&#32;The&#32;imaxdiv&#32;function</emphasis>
+282 
+283 <emphasis role="comment">//&#32;This&#32;is&#32;modified&#32;version&#32;of&#32;div()&#32;function&#32;from&#32;Microsoft&apos;s&#32;div.c&#32;found</emphasis>
+284 <emphasis role="comment">//&#32;in&#32;%MSVC.NET%\crt\src\div.c</emphasis>
+285 <emphasis role="preprocessor">#ifdef&#32;STATIC_IMAXDIV&#32;</emphasis><emphasis role="comment">//&#32;[</emphasis>
+286 <emphasis role="keyword">static</emphasis>
+287 <emphasis role="preprocessor">#else&#32;</emphasis><emphasis role="comment">//&#32;STATIC_IMAXDIV&#32;][</emphasis>
+288 _inline
+289 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;STATIC_IMAXDIV&#32;]</emphasis>
+290 <link linkend="_structimaxdiv__t">imaxdiv_t</link>&#32;__cdecl&#32;<link linkend="_inttypes_8h_1a8cb1de760b0fde0bae9eb5e070f0bce7">imaxdiv</link>(<link linkend="_stdint_8h_1a036cd61bb4b30bb510b9538af4cebd1d">intmax_t</link>&#32;numer,&#32;<link linkend="_stdint_8h_1a036cd61bb4b30bb510b9538af4cebd1d">intmax_t</link>&#32;denom)
+291 {
+292 &#32;&#32;&#32;<link linkend="_structimaxdiv__t">imaxdiv_t</link>&#32;result;
+293 
+294 &#32;&#32;&#32;result.<link linkend="_structimaxdiv__t_1a9339814cbb7610c72fb7d30c6573b393">quot</link>&#32;=&#32;numer&#32;/&#32;denom;
+295 &#32;&#32;&#32;result.<link linkend="_structimaxdiv__t_1a6c9701ad10bff81edae7ff679cae7850">rem</link>&#32;=&#32;numer&#32;%&#32;denom;
+296 
+297 &#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(numer&#32;&lt;&#32;0&#32;&amp;&amp;&#32;result.rem&#32;&gt;&#32;0)&#32;{
+298 &#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;did&#32;division&#32;wrong;&#32;must&#32;fix&#32;up</emphasis>
+299 &#32;&#32;&#32;&#32;&#32;&#32;++result.<link linkend="_structimaxdiv__t_1a9339814cbb7610c72fb7d30c6573b393">quot</link>;
+300 &#32;&#32;&#32;&#32;&#32;&#32;result.<link linkend="_structimaxdiv__t_1a6c9701ad10bff81edae7ff679cae7850">rem</link>&#32;-=&#32;denom;
+301 &#32;&#32;&#32;}
+302 
+303 &#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+304 }
+305 
+306 <emphasis role="comment">//&#32;7.8.2.3&#32;The&#32;strtoimax&#32;and&#32;strtoumax&#32;functions</emphasis>
+307 <emphasis role="preprocessor">#define&#32;strtoimax&#32;_strtoi64</emphasis>
+308 <emphasis role="preprocessor">#define&#32;strtoumax&#32;_strtoui64</emphasis>
+309 
+310 <emphasis role="comment">//&#32;7.8.2.4&#32;The&#32;wcstoimax&#32;and&#32;wcstoumax&#32;functions</emphasis>
+311 <emphasis role="preprocessor">#define&#32;wcstoimax&#32;_wcstoi64</emphasis>
+312 <emphasis role="preprocessor">#define&#32;wcstoumax&#32;_wcstoui64</emphasis>
+313 
+314 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;_MSC_VER&#32;&gt;=&#32;1800</emphasis>
+315 
+316 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;_MSC_INTTYPES_H_&#32;]</emphasis>
+</programlisting></section>

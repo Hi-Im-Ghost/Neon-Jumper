@@ -1,0 +1,711 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_regex_8h_source" xml:lang="en-US">
+<title>regex.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/regex.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_INTERNAL_REGEX_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_INTERNAL_REGEX_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;../allocators.h&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&quot;../stream.h&quot;</emphasis>
+20 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_stack_8h">stack.h</link>&quot;</emphasis>
+21 
+22 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+23 RAPIDJSON_DIAG_PUSH
+24 RAPIDJSON_DIAG_OFF(padded)
+25 RAPIDJSON_DIAG_OFF(<emphasis role="keywordflow">switch</emphasis>-<emphasis role="keyword">enum</emphasis>)
+26 <emphasis role="preprocessor">#elif&#32;defined(_MSC_VER)</emphasis>
+27 RAPIDJSON_DIAG_PUSH
+28 RAPIDJSON_DIAG_OFF(4512)&#32;<emphasis role="comment">//&#32;assignment&#32;operator&#32;could&#32;not&#32;be&#32;generated</emphasis>
+29 <emphasis role="preprocessor">#endif</emphasis>
+30 
+31 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+32 RAPIDJSON_DIAG_PUSH
+33 RAPIDJSON_DIAG_OFF(effc++)
+34 <emphasis role="preprocessor">#endif</emphasis>
+35 
+36 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_REGEX_VERBOSE</emphasis>
+37 <emphasis role="preprocessor">#define&#32;RAPIDJSON_REGEX_VERBOSE&#32;0</emphasis>
+38 <emphasis role="preprocessor">#endif</emphasis>
+39 
+40 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+41 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+42 
+44 <emphasis role="comment">//&#32;DecodedStream</emphasis>
+45 
+46 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;SourceStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
+47 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&#32;{
+48 <emphasis role="keyword">public</emphasis>:
+49 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream_1a45cf40c4e515be8aaa8cd020eaa67595">DecodedStream</link>(SourceStream&amp;&#32;ss)&#32;:&#32;ss_(ss),&#32;codepoint_()&#32;{&#32;Decode();&#32;}
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;codepoint_;&#32;}
+51 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>()&#32;{
+52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;codepoint_;
+53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c)&#32;<emphasis role="comment">//&#32;No&#32;further&#32;decoding&#32;when&#32;&apos;\0&apos;</emphasis>
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Decode();
+55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
+56 &#32;&#32;&#32;&#32;}
+57 
+58 <emphasis role="keyword">private</emphasis>:
+59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Decode()&#32;{
+60 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Encoding::Decode(ss_,&#32;&amp;codepoint_))
+61 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;codepoint_&#32;=&#32;0;
+62 &#32;&#32;&#32;&#32;}
+63 
+64 &#32;&#32;&#32;&#32;SourceStream&amp;&#32;ss_;
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint_;
+66 };
+67 
+69 <emphasis role="comment">//&#32;GenericRegex</emphasis>
+70 
+71 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;kRegexInvalidState&#32;=&#32;~SizeType(0);&#32;&#32;
+72 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;kRegexInvalidRange&#32;=&#32;~SizeType(0);
+73 
+74 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&gt;
+75 <emphasis role="keyword">class&#32;</emphasis>GenericRegexSearch;
+76 
+78 
+109 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&#32;=&#32;CrtAllocator&gt;
+110 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_generic_regex">GenericRegex</link>&#32;{
+111 <emphasis role="keyword">public</emphasis>:
+112 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a8d0eb2f6a71868b2a8f03382b7836d30">EncodingType</link>;
+113 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link>;
+114 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>,&#32;<emphasis role="keyword">typename</emphasis>&gt;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link>;
+115 
+116 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a35c3a49bc4545a991ab039858227df0f">GenericRegex</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link>*&#32;<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>,&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator&#32;=&#32;0)&#32;:&#32;
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_(allocator&#32;?&#32;0&#32;:&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)()),&#32;allocator_(allocator&#32;?&#32;allocator&#32;:&#32;ownAllocator_),&#32;
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;states_(allocator_,&#32;256),&#32;ranges_(allocator_,&#32;256),&#32;root_(kRegexInvalidState),&#32;stateCount_(),&#32;rangeCount_(),&#32;
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorBegin_(),&#32;anchorEnd_()
+120 &#32;&#32;&#32;&#32;{
+121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;Encoding&gt;</link>&#32;ss(<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>);
+122 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;GenericStringStream&lt;Encoding&gt;</link>,&#32;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&gt;&#32;ds(ss);
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Parse(ds);
+124 &#32;&#32;&#32;&#32;}
+125 
+126 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a6a4956c0391bccbf8580b2e047d5bc35">~GenericRegex</link>()
+127 &#32;&#32;&#32;&#32;{
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(ownAllocator_);
+129 &#32;&#32;&#32;&#32;}
+130 
+131 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8">IsValid</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;root_&#32;!=&#32;kRegexInvalidState;
+133 &#32;&#32;&#32;&#32;}
+134 
+135 <emphasis role="keyword">private</emphasis>:
+136 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;Operator&#32;{
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kZeroOrOne,
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kZeroOrMore,
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kOneOrMore,
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kConcatenation,
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kAlternation,
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kLeftParenthesis
+143 &#32;&#32;&#32;&#32;};
+144 
+145 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kAnyCharacterClass&#32;=&#32;0xFFFFFFFF;&#32;&#32;&#32;
+146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kRangeCharacterClass&#32;=&#32;0xFFFFFFFE;
+147 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kRangeNegationFlag&#32;=&#32;0x80000000;
+148 
+149 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>Range&#32;{
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;start;&#32;<emphasis role="comment">//&#32;</emphasis>
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;end;
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;next;
+153 &#32;&#32;&#32;&#32;};
+154 
+155 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>State&#32;{
+156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out;&#32;&#32;&#32;&#32;&#32;
+157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out1;&#32;&#32;&#32;&#32;
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeStart;
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+160 &#32;&#32;&#32;&#32;};
+161 
+162 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>Frag&#32;{
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;o,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;m)&#32;:&#32;start(s),&#32;out(o),&#32;minIndex(m)&#32;{}
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;start;
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out;&#32;
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;minIndex;
+167 &#32;&#32;&#32;&#32;};
+168 
+169 &#32;&#32;&#32;&#32;State&amp;&#32;GetState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;stateCount_);
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;states_.template&#32;Bottom&lt;State&gt;()[index];
+172 &#32;&#32;&#32;&#32;}
+173 
+174 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;GetState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;stateCount_);
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;states_.template&#32;Bottom&lt;State&gt;()[index];
+177 &#32;&#32;&#32;&#32;}
+178 
+179 &#32;&#32;&#32;&#32;Range&amp;&#32;GetRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;rangeCount_);
+181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ranges_.template&#32;Bottom&lt;Range&gt;()[index];
+182 &#32;&#32;&#32;&#32;}
+183 
+184 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Range&amp;&#32;GetRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;rangeCount_);
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ranges_.template&#32;Bottom&lt;Range&gt;()[index];
+187 &#32;&#32;&#32;&#32;}
+188 
+189 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+190 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Parse(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds)&#32;{
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;operandStack(allocator_,&#32;256);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Frag</emphasis>
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;operatorStack(allocator_,&#32;256);&#32;&#32;&#32;<emphasis role="comment">//&#32;Operator</emphasis>
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;atomCountStack(allocator_,&#32;256);&#32;&#32;<emphasis role="comment">//&#32;unsigned&#32;(Atom&#32;per&#32;parenthesis)</emphasis>
+194 
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Push&lt;unsigned&gt;()&#32;=&#32;0;
+196 
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.Peek()&#32;!=&#32;0)&#32;{
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.Take())&#32;{
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>:
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorBegin_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+203 
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;$&apos;</emphasis>:
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorEnd_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+207 
+208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;|&apos;</emphasis>:
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;&lt;&#32;kAlternation)
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kAlternation;
+213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Top&lt;unsigned&gt;()&#32;=&#32;0;
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+215 
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;(&apos;</emphasis>:
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kLeftParenthesis;
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Push&lt;unsigned&gt;()&#32;=&#32;0;
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+220 
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;)&apos;</emphasis>:
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;!=&#32;kLeftParenthesis)
+223 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operatorStack.Empty())
+226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;operatorStack.template&#32;Pop&lt;Operator&gt;(1);
+228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;atomCountStack.template&#32;Pop&lt;unsigned&gt;(1);
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+231 
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;?&apos;</emphasis>:
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kZeroOrOne))
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+236 
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;*&apos;</emphasis>:
+238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kZeroOrMore))
+239 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+240 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+241 
+242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;+&apos;</emphasis>:
+243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kOneOrMore))
+244 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+245 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+246 
+247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;{&apos;</emphasis>:
+248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;n,&#32;m;
+250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseUnsigned(ds,&#32;&amp;n))
+251 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+252 
+253 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;,&apos;</emphasis>)&#32;{
+254 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
+255 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
+256 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m&#32;=&#32;kInfinityQuantifier;
+257 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseUnsigned(ds,&#32;&amp;m)&#32;||&#32;m&#32;&lt;&#32;n)
+258 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+260 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+261 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m&#32;=&#32;n;
+262 
+263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!EvalQuantifier(operandStack,&#32;n,&#32;m)&#32;||&#32;ds.Peek()&#32;!=&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
+264 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+265 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
+266 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+267 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+268 
+269 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>:
+270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushOperand(operandStack,&#32;kAnyCharacterClass);
+271 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+272 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+273 
+274 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;[&apos;</emphasis>:
+275 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+276 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;range;
+277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseRange(ds,&#32;&amp;range))
+278 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;kRangeCharacterClass);
+280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(s).rangeStart&#32;=&#32;range;
+281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;s);
+282 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+285 
+286 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>:&#32;<emphasis role="comment">//&#32;Escape&#32;character</emphasis>
+287 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!CharacterEscape(ds,&#32;&amp;codepoint))
+288 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;&#32;<emphasis role="comment">//&#32;Unsupported&#32;escape&#32;character</emphasis>
+289 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fall&#32;through&#32;to&#32;default</emphasis>
+290 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH;
+291 
+292 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:&#32;<emphasis role="comment">//&#32;Pattern&#32;character</emphasis>
+293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushOperand(operandStack,&#32;codepoint);
+294 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+295 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+296 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+297 
+298 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty())
+299 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+300 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+301 
+302 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Link&#32;the&#32;operand&#32;to&#32;matching&#32;state.</emphasis>
+303 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;==&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
+304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag*&#32;e&#32;=&#32;operandStack.template&#32;Pop&lt;Frag&gt;(1);
+305 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e-&gt;out,&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;0));
+306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;root_&#32;=&#32;e-&gt;start;
+307 
+308 <emphasis role="preprocessor">#if&#32;RAPIDJSON_REGEX_VERBOSE</emphasis>
+309 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;root:&#32;%d\n&quot;</emphasis>,&#32;root_);
+310 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;stateCount_&#32;;&#32;i++)&#32;{
+311 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State&amp;&#32;s&#32;=&#32;GetState(i);
+312 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;[%2d]&#32;out:&#32;%2d&#32;out1:&#32;%2d&#32;c:&#32;&apos;%c&apos;\n&quot;</emphasis>,&#32;i,&#32;s.out,&#32;s.out1,&#32;(<emphasis role="keywordtype">char</emphasis>)s.codepoint);
+313 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+314 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;\n&quot;</emphasis>);
+315 <emphasis role="preprocessor">#endif</emphasis>
+316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+317 &#32;&#32;&#32;&#32;}
+318 
+319 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;NewState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out1,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+320 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State*&#32;s&#32;=&#32;states_.template&#32;Push&lt;State&gt;();
+321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;out&#32;=&#32;out;
+322 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;out1&#32;=&#32;out1;
+323 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;codepoint&#32;=&#32;codepoint;
+324 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;rangeStart&#32;=&#32;kRegexInvalidRange;
+325 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;stateCount_++;
+326 &#32;&#32;&#32;&#32;}
+327 
+328 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;PushOperand(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+329 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;codepoint);
+330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;s);
+331 &#32;&#32;&#32;&#32;}
+332 
+333 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;ImplicitConcatenation(Stack&lt;Allocator&gt;&amp;&#32;atomCountStack,&#32;Stack&lt;Allocator&gt;&amp;&#32;operatorStack)&#32;{
+334 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*atomCountStack.template&#32;Top&lt;unsigned&gt;())
+335 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kConcatenation;
+336 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(*atomCountStack.template&#32;Top&lt;unsigned&gt;())++;
+337 &#32;&#32;&#32;&#32;}
+338 
+339 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;Append(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l1,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l2)&#32;{
+340 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;old&#32;=&#32;l1;
+341 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(GetState(l1).out&#32;!=&#32;kRegexInvalidState)
+342 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;l1&#32;=&#32;GetState(l1).out;
+343 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(l1).out&#32;=&#32;l2;
+344 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;old;
+345 &#32;&#32;&#32;&#32;}
+346 
+347 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Patch(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s)&#32;{
+348 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;next;&#32;l&#32;!=&#32;kRegexInvalidState;&#32;l&#32;=&#32;next)&#32;{
+349 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;next&#32;=&#32;GetState(l).out;
+350 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(l).out&#32;=&#32;s;
+351 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+352 &#32;&#32;&#32;&#32;}
+353 
+354 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;Eval(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;Operator&#32;op)&#32;{
+355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(op)&#32;{
+356 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kConcatenation:
+357 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag)&#32;*&#32;2);
+358 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+359 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+360 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+361 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e1.out,&#32;e2.start);
+362 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(e1.start,&#32;e2.out,&#32;Min(e1.minIndex,&#32;e2.minIndex));
+363 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+364 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+365 
+366 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kAlternation:
+367 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag)&#32;*&#32;2)&#32;{
+368 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+369 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+370 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(e1.start,&#32;e2.start,&#32;0);
+371 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;Append(e1.out,&#32;e2.out),&#32;Min(e1.minIndex,&#32;e2.minIndex));
+372 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+373 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+374 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+375 
+376 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kZeroOrOne:
+377 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
+378 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+379 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
+380 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;Append(e.out,&#32;s),&#32;e.minIndex);
+381 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+382 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+383 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+384 
+385 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kZeroOrMore:
+386 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
+387 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+388 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
+389 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e.out,&#32;s);
+390 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;e.minIndex);
+391 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+392 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+393 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+394 
+395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kOneOrMore:
+396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
+397 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+398 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
+399 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e.out,&#32;s);
+400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(e.start,&#32;s,&#32;e.minIndex);
+401 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+402 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+403 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+404 
+405 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:&#32;
+406 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;syntax&#32;error&#32;(e.g.&#32;unclosed&#32;kLeftParenthesis)</emphasis>
+407 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+408 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+409 &#32;&#32;&#32;&#32;}
+410 
+411 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;EvalQuantifier(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;n,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;m)&#32;{
+412 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(n&#32;&lt;=&#32;m);
+413 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag));
+414 
+415 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;==&#32;0)&#32;{
+416 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;0)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0}&#32;not&#32;support</emphasis>
+417 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+418 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;kInfinityQuantifier)
+419 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrMore);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,}&#32;-&gt;&#32;a*</emphasis>
+420 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+421 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrOne);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?</emphasis>
+422 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
+423 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?&#32;a?&#32;a?&#32;a?&#32;a?</emphasis>
+424 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
+425 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?a?a?a?a?</emphasis>
+426 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+427 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+428 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+429 
+430 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;n&#32;-&#32;1;&#32;i++)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3}&#32;-&gt;&#32;a&#32;a&#32;a</emphasis>
+431 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);
+432 
+433 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;kInfinityQuantifier)
+434 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kOneOrMore);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,}&#32;-&gt;&#32;a&#32;a&#32;a+</emphasis>
+435 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;&gt;&#32;n)&#32;{
+436 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a</emphasis>
+437 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrOne);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?</emphasis>
+438 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;n;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
+439 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?&#32;a?</emphasis>
+440 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;n;&#32;i&#32;&lt;&#32;m;&#32;i++)
+441 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;aa?a?</emphasis>
+442 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+443 
+444 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;n&#32;-&#32;1;&#32;i++)
+445 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3}&#32;-&gt;&#32;aaa,&#32;a{3,}&#32;-&gt;&#32;aaa+,&#32;a{3.5}&#32;-&gt;&#32;aaaa?a?</emphasis>
+446 
+447 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+448 &#32;&#32;&#32;&#32;}
+449 
+450 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;Min(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;b)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;&lt;&#32;b&#32;?&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;:&#32;b;&#32;}
+451 
+452 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;CloneTopOperand(Stack&lt;Allocator&gt;&amp;&#32;operandStack)&#32;{
+453 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Frag&#32;src&#32;=&#32;*operandStack.template&#32;Top&lt;Frag&gt;();&#32;<emphasis role="comment">//&#32;Copy&#32;constructor&#32;to&#32;prevent&#32;invalidation</emphasis>
+454 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;count&#32;=&#32;stateCount_&#32;-&#32;src.minIndex;&#32;<emphasis role="comment">//&#32;Assumes&#32;top&#32;operand&#32;contains&#32;states&#32;in&#32;[src-&gt;minIndex,&#32;stateCount_)</emphasis>
+455 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State*&#32;s&#32;=&#32;states_.template&#32;Push&lt;State&gt;(count);
+456 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;memcpy(s,&#32;&amp;GetState(src.minIndex),&#32;count&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(State));
+457 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;j&#32;=&#32;0;&#32;j&#32;&lt;&#32;count;&#32;j++)&#32;{
+458 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out&#32;!=&#32;kRegexInvalidState)
+459 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].out&#32;+=&#32;count;
+460 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out1&#32;!=&#32;kRegexInvalidState)
+461 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].out1&#32;+=&#32;count;
+462 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+463 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(src.start&#32;+&#32;count,&#32;src.out&#32;+&#32;count,&#32;src.minIndex&#32;+&#32;count);
+464 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateCount_&#32;+=&#32;count;
+465 &#32;&#32;&#32;&#32;}
+466 
+467 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+468 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ParseUnsigned(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;u)&#32;{
+469 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;r&#32;=&#32;0;
+470 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;&lt;&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;||&#32;ds.Peek()&#32;&gt;&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)
+471 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.Peek()&#32;&gt;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;&amp;&amp;&#32;ds.Peek()&#32;&lt;=&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)&#32;{
+473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(r&#32;&gt;=&#32;429496729&#32;&amp;&amp;&#32;ds.Peek()&#32;&gt;&#32;<emphasis role="charliteral">&apos;5&apos;</emphasis>)&#32;<emphasis role="comment">//&#32;2^32&#32;-&#32;1&#32;=&#32;4294967295</emphasis>
+474 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;&#32;<emphasis role="comment">//&#32;overflow</emphasis>
+475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r&#32;=&#32;r&#32;*&#32;10&#32;+&#32;(ds.Take()&#32;-&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>);
+476 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*u&#32;=&#32;r;
+478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+479 &#32;&#32;&#32;&#32;}
+480 
+481 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+482 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ParseRange(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>*&#32;range)&#32;{
+483 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;isBegin&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+484 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;negate&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+485 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;step&#32;=&#32;0;
+486 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;start&#32;=&#32;kRegexInvalidRange;
+487 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;current&#32;=&#32;kRegexInvalidRange;
+488 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;((codepoint&#32;=&#32;ds.Take())&#32;!=&#32;0)&#32;{
+490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(isBegin)&#32;{
+491 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;isBegin&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+492 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;==&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>)&#32;{
+493 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;negate&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+494 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+495 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+496 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+497 
+498 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint)&#32;{
+499 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;]&apos;</emphasis>:
+500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;kRegexInvalidRange)
+501 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error:&#32;nothing&#32;inside&#32;[]</emphasis>
+502 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(step&#32;==&#32;2)&#32;{&#32;<emphasis role="comment">//&#32;Add&#32;trailing&#32;&apos;-&apos;</emphasis>
+503 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;NewRange(<emphasis role="charliteral">&apos;-&apos;</emphasis>);
+504 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(current&#32;!=&#32;kRegexInvalidRange);
+505 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).next&#32;=&#32;r;
+506 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+507 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(negate)
+508 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(start).start&#32;|=&#32;kRangeNegationFlag;
+509 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*range&#32;=&#32;start;
+510 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+511 
+512 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>:
+513 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;b&apos;</emphasis>)&#32;{
+514 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
+515 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;codepoint&#32;=&#32;0x0008;&#32;<emphasis role="comment">//&#32;Escape&#32;backspace&#32;character</emphasis>
+516 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+517 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!CharacterEscape(ds,&#32;&amp;codepoint))
+518 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+519 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fall&#32;through&#32;to&#32;default</emphasis>
+520 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH;
+521 
+522 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:
+523 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(step)&#32;{
+524 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;1:
+525 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;==&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>)&#32;{
+526 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;step++;
+527 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+528 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+529 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fall&#32;through&#32;to&#32;step&#32;0&#32;for&#32;other&#32;characters</emphasis>
+530 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH;
+531 
+532 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;0:
+533 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+534 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;NewRange(codepoint);
+535 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current&#32;!=&#32;kRegexInvalidRange)
+536 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).next&#32;=&#32;r;
+537 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;kRegexInvalidRange)
+538 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;start&#32;=&#32;r;
+539 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current&#32;=&#32;r;
+540 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+541 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;step&#32;=&#32;1;
+542 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+543 
+544 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:
+545 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(step&#32;==&#32;2);
+546 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).end&#32;=&#32;codepoint;
+547 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;step&#32;=&#32;0;
+548 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+549 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+550 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+551 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+552 &#32;&#32;&#32;&#32;}
+553 &#32;&#32;&#32;&#32;
+554 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;NewRange(<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+555 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Range*&#32;r&#32;=&#32;ranges_.template&#32;Push&lt;Range&gt;();
+556 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;start&#32;=&#32;r-&gt;end&#32;=&#32;codepoint;
+557 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;next&#32;=&#32;kRegexInvalidRange;
+558 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;rangeCount_++;
+559 &#32;&#32;&#32;&#32;}
+560 
+561 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+562 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;CharacterEscape(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;escapedCodepoint)&#32;{
+563 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+564 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.Take())&#32;{
+565 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>:
+566 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;$&apos;</emphasis>:
+567 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;|&apos;</emphasis>:
+568 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;(&apos;</emphasis>:
+569 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;)&apos;</emphasis>:
+570 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;?&apos;</emphasis>:
+571 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;*&apos;</emphasis>:
+572 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;+&apos;</emphasis>:
+573 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>:
+574 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;[&apos;</emphasis>:
+575 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;]&apos;</emphasis>:
+576 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;{&apos;</emphasis>:
+577 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>:
+578 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>:
+579 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*escapedCodepoint&#32;=&#32;codepoint;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+580 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;f&apos;</emphasis>:&#32;*escapedCodepoint&#32;=&#32;0x000C;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+581 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;n&apos;</emphasis>:&#32;*escapedCodepoint&#32;=&#32;0x000A;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+582 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;r&apos;</emphasis>:&#32;*escapedCodepoint&#32;=&#32;0x000D;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+583 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;t&apos;</emphasis>:&#32;*escapedCodepoint&#32;=&#32;0x0009;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+584 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;v&apos;</emphasis>:&#32;*escapedCodepoint&#32;=&#32;0x000B;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+585 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:
+586 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;&#32;<emphasis role="comment">//&#32;Unsupported&#32;escape&#32;character</emphasis>
+587 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+588 &#32;&#32;&#32;&#32;}
+589 
+590 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;ownAllocator_;
+591 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator_;
+592 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;states_;
+593 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;ranges_;
+594 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;root_;
+595 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;stateCount_;
+596 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeCount_;
+597 
+598 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kInfinityQuantifier&#32;=&#32;~0u;
+599 
+600 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;SearchWithAnchoring()</emphasis>
+601 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorBegin_;
+602 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorEnd_;
+603 };
+604 
+605 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;RegexType,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&#32;=&#32;CrtAllocator&gt;
+606 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link>&#32;{
+607 <emphasis role="keyword">public</emphasis>:
+608 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::EncodingType&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a7b1f81c580c33200c83e1529c2fdbf54">Encoding</link>;
+609 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>;
+610 
+611 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a72f70e210a4bc944dba62655a008750b">GenericRegexSearch</link>(<emphasis role="keyword">const</emphasis>&#32;RegexType&amp;&#32;regex,&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator&#32;=&#32;0)&#32;:&#32;
+612 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;regex_(regex),&#32;allocator_(allocator),&#32;ownAllocator_(0),
+613 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_(allocator,&#32;0),&#32;state1_(allocator,&#32;0),&#32;stateSet_()
+614 &#32;&#32;&#32;&#32;{
+615 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(regex_.IsValid());
+616 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!allocator_)
+617 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_&#32;=&#32;allocator_&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)();
+618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateSet_&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>*<emphasis role="keyword">&gt;</emphasis>(allocator_-&gt;Malloc(GetStateSetSize()));
+619 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_.template&#32;Reserve&lt;SizeType&gt;(regex_.stateCount_);
+620 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state1_.template&#32;Reserve&lt;SizeType&gt;(regex_.stateCount_);
+621 &#32;&#32;&#32;&#32;}
+622 
+623 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1ad14ee51edf6f9bfe3b7cffa59c4c19c9">~GenericRegexSearch</link>()&#32;{
+624 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Allocator::Free</link>(stateSet_);
+625 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(ownAllocator_);
+626 &#32;&#32;&#32;&#32;}
+627 
+628 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+629 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1ad204164a20e3ac403b405683b51c2d0b">Match</link>(InputStream&amp;&#32;is)&#32;{
+630 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;SearchWithAnchoring(is,&#32;<emphasis role="keyword">true</emphasis>,&#32;<emphasis role="keyword">true</emphasis>);
+631 &#32;&#32;&#32;&#32;}
+632 
+633 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a9d3fe83905549d2fd4c513b8eacd14de">Match</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>*&#32;s)&#32;{
+634 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;Encoding&gt;</link>&#32;is(s);
+635 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1ad204164a20e3ac403b405683b51c2d0b">Match</link>(is);
+636 &#32;&#32;&#32;&#32;}
+637 
+638 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+639 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a766c684321471b468ff468648f186cf0">Search</link>(InputStream&amp;&#32;is)&#32;{
+640 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;SearchWithAnchoring(is,&#32;regex_.anchorBegin_,&#32;regex_.anchorEnd_);
+641 &#32;&#32;&#32;&#32;}
+642 
+643 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a97398161c60f3ed3e4aabaff952c6f1e">Search</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>*&#32;s)&#32;{
+644 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;Encoding&gt;</link>&#32;is(s);
+645 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a766c684321471b468ff468648f186cf0">Search</link>(is);
+646 &#32;&#32;&#32;&#32;}
+647 
+648 <emphasis role="keyword">private</emphasis>:
+649 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::State&#32;State;
+650 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::Range&#32;Range;
+651 
+652 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
+653 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;SearchWithAnchoring(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorBegin,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorEnd)&#32;{
+654 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&#32;ds(is);
+655 
+656 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_.Clear();
+657 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;*current&#32;=&#32;&amp;state0_,&#32;*next&#32;=&#32;&amp;state1_;
+658 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;stateSetSize&#32;=&#32;GetStateSetSize();
+659 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(stateSet_,&#32;0,&#32;stateSetSize);
+660 
+661 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;AddState(*current,&#32;regex_.root_);
+662 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+663 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!current-&gt;<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()&#32;&amp;&amp;&#32;(codepoint&#32;=&#32;ds.Take())&#32;!=&#32;0)&#32;{
+664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(stateSet_,&#32;0,&#32;stateSetSize);
+665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;next-&gt;Clear();
+666 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;matched&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+667 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>*&#32;s&#32;=&#32;current-&gt;template&#32;Bottom&lt;SizeType&gt;();&#32;s&#32;!=&#32;current-&gt;template&#32;End&lt;SizeType&gt;();&#32;++s)&#32;{
+668 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;sr&#32;=&#32;regex_.GetState(*s);
+669 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(sr.codepoint&#32;==&#32;codepoint&#32;||
+670 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sr.codepoint&#32;==&#32;RegexType::kAnyCharacterClass&#32;||&#32;
+671 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(sr.codepoint&#32;==&#32;RegexType::kRangeCharacterClass&#32;&amp;&amp;&#32;MatchRange(sr.rangeStart,&#32;codepoint)))
+672 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+673 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;matched&#32;=&#32;AddState(*next,&#32;sr.out)&#32;||&#32;matched;
+674 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!anchorEnd&#32;&amp;&amp;&#32;matched)
+675 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+676 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+677 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!anchorBegin)
+678 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;AddState(*next,&#32;regex_.root_);
+679 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+680 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(current,&#32;next);
+681 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+682 
+683 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;matched;
+684 &#32;&#32;&#32;&#32;}
+685 
+686 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;GetStateSetSize()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+687 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(regex_.stateCount_&#32;+&#32;31)&#32;/&#32;32&#32;*&#32;4;
+688 &#32;&#32;&#32;&#32;}
+689 
+690 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Return&#32;whether&#32;the&#32;added&#32;states&#32;is&#32;a&#32;match&#32;state</emphasis>
+691 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;AddState(Stack&lt;Allocator&gt;&amp;&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+692 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;!=&#32;kRegexInvalidState);
+693 
+694 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;s&#32;=&#32;regex_.GetState(index);
+695 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s.out1&#32;!=&#32;kRegexInvalidState)&#32;{&#32;<emphasis role="comment">//&#32;Split</emphasis>
+696 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;AddState(l,&#32;s.out);
+697 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;AddState(l,&#32;s.out1)&#32;||&#32;matched;
+698 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+699 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(stateSet_[index&#32;&gt;&gt;&#32;5]&#32;&amp;&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31))))&#32;{
+700 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateSet_[index&#32;&gt;&gt;&#32;5]&#32;|=&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31));
+701 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*l.template&#32;PushUnsafe&lt;SizeType&gt;()&#32;=&#32;index;
+702 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+703 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;s.out&#32;==&#32;kRegexInvalidState;&#32;<emphasis role="comment">//&#32;by&#32;using&#32;PushUnsafe()&#32;above,&#32;we&#32;can&#32;ensure&#32;s&#32;is&#32;not&#32;validated&#32;due&#32;to&#32;reallocation.</emphasis>
+704 &#32;&#32;&#32;&#32;}
+705 
+706 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;MatchRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeIndex,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+707 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;yes&#32;=&#32;(regex_.GetRange(rangeIndex).start&#32;&amp;&#32;RegexType::kRangeNegationFlag)&#32;==&#32;0;
+708 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(rangeIndex&#32;!=&#32;kRegexInvalidRange)&#32;{
+709 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Range&amp;&#32;r&#32;=&#32;regex_.GetRange(rangeIndex);
+710 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&gt;=&#32;(r.start&#32;&amp;&#32;~RegexType::kRangeNegationFlag)&#32;&amp;&amp;&#32;codepoint&#32;&lt;=&#32;r.end)
+711 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;yes;
+712 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rangeIndex&#32;=&#32;r.next;
+713 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+714 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;!yes;
+715 &#32;&#32;&#32;&#32;}
+716 
+717 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;RegexType&amp;&#32;regex_;
+718 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator_;
+719 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;ownAllocator_;
+720 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;state0_;
+721 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;state1_;
+722 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>*&#32;stateSet_;
+723 };
+724 
+725 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex">GenericRegex&lt;UTF8&lt;&gt;</link>&#32;&gt;&#32;<link linkend="_namespaceinternal_1ae7fc20c6ee680ae3ba16ae16b4bd5e16">Regex</link>;
+726 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch&lt;Regex&gt;</link>&#32;<link linkend="_namespaceinternal_1a7101e324c2d06f1505ef7c7d4401392b">RegexSearch</link>;
+727 
+728 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+729 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+730 
+731 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+732 RAPIDJSON_DIAG_POP
+733 <emphasis role="preprocessor">#endif</emphasis>
+734 
+735 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(_MSC_VER)</emphasis>
+736 RAPIDJSON_DIAG_POP
+737 <emphasis role="preprocessor">#endif</emphasis>
+738 
+739 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_INTERNAL_REGEX_H_</emphasis>
+</programlisting></section>

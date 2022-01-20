@@ -1,0 +1,321 @@
+\hypertarget{inttypes_8h_source}{}\doxysection{inttypes.\+h}
+\label{inttypes_8h_source}\index{src/rapidjson/include/rapidjson/msinttypes/inttypes.h@{src/rapidjson/include/rapidjson/msinttypes/inttypes.h}}
+\mbox{\hyperlink{inttypes_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// ISO C9x  compliant inttypes.h for Microsoft Visual Studio}}
+\DoxyCodeLine{2 \textcolor{comment}{// Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124 }}
+\DoxyCodeLine{3 \textcolor{comment}{// }}
+\DoxyCodeLine{4 \textcolor{comment}{//  Copyright (c) 2006-\/2013 Alexander Chemeris}}
+\DoxyCodeLine{5 \textcolor{comment}{// }}
+\DoxyCodeLine{6 \textcolor{comment}{// Redistribution and use in source and binary forms, with or without}}
+\DoxyCodeLine{7 \textcolor{comment}{// modification, are permitted provided that the following conditions are met:}}
+\DoxyCodeLine{8 \textcolor{comment}{// }}
+\DoxyCodeLine{9 \textcolor{comment}{//   1. Redistributions of source code must retain the above copyright notice,}}
+\DoxyCodeLine{10 \textcolor{comment}{//      this list of conditions and the following disclaimer.}}
+\DoxyCodeLine{11 \textcolor{comment}{// }}
+\DoxyCodeLine{12 \textcolor{comment}{//   2. Redistributions in binary form must reproduce the above copyright}}
+\DoxyCodeLine{13 \textcolor{comment}{//      notice, this list of conditions and the following disclaimer in the}}
+\DoxyCodeLine{14 \textcolor{comment}{//      documentation and/or other materials provided with the distribution.}}
+\DoxyCodeLine{15 \textcolor{comment}{// }}
+\DoxyCodeLine{16 \textcolor{comment}{//   3. Neither the name of the product nor the names of its contributors may}}
+\DoxyCodeLine{17 \textcolor{comment}{//      be used to endorse or promote products derived from this software}}
+\DoxyCodeLine{18 \textcolor{comment}{//      without specific prior written permission.}}
+\DoxyCodeLine{19 \textcolor{comment}{// }}
+\DoxyCodeLine{20 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED}}
+\DoxyCodeLine{21 \textcolor{comment}{// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF}}
+\DoxyCodeLine{22 \textcolor{comment}{// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO}}
+\DoxyCodeLine{23 \textcolor{comment}{// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;}}
+\DoxyCodeLine{26 \textcolor{comment}{// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, }}
+\DoxyCodeLine{27 \textcolor{comment}{// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR}}
+\DoxyCodeLine{28 \textcolor{comment}{// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF}}
+\DoxyCodeLine{29 \textcolor{comment}{// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}}
+\DoxyCodeLine{30 \textcolor{comment}{// }}
+\DoxyCodeLine{32 \textcolor{comment}{}}
+\DoxyCodeLine{33 \textcolor{comment}{// The above software in this distribution may have been modified by }}
+\DoxyCodeLine{34 \textcolor{comment}{// THL A29 Limited ("{}Tencent Modifications"{}). }}
+\DoxyCodeLine{35 \textcolor{comment}{// All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#ifndef \_MSC\_VER }\textcolor{comment}{// [}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#error "{}Use this header only with Microsoft Visual C++ compilers!"{}}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_VER ]}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#ifndef \_MSC\_INTTYPES\_H\_ }\textcolor{comment}{// [}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#define \_MSC\_INTTYPES\_H\_}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#if \_MSC\_VER > 1000}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stdint_8h}{stdint.h}}"{}}}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50 \textcolor{comment}{// miloyip: VC supports inttypes.h since VC2013}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#if \_MSC\_VER >= 1800}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#include <\mbox{\hyperlink{inttypes_8h}{inttypes.h}}>}}
+\DoxyCodeLine{53 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{55 \textcolor{comment}{// 7.8 Format conversion of integer types}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\{}
+\DoxyCodeLine{58    \mbox{\hyperlink{stdint_8h_a036cd61bb4b30bb510b9538af4cebd1d}{intmax\_t}} \mbox{\hyperlink{structimaxdiv__t_a9339814cbb7610c72fb7d30c6573b393}{quot}};}
+\DoxyCodeLine{59    \mbox{\hyperlink{stdint_8h_a036cd61bb4b30bb510b9538af4cebd1d}{intmax\_t}} \mbox{\hyperlink{structimaxdiv__t_a6c9701ad10bff81edae7ff679cae7850}{rem}};}
+\DoxyCodeLine{60 \} \mbox{\hyperlink{structimaxdiv__t}{imaxdiv\_t}};}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62 \textcolor{comment}{// 7.8.1 Macros for format specifiers}}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64 \textcolor{preprocessor}{\#if !defined(\_\_cplusplus) || defined(\_\_STDC\_FORMAT\_MACROS) }\textcolor{comment}{// [   See footnote 185 at page 198}}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{comment}{// The fprintf macros for signed integers are:}}
+\DoxyCodeLine{67 \textcolor{preprocessor}{\#define PRId8       "{}d"{}}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#define PRIi8       "{}i"{}}}
+\DoxyCodeLine{69 \textcolor{preprocessor}{\#define PRIdLEAST8  "{}d"{}}}
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#define PRIiLEAST8  "{}i"{}}}
+\DoxyCodeLine{71 \textcolor{preprocessor}{\#define PRIdFAST8   "{}d"{}}}
+\DoxyCodeLine{72 \textcolor{preprocessor}{\#define PRIiFAST8   "{}i"{}}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74 \textcolor{preprocessor}{\#define PRId16       "{}hd"{}}}
+\DoxyCodeLine{75 \textcolor{preprocessor}{\#define PRIi16       "{}hi"{}}}
+\DoxyCodeLine{76 \textcolor{preprocessor}{\#define PRIdLEAST16  "{}hd"{}}}
+\DoxyCodeLine{77 \textcolor{preprocessor}{\#define PRIiLEAST16  "{}hi"{}}}
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#define PRIdFAST16   "{}hd"{}}}
+\DoxyCodeLine{79 \textcolor{preprocessor}{\#define PRIiFAST16   "{}hi"{}}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81 \textcolor{preprocessor}{\#define PRId32       "{}I32d"{}}}
+\DoxyCodeLine{82 \textcolor{preprocessor}{\#define PRIi32       "{}I32i"{}}}
+\DoxyCodeLine{83 \textcolor{preprocessor}{\#define PRIdLEAST32  "{}I32d"{}}}
+\DoxyCodeLine{84 \textcolor{preprocessor}{\#define PRIiLEAST32  "{}I32i"{}}}
+\DoxyCodeLine{85 \textcolor{preprocessor}{\#define PRIdFAST32   "{}I32d"{}}}
+\DoxyCodeLine{86 \textcolor{preprocessor}{\#define PRIiFAST32   "{}I32i"{}}}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88 \textcolor{preprocessor}{\#define PRId64       "{}I64d"{}}}
+\DoxyCodeLine{89 \textcolor{preprocessor}{\#define PRIi64       "{}I64i"{}}}
+\DoxyCodeLine{90 \textcolor{preprocessor}{\#define PRIdLEAST64  "{}I64d"{}}}
+\DoxyCodeLine{91 \textcolor{preprocessor}{\#define PRIiLEAST64  "{}I64i"{}}}
+\DoxyCodeLine{92 \textcolor{preprocessor}{\#define PRIdFAST64   "{}I64d"{}}}
+\DoxyCodeLine{93 \textcolor{preprocessor}{\#define PRIiFAST64   "{}I64i"{}}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \textcolor{preprocessor}{\#define PRIdMAX     "{}I64d"{}}}
+\DoxyCodeLine{96 \textcolor{preprocessor}{\#define PRIiMAX     "{}I64i"{}}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \textcolor{preprocessor}{\#define PRIdPTR     "{}Id"{}}}
+\DoxyCodeLine{99 \textcolor{preprocessor}{\#define PRIiPTR     "{}Ii"{}}}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101 \textcolor{comment}{// The fprintf macros for unsigned integers are:}}
+\DoxyCodeLine{102 \textcolor{preprocessor}{\#define PRIo8       "{}o"{}}}
+\DoxyCodeLine{103 \textcolor{preprocessor}{\#define PRIu8       "{}u"{}}}
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#define PRIx8       "{}x"{}}}
+\DoxyCodeLine{105 \textcolor{preprocessor}{\#define PRIX8       "{}X"{}}}
+\DoxyCodeLine{106 \textcolor{preprocessor}{\#define PRIoLEAST8  "{}o"{}}}
+\DoxyCodeLine{107 \textcolor{preprocessor}{\#define PRIuLEAST8  "{}u"{}}}
+\DoxyCodeLine{108 \textcolor{preprocessor}{\#define PRIxLEAST8  "{}x"{}}}
+\DoxyCodeLine{109 \textcolor{preprocessor}{\#define PRIXLEAST8  "{}X"{}}}
+\DoxyCodeLine{110 \textcolor{preprocessor}{\#define PRIoFAST8   "{}o"{}}}
+\DoxyCodeLine{111 \textcolor{preprocessor}{\#define PRIuFAST8   "{}u"{}}}
+\DoxyCodeLine{112 \textcolor{preprocessor}{\#define PRIxFAST8   "{}x"{}}}
+\DoxyCodeLine{113 \textcolor{preprocessor}{\#define PRIXFAST8   "{}X"{}}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \textcolor{preprocessor}{\#define PRIo16       "{}ho"{}}}
+\DoxyCodeLine{116 \textcolor{preprocessor}{\#define PRIu16       "{}hu"{}}}
+\DoxyCodeLine{117 \textcolor{preprocessor}{\#define PRIx16       "{}hx"{}}}
+\DoxyCodeLine{118 \textcolor{preprocessor}{\#define PRIX16       "{}hX"{}}}
+\DoxyCodeLine{119 \textcolor{preprocessor}{\#define PRIoLEAST16  "{}ho"{}}}
+\DoxyCodeLine{120 \textcolor{preprocessor}{\#define PRIuLEAST16  "{}hu"{}}}
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#define PRIxLEAST16  "{}hx"{}}}
+\DoxyCodeLine{122 \textcolor{preprocessor}{\#define PRIXLEAST16  "{}hX"{}}}
+\DoxyCodeLine{123 \textcolor{preprocessor}{\#define PRIoFAST16   "{}ho"{}}}
+\DoxyCodeLine{124 \textcolor{preprocessor}{\#define PRIuFAST16   "{}hu"{}}}
+\DoxyCodeLine{125 \textcolor{preprocessor}{\#define PRIxFAST16   "{}hx"{}}}
+\DoxyCodeLine{126 \textcolor{preprocessor}{\#define PRIXFAST16   "{}hX"{}}}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128 \textcolor{preprocessor}{\#define PRIo32       "{}I32o"{}}}
+\DoxyCodeLine{129 \textcolor{preprocessor}{\#define PRIu32       "{}I32u"{}}}
+\DoxyCodeLine{130 \textcolor{preprocessor}{\#define PRIx32       "{}I32x"{}}}
+\DoxyCodeLine{131 \textcolor{preprocessor}{\#define PRIX32       "{}I32X"{}}}
+\DoxyCodeLine{132 \textcolor{preprocessor}{\#define PRIoLEAST32  "{}I32o"{}}}
+\DoxyCodeLine{133 \textcolor{preprocessor}{\#define PRIuLEAST32  "{}I32u"{}}}
+\DoxyCodeLine{134 \textcolor{preprocessor}{\#define PRIxLEAST32  "{}I32x"{}}}
+\DoxyCodeLine{135 \textcolor{preprocessor}{\#define PRIXLEAST32  "{}I32X"{}}}
+\DoxyCodeLine{136 \textcolor{preprocessor}{\#define PRIoFAST32   "{}I32o"{}}}
+\DoxyCodeLine{137 \textcolor{preprocessor}{\#define PRIuFAST32   "{}I32u"{}}}
+\DoxyCodeLine{138 \textcolor{preprocessor}{\#define PRIxFAST32   "{}I32x"{}}}
+\DoxyCodeLine{139 \textcolor{preprocessor}{\#define PRIXFAST32   "{}I32X"{}}}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141 \textcolor{preprocessor}{\#define PRIo64       "{}I64o"{}}}
+\DoxyCodeLine{142 \textcolor{preprocessor}{\#define PRIu64       "{}I64u"{}}}
+\DoxyCodeLine{143 \textcolor{preprocessor}{\#define PRIx64       "{}I64x"{}}}
+\DoxyCodeLine{144 \textcolor{preprocessor}{\#define PRIX64       "{}I64X"{}}}
+\DoxyCodeLine{145 \textcolor{preprocessor}{\#define PRIoLEAST64  "{}I64o"{}}}
+\DoxyCodeLine{146 \textcolor{preprocessor}{\#define PRIuLEAST64  "{}I64u"{}}}
+\DoxyCodeLine{147 \textcolor{preprocessor}{\#define PRIxLEAST64  "{}I64x"{}}}
+\DoxyCodeLine{148 \textcolor{preprocessor}{\#define PRIXLEAST64  "{}I64X"{}}}
+\DoxyCodeLine{149 \textcolor{preprocessor}{\#define PRIoFAST64   "{}I64o"{}}}
+\DoxyCodeLine{150 \textcolor{preprocessor}{\#define PRIuFAST64   "{}I64u"{}}}
+\DoxyCodeLine{151 \textcolor{preprocessor}{\#define PRIxFAST64   "{}I64x"{}}}
+\DoxyCodeLine{152 \textcolor{preprocessor}{\#define PRIXFAST64   "{}I64X"{}}}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154 \textcolor{preprocessor}{\#define PRIoMAX     "{}I64o"{}}}
+\DoxyCodeLine{155 \textcolor{preprocessor}{\#define PRIuMAX     "{}I64u"{}}}
+\DoxyCodeLine{156 \textcolor{preprocessor}{\#define PRIxMAX     "{}I64x"{}}}
+\DoxyCodeLine{157 \textcolor{preprocessor}{\#define PRIXMAX     "{}I64X"{}}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{preprocessor}{\#define PRIoPTR     "{}Io"{}}}
+\DoxyCodeLine{160 \textcolor{preprocessor}{\#define PRIuPTR     "{}Iu"{}}}
+\DoxyCodeLine{161 \textcolor{preprocessor}{\#define PRIxPTR     "{}Ix"{}}}
+\DoxyCodeLine{162 \textcolor{preprocessor}{\#define PRIXPTR     "{}IX"{}}}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164 \textcolor{comment}{// The fscanf macros for signed integers are:}}
+\DoxyCodeLine{165 \textcolor{preprocessor}{\#define SCNd8       "{}d"{}}}
+\DoxyCodeLine{166 \textcolor{preprocessor}{\#define SCNi8       "{}i"{}}}
+\DoxyCodeLine{167 \textcolor{preprocessor}{\#define SCNdLEAST8  "{}d"{}}}
+\DoxyCodeLine{168 \textcolor{preprocessor}{\#define SCNiLEAST8  "{}i"{}}}
+\DoxyCodeLine{169 \textcolor{preprocessor}{\#define SCNdFAST8   "{}d"{}}}
+\DoxyCodeLine{170 \textcolor{preprocessor}{\#define SCNiFAST8   "{}i"{}}}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 \textcolor{preprocessor}{\#define SCNd16       "{}hd"{}}}
+\DoxyCodeLine{173 \textcolor{preprocessor}{\#define SCNi16       "{}hi"{}}}
+\DoxyCodeLine{174 \textcolor{preprocessor}{\#define SCNdLEAST16  "{}hd"{}}}
+\DoxyCodeLine{175 \textcolor{preprocessor}{\#define SCNiLEAST16  "{}hi"{}}}
+\DoxyCodeLine{176 \textcolor{preprocessor}{\#define SCNdFAST16   "{}hd"{}}}
+\DoxyCodeLine{177 \textcolor{preprocessor}{\#define SCNiFAST16   "{}hi"{}}}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179 \textcolor{preprocessor}{\#define SCNd32       "{}ld"{}}}
+\DoxyCodeLine{180 \textcolor{preprocessor}{\#define SCNi32       "{}li"{}}}
+\DoxyCodeLine{181 \textcolor{preprocessor}{\#define SCNdLEAST32  "{}ld"{}}}
+\DoxyCodeLine{182 \textcolor{preprocessor}{\#define SCNiLEAST32  "{}li"{}}}
+\DoxyCodeLine{183 \textcolor{preprocessor}{\#define SCNdFAST32   "{}ld"{}}}
+\DoxyCodeLine{184 \textcolor{preprocessor}{\#define SCNiFAST32   "{}li"{}}}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186 \textcolor{preprocessor}{\#define SCNd64       "{}I64d"{}}}
+\DoxyCodeLine{187 \textcolor{preprocessor}{\#define SCNi64       "{}I64i"{}}}
+\DoxyCodeLine{188 \textcolor{preprocessor}{\#define SCNdLEAST64  "{}I64d"{}}}
+\DoxyCodeLine{189 \textcolor{preprocessor}{\#define SCNiLEAST64  "{}I64i"{}}}
+\DoxyCodeLine{190 \textcolor{preprocessor}{\#define SCNdFAST64   "{}I64d"{}}}
+\DoxyCodeLine{191 \textcolor{preprocessor}{\#define SCNiFAST64   "{}I64i"{}}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193 \textcolor{preprocessor}{\#define SCNdMAX     "{}I64d"{}}}
+\DoxyCodeLine{194 \textcolor{preprocessor}{\#define SCNiMAX     "{}I64i"{}}}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196 \textcolor{preprocessor}{\#ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{197 \textcolor{preprocessor}{\#  define SCNdPTR     "{}I64d"{}}}
+\DoxyCodeLine{198 \textcolor{preprocessor}{\#  define SCNiPTR     "{}I64i"{}}}
+\DoxyCodeLine{199 \textcolor{preprocessor}{\#else  }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{200 \textcolor{preprocessor}{\#  define SCNdPTR     "{}ld"{}}}
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#  define SCNiPTR     "{}li"{}}}
+\DoxyCodeLine{202 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{203 }
+\DoxyCodeLine{204 \textcolor{comment}{// The fscanf macros for unsigned integers are:}}
+\DoxyCodeLine{205 \textcolor{preprocessor}{\#define SCNo8       "{}o"{}}}
+\DoxyCodeLine{206 \textcolor{preprocessor}{\#define SCNu8       "{}u"{}}}
+\DoxyCodeLine{207 \textcolor{preprocessor}{\#define SCNx8       "{}x"{}}}
+\DoxyCodeLine{208 \textcolor{preprocessor}{\#define SCNX8       "{}X"{}}}
+\DoxyCodeLine{209 \textcolor{preprocessor}{\#define SCNoLEAST8  "{}o"{}}}
+\DoxyCodeLine{210 \textcolor{preprocessor}{\#define SCNuLEAST8  "{}u"{}}}
+\DoxyCodeLine{211 \textcolor{preprocessor}{\#define SCNxLEAST8  "{}x"{}}}
+\DoxyCodeLine{212 \textcolor{preprocessor}{\#define SCNXLEAST8  "{}X"{}}}
+\DoxyCodeLine{213 \textcolor{preprocessor}{\#define SCNoFAST8   "{}o"{}}}
+\DoxyCodeLine{214 \textcolor{preprocessor}{\#define SCNuFAST8   "{}u"{}}}
+\DoxyCodeLine{215 \textcolor{preprocessor}{\#define SCNxFAST8   "{}x"{}}}
+\DoxyCodeLine{216 \textcolor{preprocessor}{\#define SCNXFAST8   "{}X"{}}}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{218 \textcolor{preprocessor}{\#define SCNo16       "{}ho"{}}}
+\DoxyCodeLine{219 \textcolor{preprocessor}{\#define SCNu16       "{}hu"{}}}
+\DoxyCodeLine{220 \textcolor{preprocessor}{\#define SCNx16       "{}hx"{}}}
+\DoxyCodeLine{221 \textcolor{preprocessor}{\#define SCNX16       "{}hX"{}}}
+\DoxyCodeLine{222 \textcolor{preprocessor}{\#define SCNoLEAST16  "{}ho"{}}}
+\DoxyCodeLine{223 \textcolor{preprocessor}{\#define SCNuLEAST16  "{}hu"{}}}
+\DoxyCodeLine{224 \textcolor{preprocessor}{\#define SCNxLEAST16  "{}hx"{}}}
+\DoxyCodeLine{225 \textcolor{preprocessor}{\#define SCNXLEAST16  "{}hX"{}}}
+\DoxyCodeLine{226 \textcolor{preprocessor}{\#define SCNoFAST16   "{}ho"{}}}
+\DoxyCodeLine{227 \textcolor{preprocessor}{\#define SCNuFAST16   "{}hu"{}}}
+\DoxyCodeLine{228 \textcolor{preprocessor}{\#define SCNxFAST16   "{}hx"{}}}
+\DoxyCodeLine{229 \textcolor{preprocessor}{\#define SCNXFAST16   "{}hX"{}}}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231 \textcolor{preprocessor}{\#define SCNo32       "{}lo"{}}}
+\DoxyCodeLine{232 \textcolor{preprocessor}{\#define SCNu32       "{}lu"{}}}
+\DoxyCodeLine{233 \textcolor{preprocessor}{\#define SCNx32       "{}lx"{}}}
+\DoxyCodeLine{234 \textcolor{preprocessor}{\#define SCNX32       "{}lX"{}}}
+\DoxyCodeLine{235 \textcolor{preprocessor}{\#define SCNoLEAST32  "{}lo"{}}}
+\DoxyCodeLine{236 \textcolor{preprocessor}{\#define SCNuLEAST32  "{}lu"{}}}
+\DoxyCodeLine{237 \textcolor{preprocessor}{\#define SCNxLEAST32  "{}lx"{}}}
+\DoxyCodeLine{238 \textcolor{preprocessor}{\#define SCNXLEAST32  "{}lX"{}}}
+\DoxyCodeLine{239 \textcolor{preprocessor}{\#define SCNoFAST32   "{}lo"{}}}
+\DoxyCodeLine{240 \textcolor{preprocessor}{\#define SCNuFAST32   "{}lu"{}}}
+\DoxyCodeLine{241 \textcolor{preprocessor}{\#define SCNxFAST32   "{}lx"{}}}
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#define SCNXFAST32   "{}lX"{}}}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244 \textcolor{preprocessor}{\#define SCNo64       "{}I64o"{}}}
+\DoxyCodeLine{245 \textcolor{preprocessor}{\#define SCNu64       "{}I64u"{}}}
+\DoxyCodeLine{246 \textcolor{preprocessor}{\#define SCNx64       "{}I64x"{}}}
+\DoxyCodeLine{247 \textcolor{preprocessor}{\#define SCNX64       "{}I64X"{}}}
+\DoxyCodeLine{248 \textcolor{preprocessor}{\#define SCNoLEAST64  "{}I64o"{}}}
+\DoxyCodeLine{249 \textcolor{preprocessor}{\#define SCNuLEAST64  "{}I64u"{}}}
+\DoxyCodeLine{250 \textcolor{preprocessor}{\#define SCNxLEAST64  "{}I64x"{}}}
+\DoxyCodeLine{251 \textcolor{preprocessor}{\#define SCNXLEAST64  "{}I64X"{}}}
+\DoxyCodeLine{252 \textcolor{preprocessor}{\#define SCNoFAST64   "{}I64o"{}}}
+\DoxyCodeLine{253 \textcolor{preprocessor}{\#define SCNuFAST64   "{}I64u"{}}}
+\DoxyCodeLine{254 \textcolor{preprocessor}{\#define SCNxFAST64   "{}I64x"{}}}
+\DoxyCodeLine{255 \textcolor{preprocessor}{\#define SCNXFAST64   "{}I64X"{}}}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257 \textcolor{preprocessor}{\#define SCNoMAX     "{}I64o"{}}}
+\DoxyCodeLine{258 \textcolor{preprocessor}{\#define SCNuMAX     "{}I64u"{}}}
+\DoxyCodeLine{259 \textcolor{preprocessor}{\#define SCNxMAX     "{}I64x"{}}}
+\DoxyCodeLine{260 \textcolor{preprocessor}{\#define SCNXMAX     "{}I64X"{}}}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262 \textcolor{preprocessor}{\#ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{263 \textcolor{preprocessor}{\#  define SCNoPTR     "{}I64o"{}}}
+\DoxyCodeLine{264 \textcolor{preprocessor}{\#  define SCNuPTR     "{}I64u"{}}}
+\DoxyCodeLine{265 \textcolor{preprocessor}{\#  define SCNxPTR     "{}I64x"{}}}
+\DoxyCodeLine{266 \textcolor{preprocessor}{\#  define SCNXPTR     "{}I64X"{}}}
+\DoxyCodeLine{267 \textcolor{preprocessor}{\#else  }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{268 \textcolor{preprocessor}{\#  define SCNoPTR     "{}lo"{}}}
+\DoxyCodeLine{269 \textcolor{preprocessor}{\#  define SCNuPTR     "{}lu"{}}}
+\DoxyCodeLine{270 \textcolor{preprocessor}{\#  define SCNxPTR     "{}lx"{}}}
+\DoxyCodeLine{271 \textcolor{preprocessor}{\#  define SCNXPTR     "{}lX"{}}}
+\DoxyCodeLine{272 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_STDC\_FORMAT\_MACROS ]}}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276 \textcolor{comment}{// 7.8.2 Functions for greatest-\/width integer types}}
+\DoxyCodeLine{277 }
+\DoxyCodeLine{278 \textcolor{comment}{// 7.8.2.1 The imaxabs function}}
+\DoxyCodeLine{279 \textcolor{preprocessor}{\#define imaxabs \_abs64}}
+\DoxyCodeLine{280 }
+\DoxyCodeLine{281 \textcolor{comment}{// 7.8.2.2 The imaxdiv function}}
+\DoxyCodeLine{282 }
+\DoxyCodeLine{283 \textcolor{comment}{// This is modified version of div() function from Microsoft's div.c found}}
+\DoxyCodeLine{284 \textcolor{comment}{// in \%MSVC.NET\%\(\backslash\)crt\(\backslash\)src\(\backslash\)div.c}}
+\DoxyCodeLine{285 \textcolor{preprocessor}{\#ifdef STATIC\_IMAXDIV }\textcolor{comment}{// [}}
+\DoxyCodeLine{286 \textcolor{keyword}{static}}
+\DoxyCodeLine{287 \textcolor{preprocessor}{\#else }\textcolor{comment}{// STATIC\_IMAXDIV ][}}
+\DoxyCodeLine{288 \_inline}
+\DoxyCodeLine{289 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// STATIC\_IMAXDIV ]}}
+\DoxyCodeLine{290 \mbox{\hyperlink{structimaxdiv__t}{imaxdiv\_t}} \_\_cdecl \mbox{\hyperlink{inttypes_8h_a8cb1de760b0fde0bae9eb5e070f0bce7}{imaxdiv}}(\mbox{\hyperlink{stdint_8h_a036cd61bb4b30bb510b9538af4cebd1d}{intmax\_t}} numer, \mbox{\hyperlink{stdint_8h_a036cd61bb4b30bb510b9538af4cebd1d}{intmax\_t}} denom)}
+\DoxyCodeLine{291 \{}
+\DoxyCodeLine{292    \mbox{\hyperlink{structimaxdiv__t}{imaxdiv\_t}} result;}
+\DoxyCodeLine{293 }
+\DoxyCodeLine{294    result.\mbox{\hyperlink{structimaxdiv__t_a9339814cbb7610c72fb7d30c6573b393}{quot}} = numer / denom;}
+\DoxyCodeLine{295    result.\mbox{\hyperlink{structimaxdiv__t_a6c9701ad10bff81edae7ff679cae7850}{rem}} = numer \% denom;}
+\DoxyCodeLine{296 }
+\DoxyCodeLine{297    \textcolor{keywordflow}{if} (numer < 0 \&\& result.rem > 0) \{}
+\DoxyCodeLine{298       \textcolor{comment}{// did division wrong; must fix up}}
+\DoxyCodeLine{299       ++result.\mbox{\hyperlink{structimaxdiv__t_a9339814cbb7610c72fb7d30c6573b393}{quot}};}
+\DoxyCodeLine{300       result.\mbox{\hyperlink{structimaxdiv__t_a6c9701ad10bff81edae7ff679cae7850}{rem}} -\/= denom;}
+\DoxyCodeLine{301    \}}
+\DoxyCodeLine{302 }
+\DoxyCodeLine{303    \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{304 \}}
+\DoxyCodeLine{305 }
+\DoxyCodeLine{306 \textcolor{comment}{// 7.8.2.3 The strtoimax and strtoumax functions}}
+\DoxyCodeLine{307 \textcolor{preprocessor}{\#define strtoimax \_strtoi64}}
+\DoxyCodeLine{308 \textcolor{preprocessor}{\#define strtoumax \_strtoui64}}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{310 \textcolor{comment}{// 7.8.2.4 The wcstoimax and wcstoumax functions}}
+\DoxyCodeLine{311 \textcolor{preprocessor}{\#define wcstoimax \_wcstoi64}}
+\DoxyCodeLine{312 \textcolor{preprocessor}{\#define wcstoumax \_wcstoui64}}
+\DoxyCodeLine{313 }
+\DoxyCodeLine{314 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_VER >= 1800}}
+\DoxyCodeLine{315 }
+\DoxyCodeLine{316 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_INTTYPES\_H\_ ]}}
+
+\end{DoxyCode}

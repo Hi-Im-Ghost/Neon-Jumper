@@ -1,0 +1,221 @@
+.TH "md_src_rapidjson_doc_features_zh_cn" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_features_zh_cn \- 特点 
+
+.SH "总体"
+.PP
+.IP "\(bu" 2
+跨平台
+.IP "  \(bu" 4
+编译器：Visual Studio、gcc、clang 等
+.IP "  \(bu" 4
+架构：x86、x64、ARM 等
+.IP "  \(bu" 4
+操作系统：Windows、Mac OS X、Linux、iOS、Android 等
+.PP
+
+.IP "\(bu" 2
+容易安装
+.IP "  \(bu" 4
+只有头文件的库。只需把头文件复制至你的项目中。
+.PP
+
+.IP "\(bu" 2
+独立、最小依赖
+.IP "  \(bu" 4
+不需依赖 STL、BOOST 等。
+.IP "  \(bu" 4
+只包含 \fC<cstdio>\fP, \fC<cstdlib>\fP, \fC<cstring>\fP, \fC<\fBinttypes\&.h\fP>\fP, \fC<new>\fP, \fC<\fBstdint\&.h\fP>\fP。
+.PP
+
+.IP "\(bu" 2
+没使用 C++ 异常、RTTI
+.IP "\(bu" 2
+高性能
+.IP "  \(bu" 4
+使用模版及内联函数去降低函数调用开销。
+.IP "  \(bu" 4
+内部经优化的 Grisu2 及浮点数解析实现。
+.IP "  \(bu" 4
+可选的 SSE2/SSE4\&.2 支持。
+.PP
+
+.PP
+.SH "符合标准"
+.PP
+.IP "\(bu" 2
+RapidJSON 应完全符合 RFC4627/ECMA-404 标准。
+.IP "\(bu" 2
+支持 JSON Pointer (RFC6901)\&.
+.IP "\(bu" 2
+支持 JSON \fBSchema\fP Draft v4\&.
+.IP "\(bu" 2
+支持 Unicode 代理对（surrogate pair）。
+.IP "\(bu" 2
+支持空字符（\fC'\\u0000'\fP）。
+.IP "  \(bu" 4
+例如，可以优雅地解析及处理 \fC['Hello\\u0000World']\fP。含读写字符串长度的 API。
+.PP
+
+.IP "\(bu" 2
+支持可选的放宽语法
+.IP "  \(bu" 4
+单行（\fC// \&.\&.\&.\fP）及多行（\fC/* \&.\&.\&. */\fP） 注释 (\fCkParseCommentsFlag\fP)。
+.IP "  \(bu" 4
+在对象和数组结束前含逗号 (\fCkParseTrailingCommasFlag\fP)。
+.IP "  \(bu" 4
+\fCNaN\fP、\fCInf\fP、\fCInfinity\fP、\fC-Inf\fP 及 \fC-Infinity\fP 作为 \fCdouble\fP 值 (\fCkParseNanAndInfFlag\fP)
+.PP
+
+.IP "\(bu" 2
+\fCNPM 兼容\fP\&.
+.PP
+.SH "Unicode"
+.PP
+.IP "\(bu" 2
+支持 UTF-8、UTF-16、UTF-32 编码，包括小端序和大端序。
+.IP "  \(bu" 4
+这些编码用于输入输出流，以及内存中的表示。
+.PP
+
+.IP "\(bu" 2
+支持从输入流自动检测编码。
+.IP "\(bu" 2
+内部支持编码的转换。
+.IP "  \(bu" 4
+例如，你可以读取一个 UTF-8 文件，让 RapidJSON 把 JSON 字符串转换至 UTF-16 的 DOM。
+.PP
+
+.IP "\(bu" 2
+内部支持编码校验。
+.IP "  \(bu" 4
+例如，你可以读取一个 UTF-8 文件，让 RapidJSON 检查是否所有 JSON 字符串是合法的 UTF-8 字节序列。
+.PP
+
+.IP "\(bu" 2
+支持自定义的字符类型。
+.IP "  \(bu" 4
+预设的字符类型是：UTF-8 为 \fCchar\fP，UTF-16 为 \fCwchar_t\fP，UTF32 为 \fCuint32_t\fP。
+.PP
+
+.IP "\(bu" 2
+支持自定义的编码。
+.PP
+.SH "API 风格"
+.PP
+.IP "\(bu" 2
+SAX（Simple API for XML）风格 API
+.IP "  \(bu" 4
+类似于 \fCSAX\fP, RapidJSON 提供一个事件循序访问的解析器 API（\fCrapidjson::GenericReader\fP）。RapidJSON 也提供一个生成器 API（\fCrapidjson::Writer\fP），可以处理相同的事件集合。
+.PP
+
+.IP "\(bu" 2
+DOM（Document Object Model）风格 API
+.IP "  \(bu" 4
+类似于 HTML／XML 的 \fCDOM\fP，RapidJSON 可把 JSON 解析至一个 DOM 表示方式（\fCrapidjson::GenericDocument\fP），以方便操作。如有需要，可把 DOM 转换（stringify）回 JSON。
+.IP "  \(bu" 4
+DOM 风格 API（\fCrapidjson::GenericDocument\fP）实际上是由 SAX 风格 API（\fCrapidjson::GenericReader\fP）实现的。SAX 更快，但有时 DOM 更易用。用户可根据情况作出选择。
+.PP
+
+.PP
+.SH "解析"
+.PP
+.IP "\(bu" 2
+递归式（预设）及迭代式解析器
+.IP "  \(bu" 4
+递归式解析器较快，但在极端情况下可出现堆栈溢出。
+.IP "  \(bu" 4
+迭代式解析器使用自定义的堆栈去维持解析状态。
+.PP
+
+.IP "\(bu" 2
+支持原位（*in situ*）解析。
+.IP "  \(bu" 4
+把 JSON 字符串的值解析至原 JSON 之中，然后让 DOM 指向那些字符串。
+.IP "  \(bu" 4
+比常规分析更快：不需字符串的内存分配、不需复制（如字符串不含转义符）、缓存友好。
+.PP
+
+.IP "\(bu" 2
+对于 JSON 数字类型，支持 32-bit/64-bit 的有号／无号整数，以及 \fCdouble\fP。
+.IP "\(bu" 2
+错误处理
+.IP "  \(bu" 4
+支持详尽的解析错误代号。
+.IP "  \(bu" 4
+支持本地化错误信息。
+.PP
+
+.PP
+.SH "DOM (Document)"
+.PP
+.IP "\(bu" 2
+RapidJSON 在类型转换时会检查数值的范围。
+.IP "\(bu" 2
+字符串字面量的优化
+.IP "  \(bu" 4
+只储存指针，不作复制
+.PP
+
+.IP "\(bu" 2
+优化“短”字符串
+.IP "  \(bu" 4
+在 \fCValue\fP 内储存短字符串，无需额外分配。
+.IP "  \(bu" 4
+对 UTF-8 字符串来说，32 位架构下可存储最多 11 字符，64 位下 21 字符（x86-64 下 13 字符）。
+.PP
+
+.IP "\(bu" 2
+可选地支持 \fCstd::string\fP（定义 \fCRAPIDJSON_HAS_STDSTRING=1\fP）
+.PP
+.SH "生成"
+.PP
+.IP "\(bu" 2
+支持 \fCrapidjson::PrettyWriter\fP 去加入换行及缩进。
+.PP
+.SH "输入输出流"
+.PP
+.IP "\(bu" 2
+支持 \fCrapidjson::GenericStringBuffer\fP，把输出的 JSON 储存于字符串内。
+.IP "\(bu" 2
+支持 \fCrapidjson::FileReadStream\fP 及 \fCrapidjson::FileWriteStream\fP，使用 \fCFILE\fP 对象作输入输出。
+.IP "\(bu" 2
+支持自定义输入输出流。
+.PP
+.SH "内存"
+.PP
+.IP "\(bu" 2
+最小化 DOM 的内存开销。
+.IP "  \(bu" 4
+对大部分 32／64 位机器而言，每个 JSON 值只占 16 或 20 字节（不包含字符串）。
+.PP
+
+.IP "\(bu" 2
+支持快速的预设分配器。
+.IP "  \(bu" 4
+它是一个堆栈形式的分配器（顺序分配，不容许单独释放，适合解析过程之用）。
+.IP "  \(bu" 4
+使用者也可提供一个预分配的缓冲区。（有可能达至无需 CRT 分配就能解析多个 JSON）
+.PP
+
+.IP "\(bu" 2
+支持标准 CRT（C-runtime）分配器。
+.IP "\(bu" 2
+支持自定义分配器。
+.PP
+.SH "其他"
+.PP
+.IP "\(bu" 2
+一些 C++11 的支持（可选）
+.IP "  \(bu" 4
+右值引用（rvalue reference）
+.IP "  \(bu" 4
+\fCnoexcept\fP 修饰符
+.IP "  \(bu" 4
+范围 for 循环 
+.PP
+
+.PP
+

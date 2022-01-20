@@ -1,0 +1,271 @@
+.TH "src/rapidjson/include/rapidjson/schema.h" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/include/rapidjson/schema.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'document\&.h'\fP
+.br
+\fC#include 'pointer\&.h'\fP
+.br
+\fC#include 'stringbuffer\&.h'\fP
+.br
+\fC#include 'error/en\&.h'\fP
+.br
+\fC#include 'uri\&.h'\fP
+.br
+\fC#include <cmath>\fP
+.br
+\fC#include 'internal/regex\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBinternal::ISchemaValidator\fP"
+.br
+.ti -1c
+.RI "class \fBinternal::ISchemaStateFactory< SchemaType >\fP"
+.br
+.ti -1c
+.RI "class \fBinternal::IValidationErrorHandler< SchemaType >\fP"
+.br
+.ti -1c
+.RI "class \fBinternal::Hasher< Encoding, Allocator >\fP"
+.br
+.ti -1c
+.RI "union \fBinternal::Hasher< Encoding, Allocator >::Number::U\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::SchemaValidationContext< SchemaDocumentType >\fP"
+.br
+.ti -1c
+.RI "class \fBinternal::Schema< SchemaDocumentType >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TokenHelper< Stack, Ch >\fP"
+.br
+.ti -1c
+.RI "struct \fBinternal::TokenHelper< Stack, char >\fP"
+.br
+.ti -1c
+.RI "class \fBIGenericRemoteSchemaDocumentProvider< SchemaDocumentType >\fP"
+.br
+.ti -1c
+.RI "class \fBGenericSchemaDocument< ValueT, Allocator >\fP"
+.br
+.RI "JSON schema document\&. "
+.ti -1c
+.RI "class \fBGenericSchemaValidator< SchemaDocumentType, OutputHandler, StateAllocator >\fP"
+.br
+.RI "JSON \fBSchema\fP Validator\&. "
+.ti -1c
+.RI "class \fBSchemaValidatingReader< parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator >\fP"
+.br
+.RI "A helper class for parsing with validation\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBinternal\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_USE_INTERNALREGEX\fP   1"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_USE_STDREGEX\fP   0"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HAS_REGEX\fP   1"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_VERBOSE\fP   0"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_INVALID_KEYWORD_VERBOSE\fP(keyword)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_INVALID_KEYWORD_RETURN\fP(code)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_VALIDATE_DEFAULT_FLAGS\fP   \fBkValidateNoFlags\fP"
+.br
+.RI "User-defined kValidateDefaultFlags definition\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_STRING_\fP(name, \&.\&.\&.)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_STRING_\fP(name, \&.\&.\&.)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HANDLE_BEGIN_VERBOSE_\fP()"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HANDLE_BEGIN_\fP(method,  arg1)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HANDLE_PARALLEL_\fP(method,  arg2)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HANDLE_END_\fP(method,  arg2)"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_HANDLE_VALUE_\fP(method,  arg1,  arg2)"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericSchemaDocument\fP< \fBValue\fP > \fBSchemaDocument\fP"
+.br
+.RI "\fBGenericSchemaDocument\fP using Value type\&. "
+.ti -1c
+.RI "typedef \fBIGenericRemoteSchemaDocumentProvider\fP< \fBSchemaDocument\fP > \fBIRemoteSchemaDocumentProvider\fP"
+.br
+.RI "\fBIGenericRemoteSchemaDocumentProvider\fP using SchemaDocument\&. "
+.ti -1c
+.RI "typedef \fBGenericSchemaValidator\fP< \fBSchemaDocument\fP > \fBSchemaValidator\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBValidateFlag\fP { \fBkValidateNoFlags\fP = 0, \fBkValidateContinueOnErrorFlag\fP = 1, \fBkValidateDefaultFlags\fP = RAPIDJSON_VALIDATE_DEFAULT_FLAGS }"
+.br
+.RI "Combination of validate flags\&. "
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define RAPIDJSON_INVALID_KEYWORD_RETURN(code)"
+\fBValue:\fP
+.PP
+.nf
+RAPIDJSON_MULTILINEMACRO_BEGIN\
+    context\&.invalidCode = code;\
+    context\&.invalidKeyword = SchemaType::GetValidateErrorKeyword(code)\&.GetString();\
+    RAPIDJSON_INVALID_KEYWORD_VERBOSE(context\&.invalidKeyword);\
+    return false;\
+RAPIDJSON_MULTILINEMACRO_END
+.fi
+.SS "#define RAPIDJSON_INVALID_KEYWORD_VERBOSE(keyword)"
+
+.SS "#define RAPIDJSON_SCHEMA_HANDLE_BEGIN_(method, arg1)"
+\fBValue:\fP
+.PP
+.nf
+    if (!valid_) return false; \
+    if ((!BeginValue() && !GetContinueOnErrors()) || (!CurrentSchema()\&.method arg1 && !GetContinueOnErrors())) {\
+        RAPIDJSON_SCHEMA_HANDLE_BEGIN_VERBOSE_();\
+        return valid_ = false;\
+    }
+.fi
+.SS "#define RAPIDJSON_SCHEMA_HANDLE_BEGIN_VERBOSE_()"
+
+.SS "#define RAPIDJSON_SCHEMA_HANDLE_END_(method, arg2)"
+\fBValue:\fP
+.PP
+.nf
+    valid_ = (EndValue() || GetContinueOnErrors()) && (!outputHandler_ || outputHandler_->method arg2);\
+    return valid_;
+.fi
+.SS "#define RAPIDJSON_SCHEMA_HANDLE_PARALLEL_(method, arg2)"
+\fBValue:\fP
+.PP
+.nf
+    for (Context* context = schemaStack_\&.template Bottom<Context>(); context != schemaStack_\&.template End<Context>(); context++) {\
+        if (context->hasher)\
+            static_cast<HasherType*>(context->hasher)->method arg2;\
+        if (context->validators)\
+            for (SizeType i_ = 0; i_ < context->validatorCount; i_++)\
+                static_cast<GenericSchemaValidator*>(context->validators[i_])->method arg2;\
+        if (context->patternPropertiesValidators)\
+            for (SizeType i_ = 0; i_ < context->patternPropertiesValidatorCount; i_++)\
+                static_cast<GenericSchemaValidator*>(context->patternPropertiesValidators[i_])->method arg2;\
+    }
+.fi
+.SS "#define RAPIDJSON_SCHEMA_HANDLE_VALUE_(method, arg1, arg2)"
+\fBValue:\fP
+.PP
+.nf
+    RAPIDJSON_SCHEMA_HANDLE_BEGIN_   (method, arg1);\
+    RAPIDJSON_SCHEMA_HANDLE_PARALLEL_(method, arg2);\
+    RAPIDJSON_SCHEMA_HANDLE_END_     (method, arg2)
+.fi
+.SS "#define RAPIDJSON_SCHEMA_HAS_REGEX   1"
+
+.SS "#define RAPIDJSON_SCHEMA_USE_INTERNALREGEX   1"
+
+.SS "#define RAPIDJSON_SCHEMA_USE_STDREGEX   0"
+
+.SS "#define RAPIDJSON_SCHEMA_VERBOSE   0"
+
+.SS "#define RAPIDJSON_STRING_(name,  \&.\&.\&.)"
+\fBValue:\fP
+.PP
+.nf
+    static const ValueType& Get##name##String() {\
+        static const Ch s[] = { __VA_ARGS__, '\0' };\
+        static const ValueType v(s, static_cast<SizeType>(sizeof(s) / sizeof(Ch) - 1));\
+        return v;\
+    }
+.fi
+.SS "#define RAPIDJSON_STRING_(name,  \&.\&.\&.)"
+\fBValue:\fP
+.PP
+.nf
+    static const StringRefType& Get##name##String() {\
+        static const Ch s[] = { __VA_ARGS__, '\0' };\
+        static const StringRefType v(s, static_cast<SizeType>(sizeof(s) / sizeof(Ch) - 1)); \
+        return v;\
+    }
+.fi
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef \fBIGenericRemoteSchemaDocumentProvider\fP<\fBSchemaDocument\fP> \fBIRemoteSchemaDocumentProvider\fP"
+
+.PP
+\fBIGenericRemoteSchemaDocumentProvider\fP using SchemaDocument\&. 
+.SS "typedef \fBGenericSchemaDocument\fP<\fBValue\fP> \fBSchemaDocument\fP"
+
+.PP
+\fBGenericSchemaDocument\fP using Value type\&. 
+.SS "typedef \fBGenericSchemaValidator\fP<\fBSchemaDocument\fP> \fBSchemaValidator\fP"
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBValidateFlag\fP"
+
+.PP
+Combination of validate flags\&. 
+.PP
+\fBSee also\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkValidateNoFlags \fP\fP
+No flags are set\&. 
+.TP
+\fB\fIkValidateContinueOnErrorFlag \fP\fP
+Don't stop after first validation error\&. 
+.TP
+\fB\fIkValidateDefaultFlags \fP\fP
+Default validate flags\&. Can be customized by defining RAPIDJSON_VALIDATE_DEFAULT_FLAGS\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

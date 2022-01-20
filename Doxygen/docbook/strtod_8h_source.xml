@@ -1,0 +1,298 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_strtod_8h_source" xml:lang="en-US">
+<title>strtod.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/strtod.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_STRTOD_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_STRTOD_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_ieee754_8h">ieee754.h</link>&quot;</emphasis>
+19 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_biginteger_8h">biginteger.h</link>&quot;</emphasis>
+20 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_diyfp_8h">diyfp.h</link>&quot;</emphasis>
+21 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_pow10_8h">pow10.h</link>&quot;</emphasis>
+22 <emphasis role="preprocessor">#include&#32;&lt;climits&gt;</emphasis>
+23 <emphasis role="preprocessor">#include&#32;&lt;limits&gt;</emphasis>
+24 
+25 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+26 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+27 
+28 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_namespaceinternal_1aa1bb51d788788eb5390a16462b40d98d">FastPath</link>(<emphasis role="keywordtype">double</emphasis>&#32;significand,&#32;<emphasis role="keywordtype">int</emphasis>&#32;exp)&#32;{
+29 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(exp&#32;&lt;&#32;-308)
+30 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0.0;
+31 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(exp&#32;&gt;=&#32;0)
+32 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;significand&#32;*&#32;<link linkend="_namespaceinternal_1af01c41d045d596e2f8d1888cf6fbecb6">internal::Pow10</link>(exp);
+33 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+34 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;significand&#32;/&#32;<link linkend="_namespaceinternal_1af01c41d045d596e2f8d1888cf6fbecb6">internal::Pow10</link>(-exp);
+35 }
+36 
+37 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_namespaceinternal_1a9e5fac4695310f09892fe52b1d24ab19">StrtodNormalPrecision</link>(<emphasis role="keywordtype">double</emphasis>&#32;d,&#32;<emphasis role="keywordtype">int</emphasis>&#32;p)&#32;{
+38 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(p&#32;&lt;&#32;-308)&#32;{
+39 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prevent&#32;expSum&#32;&lt;&#32;-308,&#32;making&#32;Pow10(p)&#32;=&#32;0</emphasis>
+40 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;=&#32;<link linkend="_namespaceinternal_1aa1bb51d788788eb5390a16462b40d98d">FastPath</link>(d,&#32;-308);
+41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;=&#32;<link linkend="_namespaceinternal_1aa1bb51d788788eb5390a16462b40d98d">FastPath</link>(d,&#32;p&#32;+&#32;308);
+42 &#32;&#32;&#32;&#32;}
+43 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;=&#32;<link linkend="_namespaceinternal_1aa1bb51d788788eb5390a16462b40d98d">FastPath</link>(d,&#32;p);
+45 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;d;
+46 }
+47 
+48 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;T&gt;
+49 <emphasis role="keyword">inline</emphasis>&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>&#32;<link linkend="_namespaceinternal_1ace304441347098a4953ea99f50805da9">Min3</link>(<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>&#32;b,&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>&#32;c)&#32;{
+50 &#32;&#32;&#32;&#32;<link linkend="_prettywritertest_8cpp_1a6283df8c4e365cc8a01727e2d7ad44bf">T</link>&#32;m&#32;=&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>;
+51 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;&gt;&#32;b)&#32;m&#32;=&#32;b;
+52 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;&gt;&#32;c)&#32;m&#32;=&#32;c;
+53 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;m;
+54 }
+55 
+56 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_namespaceinternal_1a190f9c286df64526a7e3550528ed6b02">CheckWithinHalfULP</link>(<emphasis role="keywordtype">double</emphasis>&#32;b,&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;d,&#32;<emphasis role="keywordtype">int</emphasis>&#32;dExp)&#32;{
+57 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_double">Double</link>&#32;db(b);
+58 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;bInt&#32;=&#32;db.<link linkend="_classinternal_1_1_double_1a1bf89d77be843f69facec9f2bc4dbc72">IntegerSignificand</link>();
+59 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;bExp&#32;=&#32;db.<link linkend="_classinternal_1_1_double_1a9721e0fdedef4d0fe6c7b411492a88fb">IntegerExponent</link>();
+60 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;hExp&#32;=&#32;bExp&#32;-&#32;1;
+61 
+62 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;dS_Exp2&#32;=&#32;0,&#32;dS_Exp5&#32;=&#32;0,&#32;bS_Exp2&#32;=&#32;0,&#32;bS_Exp5&#32;=&#32;0,&#32;hS_Exp2&#32;=&#32;0,&#32;hS_Exp5&#32;=&#32;0;
+63 
+64 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Adjust&#32;for&#32;decimal&#32;exponent</emphasis>
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dExp&#32;&gt;=&#32;0)&#32;{
+66 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dS_Exp2&#32;+=&#32;dExp;
+67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dS_Exp5&#32;+=&#32;dExp;
+68 &#32;&#32;&#32;&#32;}
+69 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bS_Exp2&#32;-=&#32;dExp;
+71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bS_Exp5&#32;-=&#32;dExp;
+72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hS_Exp2&#32;-=&#32;dExp;
+73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hS_Exp5&#32;-=&#32;dExp;
+74 &#32;&#32;&#32;&#32;}
+75 
+76 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Adjust&#32;for&#32;binary&#32;exponent</emphasis>
+77 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(bExp&#32;&gt;=&#32;0)
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bS_Exp2&#32;+=&#32;bExp;
+79 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dS_Exp2&#32;-=&#32;bExp;
+81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hS_Exp2&#32;-=&#32;bExp;
+82 &#32;&#32;&#32;&#32;}
+83 
+84 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Adjust&#32;for&#32;half&#32;ulp&#32;exponent</emphasis>
+85 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(hExp&#32;&gt;=&#32;0)
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hS_Exp2&#32;+=&#32;hExp;
+87 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+88 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dS_Exp2&#32;-=&#32;hExp;
+89 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bS_Exp2&#32;-=&#32;hExp;
+90 &#32;&#32;&#32;&#32;}
+91 
+92 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Remove&#32;common&#32;power&#32;of&#32;two&#32;factor&#32;from&#32;all&#32;three&#32;scaled&#32;values</emphasis>
+93 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;common_Exp2&#32;=&#32;<link linkend="_namespaceinternal_1ace304441347098a4953ea99f50805da9">Min3</link>(dS_Exp2,&#32;bS_Exp2,&#32;hS_Exp2);
+94 &#32;&#32;&#32;&#32;dS_Exp2&#32;-=&#32;common_Exp2;
+95 &#32;&#32;&#32;&#32;bS_Exp2&#32;-=&#32;common_Exp2;
+96 &#32;&#32;&#32;&#32;hS_Exp2&#32;-=&#32;common_Exp2;
+97 
+98 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;dS&#32;=&#32;d;
+99 &#32;&#32;&#32;&#32;dS.<link linkend="_classinternal_1_1_big_integer_1af491885747a0442492134c23a6ec4c65">MultiplyPow5</link>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(dS_Exp5))&#32;&lt;&lt;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(dS_Exp2);
+100 
+101 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;bS(bInt);
+102 &#32;&#32;&#32;&#32;bS.<link linkend="_classinternal_1_1_big_integer_1af491885747a0442492134c23a6ec4c65">MultiplyPow5</link>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(bS_Exp5))&#32;&lt;&lt;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(bS_Exp2);
+103 
+104 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;hS(1);
+105 &#32;&#32;&#32;&#32;hS.<link linkend="_classinternal_1_1_big_integer_1af491885747a0442492134c23a6ec4c65">MultiplyPow5</link>(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(hS_Exp5))&#32;&lt;&lt;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(hS_Exp2);
+106 
+107 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;delta(0);
+108 &#32;&#32;&#32;&#32;dS.<link linkend="_classinternal_1_1_big_integer_1ad7ad62e6b62af38283ee940eb4015b26">Difference</link>(bS,&#32;&amp;delta);
+109 
+110 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;delta.<link linkend="_classinternal_1_1_big_integer_1af8e90fff5382de6c1cda5f751017200c">Compare</link>(hS);
+111 }
+112 
+113 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_namespaceinternal_1a598b2d2f85130bff3c3942e4750b9185">StrtodFast</link>(<emphasis role="keywordtype">double</emphasis>&#32;d,&#32;<emphasis role="keywordtype">int</emphasis>&#32;p,&#32;<emphasis role="keywordtype">double</emphasis>*&#32;result)&#32;{
+114 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Use&#32;fast&#32;path&#32;for&#32;string-to-double&#32;conversion&#32;if&#32;possible</emphasis>
+115 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;see&#32;http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/</emphasis>
+116 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(p&#32;&gt;&#32;22&#32;&#32;&amp;&amp;&#32;p&#32;&lt;&#32;22&#32;+&#32;16)&#32;{
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Fast&#32;Path&#32;Cases&#32;In&#32;Disguise</emphasis>
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;*=&#32;<link linkend="_namespaceinternal_1af01c41d045d596e2f8d1888cf6fbecb6">internal::Pow10</link>(p&#32;-&#32;22);
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p&#32;=&#32;22;
+120 &#32;&#32;&#32;&#32;}
+121 
+122 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(p&#32;&gt;=&#32;-22&#32;&amp;&amp;&#32;p&#32;&lt;=&#32;22&#32;&amp;&amp;&#32;d&#32;&lt;=&#32;9007199254740991.0)&#32;{&#32;<emphasis role="comment">//&#32;2^53&#32;-&#32;1</emphasis>
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*result&#32;=&#32;<link linkend="_namespaceinternal_1aa1bb51d788788eb5390a16462b40d98d">FastPath</link>(d,&#32;p);
+124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+125 &#32;&#32;&#32;&#32;}
+126 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+128 }
+129 
+130 <emphasis role="comment">//&#32;Compute&#32;an&#32;approximation&#32;and&#32;see&#32;if&#32;it&#32;is&#32;within&#32;1/2&#32;ULP</emphasis>
+131 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+132 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_namespaceinternal_1aab0ac7e895939a3e117ec8e3395fd334">StrtodDiyFp</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;decimals,&#32;<emphasis role="keywordtype">int</emphasis>&#32;dLen,&#32;<emphasis role="keywordtype">int</emphasis>&#32;dExp,&#32;<emphasis role="keywordtype">double</emphasis>*&#32;result)&#32;{
+133 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;significand&#32;=&#32;0;
+134 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;0;&#32;&#32;&#32;<emphasis role="comment">//&#32;2^64&#32;-&#32;1&#32;=&#32;18446744073709551615,&#32;1844674407370955161&#32;=&#32;0x1999999999999999&#32;&#32;&#32;&#32;</emphasis>
+135 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(;&#32;i&#32;&lt;&#32;dLen;&#32;i++)&#32;{
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(significand&#32;&#32;&gt;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x19999999,&#32;0x99999999)&#32;||
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(significand&#32;==&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x19999999,&#32;0x99999999)&#32;&amp;&amp;&#32;decimals[i]&#32;&gt;&#32;Ch(<emphasis role="charliteral">&apos;5&apos;</emphasis>)))
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;significand&#32;=&#32;significand&#32;*&#32;10u&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(decimals[i]&#32;-&#32;Ch(<emphasis role="charliteral">&apos;0&apos;</emphasis>));
+140 &#32;&#32;&#32;&#32;}
+141 &#32;&#32;&#32;&#32;
+142 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(i&#32;&lt;&#32;dLen&#32;&amp;&amp;&#32;decimals[i]&#32;&gt;=&#32;Ch(<emphasis role="charliteral">&apos;5&apos;</emphasis>))&#32;<emphasis role="comment">//&#32;Rounding</emphasis>
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;significand++;
+144 
+145 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;remaining&#32;=&#32;dLen&#32;-&#32;i;
+146 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kUlpShift&#32;=&#32;3;
+147 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kUlp&#32;=&#32;1&#32;&lt;&lt;&#32;kUlpShift;
+148 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6">int64_t</link>&#32;error&#32;=&#32;(remaining&#32;==&#32;0)&#32;?&#32;0&#32;:&#32;kUlp&#32;/&#32;2;
+149 
+150 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;v(significand,&#32;0);
+151 &#32;&#32;&#32;&#32;v&#32;=&#32;v.<link linkend="_structinternal_1_1_diy_fp_1aa6cbacc8dfcd92cb8c57884e45548976">Normalize</link>();
+152 &#32;&#32;&#32;&#32;error&#32;&lt;&lt;=&#32;-v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+153 
+154 &#32;&#32;&#32;&#32;dExp&#32;+=&#32;remaining;
+155 
+156 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;actualExp;
+157 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;cachedPower&#32;=&#32;<link linkend="_namespaceinternal_1a74b8503d044bf6c0a5e90c5bea3aba42">GetCachedPower10</link>(dExp,&#32;&amp;actualExp);
+158 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(actualExp&#32;!=&#32;dExp)&#32;{
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;kPow10[]&#32;=&#32;{
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa0000000,&#32;0x00000000),&#32;-60),&#32;&#32;<emphasis role="comment">//&#32;10^1</emphasis>
+161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc8000000,&#32;0x00000000),&#32;-57),&#32;&#32;<emphasis role="comment">//&#32;10^2</emphasis>
+162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xfa000000,&#32;0x00000000),&#32;-54),&#32;&#32;<emphasis role="comment">//&#32;10^3</emphasis>
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9c400000,&#32;0x00000000),&#32;-50),&#32;&#32;<emphasis role="comment">//&#32;10^4</emphasis>
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc3500000,&#32;0x00000000),&#32;-47),&#32;&#32;<emphasis role="comment">//&#32;10^5</emphasis>
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xf4240000,&#32;0x00000000),&#32;-44),&#32;&#32;<emphasis role="comment">//&#32;10^6</emphasis>
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x98968000,&#32;0x00000000),&#32;-40)&#32;&#32;&#32;<emphasis role="comment">//&#32;10^7</emphasis>
+167 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+168 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;adjustment&#32;=&#32;dExp&#32;-&#32;actualExp;
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(adjustment&#32;&gt;=&#32;1&#32;&amp;&amp;&#32;adjustment&#32;&lt;&#32;8);
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v&#32;=&#32;v&#32;*&#32;kPow10[adjustment&#32;-&#32;1];
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dLen&#32;+&#32;adjustment&#32;&gt;&#32;19)&#32;<emphasis role="comment">//&#32;has&#32;more&#32;digits&#32;than&#32;decimal&#32;digits&#32;in&#32;64-bit</emphasis>
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;error&#32;+=&#32;kUlp&#32;/&#32;2;
+173 &#32;&#32;&#32;&#32;}
+174 
+175 &#32;&#32;&#32;&#32;v&#32;=&#32;v&#32;*&#32;cachedPower;
+176 
+177 &#32;&#32;&#32;&#32;error&#32;+=&#32;kUlp&#32;+&#32;(error&#32;==&#32;0&#32;?&#32;0&#32;:&#32;1);
+178 
+179 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;oldExp&#32;=&#32;v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+180 &#32;&#32;&#32;&#32;v&#32;=&#32;v.<link linkend="_structinternal_1_1_diy_fp_1aa6cbacc8dfcd92cb8c57884e45548976">Normalize</link>();
+181 &#32;&#32;&#32;&#32;error&#32;&lt;&lt;=&#32;oldExp&#32;-&#32;v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+182 
+183 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;effectiveSignificandSize&#32;=&#32;<link linkend="_classinternal_1_1_double_1aa710fa4f5e06b0ff4348a13475688f13">Double::EffectiveSignificandSize</link>(64&#32;+&#32;v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>);
+184 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;precisionSize&#32;=&#32;64&#32;-&#32;effectiveSignificandSize;
+185 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(precisionSize&#32;+&#32;kUlpShift&#32;&gt;=&#32;64)&#32;{
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;scaleExp&#32;=&#32;(precisionSize&#32;+&#32;kUlpShift)&#32;-&#32;63;
+187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;=&#32;scaleExp;
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+=&#32;scaleExp;&#32;
+189 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;error&#32;=&#32;(error&#32;&gt;&gt;&#32;scaleExp)&#32;+&#32;1&#32;+&#32;kUlp;
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;precisionSize&#32;-=&#32;scaleExp;
+191 &#32;&#32;&#32;&#32;}
+192 
+193 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;rounded(v.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;&#32;precisionSize,&#32;v.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;precisionSize);
+194 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;precisionBits&#32;=&#32;(v.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;((<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>(1)&#32;&lt;&lt;&#32;precisionSize)&#32;-&#32;1))&#32;*&#32;kUlp;
+195 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;halfWay&#32;=&#32;(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>(1)&#32;&lt;&lt;&#32;(precisionSize&#32;-&#32;1))&#32;*&#32;kUlp;
+196 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(precisionBits&#32;&gt;=&#32;halfWay&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(error))&#32;{
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rounded.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>++;
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(rounded.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;(<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">DiyFp::kDpHiddenBit</link>&#32;&lt;&lt;&#32;1))&#32;{&#32;<emphasis role="comment">//&#32;rounding&#32;overflows&#32;mantissa&#32;(issue&#32;#340)</emphasis>
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rounded.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;=&#32;1;
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rounded.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>++;
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+202 &#32;&#32;&#32;&#32;}
+203 
+204 &#32;&#32;&#32;&#32;*result&#32;=&#32;rounded.<link linkend="_structinternal_1_1_diy_fp_1acf0e7974f0a1175ae04edf8e4a7d1319">ToDouble</link>();
+205 
+206 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;halfWay&#32;-&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(error)&#32;&gt;=&#32;precisionBits&#32;||&#32;precisionBits&#32;&gt;=&#32;halfWay&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(error);
+207 }
+208 
+209 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+210 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_namespaceinternal_1aa69b729bd9d047f70ba772424cfb65cb">StrtodBigInteger</link>(<emphasis role="keywordtype">double</emphasis>&#32;approx,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;decimals,&#32;<emphasis role="keywordtype">int</emphasis>&#32;dLen,&#32;<emphasis role="keywordtype">int</emphasis>&#32;dExp)&#32;{
+211 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(dLen&#32;&gt;=&#32;0);
+212 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;dInt(decimals,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(dLen));
+213 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_double">Double</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>(approx);
+214 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;cmp&#32;=&#32;<link linkend="_namespaceinternal_1a190f9c286df64526a7e3550528ed6b02">CheckWithinHalfULP</link>(<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Value(),&#32;dInt,&#32;dExp);
+215 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(cmp&#32;&lt;&#32;0)
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Value();&#32;&#32;<emphasis role="comment">//&#32;within&#32;half&#32;ULP</emphasis>
+217 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(cmp&#32;==&#32;0)&#32;{
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Round&#32;towards&#32;even</emphasis>
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Significand()&#32;&amp;&#32;1)
+220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.NextPositiveDouble();
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Value();
+223 &#32;&#32;&#32;&#32;}
+224 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="comment">//&#32;adjustment</emphasis>
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.NextPositiveDouble();
+226 }
+227 
+228 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
+229 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_namespaceinternal_1a6109c750ee4707d4f71de280816a1a00">StrtodFullPrecision</link>(<emphasis role="keywordtype">double</emphasis>&#32;d,&#32;<emphasis role="keywordtype">int</emphasis>&#32;p,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;decimals,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;decimalPosition,&#32;<emphasis role="keywordtype">int</emphasis>&#32;exp)&#32;{
+230 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(d&#32;&gt;=&#32;0.0);
+231 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(length&#32;&gt;=&#32;1);
+232 
+233 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;result&#32;=&#32;0.0;
+234 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_namespaceinternal_1a598b2d2f85130bff3c3942e4750b9185">StrtodFast</link>(d,&#32;p,&#32;&amp;result))
+235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+236 
+237 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(length&#32;&lt;=&#32;INT_MAX);
+238 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;dLen&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(length);
+239 
+240 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(length&#32;&gt;=&#32;decimalPosition);
+241 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(length&#32;-&#32;decimalPosition&#32;&lt;=&#32;INT_MAX);
+242 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;dExpAdjust&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(length&#32;-&#32;decimalPosition);
+243 
+244 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(exp&#32;&gt;=&#32;INT_MIN&#32;+&#32;dExpAdjust);
+245 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;dExp&#32;=&#32;exp&#32;-&#32;dExpAdjust;
+246 
+247 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Make&#32;sure&#32;length+dExp&#32;does&#32;not&#32;overflow</emphasis>
+248 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(dExp&#32;&lt;=&#32;INT_MAX&#32;-&#32;dLen);
+249 
+250 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Trim&#32;leading&#32;zeros</emphasis>
+251 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(dLen&#32;&gt;&#32;0&#32;&amp;&amp;&#32;*decimals&#32;==&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>)&#32;{
+252 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dLen--;
+253 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;decimals++;
+254 &#32;&#32;&#32;&#32;}
+255 
+256 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Trim&#32;trailing&#32;zeros</emphasis>
+257 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(dLen&#32;&gt;&#32;0&#32;&amp;&amp;&#32;decimals[dLen&#32;-&#32;1]&#32;==&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>)&#32;{
+258 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dLen--;
+259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dExp++;
+260 &#32;&#32;&#32;&#32;}
+261 
+262 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dLen&#32;==&#32;0)&#32;{&#32;<emphasis role="comment">//&#32;Buffer&#32;only&#32;contains&#32;zeros.</emphasis>
+263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0.0;
+264 &#32;&#32;&#32;&#32;}
+265 
+266 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Trim&#32;right-most&#32;digits</emphasis>
+267 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kMaxDecimalDigit&#32;=&#32;767&#32;+&#32;1;
+268 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dLen&#32;&gt;&#32;kMaxDecimalDigit)&#32;{
+269 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dExp&#32;+=&#32;dLen&#32;-&#32;kMaxDecimalDigit;
+270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;dLen&#32;=&#32;kMaxDecimalDigit;
+271 &#32;&#32;&#32;&#32;}
+272 
+273 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;If&#32;too&#32;small,&#32;underflow&#32;to&#32;zero.</emphasis>
+274 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Any&#32;x&#32;&lt;=&#32;10^-324&#32;is&#32;interpreted&#32;as&#32;zero.</emphasis>
+275 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dLen&#32;+&#32;dExp&#32;&lt;=&#32;-324)
+276 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0.0;
+277 
+278 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;If&#32;too&#32;large,&#32;overflow&#32;to&#32;infinity.</emphasis>
+279 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Any&#32;x&#32;&gt;=&#32;10^309&#32;is&#32;interpreted&#32;as&#32;+infinity.</emphasis>
+280 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dLen&#32;+&#32;dExp&#32;&gt;&#32;309)
+281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;std::numeric_limits&lt;double&gt;::infinity();
+282 
+283 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_namespaceinternal_1aab0ac7e895939a3e117ec8e3395fd334">StrtodDiyFp</link>(decimals,&#32;dLen,&#32;dExp,&#32;&amp;result))
+284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;result;
+285 
+286 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Use&#32;approximation&#32;from&#32;StrtodDiyFp&#32;and&#32;make&#32;adjustment&#32;with&#32;BigInteger&#32;comparison</emphasis>
+287 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1aa69b729bd9d047f70ba772424cfb65cb">StrtodBigInteger</link>(result,&#32;decimals,&#32;dLen,&#32;dExp);
+288 }
+289 
+290 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+291 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+292 
+293 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_STRTOD_</emphasis>
+</programlisting></section>

@@ -1,0 +1,206 @@
+
+
+\hypertarget{md_src_rapidjson_readme_autotoc_md129}{}\doxysubsection{A fast JSON parser/generator for C++ with both SAX/\+DOM style API}\label{md_src_rapidjson_readme_autotoc_md129}
+Tencent is pleased to support the open source community by making Rapid\+JSON available.
+
+Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/Tencent/rapidjson/}{\texttt{ Rapid\+JSON Git\+Hub}}
+\item Rapid\+JSON Documentation
+\begin{DoxyItemize}
+\item \href{http://rapidjson.org/}{\texttt{ English}}
+\item \href{http://rapidjson.org/zh-cn/}{\texttt{ 简体中文}}
+\item \href{https://www.gitbook.com/book/miloyip/rapidjson/}{\texttt{ Git\+Book}} with downloadable PDF/\+EPUB/\+MOBI, without API reference.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_readme_autotoc_md130}{}\doxysubsection{Build status}\label{md_src_rapidjson_readme_autotoc_md130}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://travis-ci.org/Tencent/rapidjson}{\texttt{ Linux}}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://ci.appveyor.com/project/miloyip/rapidjson-0fdqj/branch/master}{\texttt{ Windows}}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://coveralls.io/r/Tencent/rapidjson?branch=master}{\texttt{ Coveralls}}    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://travis-ci.org/Tencent/rapidjson}{\texttt{ Linux}}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://ci.appveyor.com/project/miloyip/rapidjson-0fdqj/branch/master}{\texttt{ Windows}}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ \href{https://coveralls.io/r/Tencent/rapidjson?branch=master}{\texttt{ Coveralls}}    }\\\cline{1-3}
+\endhead
+\PBS\centering    &\PBS\centering    &\PBS\centering    \\\cline{1-3}
+\end{longtabu}
+\hypertarget{md_src_rapidjson_readme_autotoc_md131}{}\doxysubsection{Introduction}\label{md_src_rapidjson_readme_autotoc_md131}
+Rapid\+JSON is a JSON parser and generator for C++. It was inspired by \href{http://rapidxml.sourceforge.net/}{\texttt{ Rapid\+Xml}}.
+
+
+\begin{DoxyItemize}
+\item Rapid\+JSON is {\bfseries{small}} but {\bfseries{complete}}. It supports both SAX and DOM style API. The SAX parser is only a half thousand lines of code.
+\item Rapid\+JSON is {\bfseries{fast}}. Its performance can be comparable to {\ttfamily strlen()}. It also optionally supports SSE2/\+SSE4.\+2 for acceleration.
+\item Rapid\+JSON is {\bfseries{self-\/contained}} and {\bfseries{header-\/only}}. It does not depend on external libraries such as BOOST. It even does not depend on STL.
+\item Rapid\+JSON is {\bfseries{memory-\/friendly}}. Each JSON value occupies exactly 16 bytes for most 32/64-\/bit machines (excluding text string). By default it uses a fast memory allocator, and the parser allocates memory compactly during parsing.
+\item Rapid\+JSON is {\bfseries{Unicode-\/friendly}}. It supports UTF-\/8, UTF-\/16, UTF-\/32 (LE \& BE), and their detection, validation and transcoding internally. For example, you can read a UTF-\/8 file and let Rapid\+JSON transcode the JSON strings into UTF-\/16 in the DOM. It also supports surrogates and \char`\"{}\textbackslash{}u0000\char`\"{} (null character).
+\end{DoxyItemize}
+
+More features can be read C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{features_8md}{Jumper/src/rapidjson/doc/features.\+md}} \char`\"{}here\char`\"{}.
+
+JSON(\+Java\+Script Object Notation) is a light-\/weight data exchange format. Rapid\+JSON should be in full compliance with RFC7159/\+ECMA-\/404, with optional support of relaxed syntax. More information about JSON can be obtained at
+\begin{DoxyItemize}
+\item \href{http://json.org/}{\texttt{ Introducing JSON}}
+\item \href{https://tools.ietf.org/html/rfc7159}{\texttt{ RFC7159\+: The Java\+Script Object Notation (JSON) Data Interchange Format}}
+\item \href{https://www.ecma-international.org/publications/standards/Ecma-404.htm}{\texttt{ Standard ECMA-\/404\+: The JSON Data Interchange Format}}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_readme_autotoc_md132}{}\doxysubsection{Highlights in v1.\+1 (2016-\/8-\/25)}\label{md_src_rapidjson_readme_autotoc_md132}
+
+\begin{DoxyItemize}
+\item Added C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{pointer_8md}{Jumper/src/rapidjson/doc/pointer.\+md}} \char`\"{}\+JSON Pointer\char`\"{}
+\item Added C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{schema_8md}{Jumper/src/rapidjson/doc/schema.\+md}} \char`\"{}\+JSON Schema\char`\"{}
+\item Added C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{dom_8md}{Jumper/src/rapidjson/doc/dom.\+md}} \char`\"{}relaxed JSON syntax\char`\"{} (comment, trailing comma, Na\+N/\+Infinity)
+\item Iterating array/object with C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{tutorial_8md}{Jumper/src/rapidjson/doc/tutorial.\+md}} \char`\"{}\+C++11 Range-\/based for loop\char`\"{}
+\item Reduce memory overhead of each {\ttfamily Value} from 24 bytes to 16 bytes in x86-\/64 architecture.
+\end{DoxyItemize}
+
+For other changes please refer to C\+:/\+Users/\+R2-\/\+D2/\+Desktop/\+STUDIA/\+Semestr 5/\+Podstawy grafiki komputerowej/\+Projekt/\+Neon \mbox{\hyperlink{_c_h_a_n_g_e_l_o_g_8md}{Jumper/src/rapidjson/\+CHANGELOG.\+md}} \char`\"{}change log\char`\"{}.\hypertarget{md_src_rapidjson_readme_autotoc_md133}{}\doxysubsection{Compatibility}\label{md_src_rapidjson_readme_autotoc_md133}
+Rapid\+JSON is cross-\/platform. Some platform/compiler combinations which have been tested are shown as follows.
+\begin{DoxyItemize}
+\item Visual C++ 2008/2010/2013 on Windows (32/64-\/bit)
+\item GNU C++ 3.\+8.\+x on Cygwin
+\item Clang 3.\+4 on Mac OS X (32/64-\/bit) and i\+OS
+\item Clang 3.\+4 on Android NDK
+\end{DoxyItemize}
+
+Users can build and run the unit tests on their platform/compiler.\hypertarget{md_src_rapidjson_readme_autotoc_md134}{}\doxysubsection{Installation}\label{md_src_rapidjson_readme_autotoc_md134}
+Rapid\+JSON is a header-\/only C++ library. Just copy the {\ttfamily include/rapidjson} folder to system or project\textquotesingle{}s include path.
+
+Alternatively, if you are using the \href{https://github.com/Microsoft/vcpkg/}{\texttt{ vcpkg}} dependency manager you can download and install rapidjson with CMake integration in a single command\+:
+\begin{DoxyItemize}
+\item vcpkg install rapidjson
+\end{DoxyItemize}
+
+Rapid\+JSON uses following software as its dependencies\+:
+\begin{DoxyItemize}
+\item \href{https://cmake.org/}{\texttt{ CMake}} as a general build tool
+\item (optional) \href{http://www.doxygen.org}{\texttt{ Doxygen}} to build documentation
+\item (optional) \href{https://github.com/google/googletest}{\texttt{ googletest}} for unit and performance testing
+\end{DoxyItemize}
+
+To generate user documentation and run tests please proceed with the steps below\+:
+
+
+\begin{DoxyEnumerate}
+\item Execute {\ttfamily git submodule update -\/-\/init} to get the files of thirdparty submodules (google test).
+\item Create directory called {\ttfamily build} in rapidjson source directory.
+\item Change to {\ttfamily build} directory and run {\ttfamily cmake ..} command to configure your build. Windows users can do the same with cmake-\/gui application.
+\item On Windows, build the solution found in the build directory. On Linux, run {\ttfamily make} from the build directory.
+\end{DoxyEnumerate}
+
+On successful build you will find compiled test and example binaries in {\ttfamily bin} directory. The generated documentation will be available in {\ttfamily doc/html} directory of the build tree. To run tests after finished build please run {\ttfamily make test} or {\ttfamily ctest} from your build tree. You can get detailed output using {\ttfamily ctest -\/V} command.
+
+It is possible to install library system-\/wide by running {\ttfamily make install} command from the build tree with administrative privileges. This will install all files according to system preferences. Once Rapid\+JSON is installed, it is possible to use it from other CMake projects by adding {\ttfamily find\+\_\+package(\+Rapid\+JSON)} line to your CMake\+Lists.\+txt.\hypertarget{md_src_rapidjson_readme_autotoc_md135}{}\doxysubsection{Usage at a glance}\label{md_src_rapidjson_readme_autotoc_md135}
+This simple example parses a JSON string into a document (DOM), make a simple modification of the DOM, and finally stringify the DOM to a JSON string.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{comment}{// rapidjson/example/simpledom/simpledom.cpp`}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{document_8h}{rapidjson/document.h}}"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{writer_8h}{rapidjson/writer.h}}"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stringbuffer_8h}{rapidjson/stringbuffer.h}}"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }\mbox{\hyperlink{namespacerapidjson}{rapidjson}};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keywordtype}{int} \mbox{\hyperlink{_c_make_c_compiler_id_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}() \{}
+\DoxyCodeLine{    \textcolor{comment}{// 1. Parse a JSON string into DOM.}}
+\DoxyCodeLine{    \textcolor{keyword}{const} \textcolor{keywordtype}{char}* json = \textcolor{stringliteral}{"{}\{\(\backslash\)"{}project\(\backslash\)"{}:\(\backslash\)"{}rapidjson\(\backslash\)"{},\(\backslash\)"{}stars\(\backslash\)"{}:10\}"{}};}
+\DoxyCodeLine{    \mbox{\hyperlink{class_generic_document}{Document}} d;}
+\DoxyCodeLine{    d.\mbox{\hyperlink{class_generic_document_a901db1678f99a1b550003eed75bc380a}{Parse}}(json);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{comment}{// 2. Modify it by DOM.}}
+\DoxyCodeLine{    \mbox{\hyperlink{class_generic_value}{Value}}\& s = d[\textcolor{stringliteral}{"{}stars"{}}];}
+\DoxyCodeLine{    s.SetInt(s.GetInt() + 1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{comment}{// 3. Stringify the DOM}}
+\DoxyCodeLine{    \mbox{\hyperlink{class_generic_string_buffer}{StringBuffer}} buffer;}
+\DoxyCodeLine{    \mbox{\hyperlink{class_writer}{Writer<StringBuffer>}} writer(buffer);}
+\DoxyCodeLine{    d.Accept(writer);}
+\DoxyCodeLine{}
+\DoxyCodeLine{    \textcolor{comment}{// Output \{"{}project"{}:"{}rapidjson"{},"{}stars"{}:11\}}}
+\DoxyCodeLine{    std::cout << buffer.\mbox{\hyperlink{class_generic_string_buffer_a42079865bab1deb930c6cff7d491c719}{GetString}}() << std::endl;}
+\DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Note that this example did not handle potential errors.
+
+The following diagram shows the process.
+
+
+
+More \href{https://github.com/Tencent/rapidjson/tree/master/example}{\texttt{ examples}} are available\+:
+
+
+\begin{DoxyItemize}
+\item DOM API
+\begin{DoxyItemize}
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/tutorial/tutorial.cpp}{\texttt{ tutorial}}\+: Basic usage of DOM API.
+\end{DoxyItemize}
+\item SAX API
+\begin{DoxyItemize}
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/simplereader/simplereader.cpp}{\texttt{ simplereader}}\+: Dumps all SAX events while parsing a JSON by {\ttfamily Reader}.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/condense/condense.cpp}{\texttt{ condense}}\+: A command line tool to rewrite a JSON, with all whitespaces removed.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp}{\texttt{ pretty}}\+: A command line tool to rewrite a JSON with indents and newlines by {\ttfamily \mbox{\hyperlink{class_pretty_writer}{Pretty\+Writer}}}.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/capitalize/capitalize.cpp}{\texttt{ capitalize}}\+: A command line tool to capitalize strings in JSON.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/messagereader/messagereader.cpp}{\texttt{ messagereader}}\+: Parse a JSON message with SAX API.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/serialize/serialize.cpp}{\texttt{ serialize}}\+: Serialize a C++ object into JSON with SAX API.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/jsonx/jsonx.cpp}{\texttt{ jsonx}}\+: Implements a {\ttfamily \mbox{\hyperlink{class_jsonx_writer}{Jsonx\+Writer}}} which stringify SAX events into \href{https://www-01.ibm.com/support/knowledgecenter/SS9H2Y_7.1.0/com.ibm.dp.doc/json_jsonx.html}{\texttt{ JSONx}} (a kind of XML) format. The example is a command line tool which converts input JSON into JSONx format.
+\end{DoxyItemize}
+\item \mbox{\hyperlink{class_schema}{Schema}}
+\begin{DoxyItemize}
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/schemavalidator/schemavalidator.cpp}{\texttt{ schemavalidator}} \+: A command line tool to validate a JSON with a JSON schema.
+\end{DoxyItemize}
+\item Advanced
+\begin{DoxyItemize}
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/prettyauto/prettyauto.cpp}{\texttt{ prettyauto}}\+: A modified version of \href{https://github.com/Tencent/rapidjson/blob/master/example/pretty/pretty.cpp}{\texttt{ pretty}} to automatically handle JSON with any UTF encodings.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/parsebyparts/parsebyparts.cpp}{\texttt{ parsebyparts}}\+: Implements an {\ttfamily Async\+Document\+Parser} which can parse JSON in parts, using C++11 thread.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/filterkey/filterkey.cpp}{\texttt{ filterkey}}\+: A command line tool to remove all values with user-\/specified key.
+\item \href{https://github.com/Tencent/rapidjson/blob/master/example/filterkeydom/filterkeydom.cpp}{\texttt{ filterkeydom}}\+: Same tool as above, but it demonstrates how to use a generator to populate a {\ttfamily Document}.
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md_src_rapidjson_readme_autotoc_md136}{}\doxysubsection{Contributing}\label{md_src_rapidjson_readme_autotoc_md136}
+Rapid\+JSON welcomes contributions. When contributing, please follow the code below.\hypertarget{md_src_rapidjson_readme_autotoc_md137}{}\doxysubsubsection{Issues}\label{md_src_rapidjson_readme_autotoc_md137}
+Feel free to submit issues and enhancement requests.
+
+Please help us by providing {\bfseries{minimal reproducible examples}}, because source code is easier to let other people understand what happens. For crash problems on certain platforms, please bring stack dump content with the detail of the OS, compiler, etc.
+
+Please try breakpoint debugging first, tell us what you found, see if we can start exploring based on more information been prepared.\hypertarget{md_src_rapidjson_readme_autotoc_md138}{}\doxysubsubsection{Workflow}\label{md_src_rapidjson_readme_autotoc_md138}
+In general, we follow the \char`\"{}fork-\/and-\/pull\char`\"{} Git workflow.
+
+
+\begin{DoxyEnumerate}
+\item {\bfseries{Fork}} the repo on Git\+Hub
+\item {\bfseries{Clone}} the project to your own machine
+\item {\bfseries{Checkout}} a new branch on your fork, start developing on the branch
+\item {\bfseries{Test}} the change before commit, Make sure the changes pass all the tests, including {\ttfamily unittest} and {\ttfamily preftest}, please add test case for each new feature or bug-\/fix if needed.
+\item {\bfseries{Commit}} changes to your own branch
+\item {\bfseries{Push}} your work back up to your fork
+\item Submit a {\bfseries{Pull request}} so that we can review your changes
+\end{DoxyEnumerate}
+
+NOTE\+: Be sure to merge the latest from \char`\"{}upstream\char`\"{} before making a pull request!\hypertarget{md_src_rapidjson_readme_autotoc_md139}{}\doxysubsubsection{Copyright and Licensing}\label{md_src_rapidjson_readme_autotoc_md139}
+You can copy and paste the license summary from below.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{Tencent is pleased to support the open source community by making RapidJSON available.}
+\DoxyCodeLine{}
+\DoxyCodeLine{Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}
+\DoxyCodeLine{}
+\DoxyCodeLine{Licensed under the MIT License (the "{}License"{}); you may not use this file except}
+\DoxyCodeLine{in compliance with the License. You may obtain a copy of the License at}
+\DoxyCodeLine{}
+\DoxyCodeLine{http://opensource.org/licenses/MIT}
+\DoxyCodeLine{}
+\DoxyCodeLine{Unless required by applicable law or agreed to in writing, software distributed }
+\DoxyCodeLine{under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }
+\DoxyCodeLine{CONDITIONS OF ANY KIND, either express or implied. See the License for the }
+\DoxyCodeLine{specific language governing permissions and limitations under the License.}
+
+\end{DoxyCode}
+ 

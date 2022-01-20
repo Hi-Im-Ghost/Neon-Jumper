@@ -1,0 +1,462 @@
+.TH "Writer< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Writer< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags > \- JSON writer\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <writer\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBLevel\fP"
+.br
+.RI "Information for each nested level\&. "
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef SourceEncoding::Ch \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWriter\fP (OutputStream &os, StackAllocator *stackAllocator=0, size_t levelDepth=\fBkDefaultLevelDepth\fP)"
+.br
+.RI "Constructor\&. "
+.ti -1c
+.RI "\fBWriter\fP (StackAllocator *allocator=0, size_t levelDepth=\fBkDefaultLevelDepth\fP)"
+.br
+.ti -1c
+.RI "void \fBReset\fP (OutputStream &os)"
+.br
+.RI "Reset the writer with a new stream\&. "
+.ti -1c
+.RI "bool \fBIsComplete\fP () const"
+.br
+.RI "Checks whether the output is a complete JSON\&. "
+.ti -1c
+.RI "int \fBGetMaxDecimalPlaces\fP () const"
+.br
+.ti -1c
+.RI "void \fBSetMaxDecimalPlaces\fP (int maxDecimalPlaces)"
+.br
+.RI "Sets the maximum number of decimal places for double output\&. "
+.in -1c
+.PP
+.RI "\fBImplementation of Handler\fP"
+.br
+
+.PP
+\fBSee also\fP
+.RS 4
+Handler 
+.RE
+.PP
+
+.PP
+.in +1c
+.in +1c
+.ti -1c
+.RI "bool \fBNull\fP ()"
+.br
+.ti -1c
+.RI "bool \fBBool\fP (bool b)"
+.br
+.ti -1c
+.RI "bool \fBInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBUint\fP (unsigned u)"
+.br
+.ti -1c
+.RI "bool \fBInt64\fP (\fBint64_t\fP i64)"
+.br
+.ti -1c
+.RI "bool \fBUint64\fP (\fBuint64_t\fP u64)"
+.br
+.ti -1c
+.RI "bool \fBDouble\fP (double d)"
+.br
+.RI "Writes the given \fCdouble\fP value to the stream\&. "
+.ti -1c
+.RI "bool \fBRawNumber\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBStartObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy=false)"
+.br
+.ti -1c
+.RI "bool \fBEndObject\fP (\fBSizeType\fP memberCount=0)"
+.br
+.ti -1c
+.RI "bool \fBStartArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEndArray\fP (\fBSizeType\fP elementCount=0)"
+.br
+.in -1c
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBkDefaultMaxDecimalPlaces\fP = 324"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBWriteInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBWriteUint\fP (unsigned u)"
+.br
+.ti -1c
+.RI "bool \fBWriteInt64\fP (\fBint64_t\fP i64)"
+.br
+.ti -1c
+.RI "bool \fBWriteUint64\fP (\fBuint64_t\fP u)"
+.br
+.ti -1c
+.RI "bool \fBWriteDouble\fP (double d)"
+.br
+.in -1c
+.SS "Convenience extensions"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkDefaultLevelDepth\fP = 32"
+.br
+.ti -1c
+.RI "OutputStream * \fBos_\fP"
+.br
+.ti -1c
+.RI "\fBinternal::Stack\fP< StackAllocator > \fBlevel_stack_\fP"
+.br
+.ti -1c
+.RI "int \fBmaxDecimalPlaces_\fP"
+.br
+.ti -1c
+.RI "bool \fBhasRoot_\fP"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *const &str)"
+.br
+.RI "Simpler but slower overload\&. "
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *const &str)"
+.br
+.ti -1c
+.RI "bool \fBRawValue\fP (const \fBCh\fP *json, size_t length, \fBType\fP type)"
+.br
+.RI "Write a raw JSON value\&. "
+.ti -1c
+.RI "void \fBFlush\fP ()"
+.br
+.RI "Flush the output stream\&. "
+.ti -1c
+.RI "bool \fBWriteNull\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteBool\fP (bool b)"
+.br
+.ti -1c
+.RI "bool \fBWriteInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBWriteUint\fP (unsigned u)"
+.br
+.ti -1c
+.RI "bool \fBWriteInt64\fP (\fBint64_t\fP i64)"
+.br
+.ti -1c
+.RI "bool \fBWriteUint64\fP (\fBuint64_t\fP u64)"
+.br
+.ti -1c
+.RI "bool \fBWriteDouble\fP (double d)"
+.br
+.ti -1c
+.RI "bool \fBWriteString\fP (const \fBCh\fP *str, \fBSizeType\fP length)"
+.br
+.ti -1c
+.RI "bool \fBScanWriteUnescapedString\fP (\fBGenericStringStream\fP< SourceEncoding > &is, size_t length)"
+.br
+.ti -1c
+.RI "bool \fBWriteStartObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteEndObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteStartArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteEndArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBWriteRawValue\fP (const \fBCh\fP *json, size_t length)"
+.br
+.ti -1c
+.RI "void \fBPrefix\fP (\fBType\fP type)"
+.br
+.ti -1c
+.RI "bool \fBEndValue\fP (bool ret)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
+.br
+class Writer< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >"JSON writer\&. 
+
+\fBWriter\fP implements the concept Handler\&. It generates JSON text by events to an output os\&.
+.PP
+User may programmatically calls the functions of a writer to generate JSON text\&.
+.PP
+On the other side, a writer can also be passed to objects that generates events,
+.PP
+for example \fBReader::Parse()\fP and Document::Accept()\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIOutputStream\fP Type of output stream\&. 
+.br
+\fISourceEncoding\fP Encoding of source string\&. 
+.br
+\fITargetEncoding\fP Encoding of output stream\&. 
+.br
+\fIStackAllocator\fP Type of allocator for allocating memory of stack\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+implements Handler concept 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> typedef SourceEncoding::Ch \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Ch"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::Writer\fP (OutputStream & os, StackAllocator * stackAllocator = \fC0\fP, size_t levelDepth = \fC\fBkDefaultLevelDepth\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIos\fP Output stream\&. 
+.br
+\fIstackAllocator\fP User supplied allocator\&. If it is null, it will create a private one\&. 
+.br
+\fIlevelDepth\fP Initial capacity of stack\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::Writer\fP (StackAllocator * allocator = \fC0\fP, size_t levelDepth = \fC\fBkDefaultLevelDepth\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Bool (bool b)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Double (double d)\fC [inline]\fP"
+
+.PP
+Writes the given \fCdouble\fP value to the stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fId\fP The value to be written\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Whether it is succeed\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::EndArray (\fBSizeType\fP elementCount = \fC0\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::EndObject (\fBSizeType\fP memberCount = \fC0\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::EndValue (bool ret)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Flush ()\fC [inline]\fP"
+
+.PP
+Flush the output stream\&. Allows the user to flush the output stream immediately\&. 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> int \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::GetMaxDecimalPlaces () const\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Int (int i)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Int64 (\fBint64_t\fP i64)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::IsComplete () const\fC [inline]\fP"
+
+.PP
+Checks whether the output is a complete JSON\&. A complete JSON has a complete root object or array\&. 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Key (const \fBCh\fP *const & str)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Key (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Null ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Prefix (\fBType\fP type)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::RawNumber (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::RawValue (const \fBCh\fP * json, size_t length, \fBType\fP type)\fC [inline]\fP"
+
+.PP
+Write a raw JSON value\&. For user to write a stringified JSON as a value\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIjson\fP A well-formed JSON value\&. It should not contain null character within [0, length - 1] range\&. 
+.br
+\fIlength\fP Length of the json\&. 
+.br
+\fItype\fP Type of the root of json\&. 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Reset (OutputStream & os)\fC [inline]\fP"
+
+.PP
+Reset the writer with a new stream\&. This function reset the writer with a new stream and default settings, in order to make a \fBWriter\fP object reusable for output multiple JSONs\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIos\fP New output stream\&. 
+.PP
+.nf
+Writer<OutputStream> writer(os1);
+writer\&.StartObject();
+// \&.\&.\&.
+writer\&.EndObject();
+
+writer\&.Reset(os2);
+writer\&.StartObject();
+// \&.\&.\&.
+writer\&.EndObject();
+
+.fi
+.PP
+ 
+.RE
+.PP
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::ScanWriteUnescapedString (\fBGenericStringStream\fP< SourceEncoding > & is, size_t length)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::SetMaxDecimalPlaces (int maxDecimalPlaces)\fC [inline]\fP"
+
+.PP
+Sets the maximum number of decimal places for double output\&. This setting truncates the output with specified number of decimal places\&.
+.PP
+For example,
+.PP
+.PP
+.nf
+writer\&.SetMaxDecimalPlaces(3);
+writer\&.StartArray();
+writer\&.Double(0\&.12345);                 // "0\&.123"
+writer\&.Double(0\&.0001);                  // "0\&.0"
+writer\&.Double(1\&.234567890123456e30);    // "1\&.234567890123456e30" (do not truncate significand for positive exponent)
+writer\&.Double(1\&.23e-4);                 // "0\&.0"                  (do truncate significand for negative exponent)
+writer\&.EndArray();
+.fi
+.PP
+.PP
+The default setting does not truncate any decimal places\&. You can restore to this setting by calling 
+.PP
+.nf
+writer\&.SetMaxDecimalPlaces(Writer::kDefaultMaxDecimalPlaces);
+
+.fi
+.PP
+ 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::StartArray ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::StartObject ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::String (const \fBCh\fP *const & str)\fC [inline]\fP"
+
+.PP
+Simpler but slower overload\&. 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::String (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Uint (unsigned u)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Uint64 (\fBuint64_t\fP u64)\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteBool (bool b)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteDouble (double d)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "bool \fBWriter\fP< \fBStringBuffer\fP >::WriteDouble (double d)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteEndArray ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteEndObject ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteInt (int i)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "bool \fBWriter\fP< \fBStringBuffer\fP >::WriteInt (int i)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteInt64 (\fBint64_t\fP i64)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "bool \fBWriter\fP< \fBStringBuffer\fP >::WriteInt64 (\fBint64_t\fP i64)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteNull ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteRawValue (const \fBCh\fP * json, size_t length)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteStartArray ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteStartObject ()\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteString (const \fBCh\fP * str, \fBSizeType\fP length)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteUint (unsigned u)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "bool \fBWriter\fP< \fBStringBuffer\fP >::WriteUint (unsigned u)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "bool \fBWriter\fP< \fBStringBuffer\fP >::WriteUint64 (\fBuint64_t\fP u)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::WriteUint64 (\fBuint64_t\fP u64)\fC [inline]\fP, \fC [protected]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::hasRoot_\fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> const size_t \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::kDefaultLevelDepth = 32\fC [static]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> const int \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::kDefaultMaxDecimalPlaces = 324\fC [static]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBinternal::Stack\fP<StackAllocator> \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::level_stack_\fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> int \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::maxDecimalPlaces_\fC [protected]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> OutputStream* \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::os_\fC [protected]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

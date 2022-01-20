@@ -1,0 +1,662 @@
+.TH "GenericValue< Encoding, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericValue< Encoding, Allocator > \- Represents a JSON value\&. Use Value for \fBUTF8\fP encoding and default allocator\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBArrayData\fP"
+.br
+.ti -1c
+.RI "union \fBData\fP"
+.br
+.ti -1c
+.RI "struct \fBFlag\fP"
+.br
+.ti -1c
+.RI "union \fBNumber\fP"
+.br
+.ti -1c
+.RI "struct \fBObjectData\fP"
+.br
+.ti -1c
+.RI "struct \fBShortString\fP"
+.br
+.ti -1c
+.RI "struct \fBString\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericMember\fP< \fBEncoding\fP, \fBAllocator\fP > \fBMember\fP"
+.br
+.RI "Name-value pair in an object\&. "
+.ti -1c
+.RI "typedef \fBEncoding\fP \fBEncodingType\fP"
+.br
+.RI "Encoding type from template parameter\&. "
+.ti -1c
+.RI "typedef \fBAllocator\fP \fBAllocatorType\fP"
+.br
+.RI "Allocator type from template parameter\&. "
+.ti -1c
+.RI "typedef Encoding::Ch \fBCh\fP"
+.br
+.RI "Character type derived from Encoding\&. "
+.ti -1c
+.RI "typedef \fBGenericStringRef\fP< \fBCh\fP > \fBStringRefType\fP"
+.br
+.RI "Reference to a constant string\&. "
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< false, \fBEncoding\fP, \fBAllocator\fP >::Iterator \fBMemberIterator\fP"
+.br
+.RI "Member iterator for iterating in object\&. "
+.ti -1c
+.RI "typedef \fBGenericMemberIterator\fP< true, \fBEncoding\fP, \fBAllocator\fP >::Iterator \fBConstMemberIterator\fP"
+.br
+.RI "Constant member iterator for iterating in object\&. "
+.ti -1c
+.RI "typedef \fBGenericValue\fP * \fBValueIterator\fP"
+.br
+.RI "Value iterator for iterating in array\&. "
+.ti -1c
+.RI "typedef const \fBGenericValue\fP * \fBConstValueIterator\fP"
+.br
+.RI "Constant value iterator for iterating in array\&. "
+.ti -1c
+.RI "typedef \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > \fBValueType\fP"
+.br
+.RI "Value type of itself\&. "
+.ti -1c
+.RI "typedef \fBGenericArray\fP< false, \fBValueType\fP > \fBArray\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericArray\fP< true, \fBValueType\fP > \fBConstArray\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericObject\fP< false, \fBValueType\fP > \fBObject\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericObject\fP< true, \fBValueType\fP > \fBConstObject\fP"
+.br
+.in -1c
+.SS "Assignment operators"
+
+.in +1c
+.ti -1c
+.RI "enum { \fBkBoolFlag\fP = 0x0008, \fBkNumberFlag\fP = 0x0010, \fBkIntFlag\fP = 0x0020, \fBkUintFlag\fP = 0x0040, \fBkInt64Flag\fP = 0x0080, \fBkUint64Flag\fP = 0x0100, \fBkDoubleFlag\fP = 0x0200, \fBkStringFlag\fP = 0x0400, \fBkCopyFlag\fP = 0x0800, \fBkInlineStrFlag\fP = 0x1000, \fBkNullFlag\fP = kNullType, \fBkTrueFlag\fP = static_cast<int>(kTrueType) | static_cast<int>(kBoolFlag), \fBkFalseFlag\fP = static_cast<int>(kFalseType) | static_cast<int>(kBoolFlag), \fBkNumberIntFlag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kIntFlag | kInt64Flag), \fBkNumberUintFlag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kUintFlag | kUint64Flag | kInt64Flag), \fBkNumberInt64Flag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kInt64Flag), \fBkNumberUint64Flag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kUint64Flag), \fBkNumberDoubleFlag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kDoubleFlag), \fBkNumberAnyFlag\fP = static_cast<int>(kNumberType) | static_cast<int>(kNumberFlag | kIntFlag | kInt64Flag | kUintFlag | kUint64Flag | kDoubleFlag), \fBkConstStringFlag\fP = static_cast<int>(kStringType) | static_cast<int>(kStringFlag), \fBkCopyStringFlag\fP = static_cast<int>(kStringType) | static_cast<int>(kStringFlag | kCopyFlag), \fBkShortStringFlag\fP = static_cast<int>(kStringType) | static_cast<int>(kStringFlag | kCopyFlag | kInlineStrFlag), \fBkObjectFlag\fP = kObjectType, \fBkArrayFlag\fP = kArrayType, \fBkTypeMask\fP = 0x07 }"
+.br
+.ti -1c
+.RI "template<typename , typename , typename > class \fBGenericDocument\fP"
+.br
+.ti -1c
+.RI "static const \fBSizeType\fP \fBkDefaultArrayCapacity\fP = \fBRAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY\fP"
+.br
+.ti -1c
+.RI "static const \fBSizeType\fP \fBkDefaultObjectCapacity\fP = \fBRAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY\fP"
+.br
+.ti -1c
+.RI "\fBData\fP \fBdata_\fP"
+.br
+.ti -1c
+.RI "\fBGenericValue\fP & \fBoperator=\fP (\fBGenericValue\fP &rhs) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Assignment with move semantics\&. "
+.ti -1c
+.RI "\fBGenericValue\fP & \fBoperator=\fP (\fBStringRefType\fP str) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Assignment of constant string reference (no copy) "
+.ti -1c
+.RI "template<typename \fBT\fP > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::IsPointer< \fBT\fP >),(\fBGenericValue\fP &)) operator"
+.br
+.RI "Assignment with primitive types\&. "
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBGetStringPointer\fP () const"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBSetStringPointer\fP (const \fBCh\fP *str)"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBGenericValue\fP * \fBGetElementsPointer\fP () const"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBGenericValue\fP * \fBSetElementsPointer\fP (\fBGenericValue\fP *elements)"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBMember\fP * \fBGetMembersPointer\fP () const"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBMember\fP * \fBSetMembersPointer\fP (\fBMember\fP *members)"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBMember\fP * \fBDoAllocMembers\fP (\fBSizeType\fP capacity, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
+.RI "void \fBDoReserveMembers\fP (\fBSizeType\fP newCapacity, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > \fBMemberIterator\fP \fBDoFindMember\fP (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > &name)"
+.br
+.ti -1c
+.RI "void \fBDoClearMembers\fP ()"
+.br
+.ti -1c
+.RI "void \fBDoFreeMembers\fP ()"
+.br
+.ti -1c
+.RI "void \fBDoAddMember\fP (\fBGenericValue\fP &name, \fBGenericValue\fP &\fBvalue\fP, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBDoRemoveMember\fP (\fBMemberIterator\fP m)"
+.br
+.ti -1c
+.RI "\fBMemberIterator\fP \fBDoEraseMembers\fP (\fBConstMemberIterator\fP first, \fBConstMemberIterator\fP last)"
+.br
+.ti -1c
+.RI "template<typename SourceAllocator > void \fBDoCopyMembers\fP (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > &rhs, \fBAllocator\fP &allocator, bool copyConstStrings)"
+.br
+.ti -1c
+.RI "void \fBSetArrayRaw\fP (\fBGenericValue\fP *values, \fBSizeType\fP count, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
+.RI "void \fBSetObjectRaw\fP (\fBMember\fP *members, \fBSizeType\fP count, \fBAllocator\fP &allocator)"
+.br
+.RI "Initialize this value as object with initial data, without calling destructor\&. "
+.ti -1c
+.RI "void \fBSetStringRaw\fP (\fBStringRefType\fP s) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Initialize this value as constant string, without calling destructor\&. "
+.ti -1c
+.RI "void \fBSetStringRaw\fP (\fBStringRefType\fP s, \fBAllocator\fP &allocator)"
+.br
+.RI "Initialize this value as copy string with initial data, without calling destructor\&. "
+.ti -1c
+.RI "void \fBRawAssign\fP (\fBGenericValue\fP &rhs) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Assignment without calling destructor\&. "
+.ti -1c
+.RI "template<typename SourceAllocator > bool \fBStringEqual\fP (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > &rhs) const"
+.br
+.ti -1c
+.RI "static RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBDataString\fP (const \fBData\fP &data)"
+.br
+.ti -1c
+.RI "static RAPIDJSON_FORCEINLINE \fBSizeType\fP \fBDataStringLength\fP (const \fBData\fP &data)"
+.br
+.in -1c
+.SS "Constructors and destructor\&."
+
+.in +1c
+.ti -1c
+.RI "\fBGenericValue\fP () RAPIDJSON_NOEXCEPT"
+.br
+.RI "Default constructor creates a null value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBType\fP type) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor with JSON value type\&. "
+.ti -1c
+.RI "template<typename SourceAllocator > \fBGenericValue\fP (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > &rhs, \fBAllocator\fP &allocator, bool copyConstStrings=false)"
+.br
+.RI "Explicit copy constructor (with allocator) "
+.ti -1c
+.RI "template<typename \fBT\fP > \fBGenericValue\fP (\fBT\fP b, RAPIDJSON_ENABLEIF((internal::IsSame< bool, \fBT\fP >))) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for boolean value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (int i) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for int value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (unsigned u) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for unsigned value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBint64_t\fP i64) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for int64_t value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBuint64_t\fP u64) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for uint64_t value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (double d) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for double value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (float f) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for float value\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (const \fBCh\fP *s, \fBSizeType\fP length) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for constant string (i\&.e\&. do not make a copy of string) "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBStringRefType\fP s) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for constant string (i\&.e\&. do not make a copy of string) "
+.ti -1c
+.RI "\fBGenericValue\fP (const \fBCh\fP *s, \fBSizeType\fP length, \fBAllocator\fP &allocator)"
+.br
+.RI "Constructor for copy-string (i\&.e\&. do make a copy of string) "
+.ti -1c
+.RI "\fBGenericValue\fP (const \fBCh\fP *s, \fBAllocator\fP &allocator)"
+.br
+.RI "Constructor for copy-string (i\&.e\&. do make a copy of string) "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBArray\fP \fBa\fP) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for Array\&. "
+.ti -1c
+.RI "\fBGenericValue\fP (\fBObject\fP o) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Constructor for Object\&. "
+.ti -1c
+.RI "\fB~GenericValue\fP ()"
+.br
+.RI "Destructor\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename \fBEncoding\fP, typename \fBAllocator\fP = RAPIDJSON_DEFAULT_ALLOCATOR>
+.br
+class GenericValue< Encoding, Allocator >"Represents a JSON value\&. Use Value for \fBUTF8\fP encoding and default allocator\&. 
+
+A JSON value can be one of 7 types\&. This class is a variant type supporting these types\&.
+.PP
+Use the Value if \fBUTF8\fP and default allocator
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIEncoding\fP Encoding of the value\&. (Even non-string values need to have the same encoding in a document) 
+.br
+\fIAllocator\fP Allocator type for allocating memory of object, array and string\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBAllocator\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::AllocatorType"
+
+.PP
+Allocator type from template parameter\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericArray\fP<false, \fBValueType\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::Array"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef Encoding::Ch \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::Ch"
+
+.PP
+Character type derived from Encoding\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericArray\fP<true, \fBValueType\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::ConstArray"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericMemberIterator\fP<true,\fBEncoding\fP,\fBAllocator\fP>::Iterator \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::ConstMemberIterator"
+
+.PP
+Constant member iterator for iterating in object\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericObject\fP<true, \fBValueType\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::ConstObject"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef const \fBGenericValue\fP* \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::ConstValueIterator"
+
+.PP
+Constant value iterator for iterating in array\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBEncoding\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::EncodingType"
+
+.PP
+Encoding type from template parameter\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericMember\fP<\fBEncoding\fP, \fBAllocator\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::Member"
+
+.PP
+Name-value pair in an object\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericMemberIterator\fP<false,\fBEncoding\fP,\fBAllocator\fP>::Iterator \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::MemberIterator"
+
+.PP
+Member iterator for iterating in object\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericObject\fP<false, \fBValueType\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::Object"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericStringRef\fP<\fBCh\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::StringRefType"
+
+.PP
+Reference to a constant string\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericValue\fP* \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::ValueIterator"
+
+.PP
+Value iterator for iterating in array\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> typedef \fBGenericValue\fP<\fBEncoding\fP, \fBAllocator\fP> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::ValueType\fP"
+
+.PP
+Value type of itself\&. 
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> anonymous enum"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkBoolFlag \fP\fP
+.TP
+\fB\fIkNumberFlag \fP\fP
+.TP
+\fB\fIkIntFlag \fP\fP
+.TP
+\fB\fIkUintFlag \fP\fP
+.TP
+\fB\fIkInt64Flag \fP\fP
+.TP
+\fB\fIkUint64Flag \fP\fP
+.TP
+\fB\fIkDoubleFlag \fP\fP
+.TP
+\fB\fIkStringFlag \fP\fP
+.TP
+\fB\fIkCopyFlag \fP\fP
+.TP
+\fB\fIkInlineStrFlag \fP\fP
+.TP
+\fB\fIkNullFlag \fP\fP
+.TP
+\fB\fIkTrueFlag \fP\fP
+.TP
+\fB\fIkFalseFlag \fP\fP
+.TP
+\fB\fIkNumberIntFlag \fP\fP
+.TP
+\fB\fIkNumberUintFlag \fP\fP
+.TP
+\fB\fIkNumberInt64Flag \fP\fP
+.TP
+\fB\fIkNumberUint64Flag \fP\fP
+.TP
+\fB\fIkNumberDoubleFlag \fP\fP
+.TP
+\fB\fIkNumberAnyFlag \fP\fP
+.TP
+\fB\fIkConstStringFlag \fP\fP
+.TP
+\fB\fIkCopyStringFlag \fP\fP
+.TP
+\fB\fIkShortStringFlag \fP\fP
+.TP
+\fB\fIkObjectFlag \fP\fP
+.TP
+\fB\fIkArrayFlag \fP\fP
+.TP
+\fB\fIkTypeMask \fP\fP
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP ()\fC [inline]\fP"
+
+.PP
+Default constructor creates a null value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBType\fP type)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor with JSON value type\&. This creates a Value of specified type with default content\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP Type of the value\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Default content for number is zero\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename SourceAllocator > \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > & rhs, \fBAllocator\fP & allocator, bool copyConstStrings = \fCfalse\fP)\fC [inline]\fP"
+
+.PP
+Explicit copy constructor (with allocator) Creates a copy of a Value by using the given Allocator 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fISourceAllocator\fP allocator of \fCrhs\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIrhs\fP Value to copy from (read-only) 
+.br
+\fIallocator\fP Allocator for allocating copied elements and buffers\&. Commonly use \fBGenericDocument::GetAllocator()\fP\&. 
+.br
+\fIcopyConstStrings\fP Force copying of constant strings (e\&.g\&. referencing an in-situ buffer) 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+CopyFrom() 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename \fBT\fP > \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBT\fP b, RAPIDJSON_ENABLEIF((internal::IsSame< bool, \fBT\fP >)))\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for boolean value\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIb\fP Boolean value 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This constructor is limited to \fIreal\fP boolean values and rejects implicitly converted types like arbitrary pointers\&. Use an explicit cast to \fCbool\fP, if you want to construct a boolean JSON value in such cases\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (int i)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for int value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (unsigned u)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for unsigned value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBint64_t\fP i64)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for int64_t value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBuint64_t\fP u64)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for uint64_t value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (double d)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for double value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (float f)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for float value\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (const \fBCh\fP * s, \fBSizeType\fP length)\fC [inline]\fP"
+
+.PP
+Constructor for constant string (i\&.e\&. do not make a copy of string) 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBStringRefType\fP s)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor for constant string (i\&.e\&. do not make a copy of string) 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (const \fBCh\fP * s, \fBSizeType\fP length, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.PP
+Constructor for copy-string (i\&.e\&. do make a copy of string) 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (const \fBCh\fP * s, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.PP
+Constructor for copy-string (i\&.e\&. do make a copy of string) 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBArray\fP a)\fC [inline]\fP"
+
+.PP
+Constructor for Array\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP An array obtained by \fCGetArray()\fP\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+\fCArray\fP is always pass-by-value\&. 
+.PP
+the source array is moved into this value and the sourec array becomes empty\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fB::GenericValue\fP (\fBObject\fP o)\fC [inline]\fP"
+
+.PP
+Constructor for Object\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIo\fP An object obtained by \fCGetObject()\fP\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+\fCObject\fP is always pass-by-value\&. 
+.PP
+the source object is moved into this value and the sourec object becomes empty\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::~\fBGenericValue\fP ()\fC [inline]\fP"
+
+.PP
+Destructor\&. Need to destruct elements of array, members of object, or copy-string\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> static RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DataString (const \fBData\fP & data)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> static RAPIDJSON_FORCEINLINE \fBSizeType\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DataStringLength (const \fBData\fP & data)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoAddMember (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > & name, \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > & value, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE \fBMember\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoAllocMembers (\fBSizeType\fP capacity, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoClearMembers ()\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename SourceAllocator > void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoCopyMembers (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > & rhs, \fBAllocator\fP & allocator, bool copyConstStrings)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBMemberIterator\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoEraseMembers (\fBConstMemberIterator\fP first, \fBConstMemberIterator\fP last)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename SourceAllocator > \fBMemberIterator\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoFindMember (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > & name)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoFreeMembers ()\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBMemberIterator\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoRemoveMember (\fBMemberIterator\fP m)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::DoReserveMembers (\fBSizeType\fP newCapacity, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE \fBGenericValue\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::GetElementsPointer () const\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE \fBMember\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::GetMembersPointer () const\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::GetStringPointer () const\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP & \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::operator= (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > & rhs)\fC [inline]\fP"
+
+.PP
+Assignment with move semantics\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrhs\fP Source of the assignment\&. It will become a null value after assignment\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBGenericValue\fP & \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::operator= (\fBStringRefType\fP str)\fC [inline]\fP"
+
+.PP
+Assignment of constant string reference (no copy) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Constant string reference to be assigned 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This overload is needed to avoid clashes with the generic primitive type assignment overload below\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericStringRef\fP, operator=(T) 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename \fBT\fP > \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::RAPIDJSON_DISABLEIF_RETURN ((internal::IsPointer< \fBT\fP >), (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > &))"
+
+.PP
+Assignment with primitive types\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIT\fP Either \fBType\fP, \fCint\fP, \fCunsigned\fP, \fCint64_t\fP, \fCuint64_t\fP 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalue\fP The value to be assigned\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+The source type \fCT\fP explicitly disallows all pointer types, especially (\fCconst\fP) \fBCh\fP*\&. This helps avoiding implicitly referencing character strings with insufficient lifetime, use \fBSetString(const Ch*, Allocator&)\fP (for copying) or \fBStringRef()\fP (to explicitly mark the pointer as constant) instead\&. All other pointer types would implicitly convert to \fCbool\fP, use \fBSetBool()\fP instead\&. Set boolean value 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::RawAssign (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > & rhs)\fC [inline]\fP"
+
+.PP
+Assignment without calling destructor\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetArrayRaw (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > * values, \fBSizeType\fP count, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE \fBGenericValue\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetElementsPointer (\fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > * elements)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE \fBMember\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetMembersPointer (\fBMember\fP * members)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetObjectRaw (\fBMember\fP * members, \fBSizeType\fP count, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.PP
+Initialize this value as object with initial data, without calling destructor\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> RAPIDJSON_FORCEINLINE const \fBCh\fP * \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetStringPointer (const \fBCh\fP * str)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetStringRaw (\fBStringRefType\fP s)\fC [inline]\fP"
+
+.PP
+Initialize this value as constant string, without calling destructor\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> void \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::SetStringRaw (\fBStringRefType\fP s, \fBAllocator\fP & allocator)\fC [inline]\fP"
+
+.PP
+Initialize this value as copy string with initial data, without calling destructor\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename SourceAllocator > bool \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::StringEqual (const \fBGenericValue\fP< \fBEncoding\fP, SourceAllocator > & rhs) const\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> template<typename , typename , typename > friend class \fBGenericDocument\fP\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> \fBData\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::data_"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> const \fBSizeType\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::kDefaultArrayCapacity = \fBRAPIDJSON_VALUE_DEFAULT_ARRAY_CAPACITY\fP\fC [static]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR> const \fBSizeType\fP \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >::kDefaultObjectCapacity = \fBRAPIDJSON_VALUE_DEFAULT_OBJECT_CAPACITY\fP\fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

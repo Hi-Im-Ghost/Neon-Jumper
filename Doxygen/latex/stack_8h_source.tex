@@ -1,0 +1,235 @@
+\hypertarget{stack_8h_source}{}\doxysection{stack.\+h}
+\label{stack_8h_source}\index{src/rapidjson/include/rapidjson/internal/stack.h@{src/rapidjson/include/rapidjson/internal/stack.h}}
+\mbox{\hyperlink{stack_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_INTERNAL\_STACK\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_INTERNAL\_STACK\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}../allocators.h"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{swap_8h}{swap.h}}"{}}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include <cstddef>}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{23 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{24 RAPIDJSON\_DIAG\_OFF(c++98-\/compat)}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{28 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{31 \textcolor{comment}{// Stack}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{34 }
+\DoxyCodeLine{36 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Allocator>}
+\DoxyCodeLine{37 \textcolor{keyword}{class }\mbox{\hyperlink{classinternal_1_1_stack}{Stack}} \{}
+\DoxyCodeLine{38 \textcolor{keyword}{public}:}
+\DoxyCodeLine{39     \textcolor{comment}{// Optimization note: Do not allocate memory for stack\_ in constructor.}}
+\DoxyCodeLine{40     \textcolor{comment}{// Do it lazily when first Push() -\/> Expand() -\/> Resize().}}
+\DoxyCodeLine{41     \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}(\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator, \textcolor{keywordtype}{size\_t} stackCapacity) : allocator\_(allocator), ownAllocator\_(0), stack\_(0), stackTop\_(0), stackEnd\_(0), initialCapacity\_(stackCapacity) \{}
+\DoxyCodeLine{42     \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{45     \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}(\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}\&\& rhs)}
+\DoxyCodeLine{46         : allocator\_(rhs.allocator\_),}
+\DoxyCodeLine{47           ownAllocator\_(rhs.ownAllocator\_),}
+\DoxyCodeLine{48           stack\_(rhs.stack\_),}
+\DoxyCodeLine{49           stackTop\_(rhs.stackTop\_),}
+\DoxyCodeLine{50           stackEnd\_(rhs.stackEnd\_),}
+\DoxyCodeLine{51           initialCapacity\_(rhs.initialCapacity\_)}
+\DoxyCodeLine{52     \{}
+\DoxyCodeLine{53         rhs.allocator\_ = 0;}
+\DoxyCodeLine{54         rhs.ownAllocator\_ = 0;}
+\DoxyCodeLine{55         rhs.stack\_ = 0;}
+\DoxyCodeLine{56         rhs.stackTop\_ = 0;}
+\DoxyCodeLine{57         rhs.stackEnd\_ = 0;}
+\DoxyCodeLine{58         rhs.initialCapacity\_ = 0;}
+\DoxyCodeLine{59     \}}
+\DoxyCodeLine{60 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \mbox{\hyperlink{classinternal_1_1_stack_afedce84c8816abe9277a71ebd5e1808a}{\string~Stack}}() \{}
+\DoxyCodeLine{63         Destroy();}
+\DoxyCodeLine{64     \}}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{67     \mbox{\hyperlink{classinternal_1_1_stack}{Stack}}\& operator=(\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}\&\& rhs) \{}
+\DoxyCodeLine{68         \textcolor{keywordflow}{if} (\&rhs != \textcolor{keyword}{this})}
+\DoxyCodeLine{69         \{}
+\DoxyCodeLine{70             Destroy();}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72             allocator\_ = rhs.allocator\_;}
+\DoxyCodeLine{73             ownAllocator\_ = rhs.ownAllocator\_;}
+\DoxyCodeLine{74             stack\_ = rhs.stack\_;}
+\DoxyCodeLine{75             stackTop\_ = rhs.stackTop\_;}
+\DoxyCodeLine{76             stackEnd\_ = rhs.stackEnd\_;}
+\DoxyCodeLine{77             initialCapacity\_ = rhs.initialCapacity\_;}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79             rhs.allocator\_ = 0;}
+\DoxyCodeLine{80             rhs.ownAllocator\_ = 0;}
+\DoxyCodeLine{81             rhs.stack\_ = 0;}
+\DoxyCodeLine{82             rhs.stackTop\_ = 0;}
+\DoxyCodeLine{83             rhs.stackEnd\_ = 0;}
+\DoxyCodeLine{84             rhs.initialCapacity\_ = 0;}
+\DoxyCodeLine{85         \}}
+\DoxyCodeLine{86         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{87     \}}
+\DoxyCodeLine{88 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90     \textcolor{keywordtype}{void} \mbox{\hyperlink{classinternal_1_1_stack_a5e601199a21d84b1ac612f558be0f2c3}{Swap}}(\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}\& rhs) RAPIDJSON\_NOEXCEPT \{}
+\DoxyCodeLine{91         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(allocator\_, rhs.allocator\_);}
+\DoxyCodeLine{92         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(ownAllocator\_, rhs.ownAllocator\_);}
+\DoxyCodeLine{93         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(stack\_, rhs.stack\_);}
+\DoxyCodeLine{94         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(stackTop\_, rhs.stackTop\_);}
+\DoxyCodeLine{95         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(stackEnd\_, rhs.stackEnd\_);}
+\DoxyCodeLine{96         \mbox{\hyperlink{namespaceinternal_a72b2c71d36273b9691487f58c671ce04}{internal::Swap}}(initialCapacity\_, rhs.initialCapacity\_);}
+\DoxyCodeLine{97     \}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{keywordtype}{void} \mbox{\hyperlink{classinternal_1_1_stack_a02da31665a372738e81ded2f7b7d598e}{Clear}}() \{ stackTop\_ = stack\_; \}}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101     \textcolor{keywordtype}{void} \mbox{\hyperlink{classinternal_1_1_stack_a3852b8494d69c91f6a238a51572e591e}{ShrinkToFit}}() \{ }
+\DoxyCodeLine{102         \textcolor{keywordflow}{if} (\mbox{\hyperlink{classinternal_1_1_stack_a2b8bda380e33838a99e3c73ff9785f03}{Empty}}()) \{}
+\DoxyCodeLine{103             \textcolor{comment}{// If the stack is empty, completely deallocate the memory.}}
+\DoxyCodeLine{104             \mbox{\hyperlink{allocators_8h_a471c182d62d396b7d5d564e8d6a62d9e}{Allocator::Free}}(stack\_); \textcolor{comment}{// NOLINT (+clang-\/analyzer-\/unix.Malloc)}}
+\DoxyCodeLine{105             stack\_ = 0;}
+\DoxyCodeLine{106             stackTop\_ = 0;}
+\DoxyCodeLine{107             stackEnd\_ = 0;}
+\DoxyCodeLine{108         \}}
+\DoxyCodeLine{109         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{110             Resize(\mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}());}
+\DoxyCodeLine{111     \}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113     \textcolor{comment}{// Optimization note: try to minimize the size of this function for force inline.}}
+\DoxyCodeLine{114     \textcolor{comment}{// Expansion is run very infrequently, so it is moved to another (probably non-\/inline) function.}}
+\DoxyCodeLine{115     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{116     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{classinternal_1_1_stack_a7ae5de892834b7fc16099eb5e23dd97c}{Reserve}}(\textcolor{keywordtype}{size\_t} count = 1) \{}
+\DoxyCodeLine{117          \textcolor{comment}{// Expand the stack if needed}}
+\DoxyCodeLine{118         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(\textcolor{keyword}{static\_cast<}std::ptrdiff\_t\textcolor{keyword}{>}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}) * count) > (stackEnd\_ -\/ stackTop\_)))}
+\DoxyCodeLine{119             Expand<T>(count);}
+\DoxyCodeLine{120     \}}
+\DoxyCodeLine{121 }
+\DoxyCodeLine{122     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{123     RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a2d3b995140893ce92e9b94ada11ee3f3}{Push}}(\textcolor{keywordtype}{size\_t} count = 1) \{}
+\DoxyCodeLine{124         Reserve<T>(count);}
+\DoxyCodeLine{125         \textcolor{keywordflow}{return} PushUnsafe<T>(count);}
+\DoxyCodeLine{126     \}}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{129     RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a8b82b6705a41aa259936a81b927bcac0}{PushUnsafe}}(\textcolor{keywordtype}{size\_t} count = 1) \{}
+\DoxyCodeLine{130         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(stackTop\_);}
+\DoxyCodeLine{131         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{static\_cast<}std::ptrdiff\_t\textcolor{keyword}{>}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}) * count) <= (stackEnd\_ -\/ stackTop\_));}
+\DoxyCodeLine{132         \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* ret = \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_);}
+\DoxyCodeLine{133         stackTop\_ += \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}) * count;}
+\DoxyCodeLine{134         \textcolor{keywordflow}{return} ret;}
+\DoxyCodeLine{135     \}}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{138     \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a1cb63cab765815c0624c6676b3712b03}{Pop}}(\textcolor{keywordtype}{size\_t} count) \{}
+\DoxyCodeLine{139         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}() >= count * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}));}
+\DoxyCodeLine{140         stackTop\_ -\/= count * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}});}
+\DoxyCodeLine{141         \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_);}
+\DoxyCodeLine{142     \}}
+\DoxyCodeLine{143 }
+\DoxyCodeLine{144     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{145     \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a9c2611699081d74be865ebe67315dc6d}{Top}}() \{ }
+\DoxyCodeLine{146         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}() >= \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}));}
+\DoxyCodeLine{147         \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_ -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}));}
+\DoxyCodeLine{148     \}}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{151     \textcolor{keyword}{const} \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a18e79cab61089f955d42b6c45bb51c23}{Top}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{152         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}() >= \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}));}
+\DoxyCodeLine{153         \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_ -\/ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}));}
+\DoxyCodeLine{154     \}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{157     \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_acb8a65d110faf22be514db83524409c5}{End}}() \{ \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_); \}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{160     \textcolor{keyword}{const} \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a242967361d9e254d13b85cfc2161861e}{End}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stackTop\_); \}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{163     \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_a6acd2f7a16458184084c40d9f06f4a55}{Bottom}}() \{ \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stack\_); \}}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{166     \textcolor{keyword}{const} \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}* \mbox{\hyperlink{classinternal_1_1_stack_aeb6c4af6d6de57865232e1926dc0834e}{Bottom}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}*\textcolor{keyword}{>}(stack\_); \}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_stack_a657ae4d477b25d4e0045aee0efd809c3}{HasAllocator}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{169         \textcolor{keywordflow}{return} allocator\_ != 0;}
+\DoxyCodeLine{170     \}}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}\& \mbox{\hyperlink{classinternal_1_1_stack_aa6f933acc7ecd92a2b567db5fa8cd43a}{GetAllocator}}() \{}
+\DoxyCodeLine{173         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(allocator\_);}
+\DoxyCodeLine{174         \textcolor{keywordflow}{return} *allocator\_;}
+\DoxyCodeLine{175     \}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classinternal_1_1_stack_a2b8bda380e33838a99e3c73ff9785f03}{Empty}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} stackTop\_ == stack\_; \}}
+\DoxyCodeLine{178     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(stackTop\_ -\/ stack\_); \}}
+\DoxyCodeLine{179     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classinternal_1_1_stack_a67d5d7ee9424d3dd46cf9d001b6cdc6b}{GetCapacity}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(stackEnd\_ -\/ stack\_); \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181 \textcolor{keyword}{private}:}
+\DoxyCodeLine{182     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{183     \textcolor{keywordtype}{void} Expand(\textcolor{keywordtype}{size\_t} count) \{}
+\DoxyCodeLine{184         \textcolor{comment}{// Only expand the capacity if the current stack exists. Otherwise just create a stack with initial capacity.}}
+\DoxyCodeLine{185         \textcolor{keywordtype}{size\_t} newCapacity;}
+\DoxyCodeLine{186         \textcolor{keywordflow}{if} (stack\_ == 0) \{}
+\DoxyCodeLine{187             \textcolor{keywordflow}{if} (!allocator\_)}
+\DoxyCodeLine{188                 ownAllocator\_ = allocator\_ = \mbox{\hyperlink{rapidjson_8h_abdc7cd7902748ffe6626d71c59a73c3b}{RAPIDJSON\_NEW}}(\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}})();}
+\DoxyCodeLine{189             newCapacity = initialCapacity\_;}
+\DoxyCodeLine{190         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{191             newCapacity = \mbox{\hyperlink{classinternal_1_1_stack_a67d5d7ee9424d3dd46cf9d001b6cdc6b}{GetCapacity}}();}
+\DoxyCodeLine{192             newCapacity += (newCapacity + 1) / 2;}
+\DoxyCodeLine{193         \}}
+\DoxyCodeLine{194         \textcolor{keywordtype}{size\_t} newSize = \mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}() + \textcolor{keyword}{sizeof}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}) * count;}
+\DoxyCodeLine{195         \textcolor{keywordflow}{if} (newCapacity < newSize)}
+\DoxyCodeLine{196             newCapacity = newSize;}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198         Resize(newCapacity);}
+\DoxyCodeLine{199     \}}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201     \textcolor{keywordtype}{void} Resize(\textcolor{keywordtype}{size\_t} newCapacity) \{}
+\DoxyCodeLine{202         \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} size = \mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}();  \textcolor{comment}{// Backup the current size}}
+\DoxyCodeLine{203         stack\_ = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{char}*\textcolor{keyword}{>}(allocator\_-\/>Realloc(stack\_, \mbox{\hyperlink{classinternal_1_1_stack_a67d5d7ee9424d3dd46cf9d001b6cdc6b}{GetCapacity}}(), newCapacity));}
+\DoxyCodeLine{204         stackTop\_ = stack\_ + size;}
+\DoxyCodeLine{205         stackEnd\_ = stack\_ + newCapacity;}
+\DoxyCodeLine{206     \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208     \textcolor{keywordtype}{void} Destroy() \{}
+\DoxyCodeLine{209         \mbox{\hyperlink{allocators_8h_a471c182d62d396b7d5d564e8d6a62d9e}{Allocator::Free}}(stack\_);}
+\DoxyCodeLine{210         \mbox{\hyperlink{rapidjson_8h_a52c941c3fdd646527cdcd42aa846a28a}{RAPIDJSON\_DELETE}}(ownAllocator\_); \textcolor{comment}{// Only delete if it is owned by the stack}}
+\DoxyCodeLine{211     \}}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213     \textcolor{comment}{// Prohibit copy constructor \& assignment operator.}}
+\DoxyCodeLine{214     \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}\&);}
+\DoxyCodeLine{215     \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stack_af09ab91f9e5143deccf7c9af837f451e}{Stack}}\&);}
+\DoxyCodeLine{216 }
+\DoxyCodeLine{217     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator\_;}
+\DoxyCodeLine{218     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* ownAllocator\_;}
+\DoxyCodeLine{219     \textcolor{keywordtype}{char} *stack\_;}
+\DoxyCodeLine{220     \textcolor{keywordtype}{char} *stackTop\_;}
+\DoxyCodeLine{221     \textcolor{keywordtype}{char} *stackEnd\_;}
+\DoxyCodeLine{222     \textcolor{keywordtype}{size\_t} initialCapacity\_;}
+\DoxyCodeLine{223 \};}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{226 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{229 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{230 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STACK\_H\_}}
+
+\end{DoxyCode}

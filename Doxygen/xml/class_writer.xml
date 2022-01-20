@@ -1,0 +1,1242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="class_writer" kind="class" language="C++" prot="public">
+    <compoundname>Writer</compoundname>
+    <includes refid="writer_8h" local="no">writer.h</includes>
+    <innerclass refid="struct_writer_1_1_level" prot="protected">Writer::Level</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename OutputStream</type>
+      </param>
+      <param>
+        <type>typename SourceEncoding</type>
+        <defval><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt;</defval>
+      </param>
+      <param>
+        <type>typename TargetEncoding</type>
+        <defval><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt;</defval>
+      </param>
+      <param>
+        <type>typename StackAllocator</type>
+        <defval><ref refid="class_crt_allocator" kindref="compound">CrtAllocator</ref></defval>
+      </param>
+      <param>
+        <type>unsigned</type>
+        <declname>writeFlags</declname>
+        <defname>writeFlags</defname>
+        <defval><ref refid="writer_8h_1ab05d31260e712ed01daa80077f21e0a5a63d8536bdc203be5310a1c58643f30b8" kindref="member">kWriteDefaultFlags</ref></defval>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="user-defined">
+      <header>Convenience extensions</header>
+      <memberdef kind="variable" id="class_writer_1a9cb4caeb9d8971f305edff1d70e67acb" prot="public" static="yes" mutable="no">
+        <type>const size_t</type>
+        <definition>const size_t Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::kDefaultLevelDepth</definition>
+        <argsstring></argsstring>
+        <name>kDefaultLevelDepth</name>
+        <qualifiedname>Writer::kDefaultLevelDepth</qualifiedname>
+        <initializer>= 32</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="286" column="25" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_writer_1a3a3f60140f78dd67b5274978fd3a33ff" prot="protected" static="no" mutable="no">
+        <type>OutputStream *</type>
+        <definition>OutputStream* Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::os_</definition>
+        <argsstring></argsstring>
+        <name>os_</name>
+        <qualifiedname>Writer::os_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="500" column="18" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="500" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de" prot="protected" static="no" mutable="no">
+        <type><ref refid="classinternal_1_1_stack" kindref="compound">internal::Stack</ref>&lt; StackAllocator &gt;</type>
+        <definition>internal::Stack&lt;StackAllocator&gt; Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::level_stack_</definition>
+        <argsstring></argsstring>
+        <name>level_stack_</name>
+        <qualifiedname>Writer::level_stack_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="501" column="21" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="501" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::maxDecimalPlaces_</definition>
+        <argsstring></argsstring>
+        <name>maxDecimalPlaces_</name>
+        <qualifiedname>Writer::maxDecimalPlaces_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="502" column="9" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="502" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::hasRoot_</definition>
+        <argsstring></argsstring>
+        <name>hasRoot_</name>
+        <qualifiedname>Writer::hasRoot_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="503" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="503" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a2a2c6f51644b2013471aec4dac0d7466" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::String</definition>
+        <argsstring>(const Ch *const &amp;str)</argsstring>
+        <name>String</name>
+        <qualifiedname>Writer::String</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Simpler but slower overload. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="259" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="259" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ab6057b7fa9737edb4da55a7afefa966d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Key</definition>
+        <argsstring>(const Ch *const &amp;str)</argsstring>
+        <name>Key</name>
+        <qualifiedname>Writer::Key</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="260" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="260" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ae0d1615104e4e88040b9640e6784008a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::RawValue</definition>
+        <argsstring>(const Ch *json, size_t length, Type type)</argsstring>
+        <name>RawValue</name>
+        <qualifiedname>Writer::RawValue</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>json</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type><ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kindref="member">Type</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Write a raw JSON value. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>For user to write a stringified JSON as a value.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>json</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A well-formed JSON value. It should not contain null character within [0, length - 1] range. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>length</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Length of the json. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of the root of json. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="272" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="272" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a8ca4e364c546b2eb526caa68dde011d2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Flush</definition>
+        <argsstring>()</argsstring>
+        <name>Flush</name>
+        <qualifiedname>Writer::Flush</qualifiedname>
+        <briefdescription>
+<para>Flush the output stream. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Allows the user to flush the output stream immediately. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="282" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="282" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a44862b3eba8d84b909c69aba875c9f4d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteNull</definition>
+        <argsstring>()</argsstring>
+        <name>WriteNull</name>
+        <qualifiedname>Writer::WriteNull</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="296" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="296" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a42ad68b6950431bb8ca0199568546eaf" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteBool</definition>
+        <argsstring>(bool b)</argsstring>
+        <name>WriteBool</name>
+        <qualifiedname>Writer::WriteBool</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="301" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="301" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a31d0feda654ca245c41462be7dc59998" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteInt</definition>
+        <argsstring>(int i)</argsstring>
+        <name>WriteInt</name>
+        <qualifiedname>Writer::WriteInt</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="313" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="313" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a2861227e93707d1478d2cf56644dca3b" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteUint</definition>
+        <argsstring>(unsigned u)</argsstring>
+        <name>WriteUint</name>
+        <qualifiedname>Writer::WriteUint</qualifiedname>
+        <param>
+          <type>unsigned</type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="322" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="322" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1aa58d3f80c06394648de5055ecfb41587" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteInt64</definition>
+        <argsstring>(int64_t i64)</argsstring>
+        <name>WriteInt64</name>
+        <qualifiedname>Writer::WriteInt64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6" kindref="member">int64_t</ref></type>
+          <declname>i64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="331" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="331" bodyend="338"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ad07b325157220e3aa791c1c8c904021e" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteUint64</definition>
+        <argsstring>(uint64_t u64)</argsstring>
+        <name>WriteUint64</name>
+        <qualifiedname>Writer::WriteUint64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1aec6fcb673ff035718c238c8c9d544c47" kindref="member">uint64_t</ref></type>
+          <declname>u64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="340" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="340" bodyend="347"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ae7a0fc4740681d845d92c1213bd25aa1" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteDouble</definition>
+        <argsstring>(double d)</argsstring>
+        <name>WriteDouble</name>
+        <qualifiedname>Writer::WriteDouble</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="349" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="349" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1acda4412ef5f4cac6e89f9544e4b10f70" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteString</definition>
+        <argsstring>(const Ch *str, SizeType length)</argsstring>
+        <name>WriteString</name>
+        <qualifiedname>Writer::WriteString</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="377" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="377" bodyend="449"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a94140803bba7863a1b39c936bbe6d262" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::ScanWriteUnescapedString</definition>
+        <argsstring>(GenericStringStream&lt; SourceEncoding &gt; &amp;is, size_t length)</argsstring>
+        <name>ScanWriteUnescapedString</name>
+        <qualifiedname>Writer::ScanWriteUnescapedString</qualifiedname>
+        <param>
+          <type><ref refid="struct_generic_string_stream" kindref="compound">GenericStringStream</ref>&lt; SourceEncoding &gt; &amp;</type>
+          <declname>is</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="451" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="451" bodyend="453"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a81c72a2eecd47e042f56ca93a27a5cb1" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteStartObject</definition>
+        <argsstring>()</argsstring>
+        <name>WriteStartObject</name>
+        <qualifiedname>Writer::WriteStartObject</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="455" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="455" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a7e3f6760a50a72f4217a9b2d625c43ee" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteEndObject</definition>
+        <argsstring>()</argsstring>
+        <name>WriteEndObject</name>
+        <qualifiedname>Writer::WriteEndObject</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="456" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="456" bodyend="456"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a3c3560a96cac58f98f4a74d6cb227204" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteStartArray</definition>
+        <argsstring>()</argsstring>
+        <name>WriteStartArray</name>
+        <qualifiedname>Writer::WriteStartArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="457" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="457" bodyend="457"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1aabda2df1be6e83cef416e9b1f042e8f4" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteEndArray</definition>
+        <argsstring>()</argsstring>
+        <name>WriteEndArray</name>
+        <qualifiedname>Writer::WriteEndArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="458" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="458" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a8ee1135b2595261819b134907f67614e" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::WriteRawValue</definition>
+        <argsstring>(const Ch *json, size_t length)</argsstring>
+        <name>WriteRawValue</name>
+        <qualifiedname>Writer::WriteRawValue</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>json</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>length</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="460" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="460" bodyend="471"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Prefix</definition>
+        <argsstring>(Type type)</argsstring>
+        <name>Prefix</name>
+        <qualifiedname>Writer::Prefix</qualifiedname>
+        <param>
+          <type><ref refid="rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7" kindref="member">Type</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="473" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="473" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1adc1cadbabc309d31f19cf7463251d879" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::EndValue</definition>
+        <argsstring>(bool ret)</argsstring>
+        <name>EndValue</name>
+        <qualifiedname>Writer::EndValue</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>ret</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="494" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="494" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a23d333973ed2cc4a315d482bd2acaa78" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Writer</definition>
+        <argsstring>(const Writer &amp;)</argsstring>
+        <name>Writer</name>
+        <qualifiedname>Writer::Writer</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer" kindref="compound">Writer</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="507" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a7ddd040c2787fc4f0f7438cebab8c674" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="class_writer" kindref="compound">Writer</ref> &amp;</type>
+        <definition>Writer &amp; Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::operator=</definition>
+        <argsstring>(const Writer &amp;)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>Writer::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer" kindref="compound">Writer</ref> &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="508" column="12"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Implementation of Handler</header>
+      <description><para><simplesect kind="see"><para>Handler </para>
+</simplesect>
+</para>
+</description>
+      <memberdef kind="function" id="class_writer_1af700ed03c8810d48a4aaa3c5baeaf26c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Null</definition>
+        <argsstring>()</argsstring>
+        <name>Null</name>
+        <qualifiedname>Writer::Null</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="182" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="182" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ad7491f4dedb02e7456b240b23ef8c1ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Bool</definition>
+        <argsstring>(bool b)</argsstring>
+        <name>Bool</name>
+        <qualifiedname>Writer::Bool</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="183" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="183" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ad471415aa7741e732bab0bcfbb9522a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Int</definition>
+        <argsstring>(int i)</argsstring>
+        <name>Int</name>
+        <qualifiedname>Writer::Int</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="184" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="184" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a5fb0c3228f89f6f9bef15f3e6e6f1739" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Uint</definition>
+        <argsstring>(unsigned u)</argsstring>
+        <name>Uint</name>
+        <qualifiedname>Writer::Uint</qualifiedname>
+        <param>
+          <type>unsigned</type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="185" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="185" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a4144d7086ed9d3d807c373de242bde45" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Int64</definition>
+        <argsstring>(int64_t i64)</argsstring>
+        <name>Int64</name>
+        <qualifiedname>Writer::Int64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6" kindref="member">int64_t</ref></type>
+          <declname>i64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="186" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="186" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a55bb9f286ecdaf4cdb07bddb02e0cb2d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Uint64</definition>
+        <argsstring>(uint64_t u64)</argsstring>
+        <name>Uint64</name>
+        <qualifiedname>Writer::Uint64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1aec6fcb673ff035718c238c8c9d544c47" kindref="member">uint64_t</ref></type>
+          <declname>u64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="187" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="187" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a22a43e8a7193105deec6b808736f7a1a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Double</definition>
+        <argsstring>(double d)</argsstring>
+        <name>Double</name>
+        <qualifiedname>Writer::Double</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+<para>Writes the given <computeroutput>double</computeroutput> value to the stream. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value to be written. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Whether it is succeed. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="194" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="194" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ad462dc606fddea0f34fc0e190c3bdaee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::RawNumber</definition>
+        <argsstring>(const Ch *str, SizeType length, bool copy=false)</argsstring>
+        <name>RawNumber</name>
+        <qualifiedname>Writer::RawNumber</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>copy</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="196" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="196" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a8b4dc44f471403a83c9959575796ceab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::String</definition>
+        <argsstring>(const Ch *str, SizeType length, bool copy=false)</argsstring>
+        <name>String</name>
+        <qualifiedname>Writer::String</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>copy</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="203" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="203" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1aec3200b2fc80ec87d1c37f775256b2e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::StartObject</definition>
+        <argsstring>()</argsstring>
+        <name>StartObject</name>
+        <qualifiedname>Writer::StartObject</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="216" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="216" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a19096d2ccb90761f63ab1240337bf90a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Key</definition>
+        <argsstring>(const Ch *str, SizeType length, bool copy=false)</argsstring>
+        <name>Key</name>
+        <qualifiedname>Writer::Key</qualifiedname>
+        <param>
+          <type>const <ref refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" kindref="member">Ch</ref> *</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>length</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>copy</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="222" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="222" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a0771a565261564c27676b7300b11f2b5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::EndObject</definition>
+        <argsstring>(SizeType memberCount=0)</argsstring>
+        <name>EndObject</name>
+        <qualifiedname>Writer::EndObject</qualifiedname>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>memberCount</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="231" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="231" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a38715785194b42cd67ba5dd52bf7967e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::StartArray</definition>
+        <argsstring>()</argsstring>
+        <name>StartArray</name>
+        <qualifiedname>Writer::StartArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="240" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="240" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ac88d533095591a878500b63b351d4013" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::EndArray</definition>
+        <argsstring>(SizeType elementCount=0)</argsstring>
+        <name>EndArray</name>
+        <qualifiedname>Writer::EndArray</qualifiedname>
+        <param>
+          <type><ref refid="rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5" kindref="member">SizeType</ref></type>
+          <declname>elementCount</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="246" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="246" bodyend="252"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" prot="public" static="no">
+        <type>SourceEncoding::Ch</type>
+        <definition>typedef SourceEncoding::Ch Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Ch</definition>
+        <argsstring></argsstring>
+        <name>Ch</name>
+        <qualifiedname>Writer::Ch</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="92" column="41" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_writer_1ab46d66ae0ca78cb03ab7fb865d129934" prot="public" static="yes" mutable="no">
+        <type>const int</type>
+        <definition>const int Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::kDefaultMaxDecimalPlaces</definition>
+        <argsstring></argsstring>
+        <name>kDefaultMaxDecimalPlaces</name>
+        <qualifiedname>Writer::kDefaultMaxDecimalPlaces</qualifiedname>
+        <initializer>= 324</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="94" column="22" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_writer_1af4f54830d6927d9daf5bd53bfd134dd3" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Writer</definition>
+        <argsstring>(OutputStream &amp;os, StackAllocator *stackAllocator=0, size_t levelDepth=kDefaultLevelDepth)</argsstring>
+        <name>Writer</name>
+        <qualifiedname>Writer::Writer</qualifiedname>
+        <param>
+          <type>OutputStream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <param>
+          <type>StackAllocator *</type>
+          <declname>stackAllocator</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>levelDepth</declname>
+          <defval><ref refid="class_writer_1a9cb4caeb9d8971f305edff1d70e67acb" kindref="member">kDefaultLevelDepth</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>os</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output stream. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stackAllocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>User supplied allocator. If it is null, it will create a private one. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>levelDepth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial capacity of stack. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="102" column="5" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="102" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a7b885cea71542fc436be80eff447fb64" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Writer</definition>
+        <argsstring>(StackAllocator *allocator=0, size_t levelDepth=kDefaultLevelDepth)</argsstring>
+        <name>Writer</name>
+        <qualifiedname>Writer::Writer</qualifiedname>
+        <param>
+          <type>StackAllocator *</type>
+          <declname>allocator</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>levelDepth</declname>
+          <defval><ref refid="class_writer_1a9cb4caeb9d8971f305edff1d70e67acb" kindref="member">kDefaultLevelDepth</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="106" column="5" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="106" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a8b53e8f137f7fcf694f5500711b3f58d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::Reset</definition>
+        <argsstring>(OutputStream &amp;os)</argsstring>
+        <name>Reset</name>
+        <qualifiedname>Writer::Reset</qualifiedname>
+        <param>
+          <type>OutputStream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <briefdescription>
+<para>Reset the writer with a new stream. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function reset the writer with a new stream and default settings, in order to make a <ref refid="class_writer" kindref="compound">Writer</ref> object reusable for output multiple JSONs.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>os</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New output stream. <programlisting><codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;OutputStream&gt;</ref><sp/>writer(os1);</highlight></codeline>
+<codeline><highlight class="normal">writer.StartObject();</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.EndObject();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.Reset(os2);</highlight></codeline>
+<codeline><highlight class="normal">writer.StartObject();</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.EndObject();</highlight></codeline>
+</programlisting> </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="134" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="134" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a07d74d36dd3191b06e0aab678c246157" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::IsComplete</definition>
+        <argsstring>() const</argsstring>
+        <name>IsComplete</name>
+        <qualifiedname>Writer::IsComplete</qualifiedname>
+        <briefdescription>
+<para>Checks whether the output is a complete JSON. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>A complete JSON has a complete root object or array. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="144" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="144" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1ad35ddb56c6969d9584bf1e73bebda5ab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::GetMaxDecimalPlaces</definition>
+        <argsstring>() const</argsstring>
+        <name>GetMaxDecimalPlaces</name>
+        <qualifiedname>Writer::GetMaxDecimalPlaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="148" column="9" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="148" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a58e3f94dc5af1432a8eace5ba427eca7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;::SetMaxDecimalPlaces</definition>
+        <argsstring>(int maxDecimalPlaces)</argsstring>
+        <name>SetMaxDecimalPlaces</name>
+        <qualifiedname>Writer::SetMaxDecimalPlaces</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>maxDecimalPlaces</declname>
+        </param>
+        <briefdescription>
+<para>Sets the maximum number of decimal places for double output. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This setting truncates the output with specified number of decimal places.</para>
+<para>For example,</para>
+<para><programlisting><codeline><highlight class="normal">writer.SetMaxDecimalPlaces(3);</highlight></codeline>
+<codeline><highlight class="normal">writer.StartArray();</highlight></codeline>
+<codeline><highlight class="normal">writer.Double(0.12345);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>&quot;0.123&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.Double(0.0001);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>&quot;0.0&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.Double(1.234567890123456e30);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>&quot;1.234567890123456e30&quot;<sp/>(do<sp/>not<sp/>truncate<sp/>significand<sp/>for<sp/>positive<sp/>exponent)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.Double(1.23e-4);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>&quot;0.0&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(do<sp/>truncate<sp/>significand<sp/>for<sp/>negative<sp/>exponent)</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">writer.EndArray();</highlight></codeline>
+</programlisting></para>
+<para>The default setting does not truncate any decimal places. You can restore to this setting by calling <programlisting><codeline><highlight class="normal">writer.SetMaxDecimalPlaces(<ref refid="class_writer_1ab46d66ae0ca78cb03ab7fb865d129934" kindref="member">Writer::kDefaultMaxDecimalPlaces</ref>);</highlight></codeline>
+</programlisting> </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="173" column="10" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="173" bodyend="175"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_writer_1aaa9cddc35dbc6a612ef01633ed8a6687" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; StringBuffer &gt;::WriteInt</definition>
+        <argsstring>(int i)</argsstring>
+        <name>WriteInt</name>
+        <qualifiedname>Writer::WriteInt</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="514" column="20" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="514" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a9159dbd1625b1506cd13c79e3b7bad4a" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; StringBuffer &gt;::WriteUint</definition>
+        <argsstring>(unsigned u)</argsstring>
+        <name>WriteUint</name>
+        <qualifiedname>Writer::WriteUint</qualifiedname>
+        <param>
+          <type>unsigned</type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="522" column="20" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="522" bodyend="527"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a439aacf94c862df151c16d9c907afe0f" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; StringBuffer &gt;::WriteInt64</definition>
+        <argsstring>(int64_t i64)</argsstring>
+        <name>WriteInt64</name>
+        <qualifiedname>Writer::WriteInt64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6" kindref="member">int64_t</ref></type>
+          <declname>i64</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="530" column="20" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="530" bodyend="535"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1aa1d514cd0200ec1732e74fe26ebcf463" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; StringBuffer &gt;::WriteUint64</definition>
+        <argsstring>(uint64_t u)</argsstring>
+        <name>WriteUint64</name>
+        <qualifiedname>Writer::WriteUint64</qualifiedname>
+        <param>
+          <type><ref refid="stdint_8h_1aec6fcb673ff035718c238c8c9d544c47" kindref="member">uint64_t</ref></type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="538" column="20" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="538" bodyend="543"/>
+      </memberdef>
+      <memberdef kind="function" id="class_writer_1a114c748ae1f770c20f6ecd7cfc7b67bb" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Writer&lt; StringBuffer &gt;::WriteDouble</definition>
+        <argsstring>(double d)</argsstring>
+        <name>WriteDouble</name>
+        <qualifiedname>Writer::WriteDouble</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/rapidjson/include/rapidjson/writer.h" line="546" column="20" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="546" bodyend="571"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>JSON writer. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="class_writer" kindref="compound">Writer</ref> implements the concept Handler. It generates JSON text by events to an output os.</para>
+<para>User may programmatically calls the functions of a writer to generate JSON text.</para>
+<para>On the other side, a writer can also be passed to objects that generates events,</para>
+<para>for example <ref refid="class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099" kindref="member">Reader::Parse()</ref> and Document::Accept().</para>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>OutputStream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of output stream. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SourceEncoding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Encoding of source string. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>TargetEncoding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Encoding of output stream. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>StackAllocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of allocator for allocating memory of stack. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="note"><para>implements Handler concept </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>internal::Stack&lt; CrtAllocator &gt;</label>
+        <link refid="classinternal_1_1_stack"/>
+      </node>
+      <node id="1">
+        <label>Writer&lt; OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags &gt;</label>
+        <link refid="class_writer"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>kDefaultLevelDepth</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>level_stack_</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>size_t</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/rapidjson/include/rapidjson/writer.h" line="90" column="1" bodyfile="src/rapidjson/include/rapidjson/writer.h" bodystart="90" bodyend="509"/>
+    <listofallmembers>
+      <member refid="class_writer_1ad7491f4dedb02e7456b240b23ef8c1ad" prot="public" virt="non-virtual"><scope>Writer</scope><name>Bool</name></member>
+      <member refid="class_writer_1ab08bff5fd2daec65f4a78779ca3d2139" prot="public" virt="non-virtual"><scope>Writer</scope><name>Ch</name></member>
+      <member refid="class_writer_1a22a43e8a7193105deec6b808736f7a1a" prot="public" virt="non-virtual"><scope>Writer</scope><name>Double</name></member>
+      <member refid="class_writer_1ac88d533095591a878500b63b351d4013" prot="public" virt="non-virtual"><scope>Writer</scope><name>EndArray</name></member>
+      <member refid="class_writer_1a0771a565261564c27676b7300b11f2b5" prot="public" virt="non-virtual"><scope>Writer</scope><name>EndObject</name></member>
+      <member refid="class_writer_1adc1cadbabc309d31f19cf7463251d879" prot="protected" virt="non-virtual"><scope>Writer</scope><name>EndValue</name></member>
+      <member refid="class_writer_1a8ca4e364c546b2eb526caa68dde011d2" prot="public" virt="non-virtual"><scope>Writer</scope><name>Flush</name></member>
+      <member refid="class_writer_1ad35ddb56c6969d9584bf1e73bebda5ab" prot="public" virt="non-virtual"><scope>Writer</scope><name>GetMaxDecimalPlaces</name></member>
+      <member refid="class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6" prot="protected" virt="non-virtual"><scope>Writer</scope><name>hasRoot_</name></member>
+      <member refid="class_writer_1ad471415aa7741e732bab0bcfbb9522a8" prot="public" virt="non-virtual"><scope>Writer</scope><name>Int</name></member>
+      <member refid="class_writer_1a4144d7086ed9d3d807c373de242bde45" prot="public" virt="non-virtual"><scope>Writer</scope><name>Int64</name></member>
+      <member refid="class_writer_1a07d74d36dd3191b06e0aab678c246157" prot="public" virt="non-virtual"><scope>Writer</scope><name>IsComplete</name></member>
+      <member refid="class_writer_1a9cb4caeb9d8971f305edff1d70e67acb" prot="public" virt="non-virtual"><scope>Writer</scope><name>kDefaultLevelDepth</name></member>
+      <member refid="class_writer_1ab46d66ae0ca78cb03ab7fb865d129934" prot="public" virt="non-virtual"><scope>Writer</scope><name>kDefaultMaxDecimalPlaces</name></member>
+      <member refid="class_writer_1a19096d2ccb90761f63ab1240337bf90a" prot="public" virt="non-virtual"><scope>Writer</scope><name>Key</name></member>
+      <member refid="class_writer_1ab6057b7fa9737edb4da55a7afefa966d" prot="public" virt="non-virtual"><scope>Writer</scope><name>Key</name></member>
+      <member refid="class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de" prot="protected" virt="non-virtual"><scope>Writer</scope><name>level_stack_</name></member>
+      <member refid="class_writer_1a3d4ef664c3cdf34a286b13d27adcdd4d" prot="protected" virt="non-virtual"><scope>Writer</scope><name>maxDecimalPlaces_</name></member>
+      <member refid="class_writer_1af700ed03c8810d48a4aaa3c5baeaf26c" prot="public" virt="non-virtual"><scope>Writer</scope><name>Null</name></member>
+      <member refid="class_writer_1a7ddd040c2787fc4f0f7438cebab8c674" prot="private" virt="non-virtual"><scope>Writer</scope><name>operator=</name></member>
+      <member refid="class_writer_1a3a3f60140f78dd67b5274978fd3a33ff" prot="protected" virt="non-virtual"><scope>Writer</scope><name>os_</name></member>
+      <member refid="class_writer_1a1fc40f8b9f3abc2548c0c5782ce1755d" prot="protected" virt="non-virtual"><scope>Writer</scope><name>Prefix</name></member>
+      <member refid="class_writer_1ad462dc606fddea0f34fc0e190c3bdaee" prot="public" virt="non-virtual"><scope>Writer</scope><name>RawNumber</name></member>
+      <member refid="class_writer_1ae0d1615104e4e88040b9640e6784008a" prot="public" virt="non-virtual"><scope>Writer</scope><name>RawValue</name></member>
+      <member refid="class_writer_1a8b53e8f137f7fcf694f5500711b3f58d" prot="public" virt="non-virtual"><scope>Writer</scope><name>Reset</name></member>
+      <member refid="class_writer_1a94140803bba7863a1b39c936bbe6d262" prot="protected" virt="non-virtual"><scope>Writer</scope><name>ScanWriteUnescapedString</name></member>
+      <member refid="class_writer_1a58e3f94dc5af1432a8eace5ba427eca7" prot="public" virt="non-virtual"><scope>Writer</scope><name>SetMaxDecimalPlaces</name></member>
+      <member refid="class_writer_1a38715785194b42cd67ba5dd52bf7967e" prot="public" virt="non-virtual"><scope>Writer</scope><name>StartArray</name></member>
+      <member refid="class_writer_1aec3200b2fc80ec87d1c37f775256b2e1" prot="public" virt="non-virtual"><scope>Writer</scope><name>StartObject</name></member>
+      <member refid="class_writer_1a8b4dc44f471403a83c9959575796ceab" prot="public" virt="non-virtual"><scope>Writer</scope><name>String</name></member>
+      <member refid="class_writer_1a2a2c6f51644b2013471aec4dac0d7466" prot="public" virt="non-virtual"><scope>Writer</scope><name>String</name></member>
+      <member refid="class_writer_1a5fb0c3228f89f6f9bef15f3e6e6f1739" prot="public" virt="non-virtual"><scope>Writer</scope><name>Uint</name></member>
+      <member refid="class_writer_1a55bb9f286ecdaf4cdb07bddb02e0cb2d" prot="public" virt="non-virtual"><scope>Writer</scope><name>Uint64</name></member>
+      <member refid="class_writer_1a42ad68b6950431bb8ca0199568546eaf" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteBool</name></member>
+      <member refid="class_writer_1ae7a0fc4740681d845d92c1213bd25aa1" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteDouble</name></member>
+      <member refid="class_writer_1a114c748ae1f770c20f6ecd7cfc7b67bb" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteDouble</name></member>
+      <member refid="class_writer_1aabda2df1be6e83cef416e9b1f042e8f4" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteEndArray</name></member>
+      <member refid="class_writer_1a7e3f6760a50a72f4217a9b2d625c43ee" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteEndObject</name></member>
+      <member refid="class_writer_1a31d0feda654ca245c41462be7dc59998" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteInt</name></member>
+      <member refid="class_writer_1aaa9cddc35dbc6a612ef01633ed8a6687" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteInt</name></member>
+      <member refid="class_writer_1aa58d3f80c06394648de5055ecfb41587" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteInt64</name></member>
+      <member refid="class_writer_1a439aacf94c862df151c16d9c907afe0f" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteInt64</name></member>
+      <member refid="class_writer_1a44862b3eba8d84b909c69aba875c9f4d" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteNull</name></member>
+      <member refid="class_writer_1af4f54830d6927d9daf5bd53bfd134dd3" prot="public" virt="non-virtual"><scope>Writer</scope><name>Writer</name></member>
+      <member refid="class_writer_1a7b885cea71542fc436be80eff447fb64" prot="public" virt="non-virtual"><scope>Writer</scope><name>Writer</name></member>
+      <member refid="class_writer_1a23d333973ed2cc4a315d482bd2acaa78" prot="private" virt="non-virtual"><scope>Writer</scope><name>Writer</name></member>
+      <member refid="class_writer_1a8ee1135b2595261819b134907f67614e" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteRawValue</name></member>
+      <member refid="class_writer_1a3c3560a96cac58f98f4a74d6cb227204" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteStartArray</name></member>
+      <member refid="class_writer_1a81c72a2eecd47e042f56ca93a27a5cb1" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteStartObject</name></member>
+      <member refid="class_writer_1acda4412ef5f4cac6e89f9544e4b10f70" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteString</name></member>
+      <member refid="class_writer_1a2861227e93707d1478d2cf56644dca3b" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteUint</name></member>
+      <member refid="class_writer_1a9159dbd1625b1506cd13c79e3b7bad4a" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteUint</name></member>
+      <member refid="class_writer_1ad07b325157220e3aa791c1c8c904021e" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteUint64</name></member>
+      <member refid="class_writer_1aa1d514cd0200ec1732e74fe26ebcf463" prot="protected" virt="non-virtual"><scope>Writer</scope><name>WriteUint64</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

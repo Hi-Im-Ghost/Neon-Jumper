@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="pointer_8zh-cn_8md" kind="file" language="Markdown">
+    <compoundname>pointer.zh-cn.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Pointer</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">（本功能于<sp/>v1.1.0<sp/>发布）</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">JSON<sp/>Pointer<sp/>是一个标准化（[RFC6901]）的方式去选取一个<sp/>JSON<sp/>Document（DOM）中的值。这类似于<sp/>XML<sp/>的<sp/>XPath。然而，JSON<sp/>Pointer<sp/>简单得多，而且每个<sp/>JSON<sp/>Pointer<sp/>仅指向单个值。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">使用<sp/>RapidJSON<sp/>的<sp/>JSON<sp/>Pointer<sp/>实现能简化一些<sp/>DOM<sp/>的操作。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>JSON<sp/>Pointer<sp/>{#JsonPointer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">一个<sp/>JSON<sp/>Pointer<sp/>由一串（零至多个）token<sp/>所组成，每个<sp/>token<sp/>都有<sp/>`/`<sp/>前缀。每个<sp/>token<sp/>可以是一个字符串或数字。例如，给定一个<sp/>JSON：</highlight></codeline>
+<codeline><highlight class="normal">~~~javascript</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;foo&quot;<sp/>:<sp/>[&quot;bar&quot;,<sp/>&quot;baz&quot;],</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;<sp/>:<sp/>3.1416</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下的<sp/>JSON<sp/>Pointer<sp/>解析为：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`&quot;/foo&quot;`<sp/>→<sp/>`[<sp/>&quot;bar&quot;,<sp/>&quot;baz&quot;<sp/>]`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&quot;/foo/0&quot;`<sp/>→<sp/>`&quot;bar&quot;`</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>`&quot;/foo/1&quot;`<sp/>→<sp/>`&quot;baz&quot;`</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>`&quot;/pi&quot;`<sp/>→<sp/>`3.1416`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">要注意，一个空<sp/>JSON<sp/>Pointer<sp/>`&quot;&quot;`<sp/>（零个<sp/>token）解析为整个<sp/>JSON。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>基本使用方法<sp/>{#BasicUsage}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下的代码范例不解自明。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/pointer.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>使用<sp/>Set()<sp/>创建<sp/>DOM</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/project&quot;).Set(d,<sp/>&quot;RapidJSON&quot;);</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/stars&quot;).Set(d,<sp/>10);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>使用<sp/>Get()<sp/>访问<sp/>DOM。若该值不存在则返回<sp/>nullptr。</highlight></codeline>
+<codeline><highlight class="normal">if<sp/>(Value*<sp/>stars<sp/>=<sp/>Pointer(&quot;/stars&quot;).Get(d))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Set()<sp/>和<sp/>Create()<sp/>自动生成父值（如果它们不存在）。</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/a/b/0&quot;).Create(d);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>}<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>GetWithDefault()<sp/>返回引用。若该值不存在则会深拷贝缺省值。</highlight></codeline>
+<codeline><highlight class="normal">Value&amp;<sp/>hello<sp/>=<sp/>Pointer(&quot;/hello&quot;).GetWithDefault(d,<sp/>&quot;world&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;world&quot;<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>Swap()<sp/>和<sp/>Set()<sp/>相似</highlight></codeline>
+<codeline><highlight class="normal">Value<sp/>x(&quot;C++&quot;);</highlight></codeline>
+<codeline><highlight class="normal">Pointer(&quot;/hello&quot;).Swap(d,<sp/>x);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;C++&quot;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>x<sp/>变成<sp/>&quot;world&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>删去一个成员或元素，若值存在返回<sp/>true</highlight></codeline>
+<codeline><highlight class="normal">bool<sp/>success<sp/>=<sp/>Pointer(&quot;/a&quot;).Erase(d);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>辅助函数<sp/>{#HelperFunctions}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">由于面向对象的调用习惯可能不符直觉，RapidJSON<sp/>也提供了一些辅助函数，它们把成员函数包装成自由函数。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下的例子与上面例子所做的事情完全相同。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/project&quot;,<sp/>&quot;RapidJSON&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/stars&quot;,<sp/>10);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">if<sp/>(Value*<sp/>stars<sp/>=<sp/>GetValueByPointer(d,<sp/>&quot;/stars&quot;))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CreateValueByPointer(d,<sp/>&quot;/a/b/0&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value&amp;<sp/>hello<sp/>=<sp/>GetValueByPointerWithDefault(d,<sp/>&quot;/hello&quot;,<sp/>&quot;world&quot;);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Value<sp/>x(&quot;C++&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SwapValueByPointer(d,<sp/>&quot;/hello&quot;,<sp/>x);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">bool<sp/>success<sp/>=<sp/>EraseValueByPointer(d,<sp/>&quot;/a&quot;);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下对比<sp/>3<sp/>种调用方式：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`Pointer(source).&lt;Method&gt;(root,<sp/>...)`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&lt;Method&gt;ValueByPointer(root,<sp/>Pointer(source),<sp/>...)`</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>`&lt;Method&gt;ValueByPointer(root,<sp/>source,<sp/>...)`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>解析<sp/>Pointer<sp/>{#ResolvingPointer}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Pointer::Get()`<sp/>或<sp/>`GetValueByPointer()`<sp/>函数并不修改<sp/>DOM。若那些<sp/>token<sp/>不能匹配<sp/>DOM<sp/>里的值，这些函数便返回<sp/>`nullptr`。使用者可利用这个方法来检查一个值是否存在。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">注意，数值<sp/>token<sp/>可表示数组索引或成员名字。解析过程中会按值的类型来匹配。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~javascript</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;0&quot;<sp/>:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;1&quot;<sp/>:<sp/>[456]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>`&quot;/0&quot;`<sp/>→<sp/>`123`</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>`&quot;/1/0&quot;`<sp/>→<sp/>`456`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Token<sp/>`&quot;0&quot;`<sp/>在第一个<sp/>pointer<sp/>中被当作成员名字。它在第二个<sp/>pointer<sp/>中被当作成数组索引。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">其他函数会改变<sp/>DOM，包括<sp/>`Create()`、`GetWithDefault()`、`Set()`、`Swap()`。这些函数总是成功的。若一些父值不存在，就会创建它们。若父值类型不匹配<sp/>token，也会强行改变其类型。改变类型也意味着完全移除其<sp/>DOM<sp/>子树的内容。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">例如，把上面的<sp/>JSON<sp/>解译至<sp/>`d`<sp/>之后，</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;1/a&quot;,<sp/>789);<sp/>//<sp/>{<sp/>&quot;0&quot;<sp/>:<sp/>123,<sp/>&quot;1&quot;<sp/>:<sp/>{<sp/>&quot;a&quot;<sp/>:<sp/>789<sp/>}<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>解析负号<sp/>token</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">另外，[RFC6901]<sp/>定义了一个特殊<sp/>token<sp/>`-`<sp/>（单个负号），用于表示数组最后元素的下一个元素。<sp/>`Get()`<sp/>只会把此<sp/>token<sp/>当作成员名字<sp/>&apos;&quot;-&quot;&apos;。而其他函数则会以此解析数组，等同于对数组调用<sp/>`Value::PushBack()`<sp/>。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.Parse(&quot;{\&quot;foo\&quot;:[123]}&quot;);</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/foo/-&quot;,<sp/>456);<sp/>//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456]<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">SetValueByPointer(d,<sp/>&quot;/-&quot;,<sp/>789);<sp/><sp/><sp/><sp/>//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456],<sp/>&quot;-&quot;<sp/>:<sp/>789<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>解析<sp/>Document<sp/>及<sp/>Value</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">当使用<sp/>`p.Get(root)`<sp/>或<sp/>`GetValueByPointer(root,<sp/>p)`，`root`<sp/>是一个（常数）<sp/>`Value&amp;`。这意味着，它也可以是<sp/>DOM<sp/>里的一个子树。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">其他函数有两组签名。一组使用<sp/>`Document&amp;<sp/>document`<sp/>作为参数，另一组使用<sp/>`Value&amp;<sp/>root`。第一组使用<sp/>`document.GetAllocator()`<sp/>去创建值，而第二组则需要使用者提供一个<sp/>allocator，如同<sp/>DOM<sp/>里的函数。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以上例子都不需要<sp/>allocator<sp/>参数，因为它的第一个参数是<sp/>`Document&amp;`。但如果你需要对一个子树进行解析，就需要如下面的例子般提供<sp/>allocator：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">class<sp/>Person<sp/>{</highlight></codeline>
+<codeline><highlight class="normal">public:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Person()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document_<sp/>=<sp/>new<sp/>Document();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>CreateValueByPointer()<sp/>here<sp/>no<sp/>need<sp/>allocator</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(CreateValueByPointer(*document_,<sp/>&quot;/residence&quot;),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(CreateValueByPointer(*document_,<sp/>&quot;/office&quot;),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">private:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>SetLocation(Value&amp;<sp/>location,<sp/>const<sp/>char*<sp/>country,<sp/>const<sp/>char*<sp/>addresses[2])<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Value::Allocator&amp;<sp/>a<sp/>=<sp/>document_-&gt;GetAllocator();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>//<sp/>SetValueByPointer()<sp/>here<sp/>need<sp/>allocator</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/country&quot;,<sp/>country,<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/address/0&quot;,<sp/>address[0],<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetValueByPointer(location,<sp/>&quot;/address/1&quot;,<sp/>address[1],<sp/>a);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Document*<sp/>document_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Erase()`<sp/>或<sp/>`EraseValueByPointer()`<sp/>不需要<sp/>allocator。而且它们成功删除值之后会返回<sp/>`true`。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>错误处理<sp/>{#ErrorHandling}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Pointer`<sp/>在其建构函数里会解译源字符串。若有解析错误，`Pointer::IsValid()`<sp/>返回<sp/>`false`。你可使用<sp/>`Pointer::GetParseErrorCode()`<sp/>和<sp/>`GetParseErrorOffset()`<sp/>去获取错信息。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">要注意的是，所有解析函数都假设<sp/>pointer<sp/>是合法的。对一个非法<sp/>pointer<sp/>解析会造成断言失败。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>URI<sp/>片段表示方式<sp/>{#URIFragment}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">除了我们一直在使用的字符串方式表示<sp/>JSON<sp/>pointer，[RFC6901]<sp/>也定义了一个<sp/>JSON<sp/>Pointer<sp/>的<sp/>URI<sp/>片段（fragment）表示方式。URI<sp/>片段是定义于<sp/>[RFC3986]<sp/>&quot;Uniform<sp/>Resource<sp/>Identifier<sp/>(URI):<sp/>Generic<sp/>Syntax&quot;。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">URI<sp/>片段的主要分别是必然以<sp/>`#`<sp/>（pound<sp/>sign）开头，而一些字符也会以百分比编码成<sp/>UTF-8<sp/>序列。例如，以下的表展示了不同表示法下的<sp/>C/C++<sp/>字符串常数。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">字符串表示方式<sp/>|<sp/>URI<sp/>片段表示方式<sp/>|<sp/>Pointer<sp/>Tokens<sp/>（UTF-8）</highlight></codeline>
+<codeline><highlight class="normal">----------------------|-----------------------------|------------------------</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/foo/0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/foo/0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;foo&quot;,<sp/>0}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/a~1b&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/a~1b&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;a/b&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/m~0n&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/m~0n&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;m~n&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/<sp/>&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%20&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;<sp/>&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/\0&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%00&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;\0&quot;}`</highlight></codeline>
+<codeline><highlight class="normal">`&quot;/€&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`&quot;#/%E2%82%AC&quot;`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>`{&quot;€&quot;}`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>完全支持<sp/>URI<sp/>片段表示方式。它在解译时会自动检测<sp/>`#`<sp/>号。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>字符串化</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">你也可以把一个<sp/>`Pointer`<sp/>字符串化，储存于字符串或其他输出流。例如：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline><highlight class="normal">Pointer<sp/>p(...);</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal">p.Stringify(sb);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>sb.GetString()<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">使用<sp/>`StringifyUriFragment()`<sp/>可以把<sp/>pointer<sp/>字符串化为<sp/>URI<sp/>片段表示法。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>使用者提供的<sp/>tokens<sp/>{#UserSuppliedTokens}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">若一个<sp/>pointer<sp/>会用于多次解析，它应该只被创建一次，然后再施于不同的<sp/>DOM<sp/>，或在不同时间做解析。这样可以避免多次创键<sp/>`Pointer`，节省时间和内存分配。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">我们甚至可以再更进一步，完全消去解析过程及动态内存分配。我们可以直接生成<sp/>token<sp/>数组：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>NAME(s)<sp/>{<sp/>s,<sp/>sizeof(s)<sp/>/<sp/>sizeof(s[0])<sp/>-<sp/>1,<sp/>kPointerInvalidIndex<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">#define<sp/>INDEX(i)<sp/>{<sp/>#i,<sp/>sizeof(#i)<sp/>-<sp/>1,<sp/>i<sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">static<sp/>const<sp/>Pointer::Token<sp/>kTokens[]<sp/>=<sp/>{<sp/>NAME(&quot;foo&quot;),<sp/>INDEX(123)<sp/>};</highlight></codeline>
+<codeline><highlight class="normal">static<sp/>const<sp/>Pointer<sp/>p(kTokens,<sp/>sizeof(kTokens)<sp/>/<sp/>sizeof(kTokens[0]));</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Equivalent<sp/>to<sp/>static<sp/>const<sp/>Pointer<sp/>p(&quot;/foo/123&quot;);</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">这种做法可能适合内存受限的系统。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[RFC3986]:<sp/>https://tools.ietf.org/html/rfc3986</highlight></codeline>
+<codeline><highlight class="normal">[RFC6901]:<sp/>https://tools.ietf.org/html/rfc6901</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/pointer.zh-cn.md"/>
+  </compounddef>
+</doxygen>

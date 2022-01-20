@@ -1,0 +1,66 @@
+\hypertarget{memorystream_8h_source}{}\doxysection{memorystream.\+h}
+\label{memorystream_8h_source}\index{src/rapidjson/include/rapidjson/memorystream.h@{src/rapidjson/include/rapidjson/memorystream.h}}
+\mbox{\hyperlink{memorystream_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_MEMORYSTREAM\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_MEMORYSTREAM\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stream_8h}{stream.h}}"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{21 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_OFF(unreachable-\/code)}
+\DoxyCodeLine{23 RAPIDJSON\_DIAG\_OFF(missing-\/noreturn)}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{29 }
+\DoxyCodeLine{40 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_memory_stream}{MemoryStream}} \{}
+\DoxyCodeLine{41     \textcolor{keyword}{typedef} \textcolor{keywordtype}{char} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}; \textcolor{comment}{// byte}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43     \mbox{\hyperlink{struct_memory_stream_a2472317ef00fcd44e5cc209e04c49756}{MemoryStream}}(\textcolor{keyword}{const} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}} *src, \textcolor{keywordtype}{size\_t} size) : \mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}}(src), \mbox{\hyperlink{struct_memory_stream_a91f0767b4f0ed2476d835e8344848a2f}{begin\_}}(src), \mbox{\hyperlink{struct_memory_stream_a55fb302ba0492419757e3ba318c8c654}{end\_}}(src + size), \mbox{\hyperlink{struct_memory_stream_ab26a1b5c6d5e8f52c0f6982feba47f36}{size\_}}(size) \{\}}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{45     \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}} \mbox{\hyperlink{struct_memory_stream_a707014bbfd303838b6a7b90be24f6adc}{Peek}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(\mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}} == \mbox{\hyperlink{struct_memory_stream_a55fb302ba0492419757e3ba318c8c654}{end\_}}) ? \textcolor{charliteral}{'\(\backslash\)0'} : *\mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}}; \}}
+\DoxyCodeLine{46     \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}} \mbox{\hyperlink{struct_memory_stream_a14ff92deda5d39c9b166aaa07e82a0ee}{Take}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(\mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}} == \mbox{\hyperlink{struct_memory_stream_a55fb302ba0492419757e3ba318c8c654}{end\_}}) ? \textcolor{charliteral}{'\(\backslash\)0'} : *\mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}}++; \}}
+\DoxyCodeLine{47     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_memory_stream_a2de1486742f0d44decda90a56bc43268}{Tell}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}} -\/ \mbox{\hyperlink{struct_memory_stream_a91f0767b4f0ed2476d835e8344848a2f}{begin\_}}); \}}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}* \mbox{\hyperlink{struct_memory_stream_a4fd6e7a293bd3ec76e649d8e853dd38f}{PutBegin}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{50     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_memory_stream_ac445f93c23c9e85f1f5381911c4ed870}{Put}}(\mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{51     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_memory_stream_a305e141314ae0e3afacb04aaf2d8bcc6}{Flush}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{52     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_memory_stream_a74fb36c1f6f95d189502cf7a6be79135}{PutEnd}}(\mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}*) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54     \textcolor{comment}{// For encoding detection only.}}
+\DoxyCodeLine{55     \textcolor{keyword}{const} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}* \mbox{\hyperlink{struct_memory_stream_a81dd4a86148b0af9527083cdef3d31d8}{Peek4}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{56         \textcolor{keywordflow}{return} \mbox{\hyperlink{struct_memory_stream_a2de1486742f0d44decda90a56bc43268}{Tell}}() + 4 <= \mbox{\hyperlink{struct_memory_stream_ab26a1b5c6d5e8f52c0f6982feba47f36}{size\_}} ? \mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}} : 0;}
+\DoxyCodeLine{57     \}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59     \textcolor{keyword}{const} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}* \mbox{\hyperlink{struct_memory_stream_a57cf6cb5766e931a62928b9f92507443}{src\_}};     }
+\DoxyCodeLine{60     \textcolor{keyword}{const} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}* \mbox{\hyperlink{struct_memory_stream_a91f0767b4f0ed2476d835e8344848a2f}{begin\_}};   }
+\DoxyCodeLine{61     \textcolor{keyword}{const} \mbox{\hyperlink{struct_memory_stream_a62a1cbd052c325c83dbdb387d2f89088}{Ch}}* \mbox{\hyperlink{struct_memory_stream_a55fb302ba0492419757e3ba318c8c654}{end\_}};     }
+\DoxyCodeLine{62     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_memory_stream_ab26a1b5c6d5e8f52c0f6982feba47f36}{size\_}};       }
+\DoxyCodeLine{63 \};}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{66 }
+\DoxyCodeLine{67 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{68 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{69 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_MEMORYBUFFER\_H\_}}
+
+\end{DoxyCode}

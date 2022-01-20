@@ -1,0 +1,580 @@
+.TH "GenericDocument< Encoding, Allocator, StackAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericDocument< Encoding, Allocator, StackAllocator > \- A document for parsing JSON text as DOM\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <document\&.h>\fP
+.PP
+Inherits \fBGenericValue< Encoding, RAPIDJSON_DEFAULT_ALLOCATOR >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef Encoding::Ch \fBCh\fP"
+.br
+.RI "Character type derived from Encoding\&. "
+.ti -1c
+.RI "typedef \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP > \fBValueType\fP"
+.br
+.RI "Value type of the document\&. "
+.ti -1c
+.RI "typedef \fBAllocator\fP \fBAllocatorType\fP"
+.br
+.RI "Allocator type from template parameter\&. "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericDocument\fP (\fBType\fP type, \fBAllocator\fP *allocator=0, size_t stackCapacity=kDefaultStackCapacity, StackAllocator *stackAllocator=0)"
+.br
+.RI "Constructor\&. "
+.ti -1c
+.RI "\fBGenericDocument\fP (\fBAllocator\fP *allocator=0, size_t stackCapacity=kDefaultStackCapacity, StackAllocator *stackAllocator=0)"
+.br
+.RI "Constructor\&. "
+.ti -1c
+.RI "\fB~GenericDocument\fP ()"
+.br
+.ti -1c
+.RI "\fBGenericDocument\fP & \fBSwap\fP (\fBGenericDocument\fP &rhs) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Exchange the contents of this document with those of another\&. "
+.ti -1c
+.RI "template<typename Generator > \fBGenericDocument\fP & \fBPopulate\fP (Generator &g)"
+.br
+.RI "Populate this document by a generator which produces SAX events\&. "
+.ti -1c
+.RI "\fBAllocator\fP & \fBGetAllocator\fP ()"
+.br
+.RI "Get the allocator of this document\&. "
+.ti -1c
+.RI "size_t \fBGetStackCapacity\fP () const"
+.br
+.RI "Get the capacity of stack in bytes\&. "
+.ti -1c
+.RI "bool \fBNull\fP ()"
+.br
+.ti -1c
+.RI "bool \fBBool\fP (bool b)"
+.br
+.ti -1c
+.RI "bool \fBInt\fP (int i)"
+.br
+.ti -1c
+.RI "bool \fBUint\fP (unsigned i)"
+.br
+.ti -1c
+.RI "bool \fBInt64\fP (\fBint64_t\fP i)"
+.br
+.ti -1c
+.RI "bool \fBUint64\fP (\fBuint64_t\fP i)"
+.br
+.ti -1c
+.RI "bool \fBDouble\fP (double d)"
+.br
+.ti -1c
+.RI "bool \fBRawNumber\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBString\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBStartObject\fP ()"
+.br
+.ti -1c
+.RI "bool \fBKey\fP (const \fBCh\fP *str, \fBSizeType\fP length, bool copy)"
+.br
+.ti -1c
+.RI "bool \fBEndObject\fP (\fBSizeType\fP memberCount)"
+.br
+.ti -1c
+.RI "bool \fBStartArray\fP ()"
+.br
+.ti -1c
+.RI "bool \fBEndArray\fP (\fBSizeType\fP elementCount)"
+.br
+.in -1c
+.PP
+.RI "\fBParse from stream\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "template<unsigned parseFlags, typename SourceEncoding , typename InputStream > \fBGenericDocument\fP & \fBParseStream\fP (InputStream &is)"
+.br
+.RI "Parse JSON text from an input stream (with Encoding conversion) "
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream > \fBGenericDocument\fP & \fBParseStream\fP (InputStream &is)"
+.br
+.RI "Parse JSON text from an input stream\&. "
+.ti -1c
+.RI "template<typename InputStream > \fBGenericDocument\fP & \fBParseStream\fP (InputStream &is)"
+.br
+.RI "Parse JSON text from an input stream (with \fBkParseDefaultFlags\fP) "
+.in -1c
+.in -1c
+.PP
+.RI "\fBParse in-place from mutable string\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "template<unsigned parseFlags> \fBGenericDocument\fP & \fBParseInsitu\fP (\fBCh\fP *str)"
+.br
+.RI "Parse JSON text from a mutable string\&. "
+.ti -1c
+.RI "\fBGenericDocument\fP & \fBParseInsitu\fP (\fBCh\fP *str)"
+.br
+.RI "Parse JSON text from a mutable string (with \fBkParseDefaultFlags\fP) "
+.in -1c
+.in -1c
+.PP
+.RI "\fBParse from read-only string\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "template<unsigned parseFlags, typename SourceEncoding > \fBGenericDocument\fP & \fBParse\fP (const typename SourceEncoding::Ch *str)"
+.br
+.RI "Parse JSON text from a read-only string (with Encoding conversion) "
+.ti -1c
+.RI "template<unsigned parseFlags> \fBGenericDocument\fP & \fBParse\fP (const \fBCh\fP *str)"
+.br
+.RI "Parse JSON text from a read-only string\&. "
+.ti -1c
+.RI "\fBGenericDocument\fP & \fBParse\fP (const \fBCh\fP *str)"
+.br
+.RI "Parse JSON text from a read-only string (with \fBkParseDefaultFlags\fP) "
+.ti -1c
+.RI "template<unsigned parseFlags, typename SourceEncoding > \fBGenericDocument\fP & \fBParse\fP (const typename SourceEncoding::Ch *str, size_t length)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags> \fBGenericDocument\fP & \fBParse\fP (const \fBCh\fP *str, size_t length)"
+.br
+.ti -1c
+.RI "\fBGenericDocument\fP & \fBParse\fP (const \fBCh\fP *str, size_t length)"
+.br
+.in -1c
+.in -1c
+.PP
+.RI "\fBHandling parse errors\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "bool \fBHasParseError\fP () const"
+.br
+.RI "Whether a parse error has occurred in the last parsing\&. "
+.ti -1c
+.RI "\fBParseErrorCode\fP \fBGetParseError\fP () const"
+.br
+.RI "Get the \fBParseErrorCode\fP of last parsing\&. "
+.ti -1c
+.RI "size_t \fBGetErrorOffset\fP () const"
+.br
+.RI "Get the position of last parsing error in input, 0 otherwise\&. "
+.ti -1c
+.RI "\fBoperator ParseResult\fP () const"
+.br
+.RI "Implicit conversion to get the last parse result\&. "
+.in -1c
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "template<typename , typename > class \fBGenericValue\fP"
+.br
+.ti -1c
+.RI "void \fBswap\fP (\fBGenericDocument\fP &\fBa\fP, \fBGenericDocument\fP &b) RAPIDJSON_NOEXCEPT"
+.br
+.RI "free-standing swap function helper "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename \fBEncoding\fP, typename \fBAllocator\fP = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator = RAPIDJSON_DEFAULT_STACK_ALLOCATOR>
+.br
+class GenericDocument< Encoding, Allocator, StackAllocator >"A document for parsing JSON text as DOM\&. 
+
+
+.PP
+\fBNote\fP
+.RS 4
+implements Handler concept 
+.RE
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIEncoding\fP Encoding for both parsing and string storage\&. 
+.br
+\fIAllocator\fP Allocator for allocating memory for the DOM 
+.br
+\fIStackAllocator\fP Allocator for allocating memory for stack during parsing\&. 
+.RE
+.PP
+\fBWarning\fP
+.RS 4
+Although \fBGenericDocument\fP inherits from \fBGenericValue\fP, the API does \fBnot\fP provide any virtual functions, especially no virtual destructor\&. To avoid memory leaks, do not \fCdelete\fP a \fBGenericDocument\fP object via a pointer to a \fBGenericValue\fP\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> typedef \fBAllocator\fP \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::AllocatorType"
+
+.PP
+Allocator type from template parameter\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> typedef Encoding::Ch \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Ch"
+
+.PP
+Character type derived from Encoding\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> typedef \fBGenericValue\fP<\fBEncoding\fP, \fBAllocator\fP> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::ValueType\fP"
+
+.PP
+Value type of the document\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBType\fP type, \fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fCkDefaultStackCapacity\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor\&. Creates an empty document of specified type\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItype\fP Mandatory type of object to create\&. 
+.br
+\fIallocator\fP Optional allocator for allocating memory\&. 
+.br
+\fIstackCapacity\fP Optional initial capacity of stack in bytes\&. 
+.br
+\fIstackAllocator\fP Optional allocator for allocating memory for stack\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fCkDefaultStackCapacity\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Constructor\&. Creates an empty document which type is Null\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIallocator\fP Optional allocator for allocating memory\&. 
+.br
+\fIstackCapacity\fP Optional initial capacity of stack in bytes\&. 
+.br
+\fIstackAllocator\fP Optional allocator for allocating memory for stack\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::~\fBGenericDocument\fP ()\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Bool (bool b)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Double (double d)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::EndArray (\fBSizeType\fP elementCount)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::EndObject (\fBSizeType\fP memberCount)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBAllocator\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::GetAllocator ()\fC [inline]\fP"
+
+.PP
+Get the allocator of this document\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> size_t \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::GetErrorOffset () const\fC [inline]\fP"
+
+.PP
+Get the position of last parsing error in input, 0 otherwise\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBParseErrorCode\fP \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::GetParseError () const\fC [inline]\fP"
+
+.PP
+Get the \fBParseErrorCode\fP of last parsing\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> size_t \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::GetStackCapacity () const\fC [inline]\fP"
+
+.PP
+Get the capacity of stack in bytes\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::HasParseError () const\fC [inline]\fP"
+
+.PP
+Whether a parse error has occurred in the last parsing\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Int (int i)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Int64 (\fBint64_t\fP i)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Key (const \fBCh\fP * str, \fBSizeType\fP length, bool copy)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Null ()\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::operator \fBParseResult\fP () const\fC [inline]\fP"
+
+.PP
+Implicit conversion to get the last parse result\&. 
+.PP
+\fBReturns\fP
+.RS 4
+\fBParseResult\fP of the last parse operation
+.RE
+.PP
+.PP
+.nf
+Document doc;
+ParseResult ok = doc\&.Parse(json);
+if (!ok)
+  printf( "JSON parse error: %s (%u)\n", GetParseError_En(ok\&.Code()), ok\&.Offset());
+.fi
+.PP
+ 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const \fBCh\fP * str)\fC [inline]\fP"
+
+.PP
+Parse JSON text from a read-only string\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIparseFlags\fP Combination of \fBParseFlag\fP (must not contain \fBkParseInsituFlag\fP)\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Read-only zero-terminated string to be parsed\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const \fBCh\fP * str)\fC [inline]\fP"
+
+.PP
+Parse JSON text from a read-only string (with \fBkParseDefaultFlags\fP) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Read-only zero-terminated string to be parsed\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const \fBCh\fP * str, size_t length)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const \fBCh\fP * str, size_t length)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags, typename SourceEncoding > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const typename SourceEncoding::Ch * str)\fC [inline]\fP"
+
+.PP
+Parse JSON text from a read-only string (with Encoding conversion) 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIparseFlags\fP Combination of \fBParseFlag\fP (must not contain \fBkParseInsituFlag\fP)\&. 
+.br
+\fISourceEncoding\fP Transcoding from input Encoding 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Read-only zero-terminated string to be parsed\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags, typename SourceEncoding > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const typename SourceEncoding::Ch * str, size_t length)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ParseInsitu (\fBCh\fP * str)\fC [inline]\fP"
+
+.PP
+Parse JSON text from a mutable string\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIparseFlags\fP Combination of \fBParseFlag\fP\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Mutable zero-terminated string to be parsed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ParseInsitu (\fBCh\fP * str)\fC [inline]\fP"
+
+.PP
+Parse JSON text from a mutable string (with \fBkParseDefaultFlags\fP) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstr\fP Mutable zero-terminated string to be parsed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags, typename SourceEncoding , typename InputStream > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ParseStream (InputStream & is)\fC [inline]\fP"
+
+.PP
+Parse JSON text from an input stream (with Encoding conversion) 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIparseFlags\fP Combination of \fBParseFlag\fP\&. 
+.br
+\fISourceEncoding\fP Encoding of input stream 
+.br
+\fIInputStream\fP Type of input stream, implementing Stream concept 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIis\fP Input stream to be parsed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags, typename InputStream > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ParseStream (InputStream & is)\fC [inline]\fP"
+
+.PP
+Parse JSON text from an input stream\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIparseFlags\fP Combination of \fBParseFlag\fP\&. 
+.br
+\fIInputStream\fP Type of input stream, implementing Stream concept 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIis\fP Input stream to be parsed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<typename InputStream > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ParseStream (InputStream & is)\fC [inline]\fP"
+
+.PP
+Parse JSON text from an input stream (with \fBkParseDefaultFlags\fP) 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIInputStream\fP Type of input stream, implementing Stream concept 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIis\fP Input stream to be parsed\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<typename Generator > \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Populate (Generator & g)\fC [inline]\fP"
+
+.PP
+Populate this document by a generator which produces SAX events\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIGenerator\fP A functor with \fCbool f(Handler)\fP prototype\&. 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIg\fP Generator functor which sends SAX events to the parameter\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+The document itself for fluent API\&. 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::RawNumber (const \fBCh\fP * str, \fBSizeType\fP length, bool copy)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::StartArray ()\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::StartObject ()\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::String (const \fBCh\fP * str, \fBSizeType\fP length, bool copy)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Swap (\fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator > & rhs)\fC [inline]\fP"
+
+.PP
+Exchange the contents of this document with those of another\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrhs\fP Another document\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Constant complexity\&. 
+.RE
+.PP
+\fBSee also\fP
+.RS 4
+GenericValue::Swap 
+.RE
+.PP
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Uint (unsigned i)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Uint64 (\fBuint64_t\fP i)\fC [inline]\fP"
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<typename , typename > friend class \fBGenericValue\fP\fC [friend]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> void swap (\fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator > & a, \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator > & b)\fC [friend]\fP"
+
+.PP
+free-standing swap function helper Helper function to enable support for common swap implementation pattern based on \fCstd::swap:\fP 
+.PP
+.nf
+void swap(MyClass& a, MyClass& b) {
+    using std::swap;
+    swap(a\&.doc, b\&.doc);
+    // \&.\&.\&.
+}
+
+.fi
+.PP
+ 
+.PP
+\fBSee also\fP
+.RS 4
+\fBSwap()\fP 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

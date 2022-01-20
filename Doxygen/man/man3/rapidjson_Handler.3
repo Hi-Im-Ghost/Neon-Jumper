@@ -1,0 +1,44 @@
+.TH "Handler" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Handler \- Concept for receiving events from \fBGenericReader\fP upon parsing\&. The functions return true if no error occurs\&. If they return false, the event publisher should terminate the process\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <reader\&.h>\fP
+.SH "Detailed Description"
+.PP 
+Concept for receiving events from \fBGenericReader\fP upon parsing\&. The functions return true if no error occurs\&. If they return false, the event publisher should terminate the process\&. 
+
+
+.PP
+.nf
+concept Handler {
+    typename Ch;
+
+    bool Null();
+    bool Bool(bool b);
+    bool Int(int i);
+    bool Uint(unsigned i);
+    bool Int64(int64_t i);
+    bool Uint64(uint64_t i);
+    bool Double(double d);
+    bool RawNumber(const Ch* str, SizeType length, bool copy);
+    bool String(const Ch* str, SizeType length, bool copy);
+    bool StartObject();
+    bool Key(const Ch* str, SizeType length, bool copy);
+    bool EndObject(SizeType memberCount);
+    bool StartArray();
+    bool EndArray(SizeType elementCount);
+};
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

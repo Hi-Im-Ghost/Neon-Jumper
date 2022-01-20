@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_stream_zh_cn" kind="page">
+    <compoundname>md_src_rapidjson_doc_stream_zh_cn</compoundname>
+    <title>流</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>在 RapidJSON 中，<computeroutput><ref refid="classrapidjson_1_1_stream" kindref="compound">rapidjson::Stream</ref></computeroutput> 是用於读写 JSON 的概念（概念是指 C++ 的 concept）。在这里我们先介绍如何使用 RapidJSON 提供的各种流。然后再看看如何自行定义流。</para>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1MemoryStreams">
+<title>Memory Streams</title>
+<para>内存流把 JSON 存储在内存之中。</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1StringStream">
+<title>StringStream (Input)</title>
+<para><computeroutput>StringStream</computeroutput> 是最基本的输入流，它表示一个完整的、只读的、存储于内存的 JSON。它在 <computeroutput><ref refid="rapidjson_8h" kindref="compound">rapidjson/rapidjson.h</ref></computeroutput> 中定义。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>会包含<sp/>&quot;rapidjson/rapidjson.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>json[]<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="struct_generic_string_stream" kindref="compound">StringStream</ref><sp/>s(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(s);</highlight></codeline>
+</programlisting></para>
+<para>由于这是非常常用的用法，RapidJSON 提供 <computeroutput>Document::Parse(const char*)</computeroutput> 去做完全相同的事情：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>json[]<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,<sp/>2,<sp/>3,<sp/>4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+</programlisting></para>
+<para>需要注意，<computeroutput>StringStream</computeroutput> 是 <computeroutput><ref refid="struct_generic_string_stream" kindref="compound">GenericStringStream</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt; &gt;</computeroutput> 的 typedef，使用者可用其他编码类去代表流所使用的字符集。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1StringBuffer">
+<title>StringBuffer (Output)</title>
+<para><computeroutput>StringBuffer</computeroutput> 是一个简单的输出流。它分配一个内存缓冲区，供写入整个 JSON。可使用 <computeroutput>GetString()</computeroutput> 来获取该缓冲区。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="stringbuffer_8h" kindref="compound">rapidjson/stringbuffer.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer&gt;</ref><sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>output<sp/>=<sp/>buffer.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+</programlisting></para>
+<para>当缓冲区满溢，它将自动增加容量。缺省容量是 256 个字符（UTF8 是 256 字节，UTF16 是 512 字节等）。使用者能自行提供分配器及初始容量。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer1(0,<sp/>1024);<sp/></highlight><highlight class="comment">//<sp/>使用它的分配器，初始大小<sp/>=<sp/>1024</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer2(allocator,<sp/>1024);</highlight></codeline>
+</programlisting></para>
+<para>如无设置分配器，<computeroutput>StringBuffer</computeroutput> 会自行实例化一个内部分配器。</para>
+<para>相似地，<computeroutput>StringBuffer</computeroutput> 是 <computeroutput><ref refid="class_generic_string_buffer" kindref="compound">GenericStringBuffer</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>&lt;&gt; &gt;</computeroutput> 的 typedef。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1FileStreams">
+<title>File Streams</title>
+<para>当要从文件解析一个 JSON，你可以把整个 JSON 读入内存并使用上述的 <computeroutput>StringStream</computeroutput>。</para>
+<para>然而，若 JSON 很大，或是内存有限，你可以改用 <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput>。它只会从文件读取一部分至缓冲区，然后让那部分被解析。若缓冲区的字符都被读完，它会再从文件读取下一部分。</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1FileReadStream">
+<title>FileReadStream (Input)</title>
+<para><computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> 通过 <computeroutput>FILE</computeroutput> 指针读取文件。使用者需要提供一个缓冲区。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;big.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>is(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(is);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>与 <computeroutput>StringStreams</computeroutput> 不一样，<computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> 是一个字节流。它不处理编码。若文件并非 UTF-8 编码，可以把字节流用 <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> 包装。我们很快会讨论这个问题。</para>
+<para>除了读取文件，使用者也可以使用 <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> 来读取 <computeroutput>stdin</computeroutput>。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1FileWriteStream">
+<title>FileWriteStream (Output)</title>
+<para><computeroutput><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref></computeroutput> 是一个含缓冲功能的输出流。它的用法与 <computeroutput><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref></computeroutput> 非常相似。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filewritestream_8h" kindref="compound">rapidjson/filewritestream.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;output.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;wb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;w&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[65536];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>os(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;FileWriteStream&gt;</ref><sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>它也可以把输出导向 <computeroutput>stdout</computeroutput>。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1iostreamWrapper">
+<title>iostream Wrapper</title>
+<para>基于用户的要求，RapidJSON 提供了正式的 <computeroutput>std::basic_istream</computeroutput> 和 <computeroutput>std::basic_ostream</computeroutput> 包装类。然而，请注意其性能会大大低于以上的其他流。</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1IStreamWrapper">
+<title>IStreamWrapper</title>
+<para><computeroutput><ref refid="class_i_stream_wrapper" kindref="compound">IStreamWrapper</ref></computeroutput> 把任何继承自 <computeroutput>std::istream</computeroutput> 的类（如 <computeroutput>std::istringstream</computeroutput>、<computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ifstream</computeroutput>、<computeroutput>std::fstream</computeroutput>）包装成 RapidJSON 的输入流。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&lt;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="istreamwrapper_8h" kindref="compound">rapidjson/istreamwrapper.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ifstream<sp/>ifs(</highlight><highlight class="stringliteral">&quot;test.json&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_i_stream_wrapper" kindref="compound">IStreamWrapper</ref><sp/>isw(ifs);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(isw);</highlight></codeline>
+</programlisting></para>
+<para>对于继承自 <computeroutput>std::wistream</computeroutput> 的类，则使用 <computeroutput><ref refid="class_w_i_stream_wrapper" kindref="compound">WIStreamWrapper</ref></computeroutput>。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1OStreamWrapper">
+<title>OStreamWrapper</title>
+<para>相似地，<computeroutput><ref refid="class_o_stream_wrapper" kindref="compound">OStreamWrapper</ref></computeroutput> 把任何继承自 <computeroutput>std::ostream</computeroutput> 的类（如 <computeroutput>std::ostringstream</computeroutput>、<computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ofstream</computeroutput>、<computeroutput>std::fstream</computeroutput>）包装成 RapidJSON 的输出流。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&lt;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="ostreamwrapper_8h" kindref="compound">rapidjson/ostreamwrapper.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;fstream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal">std;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">ofstream<sp/>ofs(</highlight><highlight class="stringliteral">&quot;output.json&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_o_stream_wrapper" kindref="compound">OStreamWrapper</ref><sp/>osw(ofs);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;OStreamWrapper&gt;</ref><sp/>writer(osw);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+</programlisting></para>
+<para>对于继承自 <computeroutput>std::wistream</computeroutput> 的类，则使用 <computeroutput><ref refid="class_w_i_stream_wrapper" kindref="compound">WIStreamWrapper</ref></computeroutput>。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedStreams">
+<title>Encoded Streams</title>
+<para>编码流（encoded streams）本身不存储 JSON，它们是通过包装字节流来提供基本的编码／解码功能。</para>
+<para>如上所述，我们可以直接读入 UTF-8 字节流。然而，UTF-16 及 UTF-32 有字节序（endian）问题。要正确地处理字节序，需要在读取时把字节转换成字符（如对 UTF-16 使用 <computeroutput>wchar_t</computeroutput>），以及在写入时把字符转换为字节。</para>
+<para>除此以外，我们也需要处理 <ulink url="http://en.wikipedia.org/wiki/Byte_order_mark">字节顺序标记（byte order mark, BOM）</ulink>。当从一个字节流读取时，需要检测 BOM，或者仅仅是把存在的 BOM 消去。当把 JSON 写入字节流时，也可选择写入 BOM。</para>
+<para>若一个流的编码在编译期已知，你可使用 <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> 及 <computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput>。若一个流可能存储 UTF-8、UTF-16LE、UTF-16BE、UTF-32LE、UTF-32BE 的 JSON，并且编码只能在运行时得知，你便可以使用 <computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> 及 <computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput>。这些流定义在 <computeroutput><ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref></computeroutput>。</para>
+<para>注意到，这些编码流可以施于文件以外的流。例如，你可以用编码流包装内存中的文件或自定义的字节流。</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedInputStream">
+<title>EncodedInputStream</title>
+<para><computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> 含两个模板参数。第一个是 <computeroutput>Encoding</computeroutput> 类型，例如定义于 <computeroutput><ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref></computeroutput> 的 <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>、<computeroutput><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref></computeroutput>。第二个参数是被包装的流的类型。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>FileReadStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>EncodedInputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;utf16le.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>bis(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream&lt;UTF16LE&lt;&gt;</ref>,<sp/><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref>&gt;<sp/>eis(bis);<sp/><sp/></highlight><highlight class="comment">//<sp/>用<sp/>eis<sp/>包装<sp/>bis</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>Document<sp/>为<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>&lt;0,<sp/><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE&lt;&gt;</ref><sp/>&gt;(eis);<sp/><sp/></highlight><highlight class="comment">//<sp/>把<sp/>UTF-16LE<sp/>文件解析至内存中的<sp/>UTF-8</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1EncodedOutputStream">
+<title>EncodedOutputStream</title>
+<para><computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput> 也是相似的，但它的构造函数有一个 <computeroutput>bool putBOM</computeroutput> 参数，用于控制是否在输出字节流写入 BOM。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filewritestream_8h" kindref="compound">rapidjson/filewritestream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>FileWriteStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>EncodedOutputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;<ref refid="writer_8h" kindref="compound">rapidjson/writer.h</ref>&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Document<sp/>为<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;output_utf32le.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;wb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;w&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>bos(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream&lt;UTF32LE&lt;&gt;</ref>,<sp/><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref>&gt;<sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal">OutputStream<sp/>eos(bos,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>写入<sp/>BOM</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;OutputStream, UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE&lt;&gt;</ref>&gt;<sp/>writer(eos);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>这里从内存的<sp/>UTF-8<sp/>生成<sp/>UTF32-LE<sp/>文件</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1AutoUTFInputStream">
+<title>AutoUTFInputStream</title>
+<para>有时候，应用软件可能需要㲃理所有可支持的 JSON 编码。<computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> 会先使用 BOM 来检测编码。若 BOM 不存在，它便会使用合法 JSON 的特性来检测。若两种方法都失败，它就会倒退至构造函数提供的 UTF 类型。</para>
+<para>由于字符（编码单元／code unit）可能是 8 位、16 位或 32 位，<computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput> 需要一个能至少储存 32 位的字符类型。我们可以使用 <computeroutput>unsigned</computeroutput> 作为模板参数：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="document_8h" kindref="compound">rapidjson/document.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="filereadstream_8h" kindref="compound">rapidjson/filereadstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>FileReadStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodedstream_8h" kindref="compound">rapidjson/encodedstream.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>AutoUTFInputStream</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cstdio&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">FILE*<sp/>fp<sp/>=<sp/>fopen(</highlight><highlight class="stringliteral">&quot;any.json&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rb&quot;</highlight><highlight class="normal">);<sp/></highlight><highlight class="comment">//<sp/>非<sp/>Windows<sp/>平台使用<sp/>&quot;r&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>readBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_file_read_stream" kindref="compound">FileReadStream</ref><sp/>bis(fp,<sp/>readBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(readBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream&lt;unsigned, FileReadStream&gt;</ref><sp/>eis(bis);<sp/><sp/></highlight><highlight class="comment">//<sp/>用<sp/>eis<sp/>包装<sp/>bis</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Document<sp/>为<sp/>GenericDocument&lt;UTF8&lt;&gt;<sp/>&gt;<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>&lt;0,<sp/><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF&lt;unsigned&gt;</ref><sp/>&gt;(eis);<sp/></highlight><highlight class="comment">//<sp/>把任何<sp/>UTF<sp/>编码的文件解析至内存中的<sp/>UTF-8</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">fclose(fp);</highlight></codeline>
+</programlisting></para>
+<para>当要指定流的编码，可使用上面例子中 <computeroutput>ParseStream()</computeroutput> 的参数 <computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref>&lt;CharType&gt;</computeroutput>。</para>
+<para>你可以使用 <computeroutput>UTFType GetType()</computeroutput> 去获取 UTF 类型，并且用 <computeroutput>HasBOM()</computeroutput> 检测输入流是否含有 BOM。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1AutoUTFOutputStream">
+<title>AutoUTFOutputStream</title>
+<para>相似地，要在运行时选择输出的编码，我们可使用 <computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput>。这个类本身并非「自动」。你需要在运行时指定 UTF 类型，以及是否写入 BOM。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>WriteJSONFile(FILE*<sp/>fp,<sp/><ref refid="encodings_8h_1ac9448aedf514a5bb509bae73a9ce4e58" kindref="member">UTFType</ref><sp/>type,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>putBOM,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">Document</ref>&amp;<sp/>d)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>writeBuffer[256];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_file_write_stream" kindref="compound">FileWriteStream</ref><sp/>bos(fp,<sp/>writeBuffer,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(writeBuffer));</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream&lt;unsigned, FileWriteStream&gt;</ref><sp/>OutputStream;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>OutputStream<sp/>eos(bos,<sp/>type,<sp/>putBOM);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_writer" kindref="compound">Writer&lt;OutputStream, UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF&lt;&gt;</ref><sp/>&gt;<sp/>writer;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><computeroutput><ref refid="class_auto_u_t_f_input_stream" kindref="compound">AutoUTFInputStream</ref></computeroutput>／<computeroutput><ref refid="class_auto_u_t_f_output_stream" kindref="compound">AutoUTFOutputStream</ref></computeroutput> 是比 <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput>／<computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput> 方便。但前者会产生一点运行期额外开销。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1CustomStream">
+<title>Custom Stream</title>
+<para>除了内存／文件流，使用者可创建自行定义适配 RapidJSON API 的流类。例如，你可以创建网络流、从压缩文件读取的流等等。</para>
+<para>RapidJSON 利用模板结合不同的类型。只要一个类包含所有所需的接口，就可以作为一个流。流的接合定义在 <computeroutput><ref refid="rapidjson_8h" kindref="compound">rapidjson/rapidjson.h</ref></computeroutput> 的注释里：</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">concept<sp/></highlight><highlight class="normal"><ref refid="classrapidjson_1_1_stream" kindref="compound">Stream</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>typename<sp/>Ch;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()<sp/>const;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>Tell();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Put(Ch<sp/>c);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void<sp/>Flush();</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>size_t<sp/>PutEnd(Ch*<sp/>begin);</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>输入流必须实现 <computeroutput>Peek()</computeroutput>、<computeroutput>Take()</computeroutput> 及 <computeroutput>Tell()</computeroutput>。 输出流必须实现 <computeroutput>Put()</computeroutput> 及 <computeroutput>Flush()</computeroutput>。 <computeroutput>PutBegin()</computeroutput> 及 <computeroutput>PutEnd()</computeroutput> 是特殊的接口，仅用于原位（*in situ*）解析。一般的流不需实现它们。然而，即使接口不需用于某些流，仍然需要提供空实现，否则会产生编译错误。</para>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1ExampleIStreamWrapper">
+<title>Example: istream wrapper</title>
+<para>以下的简单例子是 <computeroutput>std::istream</computeroutput> 的包装类，它只需现 3 个函数。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">class<sp/></highlight><highlight class="normal">MyIStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>Ch;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(std::istream&amp;<sp/>is)<sp/>:<sp/>is_(is)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="comment">//<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c<sp/>=<sp/>is_.peek();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal"><sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/></highlight><highlight class="comment">//<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>c<sp/>=<sp/>is_.get();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>c<sp/>==<sp/>std::char_traits&lt;char&gt;::eof()<sp/>?<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal"><sp/>:<sp/>(Ch)c;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Tell()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal">)is_.tellg();<sp/>}<sp/></highlight><highlight class="comment">//<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Put(Ch)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Flush()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>PutEnd(Ch*)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyIStreamWrapper&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyIStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::istream&amp;<sp/>is_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>使用者能用它来包装 <computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ifstream</computeroutput> 的实例。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>json<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;[1,2,3,4]&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss(json);</highlight></codeline>
+<codeline><highlight class="normal">MyIStreamWrapper<sp/>is(ss);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921" kindref="member">ParseStream</ref>(is);</highlight></codeline>
+</programlisting></para>
+<para>但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_stream_zh_cn_1ExampleOStreamWrapper">
+<title>Example: ostream wrapper</title>
+<para>以下的例子是 <computeroutput>std::istream</computeroutput> 的包装类，它只需实现 2 个函数。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">class<sp/></highlight><highlight class="normal">MyOStreamWrapper<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>Ch;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="ostreamwrapper_8h_1aa8f833ae8c21c308bc48717f056ac4b6" kindref="member">OStreamWrapper</ref>(std::ostream&amp;<sp/>os)<sp/>:<sp/>os_(os)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Peek()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch<sp/>Take()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>Tell()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Ch*<sp/>PutBegin()<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Put(Ch<sp/>c)<sp/>{<sp/>os_.put(c);<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Flush()<sp/>{<sp/>os_.flush();<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>PutEnd(Ch*)<sp/>{<sp/>assert(</highlight><highlight class="keyword">false</highlight><highlight class="normal">);<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;<sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MyOStreamWrapper&amp;<sp/>operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>MyOStreamWrapper&amp;);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>std::ostream&amp;<sp/>os_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para>使用者能用它来包装 <computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ofstream</computeroutput> 的实例。</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">std::stringstream<sp/>ss;</highlight></codeline>
+<codeline><highlight class="normal">MyOStreamWrapper<sp/>os(ss);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;MyOStreamWrapper&gt;</ref><sp/>writer(os);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+</programlisting></para>
+<para>但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_stream_zh_cn_1Summary">
+<title>Summary</title>
+<para>本节描述了 RapidJSON 提供的各种流的类。内存流很简单。若 JSON 存储在文件中，文件流可减少 JSON 解析及生成所需的内存量。编码流在字节流和字符流之间作转换。最后，使用者可使用一个简单接口创建自定义的流。 </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/stream.zh-cn.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="__button_8h_source" xml:lang="en-US">
+<title>Button.h</title>
+<indexterm><primary>src/UI/Button.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;TREES_JSON_BUTTON_H</emphasis>
+2 <emphasis role="preprocessor">#define&#32;TREES_JSON_BUTTON_H</emphasis>
+3 
+4 
+5 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+6 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics/RectangleShape.hpp&gt;</emphasis>
+7 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics/RenderTarget.hpp&gt;</emphasis>
+8 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics/Text.hpp&gt;</emphasis>
+9 <emphasis role="preprocessor">#include&#32;&lt;SFML/Window/Mouse.hpp&gt;</emphasis>
+10 <emphasis role="comment">/***</emphasis>
+11 <emphasis role="comment">&#32;*&#32;@class&#32;Klasa&#32;dla&#32;przycisków,&#32;przechowuje&#32;informacje&#32;o&#32;ich&#32;pozycji,&#32;stanie,&#32;wysokości,&#32;szerokości&#32;oraz&#32;tekście</emphasis>
+12 <emphasis role="comment">&#32;*/</emphasis>
+13 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_button">Button</link>&#32;{
+14 <emphasis role="keyword">public</emphasis>:
+16 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957">ButtonState</link>&#32;{
+17 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957ac54af48e7b4defd52b6ec5e9925cc0fc">IDLE</link>,
+18 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957ade61a8af7d75db6eedb8578208983e5f">HOVER</link>,
+19 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957a2e515aeaab1c943310f4967133711a07">ACTIVE</link>
+20 &#32;&#32;&#32;&#32;};
+21 <emphasis role="keyword">private</emphasis>:
+23 &#32;&#32;&#32;&#32;sf::RectangleShape&#32;buttonShape;
+25 &#32;&#32;&#32;&#32;sf::Text&#32;text;
+27 &#32;&#32;&#32;&#32;sf::Font&#32;font;
+29 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;width;
+31 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;height;
+33 &#32;&#32;&#32;&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957">ButtonState</link>&#32;state;
+34 
+36 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initText(<emphasis role="keyword">const</emphasis>&#32;std::string&amp;&#32;text);
+37 
+38 <emphasis role="keyword">public</emphasis>:
+40 &#32;&#32;&#32;&#32;<link linkend="_class_button_1ae7c4b8c939fe4b5fc7e44749626b7506">Button</link>(<emphasis role="keyword">const</emphasis>&#32;std::string&amp;&#32;text,&#32;<emphasis role="keywordtype">float</emphasis>&#32;posX,&#32;<emphasis role="keywordtype">float</emphasis>&#32;posY,&#32;<emphasis role="keywordtype">float</emphasis>&#32;width,&#32;<emphasis role="keywordtype">float</emphasis>&#32;height);
+41 
+43 &#32;&#32;&#32;&#32;sf::Color&#32;<link linkend="_class_button_1a9587b2191d6ce2f5e3df793e960929bb">colorIdle</link>;
+45 &#32;&#32;&#32;&#32;sf::Color&#32;<link linkend="_class_button_1a936427ac9c7f34725211e3587c9ad2dc">colorHover</link>;
+47 &#32;&#32;&#32;&#32;sf::Color&#32;<link linkend="_class_button_1a99f0d1583e7b423a3977204d8329478b">colorActive</link>;
+48 
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_button_1ae36d992ac6b380f00a2a45063a6c2aa1">intersects</link>(<emphasis role="keyword">const</emphasis>&#32;sf::Shape&amp;&#32;shape);
+52 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_button_1a75f6aee61f3803d1c38da9e47e31a892">setState</link>(<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957">ButtonState</link>&#32;newState);
+54 &#32;&#32;&#32;&#32;<link linkend="_class_button_1ad8312db93093c21df8b1d2be74ae1957">ButtonState</link>&#32;<link linkend="_class_button_1aff051c1b5c0c9e90dba4cb089e4b95a5">getState</link>()&#32;{<emphasis role="keywordflow">return</emphasis>&#32;state;}
+56 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_button_1aa8ab3a2b310cc81d0bf24618bbb892ab">render</link>(sf::RenderTarget&amp;&#32;window);
+58 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_button_1ad306077cd91e58136dc7610d6edf30eb">update</link>(<emphasis role="keyword">const</emphasis>&#32;sf::RectangleShape&amp;&#32;cursor);
+59 };
+60 
+61 
+62 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//TREES_JSON_BUTTON_H</emphasis>
+</programlisting></section>

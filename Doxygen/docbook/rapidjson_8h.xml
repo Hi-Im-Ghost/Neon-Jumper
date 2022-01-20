@@ -1,0 +1,359 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_rapidjson_8h" xml:lang="en-US">
+<title>src/rapidjson/include/rapidjson/rapidjson.h File Reference</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/rapidjson.h</primary></indexterm>
+<para>
+
+<para>common definitions and configuration </para>
+ 
+</para>
+<programlisting linenumbering="unnumbered">#include &lt;cstdlib&gt;
+#include &lt;cstring&gt;
+#include &lt;cassert&gt;
+</programlisting><simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para>namespace <link linkend="_namespacerapidjson">rapidjson</link></para>
+
+<para>main RapidJSON namespace </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf1ff1685be6cbebb5d4b2ab997776f45">RAPIDJSON_MAJOR_VERSION</link>   1</para>
+
+<para>Major version of RapidJSON in integer. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf9125105c593a636a79f1c2d96835376">RAPIDJSON_MINOR_VERSION</link>   1</para>
+
+<para>Minor version of RapidJSON in integer. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf967d31be43666ce7f53756d73bd1cdf">RAPIDJSON_PATCH_VERSION</link>   0</para>
+
+<para>Patch version of RapidJSON in integer. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad283cfde97d9a32b7d8e8107b11f70a6">RAPIDJSON_VERSION_STRING</link>       RAPIDJSON_STRINGIFY(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf967d31be43666ce7f53756d73bd1cdf">RAPIDJSON_MAJOR_VERSION.RAPIDJSON_MINOR_VERSION.RAPIDJSON_PATCH_VERSION</link>)</para>
+
+<para>Version of RapidJSON in &quot;&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;&quot; string format. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga743a79d3af927391fe3eb5c979136899">RAPIDJSON_NAMESPACE</link>   rapidjson</para>
+
+<para>provide custom rapidjson namespace </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>   namespace <link linkend="_simdtest_8cpp_1a743a79d3af927391fe3eb5c979136899">RAPIDJSON_NAMESPACE</link> {</para>
+
+<para>provide custom rapidjson namespace (opening expression) </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>   }</para>
+
+<para>provide custom rapidjson namespace (closing expression) </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2f2eef0ee4477f3fe5874703a66e997f">RAPIDJSON_HAS_STDSTRING</link>   0</para>
+
+<para>Enable RapidJSON support for <computeroutput>std::string</computeroutput>. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga87dc65109882910388121e1dba15038b">RAPIDJSON_USE_MEMBERSMAP</link></para>
+
+<para>Enable RapidJSON support for object members handling in a <computeroutput>std::multimap</computeroutput>. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1addcc0c3607c5790f35cc4c15885ff97c">RAPIDJSON_LITTLEENDIAN</link>   0</para>
+
+<para>Little endian machine. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1ac7951ebf8a2624ab85d2dcd3ec7af974">RAPIDJSON_BIGENDIAN</link>   1</para>
+
+<para>Big endian machine. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1a93973847cb99354b6b5bb5605aa7fe52">RAPIDJSON_64BIT</link>   0</para>
+
+<para>Whether using 64-bit architecture. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(x)   (((x) + static_cast&lt;size_t&gt;(7u)) &amp; ~static_cast&lt;size_t&gt;(7u))</para>
+
+<para>Data alignment of the machine. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(high32,  low32)   ((static_cast&lt;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&gt;(high32) &lt;&lt; 32) | static_cast&lt;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&gt;(low32))</para>
+
+<para>Construct a 64-bit literal by a pair of 32-bit integer. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga93fb983f78208d12c822376e1ea6d185">RAPIDJSON_48BITPOINTER_OPTIMIZATION</link>   0</para>
+
+<para>Use only lower 48-bit address for some pointers. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1a113598c4750b3aab4de2782ff1865ed4">RAPIDJSON_SETPOINTER</link>(type,  p,  x)   (p = (x))</para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1ab67ad54afdd78883907fd1ecd007573a">RAPIDJSON_GETPOINTER</link>(type,  p)   (p)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(x)   assert(x)</para>
+
+<para>Assertion. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4">RAPIDJSON_STATIC_ASSERT</link>(x)</para>
+
+<para>(Internal) macro to check for conditions at compile-time </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga5dc14176a9e71ace282404b0bcda57a1">RAPIDJSON_LIKELY</link>(x)   (x)</para>
+
+<para>Compiler branching hint for expression with high probability to be true. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(x)   (x)</para>
+
+<para>Compiler branching hint for expression with low probability to be true. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(x)   <link linkend="_unittest_8h_1abeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(x)</para>
+
+<para>Assertion (in non-throwing contexts). </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1a047ad77d620d1ae97c1bc70a9f316f27">RAPIDJSON_MALLOC</link>(size)   std::malloc(size)</para>
+
+<para>! customization point for global <computeroutput>malloc</computeroutput> </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1aa2c0f2121d7803191a43609ea5d8dd67">RAPIDJSON_REALLOC</link>(ptr,  new_size)   std::realloc(ptr, new_size)</para>
+
+<para>! customization point for global <computeroutput>realloc</computeroutput> </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1aa6d5138eed2c5b311d9862d191393a5f">RAPIDJSON_FREE</link>(ptr)   std::free(ptr)</para>
+
+<para>! customization point for global <computeroutput>free</computeroutput> </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(TypeName)   new TypeName</para>
+
+<para>! customization point for global <computeroutput>new</computeroutput> </para>
+</listitem>
+            <listitem><para>#define <link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(x)   delete x</para>
+
+<para>! customization point for global <computeroutput>delete</computeroutput> </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Enumerations    </title>
+        <itemizedlist>
+            <listitem><para>enum <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link> { 
+<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087">kNullType</link> = 0
+, <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54">kFalseType</link> = 1
+, <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6">kTrueType</link> = 2
+, <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f">kObjectType</link> = 3
+, 
+<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link> = 4
+, <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link> = 5
+, <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link> = 6
+ }</para>
+
+<para>Type of JSON value. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_namespacetest_8cpp_1ad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link> typedef unsigned <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link></para>
+
+<para>Size type (for string lengths, array sizes, etc.) </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>common definitions and configuration </para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g">RapidJSON configuration</link> </para>
+</formalpara>
+</para>
+</section>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_rapidjson_8h_1a93973847cb99354b6b5bb5605aa7fe52"/><section>
+    <title>RAPIDJSON_64BIT</title>
+<indexterm><primary>RAPIDJSON_64BIT</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_64BIT</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_64BIT   0</computeroutput></para><para>
+
+<para>Whether using 64-bit architecture. </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1ac7951ebf8a2624ab85d2dcd3ec7af974"/><section>
+    <title>RAPIDJSON_BIGENDIAN</title>
+<indexterm><primary>RAPIDJSON_BIGENDIAN</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_BIGENDIAN</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_BIGENDIAN   1</computeroutput></para><para>
+
+<para>Big endian machine. </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a"/><section>
+    <title>RAPIDJSON_DELETE</title>
+<indexterm><primary>RAPIDJSON_DELETE</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_DELETE</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_DELETE( x)   delete x</computeroutput></para><para>
+
+<para>! customization point for global <computeroutput>delete</computeroutput> </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1aa6d5138eed2c5b311d9862d191393a5f"/><section>
+    <title>RAPIDJSON_FREE</title>
+<indexterm><primary>RAPIDJSON_FREE</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_FREE</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_FREE( ptr)   std::free(ptr)</computeroutput></para><para>
+
+<para>! customization point for global <computeroutput>free</computeroutput> </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1ab67ad54afdd78883907fd1ecd007573a"/><section>
+    <title>RAPIDJSON_GETPOINTER</title>
+<indexterm><primary>RAPIDJSON_GETPOINTER</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_GETPOINTER</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_GETPOINTER( type,  p)   (p)</computeroutput></para></section>
+<anchor xml:id="_rapidjson_8h_1addcc0c3607c5790f35cc4c15885ff97c"/><section>
+    <title>RAPIDJSON_LITTLEENDIAN</title>
+<indexterm><primary>RAPIDJSON_LITTLEENDIAN</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_LITTLEENDIAN</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_LITTLEENDIAN   0</computeroutput></para><para>
+
+<para>Little endian machine. </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1a047ad77d620d1ae97c1bc70a9f316f27"/><section>
+    <title>RAPIDJSON_MALLOC</title>
+<indexterm><primary>RAPIDJSON_MALLOC</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_MALLOC</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_MALLOC( size)   std::malloc(size)</computeroutput></para><para>
+
+<para>! customization point for global <computeroutput>malloc</computeroutput> </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b"/><section>
+    <title>RAPIDJSON_NEW</title>
+<indexterm><primary>RAPIDJSON_NEW</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_NEW</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_NEW( TypeName)   new TypeName</computeroutput></para><para>
+
+<para>! customization point for global <computeroutput>new</computeroutput> </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1aa2c0f2121d7803191a43609ea5d8dd67"/><section>
+    <title>RAPIDJSON_REALLOC</title>
+<indexterm><primary>RAPIDJSON_REALLOC</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_REALLOC</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_REALLOC( ptr,  new_size)   std::realloc(ptr, new_size)</computeroutput></para><para>
+
+<para>! customization point for global <computeroutput>realloc</computeroutput> </para>
+</para>
+</section>
+<anchor xml:id="_rapidjson_8h_1a113598c4750b3aab4de2782ff1865ed4"/><section>
+    <title>RAPIDJSON_SETPOINTER</title>
+<indexterm><primary>RAPIDJSON_SETPOINTER</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_SETPOINTER</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_SETPOINTER( type,  p,  x)   (p = (x))</computeroutput></para></section>
+<anchor xml:id="_rapidjson_8h_1af95188da1d8eb6d4b148fe9ce71cd7c4"/><section>
+    <title>RAPIDJSON_STATIC_ASSERT</title>
+<indexterm><primary>RAPIDJSON_STATIC_ASSERT</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_STATIC_ASSERT</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_STATIC_ASSERT( x)</computeroutput></para><para>
+
+<para>(Internal) macro to check for conditions at compile-time </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>x</entry><entry>
+<para>compile-time condition </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f"/><section>
+    <title>RAPIDJSON_UINT64_C2</title>
+<indexterm><primary>RAPIDJSON_UINT64_C2</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>RAPIDJSON_UINT64_C2</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_UINT64_C2( high32,  low32)   ((static_cast&lt;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&gt;(high32) &lt;&lt; 32) | static_cast&lt;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&gt;(low32))</computeroutput></para><para>
+
+<para>Construct a 64-bit literal by a pair of 32-bit integer. </para>
+</para>
+
+<para>64-bit literal with or without ULL suffix is prone to compiler warnings. <link linkend="_stdint_8h_1a8da5373e041921aa34c2b6172ac3babc">UINT64_C()</link> is C macro which cause compilation problems. Use this macro to define 64-bit constants by a pair of 32-bit integer. </para>
+</section>
+</section>
+<section>
+<title>Enumeration Type Documentation</title>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7"/><section>
+    <title>Type</title>
+<indexterm><primary>Type</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>Type</secondary></indexterm>
+<para><computeroutput>enum <link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link></computeroutput></para><para>
+
+<para>Type of JSON value. </para>
+</para>
+<informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kNullType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kNullType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087"/>kNullType</entry><entry>
+<para>null </para>
+</entry></row><row><entry><indexterm><primary>kFalseType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kFalseType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54"/>kFalseType</entry><entry>
+<para>false </para>
+</entry></row><row><entry><indexterm><primary>kTrueType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kTrueType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6"/>kTrueType</entry><entry>
+<para>true </para>
+</entry></row><row><entry><indexterm><primary>kObjectType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kObjectType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f"/>kObjectType</entry><entry>
+<para>object </para>
+</entry></row><row><entry><indexterm><primary>kArrayType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kArrayType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8"/>kArrayType</entry><entry>
+<para>array </para>
+</entry></row><row><entry><indexterm><primary>kStringType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kStringType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338"/>kStringType</entry><entry>
+<para>string </para>
+</entry></row><row><entry><indexterm><primary>kNumberType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>kNumberType</secondary></indexterm>
+<anchor xml:id="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d"/>kNumberType</entry><entry>
+<para>number </para>
+</entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+</section>
+<section>
+<title>Variable Documentation</title>
+<anchor xml:id="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5"/><section>
+    <title>SizeType</title>
+<indexterm><primary>SizeType</primary><secondary>rapidjson.h</secondary></indexterm>
+<indexterm><primary>rapidjson.h</primary><secondary>SizeType</secondary></indexterm>
+<para><computeroutput><link linkend="_namespacetest_8cpp_1ad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link> typedef unsigned SizeType</computeroutput></para><para>
+
+<para>Size type (for string lengths, array sizes, etc.) </para>
+</para>
+
+<para>RapidJSON uses 32-bit array/string indices even on 64-bit platforms, instead of using <computeroutput>size_t</computeroutput>. Users may override the SizeType by defining RAPIDJSON_NO_SIZETYPEDEFINE. </para>
+</section>
+</section>
+</section>

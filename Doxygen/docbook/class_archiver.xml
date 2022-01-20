@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_archiver" xml:lang="en-US">
+<title>Archiver Class Reference</title>
+<indexterm><primary>Archiver</primary></indexterm>
+<para>
+
+<para><link linkend="_class_archiver">Archiver</link> concept. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;archiver.h&gt;</computeroutput>
+</para>
+<section>
+<title>Detailed Description</title>
+
+<para><link linkend="_class_archiver">Archiver</link> concept. </para>
+
+
+
+<para><link linkend="_class_archiver">Archiver</link> can be a reader or writer for serialization or deserialization respectively.</para>
+
+<para>class <link linkend="_class_archiver">Archiver</link> { public: / <formalpara><title>Returns</title>
+
+<para>true if the archiver is in normal state. false if it has errors. operator bool() const;</para>
+</formalpara>
+/ Starts an object <link linkend="_class_archiver">Archiver</link>&amp; StartObject();</para>
+
+<para>/ After calling StartObject(), assign a member with a name <link linkend="_class_archiver">Archiver</link>&amp; Member(const char* name);</para>
+
+<para>/ After calling StartObject(), check if a member presents bool HasMember(const char* name) const;</para>
+
+<para>/ Ends an object <link linkend="_class_archiver">Archiver</link>&amp; EndObject();</para>
+
+<para>/ Starts an array /
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>size</entry><entry>
+<para>If Archiver::IsReader is true, the size of array is written. <link linkend="_class_archiver">Archiver</link>&amp; StartArray(size_t* size = 0);</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                / Ends an array <link linkend="_class_archiver">Archiver</link>&amp; EndArray();</para>
+
+<para>/ Read/Write primitive types. <link linkend="_class_archiver">Archiver</link>&amp; operator&amp;(bool&amp; b); <link linkend="_class_archiver">Archiver</link>&amp; operator&amp;(unsigned&amp; u); <link linkend="_class_archiver">Archiver</link>&amp; operator&amp;(int&amp; i); <link linkend="_class_archiver">Archiver</link>&amp; operator&amp;(double&amp; d); <link linkend="_class_archiver">Archiver</link>&amp; operator&amp;(std::string&amp; s);</para>
+
+<para>/ Write primitive types. <link linkend="_class_archiver">Archiver</link>&amp; SetNull();</para>
+
+<para>! Whether it is a reader. static const bool IsReader;</para>
+
+<para>! Whether it is a writer. static const bool IsWriter; }; </para>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/rapidjson/example/archiver/<link linkend="_archiver_8h">archiver.h</link></section>
+</section>

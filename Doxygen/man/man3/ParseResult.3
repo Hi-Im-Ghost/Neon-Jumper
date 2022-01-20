@@ -1,0 +1,162 @@
+.TH "ParseResult" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+ParseResult \- Result of parsing (wraps ParseErrorCode)  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <error\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef bool(ParseResult::* \fBBooleanType\fP) () const"
+.br
+.RI "! Unspecified boolean type "
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBParseResult\fP ()"
+.br
+.RI "Default constructor, no error\&. "
+.ti -1c
+.RI "\fBParseResult\fP (\fBParseErrorCode\fP code, size_t offset)"
+.br
+.RI "Constructor to set an error\&. "
+.ti -1c
+.RI "\fBParseErrorCode\fP \fBCode\fP () const"
+.br
+.RI "Get the error code\&. "
+.ti -1c
+.RI "size_t \fBOffset\fP () const"
+.br
+.RI "Get the error offset, if \fBIsError()\fP, 0 otherwise\&. "
+.ti -1c
+.RI "\fBoperator BooleanType\fP () const"
+.br
+.RI "Explicit conversion to \fCbool\fP, returns \fCtrue\fP, iff !\fBIsError()\fP\&. "
+.ti -1c
+.RI "bool \fBIsError\fP () const"
+.br
+.RI "Whether the result is an error\&. "
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBParseResult\fP &that) const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (\fBParseErrorCode\fP code) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBParseResult\fP &that) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (\fBParseErrorCode\fP code) const"
+.br
+.ti -1c
+.RI "void \fBClear\fP ()"
+.br
+.RI "Reset error code\&. "
+.ti -1c
+.RI "void \fBSet\fP (\fBParseErrorCode\fP code, size_t offset=0)"
+.br
+.RI "Update error code and offset\&. "
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "bool \fBoperator==\fP (\fBParseErrorCode\fP code, const \fBParseResult\fP &err)"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (\fBParseErrorCode\fP code, const \fBParseResult\fP &err)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Result of parsing (wraps ParseErrorCode) 
+
+
+.PP
+.nf
+Document doc;
+ParseResult ok = doc\&.Parse("[42]");
+if (!ok) {
+    fprintf(stderr, "JSON parse error: %s (%u)",
+            GetParseError_En(ok\&.Code()), ok\&.Offset());
+    exit(EXIT_FAILURE);
+}
+
+.fi
+.PP
+ 
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericReader::Parse\fP, \fBGenericDocument::Parse\fP 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef bool(ParseResult::* ParseResult::BooleanType) () const"
+
+.PP
+! Unspecified boolean type 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "ParseResult::ParseResult ()\fC [inline]\fP"
+
+.PP
+Default constructor, no error\&. 
+.SS "ParseResult::ParseResult (\fBParseErrorCode\fP code, size_t offset)\fC [inline]\fP"
+
+.PP
+Constructor to set an error\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void ParseResult::Clear ()\fC [inline]\fP"
+
+.PP
+Reset error code\&. 
+.SS "\fBParseErrorCode\fP ParseResult::Code () const\fC [inline]\fP"
+
+.PP
+Get the error code\&. 
+.SS "bool ParseResult::IsError () const\fC [inline]\fP"
+
+.PP
+Whether the result is an error\&. 
+.SS "size_t ParseResult::Offset () const\fC [inline]\fP"
+
+.PP
+Get the error offset, if \fBIsError()\fP, 0 otherwise\&. 
+.SS "ParseResult::operator \fBBooleanType\fP () const\fC [inline]\fP"
+
+.PP
+Explicit conversion to \fCbool\fP, returns \fCtrue\fP, iff !\fBIsError()\fP\&. 
+.SS "bool ParseResult::operator!= (const \fBParseResult\fP & that) const\fC [inline]\fP"
+
+.SS "bool ParseResult::operator!= (\fBParseErrorCode\fP code) const\fC [inline]\fP"
+
+.SS "bool ParseResult::operator== (const \fBParseResult\fP & that) const\fC [inline]\fP"
+
+.SS "bool ParseResult::operator== (\fBParseErrorCode\fP code) const\fC [inline]\fP"
+
+.SS "void ParseResult::Set (\fBParseErrorCode\fP code, size_t offset = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Update error code and offset\&. 
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "bool operator!= (\fBParseErrorCode\fP code, const \fBParseResult\fP & err)\fC [friend]\fP"
+
+.SS "bool operator== (\fBParseErrorCode\fP code, const \fBParseResult\fP & err)\fC [friend]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

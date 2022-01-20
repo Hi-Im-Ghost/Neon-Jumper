@@ -1,0 +1,305 @@
+\hypertarget{stdint_8h_source}{}\doxysection{stdint.\+h}
+\label{stdint_8h_source}\index{src/rapidjson/include/rapidjson/msinttypes/stdint.h@{src/rapidjson/include/rapidjson/msinttypes/stdint.h}}
+\mbox{\hyperlink{stdint_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// ISO C9x  compliant stdint.h for Microsoft Visual Studio}}
+\DoxyCodeLine{2 \textcolor{comment}{// Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124 }}
+\DoxyCodeLine{3 \textcolor{comment}{// }}
+\DoxyCodeLine{4 \textcolor{comment}{//  Copyright (c) 2006-\/2013 Alexander Chemeris}}
+\DoxyCodeLine{5 \textcolor{comment}{// }}
+\DoxyCodeLine{6 \textcolor{comment}{// Redistribution and use in source and binary forms, with or without}}
+\DoxyCodeLine{7 \textcolor{comment}{// modification, are permitted provided that the following conditions are met:}}
+\DoxyCodeLine{8 \textcolor{comment}{// }}
+\DoxyCodeLine{9 \textcolor{comment}{//   1. Redistributions of source code must retain the above copyright notice,}}
+\DoxyCodeLine{10 \textcolor{comment}{//      this list of conditions and the following disclaimer.}}
+\DoxyCodeLine{11 \textcolor{comment}{// }}
+\DoxyCodeLine{12 \textcolor{comment}{//   2. Redistributions in binary form must reproduce the above copyright}}
+\DoxyCodeLine{13 \textcolor{comment}{//      notice, this list of conditions and the following disclaimer in the}}
+\DoxyCodeLine{14 \textcolor{comment}{//      documentation and/or other materials provided with the distribution.}}
+\DoxyCodeLine{15 \textcolor{comment}{// }}
+\DoxyCodeLine{16 \textcolor{comment}{//   3. Neither the name of the product nor the names of its contributors may}}
+\DoxyCodeLine{17 \textcolor{comment}{//      be used to endorse or promote products derived from this software}}
+\DoxyCodeLine{18 \textcolor{comment}{//      without specific prior written permission.}}
+\DoxyCodeLine{19 \textcolor{comment}{// }}
+\DoxyCodeLine{20 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED}}
+\DoxyCodeLine{21 \textcolor{comment}{// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF}}
+\DoxyCodeLine{22 \textcolor{comment}{// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO}}
+\DoxyCodeLine{23 \textcolor{comment}{// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;}}
+\DoxyCodeLine{26 \textcolor{comment}{// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, }}
+\DoxyCodeLine{27 \textcolor{comment}{// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR}}
+\DoxyCodeLine{28 \textcolor{comment}{// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF}}
+\DoxyCodeLine{29 \textcolor{comment}{// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}}
+\DoxyCodeLine{30 \textcolor{comment}{// }}
+\DoxyCodeLine{32 \textcolor{comment}{}}
+\DoxyCodeLine{33 \textcolor{comment}{// The above software in this distribution may have been modified by }}
+\DoxyCodeLine{34 \textcolor{comment}{// THL A29 Limited ("{}Tencent Modifications"{}). }}
+\DoxyCodeLine{35 \textcolor{comment}{// All Tencent Modifications are Copyright (C) 2015 THL A29 Limited.}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#ifndef \_MSC\_VER }\textcolor{comment}{// [}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#error "{}Use this header only with Microsoft Visual C++ compilers!"{}}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_VER ]}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#ifndef \_MSC\_STDINT\_H\_ }\textcolor{comment}{// [}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#define \_MSC\_STDINT\_H\_}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#if \_MSC\_VER > 1000}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{comment}{// miloyip: Originally Visual Studio 2010 uses its own stdint.h. However it generates warning with INT64\_C(), so change to use this file for vs2010.}}
+\DoxyCodeLine{49 \textcolor{preprocessor}{\#if \_MSC\_VER >= 1600 }\textcolor{comment}{// [}}
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#include <\mbox{\hyperlink{stdint_8h}{stdint.h}}>}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#if !defined(\_\_cplusplus) || defined(\_\_STDC\_CONSTANT\_MACROS) }\textcolor{comment}{// [   See footnote 224 at page 260}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#undef INT8\_C}}
+\DoxyCodeLine{55 \textcolor{preprocessor}{\#undef INT16\_C}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{\#undef INT32\_C}}
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#undef INT64\_C}}
+\DoxyCodeLine{58 \textcolor{preprocessor}{\#undef UINT8\_C}}
+\DoxyCodeLine{59 \textcolor{preprocessor}{\#undef UINT16\_C}}
+\DoxyCodeLine{60 \textcolor{preprocessor}{\#undef UINT32\_C}}
+\DoxyCodeLine{61 \textcolor{preprocessor}{\#undef UINT64\_C}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \textcolor{comment}{// 7.18.4.1 Macros for minimum-\/width integer constants}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{preprocessor}{\#define INT8\_C(val)  val\#\#i8}}
+\DoxyCodeLine{66 \textcolor{preprocessor}{\#define INT16\_C(val) val\#\#i16}}
+\DoxyCodeLine{67 \textcolor{preprocessor}{\#define INT32\_C(val) val\#\#i32}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#define INT64\_C(val) val\#\#i64}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#define UINT8\_C(val)  val\#\#ui8}}
+\DoxyCodeLine{71 \textcolor{preprocessor}{\#define UINT16\_C(val) val\#\#ui16}}
+\DoxyCodeLine{72 \textcolor{preprocessor}{\#define UINT32\_C(val) val\#\#ui32}}
+\DoxyCodeLine{73 \textcolor{preprocessor}{\#define UINT64\_C(val) val\#\#ui64}}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75 \textcolor{comment}{// 7.18.4.2 Macros for greatest-\/width integer constants}}
+\DoxyCodeLine{76 \textcolor{comment}{// These \#ifndef's are needed to prevent collisions with <boost/cstdint.hpp>.}}
+\DoxyCodeLine{77 \textcolor{comment}{// Check out Issue 9 for the details.}}
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#ifndef INTMAX\_C }\textcolor{comment}{//   [}}
+\DoxyCodeLine{79 \textcolor{preprocessor}{\#  define INTMAX\_C   INT64\_C}}
+\DoxyCodeLine{80 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// INTMAX\_C    ]}}
+\DoxyCodeLine{81 \textcolor{preprocessor}{\#ifndef UINTMAX\_C }\textcolor{comment}{//  [}}
+\DoxyCodeLine{82 \textcolor{preprocessor}{\#  define UINTMAX\_C  UINT64\_C}}
+\DoxyCodeLine{83 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// UINTMAX\_C   ]}}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{85 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_STDC\_CONSTANT\_MACROS ]}}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87 \textcolor{preprocessor}{\#else }\textcolor{comment}{// ] \_MSC\_VER >= 1700 [}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{89 \textcolor{preprocessor}{\#include <limits.h>}}
+\DoxyCodeLine{90 }
+\DoxyCodeLine{91 \textcolor{comment}{// For Visual Studio 6 in C++ mode and for many Visual Studio versions when}}
+\DoxyCodeLine{92 \textcolor{comment}{// compiling for ARM we have to wrap <wchar.h> include with 'extern "{}C++"{} \{\}'}}
+\DoxyCodeLine{93 \textcolor{comment}{// or compiler would give many errors like this:}}
+\DoxyCodeLine{94 \textcolor{comment}{//   error C2733: second C linkage of overloaded function 'wmemchr' not allowed}}
+\DoxyCodeLine{95 \textcolor{preprocessor}{\#if defined(\_\_cplusplus) \&\& !defined(\_M\_ARM)}}
+\DoxyCodeLine{96 \textcolor{keyword}{extern} \textcolor{stringliteral}{"{}C"{}} \{}
+\DoxyCodeLine{97 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{98 \textcolor{preprocessor}{\#  include <wchar.h>}}
+\DoxyCodeLine{99 \textcolor{preprocessor}{\#if defined(\_\_cplusplus) \&\& !defined(\_M\_ARM)}}
+\DoxyCodeLine{100 \}}
+\DoxyCodeLine{101 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103 \textcolor{comment}{// Define \_W64 macros to mark types changing their size, like intptr\_t.}}
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#ifndef \_W64}}
+\DoxyCodeLine{105 \textcolor{preprocessor}{\#  if !defined(\_\_midl) \&\& (defined(\_X86\_) || defined(\_M\_IX86)) \&\& \_MSC\_VER >= 1300}}
+\DoxyCodeLine{106 \textcolor{preprocessor}{\#     define \_W64 \_\_w64}}
+\DoxyCodeLine{107 \textcolor{preprocessor}{\#  else}}
+\DoxyCodeLine{108 \textcolor{preprocessor}{\#     define \_W64}}
+\DoxyCodeLine{109 \textcolor{preprocessor}{\#  endif}}
+\DoxyCodeLine{110 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113 \textcolor{comment}{// 7.18.1 Integer types}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \textcolor{comment}{// 7.18.1.1 Exact-\/width integer types}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117 \textcolor{comment}{// Visual Studio 6 and Embedded Visual C++ 4 doesn't}}
+\DoxyCodeLine{118 \textcolor{comment}{// realize that, e.g. char has the same size as \_\_int8}}
+\DoxyCodeLine{119 \textcolor{comment}{// so we give up on \_\_intX for them.}}
+\DoxyCodeLine{120 \textcolor{preprocessor}{\#if (\_MSC\_VER < 1300)}}
+\DoxyCodeLine{121    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \textcolor{keywordtype}{char}       \mbox{\hyperlink{stdint_8h_aef44329758059c91c76d334e8fc09700}{int8\_t}};}
+\DoxyCodeLine{122    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \textcolor{keywordtype}{short}      \mbox{\hyperlink{stdint_8h_a269259c924dce846340ddbb810db2e3c}{int16\_t}};}
+\DoxyCodeLine{123    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \textcolor{keywordtype}{int}        \mbox{\hyperlink{stdint_8h_ab1967d8591af1a4e48c37fd2b0f184d0}{int32\_t}};}
+\DoxyCodeLine{124    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}     \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}};}
+\DoxyCodeLine{125    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{short}    \mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}};}
+\DoxyCodeLine{126    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}      \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}};}
+\DoxyCodeLine{127 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{128    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \_\_int8     \mbox{\hyperlink{stdint_8h_aef44329758059c91c76d334e8fc09700}{int8\_t}};}
+\DoxyCodeLine{129    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \_\_int16    \mbox{\hyperlink{stdint_8h_a269259c924dce846340ddbb810db2e3c}{int16\_t}};}
+\DoxyCodeLine{130    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \_\_int32    \mbox{\hyperlink{stdint_8h_ab1967d8591af1a4e48c37fd2b0f184d0}{int32\_t}};}
+\DoxyCodeLine{131    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int8   \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}};}
+\DoxyCodeLine{132    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int16  \mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}};}
+\DoxyCodeLine{133    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int32  \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}};}
+\DoxyCodeLine{134 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{135 \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \_\_int64       \mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}};}
+\DoxyCodeLine{136 \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int64     \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}};}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139 \textcolor{comment}{// 7.18.1.2 Minimum-\/width integer types}}
+\DoxyCodeLine{140 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aef44329758059c91c76d334e8fc09700}{int8\_t}}    \mbox{\hyperlink{stdint_8h_aadfd725efbf565422ab13db91ccca53c}{int\_least8\_t}};}
+\DoxyCodeLine{141 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a269259c924dce846340ddbb810db2e3c}{int16\_t}}   \mbox{\hyperlink{stdint_8h_a17f379713bed2a28ac431760401253cd}{int\_least16\_t}};}
+\DoxyCodeLine{142 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_ab1967d8591af1a4e48c37fd2b0f184d0}{int32\_t}}   \mbox{\hyperlink{stdint_8h_a2676b57a778795e5d0598970f1407f38}{int\_least32\_t}};}
+\DoxyCodeLine{143 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}}   \mbox{\hyperlink{stdint_8h_a2073b30b3170d509bc756bf5c7862caf}{int\_least64\_t}};}
+\DoxyCodeLine{144 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}   \mbox{\hyperlink{stdint_8h_ac76e2383debd5a3b100514044828961a}{uint\_least8\_t}};}
+\DoxyCodeLine{145 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}}  \mbox{\hyperlink{stdint_8h_a4f3f6e6631cb4aaeadf1c59ff597b2fb}{uint\_least16\_t}};}
+\DoxyCodeLine{146 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}  \mbox{\hyperlink{stdint_8h_ac0af81082969e5e3f4d939b1de7002ac}{uint\_least32\_t}};}
+\DoxyCodeLine{147 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}  \mbox{\hyperlink{stdint_8h_ab604f73dd823867b43702ae88b4f4445}{uint\_least64\_t}};}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149 \textcolor{comment}{// 7.18.1.3 Fastest minimum-\/width integer types}}
+\DoxyCodeLine{150 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aef44329758059c91c76d334e8fc09700}{int8\_t}}    \mbox{\hyperlink{stdint_8h_a880ed9ceb8621521452c81d03bd08cfb}{int\_fast8\_t}};}
+\DoxyCodeLine{151 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a269259c924dce846340ddbb810db2e3c}{int16\_t}}   \mbox{\hyperlink{stdint_8h_a9b7386d4af0e20ee32296d9a158c9f3a}{int\_fast16\_t}};}
+\DoxyCodeLine{152 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_ab1967d8591af1a4e48c37fd2b0f184d0}{int32\_t}}   \mbox{\hyperlink{stdint_8h_a920d4b149da0252281b6762375fb644a}{int\_fast32\_t}};}
+\DoxyCodeLine{153 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}}   \mbox{\hyperlink{stdint_8h_afd072b9a94c14417246175f6442422ae}{int\_fast64\_t}};}
+\DoxyCodeLine{154 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\_t}}   \mbox{\hyperlink{stdint_8h_ad0fca8b15c218d2c687f8c373a71d228}{uint\_fast8\_t}};}
+\DoxyCodeLine{155 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a273cf69d639a59973b6019625df33e30}{uint16\_t}}  \mbox{\hyperlink{stdint_8h_a6ed085329b153773ff76afa0702cf897}{uint\_fast16\_t}};}
+\DoxyCodeLine{156 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a435d1572bf3f880d55459d9805097f62}{uint32\_t}}  \mbox{\hyperlink{stdint_8h_a8f075c759c74e109e8184306c663809d}{uint\_fast32\_t}};}
+\DoxyCodeLine{157 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}  \mbox{\hyperlink{stdint_8h_a6fd055dddb7d91fab0635146851af8d5}{uint\_fast64\_t}};}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{comment}{// 7.18.1.4 Integer types capable of holding object pointers}}
+\DoxyCodeLine{160 \textcolor{preprocessor}{\#ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{161    \textcolor{keyword}{typedef} \textcolor{keywordtype}{signed} \_\_int64    \mbox{\hyperlink{stdint_8h_abd3131a20f4053d808d4277db3e39a23}{intptr\_t}};}
+\DoxyCodeLine{162    \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int64  \mbox{\hyperlink{stdint_8h_a31b85deecb45924320becd11d3ee16ce}{uintptr\_t}};}
+\DoxyCodeLine{163 \textcolor{preprocessor}{\#else }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{164    \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a3730e9bd68460c3bea497352ee69b9ae}{\_W64}} \textcolor{keywordtype}{signed} \textcolor{keywordtype}{int}   \mbox{\hyperlink{stdint_8h_abd3131a20f4053d808d4277db3e39a23}{intptr\_t}};}
+\DoxyCodeLine{165    \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a3730e9bd68460c3bea497352ee69b9ae}{\_W64}} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{stdint_8h_a31b85deecb45924320becd11d3ee16ce}{uintptr\_t}};}
+\DoxyCodeLine{166 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168 \textcolor{comment}{// 7.18.1.5 Greatest-\/width integer types}}
+\DoxyCodeLine{169 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}}   \mbox{\hyperlink{stdint_8h_a036cd61bb4b30bb510b9538af4cebd1d}{intmax\_t}};}
+\DoxyCodeLine{170 \textcolor{keyword}{typedef} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}  \mbox{\hyperlink{stdint_8h_a2ba5f6c0633401558d277b2c0e4f758d}{uintmax\_t}};}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173 \textcolor{comment}{// 7.18.2 Limits of specified-\/width integer types}}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175 \textcolor{preprocessor}{\#if !defined(\_\_cplusplus) || defined(\_\_STDC\_LIMIT\_MACROS) }\textcolor{comment}{// [   See footnote 220 at page 257 and footnote 221 at page 259}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177 \textcolor{comment}{// 7.18.2.1 Limits of exact-\/width integer types}}
+\DoxyCodeLine{178 \textcolor{preprocessor}{\#define INT8\_MIN     ((int8\_t)\_I8\_MIN)}}
+\DoxyCodeLine{179 \textcolor{preprocessor}{\#define INT8\_MAX     \_I8\_MAX}}
+\DoxyCodeLine{180 \textcolor{preprocessor}{\#define INT16\_MIN    ((int16\_t)\_I16\_MIN)}}
+\DoxyCodeLine{181 \textcolor{preprocessor}{\#define INT16\_MAX    \_I16\_MAX}}
+\DoxyCodeLine{182 \textcolor{preprocessor}{\#define INT32\_MIN    ((int32\_t)\_I32\_MIN)}}
+\DoxyCodeLine{183 \textcolor{preprocessor}{\#define INT32\_MAX    \_I32\_MAX}}
+\DoxyCodeLine{184 \textcolor{preprocessor}{\#define INT64\_MIN    ((int64\_t)\_I64\_MIN)}}
+\DoxyCodeLine{185 \textcolor{preprocessor}{\#define INT64\_MAX    \_I64\_MAX}}
+\DoxyCodeLine{186 \textcolor{preprocessor}{\#define UINT8\_MAX    \_UI8\_MAX}}
+\DoxyCodeLine{187 \textcolor{preprocessor}{\#define UINT16\_MAX   \_UI16\_MAX}}
+\DoxyCodeLine{188 \textcolor{preprocessor}{\#define UINT32\_MAX   \_UI32\_MAX}}
+\DoxyCodeLine{189 \textcolor{preprocessor}{\#define UINT64\_MAX   \_UI64\_MAX}}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191 \textcolor{comment}{// 7.18.2.2 Limits of minimum-\/width integer types}}
+\DoxyCodeLine{192 \textcolor{preprocessor}{\#define INT\_LEAST8\_MIN    INT8\_MIN}}
+\DoxyCodeLine{193 \textcolor{preprocessor}{\#define INT\_LEAST8\_MAX    INT8\_MAX}}
+\DoxyCodeLine{194 \textcolor{preprocessor}{\#define INT\_LEAST16\_MIN   INT16\_MIN}}
+\DoxyCodeLine{195 \textcolor{preprocessor}{\#define INT\_LEAST16\_MAX   INT16\_MAX}}
+\DoxyCodeLine{196 \textcolor{preprocessor}{\#define INT\_LEAST32\_MIN   INT32\_MIN}}
+\DoxyCodeLine{197 \textcolor{preprocessor}{\#define INT\_LEAST32\_MAX   INT32\_MAX}}
+\DoxyCodeLine{198 \textcolor{preprocessor}{\#define INT\_LEAST64\_MIN   INT64\_MIN}}
+\DoxyCodeLine{199 \textcolor{preprocessor}{\#define INT\_LEAST64\_MAX   INT64\_MAX}}
+\DoxyCodeLine{200 \textcolor{preprocessor}{\#define UINT\_LEAST8\_MAX   UINT8\_MAX}}
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#define UINT\_LEAST16\_MAX  UINT16\_MAX}}
+\DoxyCodeLine{202 \textcolor{preprocessor}{\#define UINT\_LEAST32\_MAX  UINT32\_MAX}}
+\DoxyCodeLine{203 \textcolor{preprocessor}{\#define UINT\_LEAST64\_MAX  UINT64\_MAX}}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205 \textcolor{comment}{// 7.18.2.3 Limits of fastest minimum-\/width integer types}}
+\DoxyCodeLine{206 \textcolor{preprocessor}{\#define INT\_FAST8\_MIN    INT8\_MIN}}
+\DoxyCodeLine{207 \textcolor{preprocessor}{\#define INT\_FAST8\_MAX    INT8\_MAX}}
+\DoxyCodeLine{208 \textcolor{preprocessor}{\#define INT\_FAST16\_MIN   INT16\_MIN}}
+\DoxyCodeLine{209 \textcolor{preprocessor}{\#define INT\_FAST16\_MAX   INT16\_MAX}}
+\DoxyCodeLine{210 \textcolor{preprocessor}{\#define INT\_FAST32\_MIN   INT32\_MIN}}
+\DoxyCodeLine{211 \textcolor{preprocessor}{\#define INT\_FAST32\_MAX   INT32\_MAX}}
+\DoxyCodeLine{212 \textcolor{preprocessor}{\#define INT\_FAST64\_MIN   INT64\_MIN}}
+\DoxyCodeLine{213 \textcolor{preprocessor}{\#define INT\_FAST64\_MAX   INT64\_MAX}}
+\DoxyCodeLine{214 \textcolor{preprocessor}{\#define UINT\_FAST8\_MAX   UINT8\_MAX}}
+\DoxyCodeLine{215 \textcolor{preprocessor}{\#define UINT\_FAST16\_MAX  UINT16\_MAX}}
+\DoxyCodeLine{216 \textcolor{preprocessor}{\#define UINT\_FAST32\_MAX  UINT32\_MAX}}
+\DoxyCodeLine{217 \textcolor{preprocessor}{\#define UINT\_FAST64\_MAX  UINT64\_MAX}}
+\DoxyCodeLine{218 }
+\DoxyCodeLine{219 \textcolor{comment}{// 7.18.2.4 Limits of integer types capable of holding object pointers}}
+\DoxyCodeLine{220 \textcolor{preprocessor}{\#ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{221 \textcolor{preprocessor}{\#  define INTPTR\_MIN   INT64\_MIN}}
+\DoxyCodeLine{222 \textcolor{preprocessor}{\#  define INTPTR\_MAX   INT64\_MAX}}
+\DoxyCodeLine{223 \textcolor{preprocessor}{\#  define UINTPTR\_MAX  UINT64\_MAX}}
+\DoxyCodeLine{224 \textcolor{preprocessor}{\#else }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{225 \textcolor{preprocessor}{\#  define INTPTR\_MIN   INT32\_MIN}}
+\DoxyCodeLine{226 \textcolor{preprocessor}{\#  define INTPTR\_MAX   INT32\_MAX}}
+\DoxyCodeLine{227 \textcolor{preprocessor}{\#  define UINTPTR\_MAX  UINT32\_MAX}}
+\DoxyCodeLine{228 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230 \textcolor{comment}{// 7.18.2.5 Limits of greatest-\/width integer types}}
+\DoxyCodeLine{231 \textcolor{preprocessor}{\#define INTMAX\_MIN   INT64\_MIN}}
+\DoxyCodeLine{232 \textcolor{preprocessor}{\#define INTMAX\_MAX   INT64\_MAX}}
+\DoxyCodeLine{233 \textcolor{preprocessor}{\#define UINTMAX\_MAX  UINT64\_MAX}}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235 \textcolor{comment}{// 7.18.3 Limits of other integer types}}
+\DoxyCodeLine{236 }
+\DoxyCodeLine{237 \textcolor{preprocessor}{\#ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{238 \textcolor{preprocessor}{\#  define PTRDIFF\_MIN  \_I64\_MIN}}
+\DoxyCodeLine{239 \textcolor{preprocessor}{\#  define PTRDIFF\_MAX  \_I64\_MAX}}
+\DoxyCodeLine{240 \textcolor{preprocessor}{\#else  }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{241 \textcolor{preprocessor}{\#  define PTRDIFF\_MIN  \_I32\_MIN}}
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#  define PTRDIFF\_MAX  \_I32\_MAX}}
+\DoxyCodeLine{243 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245 \textcolor{preprocessor}{\#define SIG\_ATOMIC\_MIN  INT\_MIN}}
+\DoxyCodeLine{246 \textcolor{preprocessor}{\#define SIG\_ATOMIC\_MAX  INT\_MAX}}
+\DoxyCodeLine{247 }
+\DoxyCodeLine{248 \textcolor{preprocessor}{\#ifndef SIZE\_MAX }\textcolor{comment}{// [}}
+\DoxyCodeLine{249 \textcolor{preprocessor}{\#  ifdef \_WIN64 }\textcolor{comment}{// [}}
+\DoxyCodeLine{250 \textcolor{preprocessor}{\#     define SIZE\_MAX  \_UI64\_MAX}}
+\DoxyCodeLine{251 \textcolor{preprocessor}{\#  else }\textcolor{comment}{// \_WIN64 ][}}
+\DoxyCodeLine{252 \textcolor{preprocessor}{\#     define SIZE\_MAX  \_UI32\_MAX}}
+\DoxyCodeLine{253 \textcolor{preprocessor}{\#  endif }\textcolor{comment}{// \_WIN64 ]}}
+\DoxyCodeLine{254 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SIZE\_MAX ]}}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256 \textcolor{comment}{// WCHAR\_MIN and WCHAR\_MAX are also defined in <wchar.h>}}
+\DoxyCodeLine{257 \textcolor{preprocessor}{\#ifndef WCHAR\_MIN }\textcolor{comment}{// [}}
+\DoxyCodeLine{258 \textcolor{preprocessor}{\#  define WCHAR\_MIN  0}}
+\DoxyCodeLine{259 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// WCHAR\_MIN ]}}
+\DoxyCodeLine{260 \textcolor{preprocessor}{\#ifndef WCHAR\_MAX }\textcolor{comment}{// [}}
+\DoxyCodeLine{261 \textcolor{preprocessor}{\#  define WCHAR\_MAX  \_UI16\_MAX}}
+\DoxyCodeLine{262 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// WCHAR\_MAX ]}}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264 \textcolor{preprocessor}{\#define WINT\_MIN  0}}
+\DoxyCodeLine{265 \textcolor{preprocessor}{\#define WINT\_MAX  \_UI16\_MAX}}
+\DoxyCodeLine{266 }
+\DoxyCodeLine{267 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_STDC\_LIMIT\_MACROS ]}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 }
+\DoxyCodeLine{270 \textcolor{comment}{// 7.18.4 Limits of other integer types}}
+\DoxyCodeLine{271 }
+\DoxyCodeLine{272 \textcolor{preprocessor}{\#if !defined(\_\_cplusplus) || defined(\_\_STDC\_CONSTANT\_MACROS) }\textcolor{comment}{// [   See footnote 224 at page 260}}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274 \textcolor{comment}{// 7.18.4.1 Macros for minimum-\/width integer constants}}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276 \textcolor{preprocessor}{\#define INT8\_C(val)  val\#\#i8}}
+\DoxyCodeLine{277 \textcolor{preprocessor}{\#define INT16\_C(val) val\#\#i16}}
+\DoxyCodeLine{278 \textcolor{preprocessor}{\#define INT32\_C(val) val\#\#i32}}
+\DoxyCodeLine{279 \textcolor{preprocessor}{\#define INT64\_C(val) val\#\#i64}}
+\DoxyCodeLine{280 }
+\DoxyCodeLine{281 \textcolor{preprocessor}{\#define UINT8\_C(val)  val\#\#ui8}}
+\DoxyCodeLine{282 \textcolor{preprocessor}{\#define UINT16\_C(val) val\#\#ui16}}
+\DoxyCodeLine{283 \textcolor{preprocessor}{\#define UINT32\_C(val) val\#\#ui32}}
+\DoxyCodeLine{284 \textcolor{preprocessor}{\#define UINT64\_C(val) val\#\#ui64}}
+\DoxyCodeLine{285 }
+\DoxyCodeLine{286 \textcolor{comment}{// 7.18.4.2 Macros for greatest-\/width integer constants}}
+\DoxyCodeLine{287 \textcolor{comment}{// These \#ifndef's are needed to prevent collisions with <boost/cstdint.hpp>.}}
+\DoxyCodeLine{288 \textcolor{comment}{// Check out Issue 9 for the details.}}
+\DoxyCodeLine{289 \textcolor{preprocessor}{\#ifndef INTMAX\_C }\textcolor{comment}{//   [}}
+\DoxyCodeLine{290 \textcolor{preprocessor}{\#  define INTMAX\_C   INT64\_C}}
+\DoxyCodeLine{291 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// INTMAX\_C    ]}}
+\DoxyCodeLine{292 \textcolor{preprocessor}{\#ifndef UINTMAX\_C }\textcolor{comment}{//  [}}
+\DoxyCodeLine{293 \textcolor{preprocessor}{\#  define UINTMAX\_C  UINT64\_C}}
+\DoxyCodeLine{294 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// UINTMAX\_C   ]}}
+\DoxyCodeLine{295 }
+\DoxyCodeLine{296 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_\_STDC\_CONSTANT\_MACROS ]}}
+\DoxyCodeLine{297 }
+\DoxyCodeLine{298 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_VER >= 1600 ]}}
+\DoxyCodeLine{299 }
+\DoxyCodeLine{300 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// \_MSC\_STDINT\_H\_ ]}}
+
+\end{DoxyCode}

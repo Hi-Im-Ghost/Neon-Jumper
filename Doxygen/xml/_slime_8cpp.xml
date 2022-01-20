@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="_slime_8cpp" kind="file" language="C++">
+    <compoundname>Slime.cpp</compoundname>
+    <includes refid="_slime_8h" local="yes">Slime.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>Enemy.h</label>
+        <link refid="_enemy_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/entities/Slime.cpp</label>
+        <link refid="_slime_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Slime.h</label>
+        <link refid="_slime_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>../modules/Animated.h</label>
+        <link refid="_animated_8h"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>../modules/Damageable.h</label>
+        <link refid="_damageable_8h"/>
+      </node>
+      <node id="6">
+        <label>SFML/Graphics.hpp</label>
+      </node>
+      <node id="7">
+        <label>SFML/System/Clock.hpp</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_slime_8h" kindref="compound">Slime.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"><ref refid="class_slime_1a00a5fe5f9774dc238adfc95a435f1f1e" kindref="member">Slime::Slime</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pathPointA,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pathPointB,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>moveRight)<sp/>:<sp/><ref refid="class_enemy" kindref="compound">Enemy</ref>(x,<sp/>y)<sp/>{</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>initSprite(</highlight><highlight class="stringliteral">&quot;../resources/slime.png&quot;</highlight><highlight class="normal">,<sp/>{0,0,16,10});</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"><sp/><sp/><sp/><sp/>setAnimValues({0,0},<sp/>{16,10},<sp/>4,<sp/>0.3,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>initHitbox({16*3,<sp/>10*3});</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>initPath(pathPointA,<sp/>pathPointB);</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;movingRight<sp/>=<sp/>moveRight;</highlight></codeline>
+<codeline lineno="9"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1ab00ca7bbfff73a12570c54c4430379e1" kindref="member">Slime::update</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaSeconds)<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>.setPosition(<ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().x,<sp/><ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().y);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_animated_1a72005d589aed57e4661825032986346c" kindref="member">animate</ref>(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a9d2ac11fe3165ce6717eaf9c074c3c40" kindref="member">moveHorizontal</ref>(100<sp/>*<sp/>deltaSeconds);<sp/></highlight><highlight class="comment">//30</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1a5a7031e64b345d3ddfb27f74c8b55042" kindref="member">Slime::render</ref>(sf::RenderTarget<sp/>&amp;window)<sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>window.draw(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_hitbox);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_path);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Slime::initPath(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointA,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointB)<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setPosition(pointA,<sp/>10);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setSize({pointB-pointA,<sp/>1});</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineColor(sf::Color::Green);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineThickness(1);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/entities/Slime.cpp"/>
+  </compounddef>
+</doxygen>

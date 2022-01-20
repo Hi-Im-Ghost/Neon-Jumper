@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_perftest_8h_source" xml:lang="en-US">
+<title>perftest.h</title>
+<indexterm><primary>src/rapidjson/test/perftest/perftest.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;PERFTEST_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;PERFTEST_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#define&#32;TEST_RAPIDJSON&#32;&#32;1</emphasis>
+19 <emphasis role="preprocessor">#define&#32;TEST_PLATFORM&#32;&#32;&#32;0</emphasis>
+20 <emphasis role="preprocessor">#define&#32;TEST_MISC&#32;&#32;&#32;&#32;&#32;&#32;&#32;0</emphasis>
+21 
+22 <emphasis role="preprocessor">#define&#32;TEST_VERSION_CODE(x,y,z)&#32;\</emphasis>
+23 <emphasis role="preprocessor">&#32;&#32;(((x)*100000)&#32;+&#32;((y)*100)&#32;+&#32;(z))</emphasis>
+24 
+25 <emphasis role="comment">//&#32;__SSE2__&#32;and&#32;__SSE4_2__&#32;are&#32;recognized&#32;by&#32;gcc,&#32;clang,&#32;and&#32;the&#32;Intel&#32;compiler.</emphasis>
+26 <emphasis role="comment">//&#32;We&#32;use&#32;-march=native&#32;with&#32;gmake&#32;to&#32;enable&#32;-msse2&#32;and&#32;-msse4.2,&#32;if&#32;supported.</emphasis>
+27 <emphasis role="comment">//&#32;Likewise,&#32;__ARM_NEON&#32;is&#32;used&#32;to&#32;detect&#32;Neon.</emphasis>
+28 <emphasis role="preprocessor">#if&#32;defined(__SSE4_2__)</emphasis>
+29 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_SSE42</emphasis>
+30 <emphasis role="preprocessor">#elif&#32;defined(__SSE2__)</emphasis>
+31 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_SSE2</emphasis>
+32 <emphasis role="preprocessor">#elif&#32;defined(__ARM_NEON)</emphasis>
+33 <emphasis role="preprocessor">#&#32;&#32;define&#32;RAPIDJSON_NEON</emphasis>
+34 <emphasis role="preprocessor">#endif</emphasis>
+35 
+36 <emphasis role="preprocessor">#define&#32;RAPIDJSON_HAS_STDSTRING&#32;1</emphasis>
+37 
+39 <emphasis role="comment">//&#32;Google&#32;Test</emphasis>
+40 
+41 <emphasis role="preprocessor">#ifdef&#32;__cplusplus</emphasis>
+42 
+43 <emphasis role="comment">//&#32;gtest&#32;indirectly&#32;included&#32;inttypes.h,&#32;without&#32;__STDC_CONSTANT_MACROS.</emphasis>
+44 <emphasis role="preprocessor">#ifndef&#32;__STDC_CONSTANT_MACROS</emphasis>
+45 <emphasis role="preprocessor">#&#32;&#32;define&#32;__STDC_CONSTANT_MACROS&#32;1&#32;</emphasis><emphasis role="comment">//&#32;required&#32;by&#32;C++&#32;standard</emphasis>
+46 <emphasis role="preprocessor">#endif</emphasis>
+47 
+48 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(__GNUC__)&#32;&amp;&amp;&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;2))</emphasis>
+49 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;6))</emphasis>
+50 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;push</emphasis>
+51 <emphasis role="preprocessor">#endif</emphasis>
+52 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;ignored&#32;&quot;-Weffc++&quot;</emphasis>
+53 <emphasis role="preprocessor">#endif</emphasis>
+54 
+55 <emphasis role="preprocessor">#include&#32;&quot;gtest/gtest.h&quot;</emphasis>
+56 
+57 <emphasis role="preprocessor">#if&#32;defined(__clang__)&#32;||&#32;defined(__GNUC__)&#32;&amp;&amp;&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;6))</emphasis>
+58 <emphasis role="preprocessor">#pragma&#32;GCC&#32;diagnostic&#32;pop</emphasis>
+59 <emphasis role="preprocessor">#endif</emphasis>
+60 
+61 <emphasis role="preprocessor">#ifdef&#32;_MSC_VER</emphasis>
+62 <emphasis role="preprocessor">#define&#32;_CRTDBG_MAP_ALLOC</emphasis>
+63 <emphasis role="preprocessor">#include&#32;&lt;crtdbg.h&gt;</emphasis>
+64 <emphasis role="preprocessor">#pragma&#32;warning(disable&#32;:&#32;4996)&#32;</emphasis><emphasis role="comment">//&#32;&apos;function&apos;:&#32;was&#32;declared&#32;deprecated</emphasis>
+65 <emphasis role="preprocessor">#endif</emphasis>
+66 
+68 <emphasis role="keyword">class&#32;</emphasis>PerfTest&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;::testing::Test&#32;{
+69 <emphasis role="keyword">public</emphasis>:
+70 &#32;&#32;&#32;&#32;PerfTest()&#32;:&#32;filename_(),&#32;json_(),&#32;length_(),&#32;whitespace_(),&#32;whitespace_length_()&#32;{}
+71 
+72 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;SetUp()&#32;{
+73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+74 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;*paths[]&#32;=&#32;{
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;data/sample.json&quot;</emphasis>,
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;bin/data/sample.json&quot;</emphasis>,
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../bin/data/sample.json&quot;</emphasis>,
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../../bin/data/sample.json&quot;</emphasis>,
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../../../bin/data/sample.json&quot;</emphasis>
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+81 
+82 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;FILE&#32;*fp&#32;=&#32;0;
+83 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<emphasis role="keyword">sizeof</emphasis>(paths)&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(paths[0]);&#32;i++)&#32;{
+84 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fp&#32;=&#32;fopen(filename_&#32;=&#32;paths[i],&#32;<emphasis role="stringliteral">&quot;rb&quot;</emphasis>);
+85 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(fp)
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+88 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_TRUE(fp&#32;!=&#32;0);
+89 
+90 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fseek(fp,&#32;0,&#32;SEEK_END);
+91 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;length_&#32;=&#32;(size_t)ftell(fp);
+92 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fseek(fp,&#32;0,&#32;SEEK_SET);
+93 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;json_&#32;=&#32;(<emphasis role="keywordtype">char</emphasis>*)malloc(length_&#32;+&#32;1);
+94 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_EQ(length_,&#32;fread(json_,&#32;1,&#32;length_,&#32;fp));
+95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;json_[length_]&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+96 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fclose(fp);
+97 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+98 
+99 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;whitespace&#32;test</emphasis>
+100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;whitespace_length_&#32;=&#32;1024&#32;*&#32;1024;
+102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;whitespace_&#32;=&#32;(<emphasis role="keywordtype">char</emphasis>&#32;*)malloc(whitespace_length_&#32;&#32;+&#32;4);
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*p&#32;=&#32;whitespace_;
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;whitespace_length_;&#32;i&#32;+=&#32;4)&#32;{
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;&#32;&apos;</emphasis>;
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;\n&apos;</emphasis>;
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;\r&apos;</emphasis>;
+108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;\t&apos;</emphasis>;
+109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;[&apos;</emphasis>;
+111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;]&apos;</emphasis>;
+113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*p++&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+115 
+116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;types&#32;test</emphasis>
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;*typespaths[]&#32;=&#32;{
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;data/types&quot;</emphasis>,
+120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;bin/types&quot;</emphasis>,
+121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../bin/types&quot;</emphasis>,
+122 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../../bin/types/&quot;</emphasis>,
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;../../../bin/types&quot;</emphasis>
+124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+125 
+126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;typesfilenames[]&#32;=&#32;{
+127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;booleans.json&quot;</emphasis>,
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;floats.json&quot;</emphasis>,
+129 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;guids.json&quot;</emphasis>,
+130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;integers.json&quot;</emphasis>,
+131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;mixed.json&quot;</emphasis>,
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;nulls.json&quot;</emphasis>,
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;paragraphs.json&quot;</emphasis>,
+134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="stringliteral">&quot;alotofkeys.json&quot;</emphasis>
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;};
+136 
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;j&#32;=&#32;0;&#32;j&#32;&lt;&#32;<emphasis role="keyword">sizeof</emphasis>(typesfilenames)&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(typesfilenames[0]);&#32;j++)&#32;{
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;types_[j]&#32;=&#32;0;
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<emphasis role="keyword">sizeof</emphasis>(typespaths)&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(typespaths[0]);&#32;i++)&#32;{
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;filename[256];
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sprintf(filename,&#32;<emphasis role="stringliteral">&quot;%s/%s&quot;</emphasis>,&#32;typespaths[i],&#32;typesfilenames[j]);
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(FILE*&#32;fp&#32;=&#32;fopen(filename,&#32;<emphasis role="stringliteral">&quot;rb&quot;</emphasis>))&#32;{
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fseek(fp,&#32;0,&#32;SEEK_END);
+144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;typesLength_[j]&#32;=&#32;(size_t)ftell(fp);
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fseek(fp,&#32;0,&#32;SEEK_SET);
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;types_[j]&#32;=&#32;(<emphasis role="keywordtype">char</emphasis>*)malloc(typesLength_[j]&#32;+&#32;1);
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ASSERT_EQ(typesLength_[j],&#32;fread(types_[j],&#32;1,&#32;typesLength_[j],&#32;fp));
+148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;types_[j][typesLength_[j]]&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fclose(fp);
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+153 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+155 &#32;&#32;&#32;&#32;}
+156 
+157 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;TearDown()&#32;{
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(json_);
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(whitespace_);
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;json_&#32;=&#32;0;
+161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;whitespace_&#32;=&#32;0;
+162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;8;&#32;i++)&#32;{
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(types_[i]);
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;types_[i]&#32;=&#32;0;
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+166 &#32;&#32;&#32;&#32;}
+167 
+168 <emphasis role="keyword">private</emphasis>:
+169 &#32;&#32;&#32;&#32;PerfTest(<emphasis role="keyword">const</emphasis>&#32;PerfTest&amp;);
+170 &#32;&#32;&#32;&#32;PerfTest&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;PerfTest&amp;);
+171 
+172 <emphasis role="keyword">protected</emphasis>:
+173 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;filename_;
+174 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*json_;
+175 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length_;
+176 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*whitespace_;
+177 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;whitespace_length_;
+178 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*types_[8];
+179 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;typesLength_[8];
+180 
+181 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kTrialCount&#32;=&#32;1000;
+182 };
+183 
+184 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;__cplusplus</emphasis>
+185 
+186 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;PERFTEST_H_</emphasis>
+</programlisting></section>

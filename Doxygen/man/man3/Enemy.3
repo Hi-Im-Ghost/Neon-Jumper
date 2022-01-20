@@ -1,0 +1,161 @@
+.TH "Enemy" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Enemy
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Enemy\&.h>\fP
+.PP
+Inherits \fBDamageable\fP, and \fBAnimated\fP\&.
+.PP
+Inherited by \fBSlime\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEnemy\fP (float x=0, float y=0)"
+.br
+.RI "Konstruktor przyjmuje początkową pozycję przeciwnika na mapie\&. "
+.ti -1c
+.RI "void \fBmoveHorizontal\fP (float x)"
+.br
+.RI "Porusza przeciwnikiem w poziomej linii o podaną wartość "
+.ti -1c
+.RI "sf::Vector2f \fBgetPosition\fP ()"
+.br
+.RI "Zwraca pozycję przeciwnika na mapie\&. "
+.ti -1c
+.RI "sf::RectangleShape & \fBgetHitbox\fP ()"
+.br
+.RI "Zwraca hitbox przeciwnika\&. Używane do sprawdzania kolizji\&. "
+.ti -1c
+.RI "virtual void \fBupdate\fP (float deltaSeconds)=0"
+.br
+.RI "Odpowiada za odświeżanie logiki przeciwnika\&. "
+.ti -1c
+.RI "virtual void \fBrender\fP (sf::RenderTarget &window)=0"
+.br
+.RI "Wyświetla przeciwnika na ekranie\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitSprite\fP (const std::string &filePath, sf::IntRect frame)"
+.br
+.RI "Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury\&. "
+.ti -1c
+.RI "void \fBinitHitbox\fP (sf::Vector2f size)"
+.br
+.RI "Nadaje odpowiednie parametry hitboxowi\&. "
+.ti -1c
+.RI "virtual void \fBinitPath\fP (float pointA, float pointB)=0"
+.br
+.RI "Nadaje odpowiednie parametry granicy ruchu\&. "
+.ti -1c
+.RI "void \fBsetPosition\fP (float x, float y)"
+.br
+.RI "Ustawia pozycję przeciwnika na mapie\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Texture \fB_texture\fP"
+.br
+.RI "Przechowuje teksturę przeciwnika\&. "
+.ti -1c
+.RI "sf::Sprite \fB_sprite\fP"
+.br
+.RI "Przechowuje sprite-a gracza\&. "
+.ti -1c
+.RI "sf::RectangleShape \fB_hitbox\fP"
+.br
+.RI "\fBReprezentuje\fP kształt odpowiedzialny za kolizje i ruch przeciwnika\&. "
+.ti -1c
+.RI "sf::RectangleShape \fB_path\fP"
+.br
+.RI "\fBReprezentuje\fP kształt określający granice ruchu przeciwnika\&. "
+.ti -1c
+.RI "bool \fBmovingRight\fP = false"
+.br
+.RI "Określa kierunek ruchu przeciwnika\&. "
+.in -1c
+.SS "Additional Inherited Members"
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Enemy::Enemy (float x = \fC0\fP, float y = \fC0\fP)\fC [explicit]\fP"
+
+.PP
+Konstruktor przyjmuje początkową pozycję przeciwnika na mapie\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "sf::RectangleShape & Enemy::getHitbox ()\fC [inline]\fP"
+
+.PP
+Zwraca hitbox przeciwnika\&. Używane do sprawdzania kolizji\&. 
+.SS "sf::Vector2f Enemy::getPosition ()"
+
+.PP
+Zwraca pozycję przeciwnika na mapie\&. 
+.SS "void Enemy::initHitbox (sf::Vector2f size)\fC [protected]\fP"
+
+.PP
+Nadaje odpowiednie parametry hitboxowi\&. 
+.SS "virtual void Enemy::initPath (float pointA, float pointB)\fC [protected]\fP, \fC [pure virtual]\fP"
+
+.PP
+Nadaje odpowiednie parametry granicy ruchu\&. 
+.SS "void Enemy::initSprite (const std::string & filePath, sf::IntRect frame)\fC [protected]\fP"
+
+.PP
+Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury\&. 
+.SS "void Enemy::moveHorizontal (float x)"
+
+.PP
+Porusza przeciwnikiem w poziomej linii o podaną wartość 
+.SS "virtual void Enemy::render (sf::RenderTarget & window)\fC [pure virtual]\fP"
+
+.PP
+Wyświetla przeciwnika na ekranie\&. 
+.PP
+Implemented in \fBSlime\fP\&.
+.SS "void Enemy::setPosition (float x, float y)\fC [protected]\fP"
+
+.PP
+Ustawia pozycję przeciwnika na mapie\&. 
+.SS "virtual void Enemy::update (float deltaSeconds)\fC [pure virtual]\fP"
+
+.PP
+Odpowiada za odświeżanie logiki przeciwnika\&. 
+.PP
+Implemented in \fBSlime\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "sf::RectangleShape Enemy::_hitbox\fC [protected]\fP"
+
+.PP
+\fBReprezentuje\fP kształt odpowiedzialny za kolizje i ruch przeciwnika\&. 
+.SS "sf::RectangleShape Enemy::_path\fC [protected]\fP"
+
+.PP
+\fBReprezentuje\fP kształt określający granice ruchu przeciwnika\&. 
+.SS "sf::Sprite Enemy::_sprite\fC [protected]\fP"
+
+.PP
+Przechowuje sprite-a gracza\&. 
+.SS "sf::Texture Enemy::_texture\fC [protected]\fP"
+
+.PP
+Przechowuje teksturę przeciwnika\&. 
+.SS "bool Enemy::movingRight = false\fC [protected]\fP"
+
+.PP
+Określa kierunek ruchu przeciwnika\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

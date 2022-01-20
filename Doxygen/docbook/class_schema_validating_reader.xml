@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_schema_validating_reader" xml:lang="en-US">
+<title>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt; Class Template Reference</title>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary></indexterm>
+<para>
+
+<para>A helper class for parsing with validation. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;schema.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef SchemaDocumentType::PointerType <link linkend="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198">PointerType</link></para>
+</listitem>
+            <listitem><para>typedef InputStream::Ch <link linkend="_class_schema_validating_reader_1a6eb6f887a49dbb400800ab4fc01f02c7">Ch</link></para>
+</listitem>
+            <listitem><para>typedef <link linkend="_class_generic_value">GenericValue</link>&lt; SourceEncoding, StackAllocator &gt; <link linkend="_class_schema_validating_reader_1af08b51fcef602c68d95769c35ae606be">ValueType</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_schema_validating_reader_1ae7945b71687ad3dd13b9c3d096892eac">SchemaValidatingReader</link> (InputStream &amp;is, const SchemaDocumentType &amp;sd)</para>
+
+<para>Constructor. </para>
+</listitem>
+            <listitem><para>template&lt;typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>bool <link linkend="_class_schema_validating_reader_1a7135d8d53aacd850fbce2901cca4a4c3">operator()</link> (<link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>const <link linkend="_struct_parse_result">ParseResult</link> &amp; <link linkend="_class_schema_validating_reader_1acc40a173eed09563cb0abad84833e9b3">GetParseResult</link> () const</para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_schema_validating_reader_1a3c04fa90a430a67a993a2b8876e89ff4">IsValid</link> () const</para>
+</listitem>
+            <listitem><para>const <link linkend="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198">PointerType</link> &amp; <link linkend="_class_schema_validating_reader_1a5bdb2a12bfff9952f7b89069cae6905c">GetInvalidSchemaPointer</link> () const</para>
+</listitem>
+            <listitem><para>const <link linkend="_class_schema_validating_reader_1a6eb6f887a49dbb400800ab4fc01f02c7">Ch</link> * <link linkend="_class_schema_validating_reader_1aa1dbb9886be16ee82c91a7293f9614e5">GetInvalidSchemaKeyword</link> () const</para>
+</listitem>
+            <listitem><para>const <link linkend="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198">PointerType</link> &amp; <link linkend="_class_schema_validating_reader_1a219ab1f4aa1623e0a8d67ff5d6cb54b9">GetInvalidDocumentPointer</link> () const</para>
+</listitem>
+            <listitem><para>const <link linkend="_class_schema_validating_reader_1af08b51fcef602c68d95769c35ae606be">ValueType</link> &amp; <link linkend="_class_schema_validating_reader_1ae9f1dde3317af2cf65ae165f060498b4">GetError</link> () const</para>
+</listitem>
+            <listitem><para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link> <link linkend="_class_schema_validating_reader_1a625f4a209960ad79485d3c8e9bc23fbb">GetInvalidSchemaCode</link> () const</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;unsigned parseFlags, typename InputStream, typename SourceEncoding, typename SchemaDocumentType = SchemaDocument, typename StackAllocator = CrtAllocator&gt;
+class SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</title></simplesect>
+
+<para>A helper class for parsing with validation. </para>
+
+
+
+<para>This helper class is a functor, designed as a parameter of <link linkend="_class_generic_document_1ac30b4e8887974060b695be20c3ceb02c">GenericDocument::Populate()</link>.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>parseFlags</entry><entry>
+<para>Combination of <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450">ParseFlag</link>. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>InputStream</entry><entry>
+<para>Type of input stream, implementing Stream concept. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>SourceEncoding</entry><entry>
+<para>Encoding of the input stream. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>SchemaDocumentType</entry><entry>
+<para>Type of schema document. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>StackAllocator</entry><entry>
+<para>Allocator type for stack. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_class_schema_validating_reader_1a6eb6f887a49dbb400800ab4fc01f02c7"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef InputStream::Ch <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::Ch</computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198"/><section>
+    <title>PointerType</title>
+<indexterm><primary>PointerType</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>PointerType</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef SchemaDocumentType::PointerType <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::PointerType</computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1af08b51fcef602c68d95769c35ae606be"/><section>
+    <title>ValueType</title>
+<indexterm><primary>ValueType</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>ValueType</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_class_generic_value">GenericValue</link>&lt;SourceEncoding, StackAllocator&gt; <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;<link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">::ValueType</link></computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_schema_validating_reader_1ae7945b71687ad3dd13b9c3d096892eac"/><section>
+    <title>SchemaValidatingReader()</title>
+<indexterm><primary>SchemaValidatingReader</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>SchemaValidatingReader</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;<link linkend="_class_schema_validating_reader">::SchemaValidatingReader</link> (InputStream &amp; is, const SchemaDocumentType &amp; sd)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Constructor. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>is</entry><entry>
+<para>Input stream. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>sd</entry><entry>
+<para><link linkend="_class_schema">Schema</link> document. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_schema_validating_reader_1ae9f1dde3317af2cf65ae165f060498b4"/><section>
+    <title>GetError()</title>
+<indexterm><primary>GetError</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetError</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_class_schema_validating_reader_1af08b51fcef602c68d95769c35ae606be">ValueType</link> &amp; <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetError ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a219ab1f4aa1623e0a8d67ff5d6cb54b9"/><section>
+    <title>GetInvalidDocumentPointer()</title>
+<indexterm><primary>GetInvalidDocumentPointer</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetInvalidDocumentPointer</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198">PointerType</link> &amp; <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetInvalidDocumentPointer ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a625f4a209960ad79485d3c8e9bc23fbb"/><section>
+    <title>GetInvalidSchemaCode()</title>
+<indexterm><primary>GetInvalidSchemaCode</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetInvalidSchemaCode</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link> <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetInvalidSchemaCode ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1aa1dbb9886be16ee82c91a7293f9614e5"/><section>
+    <title>GetInvalidSchemaKeyword()</title>
+<indexterm><primary>GetInvalidSchemaKeyword</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetInvalidSchemaKeyword</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_class_schema_validating_reader_1a6eb6f887a49dbb400800ab4fc01f02c7">Ch</link> * <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetInvalidSchemaKeyword ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a5bdb2a12bfff9952f7b89069cae6905c"/><section>
+    <title>GetInvalidSchemaPointer()</title>
+<indexterm><primary>GetInvalidSchemaPointer</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetInvalidSchemaPointer</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_class_schema_validating_reader_1a30ecf1b20ca5a1b79e0d5f4ceb3bf198">PointerType</link> &amp; <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetInvalidSchemaPointer ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1acc40a173eed09563cb0abad84833e9b3"/><section>
+    <title>GetParseResult()</title>
+<indexterm><primary>GetParseResult</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>GetParseResult</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_struct_parse_result">ParseResult</link> &amp; <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::GetParseResult ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a3c04fa90a430a67a993a2b8876e89ff4"/><section>
+    <title>IsValid()</title>
+<indexterm><primary>IsValid</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>IsValid</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::IsValid ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_schema_validating_reader_1a7135d8d53aacd850fbce2901cca4a4c3"/><section>
+    <title>operator()()</title>
+<indexterm><primary>operator()</primary><secondary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>SchemaValidatingReader&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;</primary><secondary>operator()</secondary></indexterm>
+<computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename SourceEncoding , typename SchemaDocumentType  = SchemaDocument, typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>bool <link linkend="_class_schema_validating_reader">SchemaValidatingReader</link>&lt; parseFlags, InputStream, SourceEncoding, SchemaDocumentType, StackAllocator &gt;::operator() (<link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/rapidjson/include/rapidjson/<link linkend="_schema_8h">schema.h</link></section>
+</section>

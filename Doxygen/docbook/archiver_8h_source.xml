@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_archiver_8h_source" xml:lang="en-US">
+<title>archiver.h</title>
+<indexterm><primary>src/rapidjson/example/archiver/archiver.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;ARCHIVER_H_</emphasis>
+2 <emphasis role="preprocessor">#define&#32;ARCHIVER_H_</emphasis>
+3 
+4 <emphasis role="preprocessor">#include&#32;&lt;cstddef&gt;</emphasis>
+5 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+6 
+16 
+19 
+22 
+25 
+28 
+32 
+35 
+38 
+45 
+48 
+51 
+56 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_json_reader">JsonReader</link>&#32;{
+57 <emphasis role="keyword">public</emphasis>:
+59 
+63 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader_1a6606d8c5985be77bd8c145c36abdcc8a">JsonReader</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;json);
+64 
+66 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader_1a328c859a306bfe59ee7a103586b1619a">~JsonReader</link>();
+67 
+68 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Archive&#32;concept</emphasis>
+69 
+70 &#32;&#32;&#32;&#32;<emphasis role="keyword">operator</emphasis>&#32;bool()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;!mError;&#32;}
+71 
+72 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1af4d4cdc4f7c61cad2b538c10ff365828">StartObject</link>();
+73 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1aac2abcffd65cc5b538c2b5e79a3c4e56">Member</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;name);
+74 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_reader_1a2aa30506e4bd5edd882252d9e9a26a69">HasMember</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;name)&#32;<emphasis role="keyword">const</emphasis>;
+75 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a7f3d3ebf4b2b2feb1b96642804eefdf4">EndObject</link>();
+76 
+77 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a3b3ccc8ba94677a49c738600b4746efe">StartArray</link>(<emphasis role="keywordtype">size_t</emphasis>*&#32;size&#32;=&#32;0);
+78 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a123ea8c466a6a9b0647168b0494aac98">EndArray</link>();
+79 
+80 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a8a5856ab4923dd1f3444bfeb5051f9e0">operator&amp;</link>(<emphasis role="keywordtype">bool</emphasis>&amp;&#32;b);
+81 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a8a5856ab4923dd1f3444bfeb5051f9e0">operator&amp;</link>(<emphasis role="keywordtype">unsigned</emphasis>&amp;&#32;u);
+82 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a8a5856ab4923dd1f3444bfeb5051f9e0">operator&amp;</link>(<emphasis role="keywordtype">int</emphasis>&amp;&#32;i);
+83 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a8a5856ab4923dd1f3444bfeb5051f9e0">operator&amp;</link>(<emphasis role="keywordtype">double</emphasis>&amp;&#32;d);
+84 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1a8a5856ab4923dd1f3444bfeb5051f9e0">operator&amp;</link>(std::string&amp;&#32;s);
+85 
+86 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;<link linkend="_class_json_reader_1af36c05eb087b1e452996fc72d6302b3e">SetNull</link>();
+87 
+88 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_reader_1a76d04e4b6e88a33f50faa08ce74b5758">IsReader</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+89 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_reader_1aec930ca2b0468e4bb9c7d139a3b3da26">IsWriter</link>&#32;=&#32;!<link linkend="_class_json_reader_1a76d04e4b6e88a33f50faa08ce74b5758">IsReader</link>;
+90 
+91 <emphasis role="keyword">private</emphasis>:
+92 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader_1a6606d8c5985be77bd8c145c36abdcc8a">JsonReader</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;);
+93 &#32;&#32;&#32;&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_json_reader">JsonReader</link>&amp;);
+94 
+95 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Next();
+96 
+97 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;PIMPL</emphasis>
+98 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;mDocument;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;mStack;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+100 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;mError;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+101 };
+102 
+103 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_json_writer">JsonWriter</link>&#32;{
+104 <emphasis role="keyword">public</emphasis>:
+106 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer_1ac236bb60b9ae908fd178baff276df0c8">JsonWriter</link>();
+107 
+109 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer_1ac6555dd3dfadc937848046a58bd5f974">~JsonWriter</link>();
+110 
+112 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_class_json_writer_1a69d5a42b3c5a94f5f05bb48d2489b281">GetString</link>()&#32;<emphasis role="keyword">const</emphasis>;
+113 
+114 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Archive&#32;concept</emphasis>
+115 
+116 &#32;&#32;&#32;&#32;<emphasis role="keyword">operator</emphasis>&#32;bool()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;&#32;}
+117 
+118 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1ad70866aacab1b7581d13ec47e666be84">StartObject</link>();
+119 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a4daf2f3c12e647e400c22021645a27ef">Member</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;name);
+120 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_writer_1adc9059e1fcc3a0c7db01d83f4e2993e5">HasMember</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;name)&#32;<emphasis role="keyword">const</emphasis>;
+121 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a9c7be30ac963ee742375247fe4111744">EndObject</link>();
+122 
+123 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a932a385a8acfcbef01d340648b483fce">StartArray</link>(<emphasis role="keywordtype">size_t</emphasis>*&#32;size&#32;=&#32;0);
+124 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1ab62266adeeaf740eb07d3e2986e970d7">EndArray</link>();
+125 
+126 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a1df4abfba1f7fe03ad1f98ffeed2d56d">operator&amp;</link>(<emphasis role="keywordtype">bool</emphasis>&amp;&#32;b);
+127 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a1df4abfba1f7fe03ad1f98ffeed2d56d">operator&amp;</link>(<emphasis role="keywordtype">unsigned</emphasis>&amp;&#32;u);
+128 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a1df4abfba1f7fe03ad1f98ffeed2d56d">operator&amp;</link>(<emphasis role="keywordtype">int</emphasis>&amp;&#32;i);
+129 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a1df4abfba1f7fe03ad1f98ffeed2d56d">operator&amp;</link>(<emphasis role="keywordtype">double</emphasis>&amp;&#32;d);
+130 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a1df4abfba1f7fe03ad1f98ffeed2d56d">operator&amp;</link>(std::string&amp;&#32;s);
+131 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;<link linkend="_class_json_writer_1a346169b807a73fc75d86119ee8f2b06c">SetNull</link>();
+132 
+133 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_writer_1a451cef7701a1ddd4ca89340638e1282d">IsReader</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+134 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_json_writer_1a75a06ce34de1390bba4a276fb3fb8e74">IsWriter</link>&#32;=&#32;!<link linkend="_class_json_writer_1a451cef7701a1ddd4ca89340638e1282d">IsReader</link>;
+135 
+136 <emphasis role="keyword">private</emphasis>:
+137 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer_1ac236bb60b9ae908fd178baff276df0c8">JsonWriter</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;);
+138 &#32;&#32;&#32;&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_json_writer">JsonWriter</link>&amp;);
+139 
+140 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;PIMPL&#32;idiom</emphasis>
+141 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;mWriter;&#32;&#32;&#32;&#32;&#32;&#32;
+142 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;mStream;&#32;&#32;&#32;&#32;&#32;&#32;
+143 };
+144 
+145 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;ARCHIVER_H__</emphasis>
+</programlisting></section>

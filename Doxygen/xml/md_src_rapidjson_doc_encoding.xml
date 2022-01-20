@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_encoding" kind="page">
+    <compoundname>md_src_rapidjson_doc_encoding</compoundname>
+    <title>Encoding</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>According to <ulink url="http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf">ECMA-404</ulink>,</para>
+<para><blockquote><para><zwj/>(in Introduction) JSON text is a sequence of Unicode code points. </para>
+</blockquote>The earlier <ulink url="http://www.ietf.org/rfc/rfc4627.txt">RFC4627</ulink> stated that,</para>
+<para><blockquote><para><zwj/>(in §3) JSON text SHALL be encoded in Unicode. The default encoding is UTF-8. </para>
+</blockquote><blockquote><para><zwj/>(in §6) JSON may be represented using UTF-8, UTF-16, or UTF-32. When JSON is written in UTF-8, JSON is 8bit compatible. When JSON is written in UTF-16 or UTF-32, the binary content-transfer-encoding must be used. </para>
+</blockquote>RapidJSON supports various encodings. It can also validate the encodings of JSON, and transcoding JSON among encodings. All these features are implemented internally, without the need for external libraries (e.g. <ulink url="http://site.icu-project.org/">ICU</ulink>).</para>
+<sect1 id="md_src_rapidjson_doc_encoding_zh_cn_1Unicode">
+<title>Unicode</title>
+<para>From <ulink url="http://www.unicode.org/standard/WhatIsUnicode.html">Unicode&apos;s official website</ulink>: <blockquote><para><zwj/>Unicode provides a unique number for every character, no matter what the platform, no matter what the program, no matter what the language. </para>
+</blockquote>Those unique numbers are called code points, which is in the range <computeroutput>0x0</computeroutput> to <computeroutput>0x10FFFF</computeroutput>.</para>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1UTF">
+<title>Unicode Transformation Format</title>
+<para>There are various encodings for storing Unicode code points. These are called Unicode Transformation Format (UTF). RapidJSON supports the most commonly used UTFs, including</para>
+<para><itemizedlist>
+<listitem><para>UTF-8: 8-bit variable-width encoding. It maps a code point to 1–4 bytes.</para>
+</listitem><listitem><para>UTF-16: 16-bit variable-width encoding. It maps a code point to 1–2 16-bit code units (i.e., 2–4 bytes).</para>
+</listitem><listitem><para>UTF-32: 32-bit fixed-width encoding. It directly maps a code point to a single 32-bit code unit (i.e. 4 bytes).</para>
+</listitem></itemizedlist>
+</para>
+<para>For UTF-16 and UTF-32, the byte order (endianness) does matter. Within computer memory, they are often stored in the computer&apos;s endianness. However, when it is stored in file or transferred over network, we need to state the byte order of the byte sequence, either little-endian (LE) or big-endian (BE).</para>
+<para>RapidJSON provide these encodings via the structs in <computeroutput><ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref></computeroutput>:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f16_b_e" kindref="compound">UTF16BE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;</highlight><highlight class="keyword">typename</highlight><highlight class="normal"><sp/>CharType<sp/>=<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal">&gt;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_u_t_f32_b_e" kindref="compound">UTF32BE</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+</programlisting></para>
+<para>For processing text in memory, we normally use <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> or <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput>. For processing text via I/O, we may use <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f16_l_e" kindref="compound">UTF16LE</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f16_b_e" kindref="compound">UTF16BE</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f32_l_e" kindref="compound">UTF32LE</ref></computeroutput> or <computeroutput><ref refid="struct_u_t_f32_b_e" kindref="compound">UTF32BE</ref></computeroutput>.</para>
+<para>When using the DOM-style API, the <computeroutput>Encoding</computeroutput> template parameter in <computeroutput><ref refid="class_generic_value" kindref="compound">GenericValue</ref>&lt;Encoding&gt;</computeroutput> and <computeroutput><ref refid="class_generic_document" kindref="compound">GenericDocument</ref>&lt;Encoding&gt;</computeroutput> indicates the encoding to be used to represent JSON string in memory. So normally we will use <computeroutput><ref refid="struct_u_t_f8" kindref="compound">UTF8</ref></computeroutput>, <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> or <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput> for this template parameter. The choice depends on operating systems and other libraries that the application is using. For example, Windows API represents Unicode characters in UTF-16, while most Linux distributions and applications prefer UTF-8.</para>
+<para>Example of UTF-16 DOM declaration:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_document" kindref="compound">GenericDocument&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/><ref refid="class_generic_value" kindref="compound">GenericValue&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>WValue;</highlight></codeline>
+</programlisting></para>
+<para>For a detail example, please check the example in <ref refid="stream_8md" kindref="compound">DOM&apos;s Encoding</ref> section.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1CharacterType">
+<title>Character Type</title>
+<para>As shown in the declaration, each encoding has a <computeroutput>CharType</computeroutput> template parameter. Actually, it may be a little bit confusing, but each <computeroutput>CharType</computeroutput> stores a code unit, not a character (code point). As mentioned in previous section, a code point may be encoded to 1–4 code units for UTF-8.</para>
+<para>For <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref>(LE|BE)</computeroutput>, <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref>(LE|BE)</computeroutput>, the <computeroutput>CharType</computeroutput> must be integer type of at least 2 and 4 bytes respectively.</para>
+<para>Note that C++11 introduces <computeroutput>char16_t</computeroutput> and <computeroutput>char32_t</computeroutput>, which can be used for <computeroutput><ref refid="struct_u_t_f16" kindref="compound">UTF16</ref></computeroutput> and <computeroutput><ref refid="struct_u_t_f32" kindref="compound">UTF32</ref></computeroutput> respectively.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1AutoUTF">
+<title>AutoUTF</title>
+<para>Previous encodings are statically bound in compile-time. In other words, user must know exactly which encodings will be used in the memory or streams. However, sometimes we may need to read/write files of different encodings. The encoding needed to be decided in runtime.</para>
+<para><computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref></computeroutput> is an encoding designed for this purpose. It chooses which encoding to be used according to the input or output stream. Currently, it should be used with <computeroutput><ref refid="class_encoded_input_stream" kindref="compound">EncodedInputStream</ref></computeroutput> and <computeroutput><ref refid="class_encoded_output_stream" kindref="compound">EncodedOutputStream</ref></computeroutput>.</para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1ASCII">
+<title>ASCII</title>
+<para>Although the JSON standards did not mention about <ulink url="http://en.wikipedia.org/wiki/ASCII">ASCII</ulink>, sometimes we would like to write 7-bit <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> JSON for applications that cannot handle UTF-8. Since any JSON can represent unicode characters in escaped sequence <computeroutput>\uXXXX</computeroutput>, JSON can always be encoded in <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref>.</para>
+<para>Here is an example for writing a UTF-8 DOM into <ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref>:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;<sp/></highlight><highlight class="comment">//<sp/>UTF8&lt;&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">StringBuffer</ref><sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_writer" kindref="compound">Writer&lt;StringBuffer, Document::EncodingType, ASCII&lt;&gt;</ref><sp/>&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>buffer.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+</programlisting></para>
+<para><ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> can be used in input stream. If the input stream contains bytes with values above 127, it will cause <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> error.</para>
+<para><ref refid="struct_a_s_c_i_i" kindref="compound">ASCII</ref> <emphasis>cannot</emphasis> be used in memory (encoding of <computeroutput>Document</computeroutput> or target encoding of <computeroutput>Reader</computeroutput>), as it cannot represent Unicode code points.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_encoding_zh_cn_1ValidationTranscoding">
+<title>Validation &amp; Transcoding</title>
+<para>When RapidJSON parses a JSON, it can validate the input JSON, whether it is a valid sequence of a specified encoding. This option can be turned on by adding <computeroutput>kParseValidateEncodingFlag</computeroutput> in <computeroutput>parseFlags</computeroutput> template parameter.</para>
+<para>If the input encoding and output encoding is different, <computeroutput>Reader</computeroutput> and <computeroutput><ref refid="class_writer" kindref="compound">Writer</ref></computeroutput> will automatically transcode (convert) the text. In this case, <computeroutput>kParseValidateEncodingFlag</computeroutput> is not necessary, as it must decode the input sequence. And if the sequence was unable to be decoded, it must be invalid.</para>
+<sect2 id="md_src_rapidjson_doc_encoding_zh_cn_1Transcoder">
+<title>Transcoder</title>
+<para>Although the encoding functions in RapidJSON are designed for JSON parsing/generation, user may abuse them for transcoding of non-JSON strings.</para>
+<para>Here is an example for transcoding a string from UTF-8 to UTF-16:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="encodings_8h" kindref="compound">rapidjson/encodings.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">using<sp/>namespace<sp/></highlight><highlight class="normal"><ref refid="namespacerapidjson" kindref="compound">rapidjson</ref>;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>s<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;...&quot;</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>UTF-8<sp/>string</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="struct_generic_string_stream" kindref="compound">StringStream</ref><sp/><ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>(s);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_string_buffer" kindref="compound">GenericStringBuffer&lt;UTF16&lt;&gt;</ref><sp/>&gt;<sp/>target;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>hasError<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(<ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>.Peek()<sp/>!=<sp/></highlight><highlight class="charliteral">&apos;\0&apos;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="struct_transcoder" kindref="compound">Transcoder</ref>&lt;<ref refid="struct_u_t_f8" kindref="compound">UTF8&lt;&gt;</ref>,<sp/><ref refid="struct_u_t_f16" kindref="compound">UTF16&lt;&gt;</ref><sp/>&gt;::Transcode(<ref refid="pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55" kindref="member">source</ref>,<sp/>target))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hasError<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!hasError)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">wchar_t</highlight><highlight class="normal">*<sp/>t<sp/>=<sp/>target.<ref refid="class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719" kindref="member">GetString</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>You may also use <computeroutput><ref refid="struct_auto_u_t_f" kindref="compound">AutoUTF</ref></computeroutput> and the associated streams for setting source/target encoding in runtime. </para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/encoding.md"/>
+  </compounddef>
+</doxygen>

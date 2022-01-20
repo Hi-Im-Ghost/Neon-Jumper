@@ -1,0 +1,285 @@
+.TH "src/rapidjson/test/unittest/pointertest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/unittest/pointertest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'unittest\&.h'\fP
+.br
+\fC#include 'rapidjson/pointer\&.h'\fP
+.br
+\fC#include 'rapidjson/stringbuffer\&.h'\fP
+.br
+\fC#include 'rapidjson/ostreamwrapper\&.h'\fP
+.br
+\fC#include <sstream>\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <algorithm>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBmyjson::MyAllocator\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBmyjson\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNAME\fP(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), kPointerInvalidIndex }"
+.br
+.ti -1c
+.RI "#define \fBINDEX\fP(i)   { #i, static_cast<\fBSizeType\fP>(sizeof(#i) \- 1), i }"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef rapidjson::GenericDocument< rapidjson::UTF8<>, rapidjson::MemoryPoolAllocator< MyAllocator >, MyAllocator > \fBmyjson::Document\fP"
+.br
+.ti -1c
+.RI "typedef rapidjson::GenericPointer< \fB::myjson::Document::ValueType\fP, MyAllocator > \fBmyjson::Pointer\fP"
+.br
+.ti -1c
+.RI "typedef \fB::myjson::Document::ValueType\fP \fBmyjson::Value\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, DefaultConstructor)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Parse)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Parse_URIFragment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Stringify)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, ConstructorWithToken)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, CopyConstructor)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Assignment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Swap)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Append)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Equality)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Inequality)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Create)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetUri)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Get)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetWithDefault)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetWithDefault_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Set)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Set_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Swap_Value)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Swap_Value_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Erase)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, \fBCreateValueByPointer\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, CreateValueByPointer_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, \fBGetValueByPointer\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetValueByPointerWithDefault_Pointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetValueByPointerWithDefault_String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetValueByPointerWithDefault_Pointer_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, GetValueByPointerWithDefault_String_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, SetValueByPointer_Pointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, SetValueByPointer_String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, SetValueByPointer_Pointer_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, SetValueByPointer_String_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, \fBSwapValueByPointer\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, SwapValueByPointer_NoAllocator)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, EraseValueByPointer_Pointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, EraseValueByPointer_String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Ambiguity)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, ResolveOnObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, ResolveOnArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, LessThan)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Issue483)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBPointer\fP, Issue1899)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define INDEX(i)   { #i, static_cast<\fBSizeType\fP>(sizeof(#i) \- 1), i }"
+
+.SS "#define NAME(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), kPointerInvalidIndex }"
+
+.SH "Function Documentation"
+.PP 
+.SS "TEST (\fBPointer\fP, Ambiguity)"
+
+.SS "TEST (\fBPointer\fP, Append)"
+
+.SS "TEST (\fBPointer\fP, Assignment)"
+
+.SS "TEST (\fBPointer\fP, ConstructorWithToken)"
+
+.SS "TEST (\fBPointer\fP, CopyConstructor)"
+
+.SS "TEST (\fBPointer\fP, Create)"
+
+.SS "TEST (\fBPointer\fP, \fBCreateValueByPointer\fP)"
+
+.SS "TEST (\fBPointer\fP, CreateValueByPointer_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, DefaultConstructor)"
+
+.SS "TEST (\fBPointer\fP, Equality)"
+
+.SS "TEST (\fBPointer\fP, Erase)"
+
+.SS "TEST (\fBPointer\fP, EraseValueByPointer_Pointer)"
+
+.SS "TEST (\fBPointer\fP, EraseValueByPointer_String)"
+
+.SS "TEST (\fBPointer\fP, Get)"
+
+.SS "TEST (\fBPointer\fP, GetUri)"
+
+.SS "TEST (\fBPointer\fP, \fBGetValueByPointer\fP)"
+
+.SS "TEST (\fBPointer\fP, GetValueByPointerWithDefault_Pointer)"
+
+.SS "TEST (\fBPointer\fP, GetValueByPointerWithDefault_Pointer_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, GetValueByPointerWithDefault_String)"
+
+.SS "TEST (\fBPointer\fP, GetValueByPointerWithDefault_String_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, GetWithDefault)"
+
+.SS "TEST (\fBPointer\fP, GetWithDefault_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, Inequality)"
+
+.SS "TEST (\fBPointer\fP, Issue1899)"
+
+.SS "TEST (\fBPointer\fP, Issue483)"
+
+.SS "TEST (\fBPointer\fP, LessThan)"
+
+.SS "TEST (\fBPointer\fP, Parse)"
+
+.SS "TEST (\fBPointer\fP, Parse_URIFragment)"
+
+.SS "TEST (\fBPointer\fP, ResolveOnArray)"
+
+.SS "TEST (\fBPointer\fP, ResolveOnObject)"
+
+.SS "TEST (\fBPointer\fP, Set)"
+
+.SS "TEST (\fBPointer\fP, Set_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, SetValueByPointer_Pointer)"
+
+.SS "TEST (\fBPointer\fP, SetValueByPointer_Pointer_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, SetValueByPointer_String)"
+
+.SS "TEST (\fBPointer\fP, SetValueByPointer_String_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, Stringify)"
+
+.SS "TEST (\fBPointer\fP, Swap)"
+
+.SS "TEST (\fBPointer\fP, Swap_Value)"
+
+.SS "TEST (\fBPointer\fP, Swap_Value_NoAllocator)"
+
+.SS "TEST (\fBPointer\fP, \fBSwapValueByPointer\fP)"
+
+.SS "TEST (\fBPointer\fP, SwapValueByPointer_NoAllocator)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

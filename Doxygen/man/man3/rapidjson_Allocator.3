@@ -1,0 +1,46 @@
+.TH "Allocator" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Allocator \- Concept for allocating, resizing and freeing memory block\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <allocators\&.h>\fP
+.SH "Detailed Description"
+.PP 
+Concept for allocating, resizing and freeing memory block\&. 
+
+Note that \fBMalloc()\fP and \fBRealloc()\fP are non-static but \fBFree()\fP is static\&.
+.PP
+So if an allocator need to support \fBFree()\fP, it needs to put its pointer in the header of memory block\&.
+.PP
+.PP
+.nf
+concept Allocator {
+    static const bool kNeedFree;    
+
+    // Allocate a memory block\&.
+    // \param size of the memory block in bytes\&.
+    // \returns pointer to the memory block\&.
+    void* Malloc(size_t size);
+
+    // Resize a memory block\&.
+    // \param originalPtr The pointer to current memory block\&. Null pointer is permitted\&.
+    // \param originalSize The current size in bytes\&. (Design issue: since some allocator may not book-keep this, explicitly pass to it can save memory\&.)
+    // \param newSize the new size in bytes\&.
+    void* Realloc(void* originalPtr, size_t originalSize, size_t newSize);
+
+    // Free a memory block\&.
+    // \param pointer to the memory block\&. Null pointer is permitted\&.
+    static void Free(void *ptr);
+};
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

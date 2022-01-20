@@ -1,0 +1,459 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_dom_zh_cn" xml:lang="en-US">
+
+<para>文档对象模型（Document Object Model, DOM）是一种罝于内存中的 JSON 表示方式，以供查询及操作。我们已于 <link linkend="_tutorial_8zh-cn_8md">教程</link> 中介绍了 DOM 的基本用法，本节将讲述一些细节及高级用法。</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Template">
+<title>Template</title>
+
+<para>教程中使用了 <computeroutput>Value</computeroutput> 和 <computeroutput>Document</computeroutput> 类型。与 <computeroutput>std::string</computeroutput> 相似，这些类型其实是两个模板类的 <computeroutput>typedef</computeroutput>：</para>
+
+<para><literallayout><computeroutput>namespace&#32;rapidjson&#32;{
+
+template&#32;&lt;typename&#32;Encoding,&#32;typename&#32;Allocator&#32;=&#32;MemoryPoolAllocator&lt;&gt;&#32;&gt;
+class&#32;GenericValue&#32;{
+&#32;&#32;&#32;&#32;//&#32;...
+};
+
+template&#32;&lt;typename&#32;Encoding,&#32;typename&#32;Allocator&#32;=&#32;MemoryPoolAllocator&lt;&gt;&#32;&gt;
+class&#32;GenericDocument&#32;:&#32;public&#32;GenericValue&lt;Encoding,&#32;Allocator&gt;&#32;{
+&#32;&#32;&#32;&#32;//&#32;...
+};
+
+typedef&#32;GenericValue&lt;UTF8&lt;&gt;&#32;&gt;&#32;Value;
+typedef&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;Document;
+
+}&#32;//&#32;namespace&#32;rapidjson
+</computeroutput></literallayout></para>
+
+<para>使用者可以自定义这些模板参数。</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Encoding">
+<title>Encoding</title>
+
+<para><computeroutput>Encoding</computeroutput> 参数指明在内存中的 JSON String 使用哪种编码。可行的选项有 <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>、<computeroutput><link linkend="_struct_u_t_f16">UTF16</link></computeroutput>、<computeroutput><link linkend="_struct_u_t_f32">UTF32</link></computeroutput>。要注意这 3 个类型其实也是模板类。<computeroutput><link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;</computeroutput> 等同 <computeroutput><link linkend="_struct_u_t_f8">UTF8</link>&lt;char&gt;</computeroutput>，这代表它使用 <computeroutput>char</computeroutput> 来存储字符串。更多细节可以参考 <link linkend="_encoding_8zh-cn_8md">编码</link>。</para>
+
+<para>这里是一个例子。假设一个 Windows 应用软件希望查询存储于 JSON 中的本地化字符串。Windows 中含 Unicode 的函数使用 UTF-16（宽字符）编码。无论 JSON 文件使用哪种编码，我们都可以把字符串以 UTF-16 形式存储在内存。</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+typedef&#32;GenericDocument&lt;UTF16&lt;&gt;&#32;&gt;&#32;WDocument;
+typedef&#32;GenericValue&lt;UTF16&lt;&gt;&#32;&gt;&#32;WValue;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;localization.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+AutoUTFInputStream&lt;unsigned,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;包装&#32;bis&#32;成&#32;eis
+
+WDocument&#32;d;
+d.ParseStream&lt;0,&#32;AutoUTF&lt;unsigned&gt;&#32;&gt;(eis);
+
+const&#32;WValue&#32;locale(L&quot;ja&quot;);&#32;//&#32;Japanese
+
+MessageBoxW(hWnd,&#32;d[locale].GetString(),&#32;L&quot;Test&quot;,&#32;MB_OK);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Allocator">
+<title>Allocator</title>
+
+<para><computeroutput>Allocator</computeroutput> 定义当 <computeroutput>Document</computeroutput>/<computeroutput>Value</computeroutput> 分配或释放内存时使用那个分配类。<computeroutput>Document</computeroutput> 拥有或引用到一个 <computeroutput>Allocator</computeroutput> 实例。而为了节省内存，<computeroutput>Value</computeroutput> 没有这么做。</para>
+
+<para><computeroutput><link linkend="_class_generic_document">GenericDocument</link></computeroutput> 的缺省分配器是 <computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput>。此分配器实际上会顺序地分配内存，并且不能逐一释放。当要解析一个 JSON 并生成 DOM，这种分配器是非常合适的。</para>
+
+<para>RapidJSON 还提供另一个分配器 <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>，当中 CRT 是 C 运行库（C RunTime library）的缩写。此分配器简单地读用标准的 <computeroutput>malloc()</computeroutput>/<computeroutput>realloc()</computeroutput>/<computeroutput>free()</computeroutput>。当我们需要许多增减操作，这种分配器会更为适合。然而这种分配器远远比 <computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> 低效。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Parsing">
+<title>Parsing</title>
+
+<para><computeroutput>Document</computeroutput> 提供几个解析函数。以下的 (1) 是根本的函数，其他都是调用 (1) 的协助函数。</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+//&#32;(1)&#32;根本
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;SourceEncoding,&#32;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(2)&#32;使用流的编码
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(3)&#32;使用缺省标志
+template&#32;&lt;typename&#32;InputStream&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseStream(InputStream&amp;&#32;is);
+
+//&#32;(4)&#32;原位解析
+template&#32;&lt;unsigned&#32;parseFlags&gt;
+GenericDocument&amp;&#32;GenericDocument::ParseInsitu(Ch*&#32;str);
+
+//&#32;(5)&#32;原位解析，使用缺省标志
+GenericDocument&amp;&#32;GenericDocument::ParseInsitu(Ch*&#32;str);
+
+//&#32;(6)&#32;正常解析一个字符串
+template&#32;&lt;unsigned&#32;parseFlags,&#32;typename&#32;SourceEncoding&gt;
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+
+//&#32;(7)&#32;正常解析一个字符串，使用&#32;Document&#32;的编码
+template&#32;&lt;unsigned&#32;parseFlags&gt;
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+
+//&#32;(8)&#32;正常解析一个字符串，使用缺省标志
+GenericDocument&amp;&#32;GenericDocument::Parse(const&#32;Ch*&#32;str);
+</computeroutput></literallayout></para>
+
+<para><link linkend="_tutorial_8zh-cn_8md">教程</link> 中的例使用 (8) 去正常解析字符串。而 <link linkend="_stream_8zh-cn_8md">流</link> 的例子使用前 3 个函数。我们将稍后介绍原位（*In situ*） 解析。</para>
+
+<para><computeroutput>parseFlags</computeroutput> 是以下位标置的组合：</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>解析位标志   </para>
+</entry><entry>
+<para>意义    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNoFlags</computeroutput>   </para>
+</entry><entry>
+<para>没有任何标志。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseDefaultFlags</computeroutput>   </para>
+</entry><entry>
+<para>缺省的解析选项。它等于 <computeroutput>RAPIDJSON_PARSE_DEFAULT_FLAGS</computeroutput> 宏，此宏定义为 <computeroutput>kParseNoFlags</computeroutput>。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseInsituFlag</computeroutput>   </para>
+</entry><entry>
+<para>原位（破坏性）解析。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseValidateEncodingFlag</computeroutput>   </para>
+</entry><entry>
+<para>校验 JSON 字符串的编码。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseIterativeFlag</computeroutput>   </para>
+</entry><entry>
+<para>迭代式（调用堆栈大小为常数复杂度）解析。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseStopWhenDoneFlag</computeroutput>   </para>
+</entry><entry>
+<para>当从流解析了一个完整的 JSON 根节点之后，停止继续处理余下的流。当使用了此标志，解析器便不会产生 <computeroutput>kParseErrorDocumentRootNotSingular</computeroutput> 错误。可使用本标志去解析同一个流里的多个 JSON。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseFullPrecisionFlag</computeroutput>   </para>
+</entry><entry>
+<para>使用完整的精确度去解析数字（较慢）。如不设置此标节，则会使用正常的精确度（较快）。正常精确度会有最多 3 个 <link xlink:href="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</link> 的误差。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseCommentsFlag</computeroutput>   </para>
+</entry><entry>
+<para>容许单行 <computeroutput>// ...</computeroutput> 及多行 <computeroutput>/* ... */</computeroutput> 注释（放宽的 JSON 语法）。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNumbersAsStringsFlag</computeroutput>   </para>
+</entry><entry>
+<para>把数字类型解析成字符串。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseTrailingCommasFlag</computeroutput>   </para>
+</entry><entry>
+<para>容许在对象和数组结束前含有逗号（放宽的 JSON 语法）。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseNanAndInfFlag</computeroutput>   </para>
+</entry><entry>
+<para>容许 <computeroutput>NaN</computeroutput>、<computeroutput>Inf</computeroutput>、<computeroutput>Infinity</computeroutput>、<computeroutput>-Inf</computeroutput> 及 <computeroutput>-Infinity</computeroutput> 作为 <computeroutput>double</computeroutput> 值（放宽的 JSON 语法）。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseEscapedApostropheFlag</computeroutput>   </para>
+</entry><entry>
+<para>容许字符串中转义单引号 &#8216;&amp;rsquo;` （放宽的 JSON 语法）。   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>由于使用了非类型模板参数，而不是函数参数，C++ 编译器能为个别组合生成代码，以改善性能及减少代码尺寸（当只用单种特化）。缺点是需要在编译期决定标志。</para>
+
+<para><computeroutput>SourceEncoding</computeroutput> 参数定义流使用了什么编码。这与 <computeroutput>Document</computeroutput> 的 <computeroutput>Encoding</computeroutput> 不相同。细节可参考 <link linkend="_md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation">转码和校验</link> 一节。</para>
+
+<para>此外 <computeroutput>InputStream</computeroutput> 是输入流的类型。</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1ParseError">
+<title>Parse Error</title>
+
+<para>当解析过程顺利完成，<computeroutput>Document</computeroutput> 便会含有解析结果。当过程出现错误，原来的 DOM 会*维持不变*。可使用 <computeroutput>bool HasParseError()</computeroutput>、<computeroutput>ParseErrorCode GetParseError()</computeroutput> 及 <computeroutput>size_t GetErrorOffset()</computeroutput> 获取解析的错误状态。</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>解析错误代号   </para>
+</entry><entry>
+<para>描述    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorNone</computeroutput>   </para>
+</entry><entry>
+<para>无错误。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorDocumentEmpty</computeroutput>   </para>
+</entry><entry>
+<para>文档是空的。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorDocumentRootNotSingular</computeroutput>   </para>
+</entry><entry>
+<para>文档的根后面不能有其它值。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorValueInvalid</computeroutput>   </para>
+</entry><entry>
+<para>不合法的值。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissName</computeroutput>   </para>
+</entry><entry>
+<para>Object 成员缺少名字。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissColon</computeroutput>   </para>
+</entry><entry>
+<para>Object 成员名字后缺少冒号。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorObjectMissCommaOrCurlyBracket</computeroutput>   </para>
+</entry><entry>
+<para>Object 成员后缺少逗号或 <computeroutput>}</computeroutput>。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorArrayMissCommaOrSquareBracket</computeroutput>   </para>
+</entry><entry>
+<para>Array 元素后缺少逗号或 <computeroutput>]</computeroutput> 。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringUnicodeEscapeInvalidHex</computeroutput>   </para>
+</entry><entry>
+<para>String 中的 <computeroutput>\\u</computeroutput> 转义符后含非十六进位数字。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorStringUnicodeSurrogateInvalid</computeroutput>   </para>
+</entry><entry>
+<para>String 中的代理对（surrogate pair）不合法。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringEscapeInvalid</computeroutput>   </para>
+</entry><entry>
+<para>String 含非法转义字符。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorStringMissQuotationMark</computeroutput>   </para>
+</entry><entry>
+<para>String 缺少关闭引号。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorStringInvalidEncoding</computeroutput>   </para>
+</entry><entry>
+<para>String 含非法编码。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorNumberTooBig</computeroutput>   </para>
+</entry><entry>
+<para>Number 的值太大，不能存储于 <computeroutput>double</computeroutput>。    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>kParseErrorNumberMissFraction</computeroutput>   </para>
+</entry><entry>
+<para>Number 缺少了小数部分。    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>kParseErrorNumberMissExponent</computeroutput>   </para>
+</entry><entry>
+<para>Number 缺少了指数。   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>错误的偏移量定义为从流开始至错误处的字符数量。目前 RapidJSON 不记录错误行号。</para>
+
+<para>要取得错误讯息，RapidJSON 在 <computeroutput><link linkend="_en_8h">rapidjson/error/en.h</link></computeroutput> 中提供了英文错误讯息。使用者可以修改它用于其他语言环境，或使用一个自定义的本地化系统。</para>
+
+<para>以下是一个处理错误的例子。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/error/en.h&quot;
+
+//&#32;...
+Document&#32;d;
+if&#32;(d.Parse(json).HasParseError())&#32;{
+&#32;&#32;&#32;&#32;fprintf(stderr,&#32;&quot;\nError(offset&#32;%u):&#32;%s\n&quot;,&#32;
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(unsigned)d.GetErrorOffset(),
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetParseError_En(d.GetParseErrorCode()));
+&#32;&#32;&#32;&#32;//&#32;...
+}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1InSituParsing">
+<title>In Situ Parsing</title>
+
+<para>根据 <link xlink:href="http://en.wikipedia.org/wiki/In_situ">维基百科</link>:</para>
+
+<para><blockquote>
+<para>&#8205;<emphasis>In situ</emphasis> ... is a Latin phrase that translates literally to &quot;on site&quot; or &quot;in position&quot;. It means &quot;locally&quot;, &quot;on site&quot;, &quot;on the premises&quot; or &quot;in place&quot; to describe an event where it takes place, and is used in many different contexts. ... (In computer science) An algorithm is said to be an in situ algorithm, or in-place algorithm, if the extra amount of memory required to execute the algorithm is O(1), that is, does not exceed a constant no matter how large the input. For example, heapsort is an in situ sorting algorithm. </para>
+</blockquote><blockquote>
+<para>&#8205;翻译：*In situ*……是一个拉丁文片语，字面上的意思是指「现场」、「在位置」。在许多不同语境中，它描述一个事件发生的位置，意指「本地」、「现场」、「在处所」、「就位」。 …… （在计算机科学中）一个算法若称为原位算法，或在位算法，是指执行该算法所需的额外内存空间是 O(1) 的，换句话说，无论输入大小都只需要常数空间。例如，堆排序是一个原位排序算法。 </para>
+</blockquote>在正常的解析过程中，对 JSON string 解码并复制至其他缓冲区是一个很大的开销。原位解析（*in situ* parsing）把这些 JSON string 直接解码于它原来存储的地方。由于解码后的 string 长度总是短于或等于原来储存于 JSON 的 string，所以这是可行的。在这个语境下，对 JSON string 进行解码是指处理转义符，如 <computeroutput>&quot;\n&quot;</computeroutput>、<computeroutput>&quot;\u1234&quot;</computeroutput> 等，以及在 string 末端加入空终止符号 (&#8216;&#8217;\0&apos;`)。</para>
+
+<para>以下的图比较正常及原位解析。JSON string 值包含指向解码后的字符串。</para>
+
+<para></para>
+
+<para>在正常解析中，解码后的字符串被复制至全新分配的缓冲区中。<computeroutput>&quot;\\n&quot;</computeroutput>（2 个字符）被解码成 <computeroutput>&quot;\n&quot;</computeroutput>（1 个字符）。<computeroutput>&quot;\\u0073&quot;</computeroutput>（6 个字符）被解码成 <computeroutput>&quot;s&quot;</computeroutput>（1 个字符）。</para>
+
+<para></para>
+
+<para>原位解析直接修改了原来的 JSON。图中高亮了被更新的字符。若 JSON string 不含转义符，例如 <computeroutput>&quot;msg&quot;</computeroutput>，那么解析过程仅仅是以空字符代替结束双引号。</para>
+
+<para>由于原位解析修改了输入，其解析 API 需要 <computeroutput>char*</computeroutput> 而非 <computeroutput>const char*</computeroutput>。</para>
+
+<para><literallayout><computeroutput>//&#32;把整个文件读入&#32;buffer
+FILE*&#32;fp&#32;=&#32;fopen(&quot;test.json&quot;,&#32;&quot;r&quot;);
+fseek(fp,&#32;0,&#32;SEEK_END);
+size_t&#32;filesize&#32;=&#32;(size_t)ftell(fp);
+fseek(fp,&#32;0,&#32;SEEK_SET);
+char*&#32;buffer&#32;=&#32;(char*)malloc(filesize&#32;+&#32;1);
+size_t&#32;readLength&#32;=&#32;fread(buffer,&#32;1,&#32;filesize,&#32;fp);
+buffer[readLength]&#32;=&#32;&apos;\0&apos;;
+fclose(fp);
+
+//&#32;原位解析&#32;buffer&#32;至&#32;d，buffer&#32;内容会被修改。
+Document&#32;d;
+d.ParseInsitu(buffer);
+
+//&#32;在此查询、修改&#32;DOM……
+
+free(buffer);
+//&#32;注意：在这个位置，d&#32;可能含有指向已被释放的&#32;buffer&#32;的悬空指针
+</computeroutput></literallayout></para>
+
+<para>JSON string 会被打上 const-string 的标志。但它们可能并非真正的「常数」。它的生命周期取决于存储 JSON 的缓冲区。</para>
+
+<para>原位解析把分配开销及内存复制减至最小。通常这样做能改善缓存一致性，而这对现代计算机来说是一个重要的性能因素。</para>
+
+<para>原位解析有以下限制：</para>
+
+<para><orderedlist>
+<listitem>
+<para>整个 JSON 须存储在内存之中。</para>
+</listitem><listitem>
+<para>流的来源缓码与文档的目标编码必须相同。</para>
+</listitem><listitem>
+<para>需要保留缓冲区，直至文档不再被使用。</para>
+</listitem><listitem>
+<para>若 DOM 需要在解析后被长期使用，而 DOM 内只有很少 JSON string，保留缓冲区可能造成内存浪费。</para>
+</listitem></orderedlist>
+</para>
+
+<para>原位解析最适合用于短期的、用完即弃的 JSON。实际应用中，这些场合是非常普遍的，例如反序列化 JSON 至 C++ 对象、处理以 JSON 表示的 web 请求等。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1TranscodingAndValidation">
+<title>Transcoding and Validation</title>
+
+<para>RapidJSON 内部支持不同 Unicode 格式（正式的术语是 UCS 变换格式）间的转换。在 DOM 解析时，流的来源编码与 DOM 的编码可以不同。例如，来源流可能含有 UTF-8 的 JSON，而 DOM 则使用 UTF-16 编码。在 <link linkend="_stream_8zh-cn_8md">EncodedInputStream</link> 一节里有一个例子。</para>
+
+<para>当从 DOM 输出一个 JSON 至输出流之时，也可以使用转码功能。在 <link linkend="_stream_8zh-cn_8md">EncodedOutputStream</link> 一节里有一个例子。</para>
+
+<para>在转码过程中，会把来源 string 解码成 Unicode 码点，然后把码点编码成目标格式。在解码时，它会校验来源 string 的字节序列是否合法。若遇上非合法序列，解析器会停止并返回 <computeroutput>kParseErrorStringInvalidEncoding</computeroutput> 错误。</para>
+
+<para>当来源编码与 DOM 的编码相同，解析器缺省地 * 不会 * 校验序列。使用者可开启 <computeroutput>kParseValidateEncodingFlag</computeroutput> 去强制校验。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1Techniques">
+<title>Techniques</title>
+
+<para>这里讨论一些 DOM API 的使用技巧。</para>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1autotoc_md46">
+<title>把 DOM 作为 SAX 事件发表者</title>
+
+<para>在 RapidJSON 中，利用 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 把 DOM 生成 JSON 的做法，看来有点奇怪。</para>
+
+<para><literallayout><computeroutput>//&#32;...
+Writer&lt;StringBuffer&gt;&#32;writer(buffer);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>实际上，<computeroutput>Value::Accept()</computeroutput> 是负责发布该值相关的 SAX 事件至处理器的。通过这个设计，<computeroutput>Value</computeroutput> 及 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 解除了偶合。<computeroutput>Value</computeroutput> 可生成 SAX 事件，而 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 则可以处理这些事件。</para>
+
+<para>使用者可以创建自定义的处理器，去把 DOM 转换成其它格式。例如，一个把 DOM 转换成 XML 的处理器。</para>
+
+<para>要知道更多关于 SAX 事件与处理器，可参阅 <link linkend="_sax_8zh-cn_8md">SAX</link>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_dom_zh_cn_1UserBuffer">
+<title>User Buffer</title>
+
+<para>许多应用软件可能需要尽量减少内存分配。</para>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> 可以帮助这方面，它容许使用者提供一个缓冲区。该缓冲区可能置于程序堆栈，或是一个静态分配的「草稿缓冲区（scratch buffer）」（一个静态／全局的数组），用于储存临时数据。</para>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> 会先用使用者缓冲区去解决分配请求。当使用者缓冲区用完，就会从基础分配器（缺省为 <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>）分配一块内存。</para>
+
+<para>以下是使用堆栈内存的例子，第一个分配器用于存储值，第二个用于解析时的临时缓冲。</para>
+
+<para><literallayout><computeroutput>typedef&#32;GenericDocument&lt;UTF8&lt;&gt;,&#32;MemoryPoolAllocator&lt;&gt;,&#32;MemoryPoolAllocator&lt;&gt;&gt;&#32;DocumentType;
+char&#32;valueBuffer[4096];
+char&#32;parseBuffer[1024];
+MemoryPoolAllocator&lt;&gt;&#32;valueAllocator(valueBuffer,&#32;sizeof(valueBuffer));
+MemoryPoolAllocator&lt;&gt;&#32;parseAllocator(parseBuffer,&#32;sizeof(parseBuffer));
+DocumentType&#32;d(&amp;valueAllocator,&#32;sizeof(parseBuffer),&#32;&amp;parseAllocator);
+d.Parse(json);
+</computeroutput></literallayout></para>
+
+<para>若解析时分配总量少于 4096+1024 字节时，这段代码不会造成任何堆内存分配（经 <computeroutput>new</computeroutput> 或 <computeroutput>malloc()</computeroutput>）。</para>
+
+<para>使用者可以通过 <computeroutput><link linkend="_class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d">MemoryPoolAllocator::Size()</link></computeroutput> 查询当前已分的内存大小。那么使用者可以拟定使用者缓冲区的合适大小。 </para>
+</section>
+</section>
+</section>

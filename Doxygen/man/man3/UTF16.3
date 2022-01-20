@@ -1,0 +1,95 @@
+.TH "UTF16< CharType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+UTF16< CharType > \- UTF-16 encoding\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <encodings\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum { \fBsupportUnicode\fP = 1 }"
+.br
+.ti -1c
+.RI "typedef CharType \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRAPIDJSON_STATIC_ASSERT\fP (sizeof(\fBCh\fP) >=2)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename OutputStream > static void \fBEncode\fP (OutputStream &os, unsigned codepoint)"
+.br
+.ti -1c
+.RI "template<typename OutputStream > static void \fBEncodeUnsafe\fP (OutputStream &os, unsigned codepoint)"
+.br
+.ti -1c
+.RI "template<typename InputStream > static bool \fBDecode\fP (InputStream &is, unsigned *codepoint)"
+.br
+.ti -1c
+.RI "template<typename InputStream , typename OutputStream > static bool \fBValidate\fP (InputStream &is, OutputStream &os)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename CharType = wchar_t>
+.br
+struct UTF16< CharType >"UTF-16 encoding\&. 
+
+http://en.wikipedia.org/wiki/UTF-16 http://tools.ietf.org/html/rfc2781 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP Type for storing 16-bit UTF-16 data\&. Default is wchar_t\&. C++11 may use char16_t instead\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+implements Encoding concept
+.PP
+For in-memory access, no need to concern endianness\&. The code units and code points are represented by CPU's endianness\&. For streaming, use \fBUTF16LE\fP and \fBUTF16BE\fP, which handle endianness\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename CharType  = wchar_t> typedef CharType \fBUTF16\fP< CharType >::Ch"
+
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename CharType  = wchar_t> anonymous enum"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIsupportUnicode \fP\fP
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename CharType  = wchar_t> template<typename InputStream > static bool \fBUTF16\fP< CharType >::Decode (InputStream & is, unsigned * codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = wchar_t> template<typename OutputStream > static void \fBUTF16\fP< CharType >::Encode (OutputStream & os, unsigned codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = wchar_t> template<typename OutputStream > static void \fBUTF16\fP< CharType >::EncodeUnsafe (OutputStream & os, unsigned codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = wchar_t> \fBUTF16\fP< CharType >::RAPIDJSON_STATIC_ASSERT (sizeof(\fBCh\fP) >= 2)"
+
+.SS "template<typename CharType  = wchar_t> template<typename InputStream , typename OutputStream > static bool \fBUTF16\fP< CharType >::Validate (InputStream & is, OutputStream & os)\fC [inline]\fP, \fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

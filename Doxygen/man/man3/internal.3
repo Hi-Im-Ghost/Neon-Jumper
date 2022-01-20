@@ -1,0 +1,384 @@
+.TH "internal" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+internal
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBBigInteger\fP"
+.br
+.ti -1c
+.RI "class \fBDecodedStream\fP"
+.br
+.ti -1c
+.RI "struct \fBDiyFp\fP"
+.br
+.ti -1c
+.RI "class \fBDouble\fP"
+.br
+.ti -1c
+.RI "class \fBGenericRegex\fP"
+.br
+.RI "Regular expression engine with subset of ECMAscript grammar\&. "
+.ti -1c
+.RI "class \fBGenericRegexSearch\fP"
+.br
+.ti -1c
+.RI "class \fBHasher\fP"
+.br
+.ti -1c
+.RI "class \fBISchemaStateFactory\fP"
+.br
+.ti -1c
+.RI "class \fBISchemaValidator\fP"
+.br
+.ti -1c
+.RI "struct \fBIsGenericValue\fP"
+.br
+.ti -1c
+.RI "struct \fBIsGenericValueImpl\fP"
+.br
+.ti -1c
+.RI "struct \fBIsGenericValueImpl< T, typename Void< typename T::EncodingType >::Type, typename Void< typename T::AllocatorType >::Type >\fP"
+.br
+.ti -1c
+.RI "struct \fBIsRefCounted\fP"
+.br
+.ti -1c
+.RI "struct \fBIsRefCounted< T, typename internal::EnableIfCond< T::kRefCounted >::Type >\fP"
+.br
+.ti -1c
+.RI "class \fBIValidationErrorHandler\fP"
+.br
+.ti -1c
+.RI "class \fBSchema\fP"
+.br
+.ti -1c
+.RI "struct \fBSchemaValidationContext\fP"
+.br
+.ti -1c
+.RI "class \fBStack\fP"
+.br
+.RI "A type-unsafe stack for storing different types of data\&. "
+.ti -1c
+.RI "class \fBStreamLocalCopy\fP"
+.br
+.ti -1c
+.RI "class \fBStreamLocalCopy< Stream, 0 >\fP"
+.br
+.RI "Keep reference\&. "
+.ti -1c
+.RI "class \fBStreamLocalCopy< Stream, 1 >\fP"
+.br
+.RI "Do copy optimization\&. "
+.ti -1c
+.RI "struct \fBTokenHelper\fP"
+.br
+.ti -1c
+.RI "struct \fBTokenHelper< Stack, char >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, bool >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, const typename ValueType::Ch * >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, double >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, float >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, int >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, int64_t >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, typename ValueType::Array >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, typename ValueType::ConstArray >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, typename ValueType::ConstObject >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, typename ValueType::Object >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, uint64_t >\fP"
+.br
+.ti -1c
+.RI "struct \fBTypeHelper< ValueType, unsigned >\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericRegex\fP< \fBUTF8\fP<> > \fBRegex\fP"
+.br
+.ti -1c
+.RI "typedef \fBGenericRegexSearch\fP< \fBRegex\fP > \fBRegexSearch\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBuint32_t\fP \fBclzll\fP (\fBuint64_t\fP x)"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBGetCachedPowerByIndex\fP (size_t index)"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBGetCachedPower\fP (int e, int *K)"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBGetCachedPower10\fP (int exp, int *outExp)"
+.br
+.ti -1c
+.RI "void \fBGrisuRound\fP (char *buffer, int len, \fBuint64_t\fP delta, \fBuint64_t\fP rest, \fBuint64_t\fP ten_kappa, \fBuint64_t\fP wp_w)"
+.br
+.ti -1c
+.RI "int \fBCountDecimalDigit32\fP (\fBuint32_t\fP n)"
+.br
+.ti -1c
+.RI "void \fBDigitGen\fP (const \fBDiyFp\fP &W, const \fBDiyFp\fP &Mp, \fBuint64_t\fP delta, char *buffer, int *len, int *K)"
+.br
+.ti -1c
+.RI "void \fBGrisu2\fP (double \fBvalue\fP, char *buffer, int *length, int *K)"
+.br
+.ti -1c
+.RI "char * \fBWriteExponent\fP (int K, char *buffer)"
+.br
+.ti -1c
+.RI "char * \fBPrettify\fP (char *buffer, int length, int k, int maxDecimalPlaces)"
+.br
+.ti -1c
+.RI "char * \fBdtoa\fP (double \fBvalue\fP, char *buffer, int maxDecimalPlaces=324)"
+.br
+.ti -1c
+.RI "const char * \fBGetDigitsLut\fP ()"
+.br
+.ti -1c
+.RI "char * \fBu32toa\fP (\fBuint32_t\fP \fBvalue\fP, char *buffer)"
+.br
+.ti -1c
+.RI "char * \fBi32toa\fP (\fBint32_t\fP \fBvalue\fP, char *buffer)"
+.br
+.ti -1c
+.RI "char * \fBu64toa\fP (\fBuint64_t\fP \fBvalue\fP, char *buffer)"
+.br
+.ti -1c
+.RI "char * \fBi64toa\fP (\fBint64_t\fP \fBvalue\fP, char *buffer)"
+.br
+.ti -1c
+.RI "double \fBPow10\fP (int n)"
+.br
+.RI "Computes integer powers of 10 in double (10\&.0^n)\&. "
+.ti -1c
+.RI "template<typename Ch > \fBSizeType\fP \fBStrLen\fP (const Ch *s)"
+.br
+.RI "Custom strlen() which works on different character types\&. "
+.ti -1c
+.RI "template<> \fBSizeType\fP \fBStrLen\fP (const char *s)"
+.br
+.ti -1c
+.RI "template<> \fBSizeType\fP \fBStrLen\fP (const wchar_t *s)"
+.br
+.ti -1c
+.RI "template<typename Ch > int \fBStrCmp\fP (const Ch *s1, const Ch *s2)"
+.br
+.RI "Custom strcmpn() which works on different character types\&. "
+.ti -1c
+.RI "template<typename \fBEncoding\fP > bool \fBCountStringCodePoint\fP (const typename Encoding::Ch *s, \fBSizeType\fP length, \fBSizeType\fP *outCount)"
+.br
+.RI "Returns number of code points in a encoded string\&. "
+.ti -1c
+.RI "double \fBFastPath\fP (double significand, int exp)"
+.br
+.ti -1c
+.RI "double \fBStrtodNormalPrecision\fP (double d, int p)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > \fBT\fP \fBMin3\fP (\fBT\fP \fBa\fP, \fBT\fP b, \fBT\fP c)"
+.br
+.ti -1c
+.RI "int \fBCheckWithinHalfULP\fP (double b, const \fBBigInteger\fP &d, int dExp)"
+.br
+.ti -1c
+.RI "bool \fBStrtodFast\fP (double d, int p, double *result)"
+.br
+.ti -1c
+.RI "template<typename Ch > bool \fBStrtodDiyFp\fP (const Ch *decimals, int dLen, int dExp, double *result)"
+.br
+.ti -1c
+.RI "template<typename Ch > double \fBStrtodBigInteger\fP (double approx, const Ch *decimals, int dLen, int dExp)"
+.br
+.ti -1c
+.RI "template<typename Ch > double \fBStrtodFullPrecision\fP (double d, int p, const Ch *decimals, size_t length, size_t decimalPosition, int exp)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP > void \fBSwap\fP (\fBT\fP &\fBa\fP, \fBT\fP &b) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Custom swap() to avoid dependency on C++ <algorithm> header\&. "
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef \fBGenericRegex\fP<\fBUTF8\fP<> > \fBinternal::Regex\fP"
+
+.SS "typedef \fBGenericRegexSearch\fP<\fBRegex\fP> \fBinternal::RegexSearch\fP"
+
+.SH "Function Documentation"
+.PP 
+.SS "int internal::CheckWithinHalfULP (double b, const \fBBigInteger\fP & d, int dExp)\fC [inline]\fP"
+
+.SS "\fBuint32_t\fP internal::clzll (\fBuint64_t\fP x)\fC [inline]\fP"
+
+.SS "int internal::CountDecimalDigit32 (\fBuint32_t\fP n)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP > bool internal::CountStringCodePoint (const typename Encoding::Ch * s, \fBSizeType\fP length, \fBSizeType\fP * outCount)"
+
+.PP
+Returns number of code points in a encoded string\&. 
+.SS "void internal::DigitGen (const \fBDiyFp\fP & W, const \fBDiyFp\fP & Mp, \fBuint64_t\fP delta, char * buffer, int * len, int * K)\fC [inline]\fP"
+
+.SS "char * internal::dtoa (double value, char * buffer, int maxDecimalPlaces = \fC324\fP)\fC [inline]\fP"
+
+.SS "double internal::FastPath (double significand, int exp)\fC [inline]\fP"
+
+.SS "\fBDiyFp\fP internal::GetCachedPower (int e, int * K)\fC [inline]\fP"
+
+.SS "\fBDiyFp\fP internal::GetCachedPower10 (int exp, int * outExp)\fC [inline]\fP"
+
+.SS "\fBDiyFp\fP internal::GetCachedPowerByIndex (size_t index)\fC [inline]\fP"
+
+.SS "const char * internal::GetDigitsLut ()\fC [inline]\fP"
+
+.SS "void internal::Grisu2 (double value, char * buffer, int * length, int * K)\fC [inline]\fP"
+
+.SS "void internal::GrisuRound (char * buffer, int len, \fBuint64_t\fP delta, \fBuint64_t\fP rest, \fBuint64_t\fP ten_kappa, \fBuint64_t\fP wp_w)\fC [inline]\fP"
+closer
+.SS "char * internal::i32toa (\fBint32_t\fP value, char * buffer)\fC [inline]\fP"
+
+.SS "char * internal::i64toa (\fBint64_t\fP value, char * buffer)\fC [inline]\fP"
+
+.SS "template<typename \fBT\fP > \fBT\fP internal::Min3 (\fBT\fP a, \fBT\fP b, \fBT\fP c)\fC [inline]\fP"
+
+.SS "double internal::Pow10 (int n)\fC [inline]\fP"
+
+.PP
+Computes integer powers of 10 in double (10\&.0^n)\&. This function uses lookup table for fast and accurate results\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIn\fP non-negative exponent\&. Must <= 308\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+10\&.0^n 
+.RE
+.PP
+
+.SS "char * internal::Prettify (char * buffer, int length, int k, int maxDecimalPlaces)\fC [inline]\fP"
+
+.SS "template<typename Ch > int internal::StrCmp (const Ch * s1, const Ch * s2)\fC [inline]\fP"
+
+.PP
+Custom strcmpn() which works on different character types\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICh\fP Character type (e\&.g\&. char, wchar_t, short) 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIs1\fP Null-terminated input string\&. 
+.br
+\fIs2\fP Null-terminated input string\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+0 if equal 
+.RE
+.PP
+
+.SS "template<typename Ch > \fBSizeType\fP internal::StrLen (const Ch * s)\fC [inline]\fP"
+
+.PP
+Custom strlen() which works on different character types\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICh\fP Character type (e\&.g\&. char, wchar_t, short) 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP Null-terminated input string\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+Number of characters in the string\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This has the same semantics as strlen(), the return value is not number of Unicode codepoints\&. 
+.RE
+.PP
+
+.SS "template<> \fBSizeType\fP internal::StrLen (const char * s)\fC [inline]\fP"
+
+.SS "template<> \fBSizeType\fP internal::StrLen (const wchar_t * s)\fC [inline]\fP"
+
+.SS "template<typename Ch > double internal::StrtodBigInteger (double approx, const Ch * decimals, int dLen, int dExp)\fC [inline]\fP"
+
+.SS "template<typename Ch > bool internal::StrtodDiyFp (const Ch * decimals, int dLen, int dExp, double * result)\fC [inline]\fP"
+
+.SS "bool internal::StrtodFast (double d, int p, double * result)\fC [inline]\fP"
+
+.SS "template<typename Ch > double internal::StrtodFullPrecision (double d, int p, const Ch * decimals, size_t length, size_t decimalPosition, int exp)\fC [inline]\fP"
+
+.SS "double internal::StrtodNormalPrecision (double d, int p)\fC [inline]\fP"
+
+.SS "template<typename \fBT\fP > void internal::Swap (\fBT\fP & a, \fBT\fP & b)\fC [inline]\fP"
+
+.PP
+Custom swap() to avoid dependency on C++ <algorithm> header\&. 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIT\fP Type of the arguments to swap, should be instantiated with primitive C++ types only\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This has the same semantics as std::swap()\&. 
+.RE
+.PP
+
+.SS "char * internal::u32toa (\fBuint32_t\fP value, char * buffer)\fC [inline]\fP"
+
+.SS "char * internal::u64toa (\fBuint64_t\fP value, char * buffer)\fC [inline]\fP"
+
+.SS "char * internal::WriteExponent (int K, char * buffer)\fC [inline]\fP"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

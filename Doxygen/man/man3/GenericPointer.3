@@ -1,0 +1,390 @@
+.TH "GenericPointer< ValueType, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericPointer< ValueType, Allocator > \- Represents a JSON Pointer\&. Use Pointer for \fBUTF8\fP encoding and default allocator\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pointer\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBPercentEncodeStream\fP"
+.br
+.RI "A helper stream to encode character (UTF-8 code unit) into percent-encoded sequence\&. "
+.ti -1c
+.RI "struct \fBToken\fP"
+.br
+.RI "A token is the basic units of internal representation\&. "
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBValueType::EncodingType\fP \fBEncodingType\fP"
+.br
+.RI "Encoding type from Value\&. "
+.ti -1c
+.RI "typedef \fBValueType::Ch\fP \fBCh\fP"
+.br
+.RI "Character type from Value\&. "
+.ti -1c
+.RI "typedef \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP > \fBUriType\fP"
+.br
+.in -1c
+.SS "Append token"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.RI "The current allocator\&. It is either user-supplied or equal to ownAllocator_\&. "
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.RI "Allocator owned by this Pointer\&. "
+.ti -1c
+.RI "\fBCh\fP * \fBnameBuffer_\fP"
+.br
+.RI "A buffer containing all names in tokens\&. "
+.ti -1c
+.RI "\fBToken\fP * \fBtokens_\fP"
+.br
+.RI "A list of tokens\&. "
+.ti -1c
+.RI "size_t \fBtokenCount_\fP"
+.br
+.RI "Number of tokens in tokens_\&. "
+.ti -1c
+.RI "size_t \fBparseErrorOffset_\fP"
+.br
+.RI "Offset in code unit when parsing fail\&. "
+.ti -1c
+.RI "\fBPointerParseErrorCode\fP \fBparseErrorCode_\fP"
+.br
+.RI "Parsing error code\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP \fBAppend\fP (const \fBToken\fP &token, \fBAllocator\fP *\fBallocator\fP=0) const"
+.br
+.RI "Append a token and return a new Pointer\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP \fBAppend\fP (const \fBCh\fP *name, \fBSizeType\fP length, \fBAllocator\fP *\fBallocator\fP=0) const"
+.br
+.RI "Append a name token with length, and return a new Pointer\&. "
+.ti -1c
+.RI "template<typename \fBT\fP > \fBRAPIDJSON_DISABLEIF_RETURN\fP ((internal::NotExpr< internal::IsSame< typename internal::RemoveConst< \fBT\fP >\fB::Type\fP, \fBCh\fP > >),(\fBGenericPointer\fP)) \fBAppend\fP(\fBT\fP *name"
+.br
+.RI "Append a name token without length, and return a new Pointer\&. "
+.in -1c
+.SS "Constructors and destructor\&."
+
+.in +1c
+.ti -1c
+.RI "\fBGenericPointer\fP (\fBAllocator\fP *\fBallocator\fP=0)"
+.br
+.RI "Default constructor\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP (const \fBCh\fP *\fBsource\fP, \fBAllocator\fP *\fBallocator\fP=0)"
+.br
+.RI "Constructor that parses a string or URI fragment representation\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP (const \fBCh\fP *\fBsource\fP, size_t length, \fBAllocator\fP *\fBallocator\fP=0)"
+.br
+.RI "Constructor that parses a string or URI fragment representation, with length of the source string\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP (const \fBToken\fP *tokens, size_t tokenCount)"
+.br
+.RI "Constructor with user-supplied tokens\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP (const \fBGenericPointer\fP &rhs)"
+.br
+.RI "Copy constructor\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP (const \fBGenericPointer\fP &rhs, \fBAllocator\fP *\fBallocator\fP)"
+.br
+.RI "Copy constructor\&. "
+.ti -1c
+.RI "\fB~GenericPointer\fP ()"
+.br
+.RI "Destructor\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP & \fBoperator=\fP (const \fBGenericPointer\fP &rhs)"
+.br
+.RI "Assignment operator\&. "
+.ti -1c
+.RI "\fBGenericPointer\fP & \fBSwap\fP (\fBGenericPointer\fP &other) RAPIDJSON_NOEXCEPT"
+.br
+.RI "Swap the content of this pointer with an other\&. "
+.ti -1c
+.RI "void \fBswap\fP (\fBGenericPointer\fP &\fBa\fP, \fBGenericPointer\fP &b) RAPIDJSON_NOEXCEPT"
+.br
+.RI "free-standing swap function helper "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename \fBValueType\fP, typename \fBAllocator\fP = CrtAllocator>
+.br
+class GenericPointer< ValueType, Allocator >"Represents a JSON Pointer\&. Use Pointer for \fBUTF8\fP encoding and default allocator\&. 
+
+This class implements RFC 6901 'JavaScript Object Notation (JSON) Pointer' (https://tools.ietf.org/html/rfc6901)\&.
+.PP
+A JSON pointer is for identifying a specific value in a JSON document (\fBGenericDocument\fP)\&. It can simplify coding of DOM tree manipulation, because it can access multiple-level depth of DOM tree with single API call\&.
+.PP
+After it parses a string representation (e\&.g\&. '/foo/0' or URI fragment representation (e\&.g\&. '#/foo/0') into its internal representation (tokens), it can be used to resolve a specific value in multiple documents, or sub-tree of documents\&.
+.PP
+Contrary to \fBGenericValue\fP, Pointer can be copy constructed and copy assigned\&. Apart from assignment, a Pointer cannot be modified after construction\&.
+.PP
+Although Pointer is very convenient, please aware that constructing Pointer involves parsing and dynamic memory allocation\&. A special constructor with user- supplied tokens eliminates these\&.
+.PP
+\fBGenericPointer\fP depends on \fBGenericDocument\fP and \fBGenericValue\fP\&.
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fIValueType\fP The value type of the DOM tree\&. E\&.g\&. \fBGenericValue\fP<UTF8<> > 
+.br
+\fIAllocator\fP The allocator type for allocating memory for internal representation\&.
+.RE
+.PP
+\fBNote\fP
+.RS 4
+\fBGenericPointer\fP uses same encoding of ValueType\&. However, Allocator of \fBGenericPointer\fP is independent of Allocator of Value\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> typedef \fBValueType::Ch\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Ch"
+
+.PP
+Character type from Value\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> typedef \fBValueType::EncodingType\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::EncodingType"
+
+.PP
+Encoding type from Value\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> typedef \fBGenericUri\fP<\fBValueType\fP, \fBAllocator\fP> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::UriType"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (\fBAllocator\fP * allocator = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Default constructor\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (const \fBCh\fP * source, \fBAllocator\fP * allocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Constructor that parses a string or URI fragment representation\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP A null-terminated, string or URI fragment representation of JSON pointer\&. 
+.br
+\fIallocator\fP User supplied allocator for this pointer\&. If no allocator is provided, it creates a self-owned one\&. 
+.RE
+.PP
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (const \fBCh\fP * source, size_t length, \fBAllocator\fP * allocator = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Constructor that parses a string or URI fragment representation, with length of the source string\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsource\fP A string or URI fragment representation of JSON pointer\&. 
+.br
+\fIlength\fP Length of source\&. 
+.br
+\fIallocator\fP User supplied allocator for this pointer\&. If no allocator is provided, it creates a self-owned one\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Slightly faster than the overload without length\&. 
+.RE
+.PP
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (const \fBToken\fP * tokens, size_t tokenCount)\fC [inline]\fP"
+
+.PP
+Constructor with user-supplied tokens\&. This constructor let user supplies const array of tokens\&. This prevents the parsing process and eliminates allocation\&. This is preferred for memory constrained environments\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fItokens\fP An constant array of tokens representing the JSON pointer\&. 
+.br
+\fItokenCount\fP Number of tokens\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+#define NAME(s) { s, sizeof(s) / sizeof(s[0]) - 1, kPointerInvalidIndex }
+#define INDEX(i) { #i, sizeof(#i) - 1, i }
+
+static const Pointer::Token kTokens[] = { NAME("foo"), INDEX(123) };
+static const Pointer p(kTokens, sizeof(kTokens) / sizeof(kTokens[0]));
+// Equivalent to static const Pointer p("/foo/123");
+
+#undef NAME
+#undef INDEX
+
+.fi
+.PP
+ 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (const \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & rhs)\fC [inline]\fP"
+
+.PP
+Copy constructor\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >\fB::GenericPointer\fP (const \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & rhs, \fBAllocator\fP * allocator)\fC [inline]\fP"
+
+.PP
+Copy constructor\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::~\fBGenericPointer\fP ()\fC [inline]\fP"
+
+.PP
+Destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Append (const \fBCh\fP * name, \fBSizeType\fP length, \fBAllocator\fP * allocator = \fC0\fP) const\fC [inline]\fP"
+
+.PP
+Append a name token with length, and return a new Pointer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP Name to be appended\&. 
+.br
+\fIlength\fP Length of name\&. 
+.br
+\fIallocator\fP Allocator for the newly return Pointer\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A new Pointer with appended token\&. 
+.RE
+.PP
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Append (const \fBToken\fP & token, \fBAllocator\fP * allocator = \fC0\fP) const\fC [inline]\fP"
+
+.PP
+Append a token and return a new Pointer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fItoken\fP \fBToken\fP to be appended\&. 
+.br
+\fIallocator\fP Allocator for the newly return Pointer\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A new Pointer with appended token\&. 
+.RE
+.PP
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP & \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::operator= (const \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & rhs)\fC [inline]\fP"
+
+.PP
+Assignment operator\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename \fBT\fP > \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::RAPIDJSON_DISABLEIF_RETURN ((internal::NotExpr< internal::IsSame< typename internal::RemoveConst< \fBT\fP >\fB::Type\fP, \fBCh\fP > >), (\fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >))"
+
+.PP
+Append a name token without length, and return a new Pointer\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIname\fP Name (const Ch*) to be appended\&. 
+.br
+\fIallocator\fP Allocator for the newly return Pointer\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+A new Pointer with appended token\&. 
+.RE
+.PP
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericPointer\fP & \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Swap (\fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & other)\fC [inline]\fP"
+
+.PP
+Swap the content of this pointer with an other\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIother\fP The pointer to swap with\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+Constant complexity\&. 
+.RE
+.PP
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void swap (\fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & a, \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP > & b)\fC [friend]\fP"
+
+.PP
+free-standing swap function helper Helper function to enable support for common swap implementation pattern based on \fCstd::swap:\fP 
+.PP
+.nf
+void swap(MyClass& a, MyClass& b) {
+    using std::swap;
+    swap(a\&.pointer, b\&.pointer);
+    // \&.\&.\&.
+}
+
+.fi
+.PP
+ 
+.PP
+\fBSee also\fP
+.RS 4
+\fBSwap()\fP 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::allocator"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::allocator_"
+
+.PP
+The current allocator\&. It is either user-supplied or equal to ownAllocator_\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::nameBuffer_"
+
+.PP
+A buffer containing all names in tokens\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::ownAllocator_"
+
+.PP
+Allocator owned by this Pointer\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBPointerParseErrorCode\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::parseErrorCode_"
+
+.PP
+Parsing error code\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> size_t \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::parseErrorOffset_"
+
+.PP
+Offset in code unit when parsing fail\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> size_t \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::tokenCount_"
+
+.PP
+Number of tokens in tokens_\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBToken\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::tokens_"
+
+.PP
+A list of tokens\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,387 @@
+.TH "md_src_rapidjson_doc_schema" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_schema \- \fBSchema\fP 
+(This feature was released in v1\&.1\&.0)
+.PP
+JSON \fBSchema\fP is a draft standard for describing the format of JSON data\&. The schema itself is also JSON data\&. By validating a JSON structure with JSON \fBSchema\fP, your code can safely access the DOM without manually checking types, or whether a key exists, etc\&. It can also ensure that the serialized JSON conform to a specified schema\&.
+.PP
+RapidJSON implemented a JSON \fBSchema\fP validator for \fCJSON Schema Draft v4\fP\&. If you are not familiar with JSON \fBSchema\fP, you may refer to \fCUnderstanding JSON Schema\fP\&.
+.SH "Basic Usage"
+.PP
+First of all, you need to parse a JSON \fBSchema\fP into \fCDocument\fP, and then compile the \fCDocument\fP into a \fCSchemaDocument\fP\&.
+.PP
+Secondly, construct a \fCSchemaValidator\fP with the \fCSchemaDocument\fP\&. It is similar to a \fC\fBWriter\fP\fP in the sense of handling SAX events\&. So, you can use \fCdocument\&.Accept(validator)\fP to validate a document, and then check the validity\&.
+.PP
+.PP
+.nf
+#include "rapidjson/schema\&.h"
+
+// \&.\&.\&.
+
+Document sd;
+if (sd\&.Parse(schemaJson)\&.HasParseError()) {
+    // the schema is not a valid JSON\&.
+    // \&.\&.\&.       
+}
+SchemaDocument schema(sd); // Compile a Document to SchemaDocument
+// sd is no longer needed here\&.
+
+Document d;
+if (d\&.Parse(inputJson)\&.HasParseError()) {
+    // the input is not a valid JSON\&.
+    // \&.\&.\&.       
+}
+
+SchemaValidator validator(schema);
+if (!d\&.Accept(validator)) {
+    // Input JSON is invalid according to the schema
+    // Output diagnostic information
+    StringBuffer sb;
+    validator\&.GetInvalidSchemaPointer()\&.StringifyUriFragment(sb);
+    printf("Invalid schema: %s\n", sb\&.GetString());
+    printf("Invalid keyword: %s\n", validator\&.GetInvalidSchemaKeyword());
+    sb\&.Clear();
+    validator\&.GetInvalidDocumentPointer()\&.StringifyUriFragment(sb);
+    printf("Invalid document: %s\n", sb\&.GetString());
+}
+.fi
+.PP
+.PP
+Some notes:
+.PP
+.IP "\(bu" 2
+One \fCSchemaDocument\fP can be referenced by multiple \fCSchemaValidator\fPs\&. It will not be modified by \fCSchemaValidator\fPs\&.
+.IP "\(bu" 2
+A \fCSchemaValidator\fP may be reused to validate multiple documents\&. To run it for other documents, call \fCvalidator\&.Reset()\fP first\&.
+.PP
+.SH "Validation during parsing/serialization"
+.PP
+Unlike most JSON \fBSchema\fP validator implementations, RapidJSON provides a SAX-based schema validator\&. Therefore, you can parse a JSON from a stream while validating it on the fly\&. If the validator encounters a JSON value that invalidates the supplied schema, the parsing will be terminated immediately\&. This design is especially useful for parsing large JSON files\&.
+.SS "DOM parsing"
+For using DOM in parsing, \fCDocument\fP needs some preparation and finalizing tasks, in addition to receiving SAX events, thus it needs some work to route the reader, validator and the document\&. \fC\fBSchemaValidatingReader\fP\fP is a helper class that doing such work\&.
+.PP
+.PP
+.nf
+#include "rapidjson/filereadstream\&.h"
+
+// \&.\&.\&.
+SchemaDocument schema(sd); // Compile a Document to SchemaDocument
+
+// Use reader to parse the JSON
+FILE* fp = fopen("big\&.json", "r");
+FileReadStream is(fp, buffer, sizeof(buffer));
+
+// Parse JSON from reader, validate the SAX events, and store in d\&.
+Document d;
+SchemaValidatingReader<kParseDefaultFlags, FileReadStream, UTF8<> > reader(is, schema);
+d\&.Populate(reader);
+
+if (!reader\&.GetParseResult()) {
+    // Not a valid JSON
+    // When reader\&.GetParseResult()\&.Code() == kParseErrorTermination,
+    // it may be terminated by:
+    // (1) the validator found that the JSON is invalid according to schema; or
+    // (2) the input stream has I/O error\&.
+
+    // Check the validation result
+    if (!reader\&.IsValid()) {
+        // Input JSON is invalid according to the schema
+        // Output diagnostic information
+        StringBuffer sb;
+        reader\&.GetInvalidSchemaPointer()\&.StringifyUriFragment(sb);
+        printf("Invalid schema: %s\n", sb\&.GetString());
+        printf("Invalid keyword: %s\n", reader\&.GetInvalidSchemaKeyword());
+        sb\&.Clear();
+        reader\&.GetInvalidDocumentPointer()\&.StringifyUriFragment(sb);
+        printf("Invalid document: %s\n", sb\&.GetString());
+    }
+}
+.fi
+.PP
+.SS "SAX parsing"
+For using SAX in parsing, it is much simpler\&. If it only need to validate the JSON without further processing, it is simply:
+.PP
+.PP
+.nf
+SchemaValidator validator(schema);
+Reader reader;
+if (!reader\&.Parse(stream, validator)) {
+    if (!validator\&.IsValid()) {
+        // \&.\&.\&.    
+    }
+}
+.fi
+.PP
+.PP
+This is exactly the method used in the \fCschemavalidator\fP example\&. The distinct advantage is low memory usage, no matter how big the JSON was (the memory usage depends on the complexity of the schema)\&.
+.PP
+If you need to handle the SAX events further, then you need to use the template class \fC\fBGenericSchemaValidator\fP\fP to set the output handler of the validator:
+.PP
+.PP
+.nf
+MyHandler handler;
+GenericSchemaValidator<SchemaDocument, MyHandler> validator(schema, handler);
+Reader reader;
+if (!reader\&.Parse(ss, validator)) {
+    if (!validator\&.IsValid()) {
+        // \&.\&.\&.    
+    }
+}
+.fi
+.PP
+.SS "Serialization"
+It is also possible to do validation during serializing\&. This can ensure the result JSON is valid according to the JSON schema\&.
+.PP
+.PP
+.nf
+StringBuffer sb;
+Writer<StringBuffer> writer(sb);
+GenericSchemaValidator<SchemaDocument, Writer<StringBuffer> > validator(s, writer);
+if (!d\&.Accept(validator)) {
+    // Some problem during Accept(), it may be validation or encoding issues\&.
+    if (!validator\&.IsValid()) {
+        // \&.\&.\&.
+    }
+}
+.fi
+.PP
+.PP
+Of course, if your application only needs SAX-style serialization, it can simply send SAX events to \fCSchemaValidator\fP instead of \fC\fBWriter\fP\fP\&.
+.SH "Remote Schema"
+.PP
+JSON \fBSchema\fP supports \fC\fC$ref\fP keyword\fP, which is a \fBJSON pointer\fP referencing to a local or remote schema\&. Local pointer is prefixed with \fC#\fP, while remote pointer is an relative or absolute URI\&. For example:
+.PP
+.PP
+.nf
+{ "$ref": "definitions\&.json#/address" }
+.fi
+.PP
+.PP
+As \fCSchemaDocument\fP does not know how to resolve such URI, it needs a user-provided \fCIRemoteSchemaDocumentProvider\fP instance to do so\&.
+.PP
+.PP
+.nf
+class MyRemoteSchemaDocumentProvider : public IRemoteSchemaDocumentProvider {
+public:
+    virtual const SchemaDocument* GetRemoteDocument(const char* uri, SizeType length) {
+        // Resolve the uri and returns a pointer to that schema\&.
+    }
+};
+
+// \&.\&.\&.
+
+MyRemoteSchemaDocumentProvider provider;
+SchemaDocument schema(sd, &provider);
+.fi
+.PP
+.SH "Conformance"
+.PP
+RapidJSON passed 262 out of 263 tests in \fCJSON Schema Test Suite\fP (Json \fBSchema\fP draft 4)\&.
+.PP
+The failed test is 'changed scope ref invalid' of 'change resolution scope' in \fCrefRemote\&.json\fP\&. It is due to that \fCid\fP schema keyword and URI combining function are not implemented\&.
+.PP
+Besides, the \fCformat\fP schema keyword for string values is ignored, since it is not required by the specification\&.
+.SS "Regular Expression"
+The schema keyword \fCpattern\fP and \fCpatternProperties\fP uses regular expression to match the required pattern\&.
+.PP
+RapidJSON implemented a simple NFA regular expression engine, which is used by default\&. It supports the following syntax\&.
+.PP
+Syntax   Description    \fCab\fP   Concatenation    \fCa&#124;b\fP   Alternation    \fCa?\fP   Zero or one    \fCa*\fP   Zero or more    \fCa+\fP   One or more    \fCa{3}\fP   Exactly 3 times    \fCa{3,}\fP   At least 3 times    \fCa{3,5}\fP   3 to 5 times    \fC(ab)\fP   Grouping    \fC^a\fP   At the beginning    \fCa$\fP   At the end    \fC\&.\fP   Any character    \fC[abc]\fP   Character classes    \fC[a-c]\fP   Character class range    \fC[a-z0-9_]\fP   Character class combination    \fC[^abc]\fP   Negated character classes    \fC[^a-c]\fP   Negated character class range    \fC[\\b]\fP   Backspace (U+0008)    \fC\\&#124;\fP, \fC\\\\\fP, \&.\&.\&.   Escape characters    \fC\\f\fP   Form feed (U+000C)    \fC\\n\fP   Line feed (U+000A)    \fC\\r\fP   Carriage return (U+000D)    \fC\\t\fP   Tab (U+0009)    \fC\\v\fP   Vertical tab (U+000B)   
+.PP
+For C++11 compiler, it is also possible to use the \fCstd::regex\fP by defining \fCRAPIDJSON_SCHEMA_USE_INTERNALREGEX=0\fP and \fCRAPIDJSON_SCHEMA_USE_STDREGEX=1\fP\&. If your schemas do not need \fCpattern\fP and \fCpatternProperties\fP, you can set both macros to zero to disable this feature, which will reduce some code size\&.
+.SH "Performance"
+.PP
+Most C++ JSON libraries do not yet support JSON \fBSchema\fP\&. So we tried to evaluate the performance of RapidJSON's JSON \fBSchema\fP validator according to \fCjson-schema-benchmark\fP, which tests 11 JavaScript libraries running on Node\&.js\&.
+.PP
+That benchmark runs validations on \fCJSON Schema Test Suite\fP, in which some test suites and tests are excluded\&. We made the same benchmarking procedure in \fC\fCschematest\&.cpp\fP\fP\&.
+.PP
+On a Mac Book Pro (2\&.8 GHz Intel Core i7), the following results are collected\&.
+.PP
+Validator   Relative speed   Number of test runs per second    RapidJSON   155%   30682    \fC\fCajv\fP\fP   100%   19770 (± 1\&.31%)    \fC\fCis-my-json-valid\fP\fP   70%   13835 (± 2\&.84%)    \fC\fCjsen\fP\fP   57\&.7%   11411 (± 1\&.27%)    \fC\fCschemasaurus\fP\fP   26%   5145 (± 1\&.62%)    \fC\fCthemis\fP\fP   19\&.9%   3935 (± 2\&.69%)    \fC\fCz-schema\fP\fP   7%   1388 (± 0\&.84%)    \fC\fCjsck\fP\fP   3\&.1%   606 (± 2\&.84%)    \fC\fCjsonschema\fP\fP   0\&.9%   185 (± 1\&.01%)    \fC\fCskeemas\fP\fP   0\&.8%   154 (± 0\&.79%)    tv4   0\&.5%   93 (± 0\&.94%)    \fC\fCjayschema\fP\fP   0\&.1%   21 (± 1\&.14%)   
+.PP
+That is, RapidJSON is about 1\&.5x faster than the fastest JavaScript library (ajv)\&. And 1400x faster than the slowest one\&.
+.SH "Schema violation reporting"
+.PP
+(Unreleased as of 2017-09-20)
+.PP
+When validating an instance against a JSON \fBSchema\fP, it is often desirable to report not only whether the instance is valid, but also the ways in which it violates the schema\&.
+.PP
+The \fCSchemaValidator\fP class collects errors encountered during validation into a JSON \fCValue\fP\&. This error object can then be accessed as \fCvalidator\&.GetError()\fP\&.
+.PP
+The structure of the error object is subject to change in future versions of RapidJSON, as there is no standard schema for violations\&. The details below this point are provisional only\&.
+.SS "General provisions"
+Validation of an instance value against a schema produces an error value\&. The error value is always an object\&. An empty object \fC{}\fP indicates the instance is valid\&.
+.PP
+.IP "\(bu" 2
+The name of each member corresponds to the JSON \fBSchema\fP keyword that is violated\&.
+.IP "\(bu" 2
+The value is either an object describing a single violation, or an array of such objects\&.
+.PP
+.PP
+Each violation object contains two string-valued members named \fCinstanceRef\fP and \fCschemaRef\fP\&. \fCinstanceRef\fP contains the URI fragment serialization of a JSON Pointer to the instance subobject in which the violation was detected\&. \fCschemaRef\fP contains the URI of the schema and the fragment serialization of a JSON Pointer to the subschema that was violated\&.
+.PP
+Individual violation objects can contain other keyword-specific members\&. These are detailed further\&.
+.PP
+For example, validating this instance:
+.PP
+.PP
+.nf
+{"numbers": [1, 2, "3", 4, 5]}
+.fi
+.PP
+.PP
+against this schema:
+.PP
+.PP
+.nf
+{
+  "type": "object",
+  "properties": {
+    "numbers": {"$ref": "numbers\&.schema\&.json"}
+  }
+}
+.fi
+.PP
+.PP
+where \fCnumbers\&.schema\&.json\fP refers (via a suitable \fCIRemoteSchemaDocumentProvider\fP) to this schema:
+.PP
+.PP
+.nf
+{
+  "type": "array",
+  "items": {"type": "number"}
+}
+.fi
+.PP
+.PP
+produces the following error object:
+.PP
+.PP
+.nf
+{
+  "type": {
+    "instanceRef": "#/numbers/2",
+    "schemaRef": "numbers\&.schema\&.json#/items",
+    "expected": ["number"],
+    "actual": "string"
+  }
+}
+.fi
+.PP
+.SS "Validation keywords for numbers"
+.SS "multipleOf"
+.IP "\(bu" 2
+\fCexpected\fP: required number strictly greater than 0\&. The value of the \fCmultipleOf\fP keyword specified in the schema\&.
+.IP "\(bu" 2
+\fCactual\fP: required number\&. The instance value\&.
+.PP
+.SS "maximum"
+.IP "\(bu" 2
+\fCexpected\fP: required number\&. The value of the \fCmaximum\fP keyword specified in the schema\&.
+.IP "\(bu" 2
+\fCexclusiveMaximum\fP: optional boolean\&. This will be true if the schema specified \fC'exclusiveMaximum': true\fP, and will be omitted otherwise\&.
+.IP "\(bu" 2
+\fCactual\fP: required number\&. The instance value\&.
+.PP
+.SS "minimum"
+.IP "\(bu" 2
+\fCexpected\fP: required number\&. The value of the \fCminimum\fP keyword specified in the schema\&.
+.IP "\(bu" 2
+\fCexclusiveMinimum\fP: optional boolean\&. This will be true if the schema specified \fC'exclusiveMinimum': true\fP, and will be omitted otherwise\&.
+.IP "\(bu" 2
+\fCactual\fP: required number\&. The instance value\&.
+.PP
+.SS "Validation keywords for strings"
+.SS "maxLength"
+.IP "\(bu" 2
+\fCexpected\fP: required number greater than or equal to 0\&. The value of the \fCmaxLength\fP keyword specified in the schema\&.
+.IP "\(bu" 2
+\fCactual\fP: required string\&. The instance value\&.
+.PP
+.SS "minLength"
+.IP "\(bu" 2
+\fCexpected\fP: required number greater than or equal to 0\&. The value of the \fCminLength\fP keyword specified in the schema\&.
+.IP "\(bu" 2
+\fCactual\fP: required string\&. The instance value\&.
+.PP
+.SS "pattern"
+.IP "\(bu" 2
+\fCactual\fP: required string\&. The instance value\&.
+.PP
+.PP
+(The expected pattern is not reported because the internal representation in \fCSchemaDocument\fP does not store the pattern in original string form\&.)
+.SS "Validation keywords for arrays"
+.SS "additionalItems"
+This keyword is reported when the value of \fCitems\fP schema keyword is an array, the value of \fCadditionalItems\fP is \fCfalse\fP, and the instance is an array with more items than specified in the \fCitems\fP array\&.
+.PP
+.IP "\(bu" 2
+\fCdisallowed\fP: required integer greater than or equal to 0\&. The index of the first item that has no corresponding schema\&.
+.PP
+.SS "maxItems and minItems"
+.IP "\(bu" 2
+\fCexpected\fP: required integer greater than or equal to 0\&. The value of \fCmaxItems\fP (respectively, \fCminItems\fP) specified in the schema\&.
+.IP "\(bu" 2
+\fCactual\fP: required integer greater than or equal to 0\&. Number of items in the instance array\&.
+.PP
+.SS "uniqueItems"
+.IP "\(bu" 2
+\fCduplicates\fP: required array whose items are integers greater than or equal to 0\&. Indices of items of the instance that are equal\&.
+.PP
+.PP
+(RapidJSON only reports the first two equal items, for performance reasons\&.)
+.SS "Validation keywords for objects"
+.SS "maxProperties and minProperties"
+.IP "\(bu" 2
+\fCexpected\fP: required integer greater than or equal to 0\&. The value of \fCmaxProperties\fP (respectively, \fCminProperties\fP) specified in the schema\&.
+.IP "\(bu" 2
+\fCactual\fP: required integer greater than or equal to 0\&. Number of properties in the instance object\&.
+.PP
+.SS "required"
+.IP "\(bu" 2
+\fCmissing\fP: required array of one or more unique strings\&. The names of properties that are listed in the value of the \fCrequired\fP schema keyword but not present in the instance object\&.
+.PP
+.SS "additionalProperties"
+This keyword is reported when the schema specifies \fCadditionalProperties: false\fP and the name of a property of the instance is neither listed in the \fCproperties\fP keyword nor matches any regular expression in the \fCpatternProperties\fP keyword\&.
+.PP
+.IP "\(bu" 2
+\fCdisallowed\fP: required string\&. Name of the offending property of the instance\&.
+.PP
+.PP
+(For performance reasons, RapidJSON only reports the first such property encountered\&.)
+.SS "dependencies"
+.IP "\(bu" 2
+\fCerrors\fP: required object with one or more properties\&. Names and values of its properties are described below\&.
+.PP
+.PP
+Recall that JSON \fBSchema\fP Draft 04 supports \fIschema dependencies\fP, where presence of a named \fIcontrolling\fP property requires the instance object to be valid against a subschema, and \fIproperty dependencies\fP, where presence of a controlling property requires other \fIdependent\fP properties to be also present\&.
+.PP
+For a violated schema dependency, \fCerrors\fP will contain a property with the name of the controlling property and its value will be the error object produced by validating the instance object against the dependent schema\&.
+.PP
+For a violated property dependency, \fCerrors\fP will contain a property with the name of the controlling property and its value will be an array of one or more unique strings listing the missing dependent properties\&.
+.SS "Validation keywords for any instance type"
+.SS "enum"
+This keyword has no additional properties beyond \fCinstanceRef\fP and \fCschemaRef\fP\&.
+.PP
+.IP "\(bu" 2
+The allowed values are not listed because \fCSchemaDocument\fP does not store them in original form\&.
+.IP "\(bu" 2
+The violating value is not reported because it might be unwieldy\&.
+.PP
+.PP
+If you need to report these details to your users, you can access the necessary information by following \fCinstanceRef\fP and \fCschemaRef\fP\&.
+.SS "type"
+.IP "\(bu" 2
+\fCexpected\fP: required array of one or more unique strings, each of which is one of the seven primitive types defined by the JSON \fBSchema\fP Draft 04 Core specification\&. Lists the types allowed by the \fCtype\fP schema keyword\&.
+.IP "\(bu" 2
+\fCactual\fP: required string, also one of seven primitive types\&. The primitive type of the instance\&.
+.PP
+.SS "allOf, anyOf, and oneOf"
+.IP "\(bu" 2
+\fCerrors\fP: required array of at least one object\&. There will be as many items as there are subschemas in the \fCallOf\fP, \fCanyOf\fP or \fConeOf\fP schema keyword, respectively\&. Each item will be the error value produced by validating the instance against the corresponding subschema\&.
+.PP
+.PP
+For \fCallOf\fP, at least one error value will be non-empty\&. For \fCanyOf\fP, all error values will be non-empty\&. For \fConeOf\fP, either all error values will be non-empty, or more than one will be empty\&.
+.SS "not"
+This keyword has no additional properties apart from \fCinstanceRef\fP and \fCschemaRef\fP\&. 

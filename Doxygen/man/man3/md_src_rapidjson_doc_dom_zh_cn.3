@@ -1,0 +1,256 @@
+.TH "md_src_rapidjson_doc_dom_zh_cn" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_dom_zh_cn \- DOM 
+文档对象模型（Document Object Model, DOM）是一种罝于内存中的 JSON 表示方式，以供查询及操作。我们已于 \fB教程\fP 中介绍了 DOM 的基本用法，本节将讲述一些细节及高级用法。
+.SH "Template"
+.PP
+教程中使用了 \fCValue\fP 和 \fCDocument\fP 类型。与 \fCstd::string\fP 相似，这些类型其实是两个模板类的 \fCtypedef\fP：
+.PP
+.PP
+.nf
+namespace rapidjson {
+
+template <typename Encoding, typename Allocator = MemoryPoolAllocator<> >
+class GenericValue {
+    // \&.\&.\&.
+};
+
+template <typename Encoding, typename Allocator = MemoryPoolAllocator<> >
+class GenericDocument : public GenericValue<Encoding, Allocator> {
+    // \&.\&.\&.
+};
+
+typedef GenericValue<UTF8<> > Value;
+typedef GenericDocument<UTF8<> > Document;
+
+} // namespace rapidjson
+.fi
+.PP
+.PP
+使用者可以自定义这些模板参数。
+.SS "Encoding"
+\fCEncoding\fP 参数指明在内存中的 JSON String 使用哪种编码。可行的选项有 \fC\fBUTF8\fP\fP、\fC\fBUTF16\fP\fP、\fC\fBUTF32\fP\fP。要注意这 3 个类型其实也是模板类。\fC\fBUTF8\fP<>\fP 等同 \fC\fBUTF8\fP<char>\fP，这代表它使用 \fCchar\fP 来存储字符串。更多细节可以参考 \fB编码\fP。
+.PP
+这里是一个例子。假设一个 Windows 应用软件希望查询存储于 JSON 中的本地化字符串。Windows 中含 Unicode 的函数使用 UTF-16（宽字符）编码。无论 JSON 文件使用哪种编码，我们都可以把字符串以 UTF-16 形式存储在内存。
+.PP
+.PP
+.nf
+using namespace rapidjson;
+
+typedef GenericDocument<UTF16<> > WDocument;
+typedef GenericValue<UTF16<> > WValue;
+
+FILE* fp = fopen("localization\&.json", "rb"); // 非 Windows 平台使用 "r"
+
+char readBuffer[256];
+FileReadStream bis(fp, readBuffer, sizeof(readBuffer));
+
+AutoUTFInputStream<unsigned, FileReadStream> eis(bis);  // 包装 bis 成 eis
+
+WDocument d;
+d\&.ParseStream<0, AutoUTF<unsigned> >(eis);
+
+const WValue locale(L"ja"); // Japanese
+
+MessageBoxW(hWnd, d[locale]\&.GetString(), L"Test", MB_OK);
+.fi
+.PP
+.SS "Allocator"
+\fCAllocator\fP 定义当 \fCDocument\fP/\fCValue\fP 分配或释放内存时使用那个分配类。\fCDocument\fP 拥有或引用到一个 \fCAllocator\fP 实例。而为了节省内存，\fCValue\fP 没有这么做。
+.PP
+\fC\fBGenericDocument\fP\fP 的缺省分配器是 \fC\fBMemoryPoolAllocator\fP\fP。此分配器实际上会顺序地分配内存，并且不能逐一释放。当要解析一个 JSON 并生成 DOM，这种分配器是非常合适的。
+.PP
+RapidJSON 还提供另一个分配器 \fC\fBCrtAllocator\fP\fP，当中 CRT 是 C 运行库（C RunTime library）的缩写。此分配器简单地读用标准的 \fCmalloc()\fP/\fCrealloc()\fP/\fCfree()\fP。当我们需要许多增减操作，这种分配器会更为适合。然而这种分配器远远比 \fC\fBMemoryPoolAllocator\fP\fP 低效。
+.SH "Parsing"
+.PP
+\fCDocument\fP 提供几个解析函数。以下的 (1) 是根本的函数，其他都是调用 (1) 的协助函数。
+.PP
+.PP
+.nf
+using namespace rapidjson;
+
+// (1) 根本
+template <unsigned parseFlags, typename SourceEncoding, typename InputStream>
+GenericDocument& GenericDocument::ParseStream(InputStream& is);
+
+// (2) 使用流的编码
+template <unsigned parseFlags, typename InputStream>
+GenericDocument& GenericDocument::ParseStream(InputStream& is);
+
+// (3) 使用缺省标志
+template <typename InputStream>
+GenericDocument& GenericDocument::ParseStream(InputStream& is);
+
+// (4) 原位解析
+template <unsigned parseFlags>
+GenericDocument& GenericDocument::ParseInsitu(Ch* str);
+
+// (5) 原位解析，使用缺省标志
+GenericDocument& GenericDocument::ParseInsitu(Ch* str);
+
+// (6) 正常解析一个字符串
+template <unsigned parseFlags, typename SourceEncoding>
+GenericDocument& GenericDocument::Parse(const Ch* str);
+
+// (7) 正常解析一个字符串，使用 Document 的编码
+template <unsigned parseFlags>
+GenericDocument& GenericDocument::Parse(const Ch* str);
+
+// (8) 正常解析一个字符串，使用缺省标志
+GenericDocument& GenericDocument::Parse(const Ch* str);
+.fi
+.PP
+.PP
+\fB教程\fP 中的例使用 (8) 去正常解析字符串。而 \fB流\fP 的例子使用前 3 个函数。我们将稍后介绍原位（*In situ*） 解析。
+.PP
+\fCparseFlags\fP 是以下位标置的组合：
+.PP
+解析位标志   意义    \fCkParseNoFlags\fP   没有任何标志。    \fCkParseDefaultFlags\fP   缺省的解析选项。它等于 \fCRAPIDJSON_PARSE_DEFAULT_FLAGS\fP 宏，此宏定义为 \fCkParseNoFlags\fP。    \fCkParseInsituFlag\fP   原位（破坏性）解析。    \fCkParseValidateEncodingFlag\fP   校验 JSON 字符串的编码。    \fCkParseIterativeFlag\fP   迭代式（调用堆栈大小为常数复杂度）解析。    \fCkParseStopWhenDoneFlag\fP   当从流解析了一个完整的 JSON 根节点之后，停止继续处理余下的流。当使用了此标志，解析器便不会产生 \fCkParseErrorDocumentRootNotSingular\fP 错误。可使用本标志去解析同一个流里的多个 JSON。    \fCkParseFullPrecisionFlag\fP   使用完整的精确度去解析数字（较慢）。如不设置此标节，则会使用正常的精确度（较快）。正常精确度会有最多 3 个 \fCULP\fP 的误差。    \fCkParseCommentsFlag\fP   容许单行 \fC// \&.\&.\&.\fP 及多行 \fC/* \&.\&.\&. */\fP 注释（放宽的 JSON 语法）。    \fCkParseNumbersAsStringsFlag\fP   把数字类型解析成字符串。    \fCkParseTrailingCommasFlag\fP   容许在对象和数组结束前含有逗号（放宽的 JSON 语法）。    \fCkParseNanAndInfFlag\fP   容许 \fCNaN\fP、\fCInf\fP、\fCInfinity\fP、\fC-Inf\fP 及 \fC-Infinity\fP 作为 \fCdouble\fP 值（放宽的 JSON 语法）。    \fCkParseEscapedApostropheFlag\fP   容许字符串中转义单引号 `&rsquo;` （放宽的 JSON 语法）。   
+.PP
+由于使用了非类型模板参数，而不是函数参数，C++ 编译器能为个别组合生成代码，以改善性能及减少代码尺寸（当只用单种特化）。缺点是需要在编译期决定标志。
+.PP
+\fCSourceEncoding\fP 参数定义流使用了什么编码。这与 \fCDocument\fP 的 \fCEncoding\fP 不相同。细节可参考 \fB转码和校验\fP 一节。
+.PP
+此外 \fCInputStream\fP 是输入流的类型。
+.SS "Parse Error"
+当解析过程顺利完成，\fCDocument\fP 便会含有解析结果。当过程出现错误，原来的 DOM 会*维持不变*。可使用 \fCbool HasParseError()\fP、\fCParseErrorCode GetParseError()\fP 及 \fCsize_t GetErrorOffset()\fP 获取解析的错误状态。
+.PP
+解析错误代号   描述    \fCkParseErrorNone\fP   无错误。    \fCkParseErrorDocumentEmpty\fP   文档是空的。    \fCkParseErrorDocumentRootNotSingular\fP   文档的根后面不能有其它值。    \fCkParseErrorValueInvalid\fP   不合法的值。    \fCkParseErrorObjectMissName\fP   Object 成员缺少名字。    \fCkParseErrorObjectMissColon\fP   Object 成员名字后缺少冒号。    \fCkParseErrorObjectMissCommaOrCurlyBracket\fP   Object 成员后缺少逗号或 \fC}\fP。    \fCkParseErrorArrayMissCommaOrSquareBracket\fP   Array 元素后缺少逗号或 \fC]\fP 。    \fCkParseErrorStringUnicodeEscapeInvalidHex\fP   String 中的 \fC\\\\u\fP 转义符后含非十六进位数字。    \fCkParseErrorStringUnicodeSurrogateInvalid\fP   String 中的代理对（surrogate pair）不合法。    \fCkParseErrorStringEscapeInvalid\fP   String 含非法转义字符。    \fCkParseErrorStringMissQuotationMark\fP   String 缺少关闭引号。    \fCkParseErrorStringInvalidEncoding\fP   String 含非法编码。    \fCkParseErrorNumberTooBig\fP   Number 的值太大，不能存储于 \fCdouble\fP。    \fCkParseErrorNumberMissFraction\fP   Number 缺少了小数部分。    \fCkParseErrorNumberMissExponent\fP   Number 缺少了指数。   
+.PP
+错误的偏移量定义为从流开始至错误处的字符数量。目前 RapidJSON 不记录错误行号。
+.PP
+要取得错误讯息，RapidJSON 在 \fC\fBrapidjson/error/en\&.h\fP\fP 中提供了英文错误讯息。使用者可以修改它用于其他语言环境，或使用一个自定义的本地化系统。
+.PP
+以下是一个处理错误的例子。
+.PP
+.PP
+.nf
+#include "rapidjson/document\&.h"
+#include "rapidjson/error/en\&.h"
+
+// \&.\&.\&.
+Document d;
+if (d\&.Parse(json)\&.HasParseError()) {
+    fprintf(stderr, "\nError(offset %u): %s\n", 
+        (unsigned)d\&.GetErrorOffset(),
+        GetParseError_En(d\&.GetParseErrorCode()));
+    // \&.\&.\&.
+}
+.fi
+.PP
+.SS "In Situ Parsing"
+根据 \fC维基百科\fP:
+.PP
+.RS 4
+\fIIn situ\fP \&.\&.\&. is a Latin phrase that translates literally to 'on site' or 'in position'\&. It means 'locally', 'on site', 'on the premises' or 'in place' to describe an event where it takes place, and is used in many different contexts\&. \&.\&.\&. (In computer science) An algorithm is said to be an in situ algorithm, or in-place algorithm, if the extra amount of memory required to execute the algorithm is O(1), that is, does not exceed a constant no matter how large the input\&. For example, heapsort is an in situ sorting algorithm\&. 
+.RE
+.PP
+.RS 4
+翻译：*In situ*……是一个拉丁文片语，字面上的意思是指「现场」、「在位置」。在许多不同语境中，它描述一个事件发生的位置，意指「本地」、「现场」、「在处所」、「就位」。 …… （在计算机科学中）一个算法若称为原位算法，或在位算法，是指执行该算法所需的额外内存空间是 O(1) 的，换句话说，无论输入大小都只需要常数空间。例如，堆排序是一个原位排序算法。 
+.RE
+.PP
+在正常的解析过程中，对 JSON string 解码并复制至其他缓冲区是一个很大的开销。原位解析（*in situ* parsing）把这些 JSON string 直接解码于它原来存储的地方。由于解码后的 string 长度总是短于或等于原来储存于 JSON 的 string，所以这是可行的。在这个语境下，对 JSON string 进行解码是指处理转义符，如 \fC'\\n'\fP、\fC'\\u1234'\fP 等，以及在 string 末端加入空终止符号 (`'\\0'`)。
+.PP
+以下的图比较正常及原位解析。JSON string 值包含指向解码后的字符串。
+.PP
+.PP
+在正常解析中，解码后的字符串被复制至全新分配的缓冲区中。\fC'\\\\n'\fP（2 个字符）被解码成 \fC'\\n'\fP（1 个字符）。\fC'\\\\u0073'\fP（6 个字符）被解码成 \fC's'\fP（1 个字符）。
+.PP
+.PP
+原位解析直接修改了原来的 JSON。图中高亮了被更新的字符。若 JSON string 不含转义符，例如 \fC'msg'\fP，那么解析过程仅仅是以空字符代替结束双引号。
+.PP
+由于原位解析修改了输入，其解析 API 需要 \fCchar*\fP 而非 \fCconst char*\fP。
+.PP
+.PP
+.nf
+// 把整个文件读入 buffer
+FILE* fp = fopen("test\&.json", "r");
+fseek(fp, 0, SEEK_END);
+size_t filesize = (size_t)ftell(fp);
+fseek(fp, 0, SEEK_SET);
+char* buffer = (char*)malloc(filesize + 1);
+size_t readLength = fread(buffer, 1, filesize, fp);
+buffer[readLength] = '\0';
+fclose(fp);
+
+// 原位解析 buffer 至 d，buffer 内容会被修改。
+Document d;
+d\&.ParseInsitu(buffer);
+
+// 在此查询、修改 DOM……
+
+free(buffer);
+// 注意：在这个位置，d 可能含有指向已被释放的 buffer 的悬空指针
+.fi
+.PP
+.PP
+JSON string 会被打上 const-string 的标志。但它们可能并非真正的「常数」。它的生命周期取决于存储 JSON 的缓冲区。
+.PP
+原位解析把分配开销及内存复制减至最小。通常这样做能改善缓存一致性，而这对现代计算机来说是一个重要的性能因素。
+.PP
+原位解析有以下限制：
+.PP
+.IP "1." 4
+整个 JSON 须存储在内存之中。
+.IP "2." 4
+流的来源缓码与文档的目标编码必须相同。
+.IP "3." 4
+需要保留缓冲区，直至文档不再被使用。
+.IP "4." 4
+若 DOM 需要在解析后被长期使用，而 DOM 内只有很少 JSON string，保留缓冲区可能造成内存浪费。
+.PP
+.PP
+原位解析最适合用于短期的、用完即弃的 JSON。实际应用中，这些场合是非常普遍的，例如反序列化 JSON 至 C++ 对象、处理以 JSON 表示的 web 请求等。
+.SS "Transcoding and Validation"
+RapidJSON 内部支持不同 Unicode 格式（正式的术语是 UCS 变换格式）间的转换。在 DOM 解析时，流的来源编码与 DOM 的编码可以不同。例如，来源流可能含有 UTF-8 的 JSON，而 DOM 则使用 UTF-16 编码。在 \fBEncodedInputStream\fP 一节里有一个例子。
+.PP
+当从 DOM 输出一个 JSON 至输出流之时，也可以使用转码功能。在 \fBEncodedOutputStream\fP 一节里有一个例子。
+.PP
+在转码过程中，会把来源 string 解码成 Unicode 码点，然后把码点编码成目标格式。在解码时，它会校验来源 string 的字节序列是否合法。若遇上非合法序列，解析器会停止并返回 \fCkParseErrorStringInvalidEncoding\fP 错误。
+.PP
+当来源编码与 DOM 的编码相同，解析器缺省地 * 不会 * 校验序列。使用者可开启 \fCkParseValidateEncodingFlag\fP 去强制校验。
+.SH "Techniques"
+.PP
+这里讨论一些 DOM API 的使用技巧。
+.SS "把 DOM 作为 SAX 事件发表者"
+在 RapidJSON 中，利用 \fC\fBWriter\fP\fP 把 DOM 生成 JSON 的做法，看来有点奇怪。
+.PP
+.PP
+.nf
+// \&.\&.\&.
+Writer<StringBuffer> writer(buffer);
+d\&.Accept(writer);
+.fi
+.PP
+.PP
+实际上，\fCValue::Accept()\fP 是负责发布该值相关的 SAX 事件至处理器的。通过这个设计，\fCValue\fP 及 \fC\fBWriter\fP\fP 解除了偶合。\fCValue\fP 可生成 SAX 事件，而 \fC\fBWriter\fP\fP 则可以处理这些事件。
+.PP
+使用者可以创建自定义的处理器，去把 DOM 转换成其它格式。例如，一个把 DOM 转换成 XML 的处理器。
+.PP
+要知道更多关于 SAX 事件与处理器，可参阅 \fBSAX\fP。
+.SS "User Buffer"
+许多应用软件可能需要尽量减少内存分配。
+.PP
+\fC\fBMemoryPoolAllocator\fP\fP 可以帮助这方面，它容许使用者提供一个缓冲区。该缓冲区可能置于程序堆栈，或是一个静态分配的「草稿缓冲区（scratch buffer）」（一个静态／全局的数组），用于储存临时数据。
+.PP
+\fC\fBMemoryPoolAllocator\fP\fP 会先用使用者缓冲区去解决分配请求。当使用者缓冲区用完，就会从基础分配器（缺省为 \fC\fBCrtAllocator\fP\fP）分配一块内存。
+.PP
+以下是使用堆栈内存的例子，第一个分配器用于存储值，第二个用于解析时的临时缓冲。
+.PP
+.PP
+.nf
+typedef GenericDocument<UTF8<>, MemoryPoolAllocator<>, MemoryPoolAllocator<>> DocumentType;
+char valueBuffer[4096];
+char parseBuffer[1024];
+MemoryPoolAllocator<> valueAllocator(valueBuffer, sizeof(valueBuffer));
+MemoryPoolAllocator<> parseAllocator(parseBuffer, sizeof(parseBuffer));
+DocumentType d(&valueAllocator, sizeof(parseBuffer), &parseAllocator);
+d\&.Parse(json);
+.fi
+.PP
+.PP
+若解析时分配总量少于 4096+1024 字节时，这段代码不会造成任何堆内存分配（经 \fCnew\fP 或 \fCmalloc()\fP）。
+.PP
+使用者可以通过 \fC\fBMemoryPoolAllocator::Size()\fP\fP 查询当前已分的内存大小。那么使用者可以拟定使用者缓冲区的合适大小。 

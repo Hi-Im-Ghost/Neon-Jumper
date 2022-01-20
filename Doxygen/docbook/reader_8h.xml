@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_reader_8h" xml:lang="en-US">
+<title>src/rapidjson/include/rapidjson/reader.h File Reference</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/reader.h</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;allocators.h&quot;
+#include &quot;stream.h&quot;
+#include &quot;encodedstream.h&quot;
+#include &quot;internal/clzll.h&quot;
+#include &quot;internal/meta.h&quot;
+#include &quot;internal/stack.h&quot;
+#include &quot;internal/strtod.h&quot;
+#include &lt;limits&gt;
+#include &quot;error/error.h&quot;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_base_reader_handler">BaseReaderHandler&lt; Encoding, Derived &gt;</link></para>
+
+<para>Default implementation of Handler. </para>
+</listitem>
+            <listitem><para>class <link linkend="_classinternal_1_1_stream_local_copy_3_01_stream_00_011_01_4">internal::StreamLocalCopy&lt; Stream, 1 &gt;</link></para>
+
+<para>Do copy optimization. </para>
+</listitem>
+            <listitem><para>class <link linkend="_classinternal_1_1_stream_local_copy_3_01_stream_00_010_01_4">internal::StreamLocalCopy&lt; Stream, 0 &gt;</link></para>
+
+<para>Keep reference. </para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader">GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</link></para>
+
+<para>SAX-style JSON parser. Use <link linkend="_md_src_rapidjson_doc_sax_zh_cn_1Reader">Reader</link> for <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para>namespace <link linkend="_namespaceinternal">internal</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7f8c4265b2edda78568ae3338aaf1461">RAPIDJSON_PARSE_ERROR_NORETURN</link>(parseErrorCode,  offset)</para>
+
+<para>Macro to indicate a parse error. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gae3689840fa6e89a241313f33b602f865">RAPIDJSON_PARSE_ERROR</link>(parseErrorCode,  offset)</para>
+
+<para>(Internal) macro to indicate and handle a parse error. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_reader_8h_1a77005e892e6601599beaf421b0395c31">RAPIDJSON_PARSE_DEFAULT_FLAGS</link>   <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a1af603dc5f65bb815316589e782bc71a">kParseNoFlags</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Typedefs    </title>
+        <itemizedlist>
+            <listitem><para>typedef <link linkend="_class_generic_reader">GenericReader</link>&lt; <link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;, <link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt; <link linkend="_reader_8h_1a84f3b66a66647f4ac4267078359188ba">Reader</link></para>
+
+<para>Reader with <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Enumerations    </title>
+        <itemizedlist>
+            <listitem><para>enum <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450">ParseFlag</link> { 
+<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a1af603dc5f65bb815316589e782bc71a">kParseNoFlags</link> = 0
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01">kParseInsituFlag</link> = 1
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928">kParseValidateEncodingFlag</link> = 2
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9">kParseIterativeFlag</link> = 4
+, 
+<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36">kParseStopWhenDoneFlag</link> = 8
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46">kParseFullPrecisionFlag</link> = 16
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a245d1b6af730f47f0e7bd27078f5e8c1">kParseCommentsFlag</link> = 32
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01">kParseNumbersAsStringsFlag</link> = 64
+, 
+<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a">kParseTrailingCommasFlag</link> = 128
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link> = 256
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a7593d429928f1a8224c5793928d4db3e">kParseEscapedApostropheFlag</link> = 512
+, <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9104b0946d648e9467cb7a967401ec80">kParseDefaultFlags</link> = RAPIDJSON_PARSE_DEFAULT_FLAGS
+ }</para>
+
+<para>Combination of parseFlags. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>void <link linkend="_reader_8h_1a60338858b2582eca23f3e509a2d82e0e">SkipWhitespace</link> (InputStream &amp;is)</para>
+
+<para>Skip the JSON white spaces in a stream. </para>
+</listitem>
+            <listitem><para>const char * <link linkend="_reader_8h_1aeddf0374b22926be76140ec6708dc203">SkipWhitespace</link> (const char *p, const char *end)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_reader_8h_1a77005e892e6601599beaf421b0395c31"/><section>
+    <title>RAPIDJSON_PARSE_DEFAULT_FLAGS</title>
+<indexterm><primary>RAPIDJSON_PARSE_DEFAULT_FLAGS</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>RAPIDJSON_PARSE_DEFAULT_FLAGS</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_PARSE_DEFAULT_FLAGS   <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a1af603dc5f65bb815316589e782bc71a">kParseNoFlags</link></computeroutput></para></section>
+</section>
+<section>
+<title>Typedef Documentation</title>
+<anchor xml:id="_reader_8h_1a84f3b66a66647f4ac4267078359188ba"/><section>
+    <title>Reader</title>
+<indexterm><primary>Reader</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>Reader</secondary></indexterm>
+<para><computeroutput>typedef <link linkend="_class_generic_reader">GenericReader</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;, <link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt; <link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link></computeroutput></para><para>
+
+<para>Reader with <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Enumeration Type Documentation</title>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450"/><section>
+    <title>ParseFlag</title>
+<indexterm><primary>ParseFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>ParseFlag</secondary></indexterm>
+<para><computeroutput>enum <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450">ParseFlag</link></computeroutput></para><para>
+
+<para>Combination of parseFlags. </para>
+</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099">Reader::Parse</link>, <link linkend="_class_generic_document_1a901db1678f99a1b550003eed75bc380a">Document::Parse</link>, <link linkend="_class_generic_document_1a13f68b1896a24eea4cdbc03a3916225f">Document::ParseInsitu</link>, <link linkend="_class_generic_document_1a7bc1827a7ab04de4789fe46237f0e921">Document::ParseStream</link> </para>
+</formalpara>
+</para>
+<informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kParseNoFlags</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseNoFlags</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a1af603dc5f65bb815316589e782bc71a"/>kParseNoFlags</entry><entry>
+<para>No flags are set. </para>
+</entry></row><row><entry><indexterm><primary>kParseInsituFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseInsituFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01"/>kParseInsituFlag</entry><entry>
+<para>In-situ(destructive) parsing. </para>
+</entry></row><row><entry><indexterm><primary>kParseValidateEncodingFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseValidateEncodingFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928"/>kParseValidateEncodingFlag</entry><entry>
+<para>Validate encoding of JSON strings. </para>
+</entry></row><row><entry><indexterm><primary>kParseIterativeFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseIterativeFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9"/>kParseIterativeFlag</entry><entry>
+<para>Iterative(constant complexity in terms of function call stack size) parsing. </para>
+</entry></row><row><entry><indexterm><primary>kParseStopWhenDoneFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseStopWhenDoneFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36"/>kParseStopWhenDoneFlag</entry><entry>
+<para>After parsing a complete JSON root from stream, stop further processing the rest of stream. When this flag is used, parser will not generate kParseErrorDocumentRootNotSingular error. </para>
+</entry></row><row><entry><indexterm><primary>kParseFullPrecisionFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseFullPrecisionFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46"/>kParseFullPrecisionFlag</entry><entry>
+<para>Parse number in full precision (but slower). </para>
+</entry></row><row><entry><indexterm><primary>kParseCommentsFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseCommentsFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a245d1b6af730f47f0e7bd27078f5e8c1"/>kParseCommentsFlag</entry><entry>
+<para>Allow one-line (//) and multi-line (/&#8205;**/) comments. </para>
+</entry></row><row><entry><indexterm><primary>kParseNumbersAsStringsFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseNumbersAsStringsFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01"/>kParseNumbersAsStringsFlag</entry><entry>
+<para>Parse all numbers (ints/doubles) as strings. </para>
+</entry></row><row><entry><indexterm><primary>kParseTrailingCommasFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseTrailingCommasFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a"/>kParseTrailingCommasFlag</entry><entry>
+<para>Allow trailing commas at the end of objects and arrays. </para>
+</entry></row><row><entry><indexterm><primary>kParseNanAndInfFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseNanAndInfFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6"/>kParseNanAndInfFlag</entry><entry>
+<para>Allow parsing NaN, Inf, Infinity, -Inf and -Infinity as doubles. </para>
+</entry></row><row><entry><indexterm><primary>kParseEscapedApostropheFlag</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseEscapedApostropheFlag</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a7593d429928f1a8224c5793928d4db3e"/>kParseEscapedApostropheFlag</entry><entry>
+<para>Allow escaped apostrophe in strings. </para>
+</entry></row><row><entry><indexterm><primary>kParseDefaultFlags</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>kParseDefaultFlags</secondary></indexterm>
+<anchor xml:id="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9104b0946d648e9467cb7a967401ec80"/>kParseDefaultFlags</entry><entry>
+<para>Default parse flags. Can be customized by defining RAPIDJSON_PARSE_DEFAULT_FLAGS. </para>
+</entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_reader_8h_1aeddf0374b22926be76140ec6708dc203"/><section>
+    <title>SkipWhitespace()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>SkipWhitespace</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>SkipWhitespace</secondary></indexterm>
+<para><computeroutput>const char * SkipWhitespace (const char * p, const char * end)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_reader_8h_1a60338858b2582eca23f3e509a2d82e0e"/><section>
+    <title>SkipWhitespace()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>SkipWhitespace</primary><secondary>reader.h</secondary></indexterm>
+<indexterm><primary>reader.h</primary><secondary>SkipWhitespace</secondary></indexterm>
+<computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>void SkipWhitespace (InputStream &amp; is)</computeroutput></para><para>
+
+<para>Skip the JSON white spaces in a stream. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>is</entry><entry>
+<para>A input stream for skipping white spaces. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>This function has SSE2/SSE4.2 specialization. </para>
+</note>
+</para>
+</section>
+</section>
+</section>

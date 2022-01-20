@@ -1,0 +1,327 @@
+.TH "md_src_rapidjson_doc_faq_zh_cn" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_faq_zh_cn \- 常见问题 
+
+.SH "一般问题"
+.PP
+.IP "1." 4
+RapidJSON 是什么？
+.PP
+RapidJSON 是一个 C++ 库，用于解析及生成 JSON。读者可参考它的所有 \fB特点\fP。
+.IP "2." 4
+为什么称作 RapidJSON？
+.PP
+它的灵感来自于 \fCRapidXML\fP，RapidXML 是一个高速的 XML DOM 解析器。
+.IP "3." 4
+RapidJSON 与 RapidXML 相似么？
+.PP
+RapidJSON 借镜了 RapidXML 的一些设计, 包括原位（*in situ*）解析、只有头文件的库。但两者的 API 是完全不同的。此外 RapidJSON 也提供许多 RapidXML 没有的特点。
+.IP "4." 4
+RapidJSON 是免费的么？
+.PP
+是的，它在 MIT 协议下免费。它可用于商业软件。详情请参看 \fClicense\&.txt\fP。
+.IP "5." 4
+RapidJSON 很小么？它有何依赖？
+.PP
+是的。在 Windows 上，一个解析 JSON 并打印出统计的可执行文件少于 30KB。
+.PP
+RapidJSON 仅依赖于 C++ 标准库。
+.IP "6." 4
+怎样安装 RapidJSON？
+.PP
+见 \fC安装一节\fP。
+.IP "7." 4
+RapidJSON 能否运行于我的平台？
+.PP
+社区已在多个操作系统／编译器／CPU 架构的组合上测试 RapidJSON。但我们无法确保它能运行于你特定的平台上。只需要生成及执行单元测试便能获取答案。
+.IP "8." 4
+RapidJSON 支持 C++03 么？C++11 呢？
+.PP
+RapidJSON 开始时在 C++03 上实现。后来加入了可选的 C++11 特性支持（如转移构造函数、\fCnoexcept\fP）。RapidJSON 应该兼容所有遵从 C++03 或 C++11 的编译器。
+.IP "9." 4
+RapidJSON 是否真的用于实际应用？
+.PP
+是的。它被配置于前台及后台的真实应用中。一个社区成员说 RapidJSON 在他们的系统中每日解析 5 千万个 JSON。
+.IP "10." 4
+RapidJSON 是如何被测试的？
+.PP
+RapidJSON 包含一组单元测试去执行自动测试。\fCTravis\fP（供 Linux 平台）及 \fCAppVeyor\fP（供 Windows 平台）会对所有修改进行编译及执行单元测试。在 Linux 下还会使用 Valgrind 去检测内存泄漏。
+.IP "11." 4
+RapidJSON 是否有完整的文档？
+.PP
+RapidJSON 提供了使用手册及 API 说明文档。
+.IP "12." 4
+有没有其他替代品？
+.PP
+有许多替代品。例如 \fCnativejson-benchmark\fP 列出了一些开源的 C/C++ JSON 库。\fCjson\&.org\fP 也有一个列表。
+.PP
+.SH "JSON"
+.PP
+.IP "1." 4
+什么是 JSON？
+.PP
+JSON (JavaScript Object Notation) 是一个轻量的数据交换格式。它使用人类可读的文本格式。更多关于 JSON 的细节可考 \fCRFC7159\fP 及 \fCECMA-404\fP。
+.IP "2." 4
+JSON 有什么应用场合？
+.PP
+JSON 常用于网页应用程序，以传送结构化数据。它也可作为文件格式用于数据持久化。
+.IP "3." 4
+RapidJSON 是否符合 JSON 标准？
+.PP
+是。RapidJSON 完全符合 \fCRFC7159\fP 及 \fCECMA-404\fP。它能处理一些特殊情况，例如支持 JSON 字符串中含有空字符及代理对（surrogate pair）。
+.IP "4." 4
+RapidJSON 是否支持宽松的语法？
+.PP
+目前不支持。RapidJSON 只支持严格的标准格式。宽松语法可以在这个 \fCissue\fP 中进行讨论。
+.PP
+.SH "DOM 与 SAX"
+.PP
+.IP "1." 4
+什么是 DOM 风格 API？
+.PP
+Document Object Model（DOM）是一个储存于内存的 JSON 表示方式，用于查询及修改 JSON。
+.IP "2." 4
+什么是 SAX 风格 API?
+.PP
+SAX 是一个事件驱动的 API，用于解析及生成 JSON。
+.IP "3." 4
+我应用 DOM 还是 SAX？
+.PP
+DOM 易于查询及修改。SAX 则是非常快及省内存的，但通常较难使用。
+.IP "4." 4
+什么是原位（*in situ*）解析？
+.PP
+原位解析会把 JSON 字符串直接解码至输入的 JSON 中。这是一个优化，可减少内存消耗及提升性能，但输入的 JSON 会被更改。进一步细节请参考 \fB原位解析\fP 。
+.IP "5." 4
+什么时候会产生解析错误？
+.PP
+当输入的 JSON 包含非法语法，或不能表示一个值（如 Number 太大），或解析器的处理器中断解析过程，解析器都会产生一个错误。详情请参考 \fB解析错误\fP。
+.IP "6." 4
+有什么错误信息？
+.PP
+错误信息存储在 \fC\fBParseResult\fP\fP，它包含错误代号及偏移值（从 JSON 开始至错误处的字符数目）。可以把错误代号翻译为人类可读的错误讯息。
+.IP "7." 4
+为何不只使用 \fCdouble\fP 去表示 JSON number？
+.PP
+一些应用需要使用 64 位无号／有号整数。这些整数不能无损地转换成 \fCdouble\fP。因此解析器会检测一个 JSON number 是否能转换至各种整数类型及 \fCdouble\fP。
+.IP "8." 4
+如何清空并最小化 \fCdocument\fP 或 \fCvalue\fP 的容量？
+.PP
+调用 \fCSetXXX()\fP 方法 - 这些方法会调用析构函数，并重建空的 Object 或 Array:
+.PP
+.PP
+.nf
+Document d;
+\&.\&.\&.
+d\&.SetObject();  // clear and minimize
+.fi
+.PP
+.PP
+另外，也可以参考在 \fCC++ swap with temporary idiom\fP 中的一种等价的方法: 
+.PP
+.nf
+Value(kObjectType)\&.Swap(d);
+
+.fi
+.PP
+ 或者，使用这个稍微长一点的代码也能完成同样的事情: 
+.PP
+.nf
+d\&.Swap(Value(kObjectType)\&.Move()); 
+
+.fi
+.PP
+
+.IP "9." 4
+如何将一个 \fCdocument\fP 节点插入到另一个 \fCdocument\fP 中？
+.PP
+比如有以下两个 document(DOM): 
+.PP
+.nf
+Document person;
+person\&.Parse("{\"person\":{\"name\":{\"first\":\"Adam\",\"last\":\"Thomas\"}}}");
+
+Document address;
+address\&.Parse("{\"address\":{\"city\":\"Moscow\",\"street\":\"Quiet\"}}");
+
+.fi
+.PP
+ 假设我们希望将整个 \fCaddress\fP 插入到 \fCperson\fP 中，作为其的一个子节点: 
+.PP
+.nf
+{ "person": {
+   "name": { "first": "Adam", "last": "Thomas" },
+   "address": { "city": "Moscow", "street": "Quiet" }
+   }
+}
+
+.fi
+.PP
+.PP
+在插入节点的过程中需要注意 \fCdocument\fP 和 \fCvalue\fP 的生命周期并且正确地使用 allocator 进行内存分配和管理。
+.PP
+一个简单有效的方法就是修改上述 \fCaddress\fP 变量的定义，让其使用 \fCperson\fP 的 allocator 初始化，然后将其添加到根节点。
+.PP
+.PP
+.nf
+Documnet address(&person\&.GetAllocator());
+\&.\&.\&.
+person["person"]\&.AddMember("address", address["address"], person\&.GetAllocator());
+.fi
+.PP
+ 当然，如果你不想通过显式地写出 \fCaddress\fP 的 key 来得到其值，可以使用迭代器来实现: 
+.PP
+.nf
+auto addressRoot = address\&.MemberBegin();
+person["person"]\&.AddMember(addressRoot->name, addressRoot->value, person\&.GetAllocator());
+
+.fi
+.PP
+.PP
+此外，还可以通过深拷贝 address document 来实现: 
+.PP
+.nf
+Value addressValue = Value(address["address"], person\&.GetAllocator());
+person["person"]\&.AddMember("address", addressValue, person\&.GetAllocator());
+
+.fi
+.PP
+
+.PP
+.SH "Document/Value (DOM)"
+.PP
+.IP "1." 4
+什么是转移语义？为什么？
+.PP
+\fCValue\fP 不用复制语义，而使用了转移语义。这是指，当把来源值赋值于目标值时，来源值的所有权会转移至目标值。
+.PP
+由于转移快于复制，此设计决定强迫使用者注意到复制的消耗。
+.IP "2." 4
+怎样去复制一个值？
+.PP
+有两个 API 可用：含 allocator 的构造函数，以及 \fCCopyFrom()\fP。可参考 \fB深复制 Value\fP 里的用例。
+.IP "3." 4
+为什么我需要提供字符串的长度？
+.PP
+由于 C 字符串是空字符结尾的，需要使用 \fCstrlen()\fP 去计算其长度，这是线性复杂度的操作。若使用者已知字符串的长度，对很多操作来说会造成不必要的消耗。
+.PP
+此外，RapidJSON 可处理含有 \fC\\u0000\fP（空字符）的字符串。若一个字符串含有空字符，\fCstrlen()\fP 便不能返回真正的字符串长度。在这种情况下使用者必须明确地提供字符串长度。
+.IP "4." 4
+为什么在许多 DOM 操作 API 中要提供分配器作为参数？
+.PP
+由于这些 API 是 \fCValue\fP 的成员函数，我们不希望为每个 \fCValue\fP 储存一个分配器指针。
+.IP "5." 4
+它会转换各种数值类型么？
+.PP
+当使用 \fCGetInt()\fP、\fCGetUint()\fP 等 API 时，可能会发生转换。对于整数至整数转换，仅当保证转换安全才会转换（否则会断言失败）。然而，当把一个 64 位有号／无号整数转换至 double 时，它会转换，但有可能会损失精度。含有小数的数字、或大于 64 位的整数，都只能使用 \fCGetDouble()\fP 获取其值。
+.PP
+.SH "Reader/Writer (SAX)"
+.PP
+.IP "1." 4
+为什么不仅仅用 \fCprintf\fP 输出一个 JSON？为什么需要 \fC\fBWriter\fP\fP？
+.PP
+最重要的是，\fC\fBWriter\fP\fP 能确保输出的 JSON 是格式正确的。错误地调用 SAX 事件（如 \fCStartObject()\fP 错配 \fCEndArray()\fP）会造成断言失败。此外，\fC\fBWriter\fP\fP 会把字符串进行转义（如 \fC\\n\fP）。最后，\fCprintf()\fP 的数值输出可能并不是一个合法的 JSON number，特别是某些 locale 会有数字分隔符。而且 \fC\fBWriter\fP\fP 的数值字符串转换是使用非常快的算法来实现的，胜过 \fCprintf()\fP 及 \fCiostream\fP。
+.IP "2." 4
+我能否暂停解析过程，并在稍后继续？
+.PP
+基于性能考虑，目前版本并不直接支持此功能。然而，若执行环境支持多线程，使用者可以在另一线程解析 JSON，并通过阻塞输入流去暂停。
+.PP
+.SH "Unicode"
+.PP
+.IP "1." 4
+它是否支持 UTF-8、UTF-16 及其他格式？
+.PP
+是。它完全支持 UTF-8、UTF-16（大端／小端）、UTF-32（大端／小端）及 ASCII。
+.IP "2." 4
+它能否检测编码的合法性？
+.PP
+能。只需把 \fCkParseValidateEncodingFlag\fP 参考传给 \fCParse()\fP。若发现在输入流中有非法的编码，它就会产生 \fCkParseErrorStringInvalidEncoding\fP 错误。
+.IP "3." 4
+什么是代理对（surrogate pair)？RapidJSON 是否支持？
+.PP
+JSON 使用 UTF-16 编码去转义 Unicode 字符，例如 \fC\\u5927\fP 表示中文字“大”。要处理基本多文种平面（basic multilingual plane，BMP）以外的字符时，UTF-16 会把那些字符编码成两个 16 位值，这称为 UTF-16 代理对。例如，绘文字字符 U+1F602 在 JSON 中可被编码成 \fC\\uD83D\\uDE02\fP。
+.PP
+RapidJSON 完全支持解析及生成 UTF-16 代理对。
+.IP "4." 4
+它能否处理 JSON 字符串中的 \fC\\u0000\fP（空字符）？
+.PP
+能。RapidJSON 完全支持 JSON 字符串中的空字符。然而，使用者需要注意到这件事，并使用 \fCGetStringLength()\fP 及相关 API 去取得字符串真正长度。
+.IP "5." 4
+能否对所有非 \fBASCII\fP 字符输出成 \fC\\uxxxx\fP 形式？
+.PP
+可以。只要在 \fC\fBWriter\fP\fP 中使用 \fC\fBASCII\fP<>\fP 作为输出编码参数，就可以强逼转义那些字符。
+.PP
+.SH "流"
+.PP
+.IP "1." 4
+我有一个很大的 JSON 文件。我应否把它整个载入内存中？
+.PP
+使用者可使用 \fC\fBFileReadStream\fP\fP 去逐块读入文件。但若使用于原位解析，必须载入整个文件。
+.IP "2." 4
+我能否解析一个从网络上串流进来的 JSON？
+.PP
+可以。使用者可根据 \fC\fBFileReadStream\fP\fP 的实现，去实现一个自定义的流。
+.IP "3." 4
+我不知道一些 JSON 将会使用哪种编码。怎样处理它们？
+.PP
+你可以使用 \fC\fBAutoUTFInputStream\fP\fP，它能自动检测输入流的编码。然而，它会带来一些性能开销。
+.IP "4." 4
+什么是 BOM？RapidJSON 怎样处理它？
+.PP
+\fC字节顺序标记（byte order mark, BOM）\fP 有时会出现于文件／流的开始，以表示其 UTF 编码类型。
+.PP
+RapidJSON 的 \fC\fBEncodedInputStream\fP\fP 可检测／跳过 BOM。\fC\fBEncodedOutputStream\fP\fP 可选择是否写入 BOM。可参考 \fB编码流\fP 中的例子。
+.IP "5." 4
+为什么会涉及大端／小端？
+.PP
+流的大端／小端是 UTF-16 及 UTF-32 流要处理的问题，而 UTF-8 不需要处理。
+.PP
+.SH "性能"
+.PP
+.IP "1." 4
+RapidJSON 是否真的快？
+.PP
+是。它可能是最快的开源 JSON 库。有一个 \fC评测\fP 评估 C/C++ JSON 库的性能。
+.IP "2." 4
+为什么它会快？
+.PP
+RapidJSON 的许多设计是针对时间／空间性能来设计的，这些决定可能会影响 API 的易用性。此外，它也使用了许多底层优化（内部函数／intrinsic、SIMD）及特别的算法（自定义的 double 至字符串转换、字符串至 double 的转换）。
+.IP "3." 4
+什是是 SIMD？它如何用于 RapidJSON？
+.PP
+\fCSIMD\fP 指令可以在现代 CPU 中执行并行运算。RapidJSON 支持使用 Intel 的 SSE2/SSE4\&.2 和 ARM 的 Neon 来加速对空白符、制表符、回车符和换行符的过滤处理。在解析含缩进的 JSON 时，这能提升性能。只要定义名为 \fCRAPIDJSON_SSE2\fP ，\fCRAPIDJSON_SSE42\fP 或 \fCRAPIDJSON_NEON\fP 的宏，就能启动这个功能。然而，若在不支持这些指令集的机器上执行这些可执行文件，会导致崩溃。
+.IP "4." 4
+它会消耗许多内存么？
+.PP
+RapidJSON 的设计目标是减低内存占用。
+.PP
+在 SAX API 中，\fCReader\fP 消耗的内存与 JSON 树深度加上最长 JSON 字符成正比。
+.PP
+在 DOM API 中，每个 \fCValue\fP 在 32/64 位架构下分别消耗 16/24 字节。RapidJSON 也使用一个特殊的内存分配器去减少分配的额外开销。
+.IP "5." 4
+高性能的意义何在？
+.PP
+有些应用程序需要处理非常大的 JSON 文件。而有些后台应用程序需要处理大量的 JSON。达到高性能同时改善延时及吞吐量。更广义来说，这也可以节省能源。
+.PP
+.SH "八卦"
+.PP
+.IP "1." 4
+谁是 RapidJSON 的开发者？
+.PP
+叶劲峰（Milo Yip，\fCmiloyip\fP）是 RapidJSON 的原作者。全世界许多贡献者一直在改善 RapidJSON。Philipp A\&. Hartmann（\fCpah\fP）实现了许多改进，也设置了自动化测试，而且还参与许多社区讨论。丁欧南（Don Ding，\fCthebusytypist\fP）实现了迭代式解析器。Andrii Senkovych（\fCjollyroger\fP）完成了向 CMake 的迁移。Kosta（\fCKosta-Github\fP）提供了一个非常灵巧的短字符串优化。也需要感谢其他献者及社区成员。
+.IP "2." 4
+为何你要开发 RapidJSON？
+.PP
+在 2011 年开始这项目时，它只是一个兴趣项目。Milo Yip 是一个游戏程序员，他在那时候认识到 JSON 并希望在未来的项目中使用。由于 JSON 好像很简单，他希望写一个快速的仅有头文件的程序库。
+.IP "3." 4
+为什么开发中段有一段长期空档？
+.PP
+主要是个人因素，例如加入新家庭成员。另外，Milo Yip 也花了许多业余时间去翻译 Jason Gregory 的《Game Engine Architecture》至中文版《游戏引擎架构》。
+.IP "4." 4
+为什么这个项目从 Google Code 搬到 GitHub？
+.PP
+这是大势所趋，而且 GitHub 更为强大及方便。 
+.PP
+

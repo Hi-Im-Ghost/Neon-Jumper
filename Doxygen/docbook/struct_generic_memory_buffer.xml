@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_struct_generic_memory_buffer" xml:lang="en-US">
+<title>GenericMemoryBuffer&lt; Allocator &gt; Struct Template Reference</title>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary></indexterm>
+<para>
+
+<para>Represents an in-memory output byte stream. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;memorybuffer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef char <link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_struct_generic_memory_buffer_1ad08f7da47bca43fcdb0c3b10e22dfa1d">GenericMemoryBuffer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> *allocator=0, size_t capacity=<link linkend="_struct_generic_memory_buffer_1af6ecdbdbb8d3aa53cdef6e788e4980be">kDefaultCapacity</link>)</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_generic_memory_buffer_1a9dfb477983e211893601f8ab637b42d8">Put</link> (<link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> c)</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_generic_memory_buffer_1a9861181cab6f5bec2ec08b601aa53575">Flush</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_generic_memory_buffer_1a036cbe2556778e1edc525602a9821df2">Clear</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_generic_memory_buffer_1a3b87deb9bf34c394c8fb262ab53c0c4b">ShrinkToFit</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> * <link linkend="_struct_generic_memory_buffer_1a1455475eba731dc0ce2816c70c775359">Push</link> (size_t count)</para>
+</listitem>
+            <listitem><para>void <link linkend="_struct_generic_memory_buffer_1a82a6706286f1356e1769282f5d496005">Pop</link> (size_t count)</para>
+</listitem>
+            <listitem><para>const <link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> * <link linkend="_struct_generic_memory_buffer_1a65217e77ae6d4c249c16360c24854411">GetBuffer</link> () const</para>
+</listitem>
+            <listitem><para>size_t <link linkend="_struct_generic_memory_buffer_1aaab1f18d03109ab01213d3e3d8368ff9">GetSize</link> () const</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; <link linkend="_struct_generic_memory_buffer_1a977b479180bebe8ae14ca1c11d52a486">stack_</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const size_t <link linkend="_struct_generic_memory_buffer_1af6ecdbdbb8d3aa53cdef6e788e4980be">kDefaultCapacity</link> = 256</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link> = CrtAllocator&gt;
+struct GenericMemoryBuffer&lt; Allocator &gt;</title></simplesect>
+
+<para>Represents an in-memory output byte stream. </para>
+
+
+
+<para>This class is mainly for being wrapped by <link linkend="_class_encoded_output_stream">EncodedOutputStream</link> or <link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link>.</para>
+
+<para>It is similar to FileWriteBuffer but the destination is an in-memory buffer instead of a file.</para>
+
+<para>Differences between MemoryBuffer and StringBuffer:<orderedlist>
+<listitem>
+<para>StringBuffer has Encoding but MemoryBuffer is only a byte buffer.</para>
+</listitem><listitem>
+<para><link linkend="_class_generic_string_buffer_1a42079865bab1deb930c6cff7d491c719">StringBuffer::GetString()</link> returns a null-terminated string. <link linkend="_struct_generic_memory_buffer_1a65217e77ae6d4c249c16360c24854411">MemoryBuffer::GetBuffer()</link> returns a buffer without terminator.</para>
+</listitem></orderedlist>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>Allocator</entry><entry>
+<para>type for allocating memory buffer. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>implements Stream concept </para>
+</note>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef char <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Ch</computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_struct_generic_memory_buffer_1ad08f7da47bca43fcdb0c3b10e22dfa1d"/><section>
+    <title>GenericMemoryBuffer()</title>
+<indexterm><primary>GenericMemoryBuffer</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>GenericMemoryBuffer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_struct_generic_memory_buffer">::GenericMemoryBuffer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+, size_t capacity = <computeroutput><link linkend="_struct_generic_memory_buffer_1af6ecdbdbb8d3aa53cdef6e788e4980be">kDefaultCapacity</link></computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_struct_generic_memory_buffer_1a036cbe2556778e1edc525602a9821df2"/><section>
+    <title>Clear()</title>
+<indexterm><primary>Clear</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Clear</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Clear ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a9861181cab6f5bec2ec08b601aa53575"/><section>
+    <title>Flush()</title>
+<indexterm><primary>Flush</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Flush</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Flush ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a65217e77ae6d4c249c16360c24854411"/><section>
+    <title>GetBuffer()</title>
+<indexterm><primary>GetBuffer</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>GetBuffer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> * <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetBuffer ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1aaab1f18d03109ab01213d3e3d8368ff9"/><section>
+    <title>GetSize()</title>
+<indexterm><primary>GetSize</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>GetSize</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetSize ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a82a6706286f1356e1769282f5d496005"/><section>
+    <title>Pop()</title>
+<indexterm><primary>Pop</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Pop</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Pop (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a1455475eba731dc0ce2816c70c775359"/><section>
+    <title>Push()</title>
+<indexterm><primary>Push</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Push</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> * <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Push (size_t count)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a9dfb477983e211893601f8ab637b42d8"/><section>
+    <title>Put()</title>
+<indexterm><primary>Put</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>Put</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Put (<link linkend="_struct_generic_memory_buffer_1a212f137abfd8bce2ad216b2d960c027f">Ch</link> c)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a3b87deb9bf34c394c8fb262ab53c0c4b"/><section>
+    <title>ShrinkToFit()</title>
+<indexterm><primary>ShrinkToFit</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>ShrinkToFit</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ShrinkToFit ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_struct_generic_memory_buffer_1af6ecdbdbb8d3aa53cdef6e788e4980be"/><section>
+    <title>kDefaultCapacity</title>
+<indexterm><primary>kDefaultCapacity</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>kDefaultCapacity</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kDefaultCapacity = 256<computeroutput>[static]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_struct_generic_memory_buffer_1a977b479180bebe8ae14ca1c11d52a486"/><section>
+    <title>stack_</title>
+<indexterm><primary>stack_</primary><secondary>GenericMemoryBuffer&lt; Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericMemoryBuffer&lt; Allocator &gt;</primary><secondary>stack_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>&gt; <link linkend="_struct_generic_memory_buffer">GenericMemoryBuffer</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::stack_<computeroutput>[mutable]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this struct was generated from the following files:</para>
+src/rapidjson/include/rapidjson/<link linkend="_fwd_8h">fwd.h</link>src/rapidjson/include/rapidjson/<link linkend="_memorybuffer_8h">memorybuffer.h</link></section>
+</section>

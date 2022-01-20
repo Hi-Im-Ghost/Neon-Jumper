@@ -1,0 +1,149 @@
+\hypertarget{unittest_8h_source}{}\doxysection{unittest.\+h}
+\label{unittest_8h_source}\index{src/rapidjson/test/unittest/unittest.h@{src/rapidjson/test/unittest/unittest.h}}
+\mbox{\hyperlink{unittest_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef UNITTEST\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define UNITTEST\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{comment}{// gtest indirectly included inttypes.h, without \_\_STDC\_CONSTANT\_MACROS.}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#ifndef \_\_STDC\_CONSTANT\_MACROS}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#pragma GCC diagnostic push}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#if \_\_has\_warning("{}-\/Wreserved-\/id-\/macro"{}})}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#pragma GCC diagnostic ignored "{}-\/Wreserved-\/id-\/macro"{}}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#  define \_\_STDC\_CONSTANT\_MACROS 1 }\textcolor{comment}{// required by C++ standard}}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#pragma GCC diagnostic pop}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifdef \_MSC\_VER}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define \_CRTDBG\_MAP\_ALLOC}}
+\DoxyCodeLine{36 \textcolor{preprocessor}{\#include <crtdbg.h>}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#pragma warning(disable : 4996) }\textcolor{comment}{// 'function': was declared deprecated}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || defined(\_\_GNUC\_\_) \&\& (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 2))}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6))}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#pragma GCC diagnostic push}}
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#pragma GCC diagnostic ignored "{}-\/Weffc++"{}}}
+\DoxyCodeLine{45 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47 \textcolor{preprocessor}{\#include "{}gtest/gtest.h"{}}}
+\DoxyCodeLine{48 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{50 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_) || defined(\_\_GNUC\_\_) \&\& (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6))}}
+\DoxyCodeLine{51 \textcolor{preprocessor}{\#pragma GCC diagnostic pop}}
+\DoxyCodeLine{52 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{55 \textcolor{comment}{// All TEST() macro generated this warning, disable globally}}
+\DoxyCodeLine{56 \textcolor{preprocessor}{\#pragma GCC diagnostic ignored "{}-\/Wglobal-\/constructors"{}}}
+\DoxyCodeLine{57 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{60 \textcolor{keyword}{inline} \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{unittest_8h_a158bf1a4953297866644112d81a7a3e7}{StrLen}}(\textcolor{keyword}{const} Ch* s) \{}
+\DoxyCodeLine{61     \textcolor{keyword}{const} Ch* p = s;}
+\DoxyCodeLine{62     \textcolor{keywordflow}{while} (*p) p++;}
+\DoxyCodeLine{63     \textcolor{keywordflow}{return} unsigned(p -\/ s);}
+\DoxyCodeLine{64 \}}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{67 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} \mbox{\hyperlink{unittest_8h_a8d8e3cf93e9b811c207711d0b353de02}{StrCmp}}(\textcolor{keyword}{const} Ch* s1, \textcolor{keyword}{const} Ch* s2) \{}
+\DoxyCodeLine{68     \textcolor{keywordflow}{while}(*s1 \&\& (*s1 == *s2)) \{ s1++; s2++; \}}
+\DoxyCodeLine{69     \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s1) < \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s2) ? -\/1 : \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s1) > \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(*s2);}
+\DoxyCodeLine{70 \}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{73 \textcolor{keyword}{inline} Ch* \mbox{\hyperlink{unittest_8h_a0b8e1bafb97ad4a272c5cc4469a13687}{StrDup}}(\textcolor{keyword}{const} Ch* str) \{}
+\DoxyCodeLine{74     \textcolor{keywordtype}{size\_t} bufferSize = \textcolor{keyword}{sizeof}(Ch) * (\mbox{\hyperlink{unittest_8h_a158bf1a4953297866644112d81a7a3e7}{StrLen}}(str) + 1);}
+\DoxyCodeLine{75     Ch* buffer = \textcolor{keyword}{static\_cast<}Ch*\textcolor{keyword}{>}(malloc(bufferSize));}
+\DoxyCodeLine{76     memcpy(buffer, str, bufferSize);}
+\DoxyCodeLine{77     \textcolor{keywordflow}{return} buffer;}
+\DoxyCodeLine{78 \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80 \textcolor{keyword}{inline} FILE* \mbox{\hyperlink{unittest_8h_acb6251ae9b44050f1fcabf8d3c2e792b}{TempFile}}(\textcolor{keywordtype}{char} *filename) \{}
+\DoxyCodeLine{81 \textcolor{preprocessor}{\#if defined(\_\_WIN32\_\_) || defined(\_MSC\_VER)}}
+\DoxyCodeLine{82     filename = tmpnam(filename);}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{84     \textcolor{comment}{// For Visual Studio, tmpnam() adds a backslash in front. Remove it.}}
+\DoxyCodeLine{85     \textcolor{keywordflow}{if} (filename[0] == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})}
+\DoxyCodeLine{86         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; filename[i] != \textcolor{charliteral}{'\(\backslash\)0'}; i++)}
+\DoxyCodeLine{87             filename[i] = filename[i + 1];}
+\DoxyCodeLine{88         }
+\DoxyCodeLine{89     \textcolor{keywordflow}{return} fopen(filename, \textcolor{stringliteral}{"{}wb"{}});}
+\DoxyCodeLine{90 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{91     strcpy(filename, \textcolor{stringliteral}{"{}/tmp/fileXXXXXX"{}});}
+\DoxyCodeLine{92     \textcolor{keywordtype}{int} fd = mkstemp(filename);}
+\DoxyCodeLine{93     \textcolor{keywordflow}{return} fdopen(fd, \textcolor{stringliteral}{"{}w"{}});}
+\DoxyCodeLine{94 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{95 \}}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{97 \textcolor{comment}{// Use exception for catching assert}}
+\DoxyCodeLine{98 \textcolor{preprocessor}{\#ifdef \_MSC\_VER}}
+\DoxyCodeLine{99 \textcolor{preprocessor}{\#pragma warning(disable : 4127)}}
+\DoxyCodeLine{100 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{101 }
+\DoxyCodeLine{102 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{103 \textcolor{preprocessor}{\#pragma GCC diagnostic push}}
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#if \_\_has\_warning("{}-\/Wdeprecated"{}})}
+\DoxyCodeLine{105 \textcolor{preprocessor}{\#pragma GCC diagnostic ignored "{}-\/Wdeprecated"{}}}
+\DoxyCodeLine{106 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{107 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{109 \textcolor{keyword}{class }\mbox{\hyperlink{class_assert_exception}{AssertException}} : \textcolor{keyword}{public} std::logic\_error \{}
+\DoxyCodeLine{110 \textcolor{keyword}{public}:}
+\DoxyCodeLine{111     \mbox{\hyperlink{class_assert_exception_ac95b6779576904bf5932c1f7e72300c6}{AssertException}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* w) : std::logic\_error(w) \{\}}
+\DoxyCodeLine{112     \mbox{\hyperlink{class_assert_exception_a1a5812bbbb81bd04d4352e3413a5946f}{AssertException}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_assert_exception}{AssertException}}\& rhs) : std::logic\_error(rhs) \{\}}
+\DoxyCodeLine{113     \textcolor{keyword}{virtual} \mbox{\hyperlink{class_assert_exception_aba869a44de1c69d593d16d39039bd35c}{\string~AssertException}}() throw();}
+\DoxyCodeLine{114 \};}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{117 \textcolor{preprocessor}{\#pragma GCC diagnostic pop}}
+\DoxyCodeLine{118 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120 \textcolor{comment}{// Not using noexcept for testing RAPIDJSON\_ASSERT()}}
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#define RAPIDJSON\_HAS\_CXX11\_NOEXCEPT 0}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ASSERT}}
+\DoxyCodeLine{124 \textcolor{preprocessor}{\#define RAPIDJSON\_ASSERT(x) (!(x) ? throw AssertException(RAPIDJSON\_STRINGIFY(x)) : (void)0u)}}
+\DoxyCodeLine{125 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_ASSERT\_THROWS}}
+\DoxyCodeLine{126 \textcolor{preprocessor}{\#define RAPIDJSON\_ASSERT\_THROWS}}
+\DoxyCodeLine{127 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{128 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130 \textcolor{keyword}{class }\mbox{\hyperlink{class_random}{Random}} \{}
+\DoxyCodeLine{131 \textcolor{keyword}{public}:}
+\DoxyCodeLine{132     \mbox{\hyperlink{class_random_a17f563fcd03a81b31057b71b0bdcbcdb}{Random}}(\textcolor{keywordtype}{unsigned} seed = 0) : mSeed(seed) \{\}}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_random_a881e9afda6dd041defbf4473a28bcb56}{operator()}}() \{}
+\DoxyCodeLine{135         mSeed = 214013 * mSeed + 2531011;}
+\DoxyCodeLine{136         \textcolor{keywordflow}{return} mSeed;}
+\DoxyCodeLine{137     \}}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139 \textcolor{keyword}{private}:}
+\DoxyCodeLine{140     \textcolor{keywordtype}{unsigned} mSeed;}
+\DoxyCodeLine{141 \};}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// UNITTEST\_H\_}}
+
+\end{DoxyCode}

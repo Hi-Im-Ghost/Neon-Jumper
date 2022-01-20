@@ -1,0 +1,659 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s" xml:lang="en-US">
+<title>RapidJSON error handling</title>
+<indexterm><primary>RapidJSON error handling</primary></indexterm>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_parse_result">ParseResult</link></para>
+
+<para>Result of parsing (wraps ParseErrorCode) </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>   char</para>
+
+<para>Character type of error messages. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gabe2e1bd1349e5a7d6c1af78c05a98f0d">RAPIDJSON_ERROR_STRING</link>(x)   x</para>
+
+<para>Macro for converting string literial to <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>[]. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7f8c4265b2edda78568ae3338aaf1461">RAPIDJSON_PARSE_ERROR_NORETURN</link>(parseErrorCode,  offset)</para>
+
+<para>Macro to indicate a parse error. </para>
+</listitem>
+            <listitem><para>#define <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gae3689840fa6e89a241313f33b602f865">RAPIDJSON_PARSE_ERROR</link>(parseErrorCode,  offset)</para>
+
+<para>(Internal) macro to indicate and handle a parse error. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Typedefs    </title>
+        <itemizedlist>
+            <listitem><para>typedef const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> *(* <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga18f3ccebe76cf342c0b8117e2044a9c8">GetParseErrorFunc</link>) (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>)</para>
+
+<para>Function pointer type of GetParseError(). </para>
+</listitem>
+            <listitem><para>typedef const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> *(* <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gaf2fa5ece9d7eeb6cf7b21acc6f972eb6">GetValidateErrorFunc</link>) (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link>)</para>
+
+<para>Function pointer type of GetValidateError(). </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Enumerations    </title>
+        <itemizedlist>
+            <listitem><para>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> { 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f">kParseErrorNone</link> = 0
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a">kParseErrorDocumentEmpty</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5">kParseErrorDocumentRootNotSingular</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9">kParseErrorValueInvalid</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3">kParseErrorObjectMissName</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017">kParseErrorObjectMissColon</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a34f70d7ed2fa121954f5fc5b5113d05f">kParseErrorObjectMissCommaOrCurlyBracket</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7abfdd2bd90134fec4fe6a22762d16a5f5">kParseErrorArrayMissCommaOrSquareBracket</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7afc65ea941a0a26812f0f258d2429e5d2">kParseErrorStringUnicodeEscapeInvalidHex</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ad9fced6763a06435ca448626c74e5c72">kParseErrorStringUnicodeSurrogateInvalid</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a98bb3f3b1e12fdb7f278b9fa4029306f">kParseErrorStringEscapeInvalid</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6369e5b4e4922720cbc45c5941efc4af">kParseErrorStringMissQuotationMark</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456">kParseErrorStringInvalidEncoding</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae52aaa70fde46e4cc422420309700b82">kParseErrorNumberTooBig</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a08a2cc2b4cacfba1673ed536eee229ce">kParseErrorNumberMissFraction</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a82cdbd740e22b819a70d05e585c2a442">kParseErrorNumberMissExponent</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6">kParseErrorTermination</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2bec6b26bddd3e093a37fc0d6399e0be">kParseErrorUnspecificSyntaxError</link>
+ }</para>
+
+<para>Error code of parsing. </para>
+</listitem>
+            <listitem><para>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link> { 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa626466aeef9cacbac149e4ae57d5fda2">kValidateErrors</link> = -1
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aac15ca121db8911126960c0672dfe2a2e">kValidateErrorNone</link> = 0
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aab8cf6f0be86047d0bf345f25dac31f4c">kValidateErrorMultipleOf</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa933fe947a713d741c3dcdcd7cae96b35">kValidateErrorMaximum</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3fca29f33702d8d98135b849c5f05f00">kValidateErrorExclusiveMaximum</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaa5f0cf3faa2e08c359cfcd6d151d76e9">kValidateErrorMinimum</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1722fc952e01a7a858d954c08e382d65">kValidateErrorExclusiveMinimum</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa6825de2427572de01bd121c9fffcee76">kValidateErrorMaxLength</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa58e6e01eef18ea0af4763abd84128790">kValidateErrorMinLength</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa86bde2af1a18d73a533ba8e2f5971879">kValidateErrorPattern</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa9acbcf73fe6a65bd23108a2dbc945cff">kValidateErrorMaxItems</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aad31b3292fb68a14016514736b076200c">kValidateErrorMinItems</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa35159c760856953cbd62258140d8d498">kValidateErrorUniqueItems</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa17861cca8a0ab2a0685f3b7804f67303">kValidateErrorAdditionalItems</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa179693cbb5ea15f0242e37588e99edf6">kValidateErrorMaxProperties</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa017c1ccb7febfaff42115fc256753fb6">kValidateErrorMinProperties</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2dc93a549f16b70911e6399c61a1aec4">kValidateErrorRequired</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aae02b299a3f5db48400e7c1987201d2ca">kValidateErrorAdditionalProperties</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaecdd1b884cbacca0213b36def4e1feaf">kValidateErrorPatternProperties</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2f81ab754a29330709c24110a2e895c8">kValidateErrorDependencies</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3c12e9cbc8a479b77776ceccbda4c289">kValidateErrorEnum</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa5504bec97bd2ef15efac9ff5b0a6e8fa">kValidateErrorType</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa56466697ca410e5ddc2c7fabe11f3132">kValidateErrorOneOf</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1bbc2293748b2e80415c77c7a6a069f9">kValidateErrorOneOfMatch</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaef48f9db2382e3308b823f078c73bce4">kValidateErrorAllOf</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa7b821605f3eb4ec77e2c42204b3957cf">kValidateErrorAnyOf</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aadd079998cffcae99da28675a5742327d">kValidateErrorNot</link>
+ }</para>
+
+<para>Error codes when validating. </para>
+</listitem>
+            <listitem><para>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be">PointerParseErrorCode</link> { 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea81e2b6fbd1bf4ac890ddb7779265e3a0">kPointerParseErrorNone</link> = 0
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea5821696a2ab6cbccdc8288cbe6e81c77">kPointerParseErrorTokenMustBeginWithSolidus</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea4d2a7e511d717fd1d2f532ef5fcf821b">kPointerParseErrorInvalidEscape</link>
+, <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98beac0c1b013c0db34dcc5a47fc1ee7a8c35">kPointerParseErrorInvalidPercentEncoding</link>
+, 
+<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98beabd7eae93627f74267009a03679b6dc38">kPointerParseErrorCharacterMustPercentEncode</link>
+ }</para>
+
+<para>Error code of parsing. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_namespacetest_8cpp_1ad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link> const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> * <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga28835eb93d2c3c07bbea13515eb31415">GetParseError_En</link> (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> parseErrorCode)</para>
+
+<para>Maps error code of parsing into error message. </para>
+</listitem>
+            <listitem><para>const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> * <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga05ec22ea9bae6f1a0eb0fa8cb1bde709">GetValidateError_En</link> (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link> validateErrorCode)</para>
+
+<para>Maps error code of validation into error message. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+</section>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c"/><section>
+    <title>RAPIDJSON_ERROR_CHARTYPE</title>
+<indexterm><primary>RAPIDJSON_ERROR_CHARTYPE</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>RAPIDJSON_ERROR_CHARTYPE</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_ERROR_CHARTYPE   char</computeroutput></para><para>
+
+<para>Character type of error messages. </para>
+</para>
+
+<para>The default character type is <computeroutput>char</computeroutput>. On Windows, user can define this macro as <computeroutput>TCHAR</computeroutput> for supporting both unicode/non-unicode settings. </para>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gabe2e1bd1349e5a7d6c1af78c05a98f0d"/><section>
+    <title>RAPIDJSON_ERROR_STRING</title>
+<indexterm><primary>RAPIDJSON_ERROR_STRING</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>RAPIDJSON_ERROR_STRING</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_ERROR_STRING( x)   x</computeroutput></para><para>
+
+<para>Macro for converting string literial to <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>[]. </para>
+</para>
+
+<para>By default this conversion macro does nothing. On Windows, user can define this macro as <computeroutput>_T(x)</computeroutput> for supporting both unicode/non-unicode settings. </para>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gae3689840fa6e89a241313f33b602f865"/><section>
+    <title>RAPIDJSON_PARSE_ERROR</title>
+<indexterm><primary>RAPIDJSON_PARSE_ERROR</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>RAPIDJSON_PARSE_ERROR</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_PARSE_ERROR( parseErrorCode,  offset)</computeroutput></para><para>
+
+<para>(Internal) macro to indicate and handle a parse error. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>parseErrorCode</entry><entry>
+<para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">rapidjson::ParseErrorCode</link> of the error </para>
+</entry>
+                            </row>
+                            <row>
+<entry>offset</entry><entry>
+<para>position of the error in JSON input (<computeroutput>size_t</computeroutput>)</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                Invokes RAPIDJSON_PARSE_ERROR_NORETURN and stops the parsing.</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7f8c4265b2edda78568ae3338aaf1461">RAPIDJSON_PARSE_ERROR_NORETURN</link> </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7f8c4265b2edda78568ae3338aaf1461"/><section>
+    <title>RAPIDJSON_PARSE_ERROR_NORETURN</title>
+<indexterm><primary>RAPIDJSON_PARSE_ERROR_NORETURN</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>RAPIDJSON_PARSE_ERROR_NORETURN</secondary></indexterm>
+<para><computeroutput>#define RAPIDJSON_PARSE_ERROR_NORETURN( parseErrorCode,  offset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_MULTILINEMACRO_BEGIN \</link>
+<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">    RAPIDJSON_ASSERT</link>(!HasParseError());&#32;<emphasis role="comment">/*&#32;Error&#32;can&#32;only&#32;be&#32;assigned&#32;once&#32;*/</emphasis>&#32;\
+&#32;&#32;&#32;&#32;SetParseError(parseErrorCode,&#32;offset);&#32;\
+&#32;&#32;&#32;&#32;RAPIDJSON_MULTILINEMACRO_END
+</programlisting><para>
+
+<para>Macro to indicate a parse error. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>parseErrorCode</entry><entry>
+<para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">rapidjson::ParseErrorCode</link> of the error </para>
+</entry>
+                            </row>
+                            <row>
+<entry>offset</entry><entry>
+<para>position of the error in JSON input (<computeroutput>size_t</computeroutput>)</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                This macros can be used as a customization point for the internal error handling mechanism of RapidJSON.</para>
+
+<para>A common usage model is to throw an exception instead of requiring the caller to explicitly check the rapidjson::GenericReader::Parse&apos;s return value:</para>
+
+<para><literallayout><computeroutput><emphasis role="preprocessor">#define&#32;RAPIDJSON_PARSE_ERROR_NORETURN(parseErrorCode,offset)&#32;\</emphasis>
+<emphasis role="preprocessor">&#32;&#32;&#32;throw&#32;ParseException(parseErrorCode,&#32;#parseErrorCode,&#32;offset)</emphasis>
+
+<emphasis role="preprocessor">#include&#32;&lt;stdexcept&gt;</emphasis>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;std::runtime_error</emphasis>
+<emphasis role="preprocessor">#include&#32;&quot;<link linkend="_error_8h">rapidjson/error/error.h</link>&quot;</emphasis>&#32;<emphasis role="comment">//&#32;rapidjson::ParseResult</emphasis>
+
+<emphasis role="keyword">struct&#32;</emphasis>ParseException&#32;:&#32;std::runtime_error,&#32;rapidjson::ParseResult&#32;{
+&#32;&#32;ParseException(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">rapidjson::ParseErrorCode</link>&#32;code,&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;msg,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset)
+&#32;&#32;&#32;&#32;:&#32;std::runtime_error(msg),&#32;<link linkend="_struct_parse_result">ParseResult</link>(code,&#32;offset)&#32;{}
+};
+
+<emphasis role="preprocessor">#include&#32;&quot;<link linkend="_reader_8h">rapidjson/reader.h</link>&quot;</emphasis>
+</computeroutput></literallayout></para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gae3689840fa6e89a241313f33b602f865">RAPIDJSON_PARSE_ERROR</link>, rapidjson::GenericReader::Parse </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Typedef Documentation</title>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga18f3ccebe76cf342c0b8117e2044a9c8"/><section>
+    <title>GetParseErrorFunc</title>
+<indexterm><primary>GetParseErrorFunc</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>GetParseErrorFunc</secondary></indexterm>
+<para><computeroutput>typedef const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> *(* GetParseErrorFunc) (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link>)</computeroutput></para><para>
+
+<para>Function pointer type of GetParseError(). </para>
+</para>
+
+<para>This is the prototype for <computeroutput>GetParseError_X()</computeroutput>, where <computeroutput>X</computeroutput> is a locale. User can dynamically change locale in runtime, e.g.: <literallayout><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga18f3ccebe76cf342c0b8117e2044a9c8">GetParseErrorFunc</link>&#32;GetParseError&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga28835eb93d2c3c07bbea13515eb31415">GetParseError_En</link>;&#32;<emphasis role="comment">//&#32;or&#32;whatever</emphasis>
+<emphasis role="keyword">const</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>*&#32;s&#32;=&#32;GetParseError(document.GetParseErrorCode());
+</computeroutput></literallayout> </para>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gaf2fa5ece9d7eeb6cf7b21acc6f972eb6"/><section>
+    <title>GetValidateErrorFunc</title>
+<indexterm><primary>GetValidateErrorFunc</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>GetValidateErrorFunc</secondary></indexterm>
+<para><computeroutput>typedef const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> *(* GetValidateErrorFunc) (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link>)</computeroutput></para><para>
+
+<para>Function pointer type of GetValidateError(). </para>
+</para>
+
+<para>This is the prototype for <computeroutput>GetValidateError_X()</computeroutput>, where <computeroutput>X</computeroutput> is a locale. User can dynamically change locale in runtime, e.g.: <literallayout><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gaf2fa5ece9d7eeb6cf7b21acc6f972eb6">GetValidateErrorFunc</link>&#32;GetValidateError&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga05ec22ea9bae6f1a0eb0fa8cb1bde709">GetValidateError_En</link>;&#32;<emphasis role="comment">//&#32;or&#32;whatever</emphasis>
+<emphasis role="keyword">const</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link>*&#32;s&#32;=&#32;GetValidateError(validator.GetInvalidSchemaCode());
+</computeroutput></literallayout> </para>
+</section>
+</section>
+<section>
+<title>Enumeration Type Documentation</title>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7"/><section>
+    <title>ParseErrorCode</title>
+<indexterm><primary>ParseErrorCode</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>ParseErrorCode</secondary></indexterm>
+<para><computeroutput>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link></computeroutput></para><para>
+
+<para>Error code of parsing. </para>
+</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099">GenericReader::Parse</link>, <link linkend="_class_generic_reader_1a937bf90919f50e1c370b312cee5833e8">GenericReader::GetParseErrorCode</link> </para>
+</formalpara>
+</para>
+<informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kParseErrorNone</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorNone</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ac0856bac4945cbd1d09e9502fd8f852f"/>kParseErrorNone</entry><entry>
+<para>No error. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorDocumentEmpty</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorDocumentEmpty</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a"/>kParseErrorDocumentEmpty</entry><entry>
+<para>The document is empty. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorDocumentRootNotSingular</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorDocumentRootNotSingular</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5"/>kParseErrorDocumentRootNotSingular</entry><entry>
+<para>The document root must not follow by other values. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorValueInvalid</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorValueInvalid</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9"/>kParseErrorValueInvalid</entry><entry>
+<para>Invalid value. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorObjectMissName</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorObjectMissName</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3"/>kParseErrorObjectMissName</entry><entry>
+<para>Missing a name for object member. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorObjectMissColon</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorObjectMissColon</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017"/>kParseErrorObjectMissColon</entry><entry>
+<para>Missing a colon after a name of object member. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorObjectMissCommaOrCurlyBracket</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorObjectMissCommaOrCurlyBracket</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a34f70d7ed2fa121954f5fc5b5113d05f"/>kParseErrorObjectMissCommaOrCurlyBracket</entry><entry>
+<para>Missing a comma or &apos;}&apos; after an object member. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorArrayMissCommaOrSquareBracket</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorArrayMissCommaOrSquareBracket</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7abfdd2bd90134fec4fe6a22762d16a5f5"/>kParseErrorArrayMissCommaOrSquareBracket</entry><entry>
+<para>Missing a comma or &apos;]&apos; after an array element. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorStringUnicodeEscapeInvalidHex</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorStringUnicodeEscapeInvalidHex</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7afc65ea941a0a26812f0f258d2429e5d2"/>kParseErrorStringUnicodeEscapeInvalidHex</entry><entry>
+<para>Incorrect hex digit after \u escape in string. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorStringUnicodeSurrogateInvalid</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorStringUnicodeSurrogateInvalid</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ad9fced6763a06435ca448626c74e5c72"/>kParseErrorStringUnicodeSurrogateInvalid</entry><entry>
+<para>The surrogate pair in string is invalid. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorStringEscapeInvalid</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorStringEscapeInvalid</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a98bb3f3b1e12fdb7f278b9fa4029306f"/>kParseErrorStringEscapeInvalid</entry><entry>
+<para>Invalid escape character in string. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorStringMissQuotationMark</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorStringMissQuotationMark</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6369e5b4e4922720cbc45c5941efc4af"/>kParseErrorStringMissQuotationMark</entry><entry>
+<para>Missing a closing quotation mark in string. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorStringInvalidEncoding</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorStringInvalidEncoding</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a17ecb2ed1524b513d64a93f4a7a8b456"/>kParseErrorStringInvalidEncoding</entry><entry>
+<para>Invalid encoding in string. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorNumberTooBig</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorNumberTooBig</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7ae52aaa70fde46e4cc422420309700b82"/>kParseErrorNumberTooBig</entry><entry>
+<para>Number too big to be stored in double. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorNumberMissFraction</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorNumberMissFraction</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a08a2cc2b4cacfba1673ed536eee229ce"/>kParseErrorNumberMissFraction</entry><entry>
+<para>Miss fraction part in number. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorNumberMissExponent</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorNumberMissExponent</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a82cdbd740e22b819a70d05e585c2a442"/>kParseErrorNumberMissExponent</entry><entry>
+<para>Miss exponent in number. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorTermination</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorTermination</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6"/>kParseErrorTermination</entry><entry>
+<para>Parsing was terminated. </para>
+</entry></row><row><entry><indexterm><primary>kParseErrorUnspecificSyntaxError</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kParseErrorUnspecificSyntaxError</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a2bec6b26bddd3e093a37fc0d6399e0be"/>kParseErrorUnspecificSyntaxError</entry><entry>
+<para>Unspecific syntax error. </para>
+</entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be"/><section>
+    <title>PointerParseErrorCode</title>
+<indexterm><primary>PointerParseErrorCode</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>PointerParseErrorCode</secondary></indexterm>
+<para><computeroutput>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be">PointerParseErrorCode</link></computeroutput></para><para>
+
+<para>Error code of parsing. </para>
+</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_pointer_1a5d85b7dc82719643e8f7adccd5a74fbe">GenericPointer::GenericPointer</link>, GenericPointer::GetParseErrorCode </para>
+</formalpara>
+</para>
+<informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kPointerParseErrorNone</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kPointerParseErrorNone</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea81e2b6fbd1bf4ac890ddb7779265e3a0"/>kPointerParseErrorNone</entry><entry>
+<para>The parse is successful. </para>
+</entry></row><row><entry><indexterm><primary>kPointerParseErrorTokenMustBeginWithSolidus</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kPointerParseErrorTokenMustBeginWithSolidus</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea5821696a2ab6cbccdc8288cbe6e81c77"/>kPointerParseErrorTokenMustBeginWithSolidus</entry><entry>
+<para>A token must begin with a &apos;/&apos;. </para>
+</entry></row><row><entry><indexterm><primary>kPointerParseErrorInvalidEscape</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kPointerParseErrorInvalidEscape</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98bea4d2a7e511d717fd1d2f532ef5fcf821b"/>kPointerParseErrorInvalidEscape</entry><entry>
+<para>Invalid escape. </para>
+</entry></row><row><entry><indexterm><primary>kPointerParseErrorInvalidPercentEncoding</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kPointerParseErrorInvalidPercentEncoding</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98beac0c1b013c0db34dcc5a47fc1ee7a8c35"/>kPointerParseErrorInvalidPercentEncoding</entry><entry>
+<para>Invalid percent encoding in URI fragment. </para>
+</entry></row><row><entry><indexterm><primary>kPointerParseErrorCharacterMustPercentEncode</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kPointerParseErrorCharacterMustPercentEncode</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ggacb2e274f33e54d91b96e9883a99a98beabd7eae93627f74267009a03679b6dc38"/>kPointerParseErrorCharacterMustPercentEncode</entry><entry>
+<para>A character must percent encoded in URI fragment. </para>
+</entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a"/><section>
+    <title>ValidateErrorCode</title>
+<indexterm><primary>ValidateErrorCode</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>ValidateErrorCode</secondary></indexterm>
+<para><computeroutput>enum <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link></computeroutput></para><para>
+
+<para>Error codes when validating. </para>
+</para>
+
+<para><formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_schema_validator">GenericSchemaValidator</link> </para>
+</formalpara>
+</para>
+<informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kValidateErrors</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrors</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa626466aeef9cacbac149e4ae57d5fda2"/>kValidateErrors</entry><entry>
+<para>Top level error code when kValidateContinueOnErrorsFlag set. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorNone</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorNone</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aac15ca121db8911126960c0672dfe2a2e"/>kValidateErrorNone</entry><entry>
+<para>No error. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMultipleOf</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMultipleOf</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aab8cf6f0be86047d0bf345f25dac31f4c"/>kValidateErrorMultipleOf</entry><entry>
+<para>Number is not a multiple of the &apos;multipleOf&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMaximum</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMaximum</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa933fe947a713d741c3dcdcd7cae96b35"/>kValidateErrorMaximum</entry><entry>
+<para>Number is greater than the &apos;maximum&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorExclusiveMaximum</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorExclusiveMaximum</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3fca29f33702d8d98135b849c5f05f00"/>kValidateErrorExclusiveMaximum</entry><entry>
+<para>Number is greater than or equal to the &apos;maximum&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMinimum</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMinimum</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaa5f0cf3faa2e08c359cfcd6d151d76e9"/>kValidateErrorMinimum</entry><entry>
+<para>Number is less than the &apos;minimum&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorExclusiveMinimum</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorExclusiveMinimum</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1722fc952e01a7a858d954c08e382d65"/>kValidateErrorExclusiveMinimum</entry><entry>
+<para>Number is less than or equal to the &apos;minimum&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMaxLength</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMaxLength</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa6825de2427572de01bd121c9fffcee76"/>kValidateErrorMaxLength</entry><entry>
+<para>String is longer than the &apos;maxLength&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMinLength</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMinLength</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa58e6e01eef18ea0af4763abd84128790"/>kValidateErrorMinLength</entry><entry>
+<para>String is longer than the &apos;maxLength&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorPattern</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorPattern</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa86bde2af1a18d73a533ba8e2f5971879"/>kValidateErrorPattern</entry><entry>
+<para>String does not match the &apos;pattern&apos; regular expression. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMaxItems</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMaxItems</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa9acbcf73fe6a65bd23108a2dbc945cff"/>kValidateErrorMaxItems</entry><entry>
+<para>Array is longer than the &apos;maxItems&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMinItems</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMinItems</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aad31b3292fb68a14016514736b076200c"/>kValidateErrorMinItems</entry><entry>
+<para>Array is shorter than the &apos;minItems&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorUniqueItems</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorUniqueItems</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa35159c760856953cbd62258140d8d498"/>kValidateErrorUniqueItems</entry><entry>
+<para>Array has duplicate items but &apos;uniqueItems&apos; is true. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorAdditionalItems</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorAdditionalItems</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa17861cca8a0ab2a0685f3b7804f67303"/>kValidateErrorAdditionalItems</entry><entry>
+<para>Array has additional items that are not allowed by the schema. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMaxProperties</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMaxProperties</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa179693cbb5ea15f0242e37588e99edf6"/>kValidateErrorMaxProperties</entry><entry>
+<para>Object has more members than &apos;maxProperties&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorMinProperties</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorMinProperties</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa017c1ccb7febfaff42115fc256753fb6"/>kValidateErrorMinProperties</entry><entry>
+<para>Object has less members than &apos;minProperties&apos; value. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorRequired</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorRequired</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2dc93a549f16b70911e6399c61a1aec4"/>kValidateErrorRequired</entry><entry>
+<para>Object is missing one or more members required by the schema. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorAdditionalProperties</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorAdditionalProperties</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aae02b299a3f5db48400e7c1987201d2ca"/>kValidateErrorAdditionalProperties</entry><entry>
+<para>Object has additional members that are not allowed by the schema. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorPatternProperties</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorPatternProperties</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaecdd1b884cbacca0213b36def4e1feaf"/>kValidateErrorPatternProperties</entry><entry>
+<para>See other errors. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorDependencies</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorDependencies</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa2f81ab754a29330709c24110a2e895c8"/>kValidateErrorDependencies</entry><entry>
+<para>Object has missing property or schema dependencies. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorEnum</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorEnum</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa3c12e9cbc8a479b77776ceccbda4c289"/>kValidateErrorEnum</entry><entry>
+<para>Property has a value that is not one of its allowed enumerated values. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorType</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorType</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa5504bec97bd2ef15efac9ff5b0a6e8fa"/>kValidateErrorType</entry><entry>
+<para>Property has a type that is not allowed by the schema.. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorOneOf</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorOneOf</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa56466697ca410e5ddc2c7fabe11f3132"/>kValidateErrorOneOf</entry><entry>
+<para>Property did not match any of the sub-schemas specified by &apos;oneOf&apos;. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorOneOfMatch</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorOneOfMatch</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa1bbc2293748b2e80415c77c7a6a069f9"/>kValidateErrorOneOfMatch</entry><entry>
+<para>Property matched more than one of the sub-schemas specified by &apos;oneOf&apos;. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorAllOf</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorAllOf</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aaef48f9db2382e3308b823f078c73bce4"/>kValidateErrorAllOf</entry><entry>
+<para>Property did not match all of the sub-schemas specified by &apos;allOf&apos;. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorAnyOf</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorAnyOf</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aa7b821605f3eb4ec77e2c42204b3957cf"/>kValidateErrorAnyOf</entry><entry>
+<para>Property did not match any of the sub-schemas specified by &apos;anyOf&apos;. </para>
+</entry></row><row><entry><indexterm><primary>kValidateErrorNot</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>kValidateErrorNot</secondary></indexterm>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga2e1f88f94a5d9a6817a5de0ed2f0105aadd079998cffcae99da28675a5742327d"/>kValidateErrorNot</entry><entry>
+<para>Property matched the sub-schema specified by &apos;not&apos;. </para>
+</entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga28835eb93d2c3c07bbea13515eb31415"/><section>
+    <title>GetParseError_En()</title>
+<indexterm><primary>GetParseError_En</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>GetParseError_En</secondary></indexterm>
+<para><computeroutput><link linkend="_namespacetest_8cpp_1ad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link> const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> * GetParseError_En (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> parseErrorCode)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Maps error code of parsing into error message. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>parseErrorCode</entry><entry>
+<para>Error code obtained in parsing. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>the error message. </para>
+</formalpara>
+<note><title>Note</title>
+
+<para>User can make a copy of this function for localization. Using switch-case is safer for future modification of error codes. </para>
+</note>
+</para>
+</section>
+<anchor xml:id="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga05ec22ea9bae6f1a0eb0fa8cb1bde709"/><section>
+    <title>GetValidateError_En()</title>
+<indexterm><primary>GetValidateError_En</primary><secondary>RapidJSON error handling</secondary></indexterm>
+<indexterm><primary>RapidJSON error handling</primary><secondary>GetValidateError_En</secondary></indexterm>
+<para><computeroutput>const <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga7e4636fd48d0148f102b8a13f0539d8c">RAPIDJSON_ERROR_CHARTYPE</link> * GetValidateError_En (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga2e1f88f94a5d9a6817a5de0ed2f0105a">ValidateErrorCode</link> validateErrorCode)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Maps error code of validation into error message. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>validateErrorCode</entry><entry>
+<para>Error code obtained from validator. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>the error message. </para>
+</formalpara>
+<note><title>Note</title>
+
+<para>User can make a copy of this function for localization. Using switch-case is safer for future modification of error codes. </para>
+</note>
+</para>
+</section>
+</section>
+</section>

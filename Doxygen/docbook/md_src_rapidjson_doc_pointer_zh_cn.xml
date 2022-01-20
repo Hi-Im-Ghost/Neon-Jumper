@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_pointer_zh_cn" xml:lang="en-US">
+
+<para>（本功能于 v1.1.0 发布）</para>
+
+<para>JSON Pointer 是一个标准化（<link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link>）的方式去选取一个 JSON Document（DOM）中的值。这类似于 XML 的 XPath。然而，JSON Pointer 简单得多，而且每个 JSON Pointer 仅指向单个值。</para>
+
+<para>使用 RapidJSON 的 JSON Pointer 实现能简化一些 DOM 的操作。</para>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1JsonPointer">
+<title>JSON Pointer</title>
+
+<para>一个 JSON Pointer 由一串（零至多个）token 所组成，每个 token 都有 <computeroutput>/</computeroutput> 前缀。每个 token 可以是一个字符串或数字。例如，给定一个 JSON： <literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;foo&quot;&#32;:&#32;[&quot;bar&quot;,&#32;&quot;baz&quot;],
+&#32;&#32;&#32;&#32;&quot;pi&quot;&#32;:&#32;3.1416
+}
+</computeroutput></literallayout></para>
+
+<para>以下的 JSON Pointer 解析为：</para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>&quot;/foo&quot;</computeroutput> → <computeroutput>[ &quot;bar&quot;, &quot;baz&quot; ]</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/foo/0&quot;</computeroutput> → <computeroutput>&quot;bar&quot;</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/foo/1&quot;</computeroutput> → <computeroutput>&quot;baz&quot;</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/pi&quot;</computeroutput> → <computeroutput>3.1416</computeroutput></para>
+</listitem></orderedlist>
+</para>
+
+<para>要注意，一个空 JSON Pointer <computeroutput>&quot;&quot;</computeroutput> （零个 token）解析为整个 JSON。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_schema_zh_cn_1BasicUsage">
+<title>Basic Usage</title>
+
+<para>以下的代码范例不解自明。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/pointer.h&quot;
+
+//&#32;...
+Document&#32;d;
+
+//&#32;使用&#32;Set()&#32;创建&#32;DOM
+Pointer(&quot;/project&quot;).Set(d,&#32;&quot;RapidJSON&quot;);
+Pointer(&quot;/stars&quot;).Set(d,&#32;10);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;10&#32;}
+
+//&#32;使用&#32;Get()&#32;访问&#32;DOM。若该值不存在则返回&#32;nullptr。
+if&#32;(Value*&#32;stars&#32;=&#32;Pointer(&quot;/stars&quot;).Get(d))
+&#32;&#32;&#32;&#32;stars-&gt;SetInt(stars-&gt;GetInt()&#32;+&#32;1);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11&#32;}
+
+//&#32;Set()&#32;和&#32;Create()&#32;自动生成父值（如果它们不存在）。
+Pointer(&quot;/a/b/0&quot;).Create(d);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;}&#32;}
+
+//&#32;GetWithDefault()&#32;返回引用。若该值不存在则会深拷贝缺省值。
+Value&amp;&#32;hello&#32;=&#32;Pointer(&quot;/hello&quot;).GetWithDefault(d,&#32;&quot;world&quot;);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;},&#32;&quot;hello&quot;&#32;:&#32;&quot;world&quot;&#32;}
+
+//&#32;Swap()&#32;和&#32;Set()&#32;相似
+Value&#32;x(&quot;C++&quot;);
+Pointer(&quot;/hello&quot;).Swap(d,&#32;x);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;11,&#32;&quot;a&quot;&#32;:&#32;{&#32;&quot;b&quot;&#32;:&#32;[&#32;null&#32;]&#32;},&#32;&quot;hello&quot;&#32;:&#32;&quot;C++&quot;&#32;}
+//&#32;x&#32;变成&#32;&quot;world&quot;
+
+//&#32;删去一个成员或元素，若值存在返回&#32;true
+bool&#32;success&#32;=&#32;Pointer(&quot;/a&quot;).Erase(d);
+assert(success);
+
+//&#32;{&#32;&quot;project&quot;&#32;:&#32;&quot;RapidJSON&quot;,&#32;&quot;stars&quot;&#32;:&#32;10&#32;}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1HelperFunctions">
+<title>Helper Functions</title>
+
+<para>由于面向对象的调用习惯可能不符直觉，RapidJSON 也提供了一些辅助函数，它们把成员函数包装成自由函数。</para>
+
+<para>以下的例子与上面例子所做的事情完全相同。</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+
+SetValueByPointer(d,&#32;&quot;/project&quot;,&#32;&quot;RapidJSON&quot;);
+SetValueByPointer(d,&#32;&quot;/stars&quot;,&#32;10);
+
+if&#32;(Value*&#32;stars&#32;=&#32;GetValueByPointer(d,&#32;&quot;/stars&quot;))
+&#32;&#32;&#32;&#32;stars-&gt;SetInt(stars-&gt;GetInt()&#32;+&#32;1);
+
+CreateValueByPointer(d,&#32;&quot;/a/b/0&quot;);
+
+Value&amp;&#32;hello&#32;=&#32;GetValueByPointerWithDefault(d,&#32;&quot;/hello&quot;,&#32;&quot;world&quot;);
+
+Value&#32;x(&quot;C++&quot;);
+SwapValueByPointer(d,&#32;&quot;/hello&quot;,&#32;x);
+
+bool&#32;success&#32;=&#32;EraseValueByPointer(d,&#32;&quot;/a&quot;);
+assert(success);
+</computeroutput></literallayout></para>
+
+<para>以下对比 3 种调用方式：</para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>Pointer(source).&lt;Method&gt;(root, ...)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&lt;Method&gt;ValueByPointer(root, Pointer(source), ...)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&lt;Method&gt;ValueByPointer(root, source, ...)</computeroutput></para>
+</listitem></orderedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1ResolvingPointer">
+<title>Resolving Pointer</title>
+
+<para><computeroutput>Pointer::Get()</computeroutput> 或 <computeroutput><link linkend="_pointer_8h_1a581633984b11d0587c2ad06649efefc4">GetValueByPointer()</link></computeroutput> 函数并不修改 DOM。若那些 token 不能匹配 DOM 里的值，这些函数便返回 <computeroutput>nullptr</computeroutput>。使用者可利用这个方法来检查一个值是否存在。</para>
+
+<para>注意，数值 token 可表示数组索引或成员名字。解析过程中会按值的类型来匹配。</para>
+
+<para><literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;0&quot;&#32;:&#32;123,
+&#32;&#32;&#32;&#32;&quot;1&quot;&#32;:&#32;[456]
+}
+</computeroutput></literallayout></para>
+
+<para><orderedlist>
+<listitem>
+<para><computeroutput>&quot;/0&quot;</computeroutput> → <computeroutput>123</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>&quot;/1/0&quot;</computeroutput> → <computeroutput>456</computeroutput></para>
+</listitem></orderedlist>
+</para>
+
+<para>Token <computeroutput>&quot;0&quot;</computeroutput> 在第一个 pointer 中被当作成员名字。它在第二个 pointer 中被当作成数组索引。</para>
+
+<para>其他函数会改变 DOM，包括 <computeroutput>Create()</computeroutput>、<computeroutput>GetWithDefault()</computeroutput>、<computeroutput>Set()</computeroutput>、<computeroutput><link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">Swap()</link></computeroutput>。这些函数总是成功的。若一些父值不存在，就会创建它们。若父值类型不匹配 token，也会强行改变其类型。改变类型也意味着完全移除其 DOM 子树的内容。</para>
+
+<para>例如，把上面的 JSON 解译至 <computeroutput>d</computeroutput> 之后，</para>
+
+<para><literallayout><computeroutput>SetValueByPointer(d,&#32;&quot;1/a&quot;,&#32;789);&#32;//&#32;{&#32;&quot;0&quot;&#32;:&#32;123,&#32;&quot;1&quot;&#32;:&#32;{&#32;&quot;a&quot;&#32;:&#32;789&#32;}&#32;}
+</computeroutput></literallayout></para>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1autotoc_md109">
+<title>解析负号 token</title>
+
+<para>另外，<link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link> 定义了一个特殊 token <computeroutput>-</computeroutput> （单个负号），用于表示数组最后元素的下一个元素。 <computeroutput>Get()</computeroutput> 只会把此 token 当作成员名字 &apos;&quot;-&quot;&apos;。而其他函数则会以此解析数组，等同于对数组调用 <computeroutput>Value::PushBack()</computeroutput> 。</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+d.Parse(&quot;{\&quot;foo\&quot;:[123]}&quot;);
+SetValueByPointer(d,&#32;&quot;/foo/-&quot;,&#32;456);&#32;//&#32;{&#32;&quot;foo&quot;&#32;:&#32;[123,&#32;456]&#32;}
+SetValueByPointer(d,&#32;&quot;/-&quot;,&#32;789);&#32;&#32;&#32;&#32;//&#32;{&#32;&quot;foo&quot;&#32;:&#32;[123,&#32;456],&#32;&quot;-&quot;&#32;:&#32;789&#32;}
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1autotoc_md110">
+<title>解析 Document 及 Value</title>
+
+<para>当使用 <computeroutput>p.Get(root)</computeroutput> 或 <computeroutput>GetValueByPointer(root, p)</computeroutput>，<computeroutput>root</computeroutput> 是一个（常数） <computeroutput>Value&amp;</computeroutput>。这意味着，它也可以是 DOM 里的一个子树。</para>
+
+<para>其他函数有两组签名。一组使用 <computeroutput>Document&amp; document</computeroutput> 作为参数，另一组使用 <computeroutput>Value&amp; root</computeroutput>。第一组使用 <computeroutput>document.GetAllocator()</computeroutput> 去创建值，而第二组则需要使用者提供一个 allocator，如同 DOM 里的函数。</para>
+
+<para>以上例子都不需要 allocator 参数，因为它的第一个参数是 <computeroutput>Document&amp;</computeroutput>。但如果你需要对一个子树进行解析，就需要如下面的例子般提供 allocator：</para>
+
+<para><literallayout><computeroutput>class&#32;Person&#32;{
+public:
+&#32;&#32;&#32;&#32;Person()&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;document_&#32;=&#32;new&#32;Document();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;CreateValueByPointer()&#32;here&#32;no&#32;need&#32;allocator
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetLocation(CreateValueByPointer(*document_,&#32;&quot;/residence&quot;),&#32;...);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetLocation(CreateValueByPointer(*document_,&#32;&quot;/office&quot;),&#32;...);
+&#32;&#32;&#32;&#32;};
+
+private:
+&#32;&#32;&#32;&#32;void&#32;SetLocation(Value&amp;&#32;location,&#32;const&#32;char*&#32;country,&#32;const&#32;char*&#32;addresses[2])&#32;{
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Value::Allocator&amp;&#32;a&#32;=&#32;document_-&gt;GetAllocator();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;SetValueByPointer()&#32;here&#32;need&#32;allocator
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/country&quot;,&#32;country,&#32;a);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/address/0&quot;,&#32;address[0],&#32;a);
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;SetValueByPointer(location,&#32;&quot;/address/1&quot;,&#32;address[1],&#32;a);
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;//&#32;...
+
+&#32;&#32;&#32;&#32;Document*&#32;document_;
+};
+</computeroutput></literallayout></para>
+
+<para><computeroutput>Erase()</computeroutput> 或 <computeroutput><link linkend="_pointer_8h_1a7342710933f35ad7267c871f4a8cc55f">EraseValueByPointer()</link></computeroutput> 不需要 allocator。而且它们成功删除值之后会返回 <computeroutput>true</computeroutput>。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1ErrorHandling">
+<title>Error Handling</title>
+
+<para><computeroutput>Pointer</computeroutput> 在其建构函数里会解译源字符串。若有解析错误，<computeroutput>Pointer::IsValid()</computeroutput> 返回 <computeroutput>false</computeroutput>。你可使用 <computeroutput>Pointer::GetParseErrorCode()</computeroutput> 和 <computeroutput>GetParseErrorOffset()</computeroutput> 去获取错信息。</para>
+
+<para>要注意的是，所有解析函数都假设 pointer 是合法的。对一个非法 pointer 解析会造成断言失败。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1URIFragment">
+<title>URI Fragment Representation</title>
+
+<para>除了我们一直在使用的字符串方式表示 JSON pointer，<link xlink:href="https://tools.ietf.org/html/rfc6901">RFC6901</link> 也定义了一个 JSON Pointer 的 URI 片段（fragment）表示方式。URI 片段是定义于 <link xlink:href="https://tools.ietf.org/html/rfc3986">RFC3986</link> &quot;Uniform Resource Identifier (URI): Generic Syntax&quot;。</para>
+
+<para>URI 片段的主要分别是必然以 <computeroutput>#</computeroutput> （pound sign）开头，而一些字符也会以百分比编码成 UTF-8 序列。例如，以下的表展示了不同表示法下的 C/C++ 字符串常数。</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="3" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>字符串表示方式   </para>
+</entry><entry>
+<para>URI 片段表示方式   </para>
+</entry><entry>
+<para>Pointer Tokens （UTF-8）    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/foo/0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/foo/0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;foo&quot;, 0}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/a~1b&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/a~1b&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;a/b&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/m~0n&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/m~0n&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;m~n&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/ &quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%20&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot; &quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>&quot;/\0&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%00&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;\0&quot;}</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>&quot;/€&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>&quot;#/%E2%82%AC&quot;</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>{&quot;€&quot;}</computeroutput>   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>RapidJSON 完全支持 URI 片段表示方式。它在解译时会自动检测 <computeroutput>#</computeroutput> 号。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1autotoc_md111">
+<title>字符串化</title>
+
+<para>你也可以把一个 <computeroutput>Pointer</computeroutput> 字符串化，储存于字符串或其他输出流。例如：</para>
+
+<para><literallayout><computeroutput>Pointer&#32;p(...);
+StringBuffer&#32;sb;
+p.Stringify(sb);
+std::cout&#32;&lt;&lt;&#32;sb.GetString()&#32;&lt;&lt;&#32;std::endl;
+</computeroutput></literallayout></para>
+
+<para>使用 <computeroutput>StringifyUriFragment()</computeroutput> 可以把 pointer 字符串化为 URI 片段表示法。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_pointer_zh_cn_1UserSuppliedTokens">
+<title>User-Supplied Tokens</title>
+
+<para>若一个 pointer 会用于多次解析，它应该只被创建一次，然后再施于不同的 DOM ，或在不同时间做解析。这样可以避免多次创键 <computeroutput>Pointer</computeroutput>，节省时间和内存分配。</para>
+
+<para>我们甚至可以再更进一步，完全消去解析过程及动态内存分配。我们可以直接生成 token 数组：</para>
+
+<para><literallayout><computeroutput>#define&#32;NAME(s)&#32;{&#32;s,&#32;sizeof(s)&#32;/&#32;sizeof(s[0])&#32;-&#32;1,&#32;kPointerInvalidIndex&#32;}
+#define&#32;INDEX(i)&#32;{&#32;#i,&#32;sizeof(#i)&#32;-&#32;1,&#32;i&#32;}
+
+static&#32;const&#32;Pointer::Token&#32;kTokens[]&#32;=&#32;{&#32;NAME(&quot;foo&quot;),&#32;INDEX(123)&#32;};
+static&#32;const&#32;Pointer&#32;p(kTokens,&#32;sizeof(kTokens)&#32;/&#32;sizeof(kTokens[0]));
+//&#32;Equivalent&#32;to&#32;static&#32;const&#32;Pointer&#32;p(&quot;/foo/123&quot;);
+</computeroutput></literallayout></para>
+
+<para>这种做法可能适合内存受限的系统。 </para>
+</section>
+</section>

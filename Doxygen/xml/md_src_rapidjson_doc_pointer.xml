@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="md_src_rapidjson_doc_pointer" kind="page">
+    <compoundname>md_src_rapidjson_doc_pointer</compoundname>
+    <title>Pointer</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>(This feature was released in v1.1.0)</para>
+<para>JSON Pointer is a standardized (<ulink url="https://tools.ietf.org/html/rfc6901">RFC6901</ulink>) way to select a value inside a JSON Document (DOM). This can be analogous to XPath for XML document. However, JSON Pointer is much simpler, and a single JSON Pointer only pointed to a single value.</para>
+<para>Using RapidJSON&apos;s implementation of JSON Pointer can simplify some manipulations of the DOM.</para>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1JsonPointer">
+<title>JSON Pointer</title>
+<para>A JSON Pointer is a list of zero-to-many tokens, each prefixed by <computeroutput>/</computeroutput>. Each token can be a string or a number. For example, given a JSON: <programlisting filename=".js"><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;foo&quot;<sp/>:<sp/>[&quot;bar&quot;,<sp/>&quot;baz&quot;],</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;pi&quot;<sp/>:<sp/>3.1416</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para>The following JSON Pointers resolve this JSON as:</para>
+<para><orderedlist>
+<listitem><para><computeroutput>&quot;/foo&quot;</computeroutput> → <computeroutput>[ &quot;bar&quot;, &quot;baz&quot; ]</computeroutput></para>
+</listitem><listitem><para><computeroutput>&quot;/foo/0&quot;</computeroutput> → <computeroutput>&quot;bar&quot;</computeroutput></para>
+</listitem><listitem><para><computeroutput>&quot;/foo/1&quot;</computeroutput> → <computeroutput>&quot;baz&quot;</computeroutput></para>
+</listitem><listitem><para><computeroutput>&quot;/pi&quot;</computeroutput> → <computeroutput>3.1416</computeroutput></para>
+</listitem></orderedlist>
+</para>
+<para>Note that, an empty JSON Pointer <computeroutput>&quot;&quot;</computeroutput> (zero token) resolves to the whole JSON.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_schema_zh_cn_1BasicUsage">
+<title>Basic Usage</title>
+<para>The following example code is self-explanatory.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#include<sp/>&quot;<ref refid="pointer_8h" kindref="compound">rapidjson/pointer.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Create<sp/>DOM<sp/>by<sp/>Set()</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/project&quot;</highlight><highlight class="normal">).Set(d,<sp/></highlight><highlight class="stringliteral">&quot;RapidJSON&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/stars&quot;</highlight><highlight class="normal">).Set(d,<sp/>10);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Access<sp/>DOM<sp/>by<sp/>Get().<sp/>It<sp/>return<sp/>nullptr<sp/>if<sp/>the<sp/>value<sp/>does<sp/>not<sp/>exist.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_value" kindref="compound">Value</ref>*<sp/>stars<sp/>=<sp/><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/stars&quot;</highlight><highlight class="normal">).Get(d))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Set()<sp/>and<sp/>Create()<sp/>automatically<sp/>generate<sp/>parents<sp/>if<sp/>not<sp/>exist.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/a/b/0&quot;</highlight><highlight class="normal">).Create(d);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>}<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>GetWithDefault()<sp/>returns<sp/>reference.<sp/>And<sp/>it<sp/>deep<sp/>clones<sp/>the<sp/>default<sp/>value.</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/>hello<sp/>=<sp/><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/hello&quot;</highlight><highlight class="normal">).GetWithDefault(d,<sp/></highlight><highlight class="stringliteral">&quot;world&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;world&quot;<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Swap()<sp/>is<sp/>similar<sp/>to<sp/>Set()</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>x(</highlight><highlight class="stringliteral">&quot;C++&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/hello&quot;</highlight><highlight class="normal">).Swap(d,<sp/>x);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>11,<sp/>&quot;a&quot;<sp/>:<sp/>{<sp/>&quot;b&quot;<sp/>:<sp/>[<sp/>null<sp/>]<sp/>},<sp/>&quot;hello&quot;<sp/>:<sp/>&quot;C++&quot;<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>x<sp/>becomes<sp/>&quot;world&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Erase<sp/>a<sp/>member<sp/>or<sp/>element,<sp/>return<sp/>true<sp/>if<sp/>the<sp/>value<sp/>exists</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>success<sp/>=<sp/><ref refid="fwd_8h_1a0e5c49dba7ec654cdda5735347c00397" kindref="member">Pointer</ref>(</highlight><highlight class="stringliteral">&quot;/a&quot;</highlight><highlight class="normal">).Erase(d);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>{<sp/>&quot;project&quot;<sp/>:<sp/>&quot;RapidJSON&quot;,<sp/>&quot;stars&quot;<sp/>:<sp/>10<sp/>}</highlight></codeline>
+</programlisting></para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1HelperFunctions">
+<title>Helper Functions</title>
+<para>Since object-oriented calling convention may be non-intuitive, RapidJSON also provides helper functions, which just wrap the member functions with free-functions.</para>
+<para>The following example does exactly the same as the above one.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/project&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;RapidJSON&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/stars&quot;</highlight><highlight class="normal">,<sp/>10);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="class_generic_value" kindref="compound">Value</ref>*<sp/>stars<sp/>=<sp/><ref refid="pointer_8h_1a581633984b11d0587c2ad06649efefc4" kindref="member">GetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/stars&quot;</highlight><highlight class="normal">))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>stars-&gt;SetInt(stars-&gt;GetInt()<sp/>+<sp/>1);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a7ce0d37e372f630e46e221e45714e84b" kindref="member">CreateValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/a/b/0&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/>hello<sp/>=<sp/><ref refid="pointer_8h_1accdac20f6fea3ab631da1a0df5208a61" kindref="member">GetValueByPointerWithDefault</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/hello&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;world&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="class_generic_value" kindref="compound">Value</ref><sp/>x(</highlight><highlight class="stringliteral">&quot;C++&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a542981a8bdcf3bc3c701c7eff39648ac" kindref="member">SwapValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/hello&quot;</highlight><highlight class="normal">,<sp/>x);</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>success<sp/>=<sp/><ref refid="pointer_8h_1a7342710933f35ad7267c871f4a8cc55f" kindref="member">EraseValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/a&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal">assert(success);</highlight></codeline>
+</programlisting></para>
+<para>The conventions are shown here for comparison:</para>
+<para><orderedlist>
+<listitem><para><computeroutput>Pointer(source).&lt;Method&gt;(root, ...)</computeroutput></para>
+</listitem><listitem><para><computeroutput>&lt;Method&gt;ValueByPointer(root, Pointer(source), ...)</computeroutput></para>
+</listitem><listitem><para><computeroutput>&lt;Method&gt;ValueByPointer(root, source, ...)</computeroutput></para>
+</listitem></orderedlist>
+</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1ResolvingPointer">
+<title>Resolving Pointer</title>
+<para><computeroutput>Pointer::Get()</computeroutput> or <computeroutput><ref refid="pointer_8h_1a581633984b11d0587c2ad06649efefc4" kindref="member">GetValueByPointer()</ref></computeroutput> function does not modify the DOM. If the tokens cannot match a value in the DOM, it returns <computeroutput>nullptr</computeroutput>. User can use this to check whether a value exists.</para>
+<para>Note that, numerical tokens can represent an array index or member name. The resolving process will match the values according to the types of value.</para>
+<para><programlisting filename=".js"><codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;0&quot;<sp/>:<sp/>123,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>&quot;1&quot;<sp/>:<sp/>[456]</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting></para>
+<para><orderedlist>
+<listitem><para><computeroutput>&quot;/0&quot;</computeroutput> → <computeroutput>123</computeroutput></para>
+</listitem><listitem><para><computeroutput>&quot;/1/0&quot;</computeroutput> → <computeroutput>456</computeroutput></para>
+</listitem></orderedlist>
+</para>
+<para>The token <computeroutput>&quot;0&quot;</computeroutput> is treated as member name in the first pointer. It is treated as an array index in the second pointer.</para>
+<para>The other functions, including <computeroutput>Create()</computeroutput>, <computeroutput>GetWithDefault()</computeroutput>, <computeroutput>Set()</computeroutput> and <computeroutput><ref refid="namespaceinternal_1a72b2c71d36273b9691487f58c671ce04" kindref="member">Swap()</ref></computeroutput>, will change the DOM. These functions will always succeed. They will create the parent values if they do not exist. If the parent values do not match the tokens, they will also be forced to change their type. Changing the type also mean fully removal of that DOM subtree.</para>
+<para>Parsing the above JSON into <computeroutput>d</computeroutput>,</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;1/a&quot;</highlight><highlight class="normal">,<sp/>789);<sp/></highlight><highlight class="comment">//<sp/>{<sp/>&quot;0&quot;<sp/>:<sp/>123,<sp/>&quot;1&quot;<sp/>:<sp/>{<sp/>&quot;a&quot;<sp/>:<sp/>789<sp/>}<sp/>}</highlight></codeline>
+</programlisting></para>
+<sect2 id="md_src_rapidjson_doc_pointer_1autotoc_md105">
+<title>Resolving Minus Sign Token</title>
+<para>Besides, <ulink url="https://tools.ietf.org/html/rfc6901">RFC6901</ulink> defines a special token <computeroutput>-</computeroutput> (single minus sign), which represents the pass-the-end element of an array. <computeroutput>Get()</computeroutput> only treats this token as a member name &apos;&quot;-&quot;&apos;. Yet the other functions can resolve this for array, equivalent to calling <computeroutput>Value::PushBack()</computeroutput> to the array.</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>d;</highlight></codeline>
+<codeline><highlight class="normal">d.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(</highlight><highlight class="stringliteral">&quot;{\&quot;foo\&quot;:[123]}&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/foo/-&quot;</highlight><highlight class="normal">,<sp/>456);<sp/></highlight><highlight class="comment">//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456]<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(d,<sp/></highlight><highlight class="stringliteral">&quot;/-&quot;</highlight><highlight class="normal">,<sp/>789);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>{<sp/>&quot;foo&quot;<sp/>:<sp/>[123,<sp/>456],<sp/>&quot;-&quot;<sp/>:<sp/>789<sp/>}</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="md_src_rapidjson_doc_pointer_1autotoc_md106">
+<title>Resolving Document and Value</title>
+<para>When using <computeroutput>p.Get(root)</computeroutput> or <computeroutput>GetValueByPointer(root, p)</computeroutput>, <computeroutput>root</computeroutput> is a (const) <computeroutput>Value&amp;</computeroutput>. That means, it can be a subtree of the DOM.</para>
+<para>The other functions have two groups of signature. One group uses <computeroutput>Document&amp; document</computeroutput> as parameter, another one uses <computeroutput>Value&amp; root</computeroutput>. The first group uses <computeroutput>document.GetAllocator()</computeroutput> for creating values. And the second group needs user to supply an allocator, like the functions in DOM.</para>
+<para>All examples above do not require an allocator parameter, because the first parameter is a <computeroutput>Document&amp;</computeroutput>. But if you want to resolve a pointer to a subtree, you need to supply the allocator as in the following example:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_person" kindref="compound">Person</ref><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_person_1a5e10221f201605ad323d5518e5436bd3" kindref="member">Person</ref>()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>document_<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="document_8h_1ac6ea5b168e3fe8c7fa532450fc9391f7" kindref="member">Document</ref>();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>CreateValueByPointer()<sp/>here<sp/>no<sp/>need<sp/>allocator</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(<ref refid="pointer_8h_1a7ce0d37e372f630e46e221e45714e84b" kindref="member">CreateValueByPointer</ref>(*document_,<sp/></highlight><highlight class="stringliteral">&quot;/residence&quot;</highlight><highlight class="normal">),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SetLocation(<ref refid="pointer_8h_1a7ce0d37e372f630e46e221e45714e84b" kindref="member">CreateValueByPointer</ref>(*document_,<sp/></highlight><highlight class="stringliteral">&quot;/office&quot;</highlight><highlight class="normal">),<sp/>...);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>SetLocation(<ref refid="class_generic_value" kindref="compound">Value</ref>&amp;<sp/>location,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>country,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>addresses[2])<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Value::Allocator&amp;<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref><sp/>=<sp/>document_-&gt;GetAllocator();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>SetValueByPointer()<sp/>here<sp/>need<sp/>allocator</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(location,<sp/></highlight><highlight class="stringliteral">&quot;/country&quot;</highlight><highlight class="normal">,<sp/>country,<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(location,<sp/></highlight><highlight class="stringliteral">&quot;/address/0&quot;</highlight><highlight class="normal">,<sp/>address[0],<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="pointer_8h_1a58128fa07ac8e9159440c83d0a78f2be" kindref="member">SetValueByPointer</ref>(location,<sp/></highlight><highlight class="stringliteral">&quot;/address/1&quot;</highlight><highlight class="normal">,<sp/>address[1],<sp/><ref refid="pointer_8h_1aeeddce917cf130d62c370b8f216026dd" kindref="member">a</ref>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_generic_document" kindref="compound">Document</ref>*<sp/>document_;</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+</programlisting></para>
+<para><computeroutput>Erase()</computeroutput> or <computeroutput><ref refid="pointer_8h_1a7342710933f35ad7267c871f4a8cc55f" kindref="member">EraseValueByPointer()</ref></computeroutput> does not need allocator. And they return <computeroutput>true</computeroutput> if the value is erased successfully.</para>
+</sect2>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1ErrorHandling">
+<title>Error Handling</title>
+<para>A <computeroutput>Pointer</computeroutput> parses a source string in its constructor. If there is parsing error, <computeroutput>Pointer::IsValid()</computeroutput> returns <computeroutput>false</computeroutput>. And you can use <computeroutput>Pointer::GetParseErrorCode()</computeroutput> and <computeroutput>GetParseErrorOffset()</computeroutput> to retrieve the error information.</para>
+<para>Note that, all resolving functions assumes valid pointer. Resolving with an invalid pointer causes assertion failure.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1URIFragment">
+<title>URI Fragment Representation</title>
+<para>In addition to the string representation of JSON pointer that we are using till now, <ulink url="https://tools.ietf.org/html/rfc6901">RFC6901</ulink> also defines the URI fragment representation of JSON pointer. URI fragment is specified in <ulink url="https://tools.ietf.org/html/rfc3986">RFC3986</ulink> &quot;Uniform Resource Identifier (URI): Generic Syntax&quot;.</para>
+<para>The main differences are that a the URI fragment always has a <computeroutput>#</computeroutput> (pound sign) in the beginning, and some characters are encoded by percent-encoding in UTF-8 sequence. For example, the following table shows different C/C++ string literals of different representations.</para>
+<para><table rows="7" cols="3"><row>
+<entry thead="yes"><para>String Representation   </para>
+</entry><entry thead="yes"><para>URI Fragment Representation   </para>
+</entry><entry thead="yes"><para>Pointer Tokens (UTF-8)    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/foo/0&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/foo/0&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot;foo&quot;, 0}</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/a~1b&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/a~1b&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot;a/b&quot;}</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/m~0n&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/m~0n&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot;m~n&quot;}</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/ &quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/%20&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot; &quot;}</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/\0&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/%00&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot;\0&quot;}</computeroutput>    </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>&quot;/€&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>&quot;#/%E2%82%AC&quot;</computeroutput>   </para>
+</entry><entry thead="no"><para><computeroutput>{&quot;€&quot;}</computeroutput>   </para>
+</entry></row>
+</table>
+</para>
+<para>RapidJSON fully support URI fragment representation. It automatically detects the pound sign during parsing.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_1autotoc_md107">
+<title>Stringify</title>
+<para>You may also stringify a <computeroutput>Pointer</computeroutput> to a string or other output streams. This can be done by:</para>
+<para><programlisting><codeline><highlight class="normal">Pointer<sp/>p(...);</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>sb;</highlight></codeline>
+<codeline><highlight class="normal">p.Stringify(sb);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>sb.GetString()<sp/>&lt;&lt;<sp/>std::endl;</highlight></codeline>
+</programlisting></para>
+<para>It can also stringify to URI fragment representation by <computeroutput>StringifyUriFragment()</computeroutput>.</para>
+</sect1>
+<sect1 id="md_src_rapidjson_doc_pointer_zh_cn_1UserSuppliedTokens">
+<title>User-Supplied Tokens</title>
+<para>If a pointer will be resolved multiple times, it should be constructed once, and then apply it to different DOMs or in different times. This reduce time and memory allocation for constructing <computeroutput>Pointer</computeroutput> multiple times.</para>
+<para>We can go one step further, to completely eliminate the parsing process and dynamic memory allocation, we can establish the token array directly:</para>
+<para><programlisting filename=".cpp"><codeline><highlight class="preprocessor">#define<sp/>NAME(s)<sp/>{<sp/>s,<sp/>sizeof(s)<sp/>/<sp/>sizeof(s[0])<sp/>-<sp/>1,<sp/>kPointerInvalidIndex<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>INDEX(i)<sp/>{<sp/>#i,<sp/>sizeof(#i)<sp/>-<sp/>1,<sp/>i<sp/>}</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_generic_pointer_1_1_token" kindref="compound">Pointer::Token</ref><sp/>kTokens[]<sp/>=<sp/>{<sp/><ref refid="pointertest_8cpp_1a59c7737920212dcb3bb9df58d7062de4" kindref="member">NAME</ref>(</highlight><highlight class="stringliteral">&quot;foo&quot;</highlight><highlight class="normal">),<sp/><ref refid="pointertest_8cpp_1aa5fad23b2a5eed790e6661e896a506b7" kindref="member">INDEX</ref>(123)<sp/>};</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_generic_pointer" kindref="compound">Pointer</ref><sp/>p(kTokens,<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(kTokens)<sp/>/<sp/></highlight><highlight class="keyword">sizeof</highlight><highlight class="normal">(kTokens[0]));</highlight></codeline>
+<codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>Equivalent<sp/>to<sp/>static<sp/>const<sp/>Pointer<sp/>p(&quot;/foo/123&quot;);</highlight></codeline>
+</programlisting></para>
+<para>This may be useful for memory constrained systems. </para>
+</sect1>
+    </detaileddescription>
+    <location file="src/rapidjson/doc/pointer.md"/>
+  </compounddef>
+</doxygen>

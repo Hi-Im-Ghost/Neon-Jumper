@@ -1,0 +1,57 @@
+.TH "GenericPointer< ValueType, Allocator >::Token" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GenericPointer< ValueType, Allocator >::Token \- A token is the basic units of internal representation\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pointer\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBCh\fP * \fBname\fP"
+.br
+.RI "Name of the token\&. It has null character at the end but it can contain null character\&. "
+.ti -1c
+.RI "\fBSizeType\fP \fBlength\fP"
+.br
+.RI "Length of the name\&. "
+.ti -1c
+.RI "\fBSizeType\fP \fBindex\fP"
+.br
+.RI "A valid array index, if it is not equal to kPointerInvalidIndex\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename \fBValueType\fP, typename \fBAllocator\fP = CrtAllocator>
+.br
+struct GenericPointer< ValueType, Allocator >::Token"A token is the basic units of internal representation\&. 
+
+A JSON pointer string representation '/foo/123' is parsed to two tokens: 'foo' and 123\&. 123 will be represented in both numeric form and string form\&. They are resolved according to the actual value type (object or array)\&.
+.PP
+For token that are not numbers, or the numeric value is out of bound (greater than limits of SizeType), they are only treated as string form (i\&.e\&. the token's index will be equal to kPointerInvalidIndex)\&.
+.PP
+This struct is public so that user can create a Pointer without parsing and allocation, using a special constructor\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Token::index"
+
+.PP
+A valid array index, if it is not equal to kPointerInvalidIndex\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Token::length"
+
+.PP
+Length of the name\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> const \fBCh\fP* \fBGenericPointer\fP< \fBValueType\fP, \fBAllocator\fP >::Token::name"
+
+.PP
+Name of the token\&. It has null character at the end but it can contain null character\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,54 @@
+.TH "Encoding" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Encoding \- Concept for encoding of Unicode characters\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <encodings\&.h>\fP
+.SH "Detailed Description"
+.PP 
+Concept for encoding of Unicode characters\&. 
+
+
+.PP
+.nf
+concept Encoding {
+    typename Ch;    
+
+    enum { supportUnicode = 1 }; // or 0 if not supporting unicode
+
+    template<typename OutputStream>
+    static void Encode(OutputStream& os, unsigned codepoint);
+
+    template <typename InputStream>
+    static bool Decode(InputStream& is, unsigned* codepoint);
+
+    template <typename InputStream, typename OutputStream>
+    static bool Validate(InputStream& is, OutputStream& os);
+
+    // The following functions are deal with byte streams\&.
+
+    template <typename InputByteStream>
+    static CharType TakeBOM(InputByteStream& is);
+
+    template <typename InputByteStream>
+    static Ch Take(InputByteStream& is);
+
+    template <typename OutputByteStream>
+    static void PutBOM(OutputByteStream& os);
+
+    template <typename OutputByteStream>
+    static void Put(OutputByteStream& os, Ch c);
+};
+
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

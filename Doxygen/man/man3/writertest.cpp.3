@@ -1,0 +1,254 @@
+.TH "src/rapidjson/test/unittest/writertest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/unittest/writertest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'unittest\&.h'\fP
+.br
+\fC#include 'rapidjson/document\&.h'\fP
+.br
+\fC#include 'rapidjson/reader\&.h'\fP
+.br
+\fC#include 'rapidjson/writer\&.h'\fP
+.br
+\fC#include 'rapidjson/stringbuffer\&.h'\fP
+.br
+\fC#include 'rapidjson/memorybuffer\&.h'\fP
+.br
+\fC#include <sstream>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBOStreamWrapper\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBTEST_ROUNDTRIP\fP(json)"
+.br
+.ti -1c
+.RI "#define \fBT\fP(x)"
+.br
+.ti -1c
+.RI "#define \fBT\fP(x)"
+.br
+.ti -1c
+.RI "#define \fBT\fP(x)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Compact)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Root)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Int)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, UInt)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Int64)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Uint64)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Issue_889)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, ScanWriteUnescapedString)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Double)"
+.br
+.ti -1c
+.RI "template<typename TargetEncoding > void \fBTestTranscode\fP (const char *json)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Transcode)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, \fBOStreamWrapper\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertRootMayBeAnyValue)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertIncorrectObjectLevel)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertIncorrectArrayLevel)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertIncorrectEndObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertIncorrectEndArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertObjectKeyNotString)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, AssertMultipleRoot)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, RootObjectIsComplete)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, RootArrayIsComplete)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, RootValueIsComplete)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, InvalidEncoding)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, ValidateEncoding)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, InvalidEventSequence)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, NaN)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, Inf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBWriter\fP, RawValue)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (Write, RawValue_Issue1152)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define T(x)"
+\fBValue:\fP
+.PP
+.nf
+    {\
+        StringBuffer buffer;\
+        Writer<StringBuffer> writer(buffer);\
+        EXPECT_TRUE(x);\
+    }
+.fi
+.SS "#define T(x)"
+\fBValue:\fP
+.PP
+.nf
+    {\
+        StringBuffer buffer;\
+        Writer<StringBuffer> writer(buffer);\
+        writer\&.StartObject();\
+        ASSERT_THROW(x, AssertException); \
+    }
+.fi
+.SS "#define T(x)"
+\fBValue:\fP
+.PP
+.nf
+    {\
+        StringBuffer buffer;\
+        Writer<StringBuffer> writer(buffer);\
+        EXPECT_FALSE(writer\&.IsComplete()); \
+        x; \
+        EXPECT_TRUE(writer\&.IsComplete()); \
+    }
+.fi
+.SS "#define TEST_ROUNDTRIP(json)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        StringStream s(json); \
+        StringBuffer buffer; \
+        Writer<StringBuffer> writer(buffer); \
+        Reader reader; \
+        reader\&.Parse<kParseFullPrecisionFlag>(s, writer); \
+        EXPECT_STREQ(json, buffer\&.GetString()); \
+        EXPECT_TRUE(writer\&.IsComplete()); \
+    }
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "TEST (Write, RawValue_Issue1152)"
+
+.SS "TEST (\fBWriter\fP, AssertIncorrectArrayLevel)"
+
+.SS "TEST (\fBWriter\fP, AssertIncorrectEndArray)"
+
+.SS "TEST (\fBWriter\fP, AssertIncorrectEndObject)"
+
+.SS "TEST (\fBWriter\fP, AssertIncorrectObjectLevel)"
+
+.SS "TEST (\fBWriter\fP, AssertMultipleRoot)"
+
+.SS "TEST (\fBWriter\fP, AssertObjectKeyNotString)"
+
+.SS "TEST (\fBWriter\fP, AssertRootMayBeAnyValue)"
+
+.SS "TEST (\fBWriter\fP, Compact)"
+
+.SS "TEST (\fBWriter\fP, Double)"
+
+.SS "TEST (\fBWriter\fP, Inf)"
+
+.SS "TEST (\fBWriter\fP, Int)"
+
+.SS "TEST (\fBWriter\fP, Int64)"
+
+.SS "TEST (\fBWriter\fP, InvalidEncoding)"
+
+.SS "TEST (\fBWriter\fP, InvalidEventSequence)"
+
+.SS "TEST (\fBWriter\fP, Issue_889)"
+
+.SS "TEST (\fBWriter\fP, NaN)"
+
+.SS "TEST (\fBWriter\fP, \fBOStreamWrapper\fP)"
+
+.SS "TEST (\fBWriter\fP, RawValue)"
+
+.SS "TEST (\fBWriter\fP, Root)"
+
+.SS "TEST (\fBWriter\fP, RootArrayIsComplete)"
+
+.SS "TEST (\fBWriter\fP, RootObjectIsComplete)"
+
+.SS "TEST (\fBWriter\fP, RootValueIsComplete)"
+
+.SS "TEST (\fBWriter\fP, ScanWriteUnescapedString)"
+
+.SS "TEST (\fBWriter\fP, String)"
+
+.SS "TEST (\fBWriter\fP, Transcode)"
+
+.SS "TEST (\fBWriter\fP, UInt)"
+
+.SS "TEST (\fBWriter\fP, Uint64)"
+
+.SS "TEST (\fBWriter\fP, ValidateEncoding)"
+
+.SS "template<typename TargetEncoding > void TestTranscode (const char * json)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

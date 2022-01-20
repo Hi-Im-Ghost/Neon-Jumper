@@ -1,0 +1,651 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_generic_pointer" xml:lang="en-US">
+<title>GenericPointer&lt; ValueType, Allocator &gt; Class Template Reference</title>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary></indexterm>
+<para>
+
+<para>Represents a JSON Pointer. Use Pointer for <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;pointer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_class_generic_pointer_1_1_percent_encode_stream">PercentEncodeStream</link></para>
+
+<para>A helper stream to encode character (UTF-8 code unit) into percent-encoded sequence. </para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_generic_pointer_1_1_token">Token</link></para>
+
+<para>A token is the basic units of internal representation. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef <link linkend="_class_generic_value_1a28c2cb8d04d12566c1af37597a46d209">ValueType::EncodingType</link> <link linkend="_class_generic_pointer_1a4b802da797a7a0b615fd9611cedb7c3b">EncodingType</link></para>
+
+<para>Encoding type from Value. </para>
+</listitem>
+            <listitem><para>typedef <link linkend="_class_generic_value_1ade0e0ce64ccd5d852da57a35e720bafb">ValueType::Ch</link> <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link></para>
+
+<para>Character type from Value. </para>
+</listitem>
+            <listitem><para>typedef <link linkend="_class_generic_uri">GenericUri</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; <link linkend="_class_generic_pointer_1ac82bc56506218e49644bbbbe752a86cc">UriType</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Append token    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classrapidjson_1_1_allocator">Allocator</link> * <link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link></para>
+</listitem>
+            <listitem><para><link linkend="_classrapidjson_1_1_allocator">Allocator</link> * <link linkend="_class_generic_pointer_1a331cffeec161b80ea18ac3f1562851bf">allocator_</link></para>
+
+<para>The current allocator. It is either user-supplied or equal to ownAllocator_. </para>
+</listitem>
+            <listitem><para><link linkend="_classrapidjson_1_1_allocator">Allocator</link> * <link linkend="_class_generic_pointer_1a99b51c07419ee17d57e97774d8ee63ab">ownAllocator_</link></para>
+
+<para>Allocator owned by this Pointer. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> * <link linkend="_class_generic_pointer_1a2fd627c663483ad08e4f26707ea5ad86">nameBuffer_</link></para>
+
+<para>A buffer containing all names in tokens. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_generic_pointer_1_1_token">Token</link> * <link linkend="_class_generic_pointer_1a997793c66ea1a264089c37c8731eb138">tokens_</link></para>
+
+<para>A list of tokens. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_generic_pointer_1a7051cf59af6622542a050bd0ff0340f8">tokenCount_</link></para>
+
+<para>Number of tokens in tokens_. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_generic_pointer_1ad103ed62e206319f1f0f4aa271866e37">parseErrorOffset_</link></para>
+
+<para>Offset in code unit when parsing fail. </para>
+</listitem>
+            <listitem><para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be">PointerParseErrorCode</link> <link linkend="_class_generic_pointer_1a8898ec432dc40b28f79db78dc4ca83e0">parseErrorCode_</link></para>
+
+<para>Parsing error code. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer">GenericPointer</link> <link linkend="_class_generic_pointer_1aa8f86c0f330807f337351a95ae254b78">Append</link> (const <link linkend="_struct_generic_pointer_1_1_token">Token</link> &amp;token, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>=0) const</para>
+
+<para>Append a token and return a new Pointer. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer">GenericPointer</link> <link linkend="_class_generic_pointer_1a9f8a1711f5b8e0d951c25c6c65326f77">Append</link> (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> *name, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> length, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>=0) const</para>
+
+<para>Append a name token with length, and return a new Pointer. </para>
+</listitem>
+            <listitem><para>template&lt;typename <link linkend="_writertest_8cpp_1a16a0f7e7053a679c9bf4289b441a2be7">T</link> &gt; </para><para><link linkend="_class_generic_pointer_1aaf4d7d852098878d24188d134182d42f">RAPIDJSON_DISABLEIF_RETURN</link> ((internal::NotExpr&lt; internal::IsSame&lt; typename internal::RemoveConst&lt; <link linkend="_writertest_8cpp_1a16a0f7e7053a679c9bf4289b441a2be7">T</link> &gt;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">::Type</link>, <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> &gt; &gt;),(<link linkend="_class_generic_pointer">GenericPointer</link>)) <link linkend="_class_generic_pointer_1aa8f86c0f330807f337351a95ae254b78">Append</link>(<link linkend="_writertest_8cpp_1a16a0f7e7053a679c9bf4289b441a2be7">T</link> *name</para>
+
+<para>Append a name token without length, and return a new Pointer. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Constructors and destructor.    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_generic_pointer_1a5d85b7dc82719643e8f7adccd5a74fbe">GenericPointer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>=0)</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1a4ad549b8a826c3c2dedf03fcc07be9b0">GenericPointer</link> (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> *<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>=0)</para>
+
+<para>Constructor that parses a string or URI fragment representation. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1a9c05684ea95306aac7626e70cb3946cc">GenericPointer</link> (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> *<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>, size_t length, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>=0)</para>
+
+<para>Constructor that parses a string or URI fragment representation, with length of the source string. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1a524a9921eff68f389a817a20ca7f1d84">GenericPointer</link> (const <link linkend="_struct_generic_pointer_1_1_token">Token</link> *tokens, size_t tokenCount)</para>
+
+<para>Constructor with user-supplied tokens. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1a7803645e8f7f349ee09c7d50351e9432">GenericPointer</link> (const <link linkend="_class_generic_pointer">GenericPointer</link> &amp;rhs)</para>
+
+<para>Copy constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1a4395ca3f5c646e47cc9b93d21d1660ae">GenericPointer</link> (const <link linkend="_class_generic_pointer">GenericPointer</link> &amp;rhs, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> *<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>)</para>
+
+<para>Copy constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer_1acf3eb2f7c4ebf9256f638aafa17534cb">~GenericPointer</link> ()</para>
+
+<para>Destructor. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer">GenericPointer</link> &amp; <link linkend="_class_generic_pointer_1ae1b46fbcab2c8557825f7be842acbfe7">operator=</link> (const <link linkend="_class_generic_pointer">GenericPointer</link> &amp;rhs)</para>
+
+<para>Assignment operator. </para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_pointer">GenericPointer</link> &amp; <link linkend="_class_generic_pointer_1af148818f7c2b10243221953d887044c6">Swap</link> (<link linkend="_class_generic_pointer">GenericPointer</link> &amp;other) RAPIDJSON_NOEXCEPT</para>
+
+<para>Swap the content of this pointer with an other. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_pointer_1a249c61b5d4bed20c3f8972c57f46a937">swap</link> (<link linkend="_class_generic_pointer">GenericPointer</link> &amp;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>, <link linkend="_class_generic_pointer">GenericPointer</link> &amp;b) RAPIDJSON_NOEXCEPT</para>
+
+<para>free-standing swap function helper </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link> = CrtAllocator&gt;
+class GenericPointer&lt; ValueType, Allocator &gt;</title></simplesect>
+
+<para>Represents a JSON Pointer. Use Pointer for <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+
+
+
+<para>This class implements RFC 6901 &quot;JavaScript Object Notation (JSON) Pointer&quot; (<link xlink:href="https://tools.ietf.org/html/rfc6901">https://tools.ietf.org/html/rfc6901</link>).</para>
+
+<para>A JSON pointer is for identifying a specific value in a JSON document (<link linkend="_class_generic_document">GenericDocument</link>). It can simplify coding of DOM tree manipulation, because it can access multiple-level depth of DOM tree with single API call.</para>
+
+<para>After it parses a string representation (e.g. &quot;/foo/0&quot; or URI fragment representation (e.g. &quot;#/foo/0&quot;) into its internal representation (tokens), it can be used to resolve a specific value in multiple documents, or sub-tree of documents.</para>
+
+<para>Contrary to <link linkend="_class_generic_value">GenericValue</link>, Pointer can be copy constructed and copy assigned. Apart from assignment, a Pointer cannot be modified after construction.</para>
+
+<para>Although Pointer is very convenient, please aware that constructing Pointer involves parsing and dynamic memory allocation. A special constructor with user- supplied tokens eliminates these.</para>
+
+<para><link linkend="_class_generic_pointer">GenericPointer</link> depends on <link linkend="_class_generic_document">GenericDocument</link> and <link linkend="_class_generic_value">GenericValue</link>.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>ValueType</entry><entry>
+<para>The value type of the DOM tree. E.g. <link linkend="_class_generic_value">GenericValue</link>&lt;UTF8&lt;&gt; &gt; </para>
+</entry>
+                            </row>
+                            <row>
+<entry>Allocator</entry><entry>
+<para>The allocator type for allocating memory for internal representation.</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para><link linkend="_class_generic_pointer">GenericPointer</link> uses same encoding of ValueType. However, Allocator of <link linkend="_class_generic_pointer">GenericPointer</link> is independent of Allocator of Value. </para>
+</note>
+</para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_class_generic_value_1ade0e0ce64ccd5d852da57a35e720bafb">ValueType::Ch</link> <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Ch</computeroutput></para><para>
+
+<para>Character type from Value. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a4b802da797a7a0b615fd9611cedb7c3b"/><section>
+    <title>EncodingType</title>
+<indexterm><primary>EncodingType</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>EncodingType</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_class_generic_value_1a28c2cb8d04d12566c1af37597a46d209">ValueType::EncodingType</link> <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::EncodingType</computeroutput></para><para>
+
+<para>Encoding type from Value. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1ac82bc56506218e49644bbbbe752a86cc"/><section>
+    <title>UriType</title>
+<indexterm><primary>UriType</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>UriType</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_class_generic_uri">GenericUri</link>&lt;<link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link>&gt; <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::UriType</computeroutput></para></section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_generic_pointer_1a5d85b7dc82719643e8f7adccd5a74fbe"/><section>
+    <title>GenericPointer()<computeroutput>[1/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (<link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a4ad549b8a826c3c2dedf03fcc07be9b0"/><section>
+    <title>GenericPointer()<computeroutput>[2/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> * source, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput>, <computeroutput>[explicit]</computeroutput></computeroutput></para><para>
+
+<para>Constructor that parses a string or URI fragment representation. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>source</entry><entry>
+<para>A null-terminated, string or URI fragment representation of JSON pointer. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allocator</entry><entry>
+<para>User supplied allocator for this pointer. If no allocator is provided, it creates a self-owned one. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a9c05684ea95306aac7626e70cb3946cc"/><section>
+    <title>GenericPointer()<computeroutput>[3/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> * source, size_t length, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Constructor that parses a string or URI fragment representation, with length of the source string. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>source</entry><entry>
+<para>A string or URI fragment representation of JSON pointer. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>length</entry><entry>
+<para>Length of source. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allocator</entry><entry>
+<para>User supplied allocator for this pointer. If no allocator is provided, it creates a self-owned one. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>Slightly faster than the overload without length. </para>
+</note>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a524a9921eff68f389a817a20ca7f1d84"/><section>
+    <title>GenericPointer()<computeroutput>[4/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (const <link linkend="_struct_generic_pointer_1_1_token">Token</link> * tokens, size_t tokenCount)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Constructor with user-supplied tokens. </para>
+</para>
+
+<para>This constructor let user supplies const array of tokens. This prevents the parsing process and eliminates allocation. This is preferred for memory constrained environments.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>tokens</entry><entry>
+<para>An constant array of tokens representing the JSON pointer. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>tokenCount</entry><entry>
+<para>Number of tokens.</para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <emphasis role="bold">Example</emphasis> <literallayout><computeroutput><emphasis role="preprocessor">#define&#32;NAME(s)&#32;{&#32;s,&#32;sizeof(s)&#32;/&#32;sizeof(s[0])&#32;-&#32;1,&#32;kPointerInvalidIndex&#32;}</emphasis>
+<emphasis role="preprocessor">#define&#32;INDEX(i)&#32;{&#32;#i,&#32;sizeof(#i)&#32;-&#32;1,&#32;i&#32;}</emphasis>
+
+<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_struct_generic_pointer_1_1_token">Pointer::Token</link>&#32;kTokens[]&#32;=&#32;{&#32;<link linkend="_pointertest_8cpp_1a59c7737920212dcb3bb9df58d7062de4">NAME</link>(<emphasis role="stringliteral">&quot;foo&quot;</emphasis>),&#32;<link linkend="_pointertest_8cpp_1aa5fad23b2a5eed790e6661e896a506b7">INDEX</link>(123)&#32;};
+<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_pointer">Pointer</link>&#32;p(kTokens,&#32;<emphasis role="keyword">sizeof</emphasis>(kTokens)&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(kTokens[0]));
+<emphasis role="comment">//&#32;Equivalent&#32;to&#32;static&#32;const&#32;Pointer&#32;p(&quot;/foo/123&quot;);</emphasis>
+
+<emphasis role="preprocessor">#undef&#32;NAME</emphasis>
+<emphasis role="preprocessor">#undef&#32;INDEX</emphasis>
+</computeroutput></literallayout> </para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a7803645e8f7f349ee09c7d50351e9432"/><section>
+    <title>GenericPointer()<computeroutput>[5/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (const <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; rhs)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Copy constructor. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a4395ca3f5c646e47cc9b93d21d1660ae"/><section>
+    <title>GenericPointer()<computeroutput>[6/6]</computeroutput></title>
+<indexterm><primary>GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;<link linkend="_class_generic_pointer">::GenericPointer</link> (const <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; rhs, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Copy constructor. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1acf3eb2f7c4ebf9256f638aafa17534cb"/><section>
+    <title>~GenericPointer()</title>
+<indexterm><primary>~GenericPointer</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>~GenericPointer</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::~<link linkend="_class_generic_pointer">GenericPointer</link> ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Destructor. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_generic_pointer_1a9f8a1711f5b8e0d951c25c6c65326f77"/><section>
+    <title>Append()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>Append</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>Append</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link> <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Append (const <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> * name, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> length, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Append a name token with length, and return a new Pointer. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>name</entry><entry>
+<para>Name to be appended. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>length</entry><entry>
+<para>Length of name. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allocator</entry><entry>
+<para>Allocator for the newly return Pointer. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>A new Pointer with appended token. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1aa8f86c0f330807f337351a95ae254b78"/><section>
+    <title>Append()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>Append</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>Append</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link> <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Append (const <link linkend="_struct_generic_pointer_1_1_token">Token</link> &amp; token, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> * allocator = <computeroutput>0</computeroutput>
+) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Append a token and return a new Pointer. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>token</entry><entry>
+<para><link linkend="_struct_generic_pointer_1_1_token">Token</link> to be appended. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allocator</entry><entry>
+<para>Allocator for the newly return Pointer. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>A new Pointer with appended token. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1ae1b46fbcab2c8557825f7be842acbfe7"/><section>
+    <title>operator=()</title>
+<indexterm><primary>operator=</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>operator=</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link> &amp; <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::operator= (const <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; rhs)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Assignment operator. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1aaf4d7d852098878d24188d134182d42f"/><section>
+    <title>RAPIDJSON_DISABLEIF_RETURN()</title>
+<indexterm><primary>RAPIDJSON_DISABLEIF_RETURN</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>RAPIDJSON_DISABLEIF_RETURN</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename <link linkend="_writertest_8cpp_1a16a0f7e7053a679c9bf4289b441a2be7">T</link> &gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::RAPIDJSON_DISABLEIF_RETURN ((internal::NotExpr&lt; internal::IsSame&lt; typename internal::RemoveConst&lt; <link linkend="_writertest_8cpp_1a16a0f7e7053a679c9bf4289b441a2be7">T</link> &gt;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">::Type</link>, <link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link> &gt; &gt;) , (<link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;) )</computeroutput></para><para>
+
+<para>Append a name token without length, and return a new Pointer. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>name</entry><entry>
+<para>Name (const Ch*) to be appended. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allocator</entry><entry>
+<para>Allocator for the newly return Pointer. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>A new Pointer with appended token. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1af148818f7c2b10243221953d887044c6"/><section>
+    <title>Swap()</title>
+<indexterm><primary>Swap</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>Swap</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer">GenericPointer</link> &amp; <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Swap (<link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; other)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Swap the content of this pointer with an other. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>other</entry><entry>
+<para>The pointer to swap with. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>Constant complexity. </para>
+</note>
+</para>
+</section>
+</section>
+<section>
+<title>Friends And Related Function Documentation</title>
+<anchor xml:id="_class_generic_pointer_1a249c61b5d4bed20c3f8972c57f46a937"/><section>
+    <title>swap</title>
+<indexterm><primary>swap</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>swap</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void swap (<link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; a, <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; b)<computeroutput>[friend]</computeroutput></computeroutput></para><para>
+
+<para>free-standing swap function helper </para>
+</para>
+
+<para>Helper function to enable support for common swap implementation pattern based on <computeroutput>std::swap:</computeroutput> <literallayout><computeroutput><emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_pointer_1a249c61b5d4bed20c3f8972c57f46a937">swap</link>(MyClass&amp;&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;MyClass&amp;&#32;b)&#32;{
+&#32;&#32;&#32;&#32;<emphasis role="keyword">using</emphasis>&#32;std::swap;
+&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1a249c61b5d4bed20c3f8972c57f46a937">swap</link>(<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.pointer,&#32;b.pointer);
+&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;...</emphasis>
+}
+</computeroutput></literallayout> <formalpara><title>See also</title>
+
+<para><link linkend="_class_generic_pointer_1af148818f7c2b10243221953d887044c6">Swap()</link> </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0"/><section>
+    <title>allocator</title>
+<indexterm><primary>allocator</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>allocator</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classrapidjson_1_1_allocator">Allocator</link>* <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::allocator</computeroutput></para></section>
+<anchor xml:id="_class_generic_pointer_1a331cffeec161b80ea18ac3f1562851bf"/><section>
+    <title>allocator_</title>
+<indexterm><primary>allocator_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>allocator_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classrapidjson_1_1_allocator">Allocator</link>* <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::allocator_</computeroutput></para><para>
+
+<para>The current allocator. It is either user-supplied or equal to ownAllocator_. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a2fd627c663483ad08e4f26707ea5ad86"/><section>
+    <title>nameBuffer_</title>
+<indexterm><primary>nameBuffer_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>nameBuffer_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link>* <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::nameBuffer_</computeroutput></para><para>
+
+<para>A buffer containing all names in tokens. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a99b51c07419ee17d57e97774d8ee63ab"/><section>
+    <title>ownAllocator_</title>
+<indexterm><primary>ownAllocator_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>ownAllocator_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classrapidjson_1_1_allocator">Allocator</link>* <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ownAllocator_</computeroutput></para><para>
+
+<para>Allocator owned by this Pointer. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a8898ec432dc40b28f79db78dc4ca83e0"/><section>
+    <title>parseErrorCode_</title>
+<indexterm><primary>parseErrorCode_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>parseErrorCode_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be">PointerParseErrorCode</link> <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::parseErrorCode_</computeroutput></para><para>
+
+<para>Parsing error code. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1ad103ed62e206319f1f0f4aa271866e37"/><section>
+    <title>parseErrorOffset_</title>
+<indexterm><primary>parseErrorOffset_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>parseErrorOffset_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::parseErrorOffset_</computeroutput></para><para>
+
+<para>Offset in code unit when parsing fail. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a7051cf59af6622542a050bd0ff0340f8"/><section>
+    <title>tokenCount_</title>
+<indexterm><primary>tokenCount_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>tokenCount_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::tokenCount_</computeroutput></para><para>
+
+<para>Number of tokens in tokens_. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_pointer_1a997793c66ea1a264089c37c8731eb138"/><section>
+    <title>tokens_</title>
+<indexterm><primary>tokens_</primary><secondary>GenericPointer&lt; ValueType, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericPointer&lt; ValueType, Allocator &gt;</primary><secondary>tokens_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_struct_generic_pointer_1_1_token">Token</link>* <link linkend="_class_generic_pointer">GenericPointer</link>&lt; <link linkend="_schemavalidator_8cpp_1af2c59956daf09ddf36e71b173b084b0f">ValueType</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::tokens_</computeroutput></para><para>
+
+<para>A list of tokens. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/rapidjson/include/rapidjson/<link linkend="_fwd_8h">fwd.h</link>src/rapidjson/include/rapidjson/<link linkend="_pointer_8h">pointer.h</link></section>
+</section>

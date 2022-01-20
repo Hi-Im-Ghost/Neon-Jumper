@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="internals_8md" kind="file" language="Markdown">
+    <compoundname>internals.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Internals</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>section<sp/>records<sp/>some<sp/>design<sp/>and<sp/>implementation<sp/>details.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Architecture<sp/>{#Architecture}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>SAX<sp/>and<sp/>DOM</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>basic<sp/>relationships<sp/>of<sp/>SAX<sp/>and<sp/>DOM<sp/>is<sp/>shown<sp/>in<sp/>the<sp/>following<sp/>UML<sp/>diagram.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![Architecture<sp/>UML<sp/>class<sp/>diagram](diagram/architecture.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>core<sp/>of<sp/>the<sp/>relationship<sp/>is<sp/>the<sp/>`Handler`<sp/>concept.<sp/>From<sp/>the<sp/>SAX<sp/>side,<sp/>`Reader`<sp/>parses<sp/>a<sp/>JSON<sp/>from<sp/>a<sp/>stream<sp/>and<sp/>publish<sp/>events<sp/>to<sp/>a<sp/>`Handler`.<sp/>`Writer`<sp/>implements<sp/>the<sp/>`Handler`<sp/>concept<sp/>to<sp/>handle<sp/>the<sp/>same<sp/>set<sp/>of<sp/>events.<sp/>From<sp/>the<sp/>DOM<sp/>side,<sp/>`Document`<sp/>implements<sp/>the<sp/>`Handler`<sp/>concept<sp/>to<sp/>build<sp/>a<sp/>DOM<sp/>according<sp/>to<sp/>the<sp/>events.<sp/>`Value`<sp/>supports<sp/>a<sp/>`Value::Accept(Handler&amp;)`<sp/>function,<sp/>which<sp/>traverses<sp/>the<sp/>DOM<sp/>to<sp/>publish<sp/>events.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">With<sp/>this<sp/>design,<sp/>SAX<sp/>is<sp/>not<sp/>dependent<sp/>on<sp/>DOM.<sp/>Even<sp/>`Reader`<sp/>and<sp/>`Writer`<sp/>have<sp/>no<sp/>dependencies<sp/>between<sp/>them.<sp/>This<sp/>provides<sp/>flexibility<sp/>to<sp/>chain<sp/>event<sp/>publisher<sp/>and<sp/>handlers.<sp/>Besides,<sp/>`Value`<sp/>does<sp/>not<sp/>depends<sp/>on<sp/>SAX<sp/>as<sp/>well.<sp/>So,<sp/>in<sp/>addition<sp/>to<sp/>stringify<sp/>a<sp/>DOM<sp/>to<sp/>JSON,<sp/>user<sp/>may<sp/>also<sp/>stringify<sp/>it<sp/>to<sp/>a<sp/>XML<sp/>writer,<sp/>or<sp/>do<sp/>anything<sp/>else.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Utility<sp/>Classes</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Both<sp/>SAX<sp/>and<sp/>DOM<sp/>APIs<sp/>depends<sp/>on<sp/>3<sp/>additional<sp/>concepts:<sp/>`Allocator`,<sp/>`Encoding`<sp/>and<sp/>`Stream`.<sp/>Their<sp/>inheritance<sp/>hierarchy<sp/>is<sp/>shown<sp/>as<sp/>below.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![Utility<sp/>classes<sp/>UML<sp/>class<sp/>diagram](diagram/utilityclass.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Value<sp/>{#Value}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Value`<sp/>(actually<sp/>a<sp/>typedef<sp/>of<sp/>`GenericValue&lt;UTF8&lt;&gt;&gt;`)<sp/>is<sp/>the<sp/>core<sp/>of<sp/>DOM<sp/>API.<sp/>This<sp/>section<sp/>describes<sp/>the<sp/>design<sp/>of<sp/>it.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Data<sp/>Layout<sp/>{#DataLayout}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Value`<sp/>is<sp/>a<sp/>[variant<sp/>type](http://en.wikipedia.org/wiki/Variant_type).<sp/>In<sp/>RapidJSON&apos;s<sp/>context,<sp/>an<sp/>instance<sp/>of<sp/>`Value`<sp/>can<sp/>contain<sp/>1<sp/>of<sp/>6<sp/>JSON<sp/>value<sp/>types.<sp/>This<sp/>is<sp/>possible<sp/>by<sp/>using<sp/>`union`.<sp/>Each<sp/>`Value`<sp/>contains<sp/>two<sp/>members:<sp/>`union<sp/>Data<sp/>data_`<sp/>and<sp/>a`unsigned<sp/>flags_`.<sp/>The<sp/>`flags_`<sp/>indicates<sp/>the<sp/>JSON<sp/>type,<sp/>and<sp/>also<sp/>additional<sp/>information.<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>following<sp/>tables<sp/>show<sp/>the<sp/>data<sp/>layout<sp/>of<sp/>each<sp/>type.<sp/>The<sp/>32-bit/64-bit<sp/>columns<sp/>indicates<sp/>the<sp/>size<sp/>of<sp/>the<sp/>field<sp/>in<sp/>bytes.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Null<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|-------------------|----------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/>|<sp/>`kNullType<sp/>kNullFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Bool<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|-------------------|----------------------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/>|<sp/>`kBoolType`<sp/>(either<sp/>`kTrueFlag`<sp/>or<sp/>`kFalseFlag`)<sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>String<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`Ch*<sp/>str`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Pointer<sp/>to<sp/>the<sp/>string<sp/>(may<sp/>own)<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`SizeType<sp/>length`<sp/><sp/><sp/>|<sp/>Length<sp/>of<sp/>string<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kStringType<sp/>kStringFlag<sp/>...`<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Object<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`Member*<sp/>members`<sp/><sp/><sp/>|<sp/>Pointer<sp/>to<sp/>array<sp/>of<sp/>members<sp/>(owned)<sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`SizeType<sp/>size`<sp/><sp/><sp/><sp/><sp/>|<sp/>Number<sp/>of<sp/>members<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`SizeType<sp/>capacity`<sp/>|<sp/>Capacity<sp/>of<sp/>members<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kObjectType<sp/>kObjectFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Array<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`Value*<sp/>values`<sp/><sp/><sp/><sp/><sp/>|<sp/>Pointer<sp/>to<sp/>array<sp/>of<sp/>values<sp/>(owned)<sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`SizeType<sp/>size`<sp/><sp/><sp/><sp/><sp/>|<sp/>Number<sp/>of<sp/>values<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`SizeType<sp/>capacity`<sp/>|<sp/>Capacity<sp/>of<sp/>values<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kArrayType<sp/>kArrayFlag`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Number<sp/>(Int)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`int<sp/>i`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>32-bit<sp/>signed<sp/>integer<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(zero<sp/>padding)<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>0<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kNumberType<sp/>kNumberFlag<sp/>kIntFlag<sp/>kInt64Flag<sp/>...`<sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Number<sp/>(UInt)<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>u`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>32-bit<sp/>unsigned<sp/>integer<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(zero<sp/>padding)<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>0<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kNumberType<sp/>kNumberFlag<sp/>kUintFlag<sp/>kUint64Flag<sp/>...`<sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Number<sp/>(Int64)<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`int64_t<sp/>i64`<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>64-bit<sp/>signed<sp/>integer<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kNumberType<sp/>kNumberFlag<sp/>kInt64Flag<sp/>...`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Number<sp/>(Uint64)<sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`uint64_t<sp/>i64`<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>64-bit<sp/>unsigned<sp/>integer<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kNumberType<sp/>kNumberFlag<sp/>kInt64Flag<sp/>...`<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Number<sp/>(Double)<sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`uint64_t<sp/>i64`<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>Double<sp/>precision<sp/>floating-point<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>(unused)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|8<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kNumberType<sp/>kNumberFlag<sp/>kDoubleFlag`<sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>are<sp/>some<sp/>notes:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>To<sp/>reduce<sp/>memory<sp/>consumption<sp/>for<sp/>64-bit<sp/>architecture,<sp/>`SizeType`<sp/>is<sp/>typedef<sp/>as<sp/>`unsigned`<sp/>instead<sp/>of<sp/>`size_t`.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Zero<sp/>padding<sp/>for<sp/>32-bit<sp/>number<sp/>may<sp/>be<sp/>placed<sp/>after<sp/>or<sp/>before<sp/>the<sp/>actual<sp/>type,<sp/>according<sp/>to<sp/>the<sp/>endianness.<sp/>This<sp/>makes<sp/>possible<sp/>for<sp/>interpreting<sp/>a<sp/>32-bit<sp/>integer<sp/>as<sp/>a<sp/>64-bit<sp/>integer,<sp/>without<sp/>any<sp/>conversion.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>An<sp/>`Int`<sp/>is<sp/>always<sp/>an<sp/>`Int64`,<sp/>but<sp/>the<sp/>converse<sp/>is<sp/>not<sp/>always<sp/>true.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Flags<sp/>{#Flags}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>32-bit<sp/>`flags_`<sp/>contains<sp/>both<sp/>JSON<sp/>type<sp/>and<sp/>other<sp/>additional<sp/>information.<sp/>As<sp/>shown<sp/>in<sp/>the<sp/>above<sp/>tables,<sp/>each<sp/>JSON<sp/>type<sp/>contains<sp/>redundant<sp/>`kXXXType`<sp/>and<sp/>`kXXXFlag`.<sp/>This<sp/>design<sp/>is<sp/>for<sp/>optimizing<sp/>the<sp/>operation<sp/>of<sp/>testing<sp/>bit-flags<sp/>(`IsNumber()`)<sp/>and<sp/>obtaining<sp/>a<sp/>sequential<sp/>number<sp/>for<sp/>each<sp/>type<sp/>(`GetType()`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">String<sp/>has<sp/>two<sp/>optional<sp/>flags.<sp/>`kCopyFlag`<sp/>means<sp/>that<sp/>the<sp/>string<sp/>owns<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>string.<sp/>`kInlineStrFlag`<sp/>means<sp/>using<sp/>[Short-String<sp/>Optimization](#ShortString).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Number<sp/>is<sp/>a<sp/>bit<sp/>more<sp/>complicated.<sp/>For<sp/>normal<sp/>integer<sp/>values,<sp/>it<sp/>can<sp/>contains<sp/>`kIntFlag`,<sp/>`kUintFlag`,<sp/><sp/>`kInt64Flag`<sp/>and/or<sp/>`kUint64Flag`,<sp/>according<sp/>to<sp/>the<sp/>range<sp/>of<sp/>the<sp/>integer.<sp/>For<sp/>numbers<sp/>with<sp/>fraction,<sp/>and<sp/>integers<sp/>larger<sp/>than<sp/>64-bit<sp/>range,<sp/>they<sp/>will<sp/>be<sp/>stored<sp/>as<sp/>`double`<sp/>with<sp/>`kDoubleFlag`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Short-String<sp/>Optimization<sp/>{#ShortString}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/>[Kosta](https://github.com/Kosta-Github)<sp/>provided<sp/>a<sp/>very<sp/>neat<sp/>short-string<sp/>optimization.<sp/>The<sp/>optimization<sp/>idea<sp/>is<sp/>given<sp/>as<sp/>follow.<sp/>Excluding<sp/>the<sp/>`flags_`,<sp/>a<sp/>`Value`<sp/>has<sp/>12<sp/>or<sp/>16<sp/>bytes<sp/>(32-bit<sp/>or<sp/>64-bit)<sp/>for<sp/>storing<sp/>actual<sp/>data.<sp/>Instead<sp/>of<sp/>storing<sp/>a<sp/>pointer<sp/>to<sp/>a<sp/>string,<sp/>it<sp/>is<sp/>possible<sp/>to<sp/>store<sp/>short<sp/>strings<sp/>in<sp/>these<sp/>space<sp/>internally.<sp/>For<sp/>encoding<sp/>with<sp/>1-byte<sp/>character<sp/>type<sp/>(e.g.<sp/>`char`),<sp/>it<sp/>can<sp/>store<sp/>maximum<sp/>11<sp/>or<sp/>15<sp/>characters<sp/>string<sp/>inside<sp/>the<sp/>`Value`<sp/>type.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>ShortString<sp/>(Ch=char)<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|32-bit|64-bit|</highlight></codeline>
+<codeline><highlight class="normal">|---------------------|-------------------------------------|:----:|:----:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`Ch<sp/>str[MaxChars]`<sp/><sp/>|<sp/>String<sp/>buffer<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|11<sp/><sp/><sp/><sp/>|15<sp/><sp/><sp/><sp/>|<sp/></highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`Ch<sp/>invLength`<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>MaxChars<sp/>-<sp/>Length<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|1<sp/><sp/><sp/><sp/><sp/>|1<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`unsigned<sp/>flags_`<sp/><sp/><sp/>|<sp/>`kStringType<sp/>kStringFlag<sp/>...`<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|4<sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>special<sp/>technique<sp/>is<sp/>applied.<sp/>Instead<sp/>of<sp/>storing<sp/>the<sp/>length<sp/>of<sp/>string<sp/>directly,<sp/>it<sp/>stores<sp/>(MaxChars<sp/>-<sp/>length).<sp/>This<sp/>make<sp/>it<sp/>possible<sp/>to<sp/>store<sp/>11<sp/>characters<sp/>with<sp/>trailing<sp/>`\0`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>optimization<sp/>can<sp/>reduce<sp/>memory<sp/>usage<sp/>for<sp/>copy-string.<sp/>It<sp/>can<sp/>also<sp/>improve<sp/>cache-coherence<sp/>thus<sp/>improve<sp/>runtime<sp/>performance.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Allocator<sp/>{#InternalAllocator}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`Allocator`<sp/>is<sp/>a<sp/>concept<sp/>in<sp/>RapidJSON:</highlight></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">concept<sp/>Allocator<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>const<sp/>bool<sp/>kNeedFree;<sp/><sp/><sp/><sp/>//!&lt;<sp/>Whether<sp/>this<sp/>allocator<sp/>needs<sp/>to<sp/>call<sp/>Free().</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Allocate<sp/>a<sp/>memory<sp/>block.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\param<sp/>size<sp/>of<sp/>the<sp/>memory<sp/>block<sp/>in<sp/>bytes.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\returns<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/>Malloc(size_t<sp/>size);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Resize<sp/>a<sp/>memory<sp/>block.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\param<sp/>originalPtr<sp/>The<sp/>pointer<sp/>to<sp/>current<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\param<sp/>originalSize<sp/>The<sp/>current<sp/>size<sp/>in<sp/>bytes.<sp/>(Design<sp/>issue:<sp/>since<sp/>some<sp/>allocator<sp/>may<sp/>not<sp/>book-keep<sp/>this,<sp/>explicitly<sp/>pass<sp/>to<sp/>it<sp/>can<sp/>save<sp/>memory.)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\param<sp/>newSize<sp/>the<sp/>new<sp/>size<sp/>in<sp/>bytes.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>void*<sp/>Realloc(void*<sp/>originalPtr,<sp/>size_t<sp/>originalSize,<sp/>size_t<sp/>newSize);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Free<sp/>a<sp/>memory<sp/>block.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>\param<sp/>pointer<sp/>to<sp/>the<sp/>memory<sp/>block.<sp/>Null<sp/>pointer<sp/>is<sp/>permitted.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>static<sp/>void<sp/>Free(void<sp/>*ptr);</highlight></codeline>
+<codeline><highlight class="normal">};</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that<sp/>`Malloc()`<sp/>and<sp/>`Realloc()`<sp/>are<sp/>member<sp/>functions<sp/>but<sp/>`Free()`<sp/>is<sp/>static<sp/>member<sp/>function.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>MemoryPoolAllocator<sp/>{#MemoryPoolAllocator}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`MemoryPoolAllocator`<sp/>is<sp/>the<sp/>default<sp/>allocator<sp/>for<sp/>DOM.<sp/>It<sp/>allocate<sp/>but<sp/>do<sp/>not<sp/>free<sp/>memory.<sp/>This<sp/>is<sp/>suitable<sp/>for<sp/>building<sp/>a<sp/>DOM<sp/>tree.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Internally,<sp/>it<sp/>allocates<sp/>chunks<sp/>of<sp/>memory<sp/>from<sp/>the<sp/>base<sp/>allocator<sp/>(by<sp/>default<sp/>`CrtAllocator`)<sp/>and<sp/>stores<sp/>the<sp/>chunks<sp/>as<sp/>a<sp/>singly<sp/>linked<sp/>list.<sp/>When<sp/>user<sp/>requests<sp/>an<sp/>allocation,<sp/>it<sp/>allocates<sp/>memory<sp/>from<sp/>the<sp/>following<sp/>order:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>User<sp/>supplied<sp/>buffer<sp/>if<sp/>it<sp/>is<sp/>available.<sp/>(See<sp/>[User<sp/>Buffer<sp/>section<sp/>in<sp/>DOM](doc/dom.md))</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>If<sp/>user<sp/>supplied<sp/>buffer<sp/>is<sp/>full,<sp/>use<sp/>the<sp/>current<sp/>memory<sp/>chunk.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>If<sp/>the<sp/>current<sp/>block<sp/>is<sp/>full,<sp/>allocate<sp/>a<sp/>new<sp/>block<sp/>of<sp/>memory.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Parsing<sp/>Optimization<sp/>{#ParsingOptimization}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Skip<sp/>Whitespaces<sp/>with<sp/>SIMD<sp/>{#SkipwhitespaceWithSIMD}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>parsing<sp/>JSON<sp/>from<sp/>a<sp/>stream,<sp/>the<sp/>parser<sp/>need<sp/>to<sp/>skip<sp/>4<sp/>whitespace<sp/>characters:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>Space<sp/>(`U+0020`)</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Character<sp/>Tabulation<sp/>(`U+000B`)</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Line<sp/>Feed<sp/>(`U+000A`)</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>Carriage<sp/>Return<sp/>(`U+000D`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">A<sp/>simple<sp/>implementation<sp/>will<sp/>be<sp/>simply:</highlight></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">void<sp/>SkipWhitespace(InputStream&amp;<sp/>s)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>while<sp/>(s.Peek()<sp/>==<sp/>&apos;<sp/>&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\n&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\r&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\t&apos;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.Take();</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">However,<sp/>this<sp/>requires<sp/>4<sp/>comparisons<sp/>and<sp/>a<sp/>few<sp/>branching<sp/>for<sp/>each<sp/>character.<sp/>This<sp/>was<sp/>found<sp/>to<sp/>be<sp/>a<sp/>hot<sp/>spot.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>accelerate<sp/>this<sp/>process,<sp/>SIMD<sp/>was<sp/>applied<sp/>to<sp/>compare<sp/>16<sp/>characters<sp/>with<sp/>4<sp/>white<sp/>spaces<sp/>for<sp/>each<sp/>iteration.<sp/>Currently<sp/>RapidJSON<sp/>supports<sp/>SSE2,<sp/>SSE4.2<sp/>and<sp/>ARM<sp/>Neon<sp/>instructions<sp/>for<sp/>this.<sp/>And<sp/>it<sp/>is<sp/>only<sp/>activated<sp/>for<sp/>UTF-8<sp/>memory<sp/>streams,<sp/>including<sp/>string<sp/>stream<sp/>or<sp/>*in<sp/>situ*<sp/>parsing.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>enable<sp/>this<sp/>optimization,<sp/>need<sp/>to<sp/>define<sp/>`RAPIDJSON_SSE2`,<sp/>`RAPIDJSON_SSE42`<sp/>or<sp/>`RAPIDJSON_NEON`<sp/>before<sp/>including<sp/>`rapidjson.h`.<sp/>Some<sp/>compilers<sp/>can<sp/>detect<sp/>the<sp/>setting,<sp/>as<sp/>in<sp/>`perftest.h`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>__SSE2__<sp/>and<sp/>__SSE4_2__<sp/>are<sp/>recognized<sp/>by<sp/>gcc,<sp/>clang,<sp/>and<sp/>the<sp/>Intel<sp/>compiler.</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>We<sp/>use<sp/>-march=native<sp/>with<sp/>gmake<sp/>to<sp/>enable<sp/>-msse2<sp/>and<sp/>-msse4.2,<sp/>if<sp/>supported.</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>Likewise,<sp/>__ARM_NEON<sp/>is<sp/>used<sp/>to<sp/>detect<sp/>Neon.</highlight></codeline>
+<codeline><highlight class="normal">#if<sp/>defined(__SSE4_2__)</highlight></codeline>
+<codeline><highlight class="normal">#<sp/><sp/>define<sp/>RAPIDJSON_SSE42</highlight></codeline>
+<codeline><highlight class="normal">#elif<sp/>defined(__SSE2__)</highlight></codeline>
+<codeline><highlight class="normal">#<sp/><sp/>define<sp/>RAPIDJSON_SSE2</highlight></codeline>
+<codeline><highlight class="normal">#elif<sp/>defined(__ARM_NEON)</highlight></codeline>
+<codeline><highlight class="normal">#<sp/><sp/>define<sp/>RAPIDJSON_NEON</highlight></codeline>
+<codeline><highlight class="normal">#endif</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that,<sp/>these<sp/>are<sp/>compile-time<sp/>settings.<sp/>Running<sp/>the<sp/>executable<sp/>on<sp/>a<sp/>machine<sp/>without<sp/>such<sp/>instruction<sp/>set<sp/>support<sp/>will<sp/>make<sp/>it<sp/>crash.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Page<sp/>boundary<sp/>issue</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>an<sp/>early<sp/>version<sp/>of<sp/>RapidJSON,<sp/>[an<sp/>issue](https://code.google.com/archive/p/rapidjson/issues/104)<sp/>reported<sp/>that<sp/>the<sp/>`SkipWhitespace_SIMD()`<sp/>causes<sp/>crash<sp/>very<sp/>rarely<sp/>(around<sp/>1<sp/>in<sp/>500,000).<sp/>After<sp/>investigation,<sp/>it<sp/>is<sp/>suspected<sp/>that<sp/>`_mm_loadu_si128()`<sp/>accessed<sp/>bytes<sp/>after<sp/>`&apos;\0&apos;`,<sp/>and<sp/>across<sp/>a<sp/>protected<sp/>page<sp/>boundary.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>[Intel®<sp/>64<sp/>and<sp/>IA-32<sp/>Architectures<sp/>Optimization<sp/>Reference<sp/>Manual</highlight></codeline>
+<codeline><highlight class="normal">](http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html),<sp/>section<sp/>10.2.1:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>To<sp/>support<sp/>algorithms<sp/>requiring<sp/>unaligned<sp/>128-bit<sp/>SIMD<sp/>memory<sp/>accesses,<sp/>memory<sp/>buffer<sp/>allocation<sp/>by<sp/>a<sp/>caller<sp/>function<sp/>should<sp/>consider<sp/>adding<sp/>some<sp/>pad<sp/>space<sp/>so<sp/>that<sp/>a<sp/>callee<sp/>function<sp/>can<sp/>safely<sp/>use<sp/>the<sp/>address<sp/>pointer<sp/>safely<sp/>with<sp/>unaligned<sp/>128-bit<sp/>SIMD<sp/>memory<sp/>operations.</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>The<sp/>minimal<sp/>padding<sp/>size<sp/>should<sp/>be<sp/>the<sp/>width<sp/>of<sp/>the<sp/>SIMD<sp/>register<sp/>that<sp/>might<sp/>be<sp/>used<sp/>in<sp/>conjunction<sp/>with<sp/>unaligned<sp/>SIMD<sp/>memory<sp/>access.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>not<sp/>feasible<sp/>as<sp/>RapidJSON<sp/>should<sp/>not<sp/>enforce<sp/>such<sp/>requirement.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>fix<sp/>this<sp/>issue,<sp/>currently<sp/>the<sp/>routine<sp/>process<sp/>bytes<sp/>up<sp/>to<sp/>the<sp/>next<sp/>aligned<sp/>address.<sp/>After<sp/>tha,<sp/>use<sp/>aligned<sp/>read<sp/>to<sp/>perform<sp/>SIMD<sp/>processing.<sp/>Also<sp/>see<sp/>[#85](https://github.com/Tencent/rapidjson/issues/85).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Local<sp/>Stream<sp/>Copy<sp/>{#LocalStreamCopy}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">During<sp/>optimization,<sp/>it<sp/>is<sp/>found<sp/>that<sp/>some<sp/>compilers<sp/>cannot<sp/>localize<sp/>some<sp/>member<sp/>data<sp/>access<sp/>of<sp/>streams<sp/>into<sp/>local<sp/>variables<sp/>or<sp/>registers.<sp/>Experimental<sp/>results<sp/>show<sp/>that<sp/>for<sp/>some<sp/>stream<sp/>types,<sp/>making<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>stream<sp/>and<sp/>used<sp/>it<sp/>in<sp/>inner-loop<sp/>can<sp/>improve<sp/>performance.<sp/>For<sp/>example,<sp/>the<sp/>actual<sp/>(non-SIMD)<sp/>implementation<sp/>of<sp/>`SkipWhitespace()`<sp/>is<sp/>implemented<sp/>as:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>InputStream&gt;</highlight></codeline>
+<codeline><highlight class="normal">void<sp/>SkipWhitespace(InputStream&amp;<sp/>is)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>internal::StreamLocalCopy&lt;InputStream&gt;<sp/>copy(is);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>InputStream&amp;<sp/>s(copy.s);</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>while<sp/>(s.Peek()<sp/>==<sp/>&apos;<sp/>&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\n&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\r&apos;<sp/>||<sp/>s.Peek()<sp/>==<sp/>&apos;\t&apos;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>s.Take();</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Depending<sp/>on<sp/>the<sp/>traits<sp/>of<sp/>stream,<sp/>`StreamLocalCopy`<sp/>will<sp/>make<sp/>(or<sp/>not<sp/>make)<sp/>a<sp/>copy<sp/>of<sp/>the<sp/>stream<sp/>object,<sp/>use<sp/>it<sp/>locally<sp/>and<sp/>copy<sp/>the<sp/>states<sp/>of<sp/>stream<sp/>back<sp/>to<sp/>the<sp/>original<sp/>stream.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Parsing<sp/>to<sp/>Double<sp/>{#ParsingDouble}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Parsing<sp/>string<sp/>into<sp/>`double`<sp/>is<sp/>difficult.<sp/>The<sp/>standard<sp/>library<sp/>function<sp/>`strtod()`<sp/>can<sp/>do<sp/>the<sp/>job<sp/>but<sp/>it<sp/>is<sp/>slow.<sp/>By<sp/>default,<sp/>the<sp/>parsers<sp/>use<sp/>normal<sp/>precision<sp/>setting.<sp/>This<sp/>has<sp/>has<sp/>maximum<sp/>3<sp/>[ULP](http://en.wikipedia.org/wiki/Unit_in_the_last_place)<sp/>error<sp/>and<sp/>implemented<sp/>in<sp/>`internal::StrtodNormalPrecision()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>using<sp/>`kParseFullPrecisionFlag`,<sp/>the<sp/>parsers<sp/>calls<sp/>`internal::StrtodFullPrecision()`<sp/>instead,<sp/>and<sp/>this<sp/>function<sp/>actually<sp/>implemented<sp/>3<sp/>versions<sp/>of<sp/>conversion<sp/>methods.</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>[Fast-Path](http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/).</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Custom<sp/>DIY-FP<sp/>implementation<sp/>as<sp/>in<sp/>[double-conversion](https://github.com/floitsch/double-conversion).</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Big<sp/>Integer<sp/>Method<sp/>as<sp/>in<sp/>(Clinger,<sp/>William<sp/>D. How<sp/>to<sp/>read<sp/>floating<sp/>point<sp/>numbers<sp/>accurately.<sp/>Vol.<sp/>25.<sp/>No.<sp/>6.<sp/>ACM,<sp/>1990).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>the<sp/>first<sp/>conversion<sp/>methods<sp/>fail,<sp/>it<sp/>will<sp/>try<sp/>the<sp/>second,<sp/>and<sp/>so<sp/>on.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Generation<sp/>Optimization<sp/>{#GenerationOptimization}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Integer-to-String<sp/>conversion<sp/>{#itoa}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>naive<sp/>algorithm<sp/>for<sp/>integer-to-string<sp/>conversion<sp/>involves<sp/>division<sp/>per<sp/>each<sp/>decimal<sp/>digit.<sp/>We<sp/>have<sp/>implemented<sp/>various<sp/>implementations<sp/>and<sp/>evaluated<sp/>them<sp/>in<sp/>[itoa-benchmark](https://github.com/miloyip/itoa-benchmark).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Although<sp/>SSE2<sp/>version<sp/>is<sp/>the<sp/>fastest<sp/>but<sp/>the<sp/>difference<sp/>is<sp/>minor<sp/>by<sp/>comparing<sp/>to<sp/>the<sp/>first<sp/>running-up<sp/>`branchlut`.<sp/>And<sp/>`branchlut`<sp/>is<sp/>pure<sp/>C++<sp/>implementation<sp/>so<sp/>we<sp/>adopt<sp/>`branchlut`<sp/>in<sp/>RapidJSON.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Double-to-String<sp/>conversion<sp/>{#dtoa}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Originally<sp/>RapidJSON<sp/>uses<sp/>`snprintf(...,<sp/>...,<sp/>&quot;%g&quot;)`<sp/><sp/>to<sp/>achieve<sp/>double-to-string<sp/>conversion.<sp/>This<sp/>is<sp/>not<sp/>accurate<sp/>as<sp/>the<sp/>default<sp/>precision<sp/>is<sp/>6.<sp/>Later<sp/>we<sp/>also<sp/>find<sp/>that<sp/>this<sp/>is<sp/>slow<sp/>and<sp/>there<sp/>is<sp/>an<sp/>alternative.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Google&apos;s<sp/>V8<sp/>[double-conversion](https://github.com/floitsch/double-conversion</highlight></codeline>
+<codeline><highlight class="normal">)<sp/>implemented<sp/>a<sp/>newer,<sp/>fast<sp/>algorithm<sp/>called<sp/>Grisu3<sp/>(Loitsch,<sp/>Florian.<sp/>&quot;Printing<sp/>floating-point<sp/>numbers<sp/>quickly<sp/>and<sp/>accurately<sp/>with<sp/>integers.&quot; ACM<sp/>Sigplan<sp/>Notices 45.6<sp/>(2010):<sp/>233-243.).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">However,<sp/>since<sp/>it<sp/>is<sp/>not<sp/>header-only<sp/>so<sp/>that<sp/>we<sp/>implemented<sp/>a<sp/>header-only<sp/>version<sp/>of<sp/>Grisu2.<sp/>This<sp/>algorithm<sp/>guarantees<sp/>that<sp/>the<sp/>result<sp/>is<sp/>always<sp/>accurate.<sp/>And<sp/>in<sp/>most<sp/>of<sp/>cases<sp/>it<sp/>produces<sp/>the<sp/>shortest<sp/>(optimal)<sp/>string<sp/>representation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>header-only<sp/>conversion<sp/>function<sp/>has<sp/>been<sp/>evaluated<sp/>in<sp/>[dtoa-benchmark](https://github.com/miloyip/dtoa-benchmark).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Parser<sp/>{#Parser}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Iterative<sp/>Parser<sp/>{#IterativeParser}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>iterative<sp/>parser<sp/>is<sp/>a<sp/>recursive<sp/>descent<sp/>LL(1)<sp/>parser</highlight></codeline>
+<codeline><highlight class="normal">implemented<sp/>in<sp/>a<sp/>non-recursive<sp/>manner.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Grammar<sp/>{#IterativeParserGrammar}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>grammar<sp/>used<sp/>for<sp/>this<sp/>parser<sp/>is<sp/>based<sp/>on<sp/>strict<sp/>JSON<sp/>syntax:</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline><highlight class="normal">S<sp/>-&gt;<sp/>array<sp/>|<sp/>object</highlight></codeline>
+<codeline><highlight class="normal">array<sp/>-&gt;<sp/>[<sp/>values<sp/>]</highlight></codeline>
+<codeline><highlight class="normal">object<sp/>-&gt;<sp/>{<sp/>members<sp/>}</highlight></codeline>
+<codeline><highlight class="normal">values<sp/>-&gt;<sp/>non-empty-values<sp/>|<sp/>ε</highlight></codeline>
+<codeline><highlight class="normal">non-empty-values<sp/>-&gt;<sp/>value<sp/>addition-values</highlight></codeline>
+<codeline><highlight class="normal">addition-values<sp/>-&gt;<sp/>ε<sp/>|<sp/>,<sp/>non-empty-values</highlight></codeline>
+<codeline><highlight class="normal">members<sp/>-&gt;<sp/>non-empty-members<sp/>|<sp/>ε</highlight></codeline>
+<codeline><highlight class="normal">non-empty-members<sp/>-&gt;<sp/>member<sp/>addition-members</highlight></codeline>
+<codeline><highlight class="normal">addition-members<sp/>-&gt;<sp/>ε<sp/>|<sp/>,<sp/>non-empty-members</highlight></codeline>
+<codeline><highlight class="normal">member<sp/>-&gt;<sp/>STRING<sp/>:<sp/>value</highlight></codeline>
+<codeline><highlight class="normal">value<sp/>-&gt;<sp/>STRING<sp/>|<sp/>NUMBER<sp/>|<sp/>NULL<sp/>|<sp/>BOOLEAN<sp/>|<sp/>object<sp/>|<sp/>array</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that<sp/>left<sp/>factoring<sp/>is<sp/>applied<sp/>to<sp/>non-terminals<sp/>`values`<sp/>and<sp/>`members`</highlight></codeline>
+<codeline><highlight class="normal">to<sp/>make<sp/>the<sp/>grammar<sp/>be<sp/>LL(1).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Parsing<sp/>Table<sp/>{#IterativeParserParsingTable}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Based<sp/>on<sp/>the<sp/>grammar,<sp/>we<sp/>can<sp/>construct<sp/>the<sp/>FIRST<sp/>and<sp/>FOLLOW<sp/>set.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>FIRST<sp/>set<sp/>of<sp/>non-terminals<sp/>is<sp/>listed<sp/>below:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/>NON-TERMINAL<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FIRST<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|:-----------------:|:--------------------------------:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>array<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>object<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>values<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>ε<sp/>STRING<sp/>NUMBER<sp/>NULL<sp/>BOOLEAN<sp/>{<sp/>[<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-values<sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ε<sp/>COMMA<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/>members<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ε<sp/>STRING<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-members<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ε<sp/>COMMA<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>member<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRING<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>value<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/>STRING<sp/>NUMBER<sp/>NULL<sp/>BOOLEAN<sp/>{<sp/>[<sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>S<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>non-empty-members<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRING<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>non-empty-values<sp/>|<sp/><sp/>STRING<sp/>NUMBER<sp/>NULL<sp/>BOOLEAN<sp/>{<sp/>[<sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>FOLLOW<sp/>set<sp/>is<sp/>listed<sp/>below:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/>NON-TERMINAL<sp/><sp/><sp/>|<sp/><sp/>FOLLOW<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|:-----------------:|:-------:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>S<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>$<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>array<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>,<sp/>$<sp/>}<sp/>]<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>object<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>,<sp/>$<sp/>}<sp/>]<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>values<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>]<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>non-empty-values<sp/>|<sp/><sp/><sp/><sp/>]<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-values<sp/><sp/>|<sp/><sp/><sp/><sp/>]<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/>members<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>}<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>non-empty-members<sp/>|<sp/><sp/><sp/><sp/>}<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-members<sp/>|<sp/><sp/><sp/><sp/>}<sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>member<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>,<sp/>}<sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>value<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/>,<sp/>}<sp/>]<sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Finally<sp/>the<sp/>parsing<sp/>table<sp/>can<sp/>be<sp/>constructed<sp/>from<sp/>FIRST<sp/>and<sp/>FOLLOW<sp/>set:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/>NON-TERMINAL<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>:<sp/>|<sp/>]<sp/>|<sp/>}<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRING<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NUMBER<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NULL<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BOOLEAN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|:-----------------:|:---------------------:|:---------------------:|:-------------------:|:-:|:-:|:-:|:-----------------------:|:---------------------:|:---------------------:|:---------------------:|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>S<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>array<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>object<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>array<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/>values<sp/>]<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>object<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/>{<sp/>members<sp/>}<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>values<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/>ε<sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/>non-empty-values<sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>non-empty-values<sp/>|<sp/>value<sp/>addition-values<sp/>|<sp/>value<sp/>addition-values<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/>value<sp/>addition-values<sp/><sp/>|<sp/>value<sp/>addition-values<sp/>|<sp/>value<sp/>addition-values<sp/>|<sp/>value<sp/>addition-values<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-values<sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/>,<sp/>non-empty-values<sp/>|<sp/><sp/><sp/>|<sp/>ε<sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/>members<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/>ε<sp/>|<sp/><sp/><sp/><sp/>non-empty-members<sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>non-empty-members<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/>member<sp/>addition-members<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/>addition-members<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/>,<sp/>non-empty-members<sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/>ε<sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>member<sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/>STRING<sp/>:<sp/>value<sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/><sp/><sp/><sp/><sp/><sp/><sp/>value<sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>array<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>object<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRING<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NUMBER<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NULL<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BOOLEAN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>is<sp/>a<sp/>great<sp/>[tool](http://hackingoff.com/compilers/predict-first-follow-set)<sp/>for<sp/>above<sp/>grammar<sp/>analysis.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Implementation<sp/>{#IterativeParserImplementation}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Based<sp/>on<sp/>the<sp/>parsing<sp/>table,<sp/>a<sp/>direct(or<sp/>conventional)<sp/>implementation</highlight></codeline>
+<codeline><highlight class="normal">that<sp/>pushes<sp/>the<sp/>production<sp/>body<sp/>in<sp/>reverse<sp/>order</highlight></codeline>
+<codeline><highlight class="normal">while<sp/>generating<sp/>a<sp/>production<sp/>could<sp/>work.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>RapidJSON,<sp/>several<sp/>modifications(or<sp/>adaptations<sp/>to<sp/>current<sp/>design)<sp/>are<sp/>made<sp/>to<sp/>a<sp/>direct<sp/>implementation.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">First,<sp/>the<sp/>parsing<sp/>table<sp/>is<sp/>encoded<sp/>in<sp/>a<sp/>state<sp/>machine<sp/>in<sp/>RapidJSON.</highlight></codeline>
+<codeline><highlight class="normal">States<sp/>are<sp/>constructed<sp/>by<sp/>the<sp/>head<sp/>and<sp/>body<sp/>of<sp/>production.</highlight></codeline>
+<codeline><highlight class="normal">State<sp/>transitions<sp/>are<sp/>constructed<sp/>by<sp/>production<sp/>rules.</highlight></codeline>
+<codeline><highlight class="normal">Besides,<sp/>extra<sp/>states<sp/>are<sp/>added<sp/>for<sp/>productions<sp/>involved<sp/>with<sp/>`array`<sp/>and<sp/>`object`.</highlight></codeline>
+<codeline><highlight class="normal">In<sp/>this<sp/>way<sp/>the<sp/>generation<sp/>of<sp/>array<sp/>values<sp/>or<sp/>object<sp/>members<sp/>would<sp/>be<sp/>a<sp/>single<sp/>state<sp/>transition,</highlight></codeline>
+<codeline><highlight class="normal">rather<sp/>than<sp/>several<sp/>pop/push<sp/>operations<sp/>in<sp/>the<sp/>direct<sp/>implementation.</highlight></codeline>
+<codeline><highlight class="normal">This<sp/>also<sp/>makes<sp/>the<sp/>estimation<sp/>of<sp/>stack<sp/>size<sp/>more<sp/>easier.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>state<sp/>diagram<sp/>is<sp/>shown<sp/>as<sp/>follows:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">![State<sp/>Diagram](diagram/iterative-parser-states-diagram.png)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Second,<sp/>the<sp/>iterative<sp/>parser<sp/>also<sp/>keeps<sp/>track<sp/>of<sp/>array&apos;s<sp/>value<sp/>count<sp/>and<sp/>object&apos;s<sp/>member<sp/>count</highlight></codeline>
+<codeline><highlight class="normal">in<sp/>its<sp/>internal<sp/>stack,<sp/>which<sp/>may<sp/>be<sp/>different<sp/>from<sp/>a<sp/>conventional<sp/>implementation.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/internals.md"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,267 @@
+\hypertarget{diyfp_8h_source}{}\doxysection{diyfp.\+h}
+\label{diyfp_8h_source}\index{src/rapidjson/include/rapidjson/internal/diyfp.h@{src/rapidjson/include/rapidjson/internal/diyfp.h}}
+\mbox{\hyperlink{diyfp_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{comment}{// This is a C++ header-\/only implementation of Grisu2 algorithm from the publication:}}
+\DoxyCodeLine{16 \textcolor{comment}{// Loitsch, Florian. "{}Printing floating-\/point numbers quickly and accurately with}}
+\DoxyCodeLine{17 \textcolor{comment}{// integers."{} ACM Sigplan Notices 45.6 (2010): 233-\/243.}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_DIYFP\_H\_}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#define RAPIDJSON\_DIYFP\_H\_}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}../rapidjson.h"{}}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{clzll_8h}{clzll.h}}"{}}}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#include <limits>}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& defined(\_M\_AMD64) \&\& !defined(\_\_INTEL\_COMPILER)}}
+\DoxyCodeLine{27 \textcolor{preprocessor}{\#include <intrin.h>}}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#if !defined(\_ARM64EC\_)}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#pragma intrinsic(\_umul128)}}
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{31 \textcolor{preprocessor}{\#pragma comment(lib,"{}softintrin"{}})}
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{33 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{36 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{39 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{40 RAPIDJSON\_DIAG\_OFF(effc++)}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{44 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{45 RAPIDJSON\_DIAG\_OFF(padded)}
+\DoxyCodeLine{46 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{keyword}{struct }\mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \{}
+\DoxyCodeLine{49     \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}() : \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}(), \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}() \{\}}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51     \mbox{\hyperlink{structinternal_1_1_diy_fp_a9a8f2f5c49dfa0dee4a527f0829cc2e5}{DiyFp}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} fp, \textcolor{keywordtype}{int} exp) : \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}(fp), \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}(exp) \{\}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \textcolor{keyword}{explicit} \mbox{\hyperlink{structinternal_1_1_diy_fp_adc132c7da4c8e3ee5ae12efdcf6dbf7c}{DiyFp}}(\textcolor{keywordtype}{double} d) \{}
+\DoxyCodeLine{54         \textcolor{keyword}{union }\{}
+\DoxyCodeLine{55             \textcolor{keywordtype}{double} d;}
+\DoxyCodeLine{56             \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u64;}
+\DoxyCodeLine{57         \} u = \{ d \};}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59         \textcolor{keywordtype}{int} biased\_e = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}((u.u64 \& \mbox{\hyperlink{structinternal_1_1_diy_fp_aaacbf068c44275f4451db750938bd1d3}{kDpExponentMask}}) >> \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}});}
+\DoxyCodeLine{60         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} significand = (u.u64 \& \mbox{\hyperlink{structinternal_1_1_diy_fp_a841ef0ae29ccd2889e7f96aad76b0179}{kDpSignificandMask}});}
+\DoxyCodeLine{61         \textcolor{keywordflow}{if} (biased\_e != 0) \{}
+\DoxyCodeLine{62             \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} = significand + \mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}};}
+\DoxyCodeLine{63             \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} = biased\_e -\/ \mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}};}
+\DoxyCodeLine{64         \}}
+\DoxyCodeLine{65         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{66             \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} = significand;}
+\DoxyCodeLine{67             \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} = \mbox{\hyperlink{structinternal_1_1_diy_fp_a9ad1b0cdbab318e45d2bc48e64707ef3}{kDpMinExponent}} + 1;}
+\DoxyCodeLine{68         \}}
+\DoxyCodeLine{69     \}}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{71     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a9cea201daabec04c6f2526b35af8ead3}{operator-\/}}(\textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{72         \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} -\/ rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}});}
+\DoxyCodeLine{73     \}}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a9868841f824924cc385ad5163c9c85b3}{operator*}}(\textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{76 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& defined(\_M\_AMD64)}}
+\DoxyCodeLine{77         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} h;}
+\DoxyCodeLine{78         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} l = \_umul128(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}, rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}, \&h);}
+\DoxyCodeLine{79         \textcolor{keywordflow}{if} (l \& (\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}(1) << 63)) \textcolor{comment}{// rounding}}
+\DoxyCodeLine{80             h++;}
+\DoxyCodeLine{81         \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}(h, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + 64);}
+\DoxyCodeLine{82 \textcolor{preprocessor}{\#elif (\_\_GNUC\_\_ > 4 || (\_\_GNUC\_\_ == 4 \&\& \_\_GNUC\_MINOR\_\_ >= 6)) \&\& defined(\_\_x86\_64\_\_)}}
+\DoxyCodeLine{83         \_\_extension\_\_ \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \_\_int128 uint128;}
+\DoxyCodeLine{84         uint128 p = \textcolor{keyword}{static\_cast<}uint128\textcolor{keyword}{>}(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}) * \textcolor{keyword}{static\_cast<}uint128\textcolor{keyword}{>}(rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}});}
+\DoxyCodeLine{85         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} h = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(p >> 64);}
+\DoxyCodeLine{86         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} l = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(p);}
+\DoxyCodeLine{87         \textcolor{keywordflow}{if} (l \& (\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}(1) << 63)) \textcolor{comment}{// rounding}}
+\DoxyCodeLine{88             h++;}
+\DoxyCodeLine{89         \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}(h, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + 64);}
+\DoxyCodeLine{90 \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{91         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} M32 = 0xFFFFFFFF;}
+\DoxyCodeLine{92         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} = \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >> 32;}
+\DoxyCodeLine{93         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} b = \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& M32;}
+\DoxyCodeLine{94         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} c = rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >> 32;}
+\DoxyCodeLine{95         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} d = rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& M32;}
+\DoxyCodeLine{96         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} ac = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} * c;}
+\DoxyCodeLine{97         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} bc = b * c;}
+\DoxyCodeLine{98         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} ad = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}} * d;}
+\DoxyCodeLine{99         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} bd = b * d;}
+\DoxyCodeLine{100         \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} tmp = (bd >> 32) + (ad \& M32) + (bc \& M32);}
+\DoxyCodeLine{101         tmp += 1U << 31;  }
+\DoxyCodeLine{102         \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}(ac + (ad >> 32) + (bc >> 32) + (tmp >> 32), \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + rhs.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + 64);}
+\DoxyCodeLine{103 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{104     \}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{structinternal_1_1_diy_fp_aa6cbacc8dfcd92cb8c57884e45548976}{Normalize}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{107         \textcolor{keywordtype}{int} s = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(\mbox{\hyperlink{namespaceinternal_af72bbb0200bf0166f728c7afde826286}{clzll}}(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}));}
+\DoxyCodeLine{108         \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} << s, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ s);}
+\DoxyCodeLine{109     \}}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a3a840e739b412e20e11c05a03f4573df}{NormalizeBoundary}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{112         \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} res = *\textcolor{keyword}{this};}
+\DoxyCodeLine{113         \textcolor{keywordflow}{while} (!(res.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& (\mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}} << 1))) \{}
+\DoxyCodeLine{114             res.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} <<= 1;}
+\DoxyCodeLine{115             res.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}-\/-\/;}
+\DoxyCodeLine{116         \}}
+\DoxyCodeLine{117         res.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} <<= (\mbox{\hyperlink{structinternal_1_1_diy_fp_aac30e0c32d43425ac403281fc9b0cee4}{kDiySignificandSize}} -\/ \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}} -\/ 2);}
+\DoxyCodeLine{118         res.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} = res.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ (\mbox{\hyperlink{structinternal_1_1_diy_fp_aac30e0c32d43425ac403281fc9b0cee4}{kDiySignificandSize}} -\/ \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}} -\/ 2);}
+\DoxyCodeLine{119         \textcolor{keywordflow}{return} res;}
+\DoxyCodeLine{120     \}}
+\DoxyCodeLine{121 }
+\DoxyCodeLine{122     \textcolor{keywordtype}{void} \mbox{\hyperlink{structinternal_1_1_diy_fp_adef8bf723f24db9dc6cefa260e8c2390}{NormalizedBoundaries}}(\mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}* minus, \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}* plus)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{123         \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} pl = \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}((\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} << 1) + 1, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ 1).NormalizeBoundary();}
+\DoxyCodeLine{124         \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} mi = (\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} == \mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}}) ? \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}((\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} << 2) -\/ 1, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ 2) : \mbox{\hyperlink{structinternal_1_1_diy_fp_aea27f027c58a55245d700df08be4ff7e}{DiyFp}}((\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} << 1) -\/ 1, \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ 1);}
+\DoxyCodeLine{125         mi.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} <<= mi.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} -\/ pl.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{126         mi.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} = pl.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{127         *plus = pl;}
+\DoxyCodeLine{128         *minus = mi;}
+\DoxyCodeLine{129     \}}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131     \textcolor{keywordtype}{double} \mbox{\hyperlink{structinternal_1_1_diy_fp_acf0e7974f0a1175ae04edf8e4a7d1319}{ToDouble}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{132         \textcolor{keyword}{union }\{}
+\DoxyCodeLine{133             \textcolor{keywordtype}{double} d;}
+\DoxyCodeLine{134             \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u64;}
+\DoxyCodeLine{135         \}u;}
+\DoxyCodeLine{136         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} <= \mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}} + \mbox{\hyperlink{structinternal_1_1_diy_fp_a841ef0ae29ccd2889e7f96aad76b0179}{kDpSignificandMask}});}
+\DoxyCodeLine{137         \textcolor{keywordflow}{if} (\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} < \mbox{\hyperlink{structinternal_1_1_diy_fp_a994f16a1247a290cfc3a875715e3a92b}{kDpDenormalExponent}}) \{}
+\DoxyCodeLine{138             \textcolor{comment}{// Underflow.}}
+\DoxyCodeLine{139             \textcolor{keywordflow}{return} 0.0;}
+\DoxyCodeLine{140         \}}
+\DoxyCodeLine{141         \textcolor{keywordflow}{if} (\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} >= \mbox{\hyperlink{structinternal_1_1_diy_fp_a80535a5594dae96fc482757a54162c7d}{kDpMaxExponent}}) \{}
+\DoxyCodeLine{142             \textcolor{comment}{// Overflow.}}
+\DoxyCodeLine{143             \textcolor{keywordflow}{return} std::numeric\_limits<double>::infinity();}
+\DoxyCodeLine{144         \}}
+\DoxyCodeLine{145         \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} be = (\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} == \mbox{\hyperlink{structinternal_1_1_diy_fp_a994f16a1247a290cfc3a875715e3a92b}{kDpDenormalExponent}} \&\& (\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& \mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}}) == 0) ? 0 :}
+\DoxyCodeLine{146             \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}\textcolor{keyword}{>}(\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + \mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}});}
+\DoxyCodeLine{147         u.u64 = (\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& \mbox{\hyperlink{structinternal_1_1_diy_fp_a841ef0ae29ccd2889e7f96aad76b0179}{kDpSignificandMask}}) | (be << \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}});}
+\DoxyCodeLine{148         \textcolor{keywordflow}{return} u.d;}
+\DoxyCodeLine{149     \}}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_aac30e0c32d43425ac403281fc9b0cee4}{kDiySignificandSize}} = 64;}
+\DoxyCodeLine{152     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}} = 52;}
+\DoxyCodeLine{153     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}} = 0x3FF + \mbox{\hyperlink{structinternal_1_1_diy_fp_a037aed0fa0b66af0a13657418edef19e}{kDpSignificandSize}};}
+\DoxyCodeLine{154     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_a80535a5594dae96fc482757a54162c7d}{kDpMaxExponent}} = 0x7FF -\/ \mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}};}
+\DoxyCodeLine{155     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_a9ad1b0cdbab318e45d2bc48e64707ef3}{kDpMinExponent}} = -\/\mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}};}
+\DoxyCodeLine{156     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_a994f16a1247a290cfc3a875715e3a92b}{kDpDenormalExponent}} = -\/\mbox{\hyperlink{structinternal_1_1_diy_fp_a38b6f864ae0859d43fa96c3ff27959be}{kDpExponentBias}} + 1;}
+\DoxyCodeLine{157     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{structinternal_1_1_diy_fp_aaacbf068c44275f4451db750938bd1d3}{kDpExponentMask}} = \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x7FF00000, 0x00000000);}
+\DoxyCodeLine{158     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a841ef0ae29ccd2889e7f96aad76b0179}{kDpSignificandMask}} = \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x000FFFFF, 0xFFFFFFFF);}
+\DoxyCodeLine{159     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{kDpHiddenBit}} = \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x00100000, 0x00000000);}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161     \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} \mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}};}
+\DoxyCodeLine{162     \textcolor{keywordtype}{int} \mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{163 \};}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165 \textcolor{keyword}{inline} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{namespaceinternal_a3e95f043ed6c40cda1c1bc33c2f0ece2}{GetCachedPowerByIndex}}(\textcolor{keywordtype}{size\_t} index) \{}
+\DoxyCodeLine{166     \textcolor{comment}{// 10\string^-\/348, 10\string^-\/340, ..., 10\string^340}}
+\DoxyCodeLine{167     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} kCachedPowers\_F[] = \{}
+\DoxyCodeLine{168         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xfa8fd5a0, 0x081c0288), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xbaaee17f, 0xa23ebf76),}
+\DoxyCodeLine{169         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8b16fb20, 0x3055ac76), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xcf42894a, 0x5dce35ea),}
+\DoxyCodeLine{170         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9a6bb0aa, 0x55653b2d), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xe61acf03, 0x3d1a45df),}
+\DoxyCodeLine{171         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xab70fe17, 0xc79ac6ca), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xff77b1fc, 0xbebcdc4f),}
+\DoxyCodeLine{172         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xbe5691ef, 0x416bd60c), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8dd01fad, 0x907ffc3c),}
+\DoxyCodeLine{173         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd3515c28, 0x31559a83), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9d71ac8f, 0xada6c9b5),}
+\DoxyCodeLine{174         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xea9c2277, 0x23ee8bcb), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xaecc4991, 0x4078536d),}
+\DoxyCodeLine{175         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x823c1279, 0x5db6ce57), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc2109436, 0x4dfb5637),}
+\DoxyCodeLine{176         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9096ea6f, 0x3848984f), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd77485cb, 0x25823ac7),}
+\DoxyCodeLine{177         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa086cfcd, 0x97bf97f4), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xef340a98, 0x172aace5),}
+\DoxyCodeLine{178         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb23867fb, 0x2a35b28e), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x84c8d4df, 0xd2c63f3b),}
+\DoxyCodeLine{179         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc5dd4427, 0x1ad3cdba), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x936b9fce, 0xbb25c996),}
+\DoxyCodeLine{180         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xdbac6c24, 0x7d62a584), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa3ab6658, 0x0d5fdaf6),}
+\DoxyCodeLine{181         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xf3e2f893, 0xdec3f126), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb5b5ada8, 0xaaff80b8),}
+\DoxyCodeLine{182         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x87625f05, 0x6c7c4a8b), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc9bcff60, 0x34c13053),}
+\DoxyCodeLine{183         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x964e858c, 0x91ba2655), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xdff97724, 0x70297ebd),}
+\DoxyCodeLine{184         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa6dfbd9f, 0xb8e5b88f), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xf8a95fcf, 0x88747d94),}
+\DoxyCodeLine{185         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb9447093, 0x8fa89bcf), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8a08f0f8, 0xbf0f156b),}
+\DoxyCodeLine{186         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xcdb02555, 0x653131b6), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x993fe2c6, 0xd07b7fac),}
+\DoxyCodeLine{187         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xe45c10c4, 0x2a2b3b06), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xaa242499, 0x697392d3),}
+\DoxyCodeLine{188         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xfd87b5f2, 0x8300ca0e), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xbce50864, 0x92111aeb),}
+\DoxyCodeLine{189         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8cbccc09, 0x6f5088cc), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd1b71758, 0xe219652c),}
+\DoxyCodeLine{190         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9c400000, 0x00000000), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xe8d4a510, 0x00000000),}
+\DoxyCodeLine{191         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xad78ebc5, 0xac620000), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x813f3978, 0xf8940984),}
+\DoxyCodeLine{192         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc097ce7b, 0xc90715b3), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8f7e32ce, 0x7bea5c70),}
+\DoxyCodeLine{193         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd5d238a4, 0xabe98068), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9f4f2726, 0x179a2245),}
+\DoxyCodeLine{194         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xed63a231, 0xd4c4fb27), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb0de6538, 0x8cc8ada8),}
+\DoxyCodeLine{195         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x83c7088e, 0x1aab65db), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc45d1df9, 0x42711d9a),}
+\DoxyCodeLine{196         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x924d692c, 0xa61be758), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xda01ee64, 0x1a708dea),}
+\DoxyCodeLine{197         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa26da399, 0x9aef774a), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xf209787b, 0xb47d6b85),}
+\DoxyCodeLine{198         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb454e4a1, 0x79dd1877), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x865b8692, 0x5b9bc5c2),}
+\DoxyCodeLine{199         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc83553c5, 0xc8965d3d), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x952ab45c, 0xfa97a0b3),}
+\DoxyCodeLine{200         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xde469fbd, 0x99a05fe3), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa59bc234, 0xdb398c25),}
+\DoxyCodeLine{201         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xf6c69a72, 0xa3989f5c), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xb7dcbf53, 0x54e9bece),}
+\DoxyCodeLine{202         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x88fcf317, 0xf22241e2), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xcc20ce9b, 0xd35c78a5),}
+\DoxyCodeLine{203         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x98165af3, 0x7b2153df), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xe2a0b5dc, 0x971f303a),}
+\DoxyCodeLine{204         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa8d9d153, 0x5ce3b396), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xfb9b7cd9, 0xa4a7443c),}
+\DoxyCodeLine{205         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xbb764c4c, 0xa7a44410), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8bab8eef, 0xb6409c1a),}
+\DoxyCodeLine{206         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd01fef10, 0xa657842c), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9b10a4e5, 0xe9913129),}
+\DoxyCodeLine{207         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xe7109bfb, 0xa19c0c9d), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xac2820d9, 0x623bf429),}
+\DoxyCodeLine{208         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x80444b5e, 0x7aa7cf85), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xbf21e440, 0x03acdd2d),}
+\DoxyCodeLine{209         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x8e679c2f, 0x5e44ff8f), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xd433179d, 0x9c8cb841),}
+\DoxyCodeLine{210         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9e19db92, 0xb4e31ba9), \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xeb96bf6e, 0xbadf77d9),}
+\DoxyCodeLine{211         \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xaf87023b, 0x9bf0ee6b)}
+\DoxyCodeLine{212     \};}
+\DoxyCodeLine{213     \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_a269259c924dce846340ddbb810db2e3c}{int16\_t}} kCachedPowers\_E[] = \{}
+\DoxyCodeLine{214         -\/1220, -\/1193, -\/1166, -\/1140, -\/1113, -\/1087, -\/1060, -\/1034, -\/1007,  -\/980,}
+\DoxyCodeLine{215         -\/954,  -\/927,  -\/901,  -\/874,  -\/847,  -\/821,  -\/794,  -\/768,  -\/741,  -\/715,}
+\DoxyCodeLine{216         -\/688,  -\/661,  -\/635,  -\/608,  -\/582,  -\/555,  -\/529,  -\/502,  -\/475,  -\/449,}
+\DoxyCodeLine{217         -\/422,  -\/396,  -\/369,  -\/343,  -\/316,  -\/289,  -\/263,  -\/236,  -\/210,  -\/183,}
+\DoxyCodeLine{218         -\/157,  -\/130,  -\/103,   -\/77,   -\/50,   -\/24,     3,    30,    56,    83,}
+\DoxyCodeLine{219         109,   136,   162,   189,   216,   242,   269,   295,   322,   348,}
+\DoxyCodeLine{220         375,   402,   428,   455,   481,   508,   534,   561,   588,   614,}
+\DoxyCodeLine{221         641,   667,   694,   720,   747,   774,   800,   827,   853,   880,}
+\DoxyCodeLine{222         907,   933,   960,   986,  1013,  1039,  1066}
+\DoxyCodeLine{223     \};}
+\DoxyCodeLine{224     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(index < 87);}
+\DoxyCodeLine{225     \textcolor{keywordflow}{return} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(kCachedPowers\_F[index], kCachedPowers\_E[index]);}
+\DoxyCodeLine{226 \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{keyword}{inline} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{namespaceinternal_abac3dbfa1070756c37725829148f6038}{GetCachedPower}}(\textcolor{keywordtype}{int} e, \textcolor{keywordtype}{int}* K) \{}
+\DoxyCodeLine{229 }
+\DoxyCodeLine{230     \textcolor{comment}{//int k = static\_cast<int>(ceil((-\/61 -\/ e) * 0.30102999566398114)) + 374;}}
+\DoxyCodeLine{231     \textcolor{keywordtype}{double} dk = (-\/61 -\/ e) * 0.30102999566398114 + 347;  \textcolor{comment}{// dk must be positive, so can do ceiling in positive}}
+\DoxyCodeLine{232     \textcolor{keywordtype}{int} k = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(dk);}
+\DoxyCodeLine{233     \textcolor{keywordflow}{if} (dk -\/ k > 0.0)}
+\DoxyCodeLine{234         k++;}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236     \textcolor{keywordtype}{unsigned} index = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}((k >> 3) + 1);}
+\DoxyCodeLine{237     *K = -\/(-\/348 + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(index << 3));    \textcolor{comment}{// decimal exponent no need lookup table}}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239     \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_a3e95f043ed6c40cda1c1bc33c2f0ece2}{GetCachedPowerByIndex}}(index);}
+\DoxyCodeLine{240 \}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242 \textcolor{keyword}{inline} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} \mbox{\hyperlink{namespaceinternal_a74b8503d044bf6c0a5e90c5bea3aba42}{GetCachedPower10}}(\textcolor{keywordtype}{int} exp, \textcolor{keywordtype}{int} *outExp) \{}
+\DoxyCodeLine{243     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(exp >= -\/348);}
+\DoxyCodeLine{244     \textcolor{keywordtype}{unsigned} index = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(exp + 348) / 8u;}
+\DoxyCodeLine{245     *outExp = -\/348 + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(index) * 8;}
+\DoxyCodeLine{246     \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_a3e95f043ed6c40cda1c1bc33c2f0ece2}{GetCachedPowerByIndex}}(index);}
+\DoxyCodeLine{247 \}}
+\DoxyCodeLine{248 }
+\DoxyCodeLine{249 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{250 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{251 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{252 }
+\DoxyCodeLine{253 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{254 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{255 RAPIDJSON\_DIAG\_OFF(padded)}
+\DoxyCodeLine{256 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{259 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_DIYFP\_H\_}}
+
+\end{DoxyCode}

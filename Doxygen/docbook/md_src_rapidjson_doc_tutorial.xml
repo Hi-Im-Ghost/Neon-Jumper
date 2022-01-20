@@ -1,0 +1,639 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_tutorial" xml:lang="en-US">
+
+<para>This tutorial introduces the basics of the Document Object Model(DOM) API.</para>
+
+<para>As shown in Usage at a glance, JSON can be parsed into a DOM, and then the DOM can be queried and modified easily, and finally be converted back to JSON.</para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1ValueDocument">
+<title>Value &amp; Document</title>
+
+<para>Each JSON value is stored in a type called <computeroutput>Value</computeroutput>. A <computeroutput>Document</computeroutput>, representing the DOM, contains the root <computeroutput>Value</computeroutput> of the DOM tree. All public types and functions of RapidJSON are defined in the <computeroutput>rapidjson</computeroutput> namespace.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1QueryValue">
+<title>Query Value</title>
+
+<para>In this section, we will use excerpt from <computeroutput><link linkend="_tutorial_8cpp">example/tutorial/tutorial.cpp</link></computeroutput>.</para>
+
+<para>Assume we have the following JSON stored in a C string (<computeroutput>const char* json</computeroutput>): <literallayout><computeroutput>{
+&#32;&#32;&#32;&#32;&quot;hello&quot;:&#32;&quot;world&quot;,
+&#32;&#32;&#32;&#32;&quot;t&quot;:&#32;true&#32;,
+&#32;&#32;&#32;&#32;&quot;f&quot;:&#32;false,
+&#32;&#32;&#32;&#32;&quot;n&quot;:&#32;null,
+&#32;&#32;&#32;&#32;&quot;i&quot;:&#32;123,
+&#32;&#32;&#32;&#32;&quot;pi&quot;:&#32;3.1416,
+&#32;&#32;&#32;&#32;&quot;a&quot;:&#32;[1,&#32;2,&#32;3,&#32;4]
+}
+</computeroutput></literallayout></para>
+
+<para>Parse it into a <computeroutput>Document</computeroutput>: <literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+
+using&#32;namespace&#32;rapidjson;
+
+//&#32;...
+Document&#32;document;
+document.Parse(json);
+</computeroutput></literallayout></para>
+
+<para>The JSON is now parsed into <computeroutput>document</computeroutput> as a <emphasis>DOM tree</emphasis>:</para>
+
+<para></para>
+
+<para>Since the update to RFC 7159, the root of a conforming JSON document can be any JSON value. In earlier RFC 4627, only objects or arrays were allowed as root values. In this case, the root is an object. <literallayout><computeroutput>assert(document.IsObject());
+</computeroutput></literallayout></para>
+
+<para>Let&apos;s query whether a <computeroutput>&quot;hello&quot;</computeroutput> member exists in the root object. Since a <computeroutput>Value</computeroutput> can contain different types of value, we may need to verify its type and use suitable API to obtain the value. In this example, <computeroutput>&quot;hello&quot;</computeroutput> member associates with a JSON string. <literallayout><computeroutput>assert(document.HasMember(&quot;hello&quot;));
+assert(document[&quot;hello&quot;].IsString());
+printf(&quot;hello&#32;=&#32;%s\n&quot;,&#32;document[&quot;hello&quot;].GetString());
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>hello&#32;=&#32;world
+</computeroutput></literallayout></para>
+
+<para>JSON true/false values are represented as <computeroutput>bool</computeroutput>. <literallayout><computeroutput>assert(document[&quot;t&quot;].IsBool());
+printf(&quot;t&#32;=&#32;%s\n&quot;,&#32;document[&quot;t&quot;].GetBool()&#32;?&#32;&quot;true&quot;&#32;:&#32;&quot;false&quot;);
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>t&#32;=&#32;true
+</computeroutput></literallayout></para>
+
+<para>JSON null can be queried with <computeroutput>IsNull()</computeroutput>. <literallayout><computeroutput>printf(&quot;n&#32;=&#32;%s\n&quot;,&#32;document[&quot;n&quot;].IsNull()&#32;?&#32;&quot;null&quot;&#32;:&#32;&quot;?&quot;);
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>n&#32;=&#32;null
+</computeroutput></literallayout></para>
+
+<para>JSON number type represents all numeric values. However, C++ needs more specific type for manipulation.</para>
+
+<para><literallayout><computeroutput>assert(document[&quot;i&quot;].IsNumber());
+
+//&#32;In&#32;this&#32;case,&#32;IsUint()/IsInt64()/IsUint64()&#32;also&#32;return&#32;true.
+assert(document[&quot;i&quot;].IsInt());&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+printf(&quot;i&#32;=&#32;%d\n&quot;,&#32;document[&quot;i&quot;].GetInt());
+//&#32;Alternatively&#32;(int)document[&quot;i&quot;]
+
+assert(document[&quot;pi&quot;].IsNumber());
+assert(document[&quot;pi&quot;].IsDouble());
+printf(&quot;pi&#32;=&#32;%g\n&quot;,&#32;document[&quot;pi&quot;].GetDouble());
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>i&#32;=&#32;123
+pi&#32;=&#32;3.1416
+</computeroutput></literallayout></para>
+
+<para>JSON array contains a number of elements. <literallayout><computeroutput>//&#32;Using&#32;a&#32;reference&#32;for&#32;consecutive&#32;access&#32;is&#32;handy&#32;and&#32;faster.
+const&#32;Value&amp;&#32;a&#32;=&#32;document[&quot;a&quot;];
+assert(a.IsArray());
+for&#32;(SizeType&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;a.Size();&#32;i++)&#32;//&#32;Uses&#32;SizeType&#32;instead&#32;of&#32;size_t
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(&quot;a[%d]&#32;=&#32;%d\n&quot;,&#32;i,&#32;a[i].GetInt());
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>a[0]&#32;=&#32;1
+a[1]&#32;=&#32;2
+a[2]&#32;=&#32;3
+a[3]&#32;=&#32;4
+</computeroutput></literallayout></para>
+
+<para>Note that, RapidJSON does not automatically convert values between JSON types. For example, if a value is a string, it is invalid to call <computeroutput>GetInt()</computeroutput>. In debug mode it will fail on assertion. In release mode, the behavior is undefined.</para>
+
+<para>In the following sections we discuss details about querying individual types.</para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1QueryArray">
+<title>Query Array</title>
+
+<para>By default, <computeroutput>SizeType</computeroutput> is typedef of <computeroutput>unsigned</computeroutput>. In most systems, an array is limited to store up to 2^32-1 elements.</para>
+
+<para>You may access the elements in an array by integer literal, for example, <computeroutput>a[0]</computeroutput>, <computeroutput>a[1]</computeroutput>, <computeroutput>a[2]</computeroutput>.</para>
+
+<para>Array is similar to <computeroutput>std::vector</computeroutput>: instead of using indices, you may also use iterator to access all the elements. <literallayout><computeroutput>for&#32;(Value::ConstValueIterator&#32;itr&#32;=&#32;a.Begin();&#32;itr&#32;!=&#32;a.End();&#32;++itr)
+&#32;&#32;&#32;&#32;printf(&quot;%d&#32;&quot;,&#32;itr-&gt;GetInt());
+</computeroutput></literallayout></para>
+
+<para>And other familiar query functions:<itemizedlist>
+<listitem>
+<para><computeroutput>SizeType Capacity() const</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>bool Empty() const</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_1autotoc_md120">
+<title>Range-based For Loop (New in v1.1.0)</title>
+
+<para>When C++11 is enabled, you can use range-based for loop to access all elements in an array.</para>
+
+<para><literallayout><computeroutput>for&#32;(auto&amp;&#32;v&#32;:&#32;a.GetArray())
+&#32;&#32;&#32;&#32;printf(&quot;%d&#32;&quot;,&#32;v.GetInt());
+</computeroutput></literallayout></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1QueryObject">
+<title>Query Object</title>
+
+<para>Similar to Array, we can access all object members by iterator:</para>
+
+<para><literallayout><computeroutput>static&#32;const&#32;char*&#32;kTypeNames[]&#32;=&#32;
+&#32;&#32;&#32;&#32;{&#32;&quot;Null&quot;,&#32;&quot;False&quot;,&#32;&quot;True&quot;,&#32;&quot;Object&quot;,&#32;&quot;Array&quot;,&#32;&quot;String&quot;,&#32;&quot;Number&quot;&#32;};
+
+for&#32;(Value::ConstMemberIterator&#32;itr&#32;=&#32;document.MemberBegin();
+&#32;&#32;&#32;&#32;itr&#32;!=&#32;document.MemberEnd();&#32;++itr)
+{
+&#32;&#32;&#32;&#32;printf(&quot;Type&#32;of&#32;member&#32;%s&#32;is&#32;%s\n&quot;,
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;itr-&gt;name.GetString(),&#32;kTypeNames[itr-&gt;value.GetType()]);
+}
+</computeroutput></literallayout></para>
+
+<para><literallayout><computeroutput>Type&#32;of&#32;member&#32;hello&#32;is&#32;String
+Type&#32;of&#32;member&#32;t&#32;is&#32;True
+Type&#32;of&#32;member&#32;f&#32;is&#32;False
+Type&#32;of&#32;member&#32;n&#32;is&#32;Null
+Type&#32;of&#32;member&#32;i&#32;is&#32;Number
+Type&#32;of&#32;member&#32;pi&#32;is&#32;Number
+Type&#32;of&#32;member&#32;a&#32;is&#32;Array
+</computeroutput></literallayout></para>
+
+<para>Note that, when <computeroutput>operator[](const char*)</computeroutput> cannot find the member, it will fail on assertion.</para>
+
+<para>If we are unsure whether a member exists, we need to call <computeroutput>HasMember()</computeroutput> before calling <computeroutput>operator[](const char*)</computeroutput>. However, this incurs two lookup. A better way is to call <computeroutput>FindMember()</computeroutput>, which can check the existence of a member and obtain its value at once:</para>
+
+<para><literallayout><computeroutput>Value::ConstMemberIterator&#32;itr&#32;=&#32;document.FindMember(&quot;hello&quot;);
+if&#32;(itr&#32;!=&#32;document.MemberEnd())
+&#32;&#32;&#32;&#32;printf(&quot;%s\n&quot;,&#32;itr-&gt;value.GetString());
+</computeroutput></literallayout></para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_1autotoc_md121">
+<title>Range-based For Loop (New in v1.1.0)</title>
+
+<para>When C++11 is enabled, you can use range-based for loop to access all members in an object.</para>
+
+<para><literallayout><computeroutput>for&#32;(auto&amp;&#32;m&#32;:&#32;document.GetObject())
+&#32;&#32;&#32;&#32;printf(&quot;Type&#32;of&#32;member&#32;%s&#32;is&#32;%s\n&quot;,
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m.name.GetString(),&#32;kTypeNames[m.value.GetType()]);
+</computeroutput></literallayout></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1QueryNumber">
+<title>Querying Number</title>
+
+<para>JSON provides a single numerical type called Number. Number can be an integer or a real number. RFC 4627 says the range of Number is specified by the parser implementation.</para>
+
+<para>As C++ provides several integer and floating point number types, the DOM tries to handle these with the widest possible range and good performance.</para>
+
+<para>When a Number is parsed, it is stored in the DOM as one of the following types:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Type   </para>
+</entry><entry>
+<para>Description    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned</computeroutput>   </para>
+</entry><entry>
+<para>32-bit unsigned integer    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>int</computeroutput>   </para>
+</entry><entry>
+<para>32-bit signed integer    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>uint64_t</computeroutput>   </para>
+</entry><entry>
+<para>64-bit unsigned integer    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>int64_t</computeroutput>   </para>
+</entry><entry>
+<para>64-bit signed integer    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>double</computeroutput>   </para>
+</entry><entry>
+<para>64-bit double precision floating point   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>When querying a number, you can check whether the number can be obtained as the target type:</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Checking   </para>
+</entry><entry>
+<para>Obtaining    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>bool IsNumber()</computeroutput>   </para>
+</entry><entry>
+<para>N/A    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>bool IsUint()</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>unsigned GetUint()</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>bool IsInt()</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>int GetInt()</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>bool IsUint64()</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>uint64_t GetUint64()</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>bool IsInt64()</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>int64_t GetInt64()</computeroutput>    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>bool IsDouble()</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>double GetDouble()</computeroutput>   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>Note that, an integer value may be obtained in various ways without conversion. For example, A value <computeroutput>x</computeroutput> containing 123 will make <computeroutput>x.IsInt() == x.IsUint() == x.IsInt64() == x.IsUint64() == true</computeroutput>. But a value <computeroutput>y</computeroutput> containing -3000000000 will only make <computeroutput>x.IsInt64() == true</computeroutput>.</para>
+
+<para>When obtaining the numeric values, <computeroutput>GetDouble()</computeroutput> will convert internal integer representation to a <computeroutput>double</computeroutput>. Note that, <computeroutput>int</computeroutput> and <computeroutput>unsigned</computeroutput> can be safely converted to <computeroutput>double</computeroutput>, but <computeroutput>int64_t</computeroutput> and <computeroutput>uint64_t</computeroutput> may lose precision (since mantissa of <computeroutput>double</computeroutput> is only 52-bits).</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1QueryString">
+<title>Query String</title>
+
+<para>In addition to <computeroutput>GetString()</computeroutput>, the <computeroutput>Value</computeroutput> class also contains <computeroutput>GetStringLength()</computeroutput>. Here explains why:</para>
+
+<para>According to RFC 4627, JSON strings can contain Unicode character <computeroutput>U+0000</computeroutput>, which must be escaped as <computeroutput>&quot;\u0000&quot;</computeroutput>. The problem is that, C/C++ often uses null-terminated string, which treats <computeroutput>\0</computeroutput> as the terminator symbol.</para>
+
+<para>To conform with RFC 4627, RapidJSON supports string containing <computeroutput>U+0000</computeroutput> character. If you need to handle this, you can use <computeroutput>GetStringLength()</computeroutput> to obtain the correct string length.</para>
+
+<para>For example, after parsing the following JSON to <computeroutput>Document d</computeroutput>:</para>
+
+<para><literallayout><computeroutput>{&#32;&quot;s&quot;&#32;:&#32;&#32;&quot;a\u0000b&quot;&#32;}
+</computeroutput></literallayout> The correct length of the string <computeroutput>&quot;a\u0000b&quot;</computeroutput> is 3, as returned by <computeroutput>GetStringLength()</computeroutput>. But <computeroutput>strlen()</computeroutput> returns 1.</para>
+
+<para><computeroutput>GetStringLength()</computeroutput> can also improve performance, as user may often need to call <computeroutput>strlen()</computeroutput> for allocating buffer.</para>
+
+<para>Besides, <computeroutput>std::string</computeroutput> also support a constructor:</para>
+
+<para><literallayout><computeroutput>string(const&#32;char*&#32;s,&#32;size_t&#32;count);
+</computeroutput></literallayout></para>
+
+<para>which accepts the length of string as parameter. This constructor supports storing null character within the string, and should also provide better performance.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_1autotoc_md122">
+<title>Comparing values</title>
+
+<para>You can use <computeroutput>==</computeroutput> and <computeroutput>!=</computeroutput> to compare values. Two values are equal if and only if they have same type and contents. You can also compare values with primitive types. Here is an example:</para>
+
+<para><literallayout><computeroutput>if&#32;(document[&quot;hello&quot;]&#32;==&#32;document[&quot;n&quot;])&#32;/*...*/;&#32;&#32;&#32;&#32;//&#32;Compare&#32;values
+if&#32;(document[&quot;hello&quot;]&#32;==&#32;&quot;world&quot;)&#32;/*...*/;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Compare&#32;value&#32;with&#32;literal&#32;string
+if&#32;(document[&quot;i&quot;]&#32;!=&#32;123)&#32;/*...*/;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Compare&#32;with&#32;integers
+if&#32;(document[&quot;pi&quot;]&#32;!=&#32;3.14)&#32;/*...*/;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Compare&#32;with&#32;double.
+</computeroutput></literallayout></para>
+
+<para>Array/object compares their elements/members in order. They are equal if and only if their whole subtrees are equal.</para>
+
+<para>Note that, currently if an object contains duplicated named member, comparing equality with any object is always <computeroutput>false</computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1CreateModifyValues">
+<title>Create/Modify Values</title>
+
+<para>There are several ways to create values. After a DOM tree is created and/or modified, it can be saved as JSON again using <computeroutput><link linkend="_class_writer">Writer</link></computeroutput>.</para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1ChangeValueType">
+<title>Change Value Type</title>
+
+<para>When creating a <computeroutput>Value</computeroutput> or <computeroutput>Document</computeroutput> by default constructor, its type is Null. To change its type, call <computeroutput>SetXXX()</computeroutput> or assignment operator, for example:</para>
+
+<para><literallayout><computeroutput>Document&#32;d;&#32;//&#32;Null
+d.SetObject();
+
+Value&#32;v;&#32;&#32;&#32;&#32;//&#32;Null
+v.SetInt(10);
+v&#32;=&#32;10;&#32;&#32;&#32;&#32;&#32;//&#32;Shortcut,&#32;same&#32;as&#32;above
+</computeroutput></literallayout></para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_1autotoc_md123">
+<title>Overloaded Constructors</title>
+
+<para>There are also overloaded constructors for several types:</para>
+
+<para><literallayout><computeroutput>Value&#32;b(true);&#32;&#32;&#32;&#32;//&#32;calls&#32;Value(bool)
+Value&#32;i(-123);&#32;&#32;&#32;&#32;//&#32;calls&#32;Value(int)
+Value&#32;u(123u);&#32;&#32;&#32;&#32;//&#32;calls&#32;Value(unsigned)
+Value&#32;d(1.5);&#32;&#32;&#32;&#32;&#32;//&#32;calls&#32;Value(double)
+</computeroutput></literallayout></para>
+
+<para>To create empty object or array, you may use <computeroutput>SetObject()</computeroutput>/<computeroutput>SetArray()</computeroutput> after default constructor, or using the <computeroutput>Value(Type)</computeroutput> in one call:</para>
+
+<para><literallayout><computeroutput>Value&#32;o(kObjectType);
+Value&#32;a(kArrayType);
+</computeroutput></literallayout></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1MoveSemantics">
+<title>Move Semantics</title>
+
+<para>A very special decision during design of RapidJSON is that, assignment of value does not copy the source value to destination value. Instead, the value from source is moved to the destination. For example,</para>
+
+<para><literallayout><computeroutput>Value&#32;a(123);
+Value&#32;b(456);
+a&#32;=&#32;b;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;b&#32;becomes&#32;a&#32;Null&#32;value,&#32;a&#32;becomes&#32;number&#32;456.
+</computeroutput></literallayout></para>
+
+<para></para>
+
+<para>Why? What is the advantage of this semantics?</para>
+
+<para>The simple answer is performance. For fixed size JSON types (Number, True, False, Null), copying them is fast and easy. However, For variable size JSON types (String, Array, Object), copying them will incur a lot of overheads. And these overheads are often unnoticed. Especially when we need to create temporary object, copy it to another variable, and then destruct it.</para>
+
+<para>For example, if normal <emphasis>copy</emphasis> semantics was used:</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+Value&#32;o(kObjectType);
+{
+&#32;&#32;&#32;&#32;Value&#32;contacts(kArrayType);
+&#32;&#32;&#32;&#32;//&#32;adding&#32;elements&#32;to&#32;contacts&#32;array.
+&#32;&#32;&#32;&#32;//&#32;...
+&#32;&#32;&#32;&#32;o.AddMember(&quot;contacts&quot;,&#32;contacts,&#32;d.GetAllocator());&#32;&#32;//&#32;deep&#32;clone&#32;contacts&#32;(may&#32;be&#32;with&#32;lots&#32;of&#32;allocations)
+&#32;&#32;&#32;&#32;//&#32;destruct&#32;contacts.
+}
+</computeroutput></literallayout></para>
+
+<para></para>
+
+<para>The object <computeroutput>o</computeroutput> needs to allocate a buffer of same size as contacts, makes a deep clone of it, and then finally contacts is destructed. This will incur a lot of unnecessary allocations/deallocations and memory copying.</para>
+
+<para>There are solutions to prevent actual copying these data, such as reference counting and garbage collection(GC).</para>
+
+<para>To make RapidJSON simple and fast, we chose to use <emphasis>move</emphasis> semantics for assignment. It is similar to <computeroutput>std::auto_ptr</computeroutput> which transfer ownership during assignment. Move is much faster and simpler, it just destructs the original value, <computeroutput>memcpy()</computeroutput> the source to destination, and finally sets the source as Null type.</para>
+
+<para>So, with move semantics, the above example becomes:</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+Value&#32;o(kObjectType);
+{
+&#32;&#32;&#32;&#32;Value&#32;contacts(kArrayType);
+&#32;&#32;&#32;&#32;//&#32;adding&#32;elements&#32;to&#32;contacts&#32;array.
+&#32;&#32;&#32;&#32;o.AddMember(&quot;contacts&quot;,&#32;contacts,&#32;d.GetAllocator());&#32;&#32;//&#32;just&#32;memcpy()&#32;of&#32;contacts&#32;itself&#32;to&#32;the&#32;value&#32;of&#32;new&#32;member&#32;(16&#32;bytes)
+&#32;&#32;&#32;&#32;//&#32;contacts&#32;became&#32;Null&#32;here.&#32;Its&#32;destruction&#32;is&#32;trivial.
+}
+</computeroutput></literallayout></para>
+
+<para></para>
+
+<para>This is called move assignment operator in C++11. As RapidJSON supports C++03, it adopts move semantics using assignment operator, and all other modifying function like <computeroutput>AddMember()</computeroutput>, <computeroutput>PushBack()</computeroutput>.</para>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues">
+<title>Move semantics and temporary values</title>
+
+<para>Sometimes, it is convenient to construct a Value in place, before passing it to one of the &quot;moving&quot; functions, like <computeroutput>PushBack()</computeroutput> or <computeroutput>AddMember()</computeroutput>. As temporary objects can&apos;t be converted to proper Value references, the convenience function <computeroutput>Move()</computeroutput> is available:</para>
+
+<para><literallayout><computeroutput>Value&#32;a(kArrayType);
+Document::AllocatorType&amp;&#32;allocator&#32;=&#32;document.GetAllocator();
+//&#32;a.PushBack(Value(42),&#32;allocator);&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;will&#32;not&#32;compile
+a.PushBack(Value().SetInt(42),&#32;allocator);&#32;//&#32;fluent&#32;API
+a.PushBack(Value(42).Move(),&#32;allocator);&#32;&#32;&#32;//&#32;same&#32;as&#32;above
+</computeroutput></literallayout></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1CreateString">
+<title>Create String</title>
+
+<para>RapidJSON provides two strategies for storing string.</para>
+
+<para><orderedlist>
+<listitem>
+<para>copy-string: allocates a buffer, and then copy the source data into it.</para>
+</listitem><listitem>
+<para>const-string: simply store a pointer of string.</para>
+</listitem></orderedlist>
+</para>
+
+<para>Copy-string is always safe because it owns a copy of the data. Const-string can be used for storing a string literal, and for in-situ parsing which will be mentioned in the DOM section.</para>
+
+<para>To make memory allocation customizable, RapidJSON requires users to pass an instance of allocator, whenever an operation may require allocation. This design is needed to prevent storing an allocator (or Document) pointer per Value.</para>
+
+<para>Therefore, when we assign a copy-string, we call this overloaded <computeroutput>SetString()</computeroutput> with allocator:</para>
+
+<para><literallayout><computeroutput>Document&#32;document;
+Value&#32;author;
+char&#32;buffer[10];
+int&#32;len&#32;=&#32;sprintf(buffer,&#32;&quot;%s&#32;%s&quot;,&#32;&quot;Milo&quot;,&#32;&quot;Yip&quot;);&#32;//&#32;dynamically&#32;created&#32;string.
+author.SetString(buffer,&#32;len,&#32;document.GetAllocator());
+memset(buffer,&#32;0,&#32;sizeof(buffer));
+//&#32;author.GetString()&#32;still&#32;contains&#32;&quot;Milo&#32;Yip&quot;&#32;after&#32;buffer&#32;is&#32;destroyed
+</computeroutput></literallayout></para>
+
+<para>In this example, we get the allocator from a <computeroutput>Document</computeroutput> instance. This is a common idiom when using RapidJSON. But you may use other instances of allocator.</para>
+
+<para>Besides, the above <computeroutput>SetString()</computeroutput> requires length. This can handle null characters within a string. There is another <computeroutput>SetString()</computeroutput> overloaded function without the length parameter. And it assumes the input is null-terminated and calls a <computeroutput>strlen()</computeroutput>-like function to obtain the length.</para>
+
+<para>Finally, for a string literal or string with a safe life-cycle one can use the const-string version of <computeroutput>SetString()</computeroutput>, which lacks an allocator parameter. For string literals (or constant character arrays), simply passing the literal as parameter is safe and efficient:</para>
+
+<para><literallayout><computeroutput>Value&#32;s;
+s.SetString(&quot;rapidjson&quot;);&#32;&#32;&#32;&#32;//&#32;can&#32;contain&#32;null&#32;character,&#32;length&#32;derived&#32;at&#32;compile&#32;time
+s&#32;=&#32;&quot;rapidjson&quot;;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;shortcut,&#32;same&#32;as&#32;above
+</computeroutput></literallayout></para>
+
+<para>For a character pointer, RapidJSON requires it to be marked as safe before using it without copying. This can be achieved by using the <computeroutput>StringRef</computeroutput> function:</para>
+
+<para><literallayout><computeroutput>const&#32;char&#32;*&#32;cstr&#32;=&#32;getenv(&quot;USER&quot;);
+size_t&#32;cstr_len&#32;=&#32;...;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;in&#32;case&#32;length&#32;is&#32;available
+Value&#32;s;
+//&#32;s.SetString(cstr);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;will&#32;not&#32;compile
+s.SetString(StringRef(cstr));&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;ok,&#32;assume&#32;safe&#32;lifetime,&#32;null-terminated
+s&#32;=&#32;StringRef(cstr);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;shortcut,&#32;same&#32;as&#32;above
+s.SetString(StringRef(cstr,cstr_len));&#32;//&#32;faster,&#32;can&#32;contain&#32;null&#32;character
+s&#32;=&#32;StringRef(cstr,cstr_len);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;shortcut,&#32;same&#32;as&#32;above
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1ModifyArray">
+<title>Modify Array</title>
+
+<para>Value with array type provides an API similar to <computeroutput>std::vector</computeroutput>.</para>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>Clear()</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>Reserve(SizeType, Allocator&amp;)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>Value&amp; PushBack(Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>template &lt;typename T&gt; <link linkend="_class_generic_value">GenericValue</link>&amp; PushBack(T, Allocator&amp;)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>Value&amp; PopBack()</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>ValueIterator Erase(ConstValueIterator pos)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>ValueIterator Erase(ConstValueIterator first, ConstValueIterator last)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+
+<para>Note that, <computeroutput>Reserve(...)</computeroutput> and <computeroutput>PushBack(...)</computeroutput> may allocate memory for the array elements, therefore requiring an allocator.</para>
+
+<para>Here is an example of <computeroutput>PushBack()</computeroutput>:</para>
+
+<para><literallayout><computeroutput>Value&#32;a(kArrayType);
+Document::AllocatorType&amp;&#32;allocator&#32;=&#32;document.GetAllocator();
+
+for&#32;(int&#32;i&#32;=&#32;5;&#32;i&#32;&lt;=&#32;10;&#32;i++)
+&#32;&#32;&#32;&#32;a.PushBack(i,&#32;allocator);&#32;&#32;&#32;//&#32;allocator&#32;is&#32;needed&#32;for&#32;potential&#32;realloc().
+
+//&#32;Fluent&#32;interface
+a.PushBack(&quot;Lua&quot;,&#32;allocator).PushBack(&quot;Mio&quot;,&#32;allocator);
+</computeroutput></literallayout></para>
+
+<para>This API differs from STL in that <computeroutput>PushBack()</computeroutput>/<computeroutput>PopBack()</computeroutput> return the array reference itself. This is called <emphasis>fluent interface</emphasis>.</para>
+
+<para>If you want to add a non-constant string or a string without sufficient lifetime (see <link linkend="_md_src_rapidjson_doc_tutorial_zh_cn_1CreateString">Create String</link>) to the array, you need to create a string Value by using the copy-string API. To avoid the need for an intermediate variable, you can use a <link linkend="_md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues">temporary value</link> in place:</para>
+
+<para><literallayout><computeroutput>//&#32;in-place&#32;Value&#32;parameter
+contact.PushBack(Value(&quot;copy&quot;,&#32;document.GetAllocator()).Move(),&#32;//&#32;copy&#32;string
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;document.GetAllocator());
+
+//&#32;explicit&#32;parameters
+Value&#32;val(&quot;key&quot;,&#32;document.GetAllocator());&#32;//&#32;copy&#32;string
+contact.PushBack(val,&#32;document.GetAllocator());
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1ModifyObject">
+<title>Modify Object</title>
+
+<para>The Object class is a collection of key-value pairs (members). Each key must be a string value. To modify an object, either add or remove members. The following API is for adding members:</para>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>Value&amp; AddMember(Value&amp;, Value&amp;, Allocator&amp; allocator)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>Value&amp; AddMember(StringRefType, Value&amp;, Allocator&amp;)</computeroutput></para>
+</listitem><listitem>
+<para><computeroutput>template &lt;typename T&gt; Value&amp; AddMember(StringRefType, T value, Allocator&amp;)</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+
+<para>Here is an example.</para>
+
+<para><literallayout><computeroutput>Value&#32;contact(kObject);
+contact.AddMember(&quot;name&quot;,&#32;&quot;Milo&quot;,&#32;document.GetAllocator());
+contact.AddMember(&quot;married&quot;,&#32;true,&#32;document.GetAllocator());
+</computeroutput></literallayout></para>
+
+<para>The name parameter with <computeroutput>StringRefType</computeroutput> is similar to the interface of the <computeroutput>SetString</computeroutput> function for string values. These overloads are used to avoid the need for copying the <computeroutput>name</computeroutput> string, since constant key names are very common in JSON objects.</para>
+
+<para>If you need to create a name from a non-constant string or a string without sufficient lifetime (see <link linkend="_md_src_rapidjson_doc_tutorial_zh_cn_1CreateString">Create String</link>), you need to create a string Value by using the copy-string API. To avoid the need for an intermediate variable, you can use a <link linkend="_md_src_rapidjson_doc_tutorial_zh_cn_1TemporaryValues">temporary value</link> in place:</para>
+
+<para><literallayout><computeroutput>//&#32;in-place&#32;Value&#32;parameter
+contact.AddMember(Value(&quot;copy&quot;,&#32;document.GetAllocator()).Move(),&#32;//&#32;copy&#32;string
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Value().Move(),&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;null&#32;value
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;document.GetAllocator());
+
+//&#32;explicit&#32;parameters
+Value&#32;key(&quot;key&quot;,&#32;document.GetAllocator());&#32;//&#32;copy&#32;string&#32;name
+Value&#32;val(42);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;some&#32;value
+contact.AddMember(key,&#32;val,&#32;document.GetAllocator());
+</computeroutput></literallayout></para>
+
+<para>For removing members, there are several choices:</para>
+
+<para><itemizedlist>
+<listitem>
+<para><computeroutput>bool RemoveMember(const Ch* name)</computeroutput>: Remove a member by search its name (linear time complexity).</para>
+</listitem><listitem>
+<para><computeroutput>bool RemoveMember(const Value&amp; name)</computeroutput>: same as above but <computeroutput>name</computeroutput> is a Value.</para>
+</listitem><listitem>
+<para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput>: Remove a member by iterator (<emphasis>constant</emphasis> time complexity).</para>
+</listitem><listitem>
+<para><computeroutput>MemberIterator EraseMember(MemberIterator)</computeroutput>: similar to the above but it preserves order of members (linear time complexity).</para>
+</listitem><listitem>
+<para><computeroutput>MemberIterator EraseMember(MemberIterator first, MemberIterator last)</computeroutput>: remove a range of members, preserves order (linear time complexity).</para>
+</listitem></itemizedlist>
+</para>
+
+<para><computeroutput>MemberIterator RemoveMember(MemberIterator)</computeroutput> uses a &quot;move-last&quot; trick to achieve constant time complexity. Basically the member at iterator is destructed, and then the last element is moved to that position. So the order of the remaining members are changed.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1DeepCopyValue">
+<title>Deep Copy Value</title>
+
+<para>If we really need to copy a DOM tree, we can use two APIs for deep copy: constructor with allocator, and <computeroutput>CopyFrom()</computeroutput>.</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+Document::AllocatorType&amp;&#32;a&#32;=&#32;d.GetAllocator();
+Value&#32;v1(&quot;foo&quot;);
+//&#32;Value&#32;v2(v1);&#32;//&#32;not&#32;allowed
+
+Value&#32;v2(v1,&#32;a);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;make&#32;a&#32;copy
+assert(v1.IsString());&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;v1&#32;untouched
+d.SetArray().PushBack(v1,&#32;a).PushBack(v2,&#32;a);
+assert(v1.IsNull()&#32;&amp;&amp;&#32;v2.IsNull());&#32;&#32;&#32;//&#32;both&#32;moved&#32;to&#32;d
+
+v2.CopyFrom(d,&#32;a);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;copy&#32;whole&#32;document&#32;to&#32;v2
+assert(d.IsArray()&#32;&amp;&amp;&#32;d.Size()&#32;==&#32;2);&#32;//&#32;d&#32;untouched
+v1.SetObject().AddMember(&quot;array&quot;,&#32;v2,&#32;a);
+d.PushBack(v1,&#32;a);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1SwapValues">
+<title>Swap Values</title>
+
+<para><computeroutput><link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">Swap()</link></computeroutput> is also provided.</para>
+
+<para><literallayout><computeroutput>Value&#32;a(123);
+Value&#32;b(&quot;Hello&quot;);
+a.Swap(b);
+assert(a.IsString());
+assert(b.IsInt());
+</computeroutput></literallayout></para>
+
+<para>Swapping two DOM trees is fast (constant time), despite the complexity of the trees.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_tutorial_zh_cn_1WhatsNext">
+<title>What&apos;s next</title>
+
+<para>This tutorial shows the basics of DOM tree query and manipulation. There are several important concepts in RapidJSON:</para>
+
+<para><orderedlist>
+<listitem>
+<para><link linkend="_stream_8md">Streams</link> are channels for reading/writing JSON, which can be a in-memory string, or file stream, etc. User can also create their streams.</para>
+</listitem><listitem>
+<para><link linkend="_encoding_8md">Encoding</link> defines which character encoding is used in streams and memory. RapidJSON also provide Unicode conversion/validation internally.</para>
+</listitem><listitem>
+<para><link linkend="_dom_8md">DOM</link>&apos;s basics are already covered in this tutorial. Uncover more advanced features such as <emphasis>in situ</emphasis> parsing, other parsing options and advanced usages.</para>
+</listitem><listitem>
+<para><link linkend="_sax_8md">SAX</link> is the foundation of parsing/generating facility in RapidJSON. Learn how to use <computeroutput>Reader</computeroutput>/<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> to implement even faster applications. Also try <computeroutput><link linkend="_class_pretty_writer">PrettyWriter</link></computeroutput> to format the JSON.</para>
+</listitem><listitem>
+<para><link linkend="_performance_8md">Performance</link> shows some in-house and third-party benchmarks.</para>
+</listitem><listitem>
+<para><link linkend="_internals_8md">Internals</link> describes some internal designs and techniques of RapidJSON.</para>
+</listitem></orderedlist>
+</para>
+
+<para>You may also refer to the <link linkend="_faq_8md">FAQ</link>, API documentation, examples and unit tests. </para>
+</section>
+</section>

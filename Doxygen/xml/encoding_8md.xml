@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="encoding_8md" kind="file" language="Markdown">
+    <compoundname>encoding.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Encoding</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">According<sp/>to<sp/>[ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf),</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>Introduction)<sp/>JSON<sp/>text<sp/>is<sp/>a<sp/>sequence<sp/>of<sp/>Unicode<sp/>code<sp/>points.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>earlier<sp/>[RFC4627](http://www.ietf.org/rfc/rfc4627.txt)<sp/>stated<sp/>that,</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>§3)<sp/>JSON<sp/>text<sp/>SHALL<sp/>be<sp/>encoded<sp/>in<sp/>Unicode.<sp/><sp/>The<sp/>default<sp/>encoding<sp/>is<sp/>UTF-8.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>§6)<sp/>JSON<sp/>may<sp/>be<sp/>represented<sp/>using<sp/>UTF-8,<sp/>UTF-16,<sp/>or<sp/>UTF-32.<sp/>When<sp/>JSON<sp/>is<sp/>written<sp/>in<sp/>UTF-8,<sp/>JSON<sp/>is<sp/>8bit<sp/>compatible.<sp/><sp/>When<sp/>JSON<sp/>is<sp/>written<sp/>in<sp/>UTF-16<sp/>or<sp/>UTF-32,<sp/>the<sp/>binary<sp/>content-transfer-encoding<sp/>must<sp/>be<sp/>used.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>supports<sp/>various<sp/>encodings.<sp/>It<sp/>can<sp/>also<sp/>validate<sp/>the<sp/>encodings<sp/>of<sp/>JSON,<sp/>and<sp/>transcoding<sp/>JSON<sp/>among<sp/>encodings.<sp/>All<sp/>these<sp/>features<sp/>are<sp/>implemented<sp/>internally,<sp/>without<sp/>the<sp/>need<sp/>for<sp/>external<sp/>libraries<sp/>(e.g.<sp/>[ICU](http://site.icu-project.org/)).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Unicode<sp/>{#Unicode}</highlight></codeline>
+<codeline><highlight class="normal">From<sp/>[Unicode&apos;s<sp/>official<sp/>website](http://www.unicode.org/standard/WhatIsUnicode.html):</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>Unicode<sp/>provides<sp/>a<sp/>unique<sp/>number<sp/>for<sp/>every<sp/>character,<sp/></highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>no<sp/>matter<sp/>what<sp/>the<sp/>platform,</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>no<sp/>matter<sp/>what<sp/>the<sp/>program,</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>no<sp/>matter<sp/>what<sp/>the<sp/>language.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Those<sp/>unique<sp/>numbers<sp/>are<sp/>called<sp/>code<sp/>points,<sp/>which<sp/>is<sp/>in<sp/>the<sp/>range<sp/>`0x0`<sp/>to<sp/>`0x10FFFF`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Unicode<sp/>Transformation<sp/>Format<sp/>{#UTF}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>various<sp/>encodings<sp/>for<sp/>storing<sp/>Unicode<sp/>code<sp/>points.<sp/>These<sp/>are<sp/>called<sp/>Unicode<sp/>Transformation<sp/>Format<sp/>(UTF).<sp/>RapidJSON<sp/>supports<sp/>the<sp/>most<sp/>commonly<sp/>used<sp/>UTFs,<sp/>including</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-8:<sp/>8-bit<sp/>variable-width<sp/>encoding.<sp/>It<sp/>maps<sp/>a<sp/>code<sp/>point<sp/>to<sp/>1–4<sp/>bytes.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-16:<sp/>16-bit<sp/>variable-width<sp/>encoding.<sp/>It<sp/>maps<sp/>a<sp/>code<sp/>point<sp/>to<sp/>1–2<sp/>16-bit<sp/>code<sp/>units<sp/>(i.e.,<sp/>2–4<sp/>bytes).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-32:<sp/>32-bit<sp/>fixed-width<sp/>encoding.<sp/>It<sp/>directly<sp/>maps<sp/>a<sp/>code<sp/>point<sp/>to<sp/>a<sp/>single<sp/>32-bit<sp/>code<sp/>unit<sp/>(i.e.<sp/>4<sp/>bytes).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>UTF-16<sp/>and<sp/>UTF-32,<sp/>the<sp/>byte<sp/>order<sp/>(endianness)<sp/>does<sp/>matter.<sp/>Within<sp/>computer<sp/>memory,<sp/>they<sp/>are<sp/>often<sp/>stored<sp/>in<sp/>the<sp/>computer&apos;s<sp/>endianness.<sp/>However,<sp/>when<sp/>it<sp/>is<sp/>stored<sp/>in<sp/>file<sp/>or<sp/>transferred<sp/>over<sp/>network,<sp/>we<sp/>need<sp/>to<sp/>state<sp/>the<sp/>byte<sp/>order<sp/>of<sp/>the<sp/>byte<sp/>sequence,<sp/>either<sp/>little-endian<sp/>(LE)<sp/>or<sp/>big-endian<sp/>(BE).<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>provide<sp/>these<sp/>encodings<sp/>via<sp/>the<sp/>structs<sp/>in<sp/>`rapidjson/encodings.h`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">namespace<sp/>rapidjson<sp/>{</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>char&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF8;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16LE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16BE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32LE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32BE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">}<sp/>//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>processing<sp/>text<sp/>in<sp/>memory,<sp/>we<sp/>normally<sp/>use<sp/>`UTF8`,<sp/>`UTF16`<sp/>or<sp/>`UTF32`.<sp/>For<sp/>processing<sp/>text<sp/>via<sp/>I/O,<sp/>we<sp/>may<sp/>use<sp/>`UTF8`,<sp/>`UTF16LE`,<sp/>`UTF16BE`,<sp/>`UTF32LE`<sp/>or<sp/>`UTF32BE`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>using<sp/>the<sp/>DOM-style<sp/>API,<sp/>the<sp/>`Encoding`<sp/>template<sp/>parameter<sp/>in<sp/>`GenericValue&lt;Encoding&gt;`<sp/>and<sp/>`GenericDocument&lt;Encoding&gt;`<sp/>indicates<sp/>the<sp/>encoding<sp/>to<sp/>be<sp/>used<sp/>to<sp/>represent<sp/>JSON<sp/>string<sp/>in<sp/>memory.<sp/>So<sp/>normally<sp/>we<sp/>will<sp/>use<sp/>`UTF8`,<sp/>`UTF16`<sp/>or<sp/>`UTF32`<sp/>for<sp/>this<sp/>template<sp/>parameter.<sp/>The<sp/>choice<sp/>depends<sp/>on<sp/>operating<sp/>systems<sp/>and<sp/>other<sp/>libraries<sp/>that<sp/>the<sp/>application<sp/>is<sp/>using.<sp/>For<sp/>example,<sp/>Windows<sp/>API<sp/>represents<sp/>Unicode<sp/>characters<sp/>in<sp/>UTF-16,<sp/>while<sp/>most<sp/>Linux<sp/>distributions<sp/>and<sp/>applications<sp/>prefer<sp/>UTF-8.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Example<sp/>of<sp/>UTF-16<sp/>DOM<sp/>declaration:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericDocument&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericValue&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WValue;</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>detail<sp/>example,<sp/>please<sp/>check<sp/>the<sp/>example<sp/>in<sp/>[DOM&apos;s<sp/>Encoding](doc/stream.md)<sp/>section.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Character<sp/>Type<sp/>{#CharacterType}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">As<sp/>shown<sp/>in<sp/>the<sp/>declaration,<sp/>each<sp/>encoding<sp/>has<sp/>a<sp/>`CharType`<sp/>template<sp/>parameter.<sp/>Actually,<sp/>it<sp/>may<sp/>be<sp/>a<sp/>little<sp/>bit<sp/>confusing,<sp/>but<sp/>each<sp/>`CharType`<sp/>stores<sp/>a<sp/>code<sp/>unit,<sp/>not<sp/>a<sp/>character<sp/>(code<sp/>point).<sp/>As<sp/>mentioned<sp/>in<sp/>previous<sp/>section,<sp/>a<sp/>code<sp/>point<sp/>may<sp/>be<sp/>encoded<sp/>to<sp/>1–4<sp/>code<sp/>units<sp/>for<sp/>UTF-8.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>`UTF16(LE|BE)`,<sp/>`UTF32(LE|BE)`,<sp/>the<sp/>`CharType`<sp/>must<sp/>be<sp/>integer<sp/>type<sp/>of<sp/>at<sp/>least<sp/>2<sp/>and<sp/>4<sp/>bytes<sp/><sp/>respectively.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Note<sp/>that<sp/>C++11<sp/>introduces<sp/>`char16_t`<sp/>and<sp/>`char32_t`,<sp/>which<sp/>can<sp/>be<sp/>used<sp/>for<sp/>`UTF16`<sp/>and<sp/>`UTF32`<sp/>respectively.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>AutoUTF<sp/>{#AutoUTF}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Previous<sp/>encodings<sp/>are<sp/>statically<sp/>bound<sp/>in<sp/>compile-time.<sp/>In<sp/>other<sp/>words,<sp/>user<sp/>must<sp/>know<sp/>exactly<sp/>which<sp/>encodings<sp/>will<sp/>be<sp/>used<sp/>in<sp/>the<sp/>memory<sp/>or<sp/>streams.<sp/>However,<sp/>sometimes<sp/>we<sp/>may<sp/>need<sp/>to<sp/>read/write<sp/>files<sp/>of<sp/>different<sp/>encodings.<sp/>The<sp/>encoding<sp/>needed<sp/>to<sp/>be<sp/>decided<sp/>in<sp/>runtime.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`AutoUTF`<sp/>is<sp/>an<sp/>encoding<sp/>designed<sp/>for<sp/>this<sp/>purpose.<sp/>It<sp/>chooses<sp/>which<sp/>encoding<sp/>to<sp/>be<sp/>used<sp/>according<sp/>to<sp/>the<sp/>input<sp/>or<sp/>output<sp/>stream.<sp/>Currently,<sp/>it<sp/>should<sp/>be<sp/>used<sp/>with<sp/>`EncodedInputStream`<sp/>and<sp/>`EncodedOutputStream`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>ASCII<sp/>{#ASCII}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Although<sp/>the<sp/>JSON<sp/>standards<sp/>did<sp/>not<sp/>mention<sp/>about<sp/>[ASCII](http://en.wikipedia.org/wiki/ASCII),<sp/>sometimes<sp/>we<sp/>would<sp/>like<sp/>to<sp/>write<sp/>7-bit<sp/>ASCII<sp/>JSON<sp/>for<sp/>applications<sp/>that<sp/>cannot<sp/>handle<sp/>UTF-8.<sp/>Since<sp/>any<sp/>JSON<sp/>can<sp/>represent<sp/>unicode<sp/>characters<sp/>in<sp/>escaped<sp/>sequence<sp/>`\uXXXX`,<sp/>JSON<sp/>can<sp/>always<sp/>be<sp/>encoded<sp/>in<sp/>ASCII.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example<sp/>for<sp/>writing<sp/>a<sp/>UTF-8<sp/>DOM<sp/>into<sp/>ASCII:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/>//<sp/>UTF8&lt;&gt;</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal">Writer&lt;StringBuffer,<sp/>Document::EncodingType,<sp/>ASCII&lt;&gt;<sp/>&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>buffer.GetString();</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ASCII<sp/>can<sp/>be<sp/>used<sp/>in<sp/>input<sp/>stream.<sp/>If<sp/>the<sp/>input<sp/>stream<sp/>contains<sp/>bytes<sp/>with<sp/>values<sp/>above<sp/>127,<sp/>it<sp/>will<sp/>cause<sp/>`kParseErrorStringInvalidEncoding`<sp/>error.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ASCII<sp/>*cannot*<sp/>be<sp/>used<sp/>in<sp/>memory<sp/>(encoding<sp/>of<sp/>`Document`<sp/>or<sp/>target<sp/>encoding<sp/>of<sp/>`Reader`),<sp/>as<sp/>it<sp/>cannot<sp/>represent<sp/>Unicode<sp/>code<sp/>points.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Validation<sp/>&amp;<sp/>Transcoding<sp/>{#ValidationTranscoding}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>RapidJSON<sp/>parses<sp/>a<sp/>JSON,<sp/>it<sp/>can<sp/>validate<sp/>the<sp/>input<sp/>JSON,<sp/>whether<sp/>it<sp/>is<sp/>a<sp/>valid<sp/>sequence<sp/>of<sp/>a<sp/>specified<sp/>encoding.<sp/>This<sp/>option<sp/>can<sp/>be<sp/>turned<sp/>on<sp/>by<sp/>adding<sp/>`kParseValidateEncodingFlag`<sp/>in<sp/>`parseFlags`<sp/>template<sp/>parameter.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>the<sp/>input<sp/>encoding<sp/>and<sp/>output<sp/>encoding<sp/>is<sp/>different,<sp/>`Reader`<sp/>and<sp/>`Writer`<sp/>will<sp/>automatically<sp/>transcode<sp/>(convert)<sp/>the<sp/>text.<sp/>In<sp/>this<sp/>case,<sp/>`kParseValidateEncodingFlag`<sp/>is<sp/>not<sp/>necessary,<sp/>as<sp/>it<sp/>must<sp/>decode<sp/>the<sp/>input<sp/>sequence.<sp/>And<sp/>if<sp/>the<sp/>sequence<sp/>was<sp/>unable<sp/>to<sp/>be<sp/>decoded,<sp/>it<sp/>must<sp/>be<sp/>invalid.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Transcoder<sp/>{#Transcoder}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Although<sp/>the<sp/>encoding<sp/>functions<sp/>in<sp/>RapidJSON<sp/>are<sp/>designed<sp/>for<sp/>JSON<sp/>parsing/generation,<sp/>user<sp/>may<sp/>abuse<sp/>them<sp/>for<sp/>transcoding<sp/>of<sp/>non-JSON<sp/>strings.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Here<sp/>is<sp/>an<sp/>example<sp/>for<sp/>transcoding<sp/>a<sp/>string<sp/>from<sp/>UTF-8<sp/>to<sp/>UTF-16:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/encodings.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">const<sp/>char*<sp/>s<sp/>=<sp/>&quot;...&quot;;<sp/>//<sp/>UTF-8<sp/>string</highlight></codeline>
+<codeline><highlight class="normal">StringStream<sp/>source(s);</highlight></codeline>
+<codeline><highlight class="normal">GenericStringBuffer&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>target;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">bool<sp/>hasError<sp/>=<sp/>false;</highlight></codeline>
+<codeline><highlight class="normal">while<sp/>(source.Peek()<sp/>!=<sp/>&apos;\0&apos;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!Transcoder&lt;UTF8&lt;&gt;,<sp/>UTF16&lt;&gt;<sp/>&gt;::Transcode(source,<sp/>target))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hasError<sp/>=<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>break;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">if<sp/>(!hasError)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>const<sp/>wchar_t*<sp/>t<sp/>=<sp/>target.GetString();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>also<sp/>use<sp/>`AutoUTF`<sp/>and<sp/>the<sp/>associated<sp/>streams<sp/>for<sp/>setting<sp/>source/target<sp/>encoding<sp/>in<sp/>runtime.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/encoding.md"/>
+  </compounddef>
+</doxygen>

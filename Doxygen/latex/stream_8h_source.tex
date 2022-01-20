@@ -1,0 +1,169 @@
+\hypertarget{stream_8h_source}{}\doxysection{stream.\+h}
+\label{stream_8h_source}\index{src/rapidjson/include/rapidjson/stream.h@{src/rapidjson/include/rapidjson/stream.h}}
+\mbox{\hyperlink{stream_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{rapidjson_8h}{rapidjson.h}}"{}}}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_STREAM\_H\_}}
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#define RAPIDJSON\_STREAM\_H\_}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{encodings_8h}{encodings.h}}"{}}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{25 \textcolor{comment}{//  Stream}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{39 }
+\DoxyCodeLine{42 }
+\DoxyCodeLine{46 }
+\DoxyCodeLine{50 }
+\DoxyCodeLine{53 }
+\DoxyCodeLine{56 }
+\DoxyCodeLine{61 }
+\DoxyCodeLine{67 }
+\DoxyCodeLine{72 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream>}
+\DoxyCodeLine{73 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_stream_traits}{StreamTraits}} \{}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{79     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_stream_traits_a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac}{copyOptimization}} = 0 \};}
+\DoxyCodeLine{80 \};}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{83 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream>}
+\DoxyCodeLine{84 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stream_8h_aa817b00a466bb84d96c5de1616436c95}{PutReserve}}(\mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& stream, \textcolor{keywordtype}{size\_t} count) \{}
+\DoxyCodeLine{85     (void)stream;}
+\DoxyCodeLine{86     (void)count;}
+\DoxyCodeLine{87 \}}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{90 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream>}
+\DoxyCodeLine{91 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stream_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(\mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& stream, \textcolor{keyword}{typename} Stream::Ch c) \{}
+\DoxyCodeLine{92     stream.Put(c);}
+\DoxyCodeLine{93 \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{96 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream, \textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{97 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{stream_8h_aacdd569be6f98c9d7d9ef71f79ef0fc0}{PutN}}(\mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& stream, Ch c, \textcolor{keywordtype}{size\_t} n) \{}
+\DoxyCodeLine{98     \mbox{\hyperlink{stream_8h_aa817b00a466bb84d96c5de1616436c95}{PutReserve}}(stream, n);}
+\DoxyCodeLine{99     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < n; i++)}
+\DoxyCodeLine{100         \mbox{\hyperlink{stream_8h_ad57ba7f2912c5509924b69dec7db4396}{PutUnsafe}}(stream, c);}
+\DoxyCodeLine{101 \}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{104 \textcolor{comment}{// GenericStreamWrapper}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{107 }
+\DoxyCodeLine{112 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& \_MSC\_VER <= 1800}}
+\DoxyCodeLine{113 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{114 RAPIDJSON\_DIAG\_OFF(4702)  \textcolor{comment}{// unreachable code}}
+\DoxyCodeLine{115 RAPIDJSON\_DIAG\_OFF(4512)  \textcolor{comment}{// assignment operator could not be generated}}
+\DoxyCodeLine{116 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118 \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Encoding = UTF8<> >}
+\DoxyCodeLine{119 \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_stream_wrapper}{GenericStreamWrapper}} \{}
+\DoxyCodeLine{120 \textcolor{keyword}{public}:}
+\DoxyCodeLine{121     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} Encoding::Ch \mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}};}
+\DoxyCodeLine{122     \mbox{\hyperlink{class_generic_stream_wrapper_a7b12b1de6337d3f8e635b650e372c803}{GenericStreamWrapper}}(InputStream\& is): \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}(is) \{\}}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{124     \mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}} \mbox{\hyperlink{class_generic_stream_wrapper_a98d22642dfdd2626ee25ad1db9fe287e}{Peek}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Peek(); \}}
+\DoxyCodeLine{125     \mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}} \mbox{\hyperlink{class_generic_stream_wrapper_a1c0bc67a233e08ed89b4ff37455e7754}{Take}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Take(); \}}
+\DoxyCodeLine{126     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_stream_wrapper_a5068a627e0a2deffa985db39f89c5378}{Tell}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Tell(); \}}
+\DoxyCodeLine{127     \mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}}* \mbox{\hyperlink{class_generic_stream_wrapper_a15044e9a6874ca4caa92ed27a191345c}{PutBegin}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.PutBegin(); \}}
+\DoxyCodeLine{128     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_stream_wrapper_a458b9f3e00ad41dadb069839ab53f0ba}{Put}}(\mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}} ch) \{ \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Put(ch); \}}
+\DoxyCodeLine{129     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_stream_wrapper_a210c0864fbff3cc72f2f62ed461105fb}{Flush}}() \{ \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Flush(); \}}
+\DoxyCodeLine{130     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_stream_wrapper_a84f8d6e1f95d53c4e8e22892d5113fd3}{PutEnd}}(\mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}}* ch) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.PutEnd(ch); \}}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132     \textcolor{comment}{// wrapper for MemoryStream}}
+\DoxyCodeLine{133     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_stream_wrapper_aef9e89bc4997497315bde1b60e8bb848}{Ch}}* \mbox{\hyperlink{class_generic_stream_wrapper_afdfd046b769d1c2e38d9a91656e6b592}{Peek4}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Peek4(); \}}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135     \textcolor{comment}{// wrapper for AutoUTFInputStream}}
+\DoxyCodeLine{136     \mbox{\hyperlink{encodings_8h_ac9448aedf514a5bb509bae73a9ce4e58}{UTFType}} \mbox{\hyperlink{class_generic_stream_wrapper_a5978422ff38fbacee201d4123da37e4f}{GetType}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.GetType(); \}}
+\DoxyCodeLine{137     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_stream_wrapper_a50f13a9be06f9b29032ca6c655b099ef}{HasBOM}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.HasBOM(); \}}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{140     InputStream\& \mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}};}
+\DoxyCodeLine{141 \};}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& \_MSC\_VER <= 1800}}
+\DoxyCodeLine{144 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{145 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{148 \textcolor{comment}{// StringStream}}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{151 }
+\DoxyCodeLine{153 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{154 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_generic_string_stream}{GenericStringStream}} \{}
+\DoxyCodeLine{155     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} Encoding::Ch \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}};}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157     \mbox{\hyperlink{struct_generic_string_stream_a6b20885ed64e33f5d081a1e83b07da06}{GenericStringStream}}(\textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}} *src) : \mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}}(src), \mbox{\hyperlink{struct_generic_string_stream_a3c86ef1e1f0655028cb8a3afce11ee4f}{head\_}}(src) \{\}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159     \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}} \mbox{\hyperlink{struct_generic_string_stream_a0c8fea9c2740c2953af9b3bb28bd469b}{Peek}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} *\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}}; \}}
+\DoxyCodeLine{160     \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}} \mbox{\hyperlink{struct_generic_string_stream_a0d26e3e77e4fca64a87c2d71f48ac5e5}{Take}}() \{ \textcolor{keywordflow}{return} *\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}}++; \}}
+\DoxyCodeLine{161     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_generic_string_stream_abc73d04baf4c7c58f383bc52536e8ac4}{Tell}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}} -\/ \mbox{\hyperlink{struct_generic_string_stream_a3c86ef1e1f0655028cb8a3afce11ee4f}{head\_}}); \}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163     \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}}* \mbox{\hyperlink{struct_generic_string_stream_a546c370fa1ea14a89a0bd717e1932c06}{PutBegin}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{164     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_generic_string_stream_aaa59dc5313151a4125bf7840f87a33eb}{Put}}(\mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}}) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{165     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_generic_string_stream_a5ff1a870d9334cd054cf4ca34c86ddc3}{Flush}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \}}
+\DoxyCodeLine{166     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_generic_string_stream_a07b942bacda494afb3b2f7629cef14af}{PutEnd}}(\mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}}*) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168     \textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}}* \mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}};     }
+\DoxyCodeLine{169     \textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_string_stream_a4289aca895330084ff3168e37e4f08bd}{Ch}}* \mbox{\hyperlink{struct_generic_string_stream_a3c86ef1e1f0655028cb8a3afce11ee4f}{head\_}};    }
+\DoxyCodeLine{170 \};}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{173 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_stream_traits}{StreamTraits}}<\mbox{\hyperlink{struct_generic_string_stream}{GenericStringStream}}<\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}> > \{}
+\DoxyCodeLine{174     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_stream_traits_a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac}{copyOptimization}} = 1 \};}
+\DoxyCodeLine{175 \};}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{178 \textcolor{keyword}{typedef} \mbox{\hyperlink{struct_generic_string_stream}{GenericStringStream<UTF8<>}} > \mbox{\hyperlink{stream_8h_a269d93f9d27c2dd91bfacac05c478122}{StringStream}};}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{181 \textcolor{comment}{// InsituStringStream}}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{184 }
+\DoxyCodeLine{187 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{188 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_generic_insitu_string_stream}{GenericInsituStringStream}} \{}
+\DoxyCodeLine{189     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} Encoding::Ch \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}};}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191     \mbox{\hyperlink{struct_generic_insitu_string_stream_ad8b8417f0501ac261c7232023292c183}{GenericInsituStringStream}}(\mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}} *src) : \mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}}(src), \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}}(0), \mbox{\hyperlink{struct_generic_insitu_string_stream_af5a7116bdd9bfde5141c298a5b7566b0}{head\_}}(src) \{\}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193     \textcolor{comment}{// Read}}
+\DoxyCodeLine{194     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}} \mbox{\hyperlink{struct_generic_insitu_string_stream_ae21ba3ff4595ccd5caa4a9858e793f3f}{Peek}}() \{ \textcolor{keywordflow}{return} *\mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}}; \}}
+\DoxyCodeLine{195     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}} \mbox{\hyperlink{struct_generic_insitu_string_stream_afde4e46663225e4c32cfdbcd261f321e}{Take}}() \{ \textcolor{keywordflow}{return} *\mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}}++; \}}
+\DoxyCodeLine{196     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_generic_insitu_string_stream_aa9a84abb24e8c93b683a2e7bfea309db}{Tell}}() \{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}} -\/ \mbox{\hyperlink{struct_generic_insitu_string_stream_af5a7116bdd9bfde5141c298a5b7566b0}{head\_}}); \}}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198     \textcolor{comment}{// Write}}
+\DoxyCodeLine{199     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_generic_insitu_string_stream_a74f92f9a4c34bd65aab4b99f519a543a}{Put}}(\mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}} c) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}} != 0); *\mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}}++ = c; \}}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* \mbox{\hyperlink{struct_generic_insitu_string_stream_a92fc7e54add4071d7941013b22ca64ed}{PutBegin}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}} = \mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}}; \}}
+\DoxyCodeLine{202     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{struct_generic_insitu_string_stream_a93702b08ff29c66bde389b0d4e9efa5a}{PutEnd}}(\mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* begin) \{ \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(\mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}} -\/ begin); \}}
+\DoxyCodeLine{203     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_generic_insitu_string_stream_a53597dc98a03a6a051c37c4f1046bd04}{Flush}}() \{\}}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* \mbox{\hyperlink{struct_generic_insitu_string_stream_ae29c28193128c240b20fab0af43f9bc8}{Push}}(\textcolor{keywordtype}{size\_t} count) \{ \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* begin = \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}}; \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}} += count; \textcolor{keywordflow}{return} begin; \}}
+\DoxyCodeLine{206     \textcolor{keywordtype}{void} \mbox{\hyperlink{struct_generic_insitu_string_stream_ad2c56d9dd64268ad72aab95f981fd761}{Pop}}(\textcolor{keywordtype}{size\_t} count) \{ \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}} -\/= count; \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* \mbox{\hyperlink{struct_generic_insitu_string_stream_af3cc551dd07fcca39db84459f4d4e718}{src\_}};}
+\DoxyCodeLine{209     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* \mbox{\hyperlink{struct_generic_insitu_string_stream_ab0e7a73638a7a8db81aa9b26714b0e3b}{dst\_}};}
+\DoxyCodeLine{210     \mbox{\hyperlink{struct_generic_insitu_string_stream_a277308a58f551f11d0d9a20823702b5a}{Ch}}* \mbox{\hyperlink{struct_generic_insitu_string_stream_af5a7116bdd9bfde5141c298a5b7566b0}{head\_}};}
+\DoxyCodeLine{211 \};}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213 \textcolor{keyword}{template} <\textcolor{keyword}{typename} Encoding>}
+\DoxyCodeLine{214 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_stream_traits}{StreamTraits}}<\mbox{\hyperlink{struct_generic_insitu_string_stream}{GenericInsituStringStream}}<\mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}> > \{}
+\DoxyCodeLine{215     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{struct_stream_traits_a396e8fd5cbb7c0a9e4c1f509e4d490f5a0300ac4c098b0d59f43a0c4e1ec86eac}{copyOptimization}} = 1 \};}
+\DoxyCodeLine{216 \};}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{219 \textcolor{keyword}{typedef} \mbox{\hyperlink{struct_generic_insitu_string_stream}{GenericInsituStringStream<UTF8<>}} > \mbox{\hyperlink{stream_8h_a8e02982f60e5b8f697b71640ddaa144c}{InsituStringStream}};}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STREAM\_H\_}}
+
+\end{DoxyCode}

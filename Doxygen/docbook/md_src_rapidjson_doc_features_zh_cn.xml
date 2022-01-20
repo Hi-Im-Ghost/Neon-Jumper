@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_features_zh_cn" xml:lang="en-US">
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md81">
+<title>总体</title>
+
+<para><itemizedlist>
+<listitem>
+<para>跨平台<itemizedlist>
+<listitem>
+<para>编译器：Visual Studio、gcc、clang 等</para>
+</listitem><listitem>
+<para>架构：x86、x64、ARM 等</para>
+</listitem><listitem>
+<para>操作系统：Windows、Mac OS X、Linux、iOS、Android 等</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>容易安装<itemizedlist>
+<listitem>
+<para>只有头文件的库。只需把头文件复制至你的项目中。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>独立、最小依赖<itemizedlist>
+<listitem>
+<para>不需依赖 STL、BOOST 等。</para>
+</listitem><listitem>
+<para>只包含 <computeroutput>&lt;cstdio&gt;</computeroutput>, <computeroutput>&lt;cstdlib&gt;</computeroutput>, <computeroutput>&lt;cstring&gt;</computeroutput>, <computeroutput>&lt;<link linkend="_inttypes_8h">inttypes.h</link>&gt;</computeroutput>, <computeroutput>&lt;new&gt;</computeroutput>, <computeroutput>&lt;<link linkend="_stdint_8h">stdint.h</link>&gt;</computeroutput>。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>没使用 C++ 异常、RTTI</para>
+</listitem><listitem>
+<para>高性能<itemizedlist>
+<listitem>
+<para>使用模版及内联函数去降低函数调用开销。</para>
+</listitem><listitem>
+<para>内部经优化的 Grisu2 及浮点数解析实现。</para>
+</listitem><listitem>
+<para>可选的 SSE2/SSE4.2 支持。</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md82">
+<title>符合标准</title>
+
+<para><itemizedlist>
+<listitem>
+<para>RapidJSON 应完全符合 RFC4627/ECMA-404 标准。</para>
+</listitem><listitem>
+<para>支持 JSON Pointer (RFC6901).</para>
+</listitem><listitem>
+<para>支持 JSON <link linkend="_class_schema">Schema</link> Draft v4.</para>
+</listitem><listitem>
+<para>支持 Unicode 代理对（surrogate pair）。</para>
+</listitem><listitem>
+<para>支持空字符（<computeroutput>&quot;\u0000&quot;</computeroutput>）。<itemizedlist>
+<listitem>
+<para>例如，可以优雅地解析及处理 <computeroutput>[&quot;Hello\u0000World&quot;]</computeroutput>。含读写字符串长度的 API。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持可选的放宽语法<itemizedlist>
+<listitem>
+<para>单行（<computeroutput>// ...</computeroutput>）及多行（<computeroutput>/* ... */</computeroutput>） 注释 (<computeroutput>kParseCommentsFlag</computeroutput>)。</para>
+</listitem><listitem>
+<para>在对象和数组结束前含逗号 (<computeroutput>kParseTrailingCommasFlag</computeroutput>)。</para>
+</listitem><listitem>
+<para><computeroutput>NaN</computeroutput>、<computeroutput>Inf</computeroutput>、<computeroutput>Infinity</computeroutput>、<computeroutput>-Inf</computeroutput> 及 <computeroutput>-Infinity</computeroutput> 作为 <computeroutput>double</computeroutput> 值 (<computeroutput>kParseNanAndInfFlag</computeroutput>)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/Tencent/rapidjson/blob/master/doc/npm.md">NPM 兼容</link>.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md83">
+<title>Unicode</title>
+
+<para><itemizedlist>
+<listitem>
+<para>支持 UTF-8、UTF-16、UTF-32 编码，包括小端序和大端序。<itemizedlist>
+<listitem>
+<para>这些编码用于输入输出流，以及内存中的表示。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持从输入流自动检测编码。</para>
+</listitem><listitem>
+<para>内部支持编码的转换。<itemizedlist>
+<listitem>
+<para>例如，你可以读取一个 UTF-8 文件，让 RapidJSON 把 JSON 字符串转换至 UTF-16 的 DOM。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>内部支持编码校验。<itemizedlist>
+<listitem>
+<para>例如，你可以读取一个 UTF-8 文件，让 RapidJSON 检查是否所有 JSON 字符串是合法的 UTF-8 字节序列。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持自定义的字符类型。<itemizedlist>
+<listitem>
+<para>预设的字符类型是：UTF-8 为 <computeroutput>char</computeroutput>，UTF-16 为 <computeroutput>wchar_t</computeroutput>，UTF32 为 <computeroutput>uint32_t</computeroutput>。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持自定义的编码。</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md84">
+<title>API 风格</title>
+
+<para><itemizedlist>
+<listitem>
+<para>SAX（Simple API for XML）风格 API<itemizedlist>
+<listitem>
+<para>类似于 <link xlink:href="http://en.wikipedia.org/wiki/Simple_API_for_XML">SAX</link>, RapidJSON 提供一个事件循序访问的解析器 API（<computeroutput>rapidjson::GenericReader</computeroutput>）。RapidJSON 也提供一个生成器 API（<computeroutput>rapidjson::Writer</computeroutput>），可以处理相同的事件集合。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>DOM（Document Object Model）风格 API<itemizedlist>
+<listitem>
+<para>类似于 HTML／XML 的 <link xlink:href="http://en.wikipedia.org/wiki/Document_Object_Model">DOM</link>，RapidJSON 可把 JSON 解析至一个 DOM 表示方式（<computeroutput>rapidjson::GenericDocument</computeroutput>），以方便操作。如有需要，可把 DOM 转换（stringify）回 JSON。</para>
+</listitem><listitem>
+<para>DOM 风格 API（<computeroutput>rapidjson::GenericDocument</computeroutput>）实际上是由 SAX 风格 API（<computeroutput>rapidjson::GenericReader</computeroutput>）实现的。SAX 更快，但有时 DOM 更易用。用户可根据情况作出选择。</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md85">
+<title>解析</title>
+
+<para><itemizedlist>
+<listitem>
+<para>递归式（预设）及迭代式解析器<itemizedlist>
+<listitem>
+<para>递归式解析器较快，但在极端情况下可出现堆栈溢出。</para>
+</listitem><listitem>
+<para>迭代式解析器使用自定义的堆栈去维持解析状态。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持原位（*in situ*）解析。<itemizedlist>
+<listitem>
+<para>把 JSON 字符串的值解析至原 JSON 之中，然后让 DOM 指向那些字符串。</para>
+</listitem><listitem>
+<para>比常规分析更快：不需字符串的内存分配、不需复制（如字符串不含转义符）、缓存友好。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>对于 JSON 数字类型，支持 32-bit/64-bit 的有号／无号整数，以及 <computeroutput>double</computeroutput>。</para>
+</listitem><listitem>
+<para>错误处理<itemizedlist>
+<listitem>
+<para>支持详尽的解析错误代号。</para>
+</listitem><listitem>
+<para>支持本地化错误信息。</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md86">
+<title>DOM (Document)</title>
+
+<para><itemizedlist>
+<listitem>
+<para>RapidJSON 在类型转换时会检查数值的范围。</para>
+</listitem><listitem>
+<para>字符串字面量的优化<itemizedlist>
+<listitem>
+<para>只储存指针，不作复制</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>优化“短”字符串<itemizedlist>
+<listitem>
+<para>在 <computeroutput>Value</computeroutput> 内储存短字符串，无需额外分配。</para>
+</listitem><listitem>
+<para>对 UTF-8 字符串来说，32 位架构下可存储最多 11 字符，64 位下 21 字符（x86-64 下 13 字符）。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>可选地支持 <computeroutput>std::string</computeroutput>（定义 <computeroutput>RAPIDJSON_HAS_STDSTRING=1</computeroutput>）</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md87">
+<title>生成</title>
+
+<para><itemizedlist>
+<listitem>
+<para>支持 <computeroutput>rapidjson::PrettyWriter</computeroutput> 去加入换行及缩进。</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md88">
+<title>输入输出流</title>
+
+<para><itemizedlist>
+<listitem>
+<para>支持 <computeroutput>rapidjson::GenericStringBuffer</computeroutput>，把输出的 JSON 储存于字符串内。</para>
+</listitem><listitem>
+<para>支持 <computeroutput>rapidjson::FileReadStream</computeroutput> 及 <computeroutput>rapidjson::FileWriteStream</computeroutput>，使用 <computeroutput>FILE</computeroutput> 对象作输入输出。</para>
+</listitem><listitem>
+<para>支持自定义输入输出流。</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md89">
+<title>内存</title>
+
+<para><itemizedlist>
+<listitem>
+<para>最小化 DOM 的内存开销。<itemizedlist>
+<listitem>
+<para>对大部分 32／64 位机器而言，每个 JSON 值只占 16 或 20 字节（不包含字符串）。</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持快速的预设分配器。<itemizedlist>
+<listitem>
+<para>它是一个堆栈形式的分配器（顺序分配，不容许单独释放，适合解析过程之用）。</para>
+</listitem><listitem>
+<para>使用者也可提供一个预分配的缓冲区。（有可能达至无需 CRT 分配就能解析多个 JSON）</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem>
+<para>支持标准 CRT（C-runtime）分配器。</para>
+</listitem><listitem>
+<para>支持自定义分配器。</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_features_zh_cn_1autotoc_md90">
+<title>其他</title>
+
+<para><itemizedlist>
+<listitem>
+<para>一些 C++11 的支持（可选）<itemizedlist>
+<listitem>
+<para>右值引用（rvalue reference）</para>
+</listitem><listitem>
+<para><computeroutput>noexcept</computeroutput> 修饰符</para>
+</listitem><listitem>
+<para>范围 for 循环 </para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</section>
+</section>

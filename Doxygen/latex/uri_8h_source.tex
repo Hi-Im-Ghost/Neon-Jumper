@@ -1,0 +1,476 @@
+\hypertarget{uri_8h_source}{}\doxysection{uri.\+h}
+\label{uri_8h_source}\index{src/rapidjson/include/rapidjson/uri.h@{src/rapidjson/include/rapidjson/uri.h}}
+\mbox{\hyperlink{uri_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// (C) Copyright IBM Corporation 2021}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_URI\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_URI\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{strfunc_8h}{internal/strfunc.h}}"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{21 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_OFF(c++98-\/compat)}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#elif defined(\_MSC\_VER)}}
+\DoxyCodeLine{24 RAPIDJSON\_DIAG\_OFF(4512) \textcolor{comment}{// assignment operator could not be generated}}
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{27 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{30 \textcolor{comment}{// GenericUri}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{keyword}{template} <\textcolor{keyword}{typename} ValueType, \textcolor{keyword}{typename} Allocator=CrtAllocator>}
+\DoxyCodeLine{33 \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_uri}{GenericUri}} \{}
+\DoxyCodeLine{34 \textcolor{keyword}{public}:}
+\DoxyCodeLine{35     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} \mbox{\hyperlink{class_generic_value_ade0e0ce64ccd5d852da57a35e720bafb}{ValueType::Ch}} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}};}
+\DoxyCodeLine{36 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{37     \textcolor{keyword}{typedef} std::basic\_string<Ch> String;}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{41     \mbox{\hyperlink{class_generic_uri_ae9e702382446e760e66e45872567b59e}{GenericUri}}(\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{42     \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44     \mbox{\hyperlink{class_generic_uri_a188f7f9d11aac1c7647e6f43e05fcbd4}{GenericUri}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* uri, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} len, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{45         Parse(uri, len);}
+\DoxyCodeLine{46     \}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48     \mbox{\hyperlink{class_generic_uri_a2077917cd430c4893a3eee2fc5133727}{GenericUri}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* uri, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{49         Parse(uri, internal::StrLen<Ch>(uri));}
+\DoxyCodeLine{50     \}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52     \textcolor{comment}{// Use with specializations of GenericValue}}
+\DoxyCodeLine{53     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T> \mbox{\hyperlink{class_generic_uri_ae0d105ae4ae9a2edc6489835f3bf62a5}{GenericUri}}(\textcolor{keyword}{const} \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}\& uri, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{54         \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* u = uri.template Get<const Ch*>(); \textcolor{comment}{// TypeHelper from document.h}}
+\DoxyCodeLine{55         Parse(u, internal::StrLen<Ch>(u));}
+\DoxyCodeLine{56     \}}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{59     \mbox{\hyperlink{class_generic_uri_ae9e702382446e760e66e45872567b59e}{GenericUri}}(\textcolor{keyword}{const} String\& uri, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{60         Parse(uri.c\_str(), internal::StrLen<Ch>(uri.c\_str()));}
+\DoxyCodeLine{61     \}}
+\DoxyCodeLine{62 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{65     \mbox{\hyperlink{class_generic_uri_a701930adaab51f0da0b2fba64bb67b25}{GenericUri}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& rhs) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(), ownAllocator\_() \{}
+\DoxyCodeLine{66         *\textcolor{keyword}{this} = rhs;}
+\DoxyCodeLine{67     \}}
+\DoxyCodeLine{68 }
+\DoxyCodeLine{70     \mbox{\hyperlink{class_generic_uri_a233ee45aeaeb5ee3a6ccea5a720d67b2}{GenericUri}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& rhs, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator) : uri\_(), base\_(), scheme\_(), auth\_(), path\_(), query\_(), frag\_(), allocator\_(allocator), ownAllocator\_() \{}
+\DoxyCodeLine{71         *\textcolor{keyword}{this} = rhs;}
+\DoxyCodeLine{72     \}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{75     \mbox{\hyperlink{class_generic_uri_a6479d97f05ba77b27f06778ce17590d0}{\string~GenericUri}}() \{}
+\DoxyCodeLine{76         Free();}
+\DoxyCodeLine{77         \mbox{\hyperlink{rapidjson_8h_a52c941c3fdd646527cdcd42aa846a28a}{RAPIDJSON\_DELETE}}(ownAllocator\_);}
+\DoxyCodeLine{78     \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{81     \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& \mbox{\hyperlink{class_generic_uri_adbd9d4a3a05a34aed0b05a016110b54e}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& rhs) \{}
+\DoxyCodeLine{82         \textcolor{keywordflow}{if} (\textcolor{keyword}{this} != \&rhs) \{}
+\DoxyCodeLine{83             \textcolor{comment}{// Do not delete ownAllocator}}
+\DoxyCodeLine{84             Free();}
+\DoxyCodeLine{85             Allocate(rhs.\mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}());}
+\DoxyCodeLine{86             auth\_ = CopyPart(scheme\_, rhs.scheme\_, rhs.\mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}());}
+\DoxyCodeLine{87             path\_ = CopyPart(auth\_, rhs.auth\_, rhs.\mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}());}
+\DoxyCodeLine{88             query\_ = CopyPart(path\_, rhs.path\_, rhs.\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{89             frag\_ = CopyPart(query\_, rhs.query\_, rhs.\mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{90             base\_ = CopyPart(frag\_, rhs.frag\_, rhs.\mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}());}
+\DoxyCodeLine{91             uri\_ = CopyPart(base\_, rhs.base\_, rhs.\mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}());}
+\DoxyCodeLine{92             CopyPart(uri\_, rhs.uri\_, rhs.\mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}());}
+\DoxyCodeLine{93         \}}
+\DoxyCodeLine{94         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{95     \}}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{98     \textcolor{comment}{// Use with specializations of GenericValue}}
+\DoxyCodeLine{99     \textcolor{keyword}{template}<\textcolor{keyword}{typename} T> \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_uri_ae3d2e835bd683e41720379260c2f1e04}{Get}}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}}\& uri, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}\& allocator) \{}
+\DoxyCodeLine{100         uri.template Set<const Ch*>(this-\/>\mbox{\hyperlink{class_generic_uri_a77129c5d1d6510eca7cc3623ffa6cf96}{GetString}}(), allocator); \textcolor{comment}{// TypeHelper from document.h}}
+\DoxyCodeLine{101     \}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_a77129c5d1d6510eca7cc3623ffa6cf96}{GetString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} uri\_; \}}
+\DoxyCodeLine{104     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} uri\_ == 0 ? 0 : internal::StrLen<Ch>(uri\_); \}}
+\DoxyCodeLine{105     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_aa01f0e6bc010e7f41e91f11351b7a1a4}{GetBaseString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} base\_; \}}
+\DoxyCodeLine{106     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} base\_ == 0 ? 0 : internal::StrLen<Ch>(base\_); \}}
+\DoxyCodeLine{107     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_a797383c9f123cf1069686255d26e01b5}{GetSchemeString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} scheme\_; \}}
+\DoxyCodeLine{108     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} scheme\_ == 0 ? 0 : internal::StrLen<Ch>(scheme\_); \}}
+\DoxyCodeLine{109     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_a0be548d5419bede81146a6fcf4729773}{GetAuthString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} auth\_; \}}
+\DoxyCodeLine{110     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} auth\_ == 0 ? 0 : internal::StrLen<Ch>(auth\_); \}}
+\DoxyCodeLine{111     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_a0233d4141f2e1f9bf74f8af179df006a}{GetPathString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} path\_; \}}
+\DoxyCodeLine{112     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} path\_ == 0 ? 0 : internal::StrLen<Ch>(path\_); \}}
+\DoxyCodeLine{113     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_aea760c8dcff37c9237929e235cd5b1e5}{GetQueryString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} query\_; \}}
+\DoxyCodeLine{114     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} query\_ == 0 ? 0 : internal::StrLen<Ch>(query\_); \}}
+\DoxyCodeLine{115     \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* \mbox{\hyperlink{class_generic_uri_aa1aa1a55c2582da765a9526b6a6fd08f}{GetFragString}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} frag\_; \}}
+\DoxyCodeLine{116     \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} frag\_ == 0 ? 0 : internal::StrLen<Ch>(frag\_); \}}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{119     \textcolor{keyword}{static} String \mbox{\hyperlink{class_generic_uri_ae3d2e835bd683e41720379260c2f1e04}{Get}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_a77129c5d1d6510eca7cc3623ffa6cf96}{GetString}}(), uri.\mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}()); \}}
+\DoxyCodeLine{120     \textcolor{keyword}{static} String GetBase(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_aa01f0e6bc010e7f41e91f11351b7a1a4}{GetBaseString}}(), uri.\mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}()); \}}
+\DoxyCodeLine{121     \textcolor{keyword}{static} String GetScheme(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_a797383c9f123cf1069686255d26e01b5}{GetSchemeString}}(), uri.\mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}()); \}}
+\DoxyCodeLine{122     \textcolor{keyword}{static} String GetAuth(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_a0be548d5419bede81146a6fcf4729773}{GetAuthString}}(), uri.\mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}()); \}}
+\DoxyCodeLine{123     \textcolor{keyword}{static} String GetPath(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_a0233d4141f2e1f9bf74f8af179df006a}{GetPathString}}(), uri.\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}()); \}}
+\DoxyCodeLine{124     \textcolor{keyword}{static} String GetQuery(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_aea760c8dcff37c9237929e235cd5b1e5}{GetQueryString}}(), uri.\mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}()); \}}
+\DoxyCodeLine{125     \textcolor{keyword}{static} String GetFrag(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri) \{ \textcolor{keywordflow}{return} String(uri.\mbox{\hyperlink{class_generic_uri_aa1aa1a55c2582da765a9526b6a6fd08f}{GetFragString}}(), uri.\mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}()); \}}
+\DoxyCodeLine{126 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{129     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_uri_aa2a0b3b540a2736ba253feddf848ff46}{operator==}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{130         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_uri_a1a35d339917489a66064d21642788aab}{Match}}(rhs, \textcolor{keyword}{true});}
+\DoxyCodeLine{131     \}}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_uri_af220805902de60eda9f4286c017c9c95}{operator!=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& rhs)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{134         \textcolor{keywordflow}{return} !\mbox{\hyperlink{class_generic_uri_a1a35d339917489a66064d21642788aab}{Match}}(rhs, \textcolor{keyword}{true});}
+\DoxyCodeLine{135     \}}
+\DoxyCodeLine{136 }
+\DoxyCodeLine{137     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_uri_a1a35d339917489a66064d21642788aab}{Match}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& uri, \textcolor{keywordtype}{bool} full = \textcolor{keyword}{true})\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{138         \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* s1;}
+\DoxyCodeLine{139         \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* s2;}
+\DoxyCodeLine{140         \textcolor{keywordflow}{if} (full) \{}
+\DoxyCodeLine{141             s1 = uri\_;}
+\DoxyCodeLine{142             s2 = uri.uri\_;}
+\DoxyCodeLine{143         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{144             s1 = base\_;}
+\DoxyCodeLine{145             s2 = uri.base\_;}
+\DoxyCodeLine{146         \}}
+\DoxyCodeLine{147         \textcolor{keywordflow}{if} (s1 == s2) \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{148         \textcolor{keywordflow}{if} (s1 == 0 || s2 == 0) \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{149         \textcolor{keywordflow}{return} internal::StrCmp<Ch>(s1, s2) == 0;}
+\DoxyCodeLine{150     \}}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{153     \textcolor{comment}{// See https://tools.ietf.org/html/rfc3986}}
+\DoxyCodeLine{154     \textcolor{comment}{// Use for resolving an id or \$ref with an in-\/scope id.}}
+\DoxyCodeLine{155     \textcolor{comment}{// Returns a new GenericUri for the resolved URI.}}
+\DoxyCodeLine{156     \mbox{\hyperlink{class_generic_uri}{GenericUri}} \mbox{\hyperlink{class_generic_uri_a7de4b3a28c8046f2293658bc9c0b44e1}{Resolve}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri}{GenericUri}}\& baseuri, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator = 0) \{}
+\DoxyCodeLine{157         \mbox{\hyperlink{class_generic_uri}{GenericUri}} resuri;}
+\DoxyCodeLine{158         resuri.allocator\_ = allocator;}
+\DoxyCodeLine{159         \textcolor{comment}{// Ensure enough space for combining paths}}
+\DoxyCodeLine{160         resuri.Allocate(\mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}() + baseuri.\mbox{\hyperlink{class_generic_uri_ad8f54ebb7d47030b4b0900b6987d76f7}{GetStringLength}}() + 1); \textcolor{comment}{// + 1 for joining slash}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162         \textcolor{keywordflow}{if} (!(\mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}() == 0)) \{}
+\DoxyCodeLine{163             \textcolor{comment}{// Use all of this URI}}
+\DoxyCodeLine{164             resuri.auth\_ = CopyPart(resuri.scheme\_, scheme\_, \mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}());}
+\DoxyCodeLine{165             resuri.path\_ = CopyPart(resuri.auth\_, auth\_, \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}());}
+\DoxyCodeLine{166             resuri.query\_ = CopyPart(resuri.path\_, path\_, \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{167             resuri.frag\_ = CopyPart(resuri.query\_, query\_, \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{168             resuri.RemoveDotSegments();}
+\DoxyCodeLine{169         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{170             \textcolor{comment}{// Use the base scheme}}
+\DoxyCodeLine{171             resuri.auth\_ = CopyPart(resuri.scheme\_, baseuri.scheme\_, baseuri.\mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}());}
+\DoxyCodeLine{172             \textcolor{keywordflow}{if} (!(\mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}() == 0)) \{}
+\DoxyCodeLine{173                 \textcolor{comment}{// Use this auth, path, query}}
+\DoxyCodeLine{174                 resuri.path\_ = CopyPart(resuri.auth\_, auth\_, \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}());}
+\DoxyCodeLine{175                 resuri.query\_ = CopyPart(resuri.path\_, path\_, \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{176                 resuri.frag\_ = CopyPart(resuri.query\_, query\_, \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{177                 resuri.RemoveDotSegments();}
+\DoxyCodeLine{178             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{179                 \textcolor{comment}{// Use the base auth}}
+\DoxyCodeLine{180                 resuri.path\_ = CopyPart(resuri.auth\_, baseuri.auth\_, baseuri.\mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}());}
+\DoxyCodeLine{181                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}() == 0) \{}
+\DoxyCodeLine{182                     \textcolor{comment}{// Use the base path}}
+\DoxyCodeLine{183                     resuri.query\_ = CopyPart(resuri.path\_, baseuri.path\_, baseuri.\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{184                     \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}() == 0) \{}
+\DoxyCodeLine{185                         \textcolor{comment}{// Use the base query}}
+\DoxyCodeLine{186                         resuri.frag\_ = CopyPart(resuri.query\_, baseuri.query\_, baseuri.\mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{187                     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{188                         \textcolor{comment}{// Use this query}}
+\DoxyCodeLine{189                         resuri.frag\_ = CopyPart(resuri.query\_, query\_, \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{190                     \}}
+\DoxyCodeLine{191                 \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{192                     \textcolor{keywordflow}{if} (path\_[0] == \textcolor{charliteral}{'/'}) \{}
+\DoxyCodeLine{193                         \textcolor{comment}{// Absolute path -\/ use all of this path}}
+\DoxyCodeLine{194                         resuri.query\_ = CopyPart(resuri.path\_, path\_, \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{195                         resuri.RemoveDotSegments();}
+\DoxyCodeLine{196                     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{197                         \textcolor{comment}{// Relative path -\/ append this path to base path after base path's last slash}}
+\DoxyCodeLine{198                         \textcolor{keywordtype}{size\_t} pos = 0;}
+\DoxyCodeLine{199                         \textcolor{keywordflow}{if} (!(baseuri.\mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}() == 0) \&\& baseuri.\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}() == 0) \{}
+\DoxyCodeLine{200                             resuri.path\_[pos] = \textcolor{charliteral}{'/'};}
+\DoxyCodeLine{201                             pos++;}
+\DoxyCodeLine{202                         \}}
+\DoxyCodeLine{203                         \textcolor{keywordtype}{size\_t} lastslashpos = baseuri.\mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}();}
+\DoxyCodeLine{204                         \textcolor{keywordflow}{while} (lastslashpos > 0) \{}
+\DoxyCodeLine{205                             \textcolor{keywordflow}{if} (baseuri.path\_[lastslashpos -\/ 1] == \textcolor{charliteral}{'/'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{206                             lastslashpos-\/-\/;}
+\DoxyCodeLine{207                         \}}
+\DoxyCodeLine{208                         std::memcpy(\&resuri.path\_[pos], baseuri.path\_, lastslashpos * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{209                         pos += lastslashpos;}
+\DoxyCodeLine{210                         resuri.query\_ = CopyPart(\&resuri.path\_[pos], path\_, \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}());}
+\DoxyCodeLine{211                         resuri.RemoveDotSegments();}
+\DoxyCodeLine{212                     \}}
+\DoxyCodeLine{213                     \textcolor{comment}{// Use this query}}
+\DoxyCodeLine{214                     resuri.frag\_ = CopyPart(resuri.query\_, query\_, \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}());}
+\DoxyCodeLine{215                 \}}
+\DoxyCodeLine{216             \}}
+\DoxyCodeLine{217         \}}
+\DoxyCodeLine{218         \textcolor{comment}{// Always use this frag}}
+\DoxyCodeLine{219         resuri.base\_ = CopyPart(resuri.frag\_, frag\_, \mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}());}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221         \textcolor{comment}{// Re-\/constitute base\_ and uri\_}}
+\DoxyCodeLine{222         resuri.SetBase();}
+\DoxyCodeLine{223         resuri.uri\_ = resuri.base\_ + resuri.\mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}() + 1;}
+\DoxyCodeLine{224         resuri.SetUri();}
+\DoxyCodeLine{225         \textcolor{keywordflow}{return} resuri;}
+\DoxyCodeLine{226     \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{229     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}\& \mbox{\hyperlink{class_generic_uri_a35243f85b101434281df864d36af4cb8}{GetAllocator}}() \{ \textcolor{keywordflow}{return} *allocator\_; \}}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231 \textcolor{keyword}{private}:}
+\DoxyCodeLine{232     \textcolor{comment}{// Allocate memory for a URI}}
+\DoxyCodeLine{233     \textcolor{comment}{// Returns total amount allocated}}
+\DoxyCodeLine{234     std::size\_t Allocate(std::size\_t len) \{}
+\DoxyCodeLine{235         \textcolor{comment}{// Create own allocator if user did not supply.}}
+\DoxyCodeLine{236         \textcolor{keywordflow}{if} (!allocator\_)}
+\DoxyCodeLine{237             ownAllocator\_ =  allocator\_ = \mbox{\hyperlink{rapidjson_8h_abdc7cd7902748ffe6626d71c59a73c3b}{RAPIDJSON\_NEW}}(\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}})();}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239         \textcolor{comment}{// Allocate one block containing each part of the URI (5) plus base plus full URI, all null terminated.}}
+\DoxyCodeLine{240         \textcolor{comment}{// Order: scheme, auth, path, query, frag, base, uri}}
+\DoxyCodeLine{241         \textcolor{comment}{// Note need to set, increment, assign in 3 stages to avoid compiler warning bug.}}
+\DoxyCodeLine{242         \textcolor{keywordtype}{size\_t} total = (3 * len + 7) * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}});}
+\DoxyCodeLine{243         scheme\_ = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}*\textcolor{keyword}{>}(allocator\_-\/>Malloc(total));}
+\DoxyCodeLine{244         *scheme\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{245         auth\_ = scheme\_;}
+\DoxyCodeLine{246         auth\_++;}
+\DoxyCodeLine{247         *auth\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{248         path\_ = auth\_;}
+\DoxyCodeLine{249         path\_++;}
+\DoxyCodeLine{250         *path\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{251         query\_ = path\_;}
+\DoxyCodeLine{252         query\_++;}
+\DoxyCodeLine{253         *query\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{254         frag\_ = query\_;}
+\DoxyCodeLine{255         frag\_++;}
+\DoxyCodeLine{256         *frag\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{257         base\_ = frag\_;}
+\DoxyCodeLine{258         base\_++;}
+\DoxyCodeLine{259         *base\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{260         uri\_ = base\_;}
+\DoxyCodeLine{261         uri\_++;}
+\DoxyCodeLine{262         *uri\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{263         \textcolor{keywordflow}{return} total;}
+\DoxyCodeLine{264     \}}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266     \textcolor{comment}{// Free memory for a URI}}
+\DoxyCodeLine{267     \textcolor{keywordtype}{void} Free() \{}
+\DoxyCodeLine{268         \textcolor{keywordflow}{if} (scheme\_) \{}
+\DoxyCodeLine{269             \mbox{\hyperlink{allocators_8h_a471c182d62d396b7d5d564e8d6a62d9e}{Allocator::Free}}(scheme\_);}
+\DoxyCodeLine{270             scheme\_ = 0;}
+\DoxyCodeLine{271         \}}
+\DoxyCodeLine{272     \}}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274     \textcolor{comment}{// Parse a URI into constituent scheme, authority, path, query, \& fragment parts}}
+\DoxyCodeLine{275     \textcolor{comment}{// Supports URIs that match regex \string^(([\string^:/?\#]+):)?(//([\string^/?\#]*))?([\string^?\#]*)(\(\backslash\)?([\string^\#]*))?(\#(.*))? as per}}
+\DoxyCodeLine{276     \textcolor{comment}{// https://tools.ietf.org/html/rfc3986}}
+\DoxyCodeLine{277     \textcolor{keywordtype}{void} Parse(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* uri, std::size\_t len) \{}
+\DoxyCodeLine{278         std::size\_t start = 0, pos1 = 0, pos2 = 0;}
+\DoxyCodeLine{279         Allocate(len);}
+\DoxyCodeLine{280 }
+\DoxyCodeLine{281         \textcolor{comment}{// Look for scheme ([\string^:/?\#]+):)?}}
+\DoxyCodeLine{282         \textcolor{keywordflow}{if} (start < len) \{}
+\DoxyCodeLine{283             \textcolor{keywordflow}{while} (pos1 < len) \{}
+\DoxyCodeLine{284                 \textcolor{keywordflow}{if} (uri[pos1] == \textcolor{charliteral}{':'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{285                 pos1++;}
+\DoxyCodeLine{286             \}}
+\DoxyCodeLine{287             \textcolor{keywordflow}{if} (pos1 != len) \{}
+\DoxyCodeLine{288                 \textcolor{keywordflow}{while} (pos2 < len) \{}
+\DoxyCodeLine{289                     \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'/'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{290                     \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'?'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{291                     \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'\#'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{292                     pos2++;}
+\DoxyCodeLine{293                 \}}
+\DoxyCodeLine{294                 \textcolor{keywordflow}{if} (pos1 < pos2) \{}
+\DoxyCodeLine{295                     pos1++;}
+\DoxyCodeLine{296                     std::memcpy(scheme\_, \&uri[start], pos1 * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{297                     scheme\_[pos1] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{298                     start = pos1;}
+\DoxyCodeLine{299                 \}}
+\DoxyCodeLine{300             \}}
+\DoxyCodeLine{301         \}}
+\DoxyCodeLine{302         \textcolor{comment}{// Look for auth (//([\string^/?\#]*))?}}
+\DoxyCodeLine{303         \textcolor{comment}{// Note need to set, increment, assign in 3 stages to avoid compiler warning bug.}}
+\DoxyCodeLine{304         auth\_ = scheme\_ + \mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}();}
+\DoxyCodeLine{305         auth\_++;}
+\DoxyCodeLine{306         *auth\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{307         \textcolor{keywordflow}{if} (start < len -\/ 1 \&\& uri[start] == \textcolor{charliteral}{'/'} \&\& uri[start + 1] == \textcolor{charliteral}{'/'}) \{}
+\DoxyCodeLine{308             pos2 = start + 2;}
+\DoxyCodeLine{309             \textcolor{keywordflow}{while} (pos2 < len) \{}
+\DoxyCodeLine{310                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'/'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{311                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'?'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{312                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'\#'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{313                 pos2++;}
+\DoxyCodeLine{314             \}}
+\DoxyCodeLine{315             std::memcpy(auth\_, \&uri[start], (pos2 -\/ start) * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{316             auth\_[pos2 -\/ start] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{317             start = pos2;}
+\DoxyCodeLine{318         \}}
+\DoxyCodeLine{319         \textcolor{comment}{// Look for path ([\string^?\#]*)}}
+\DoxyCodeLine{320         \textcolor{comment}{// Note need to set, increment, assign in 3 stages to avoid compiler warning bug.}}
+\DoxyCodeLine{321         path\_ = auth\_ + \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}();}
+\DoxyCodeLine{322         path\_++;}
+\DoxyCodeLine{323         *path\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{324         \textcolor{keywordflow}{if} (start < len) \{}
+\DoxyCodeLine{325             pos2 = start;}
+\DoxyCodeLine{326             \textcolor{keywordflow}{while} (pos2 < len) \{}
+\DoxyCodeLine{327                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'?'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{328                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'\#'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{329                 pos2++;}
+\DoxyCodeLine{330             \}}
+\DoxyCodeLine{331             \textcolor{keywordflow}{if} (start != pos2) \{}
+\DoxyCodeLine{332                 std::memcpy(path\_, \&uri[start], (pos2 -\/ start) * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{333                 path\_[pos2 -\/ start] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{334                 \textcolor{keywordflow}{if} (path\_[0] == \textcolor{charliteral}{'/'})}
+\DoxyCodeLine{335                     RemoveDotSegments();   \textcolor{comment}{// absolute path -\/ normalize}}
+\DoxyCodeLine{336                 start = pos2;}
+\DoxyCodeLine{337             \}}
+\DoxyCodeLine{338         \}}
+\DoxyCodeLine{339         \textcolor{comment}{// Look for query (\(\backslash\)?([\string^\#]*))?}}
+\DoxyCodeLine{340         \textcolor{comment}{// Note need to set, increment, assign in 3 stages to avoid compiler warning bug.}}
+\DoxyCodeLine{341         query\_ = path\_ + \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}();}
+\DoxyCodeLine{342         query\_++;}
+\DoxyCodeLine{343         *query\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{344         \textcolor{keywordflow}{if} (start < len \&\& uri[start] == \textcolor{charliteral}{'?'}) \{}
+\DoxyCodeLine{345             pos2 = start + 1;}
+\DoxyCodeLine{346             \textcolor{keywordflow}{while} (pos2 < len) \{}
+\DoxyCodeLine{347                 \textcolor{keywordflow}{if} (uri[pos2] == \textcolor{charliteral}{'\#'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{348                 pos2++;}
+\DoxyCodeLine{349             \}}
+\DoxyCodeLine{350             \textcolor{keywordflow}{if} (start != pos2) \{}
+\DoxyCodeLine{351                 std::memcpy(query\_, \&uri[start], (pos2 -\/ start) * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{352                 query\_[pos2 -\/ start] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{353                 start = pos2;}
+\DoxyCodeLine{354             \}}
+\DoxyCodeLine{355         \}}
+\DoxyCodeLine{356         \textcolor{comment}{// Look for fragment (\#(.*))?}}
+\DoxyCodeLine{357         \textcolor{comment}{// Note need to set, increment, assign in 3 stages to avoid compiler warning bug.}}
+\DoxyCodeLine{358         frag\_ = query\_ + \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}();}
+\DoxyCodeLine{359         frag\_++;}
+\DoxyCodeLine{360         *frag\_ = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{361         \textcolor{keywordflow}{if} (start < len \&\& uri[start] == \textcolor{charliteral}{'\#'}) \{}
+\DoxyCodeLine{362             std::memcpy(frag\_, \&uri[start], (len -\/ start) * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{363             frag\_[len -\/ start] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{364         \}}
+\DoxyCodeLine{365 }
+\DoxyCodeLine{366         \textcolor{comment}{// Re-\/constitute base\_ and uri\_}}
+\DoxyCodeLine{367         base\_ = frag\_ + \mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}() + 1;}
+\DoxyCodeLine{368         SetBase();}
+\DoxyCodeLine{369         uri\_ = base\_ + \mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}() + 1;}
+\DoxyCodeLine{370         SetUri();}
+\DoxyCodeLine{371     \}}
+\DoxyCodeLine{372 }
+\DoxyCodeLine{373     \textcolor{comment}{// Reconstitute base}}
+\DoxyCodeLine{374     \textcolor{keywordtype}{void} SetBase() \{}
+\DoxyCodeLine{375         \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* next = base\_;}
+\DoxyCodeLine{376         std::memcpy(next, scheme\_, \mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{377         next+= \mbox{\hyperlink{class_generic_uri_ac3337c9af8f61c56301e2c51b9c03183}{GetSchemeStringLength}}();}
+\DoxyCodeLine{378         std::memcpy(next, auth\_, \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{379         next+= \mbox{\hyperlink{class_generic_uri_a6c7e9223173511e2c8addf0a5fbb4719}{GetAuthStringLength}}();}
+\DoxyCodeLine{380         std::memcpy(next, path\_, \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{381         next+= \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}();}
+\DoxyCodeLine{382         std::memcpy(next, query\_, \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{383         next+= \mbox{\hyperlink{class_generic_uri_a6ef50d8c3d2d57ce653d88f0fb6297ce}{GetQueryStringLength}}();}
+\DoxyCodeLine{384         *next = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{385     \}}
+\DoxyCodeLine{386 }
+\DoxyCodeLine{387     \textcolor{comment}{// Reconstitute uri}}
+\DoxyCodeLine{388     \textcolor{keywordtype}{void} SetUri() \{}
+\DoxyCodeLine{389         \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* next = uri\_;}
+\DoxyCodeLine{390         std::memcpy(next, base\_, \mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{391         next+= \mbox{\hyperlink{class_generic_uri_a87075603b398cc925d04180343443aca}{GetBaseStringLength}}();}
+\DoxyCodeLine{392         std::memcpy(next, frag\_, \mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}() * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{393         next+= \mbox{\hyperlink{class_generic_uri_a808ac934c8cb8aaf57f63b216a40a9b9}{GetFragStringLength}}();}
+\DoxyCodeLine{394         *next = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{395     \}}
+\DoxyCodeLine{396 }
+\DoxyCodeLine{397     \textcolor{comment}{// Copy a part from one GenericUri to another}}
+\DoxyCodeLine{398     \textcolor{comment}{// Return the pointer to the next part to be copied to}}
+\DoxyCodeLine{399     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* CopyPart(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* to, \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* from, std::size\_t len) \{}
+\DoxyCodeLine{400         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(to != 0);}
+\DoxyCodeLine{401         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(from != 0);}
+\DoxyCodeLine{402         std::memcpy(to, from, len * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{403         to[len] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{404         \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* next = to + len + 1;}
+\DoxyCodeLine{405         \textcolor{keywordflow}{return} next;}
+\DoxyCodeLine{406     \}}
+\DoxyCodeLine{407 }
+\DoxyCodeLine{408     \textcolor{comment}{// Remove . and .. segments from the path\_ member.}}
+\DoxyCodeLine{409     \textcolor{comment}{// https://tools.ietf.org/html/rfc3986}}
+\DoxyCodeLine{410     \textcolor{comment}{// This is done in place as we are only removing segments.}}
+\DoxyCodeLine{411     \textcolor{keywordtype}{void} RemoveDotSegments() \{}
+\DoxyCodeLine{412         std::size\_t pathlen = \mbox{\hyperlink{class_generic_uri_a7d6e5a13cb64cb5b65439bfd9ea82674}{GetPathStringLength}}();}
+\DoxyCodeLine{413         std::size\_t pathpos = 0;  \textcolor{comment}{// Position in path\_}}
+\DoxyCodeLine{414         std::size\_t newpos = 0;   \textcolor{comment}{// Position in new path\_}}
+\DoxyCodeLine{415 }
+\DoxyCodeLine{416         \textcolor{comment}{// Loop through each segment in original path\_}}
+\DoxyCodeLine{417         \textcolor{keywordflow}{while} (pathpos < pathlen) \{}
+\DoxyCodeLine{418             \textcolor{comment}{// Get next segment, bounded by '/' or end}}
+\DoxyCodeLine{419             \textcolor{keywordtype}{size\_t} slashpos = 0;}
+\DoxyCodeLine{420             \textcolor{keywordflow}{while} ((pathpos + slashpos) < pathlen) \{}
+\DoxyCodeLine{421                 \textcolor{keywordflow}{if} (path\_[pathpos + slashpos] == \textcolor{charliteral}{'/'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{422                 slashpos++;}
+\DoxyCodeLine{423             \}}
+\DoxyCodeLine{424             \textcolor{comment}{// Check for .. and . segments}}
+\DoxyCodeLine{425             \textcolor{keywordflow}{if} (slashpos == 2 \&\& path\_[pathpos] == \textcolor{charliteral}{'.'} \&\& path\_[pathpos + 1] == \textcolor{charliteral}{'.'}) \{}
+\DoxyCodeLine{426                 \textcolor{comment}{// Backup a .. segment in the new path\_}}
+\DoxyCodeLine{427                 \textcolor{comment}{// We expect to find a previously added slash at the end or nothing}}
+\DoxyCodeLine{428                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(newpos == 0 || path\_[newpos -\/ 1] == \textcolor{charliteral}{'/'});}
+\DoxyCodeLine{429                 \textcolor{keywordtype}{size\_t} lastslashpos = newpos;}
+\DoxyCodeLine{430                 \textcolor{comment}{// Make sure we don't go beyond the start segment}}
+\DoxyCodeLine{431                 \textcolor{keywordflow}{if} (lastslashpos > 1) \{}
+\DoxyCodeLine{432                     \textcolor{comment}{// Find the next to last slash and back up to it}}
+\DoxyCodeLine{433                     lastslashpos-\/-\/;}
+\DoxyCodeLine{434                     \textcolor{keywordflow}{while} (lastslashpos > 0) \{}
+\DoxyCodeLine{435                         \textcolor{keywordflow}{if} (path\_[lastslashpos -\/ 1] == \textcolor{charliteral}{'/'}) \textcolor{keywordflow}{break};}
+\DoxyCodeLine{436                         lastslashpos-\/-\/;}
+\DoxyCodeLine{437                     \}}
+\DoxyCodeLine{438                     \textcolor{comment}{// Set the new path\_ position}}
+\DoxyCodeLine{439                     newpos = lastslashpos;}
+\DoxyCodeLine{440                 \}}
+\DoxyCodeLine{441             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (slashpos == 1 \&\& path\_[pathpos] == \textcolor{charliteral}{'.'}) \{}
+\DoxyCodeLine{442                 \textcolor{comment}{// Discard . segment, leaves new path\_ unchanged}}
+\DoxyCodeLine{443             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{444                 \textcolor{comment}{// Move any other kind of segment to the new path\_}}
+\DoxyCodeLine{445                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(newpos <= pathpos);}
+\DoxyCodeLine{446                 std::memmove(\&path\_[newpos], \&path\_[pathpos], slashpos * \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}));}
+\DoxyCodeLine{447                 newpos += slashpos;}
+\DoxyCodeLine{448                 \textcolor{comment}{// Add slash if not at end}}
+\DoxyCodeLine{449                 \textcolor{keywordflow}{if} ((pathpos + slashpos) < pathlen) \{}
+\DoxyCodeLine{450                     path\_[newpos] = \textcolor{charliteral}{'/'};}
+\DoxyCodeLine{451                     newpos++;}
+\DoxyCodeLine{452                 \}}
+\DoxyCodeLine{453             \}}
+\DoxyCodeLine{454             \textcolor{comment}{// Move to next segment}}
+\DoxyCodeLine{455             pathpos += slashpos + 1;}
+\DoxyCodeLine{456         \}}
+\DoxyCodeLine{457         path\_[newpos] = \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{458     \}}
+\DoxyCodeLine{459 }
+\DoxyCodeLine{460     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* uri\_;    \textcolor{comment}{// Everything}}
+\DoxyCodeLine{461     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* base\_;   \textcolor{comment}{// Everything except fragment}}
+\DoxyCodeLine{462     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* scheme\_; \textcolor{comment}{// Includes the :}}
+\DoxyCodeLine{463     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* auth\_;   \textcolor{comment}{// Includes the //}}
+\DoxyCodeLine{464     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* path\_;   \textcolor{comment}{// Absolute if starts with /}}
+\DoxyCodeLine{465     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* query\_;  \textcolor{comment}{// Includes the ?}}
+\DoxyCodeLine{466     \mbox{\hyperlink{class_generic_uri_a20d0602cff62211d89bc4b25963beeee}{Ch}}* frag\_;   \textcolor{comment}{// Includes the \#}}
+\DoxyCodeLine{467 }
+\DoxyCodeLine{468     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* allocator\_;      }
+\DoxyCodeLine{469     \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}* ownAllocator\_;   }
+\DoxyCodeLine{470 \};}
+\DoxyCodeLine{471 }
+\DoxyCodeLine{473 \textcolor{keyword}{typedef} \mbox{\hyperlink{class_generic_uri}{GenericUri<Value>}} \mbox{\hyperlink{uri_8h_a8ce9b9949b7b615863aa015410222d2d}{Uri}};}
+\DoxyCodeLine{474 }
+\DoxyCodeLine{475 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{476 }
+\DoxyCodeLine{477 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{478 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{479 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{480 }
+\DoxyCodeLine{481 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_URI\_H\_}}
+
+\end{DoxyCode}

@@ -1,0 +1,366 @@
+.TH "GameState" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GameState
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <GameState\&.h>\fP
+.PP
+Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGameState\fP (std::stack< \fBGameState\fP * > *\fBstates\fP)"
+.br
+.RI "Konstruktor przyjmuje odniesienie do stosu wszystkich stanów\&. "
+.ti -1c
+.RI "void \fBendState\fP ()"
+.br
+.RI "Komunikuje o chęci zakończenia stanu\&. "
+.ti -1c
+.RI "bool \fBgetEndState\fP () const"
+.br
+.RI "Pozwala uzyskać informację, czy należy zakończyć stan\&. "
+.ti -1c
+.RI "bool \fBgetGoNextLevel\fP () const"
+.br
+.RI "Pozwala przejść do drugiego poziomu gry\&. "
+.ti -1c
+.RI "virtual void \fBupdate\fP (float deltaTime)=0"
+.br
+.RI "Funkcja zarządzająca odświeżaniem logiki stanu\&. "
+.ti -1c
+.RI "virtual void \fBrender\fP (sf::RenderTarget &window)"
+.br
+.RI "Funkcja zarządzająca renderowaniem grafiki stanu\&. "
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBupdateMousePosition\fP ()"
+.br
+.RI "Pozwala na aktualizowanie pozycji myszy na ekranie\&. "
+.ti -1c
+.RI "void \fBpause\fP ()"
+.br
+.RI "Pozwala zakomunikować o potrzebie zatrzymania stanu\&. "
+.ti -1c
+.RI "void \fBunpause\fP ()"
+.br
+.RI "Pozwala zakomunikować o potrzebie wznowienia stanu\&. "
+.ti -1c
+.RI "void \fBendGame\fP ()"
+.br
+.RI "Pozwala zakomunikować o koncu gry\&. "
+.ti -1c
+.RI "void \fBunEndGame\fP ()"
+.br
+.RI "Pozwala zakomunikować o zmianie stanu konca gry\&. "
+.ti -1c
+.RI "void \fBinitVirtualCursor\fP ()"
+.br
+.RI "Inicjuje wirtualny kursor\&. "
+.ti -1c
+.RI "void \fBupdateVirtualCursor\fP ()"
+.br
+.RI "Odświeża kursor wirtualny do pozycji kursora myszy\&. "
+.ti -1c
+.RI "void \fBinitMusicMenu\fP ()"
+.br
+.RI "Inicjuje muzykę menu\&. "
+.ti -1c
+.RI "void \fBinitSoundMenu\fP ()"
+.br
+.RI "Inicjuje dźwięki przycisków menu\&. "
+.ti -1c
+.RI "void \fBinitMusicGame\fP ()"
+.br
+.RI "Inicjuje muzykę podczas gry\&. "
+.ti -1c
+.RI "void \fBinitTextGame\fP ()"
+.br
+.RI "Inicjacja tekstu do gry\&. "
+.ti -1c
+.RI "void \fBinitTextPause\fP ()"
+.br
+.RI "Inicjacja tekstu do pauzy\&. "
+.ti -1c
+.RI "void \fBinitTextPlay\fP ()"
+.br
+.RI "Inicjacja tekstu do instrukcji gry\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Text \fBnameTextGame\fP"
+.br
+.RI "Tekst przechowujący napis do gry\&. "
+.ti -1c
+.RI "sf::Text \fBnameTextPause\fP"
+.br
+.RI "Tekst przechowujący napis do pauzy\&. "
+.ti -1c
+.RI "sf::Text \fBnameTextPlay\fP"
+.br
+.RI "Tekst przechowujący napis do instrukcji gry\&. "
+.ti -1c
+.RI "sf::Font \fBnameFontGame\fP"
+.br
+.RI "Czciona używana do tekstu gry\&. "
+.ti -1c
+.RI "sf::Music \fBmusicMenu\fP"
+.br
+.RI "Przechowuje muzykę graną w menu\&. "
+.ti -1c
+.RI "sf::Music \fBmusicGame\fP"
+.br
+.RI "Przechowuje muzykę graną podczas gry\&. "
+.ti -1c
+.RI "sf::SoundBuffer \fBbuf\fP"
+.br
+.RI "Buffor dla dzwieku klikania\&. "
+.ti -1c
+.RI "sf::SoundBuffer \fBbufdeath\fP"
+.br
+.RI "Buffor dla dzwieku smierci gracza\&. "
+.ti -1c
+.RI "sf::Sound \fBclickMenu\fP"
+.br
+.RI "Przechowuje dźwięk naciśnięcia przycisku\&. "
+.ti -1c
+.RI "sf::Sound \fBdeathGame\fP"
+.br
+.RI "Przechowuje dźwięk smierci gracza\&. "
+.ti -1c
+.RI "sf::Vector2f \fBmousePosition\fP"
+.br
+.RI "Przechowuje pozycję kursora myszy na ekranie\&. "
+.ti -1c
+.RI "bool \fBbEndState\fP = false"
+.br
+.RI "Określa, czy należy już wyjść ze stanu\&. "
+.ti -1c
+.RI "bool \fBbEndGame\fP = false"
+.br
+.RI "Określa, czy zakonczylismy gre\&. "
+.ti -1c
+.RI "bool \fBbPaused\fP = false"
+.br
+.RI "Określa, czy stan jest zatrzymany\&. "
+.ti -1c
+.RI "bool \fBbnextLevel\fP = false"
+.br
+.RI "Określa, czy stan pierwszego poziomu chce przejść do drugiego poziomu\&. "
+.ti -1c
+.RI "std::stack< \fBGameState\fP * > * \fBstates\fP"
+.br
+.RI "Stos stanów aplikacji\&. Zawsze używany jest najwyższy stan na stosie\&. "
+.ti -1c
+.RI "sf::RectangleShape \fBvirtualCursor\fP"
+.br
+.RI "Kursor wirtualny, czyli hitbox służący do wykrywania obiektów pod kursorem myszy\&. "
+.ti -1c
+.RI "int \fBcheckLevel\fP"
+.br
+.RI "Zmienna sprawdzająca aktualny lvl\&. "
+.ti -1c
+.RI "float \fBplayerPositionX\fP"
+.br
+.RI "Zmienna do której zapisywana jest pozycja x gracza dla zapisu stanu gry i wczytywania\&. "
+.ti -1c
+.RI "float \fBplayerPositionY\fP"
+.br
+.RI "Zmienna do której zapisywana jest pozycja y gracza dla zapisu stanu gry i wczytywania\&. "
+.ti -1c
+.RI "int \fBplayerHP\fP"
+.br
+.RI "Zmienna do której zapisywana jest ilość hp gracza dla zapisu stanu gry i wczytywania\&. "
+.ti -1c
+.RI "bool \fBloadSave\fP = false"
+.br
+.RI "Zmienna określająca czy wczytaliśmy grę "
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GameState::GameState (std::stack< \fBGameState\fP * > * states)\fC [explicit]\fP"
+
+.PP
+Konstruktor przyjmuje odniesienie do stosu wszystkich stanów\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "void GameState::endGame ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+Pozwala zakomunikować o koncu gry\&. 
+.SS "void GameState::endState ()"
+
+.PP
+Komunikuje o chęci zakończenia stanu\&. 
+.SS "bool GameState::getEndState () const\fC [inline]\fP"
+
+.PP
+Pozwala uzyskać informację, czy należy zakończyć stan\&. 
+.SS "bool GameState::getGoNextLevel () const\fC [inline]\fP"
+
+.PP
+Pozwala przejść do drugiego poziomu gry\&. 
+.SS "void GameState::initMusicGame ()\fC [protected]\fP"
+
+.PP
+Inicjuje muzykę podczas gry\&. 
+.SS "void GameState::initMusicMenu ()\fC [protected]\fP"
+
+.PP
+Inicjuje muzykę menu\&. 
+.SS "void GameState::initSoundMenu ()\fC [protected]\fP"
+
+.PP
+Inicjuje dźwięki przycisków menu\&. 
+.SS "void GameState::initTextGame ()\fC [protected]\fP"
+
+.PP
+Inicjacja tekstu do gry\&. 
+.SS "void GameState::initTextPause ()\fC [protected]\fP"
+
+.PP
+Inicjacja tekstu do pauzy\&. 
+.SS "void GameState::initTextPlay ()\fC [protected]\fP"
+
+.PP
+Inicjacja tekstu do instrukcji gry\&. 
+.SS "void GameState::initVirtualCursor ()\fC [protected]\fP"
+
+.PP
+Inicjuje wirtualny kursor\&. 
+.SS "void GameState::pause ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+Pozwala zakomunikować o potrzebie zatrzymania stanu\&. 
+.SS "virtual void GameState::render (sf::RenderTarget & window)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Funkcja zarządzająca renderowaniem grafiki stanu\&. 
+.PP
+Reimplemented in \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
+.SS "void GameState::unEndGame ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+Pozwala zakomunikować o zmianie stanu konca gry\&. 
+.SS "void GameState::unpause ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+Pozwala zakomunikować o potrzebie wznowienia stanu\&. 
+.SS "virtual void GameState::update (float deltaTime)\fC [pure virtual]\fP"
+
+.PP
+Funkcja zarządzająca odświeżaniem logiki stanu\&. 
+.PP
+Implemented in \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
+.SS "void GameState::updateMousePosition ()\fC [protected]\fP"
+
+.PP
+Pozwala na aktualizowanie pozycji myszy na ekranie\&. 
+.SS "void GameState::updateVirtualCursor ()\fC [protected]\fP"
+
+.PP
+Odświeża kursor wirtualny do pozycji kursora myszy\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "bool GameState::bEndGame = false\fC [protected]\fP"
+
+.PP
+Określa, czy zakonczylismy gre\&. 
+.SS "bool GameState::bEndState = false\fC [protected]\fP"
+
+.PP
+Określa, czy należy już wyjść ze stanu\&. 
+.SS "bool GameState::bnextLevel = false\fC [protected]\fP"
+
+.PP
+Określa, czy stan pierwszego poziomu chce przejść do drugiego poziomu\&. 
+.SS "bool GameState::bPaused = false\fC [protected]\fP"
+
+.PP
+Określa, czy stan jest zatrzymany\&. 
+.SS "sf::SoundBuffer GameState::buf\fC [protected]\fP"
+
+.PP
+Buffor dla dzwieku klikania\&. 
+.SS "sf::SoundBuffer GameState::bufdeath\fC [protected]\fP"
+
+.PP
+Buffor dla dzwieku smierci gracza\&. 
+.SS "int GameState::checkLevel\fC [protected]\fP"
+
+.PP
+Zmienna sprawdzająca aktualny lvl\&. 
+.SS "sf::Sound GameState::clickMenu\fC [protected]\fP"
+
+.PP
+Przechowuje dźwięk naciśnięcia przycisku\&. 
+.SS "sf::Sound GameState::deathGame\fC [protected]\fP"
+
+.PP
+Przechowuje dźwięk smierci gracza\&. 
+.SS "bool GameState::loadSave = false\fC [protected]\fP"
+
+.PP
+Zmienna określająca czy wczytaliśmy grę 
+.SS "sf::Vector2f GameState::mousePosition\fC [protected]\fP"
+
+.PP
+Przechowuje pozycję kursora myszy na ekranie\&. 
+.SS "sf::Music GameState::musicGame\fC [protected]\fP"
+
+.PP
+Przechowuje muzykę graną podczas gry\&. 
+.SS "sf::Music GameState::musicMenu\fC [protected]\fP"
+
+.PP
+Przechowuje muzykę graną w menu\&. 
+.SS "sf::Font GameState::nameFontGame\fC [protected]\fP"
+
+.PP
+Czciona używana do tekstu gry\&. 
+.SS "sf::Text GameState::nameTextGame\fC [protected]\fP"
+
+.PP
+Tekst przechowujący napis do gry\&. 
+.SS "sf::Text GameState::nameTextPause\fC [protected]\fP"
+
+.PP
+Tekst przechowujący napis do pauzy\&. 
+.SS "sf::Text GameState::nameTextPlay\fC [protected]\fP"
+
+.PP
+Tekst przechowujący napis do instrukcji gry\&. 
+.SS "int GameState::playerHP\fC [protected]\fP"
+
+.PP
+Zmienna do której zapisywana jest ilość hp gracza dla zapisu stanu gry i wczytywania\&. 
+.SS "float GameState::playerPositionX\fC [protected]\fP"
+
+.PP
+Zmienna do której zapisywana jest pozycja x gracza dla zapisu stanu gry i wczytywania\&. 
+.SS "float GameState::playerPositionY\fC [protected]\fP"
+
+.PP
+Zmienna do której zapisywana jest pozycja y gracza dla zapisu stanu gry i wczytywania\&. 
+.SS "std::stack<\fBGameState\fP*>* GameState::states\fC [protected]\fP"
+
+.PP
+Stos stanów aplikacji\&. Zawsze używany jest najwyższy stan na stosie\&. 
+.SS "sf::RectangleShape GameState::virtualCursor\fC [protected]\fP"
+
+.PP
+Kursor wirtualny, czyli hitbox służący do wykrywania obiektów pod kursorem myszy\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_diyfp_8h_source" xml:lang="en-US">
+<title>diyfp.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/diyfp.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="comment">//&#32;This&#32;is&#32;a&#32;C++&#32;header-only&#32;implementation&#32;of&#32;Grisu2&#32;algorithm&#32;from&#32;the&#32;publication:</emphasis>
+16 <emphasis role="comment">//&#32;Loitsch,&#32;Florian.&#32;&quot;Printing&#32;floating-point&#32;numbers&#32;quickly&#32;and&#32;accurately&#32;with</emphasis>
+17 <emphasis role="comment">//&#32;integers.&quot;&#32;ACM&#32;Sigplan&#32;Notices&#32;45.6&#32;(2010):&#32;233-243.</emphasis>
+18 
+19 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_DIYFP_H_</emphasis>
+20 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DIYFP_H_</emphasis>
+21 
+22 <emphasis role="preprocessor">#include&#32;&quot;../rapidjson.h&quot;</emphasis>
+23 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_clzll_8h">clzll.h</link>&quot;</emphasis>
+24 <emphasis role="preprocessor">#include&#32;&lt;limits&gt;</emphasis>
+25 
+26 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;defined(_M_AMD64)&#32;&amp;&amp;&#32;!defined(__INTEL_COMPILER)</emphasis>
+27 <emphasis role="preprocessor">#include&#32;&lt;intrin.h&gt;</emphasis>
+28 <emphasis role="preprocessor">#if&#32;!defined(_ARM64EC_)</emphasis>
+29 <emphasis role="preprocessor">#pragma&#32;intrinsic(_umul128)</emphasis>
+30 <emphasis role="preprocessor">#else</emphasis>
+31 <emphasis role="preprocessor">#pragma&#32;comment(lib,&quot;softintrin&quot;</emphasis>)
+32 <emphasis role="preprocessor">#endif</emphasis>
+33 <emphasis role="preprocessor">#endif</emphasis>
+34 
+35 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+36 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+37 
+38 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+39 RAPIDJSON_DIAG_PUSH
+40 RAPIDJSON_DIAG_OFF(effc++)
+41 <emphasis role="preprocessor">#endif</emphasis>
+42 
+43 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+44 RAPIDJSON_DIAG_PUSH
+45 RAPIDJSON_DIAG_OFF(padded)
+46 <emphasis role="preprocessor">#endif</emphasis>
+47 
+48 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;{
+49 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>()&#32;:&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>(),&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>()&#32;{}
+50 
+51 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1a9a8f2f5c49dfa0dee4a527f0829cc2e5">DiyFp</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;fp,&#32;<emphasis role="keywordtype">int</emphasis>&#32;exp)&#32;:&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>(fp),&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>(exp)&#32;{}
+52 
+53 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1adc132c7da4c8e3ee5ae12efdcf6dbf7c">DiyFp</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;{
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">union&#32;</emphasis>{
+55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;d;
+56 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u64;
+57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;u&#32;=&#32;{&#32;d&#32;};
+58 
+59 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;biased_e&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>((u.u64&#32;&amp;&#32;<link linkend="_structinternal_1_1_diy_fp_1aaacbf068c44275f4451db750938bd1d3">kDpExponentMask</link>)&#32;&gt;&gt;&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>);
+60 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;significand&#32;=&#32;(u.u64&#32;&amp;&#32;<link linkend="_structinternal_1_1_diy_fp_1a841ef0ae29ccd2889e7f96aad76b0179">kDpSignificandMask</link>);
+61 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(biased_e&#32;!=&#32;0)&#32;{
+62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;=&#32;significand&#32;+&#32;<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>;
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;=&#32;biased_e&#32;-&#32;<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>;
+64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+66 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;=&#32;significand;
+67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;=&#32;<link linkend="_structinternal_1_1_diy_fp_1a9ad1b0cdbab318e45d2bc48e64707ef3">kDpMinExponent</link>&#32;+&#32;1;
+68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+69 &#32;&#32;&#32;&#32;}
+70 
+71 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a9cea201daabec04c6f2526b35af8ead3">operator-</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&amp;&#32;rhs)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;-&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>);
+73 &#32;&#32;&#32;&#32;}
+74 
+75 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a9868841f824924cc385ad5163c9c85b3">operator*</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&amp;&#32;rhs)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+76 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;defined(_M_AMD64)</emphasis>
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;h;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;l&#32;=&#32;_umul128(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>,&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>,&#32;&amp;h);
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(l&#32;&amp;&#32;(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>(1)&#32;&lt;&lt;&#32;63))&#32;<emphasis role="comment">//&#32;rounding</emphasis>
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h++;
+81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>(h,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;64);
+82 <emphasis role="preprocessor">#elif&#32;(__GNUC__&#32;&gt;&#32;4&#32;||&#32;(__GNUC__&#32;==&#32;4&#32;&amp;&amp;&#32;__GNUC_MINOR__&#32;&gt;=&#32;6))&#32;&amp;&amp;&#32;defined(__x86_64__)</emphasis>
+83 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;__extension__&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;__int128&#32;uint128;
+84 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;uint128&#32;p&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis>uint128<emphasis role="keyword">&gt;</emphasis>(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>)&#32;*&#32;<emphasis role="keyword">static_cast&lt;</emphasis>uint128<emphasis role="keyword">&gt;</emphasis>(rhs.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>);
+85 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;h&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link><emphasis role="keyword">&gt;</emphasis>(p&#32;&gt;&gt;&#32;64);
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;l&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link><emphasis role="keyword">&gt;</emphasis>(p);
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(l&#32;&amp;&#32;(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>(1)&#32;&lt;&lt;&#32;63))&#32;<emphasis role="comment">//&#32;rounding</emphasis>
+88 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h++;
+89 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>(h,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;64);
+90 <emphasis role="preprocessor">#else</emphasis>
+91 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;M32&#32;=&#32;0xFFFFFFFF;
+92 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;=&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;&#32;32;
+93 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;b&#32;=&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;M32;
+94 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;c&#32;=&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;&#32;32;
+95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;d&#32;=&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;M32;
+96 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;ac&#32;=&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;*&#32;c;
+97 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;bc&#32;=&#32;b&#32;*&#32;c;
+98 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;ad&#32;=&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;*&#32;d;
+99 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;bd&#32;=&#32;b&#32;*&#32;d;
+100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;tmp&#32;=&#32;(bd&#32;&gt;&gt;&#32;32)&#32;+&#32;(ad&#32;&amp;&#32;M32)&#32;+&#32;(bc&#32;&amp;&#32;M32);
+101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tmp&#32;+=&#32;1U&#32;&lt;&lt;&#32;31;&#32;&#32;
+102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>(ac&#32;+&#32;(ad&#32;&gt;&gt;&#32;32)&#32;+&#32;(bc&#32;&gt;&gt;&#32;32)&#32;+&#32;(tmp&#32;&gt;&gt;&#32;32),&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;rhs.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;64);
+103 <emphasis role="preprocessor">#endif</emphasis>
+104 &#32;&#32;&#32;&#32;}
+105 
+106 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1aa6cbacc8dfcd92cb8c57884e45548976">Normalize</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;s&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_namespaceinternal_1af72bbb0200bf0166f728c7afde826286">clzll</link>(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>));
+108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;&#32;s,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;s);
+109 &#32;&#32;&#32;&#32;}
+110 
+111 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a3a840e739b412e20e11c05a03f4573df">NormalizeBoundary</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;res&#32;=&#32;*<emphasis role="keyword">this</emphasis>;
+113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!(res.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;(<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>&#32;&lt;&lt;&#32;1)))&#32;{
+114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;res.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;=&#32;1;
+115 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;res.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>--;
+116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;res.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;=&#32;(<link linkend="_structinternal_1_1_diy_fp_1aac30e0c32d43425ac403281fc9b0cee4">kDiySignificandSize</link>&#32;-&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>&#32;-&#32;2);
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;res.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;=&#32;res.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;(<link linkend="_structinternal_1_1_diy_fp_1aac30e0c32d43425ac403281fc9b0cee4">kDiySignificandSize</link>&#32;-&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>&#32;-&#32;2);
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;res;
+120 &#32;&#32;&#32;&#32;}
+121 
+122 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1adef8bf723f24db9dc6cefa260e8c2390">NormalizedBoundaries</link>(<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>*&#32;minus,&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>*&#32;plus)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;pl&#32;=&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>((<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;&#32;1)&#32;+&#32;1,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;1).NormalizeBoundary();
+124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;mi&#32;=&#32;(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;==&#32;<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>)&#32;?&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>((<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;&#32;2)&#32;-&#32;1,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;2)&#32;:&#32;<link linkend="_structinternal_1_1_diy_fp_1aea27f027c58a55245d700df08be4ff7e">DiyFp</link>((<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;&#32;1)&#32;-&#32;1,&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;1);
+125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;mi.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;&lt;=&#32;mi.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;-&#32;pl.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;mi.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;=&#32;pl.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*plus&#32;=&#32;pl;
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*minus&#32;=&#32;mi;
+129 &#32;&#32;&#32;&#32;}
+130 
+131 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1acf0e7974f0a1175ae04edf8e4a7d1319">ToDouble</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">union&#32;</emphasis>{
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;d;
+134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u64;
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}u;
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&lt;=&#32;<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>&#32;+&#32;<link linkend="_structinternal_1_1_diy_fp_1a841ef0ae29ccd2889e7f96aad76b0179">kDpSignificandMask</link>);
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;&lt;&#32;<link linkend="_structinternal_1_1_diy_fp_1a994f16a1247a290cfc3a875715e3a92b">kDpDenormalExponent</link>)&#32;{
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Underflow.</emphasis>
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0.0;
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;&gt;=&#32;<link linkend="_structinternal_1_1_diy_fp_1a80535a5594dae96fc482757a54162c7d">kDpMaxExponent</link>)&#32;{
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Overflow.</emphasis>
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;std::numeric_limits&lt;double&gt;::infinity();
+144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;be&#32;=&#32;(<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;==&#32;<link linkend="_structinternal_1_1_diy_fp_1a994f16a1247a290cfc3a875715e3a92b">kDpDenormalExponent</link>&#32;&amp;&amp;&#32;(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>)&#32;==&#32;0)&#32;?&#32;0&#32;:
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link><emphasis role="keyword">&gt;</emphasis>(<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>&#32;+&#32;<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>);
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;u.u64&#32;=&#32;(<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;<link linkend="_structinternal_1_1_diy_fp_1a841ef0ae29ccd2889e7f96aad76b0179">kDpSignificandMask</link>)&#32;|&#32;(be&#32;&lt;&lt;&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>);
+148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;u.d;
+149 &#32;&#32;&#32;&#32;}
+150 
+151 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1aac30e0c32d43425ac403281fc9b0cee4">kDiySignificandSize</link>&#32;=&#32;64;
+152 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>&#32;=&#32;52;
+153 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>&#32;=&#32;0x3FF&#32;+&#32;<link linkend="_structinternal_1_1_diy_fp_1a037aed0fa0b66af0a13657418edef19e">kDpSignificandSize</link>;
+154 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1a80535a5594dae96fc482757a54162c7d">kDpMaxExponent</link>&#32;=&#32;0x7FF&#32;-&#32;<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>;
+155 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1a9ad1b0cdbab318e45d2bc48e64707ef3">kDpMinExponent</link>&#32;=&#32;-<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>;
+156 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1a994f16a1247a290cfc3a875715e3a92b">kDpDenormalExponent</link>&#32;=&#32;-<link linkend="_structinternal_1_1_diy_fp_1a38b6f864ae0859d43fa96c3ff27959be">kDpExponentBias</link>&#32;+&#32;1;
+157 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1aaacbf068c44275f4451db750938bd1d3">kDpExponentMask</link>&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x7FF00000,&#32;0x00000000);
+158 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a841ef0ae29ccd2889e7f96aad76b0179">kDpSignificandMask</link>&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x000FFFFF,&#32;0xFFFFFFFF);
+159 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a43ea451ce20095b1ff53cccf132ca15f">kDpHiddenBit</link>&#32;=&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x00100000,&#32;0x00000000);
+160 
+161 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>;
+162 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>;
+163 };
+164 
+165 <emphasis role="keyword">inline</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_namespaceinternal_1a3e95f043ed6c40cda1c1bc33c2f0ece2">GetCachedPowerByIndex</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;index)&#32;{
+166 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;10^-348,&#32;10^-340,&#32;...,&#32;10^340</emphasis>
+167 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kCachedPowers_F[]&#32;=&#32;{
+168 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xfa8fd5a0,&#32;0x081c0288),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xbaaee17f,&#32;0xa23ebf76),
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8b16fb20,&#32;0x3055ac76),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xcf42894a,&#32;0x5dce35ea),
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9a6bb0aa,&#32;0x55653b2d),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xe61acf03,&#32;0x3d1a45df),
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xab70fe17,&#32;0xc79ac6ca),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xff77b1fc,&#32;0xbebcdc4f),
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xbe5691ef,&#32;0x416bd60c),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8dd01fad,&#32;0x907ffc3c),
+173 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd3515c28,&#32;0x31559a83),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9d71ac8f,&#32;0xada6c9b5),
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xea9c2277,&#32;0x23ee8bcb),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xaecc4991,&#32;0x4078536d),
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x823c1279,&#32;0x5db6ce57),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc2109436,&#32;0x4dfb5637),
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9096ea6f,&#32;0x3848984f),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd77485cb,&#32;0x25823ac7),
+177 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa086cfcd,&#32;0x97bf97f4),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xef340a98,&#32;0x172aace5),
+178 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb23867fb,&#32;0x2a35b28e),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x84c8d4df,&#32;0xd2c63f3b),
+179 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc5dd4427,&#32;0x1ad3cdba),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x936b9fce,&#32;0xbb25c996),
+180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xdbac6c24,&#32;0x7d62a584),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa3ab6658,&#32;0x0d5fdaf6),
+181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xf3e2f893,&#32;0xdec3f126),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb5b5ada8,&#32;0xaaff80b8),
+182 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x87625f05,&#32;0x6c7c4a8b),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc9bcff60,&#32;0x34c13053),
+183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x964e858c,&#32;0x91ba2655),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xdff97724,&#32;0x70297ebd),
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa6dfbd9f,&#32;0xb8e5b88f),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xf8a95fcf,&#32;0x88747d94),
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb9447093,&#32;0x8fa89bcf),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8a08f0f8,&#32;0xbf0f156b),
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xcdb02555,&#32;0x653131b6),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x993fe2c6,&#32;0xd07b7fac),
+187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xe45c10c4,&#32;0x2a2b3b06),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xaa242499,&#32;0x697392d3),
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xfd87b5f2,&#32;0x8300ca0e),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xbce50864,&#32;0x92111aeb),
+189 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8cbccc09,&#32;0x6f5088cc),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd1b71758,&#32;0xe219652c),
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9c400000,&#32;0x00000000),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xe8d4a510,&#32;0x00000000),
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xad78ebc5,&#32;0xac620000),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x813f3978,&#32;0xf8940984),
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc097ce7b,&#32;0xc90715b3),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8f7e32ce,&#32;0x7bea5c70),
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd5d238a4,&#32;0xabe98068),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9f4f2726,&#32;0x179a2245),
+194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xed63a231,&#32;0xd4c4fb27),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb0de6538,&#32;0x8cc8ada8),
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x83c7088e,&#32;0x1aab65db),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc45d1df9,&#32;0x42711d9a),
+196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x924d692c,&#32;0xa61be758),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xda01ee64,&#32;0x1a708dea),
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa26da399,&#32;0x9aef774a),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xf209787b,&#32;0xb47d6b85),
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb454e4a1,&#32;0x79dd1877),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x865b8692,&#32;0x5b9bc5c2),
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xc83553c5,&#32;0xc8965d3d),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x952ab45c,&#32;0xfa97a0b3),
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xde469fbd,&#32;0x99a05fe3),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa59bc234,&#32;0xdb398c25),
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xf6c69a72,&#32;0xa3989f5c),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xb7dcbf53,&#32;0x54e9bece),
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x88fcf317,&#32;0xf22241e2),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xcc20ce9b,&#32;0xd35c78a5),
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x98165af3,&#32;0x7b2153df),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xe2a0b5dc,&#32;0x971f303a),
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xa8d9d153,&#32;0x5ce3b396),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xfb9b7cd9,&#32;0xa4a7443c),
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xbb764c4c,&#32;0xa7a44410),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8bab8eef,&#32;0xb6409c1a),
+206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd01fef10,&#32;0xa657842c),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9b10a4e5,&#32;0xe9913129),
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xe7109bfb,&#32;0xa19c0c9d),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xac2820d9,&#32;0x623bf429),
+208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x80444b5e,&#32;0x7aa7cf85),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xbf21e440,&#32;0x03acdd2d),
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x8e679c2f,&#32;0x5e44ff8f),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xd433179d,&#32;0x9c8cb841),
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0x9e19db92,&#32;0xb4e31ba9),&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xeb96bf6e,&#32;0xbadf77d9),
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1aaee1245f375a71be1ac9b8a07ba5fb8f">RAPIDJSON_UINT64_C2</link>(0xaf87023b,&#32;0x9bf0ee6b)
+212 &#32;&#32;&#32;&#32;};
+213 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1a269259c924dce846340ddbb810db2e3c">int16_t</link>&#32;kCachedPowers_E[]&#32;=&#32;{
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;-1220,&#32;-1193,&#32;-1166,&#32;-1140,&#32;-1113,&#32;-1087,&#32;-1060,&#32;-1034,&#32;-1007,&#32;&#32;-980,
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;-954,&#32;&#32;-927,&#32;&#32;-901,&#32;&#32;-874,&#32;&#32;-847,&#32;&#32;-821,&#32;&#32;-794,&#32;&#32;-768,&#32;&#32;-741,&#32;&#32;-715,
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;-688,&#32;&#32;-661,&#32;&#32;-635,&#32;&#32;-608,&#32;&#32;-582,&#32;&#32;-555,&#32;&#32;-529,&#32;&#32;-502,&#32;&#32;-475,&#32;&#32;-449,
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;-422,&#32;&#32;-396,&#32;&#32;-369,&#32;&#32;-343,&#32;&#32;-316,&#32;&#32;-289,&#32;&#32;-263,&#32;&#32;-236,&#32;&#32;-210,&#32;&#32;-183,
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;-157,&#32;&#32;-130,&#32;&#32;-103,&#32;&#32;&#32;-77,&#32;&#32;&#32;-50,&#32;&#32;&#32;-24,&#32;&#32;&#32;&#32;&#32;3,&#32;&#32;&#32;&#32;30,&#32;&#32;&#32;&#32;56,&#32;&#32;&#32;&#32;83,
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;109,&#32;&#32;&#32;136,&#32;&#32;&#32;162,&#32;&#32;&#32;189,&#32;&#32;&#32;216,&#32;&#32;&#32;242,&#32;&#32;&#32;269,&#32;&#32;&#32;295,&#32;&#32;&#32;322,&#32;&#32;&#32;348,
+220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;375,&#32;&#32;&#32;402,&#32;&#32;&#32;428,&#32;&#32;&#32;455,&#32;&#32;&#32;481,&#32;&#32;&#32;508,&#32;&#32;&#32;534,&#32;&#32;&#32;561,&#32;&#32;&#32;588,&#32;&#32;&#32;614,
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;641,&#32;&#32;&#32;667,&#32;&#32;&#32;694,&#32;&#32;&#32;720,&#32;&#32;&#32;747,&#32;&#32;&#32;774,&#32;&#32;&#32;800,&#32;&#32;&#32;827,&#32;&#32;&#32;853,&#32;&#32;&#32;880,
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;907,&#32;&#32;&#32;933,&#32;&#32;&#32;960,&#32;&#32;&#32;986,&#32;&#32;1013,&#32;&#32;1039,&#32;&#32;1066
+223 &#32;&#32;&#32;&#32;};
+224 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;87);
+225 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>(kCachedPowers_F[index],&#32;kCachedPowers_E[index]);
+226 }
+227 
+228 <emphasis role="keyword">inline</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_namespaceinternal_1abac3dbfa1070756c37725829148f6038">GetCachedPower</link>(<emphasis role="keywordtype">int</emphasis>&#32;e,&#32;<emphasis role="keywordtype">int</emphasis>*&#32;K)&#32;{
+229 
+230 &#32;&#32;&#32;&#32;<emphasis role="comment">//int&#32;k&#32;=&#32;static_cast&lt;int&gt;(ceil((-61&#32;-&#32;e)&#32;*&#32;0.30102999566398114))&#32;+&#32;374;</emphasis>
+231 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;dk&#32;=&#32;(-61&#32;-&#32;e)&#32;*&#32;0.30102999566398114&#32;+&#32;347;&#32;&#32;<emphasis role="comment">//&#32;dk&#32;must&#32;be&#32;positive,&#32;so&#32;can&#32;do&#32;ceiling&#32;in&#32;positive</emphasis>
+232 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;k&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(dk);
+233 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(dk&#32;-&#32;k&#32;&gt;&#32;0.0)
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;k++;
+235 
+236 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;index&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>((k&#32;&gt;&gt;&#32;3)&#32;+&#32;1);
+237 &#32;&#32;&#32;&#32;*K&#32;=&#32;-(-348&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(index&#32;&lt;&lt;&#32;3));&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;decimal&#32;exponent&#32;no&#32;need&#32;lookup&#32;table</emphasis>
+238 
+239 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1a3e95f043ed6c40cda1c1bc33c2f0ece2">GetCachedPowerByIndex</link>(index);
+240 }
+241 
+242 <emphasis role="keyword">inline</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;<link linkend="_namespaceinternal_1a74b8503d044bf6c0a5e90c5bea3aba42">GetCachedPower10</link>(<emphasis role="keywordtype">int</emphasis>&#32;exp,&#32;<emphasis role="keywordtype">int</emphasis>&#32;*outExp)&#32;{
+243 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(exp&#32;&gt;=&#32;-348);
+244 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;index&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis><emphasis role="keyword">&gt;</emphasis>(exp&#32;+&#32;348)&#32;/&#32;8u;
+245 &#32;&#32;&#32;&#32;*outExp&#32;=&#32;-348&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(index)&#32;*&#32;8;
+246 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1a3e95f043ed6c40cda1c1bc33c2f0ece2">GetCachedPowerByIndex</link>(index);
+247 }
+248 
+249 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+250 RAPIDJSON_DIAG_POP
+251 <emphasis role="preprocessor">#endif</emphasis>
+252 
+253 <emphasis role="preprocessor">#ifdef&#32;__clang__</emphasis>
+254 RAPIDJSON_DIAG_POP
+255 RAPIDJSON_DIAG_OFF(padded)
+256 <emphasis role="preprocessor">#endif</emphasis>
+257 
+258 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+259 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+260 
+261 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_DIYFP_H_</emphasis>
+</programlisting></section>

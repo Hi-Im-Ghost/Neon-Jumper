@@ -1,0 +1,45 @@
+.TH "Stream" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Stream \- Concept for reading and writing characters\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <stream\&.h>\fP
+.SH "Detailed Description"
+.PP 
+Concept for reading and writing characters\&. 
+
+For read-only stream, no need to implement PutBegin(), Put(), Flush() and PutEnd()\&.
+.PP
+For write-only stream, only need to implement Put() and Flush()\&.
+.PP
+.PP
+.nf
+concept Stream {
+    typename Ch;    
+
+    Ch Peek() const;
+
+    Ch Take();
+
+    size_t Tell();
+
+    Ch* PutBegin();
+
+    void Put(Ch c);
+
+    void Flush();
+
+    size_t PutEnd(Ch* begin);
+}
+.fi
+.PP
+ 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

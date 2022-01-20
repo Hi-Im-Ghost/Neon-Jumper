@@ -1,0 +1,225 @@
+.TH "src/rapidjson/test/unittest/valuetest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/unittest/valuetest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'unittest\&.h'\fP
+.br
+\fC#include 'rapidjson/document\&.h'\fP
+.br
+\fC#include <algorithm>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBTerminateHandler< e >\fP"
+.br
+.ti -1c
+.RI "struct \fBValueIntComparer\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBTEST_TERMINATION\fP(e,  json)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Size)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, DefaultConstructor)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, AssignmentOperator)"
+.br
+.ti -1c
+.RI "template<typename A , typename B > void \fBTestEqual\fP (const A &\fBa\fP, const B &b)"
+.br
+.ti -1c
+.RI "template<typename A , typename B > void \fBTestUnequal\fP (const A &\fBa\fP, const B &b)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, EqualtoOperator)"
+.br
+.ti -1c
+.RI "template<typename \fBValue\fP > void \fBTestCopyFrom\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, CopyFrom)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Swap)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Null)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, True)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, False)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Int)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Uint)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Int64)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Uint64)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Double)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Float)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, IsLosslessDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, IsLosslessFloat)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, SetStringNull)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Array)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, ArrayHelper)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, Object)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, ObjectHelper)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, EraseMember_String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, BigNestedArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, BigNestedObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, RemoveLastElement)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBDocument\fP, \fBCrtAllocator\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, AllocateShortString)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, AcceptTerminationByHandler)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, MergeDuplicateKey)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define TEST_TERMINATION(e, json)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    Document d; \
+    EXPECT_FALSE(d\&.Parse(json)\&.HasParseError()); \
+    Reader reader; \
+    TerminateHandler<e> h;\
+    EXPECT_FALSE(d\&.Accept(h));\
+}
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "TEST (\fBDocument\fP, \fBCrtAllocator\fP)"
+
+.SS "TEST (\fBValue\fP, AcceptTerminationByHandler)"
+
+.SS "TEST (\fBValue\fP, AllocateShortString)"
+
+.SS "TEST (\fBValue\fP, Array)"
+
+.SS "TEST (\fBValue\fP, ArrayHelper)"
+
+.SS "TEST (\fBValue\fP, AssignmentOperator)"
+
+.SS "TEST (\fBValue\fP, BigNestedArray)"
+
+.SS "TEST (\fBValue\fP, BigNestedObject)"
+
+.SS "TEST (\fBValue\fP, CopyFrom)"
+
+.SS "TEST (\fBValue\fP, DefaultConstructor)"
+
+.SS "TEST (\fBValue\fP, Double)"
+
+.SS "TEST (\fBValue\fP, EqualtoOperator)"
+
+.SS "TEST (\fBValue\fP, EraseMember_String)"
+
+.SS "TEST (\fBValue\fP, False)"
+
+.SS "TEST (\fBValue\fP, Float)"
+
+.SS "TEST (\fBValue\fP, Int)"
+
+.SS "TEST (\fBValue\fP, Int64)"
+
+.SS "TEST (\fBValue\fP, IsLosslessDouble)"
+
+.SS "TEST (\fBValue\fP, IsLosslessFloat)"
+
+.SS "TEST (\fBValue\fP, MergeDuplicateKey)"
+
+.SS "TEST (\fBValue\fP, Null)"
+
+.SS "TEST (\fBValue\fP, Object)"
+
+.SS "TEST (\fBValue\fP, ObjectHelper)"
+
+.SS "TEST (\fBValue\fP, RemoveLastElement)"
+
+.SS "TEST (\fBValue\fP, SetStringNull)"
+
+.SS "TEST (\fBValue\fP, Size)"
+
+.SS "TEST (\fBValue\fP, String)"
+
+.SS "TEST (\fBValue\fP, Swap)"
+
+.SS "TEST (\fBValue\fP, True)"
+
+.SS "TEST (\fBValue\fP, Uint)"
+
+.SS "TEST (\fBValue\fP, Uint64)"
+
+.SS "template<typename \fBValue\fP > void TestCopyFrom ()"
+
+.SS "template<typename A , typename B > void TestEqual (const A & a, const B & b)"
+
+.SS "template<typename A , typename B > void TestUnequal (const A & a, const B & b)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

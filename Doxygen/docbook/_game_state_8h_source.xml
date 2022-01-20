@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="__game_state_8h_source" xml:lang="en-US">
+<title>GameState.h</title>
+<indexterm><primary>src/states/GameState.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;TREES_JSON_GAMESTATE_H</emphasis>
+2 <emphasis role="preprocessor">#define&#32;TREES_JSON_GAMESTATE_H</emphasis>
+3 
+4 
+5 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics/RenderTarget.hpp&gt;</emphasis>
+6 <emphasis role="preprocessor">#include&#32;&lt;SFML/Audio.hpp&gt;</emphasis>
+7 <emphasis role="preprocessor">#include&#32;&lt;stack&gt;</emphasis>
+8 <emphasis role="preprocessor">#include&#32;&quot;../UI/Button.h&quot;</emphasis>
+9 <emphasis role="preprocessor">#include&#32;&quot;../modules/PlayerHUD.h&quot;</emphasis>
+10 
+14 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_game_state">GameState</link>&#32;{
+15 <emphasis role="keyword">private</emphasis>:
+16 
+17 <emphasis role="keyword">protected</emphasis>:
+19 &#32;&#32;&#32;&#32;sf::Text&#32;<link linkend="_class_game_state_1ac7e15f55db432562cc7e9eaf5bdbb34c">nameTextGame</link>;
+21 &#32;&#32;&#32;&#32;sf::Text&#32;<link linkend="_class_game_state_1aa806cfd5c598107d33fcfec500fe24de">nameTextPause</link>;
+23 &#32;&#32;&#32;&#32;sf::Text&#32;<link linkend="_class_game_state_1af43c63a00c31d67afbcd0f2bad674446">nameTextPlay</link>;
+25 &#32;&#32;&#32;&#32;sf::Font&#32;<link linkend="_class_game_state_1a318ab0204b4a95963130dd5d42193309">nameFontGame</link>;
+27 &#32;&#32;&#32;&#32;sf::Music&#32;<link linkend="_class_game_state_1a0462c55a3b9435b1fdb8a5c7dfc02616">musicMenu</link>;
+29 &#32;&#32;&#32;&#32;sf::Music&#32;<link linkend="_class_game_state_1a215e2176b6c9c7c2cdb118902c549136">musicGame</link>;
+31 &#32;&#32;&#32;&#32;sf::SoundBuffer&#32;<link linkend="_class_game_state_1ac6a4570001b3e0d4f2e7b83fdc0bb06c">buf</link>;
+33 &#32;&#32;&#32;&#32;sf::SoundBuffer&#32;<link linkend="_class_game_state_1ae9096ac3bc4dc51feccc0854d28c53d3">bufdeath</link>;
+35 &#32;&#32;&#32;&#32;sf::Sound&#32;<link linkend="_class_game_state_1a3c02c1ddd315e5705bcae85d53d723be">clickMenu</link>;
+37 &#32;&#32;&#32;&#32;sf::Sound&#32;<link linkend="_class_game_state_1aaa4fb040e1ae9db46ebfcb6f9462d715">deathGame</link>;
+39 &#32;&#32;&#32;&#32;sf::Vector2f&#32;<link linkend="_class_game_state_1a48c5d71a7721b49027ebfab4d903e4ca">mousePosition</link>;
+41 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1aa5a8fc9bd5033a7789100d68e9cfde6d">bEndState</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+43 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1a68bb84c2c03eca937b61ada1e3df7d37">bEndGame</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+45 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1ab9eeaadfb41628ea3fe9c3a36c8cb523">bPaused</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+47 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1ada39e1e7a5b23eccb09e6887958c0ba4">bnextLevel</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+49 &#32;&#32;&#32;&#32;std::stack&lt;GameState*&gt;*&#32;<link linkend="_class_game_state_1a6e9e1aa616cd1071425f2766a76957ec">states</link>;
+51 &#32;&#32;&#32;&#32;sf::RectangleShape&#32;<link linkend="_class_game_state_1a33816d850ae3dddfc8a61183c355e9ea">virtualCursor</link>;
+52 
+54 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_class_game_state_1a831924eb7e5e953b7a3f319c999fcf2e">checkLevel</link>;
+56 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_game_state_1a4f6a05c09ed85658e562d5b7bc1d3620">playerPositionX</link>;
+58 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_game_state_1adcadee1d0434d9e782f7cc8ee8bc6327">playerPositionY</link>;
+60 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_class_game_state_1a05d411d27fbfd2beb8523b461a19b2c3">playerHP</link>;
+62 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1ad5777ac8a3645b733fdb3d4e18a9a2d6">loadSave</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+63 
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1ada16e95cc9cdda4c4764bdf5833848ba">updateMousePosition</link>();
+67 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1ae9b6258dccf8740eced6857468548e60">pause</link>()&#32;{<link linkend="_class_game_state_1ab9eeaadfb41628ea3fe9c3a36c8cb523">bPaused</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;}
+69 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a4a9b6f37601bfa3bad8c760cf3fb16fc">unpause</link>()&#32;{<link linkend="_class_game_state_1ab9eeaadfb41628ea3fe9c3a36c8cb523">bPaused</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;}
+71 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a0f46eb5be452693b0dc945a7c5cd0c9a">endGame</link>()&#32;{<link linkend="_class_game_state_1a68bb84c2c03eca937b61ada1e3df7d37">bEndGame</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;}
+73 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a643419a178b99f865cb7af2373c3dda0">unEndGame</link>()&#32;{<link linkend="_class_game_state_1a68bb84c2c03eca937b61ada1e3df7d37">bEndGame</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;}
+74 
+76 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a50a01d688f5ed6310257bc00d4ade0cd">initVirtualCursor</link>();
+78 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1ab549d25215e9626d61cf1377ba03d6ad">updateVirtualCursor</link>();
+80 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a5dac99e8c9278389352c42161f03452a">initMusicMenu</link>();
+82 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a5473619dbf358cb4bffbf202e67208bf">initSoundMenu</link>();
+84 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1acb92a3053f84a4bc19ee00dd5c7ef014">initMusicGame</link>();
+86 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1ad67cf6bd0d59e8777b2d90272facb8bf">initTextGame</link>();
+88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a2b678c21bac3ccf22ea1311a77c9847e">initTextPause</link>();
+90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a4c7646ad7b6bb5e9f685a6c69df36a0e">initTextPlay</link>();
+91 
+92 <emphasis role="keyword">public</emphasis>:
+94 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_game_state_1a00007967d00ac636381f23f3818f0db1">GameState</link>(std::stack&lt;GameState*&gt;*&#32;<link linkend="_class_game_state_1a6e9e1aa616cd1071425f2766a76957ec">states</link>);
+95 
+97 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a5b6ccfff3ca74df5a7e67fdeb4ed5bce">endState</link>();
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1ab48ca6f7e9a9645ae583f16ccccbdcf0">getEndState</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_game_state_1aa5a8fc9bd5033a7789100d68e9cfde6d">bEndState</link>;}
+101 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_game_state_1abb6044767e0b7f20f49fb53adc2ef1a6">getGoNextLevel</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_game_state_1ada39e1e7a5b23eccb09e6887958c0ba4">bnextLevel</link>;}
+102 &#32;&#32;&#32;&#32;<emphasis role="comment">//bool&#32;isPaused()&#32;const&#32;{return&#32;bPaused;}</emphasis>
+103 
+105 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1a360521bb5b371ea942a9e4e2ba1e8145">update</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime)&#32;=&#32;0;
+107 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_game_state_1ab54d45c62b2ec2719bd48788b982b471">render</link>(sf::RenderTarget&amp;&#32;window)&#32;{};
+108 };
+109 
+110 
+111 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//TREES_JSON_GAMESTATE_H</emphasis>
+</programlisting></section>

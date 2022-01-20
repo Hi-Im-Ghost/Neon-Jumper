@@ -1,0 +1,263 @@
+.TH "md_src_rapidjson_doc_internals" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md_src_rapidjson_doc_internals \- Internals 
+This section records some design and implementation details\&.
+.SH "Architecture"
+.PP
+.SS "SAX and DOM"
+The basic relationships of SAX and DOM is shown in the following UML diagram\&.
+.PP
+.PP
+The core of the relationship is the \fCHandler\fP concept\&. From the SAX side, \fCReader\fP parses a JSON from a stream and publish events to a \fCHandler\fP\&. \fC\fBWriter\fP\fP implements the \fCHandler\fP concept to handle the same set of events\&. From the DOM side, \fCDocument\fP implements the \fCHandler\fP concept to build a DOM according to the events\&. \fCValue\fP supports a \fCValue::Accept(Handler&)\fP function, which traverses the DOM to publish events\&.
+.PP
+With this design, SAX is not dependent on DOM\&. Even \fCReader\fP and \fC\fBWriter\fP\fP have no dependencies between them\&. This provides flexibility to chain event publisher and handlers\&. Besides, \fCValue\fP does not depends on SAX as well\&. So, in addition to stringify a DOM to JSON, user may also stringify it to a XML writer, or do anything else\&.
+.SS "Utility Classes"
+Both SAX and DOM APIs depends on 3 additional concepts: \fCAllocator\fP, \fCEncoding\fP and \fCStream\fP\&. Their inheritance hierarchy is shown as below\&.
+.PP
+.SH "Value"
+.PP
+\fCValue\fP (actually a typedef of \fC\fBGenericValue\fP<\fBUTF8\fP<>>\fP) is the core of DOM API\&. This section describes the design of it\&.
+.SS "Data Layout"
+\fCValue\fP is a \fCvariant type\fP\&. In RapidJSON's context, an instance of \fCValue\fP can contain 1 of 6 JSON value types\&. This is possible by using \fCunion\fP\&. Each \fCValue\fP contains two members: \fCunion Data data_\fP and a\fCunsigned flags_\fP\&. The \fCflags_\fP indicates the JSON type, and also additional information\&.
+.PP
+The following tables show the data layout of each type\&. The 32-bit/64-bit columns indicates the size of the field in bytes\&.
+.PP
+Null   32-bit   64-bit    (unused)   4   8    (unused)   4   4    (unused)   4   4    \fCunsigned flags_\fP   \fCkNullType kNullFlag\fP   4   4   
+.PP
+Bool   32-bit   64-bit    (unused)   4   8    (unused)   4   4    (unused)   4   4    \fCunsigned flags_\fP   \fCkBoolType\fP (either \fCkTrueFlag\fP or \fCkFalseFlag\fP)   4   4   
+.PP
+String   32-bit   64-bit    \fCCh* str\fP   Pointer to the string (may own)   4   8    \fCSizeType length\fP   Length of string   4   4    (unused)   4   4    \fCunsigned flags_\fP   \fCkStringType kStringFlag \&.\&.\&.\fP   4   4   
+.PP
+Object   32-bit   64-bit    \fCMember* members\fP   Pointer to array of members (owned)   4   8    \fCSizeType size\fP   Number of members   4   4    \fCSizeType capacity\fP   Capacity of members   4   4    \fCunsigned flags_\fP   \fCkObjectType kObjectFlag\fP   4   4   
+.PP
+Array   32-bit   64-bit    \fCValue* values\fP   Pointer to array of values (owned)   4   8    \fCSizeType size\fP   Number of values   4   4    \fCSizeType capacity\fP   Capacity of values   4   4    \fCunsigned flags_\fP   \fCkArrayType kArrayFlag\fP   4   4   
+.PP
+Number (Int)   32-bit   64-bit    \fCint i\fP   32-bit signed integer   4   4    (zero padding)   0   4   4    (unused)   4   8    \fCunsigned flags_\fP   \fCkNumberType kNumberFlag kIntFlag kInt64Flag \&.\&.\&.\fP   4   4   
+.PP
+Number (UInt)   32-bit   64-bit    \fCunsigned u\fP   32-bit unsigned integer   4   4    (zero padding)   0   4   4    (unused)   4   8    \fCunsigned flags_\fP   \fCkNumberType kNumberFlag kUintFlag kUint64Flag \&.\&.\&.\fP   4   4   
+.PP
+Number (Int64)   32-bit   64-bit    \fCint64_t i64\fP   64-bit signed integer   8   8    (unused)   4   8    \fCunsigned flags_\fP   \fCkNumberType kNumberFlag kInt64Flag \&.\&.\&.\fP   4   4   
+.PP
+Number (Uint64)   32-bit   64-bit    \fCuint64_t i64\fP   64-bit unsigned integer   8   8    (unused)   4   8    \fCunsigned flags_\fP   \fCkNumberType kNumberFlag kInt64Flag \&.\&.\&.\fP   4   4   
+.PP
+Number (Double)   32-bit   64-bit    \fCuint64_t i64\fP   Double precision floating-point   8   8    (unused)   4   8    \fCunsigned flags_\fP   \fCkNumberType kNumberFlag kDoubleFlag\fP   4   4   
+.PP
+Here are some notes:
+.IP "\(bu" 2
+To reduce memory consumption for 64-bit architecture, \fCSizeType\fP is typedef as \fCunsigned\fP instead of \fCsize_t\fP\&.
+.IP "\(bu" 2
+Zero padding for 32-bit number may be placed after or before the actual type, according to the endianness\&. This makes possible for interpreting a 32-bit integer as a 64-bit integer, without any conversion\&.
+.IP "\(bu" 2
+An \fCInt\fP is always an \fCInt64\fP, but the converse is not always true\&.
+.PP
+.SS "Flags"
+The 32-bit \fCflags_\fP contains both JSON type and other additional information\&. As shown in the above tables, each JSON type contains redundant \fCkXXXType\fP and \fCkXXXFlag\fP\&. This design is for optimizing the operation of testing bit-flags (\fCIsNumber()\fP) and obtaining a sequential number for each type (\fCGetType()\fP)\&.
+.PP
+String has two optional flags\&. \fCkCopyFlag\fP means that the string owns a copy of the string\&. \fCkInlineStrFlag\fP means using \fBShort-String Optimization\fP\&.
+.PP
+Number is a bit more complicated\&. For normal integer values, it can contains \fCkIntFlag\fP, \fCkUintFlag\fP, \fCkInt64Flag\fP and/or \fCkUint64Flag\fP, according to the range of the integer\&. For numbers with fraction, and integers larger than 64-bit range, they will be stored as \fCdouble\fP with \fCkDoubleFlag\fP\&.
+.SS "Short-String Optimization"
+\fCKosta\fP provided a very neat short-string optimization\&. The optimization idea is given as follow\&. Excluding the \fCflags_\fP, a \fCValue\fP has 12 or 16 bytes (32-bit or 64-bit) for storing actual data\&. Instead of storing a pointer to a string, it is possible to store short strings in these space internally\&. For encoding with 1-byte character type (e\&.g\&. \fCchar\fP), it can store maximum 11 or 15 characters string inside the \fCValue\fP type\&.
+.PP
+ShortString (Ch=char)   32-bit   64-bit    \fCCh str[MaxChars]\fP   String buffer   11   15    \fCCh invLength\fP   MaxChars - Length   1   1    \fCunsigned flags_\fP   \fCkStringType kStringFlag \&.\&.\&.\fP   4   4   
+.PP
+A special technique is applied\&. Instead of storing the length of string directly, it stores (MaxChars - length)\&. This make it possible to store 11 characters with trailing \fC\\0\fP\&.
+.PP
+This optimization can reduce memory usage for copy-string\&. It can also improve cache-coherence thus improve runtime performance\&.
+.SH "Allocator"
+.PP
+\fCAllocator\fP is a concept in RapidJSON: 
+.PP
+.nf
+concept Allocator {
+    static const bool kNeedFree;    
+
+    // Allocate a memory block\&.
+    // \param size of the memory block in bytes\&.
+    // \returns pointer to the memory block\&.
+    void* Malloc(size_t size);
+
+    // Resize a memory block\&.
+    // \param originalPtr The pointer to current memory block\&. Null pointer is permitted\&.
+    // \param originalSize The current size in bytes\&. (Design issue: since some allocator may not book-keep this, explicitly pass to it can save memory\&.)
+    // \param newSize the new size in bytes\&.
+    void* Realloc(void* originalPtr, size_t originalSize, size_t newSize);
+
+    // Free a memory block\&.
+    // \param pointer to the memory block\&. Null pointer is permitted\&.
+    static void Free(void *ptr);
+};
+
+.fi
+.PP
+.PP
+Note that \fC\fBMalloc()\fP\fP and \fC\fBRealloc()\fP\fP are member functions but \fC\fBFree()\fP\fP is static member function\&.
+.SS "MemoryPoolAllocator"
+\fC\fBMemoryPoolAllocator\fP\fP is the default allocator for DOM\&. It allocate but do not free memory\&. This is suitable for building a DOM tree\&.
+.PP
+Internally, it allocates chunks of memory from the base allocator (by default \fC\fBCrtAllocator\fP\fP) and stores the chunks as a singly linked list\&. When user requests an allocation, it allocates memory from the following order:
+.PP
+.IP "1." 4
+User supplied buffer if it is available\&. (See \fBUser Buffer section in DOM\fP)
+.IP "2." 4
+If user supplied buffer is full, use the current memory chunk\&.
+.IP "3." 4
+If the current block is full, allocate a new block of memory\&.
+.PP
+.SH "Parsing Optimization"
+.PP
+.SS "Skip Whitespaces with SIMD"
+When parsing JSON from a stream, the parser need to skip 4 whitespace characters:
+.PP
+.IP "1." 4
+Space (\fCU+0020\fP)
+.IP "2." 4
+Character Tabulation (\fCU+000B\fP)
+.IP "3." 4
+Line Feed (\fCU+000A\fP)
+.IP "4." 4
+Carriage Return (\fCU+000D\fP)
+.PP
+.PP
+A simple implementation will be simply: 
+.PP
+.nf
+void SkipWhitespace(InputStream& s) {
+    while (s\&.Peek() == ' ' || s\&.Peek() == '\n' || s\&.Peek() == '\r' || s\&.Peek() == '\t')
+        s\&.Take();
+}
+
+.fi
+.PP
+.PP
+However, this requires 4 comparisons and a few branching for each character\&. This was found to be a hot spot\&.
+.PP
+To accelerate this process, SIMD was applied to compare 16 characters with 4 white spaces for each iteration\&. Currently RapidJSON supports SSE2, SSE4\&.2 and ARM Neon instructions for this\&. And it is only activated for UTF-8 memory streams, including string stream or \fIin situ\fP parsing\&.
+.PP
+To enable this optimization, need to define \fCRAPIDJSON_SSE2\fP, \fCRAPIDJSON_SSE42\fP or \fCRAPIDJSON_NEON\fP before including \fC\fBrapidjson\&.h\fP\fP\&. Some compilers can detect the setting, as in \fC\fBperftest\&.h\fP\fP:
+.PP
+.PP
+.nf
+// __SSE2__ and __SSE4_2__ are recognized by gcc, clang, and the Intel compiler\&.
+// We use -march=native with gmake to enable -msse2 and -msse4\&.2, if supported\&.
+// Likewise, __ARM_NEON is used to detect Neon\&.
+#if defined(__SSE4_2__)
+#  define RAPIDJSON_SSE42
+#elif defined(__SSE2__)
+#  define RAPIDJSON_SSE2
+#elif defined(__ARM_NEON)
+#  define RAPIDJSON_NEON
+#endif
+.fi
+.PP
+.PP
+Note that, these are compile-time settings\&. Running the executable on a machine without such instruction set support will make it crash\&.
+.SS "Page boundary issue"
+In an early version of RapidJSON, \fCan issue\fP reported that the \fCSkipWhitespace_SIMD()\fP causes crash very rarely (around 1 in 500,000)\&. After investigation, it is suspected that \fC_mm_loadu_si128()\fP accessed bytes after `'\\0'`, and across a protected page boundary\&.
+.PP
+In \fCIntel® 64 and IA-32 Architectures Optimization Reference Manual\fP, section 10\&.2\&.1:
+.PP
+.RS 4
+To support algorithms requiring unaligned 128-bit SIMD memory accesses, memory buffer allocation by a caller function should consider adding some pad space so that a callee function can safely use the address pointer safely with unaligned 128-bit SIMD memory operations\&. The minimal padding size should be the width of the SIMD register that might be used in conjunction with unaligned SIMD memory access\&. 
+.RE
+.PP
+This is not feasible as RapidJSON should not enforce such requirement\&.
+.PP
+To fix this issue, currently the routine process bytes up to the next aligned address\&. After tha, use aligned read to perform SIMD processing\&. Also see \fC#85\fP\&.
+.SS "Local Stream Copy"
+During optimization, it is found that some compilers cannot localize some member data access of streams into local variables or registers\&. Experimental results show that for some stream types, making a copy of the stream and used it in inner-loop can improve performance\&. For example, the actual (non-SIMD) implementation of \fC\fBSkipWhitespace()\fP\fP is implemented as:
+.PP
+.PP
+.nf
+template<typename InputStream>
+void SkipWhitespace(InputStream& is) {
+    internal::StreamLocalCopy<InputStream> copy(is);
+    InputStream& s(copy\&.s);
+
+    while (s\&.Peek() == ' ' || s\&.Peek() == '\n' || s\&.Peek() == '\r' || s\&.Peek() == '\t')
+        s\&.Take();
+}
+.fi
+.PP
+.PP
+Depending on the traits of stream, \fCStreamLocalCopy\fP will make (or not make) a copy of the stream object, use it locally and copy the states of stream back to the original stream\&.
+.SS "Parsing to Double"
+Parsing string into \fCdouble\fP is difficult\&. The standard library function \fCstrtod()\fP can do the job but it is slow\&. By default, the parsers use normal precision setting\&. This has has maximum 3 \fCULP\fP error and implemented in \fC\fBinternal::StrtodNormalPrecision()\fP\fP\&.
+.PP
+When using \fCkParseFullPrecisionFlag\fP, the parsers calls \fC\fBinternal::StrtodFullPrecision()\fP\fP instead, and this function actually implemented 3 versions of conversion methods\&.
+.IP "1." 4
+\fCFast-Path\fP\&.
+.IP "2." 4
+Custom DIY-FP implementation as in \fCdouble-conversion\fP\&.
+.IP "3." 4
+Big Integer Method as in (Clinger, William D\&. How to read floating point numbers accurately\&. Vol\&. 25\&. No\&. 6\&. ACM, 1990)\&.
+.PP
+.PP
+If the first conversion methods fail, it will try the second, and so on\&.
+.SH "Generation Optimization"
+.PP
+.SS "Integer-to-String conversion"
+The naive algorithm for integer-to-string conversion involves division per each decimal digit\&. We have implemented various implementations and evaluated them in \fCitoa-benchmark\fP\&.
+.PP
+Although SSE2 version is the fastest but the difference is minor by comparing to the first running-up \fCbranchlut\fP\&. And \fCbranchlut\fP is pure C++ implementation so we adopt \fCbranchlut\fP in RapidJSON\&.
+.SS "Double-to-String conversion"
+Originally RapidJSON uses \fCsnprintf(\&.\&.\&., \&.\&.\&., '%g')\fP to achieve double-to-string conversion\&. This is not accurate as the default precision is 6\&. Later we also find that this is slow and there is an alternative\&.
+.PP
+Google's V8 \fCdouble-conversion\fP implemented a newer, fast algorithm called Grisu3 (Loitsch, Florian\&. 'Printing floating-point numbers quickly and accurately with integers\&.' ACM Sigplan Notices 45\&.6 (2010): 233-243\&.)\&.
+.PP
+However, since it is not header-only so that we implemented a header-only version of Grisu2\&. This algorithm guarantees that the result is always accurate\&. And in most of cases it produces the shortest (optimal) string representation\&.
+.PP
+The header-only conversion function has been evaluated in \fCdtoa-benchmark\fP\&.
+.SH "Parser"
+.PP
+.SS "Iterative Parser"
+The iterative parser is a recursive descent LL(1) parser implemented in a non-recursive manner\&.
+.SS "Grammar"
+The grammar used for this parser is based on strict JSON syntax: 
+.PP
+.nf
+S -> array | object
+array -> [ values ]
+object -> { members }
+values -> non-empty-values | ε
+non-empty-values -> value addition-values
+addition-values -> ε | , non-empty-values
+members -> non-empty-members | ε
+non-empty-members -> member addition-members
+addition-members -> ε | , non-empty-members
+member -> STRING : value
+value -> STRING | NUMBER | NULL | BOOLEAN | object | array
+
+.fi
+.PP
+.PP
+Note that left factoring is applied to non-terminals \fCvalues\fP and \fCmembers\fP to make the grammar be LL(1)\&.
+.SS "Parsing Table"
+Based on the grammar, we can construct the FIRST and FOLLOW set\&.
+.PP
+The FIRST set of non-terminals is listed below:
+.PP
+NON-TERMINAL   FIRST    array   [    object   {    values   ε STRING NUMBER NULL BOOLEAN { [    addition-values   ε COMMA    members   ε STRING    addition-members   ε COMMA    member   STRING    value   STRING NUMBER NULL BOOLEAN { [    S   [ {    non-empty-members   STRING    non-empty-values   STRING NUMBER NULL BOOLEAN { [   
+.PP
+The FOLLOW set is listed below:
+.PP
+NON-TERMINAL   FOLLOW    S   $    array   , $ } ]    object   , $ } ]    values   ]    non-empty-values   ]    addition-values   ]    members   }    non-empty-members   }    addition-members   }    member   , }    value   , } ]   
+.PP
+Finally the parsing table can be constructed from FIRST and FOLLOW set:
+.PP
+NON-TERMINAL   [   {   ,   :   ]   }   STRING   NUMBER   NULL   BOOLEAN    S   array   object   array   [ values ]   object   { members }   values   non-empty-values   non-empty-values   ε   non-empty-values   non-empty-values   non-empty-values   non-empty-values    non-empty-values   value addition-values   value addition-values   value addition-values   value addition-values   value addition-values   value addition-values    addition-values   , non-empty-values   ε   members   ε   non-empty-members   non-empty-members   member addition-members   addition-members   , non-empty-members   ε   member   STRING : value   value   array   object   STRING   NUMBER   NULL   BOOLEAN   
+.PP
+There is a great \fCtool\fP for above grammar analysis\&.
+.SS "Implementation"
+Based on the parsing table, a direct(or conventional) implementation that pushes the production body in reverse order while generating a production could work\&.
+.PP
+In RapidJSON, several modifications(or adaptations to current design) are made to a direct implementation\&.
+.PP
+First, the parsing table is encoded in a state machine in RapidJSON\&. States are constructed by the head and body of production\&. State transitions are constructed by production rules\&. Besides, extra states are added for productions involved with \fCarray\fP and \fCobject\fP\&. In this way the generation of array values or object members would be a single state transition, rather than several pop/push operations in the direct implementation\&. This also makes the estimation of stack size more easier\&.
+.PP
+The state diagram is shown as follows:
+.PP
+.PP
+Second, the iterative parser also keeps track of array's value count and object's member count in its internal stack, which may be different from a conventional implementation\&. 

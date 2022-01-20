@@ -1,0 +1,95 @@
+.TH "UTF32< CharType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+UTF32< CharType > \- UTF-32 encoding\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <encodings\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum { \fBsupportUnicode\fP = 1 }"
+.br
+.ti -1c
+.RI "typedef CharType \fBCh\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRAPIDJSON_STATIC_ASSERT\fP (sizeof(\fBCh\fP) >=4)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename OutputStream > static void \fBEncode\fP (OutputStream &os, unsigned codepoint)"
+.br
+.ti -1c
+.RI "template<typename OutputStream > static void \fBEncodeUnsafe\fP (OutputStream &os, unsigned codepoint)"
+.br
+.ti -1c
+.RI "template<typename InputStream > static bool \fBDecode\fP (InputStream &is, unsigned *codepoint)"
+.br
+.ti -1c
+.RI "template<typename InputStream , typename OutputStream > static bool \fBValidate\fP (InputStream &is, OutputStream &os)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename CharType = unsigned>
+.br
+struct UTF32< CharType >"UTF-32 encoding\&. 
+
+http://en.wikipedia.org/wiki/UTF-32 
+.PP
+\fBTemplate Parameters\fP
+.RS 4
+\fICharType\fP Type for storing 32-bit UTF-32 data\&. Default is unsigned\&. C++11 may use char32_t instead\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+implements Encoding concept
+.PP
+For in-memory access, no need to concern endianness\&. The code units and code points are represented by CPU's endianness\&. For streaming, use \fBUTF32LE\fP and \fBUTF32BE\fP, which handle endianness\&. 
+.RE
+.PP
+
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename CharType  = unsigned> typedef CharType \fBUTF32\fP< CharType >::Ch"
+
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename CharType  = unsigned> anonymous enum"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIsupportUnicode \fP\fP
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename CharType  = unsigned> template<typename InputStream > static bool \fBUTF32\fP< CharType >::Decode (InputStream & is, unsigned * codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = unsigned> template<typename OutputStream > static void \fBUTF32\fP< CharType >::Encode (OutputStream & os, unsigned codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = unsigned> template<typename OutputStream > static void \fBUTF32\fP< CharType >::EncodeUnsafe (OutputStream & os, unsigned codepoint)\fC [inline]\fP, \fC [static]\fP"
+
+.SS "template<typename CharType  = unsigned> \fBUTF32\fP< CharType >::RAPIDJSON_STATIC_ASSERT (sizeof(\fBCh\fP) >= 4)"
+
+.SS "template<typename CharType  = unsigned> template<typename InputStream , typename OutputStream > static bool \fBUTF32\fP< CharType >::Validate (InputStream & is, OutputStream & os)\fC [inline]\fP, \fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

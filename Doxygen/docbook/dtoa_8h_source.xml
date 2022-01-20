@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_dtoa_8h_source" xml:lang="en-US">
+<title>dtoa.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/internal/dtoa.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="comment">//&#32;This&#32;is&#32;a&#32;C++&#32;header-only&#32;implementation&#32;of&#32;Grisu2&#32;algorithm&#32;from&#32;the&#32;publication:</emphasis>
+16 <emphasis role="comment">//&#32;Loitsch,&#32;Florian.&#32;&quot;Printing&#32;floating-point&#32;numbers&#32;quickly&#32;and&#32;accurately&#32;with</emphasis>
+17 <emphasis role="comment">//&#32;integers.&quot;&#32;ACM&#32;Sigplan&#32;Notices&#32;45.6&#32;(2010):&#32;233-243.</emphasis>
+18 
+19 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_DTOA_</emphasis>
+20 <emphasis role="preprocessor">#define&#32;RAPIDJSON_DTOA_</emphasis>
+21 
+22 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_itoa_8h">itoa.h</link>&quot;</emphasis>&#32;<emphasis role="comment">//&#32;GetDigitsLut()</emphasis>
+23 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_diyfp_8h">diyfp.h</link>&quot;</emphasis>
+24 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_ieee754_8h">ieee754.h</link>&quot;</emphasis>
+25 
+26 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+27 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
+28 
+29 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+30 RAPIDJSON_DIAG_PUSH
+31 RAPIDJSON_DIAG_OFF(effc++)
+32 RAPIDJSON_DIAG_OFF(array-bounds)&#32;<emphasis role="comment">//&#32;some&#32;gcc&#32;versions&#32;generate&#32;wrong&#32;warnings&#32;https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59124</emphasis>
+33 <emphasis role="preprocessor">#endif</emphasis>
+34 
+35 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_namespaceinternal_1a234e10bef097ccb2f202b7a133086e71">GrisuRound</link>(<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">int</emphasis>&#32;len,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;delta,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;rest,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;ten_kappa,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;wp_w)&#32;{
+36 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(rest&#32;&lt;&#32;wp_w&#32;&amp;&amp;&#32;delta&#32;-&#32;rest&#32;&gt;=&#32;ten_kappa&#32;&amp;&amp;
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(rest&#32;+&#32;ten_kappa&#32;&lt;&#32;wp_w&#32;||&#32;&#32;
+38 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;wp_w&#32;-&#32;rest&#32;&gt;&#32;rest&#32;+&#32;ten_kappa&#32;-&#32;wp_w))&#32;{
+39 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[len&#32;-&#32;1]--;
+40 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rest&#32;+=&#32;ten_kappa;
+41 &#32;&#32;&#32;&#32;}
+42 }
+43 
+44 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_namespaceinternal_1a8aae11dbb46da9ac99e116aa2a6dbfc9">CountDecimalDigit32</link>(<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>&#32;n)&#32;{
+45 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Simple&#32;pure&#32;C++&#32;implementation&#32;was&#32;faster&#32;than&#32;__builtin_clz&#32;version&#32;in&#32;this&#32;situation.</emphasis>
+46 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;10)&#32;<emphasis role="keywordflow">return</emphasis>&#32;1;
+47 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;100)&#32;<emphasis role="keywordflow">return</emphasis>&#32;2;
+48 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;1000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;3;
+49 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;10000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;4;
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;100000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;5;
+51 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;1000000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;6;
+52 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;10000000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;7;
+53 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&lt;&#32;100000000)&#32;<emphasis role="keywordflow">return</emphasis>&#32;8;
+54 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Will&#32;not&#32;reach&#32;10&#32;digits&#32;in&#32;DigitGen()</emphasis>
+55 &#32;&#32;&#32;&#32;<emphasis role="comment">//if&#32;(n&#32;&lt;&#32;1000000000)&#32;return&#32;9;</emphasis>
+56 &#32;&#32;&#32;&#32;<emphasis role="comment">//return&#32;10;</emphasis>
+57 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;9;
+58 }
+59 
+60 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_namespaceinternal_1a47be9aea8d0f9cae49dc03dc046d2450">DigitGen</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&amp;&#32;W,&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&amp;&#32;Mp,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;delta,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">int</emphasis>*&#32;len,&#32;<emphasis role="keywordtype">int</emphasis>*&#32;K)&#32;{
+61 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;kPow10[]&#32;=&#32;{&#32;1U,&#32;10U,&#32;100U,&#32;1000U,&#32;10000U,&#32;100000U,&#32;1000000U,&#32;10000000U,&#32;100000000U,
+62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;1000000000U,&#32;10000000000U,&#32;100000000000U,&#32;1000000000000U,
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10000000000000U,&#32;100000000000000U,&#32;1000000000000000U,
+64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10000000000000000U,&#32;100000000000000000U,&#32;1000000000000000000U,
+65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10000000000000000000U&#32;};
+66 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;one(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>(1)&#32;&lt;&lt;&#32;-Mp.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>,&#32;Mp.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>);
+67 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;wp_w&#32;=&#32;Mp&#32;-&#32;W;
+68 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>&#32;p1&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link><emphasis role="keyword">&gt;</emphasis>(Mp.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&gt;&gt;&#32;-one.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>);
+69 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;p2&#32;=&#32;Mp.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;&amp;&#32;(one.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;-&#32;1);
+70 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;kappa&#32;=&#32;<link linkend="_namespaceinternal_1a8aae11dbb46da9ac99e116aa2a6dbfc9">CountDecimalDigit32</link>(p1);&#32;<emphasis role="comment">//&#32;kappa&#32;in&#32;[0,&#32;9]</emphasis>
+71 &#32;&#32;&#32;&#32;*len&#32;=&#32;0;
+72 
+73 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(kappa&#32;&gt;&#32;0)&#32;{
+74 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>&#32;d&#32;=&#32;0;
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(kappa)&#32;{
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;9:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;100000000;&#32;p1&#32;%=&#32;&#32;100000000;&#32;<emphasis role="keywordflow">break</emphasis>;
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;8:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;10000000;&#32;p1&#32;%=&#32;&#32;&#32;10000000;&#32;<emphasis role="keywordflow">break</emphasis>;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;7:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;1000000;&#32;p1&#32;%=&#32;&#32;&#32;&#32;1000000;&#32;<emphasis role="keywordflow">break</emphasis>;
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;6:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;&#32;100000;&#32;p1&#32;%=&#32;&#32;&#32;&#32;&#32;100000;&#32;<emphasis role="keywordflow">break</emphasis>;
+80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;5:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;&#32;&#32;10000;&#32;p1&#32;%=&#32;&#32;&#32;&#32;&#32;&#32;10000;&#32;<emphasis role="keywordflow">break</emphasis>;
+81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;4:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;&#32;&#32;&#32;1000;&#32;p1&#32;%=&#32;&#32;&#32;&#32;&#32;&#32;&#32;1000;&#32;<emphasis role="keywordflow">break</emphasis>;
+82 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;3:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;100;&#32;p1&#32;%=&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;100;&#32;<emphasis role="keywordflow">break</emphasis>;
+83 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;2:&#32;d&#32;=&#32;p1&#32;/&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10;&#32;p1&#32;%=&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;10;&#32;<emphasis role="keywordflow">break</emphasis>;
+84 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;&#32;1:&#32;d&#32;=&#32;p1;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p1&#32;=&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;0;&#32;<emphasis role="keywordflow">break</emphasis>;
+85 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:;
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(d&#32;||&#32;*len)
+88 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[(*len)++]&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(d));
+89 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kappa--;
+90 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;tmp&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link><emphasis role="keyword">&gt;</emphasis>(p1)&#32;&lt;&lt;&#32;-one.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>)&#32;+&#32;p2;
+91 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(tmp&#32;&lt;=&#32;delta)&#32;{
+92 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*K&#32;+=&#32;kappa;
+93 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a234e10bef097ccb2f202b7a133086e71">GrisuRound</link>(buffer,&#32;*len,&#32;delta,&#32;tmp,&#32;kPow10[kappa]&#32;&lt;&lt;&#32;-one.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>,&#32;wp_w.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>);
+94 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+96 &#32;&#32;&#32;&#32;}
+97 
+98 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;kappa&#32;=&#32;0</emphasis>
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(;;)&#32;{
+100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p2&#32;*=&#32;10;
+101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;delta&#32;*=&#32;10;
+102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;d&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(p2&#32;&gt;&gt;&#32;-one.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>);
+103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(d&#32;||&#32;*len)
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[(*len)++]&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;+&#32;d);
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;p2&#32;&amp;=&#32;one.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;-&#32;1;
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kappa--;
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(p2&#32;&lt;&#32;delta)&#32;{
+108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*K&#32;+=&#32;kappa;
+109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;index&#32;=&#32;-kappa;
+110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a234e10bef097ccb2f202b7a133086e71">GrisuRound</link>(buffer,&#32;*len,&#32;delta,&#32;p2,&#32;one.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>,&#32;wp_w.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;*&#32;(index&#32;&lt;&#32;20&#32;?&#32;kPow10[index]&#32;:&#32;0));
+111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+113 &#32;&#32;&#32;&#32;}
+114 }
+115 
+116 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_namespaceinternal_1aeb7b6c0784b644968003cbd1b9da57e3">Grisu2</link>(<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">int</emphasis>*&#32;length,&#32;<emphasis role="keywordtype">int</emphasis>*&#32;K)&#32;{
+117 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;v(<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>);
+118 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;w_m,&#32;w_p;
+119 &#32;&#32;&#32;&#32;v.<link linkend="_structinternal_1_1_diy_fp_1adef8bf723f24db9dc6cefa260e8c2390">NormalizedBoundaries</link>(&amp;w_m,&#32;&amp;w_p);
+120 
+121 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;c_mk&#32;=&#32;<link linkend="_namespaceinternal_1abac3dbfa1070756c37725829148f6038">GetCachedPower</link>(w_p.<link linkend="_structinternal_1_1_diy_fp_1afa9db335eeb61c7f966d888d89b1e6f2">e</link>,&#32;K);
+122 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;W&#32;=&#32;v.<link linkend="_structinternal_1_1_diy_fp_1aa6cbacc8dfcd92cb8c57884e45548976">Normalize</link>()&#32;*&#32;c_mk;
+123 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;Wp&#32;=&#32;w_p&#32;*&#32;c_mk;
+124 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_diy_fp">DiyFp</link>&#32;Wm&#32;=&#32;w_m&#32;*&#32;c_mk;
+125 &#32;&#32;&#32;&#32;Wm.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>++;
+126 &#32;&#32;&#32;&#32;Wp.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>--;
+127 &#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a47be9aea8d0f9cae49dc03dc046d2450">DigitGen</link>(W,&#32;Wp,&#32;Wp.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>&#32;-&#32;Wm.<link linkend="_structinternal_1_1_diy_fp_1a09b9217a86e8a2e6aa8d2d48fc351008">f</link>,&#32;buffer,&#32;length,&#32;K);
+128 }
+129 
+130 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_namespaceinternal_1aadc1fd5929c1c67a56c8ba480c587bac">WriteExponent</link>(<emphasis role="keywordtype">int</emphasis>&#32;K,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer)&#32;{
+131 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(K&#32;&lt;&#32;0)&#32;{
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>;
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;K&#32;=&#32;-K;
+134 &#32;&#32;&#32;&#32;}
+135 
+136 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(K&#32;&gt;=&#32;100)&#32;{
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(K&#32;/&#32;100));
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;K&#32;%=&#32;100;
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;d&#32;=&#32;<link linkend="_namespaceinternal_1a76ad2b55668f695effde1971d53a5ce1">GetDigitsLut</link>()&#32;+&#32;K&#32;*&#32;2;
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;d[0];
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;d[1];
+142 &#32;&#32;&#32;&#32;}
+143 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(K&#32;&gt;=&#32;10)&#32;{
+144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;d&#32;=&#32;<link linkend="_namespaceinternal_1a76ad2b55668f695effde1971d53a5ce1">GetDigitsLut</link>()&#32;+&#32;K&#32;*&#32;2;
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;d[0];
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;d[1];
+147 &#32;&#32;&#32;&#32;}
+148 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(K));
+150 
+151 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;buffer;
+152 }
+153 
+154 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_namespaceinternal_1a4b194248657212e94cc3f244b09dbeae">Prettify</link>(<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">int</emphasis>&#32;length,&#32;<emphasis role="keywordtype">int</emphasis>&#32;k,&#32;<emphasis role="keywordtype">int</emphasis>&#32;maxDecimalPlaces)&#32;{
+155 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;kk&#32;=&#32;length&#32;+&#32;k;&#32;&#32;<emphasis role="comment">//&#32;10^(kk-1)&#32;&lt;=&#32;v&#32;&lt;&#32;10^kk</emphasis>
+156 
+157 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(0&#32;&lt;=&#32;k&#32;&amp;&amp;&#32;kk&#32;&lt;=&#32;21)&#32;{
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;1234e7&#32;-&gt;&#32;12340000000</emphasis>
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;length;&#32;i&#32;&lt;&#32;kk;&#32;i++)
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[i]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[kk]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[kk&#32;+&#32;1]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[kk&#32;+&#32;2];
+164 &#32;&#32;&#32;&#32;}
+165 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(0&#32;&lt;&#32;kk&#32;&amp;&amp;&#32;kk&#32;&lt;=&#32;21)&#32;{
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;1234e-2&#32;-&gt;&#32;12.34</emphasis>
+167 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memmove(&amp;buffer[kk&#32;+&#32;1],&#32;&amp;buffer[kk],&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(length&#32;-&#32;kk));
+168 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[kk]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(0&#32;&gt;&#32;k&#32;+&#32;maxDecimalPlaces)&#32;{
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;When&#32;maxDecimalPlaces&#32;=&#32;2,&#32;1.2345&#32;-&gt;&#32;1.23,&#32;1.102&#32;-&gt;&#32;1.1</emphasis>
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Remove&#32;extra&#32;trailing&#32;zeros&#32;(at&#32;least&#32;one)&#32;after&#32;truncation.</emphasis>
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;kk&#32;+&#32;maxDecimalPlaces;&#32;i&#32;&gt;&#32;kk&#32;+&#32;1;&#32;i--)
+173 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(buffer[i]&#32;!=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>)
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[i&#32;+&#32;1];
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[kk&#32;+&#32;2];&#32;<emphasis role="comment">//&#32;Reserve&#32;one&#32;zero</emphasis>
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+177 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+178 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[length&#32;+&#32;1];
+179 &#32;&#32;&#32;&#32;}
+180 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(-6&#32;&lt;&#32;kk&#32;&amp;&amp;&#32;kk&#32;&lt;=&#32;0)&#32;{
+181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;1234e-6&#32;-&gt;&#32;0.001234</emphasis>
+182 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;offset&#32;=&#32;2&#32;-&#32;kk;
+183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memmove(&amp;buffer[offset],&#32;&amp;buffer[0],&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(length));
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[0]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[1]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;2;&#32;i&#32;&lt;&#32;offset;&#32;i++)
+187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[i]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(length&#32;-&#32;kk&#32;&gt;&#32;maxDecimalPlaces)&#32;{
+189 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;When&#32;maxDecimalPlaces&#32;=&#32;2,&#32;0.123&#32;-&gt;&#32;0.12,&#32;0.102&#32;-&gt;&#32;0.1</emphasis>
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Remove&#32;extra&#32;trailing&#32;zeros&#32;(at&#32;least&#32;one)&#32;after&#32;truncation.</emphasis>
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;maxDecimalPlaces&#32;+&#32;1;&#32;i&#32;&gt;&#32;2;&#32;i--)
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(buffer[i]&#32;!=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>)
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[i&#32;+&#32;1];
+194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[3];&#32;<emphasis role="comment">//&#32;Reserve&#32;one&#32;zero</emphasis>
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[length&#32;+&#32;offset];
+198 &#32;&#32;&#32;&#32;}
+199 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(kk&#32;&lt;&#32;-maxDecimalPlaces)&#32;{
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Truncate&#32;to&#32;zero</emphasis>
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[0]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[1]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[2]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[3];
+205 &#32;&#32;&#32;&#32;}
+206 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(length&#32;==&#32;1)&#32;{
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;1e30</emphasis>
+208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[1]&#32;=&#32;<emphasis role="charliteral">&apos;e&apos;</emphasis>;
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1aadc1fd5929c1c67a56c8ba480c587bac">WriteExponent</link>(kk&#32;-&#32;1,&#32;&amp;buffer[2]);
+210 &#32;&#32;&#32;&#32;}
+211 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;1234e30&#32;-&gt;&#32;1.234e33</emphasis>
+213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memmove(&amp;buffer[2],&#32;&amp;buffer[1],&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(length&#32;-&#32;1));
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[1]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[length&#32;+&#32;1]&#32;=&#32;<emphasis role="charliteral">&apos;e&apos;</emphasis>;
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1aadc1fd5929c1c67a56c8ba480c587bac">WriteExponent</link>(kk&#32;-&#32;1,&#32;&amp;buffer[0&#32;+&#32;length&#32;+&#32;2]);
+217 &#32;&#32;&#32;&#32;}
+218 }
+219 
+220 <emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_namespaceinternal_1a38ffd2dab9bb216948f828f3a36c801f">dtoa</link>(<emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">int</emphasis>&#32;maxDecimalPlaces&#32;=&#32;324)&#32;{
+221 &#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(maxDecimalPlaces&#32;&gt;=&#32;1);
+222 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_double">Double</link>&#32;d(<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>);
+223 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(d.<link linkend="_classinternal_1_1_double_1a90a3a1ca614b377b59576955ce987ce2">IsZero</link>())&#32;{
+224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(d.<link linkend="_classinternal_1_1_double_1ab09c26873ca4c3e471a97c4559bf317d">Sign</link>())
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;-0.0,&#32;Issue&#32;#289</emphasis>
+226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[0]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[1]&#32;=&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>;
+228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer[2]&#32;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;buffer[3];
+230 &#32;&#32;&#32;&#32;}
+231 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>&#32;&lt;&#32;0)&#32;{
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*buffer++&#32;=&#32;<emphasis role="charliteral">&apos;-&apos;</emphasis>;
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>&#32;=&#32;-<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>;
+235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+236 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;length,&#32;K;
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1aeb7b6c0784b644968003cbd1b9da57e3">Grisu2</link>(<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">value</link>,&#32;buffer,&#32;&amp;length,&#32;&amp;K);
+238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_namespaceinternal_1a4b194248657212e94cc3f244b09dbeae">Prettify</link>(buffer,&#32;length,&#32;K,&#32;maxDecimalPlaces);
+239 &#32;&#32;&#32;&#32;}
+240 }
+241 
+242 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+243 RAPIDJSON_DIAG_POP
+244 <emphasis role="preprocessor">#endif</emphasis>
+245 
+246 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>
+247 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+248 
+249 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_DTOA_</emphasis>
+</programlisting></section>

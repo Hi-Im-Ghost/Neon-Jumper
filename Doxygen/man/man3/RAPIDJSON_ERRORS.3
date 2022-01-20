@@ -1,0 +1,422 @@
+.TH "RAPIDJSON_ERRORS" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+RAPIDJSON_ERRORS \- RapidJSON error handling
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBParseResult\fP"
+.br
+.RI "Result of parsing (wraps ParseErrorCode) "
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_ERROR_CHARTYPE\fP   char"
+.br
+.RI "Character type of error messages\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_ERROR_STRING\fP(x)   x"
+.br
+.RI "Macro for converting string literial to \fBRAPIDJSON_ERROR_CHARTYPE\fP[]\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_PARSE_ERROR_NORETURN\fP(parseErrorCode,  offset)"
+.br
+.RI "Macro to indicate a parse error\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_PARSE_ERROR\fP(parseErrorCode,  offset)"
+.br
+.RI "(Internal) macro to indicate and handle a parse error\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef const \fBRAPIDJSON_ERROR_CHARTYPE\fP *(* \fBGetParseErrorFunc\fP) (\fBParseErrorCode\fP)"
+.br
+.RI "Function pointer type of GetParseError()\&. "
+.ti -1c
+.RI "typedef const \fBRAPIDJSON_ERROR_CHARTYPE\fP *(* \fBGetValidateErrorFunc\fP) (\fBValidateErrorCode\fP)"
+.br
+.RI "Function pointer type of GetValidateError()\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBParseErrorCode\fP { \fBkParseErrorNone\fP = 0, \fBkParseErrorDocumentEmpty\fP, \fBkParseErrorDocumentRootNotSingular\fP, \fBkParseErrorValueInvalid\fP, \fBkParseErrorObjectMissName\fP, \fBkParseErrorObjectMissColon\fP, \fBkParseErrorObjectMissCommaOrCurlyBracket\fP, \fBkParseErrorArrayMissCommaOrSquareBracket\fP, \fBkParseErrorStringUnicodeEscapeInvalidHex\fP, \fBkParseErrorStringUnicodeSurrogateInvalid\fP, \fBkParseErrorStringEscapeInvalid\fP, \fBkParseErrorStringMissQuotationMark\fP, \fBkParseErrorStringInvalidEncoding\fP, \fBkParseErrorNumberTooBig\fP, \fBkParseErrorNumberMissFraction\fP, \fBkParseErrorNumberMissExponent\fP, \fBkParseErrorTermination\fP, \fBkParseErrorUnspecificSyntaxError\fP }"
+.br
+.RI "Error code of parsing\&. "
+.ti -1c
+.RI "enum \fBValidateErrorCode\fP { \fBkValidateErrors\fP = -1, \fBkValidateErrorNone\fP = 0, \fBkValidateErrorMultipleOf\fP, \fBkValidateErrorMaximum\fP, \fBkValidateErrorExclusiveMaximum\fP, \fBkValidateErrorMinimum\fP, \fBkValidateErrorExclusiveMinimum\fP, \fBkValidateErrorMaxLength\fP, \fBkValidateErrorMinLength\fP, \fBkValidateErrorPattern\fP, \fBkValidateErrorMaxItems\fP, \fBkValidateErrorMinItems\fP, \fBkValidateErrorUniqueItems\fP, \fBkValidateErrorAdditionalItems\fP, \fBkValidateErrorMaxProperties\fP, \fBkValidateErrorMinProperties\fP, \fBkValidateErrorRequired\fP, \fBkValidateErrorAdditionalProperties\fP, \fBkValidateErrorPatternProperties\fP, \fBkValidateErrorDependencies\fP, \fBkValidateErrorEnum\fP, \fBkValidateErrorType\fP, \fBkValidateErrorOneOf\fP, \fBkValidateErrorOneOfMatch\fP, \fBkValidateErrorAllOf\fP, \fBkValidateErrorAnyOf\fP, \fBkValidateErrorNot\fP }"
+.br
+.RI "Error codes when validating\&. "
+.ti -1c
+.RI "enum \fBPointerParseErrorCode\fP { \fBkPointerParseErrorNone\fP = 0, \fBkPointerParseErrorTokenMustBeginWithSolidus\fP, \fBkPointerParseErrorInvalidEscape\fP, \fBkPointerParseErrorInvalidPercentEncoding\fP, \fBkPointerParseErrorCharacterMustPercentEncode\fP }"
+.br
+.RI "Error code of parsing\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRAPIDJSON_NAMESPACE_BEGIN\fP const \fBRAPIDJSON_ERROR_CHARTYPE\fP * \fBGetParseError_En\fP (\fBParseErrorCode\fP parseErrorCode)"
+.br
+.RI "Maps error code of parsing into error message\&. "
+.ti -1c
+.RI "const \fBRAPIDJSON_ERROR_CHARTYPE\fP * \fBGetValidateError_En\fP (\fBValidateErrorCode\fP validateErrorCode)"
+.br
+.RI "Maps error code of validation into error message\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define RAPIDJSON_ERROR_CHARTYPE   char"
+
+.PP
+Character type of error messages\&. The default character type is \fCchar\fP\&. On Windows, user can define this macro as \fCTCHAR\fP for supporting both unicode/non-unicode settings\&. 
+.SS "#define RAPIDJSON_ERROR_STRING(x)   x"
+
+.PP
+Macro for converting string literial to \fBRAPIDJSON_ERROR_CHARTYPE\fP[]\&. By default this conversion macro does nothing\&. On Windows, user can define this macro as \fC_T(x)\fP for supporting both unicode/non-unicode settings\&. 
+.SS "#define RAPIDJSON_PARSE_ERROR(parseErrorCode, offset)"
+
+.PP
+(Internal) macro to indicate and handle a parse error\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparseErrorCode\fP \fBrapidjson::ParseErrorCode\fP of the error 
+.br
+\fIoffset\fP position of the error in JSON input (\fCsize_t\fP)
+.RE
+.PP
+Invokes RAPIDJSON_PARSE_ERROR_NORETURN and stops the parsing\&.
+.PP
+\fBSee also\fP
+.RS 4
+\fBRAPIDJSON_PARSE_ERROR_NORETURN\fP 
+.RE
+.PP
+
+.SS "#define RAPIDJSON_PARSE_ERROR_NORETURN(parseErrorCode, offset)"
+\fBValue:\fP
+.PP
+.nf
+    RAPIDJSON_MULTILINEMACRO_BEGIN \\
+    RAPIDJSON_ASSERT(!HasParseError()); /* Error can only be assigned once */ \
+    SetParseError(parseErrorCode, offset); \
+    RAPIDJSON_MULTILINEMACRO_END
+.fi
+.PP
+Macro to indicate a parse error\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparseErrorCode\fP \fBrapidjson::ParseErrorCode\fP of the error 
+.br
+\fIoffset\fP position of the error in JSON input (\fCsize_t\fP)
+.RE
+.PP
+This macros can be used as a customization point for the internal error handling mechanism of RapidJSON\&.
+.PP
+A common usage model is to throw an exception instead of requiring the caller to explicitly check the \fBrapidjson::GenericReader::Parse\fP's return value:
+.PP
+.PP
+.nf
+#define RAPIDJSON_PARSE_ERROR_NORETURN(parseErrorCode,offset) \
+   throw ParseException(parseErrorCode, #parseErrorCode, offset)
+
+#include <stdexcept>               // std::runtime_error
+#include "rapidjson/error/error\&.h" // rapidjson::ParseResult
+
+struct ParseException : std::runtime_error, rapidjson::ParseResult {
+  ParseException(rapidjson::ParseErrorCode code, const char* msg, size_t offset)
+    : std::runtime_error(msg), ParseResult(code, offset) {}
+};
+
+#include "rapidjson/reader\&.h"
+.fi
+.PP
+.PP
+\fBSee also\fP
+.RS 4
+\fBRAPIDJSON_PARSE_ERROR\fP, rapidjson::GenericReader::Parse 
+.RE
+.PP
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef const \fBRAPIDJSON_ERROR_CHARTYPE\fP *(* GetParseErrorFunc) (\fBParseErrorCode\fP)"
+
+.PP
+Function pointer type of GetParseError()\&. This is the prototype for \fCGetParseError_X()\fP, where \fCX\fP is a locale\&. User can dynamically change locale in runtime, e\&.g\&.: 
+.PP
+.nf
+GetParseErrorFunc GetParseError = GetParseError_En; // or whatever
+const RAPIDJSON_ERROR_CHARTYPE* s = GetParseError(document\&.GetParseErrorCode());
+
+.fi
+.PP
+ 
+.SS "typedef const \fBRAPIDJSON_ERROR_CHARTYPE\fP *(* GetValidateErrorFunc) (\fBValidateErrorCode\fP)"
+
+.PP
+Function pointer type of GetValidateError()\&. This is the prototype for \fCGetValidateError_X()\fP, where \fCX\fP is a locale\&. User can dynamically change locale in runtime, e\&.g\&.: 
+.PP
+.nf
+GetValidateErrorFunc GetValidateError = GetValidateError_En; // or whatever
+const RAPIDJSON_ERROR_CHARTYPE* s = GetValidateError(validator\&.GetInvalidSchemaCode());
+
+.fi
+.PP
+ 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBParseErrorCode\fP"
+
+.PP
+Error code of parsing\&. 
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericReader::Parse\fP, \fBGenericReader::GetParseErrorCode\fP 
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkParseErrorNone \fP\fP
+No error\&. 
+.TP
+\fB\fIkParseErrorDocumentEmpty \fP\fP
+The document is empty\&. 
+.TP
+\fB\fIkParseErrorDocumentRootNotSingular \fP\fP
+The document root must not follow by other values\&. 
+.TP
+\fB\fIkParseErrorValueInvalid \fP\fP
+Invalid value\&. 
+.TP
+\fB\fIkParseErrorObjectMissName \fP\fP
+Missing a name for object member\&. 
+.TP
+\fB\fIkParseErrorObjectMissColon \fP\fP
+Missing a colon after a name of object member\&. 
+.TP
+\fB\fIkParseErrorObjectMissCommaOrCurlyBracket \fP\fP
+Missing a comma or '}' after an object member\&. 
+.TP
+\fB\fIkParseErrorArrayMissCommaOrSquareBracket \fP\fP
+Missing a comma or ']' after an array element\&. 
+.TP
+\fB\fIkParseErrorStringUnicodeEscapeInvalidHex \fP\fP
+Incorrect hex digit after \\u escape in string\&. 
+.TP
+\fB\fIkParseErrorStringUnicodeSurrogateInvalid \fP\fP
+The surrogate pair in string is invalid\&. 
+.TP
+\fB\fIkParseErrorStringEscapeInvalid \fP\fP
+Invalid escape character in string\&. 
+.TP
+\fB\fIkParseErrorStringMissQuotationMark \fP\fP
+Missing a closing quotation mark in string\&. 
+.TP
+\fB\fIkParseErrorStringInvalidEncoding \fP\fP
+Invalid encoding in string\&. 
+.TP
+\fB\fIkParseErrorNumberTooBig \fP\fP
+Number too big to be stored in double\&. 
+.TP
+\fB\fIkParseErrorNumberMissFraction \fP\fP
+Miss fraction part in number\&. 
+.TP
+\fB\fIkParseErrorNumberMissExponent \fP\fP
+Miss exponent in number\&. 
+.TP
+\fB\fIkParseErrorTermination \fP\fP
+Parsing was terminated\&. 
+.TP
+\fB\fIkParseErrorUnspecificSyntaxError \fP\fP
+Unspecific syntax error\&. 
+.SS "enum \fBPointerParseErrorCode\fP"
+
+.PP
+Error code of parsing\&. 
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericPointer::GenericPointer\fP, GenericPointer::GetParseErrorCode 
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkPointerParseErrorNone \fP\fP
+The parse is successful\&. 
+.TP
+\fB\fIkPointerParseErrorTokenMustBeginWithSolidus \fP\fP
+A token must begin with a '/'\&. 
+.TP
+\fB\fIkPointerParseErrorInvalidEscape \fP\fP
+Invalid escape\&. 
+.TP
+\fB\fIkPointerParseErrorInvalidPercentEncoding \fP\fP
+Invalid percent encoding in URI fragment\&. 
+.TP
+\fB\fIkPointerParseErrorCharacterMustPercentEncode \fP\fP
+A character must percent encoded in URI fragment\&. 
+.SS "enum \fBValidateErrorCode\fP"
+
+.PP
+Error codes when validating\&. 
+.PP
+\fBSee also\fP
+.RS 4
+\fBGenericSchemaValidator\fP 
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkValidateErrors \fP\fP
+Top level error code when kValidateContinueOnErrorsFlag set\&. 
+.TP
+\fB\fIkValidateErrorNone \fP\fP
+No error\&. 
+.TP
+\fB\fIkValidateErrorMultipleOf \fP\fP
+Number is not a multiple of the 'multipleOf' value\&. 
+.TP
+\fB\fIkValidateErrorMaximum \fP\fP
+Number is greater than the 'maximum' value\&. 
+.TP
+\fB\fIkValidateErrorExclusiveMaximum \fP\fP
+Number is greater than or equal to the 'maximum' value\&. 
+.TP
+\fB\fIkValidateErrorMinimum \fP\fP
+Number is less than the 'minimum' value\&. 
+.TP
+\fB\fIkValidateErrorExclusiveMinimum \fP\fP
+Number is less than or equal to the 'minimum' value\&. 
+.TP
+\fB\fIkValidateErrorMaxLength \fP\fP
+String is longer than the 'maxLength' value\&. 
+.TP
+\fB\fIkValidateErrorMinLength \fP\fP
+String is longer than the 'maxLength' value\&. 
+.TP
+\fB\fIkValidateErrorPattern \fP\fP
+String does not match the 'pattern' regular expression\&. 
+.TP
+\fB\fIkValidateErrorMaxItems \fP\fP
+Array is longer than the 'maxItems' value\&. 
+.TP
+\fB\fIkValidateErrorMinItems \fP\fP
+Array is shorter than the 'minItems' value\&. 
+.TP
+\fB\fIkValidateErrorUniqueItems \fP\fP
+Array has duplicate items but 'uniqueItems' is true\&. 
+.TP
+\fB\fIkValidateErrorAdditionalItems \fP\fP
+Array has additional items that are not allowed by the schema\&. 
+.TP
+\fB\fIkValidateErrorMaxProperties \fP\fP
+Object has more members than 'maxProperties' value\&. 
+.TP
+\fB\fIkValidateErrorMinProperties \fP\fP
+Object has less members than 'minProperties' value\&. 
+.TP
+\fB\fIkValidateErrorRequired \fP\fP
+Object is missing one or more members required by the schema\&. 
+.TP
+\fB\fIkValidateErrorAdditionalProperties \fP\fP
+Object has additional members that are not allowed by the schema\&. 
+.TP
+\fB\fIkValidateErrorPatternProperties \fP\fP
+See other errors\&. 
+.TP
+\fB\fIkValidateErrorDependencies \fP\fP
+Object has missing property or schema dependencies\&. 
+.TP
+\fB\fIkValidateErrorEnum \fP\fP
+Property has a value that is not one of its allowed enumerated values\&. 
+.TP
+\fB\fIkValidateErrorType \fP\fP
+Property has a type that is not allowed by the schema\&.\&. 
+.TP
+\fB\fIkValidateErrorOneOf \fP\fP
+Property did not match any of the sub-schemas specified by 'oneOf'\&. 
+.TP
+\fB\fIkValidateErrorOneOfMatch \fP\fP
+Property matched more than one of the sub-schemas specified by 'oneOf'\&. 
+.TP
+\fB\fIkValidateErrorAllOf \fP\fP
+Property did not match all of the sub-schemas specified by 'allOf'\&. 
+.TP
+\fB\fIkValidateErrorAnyOf \fP\fP
+Property did not match any of the sub-schemas specified by 'anyOf'\&. 
+.TP
+\fB\fIkValidateErrorNot \fP\fP
+Property matched the sub-schema specified by 'not'\&. 
+.SH "Function Documentation"
+.PP 
+.SS "\fBRAPIDJSON_NAMESPACE_BEGIN\fP const \fBRAPIDJSON_ERROR_CHARTYPE\fP * GetParseError_En (\fBParseErrorCode\fP parseErrorCode)\fC [inline]\fP"
+
+.PP
+Maps error code of parsing into error message\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIparseErrorCode\fP Error code obtained in parsing\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the error message\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+User can make a copy of this function for localization\&. Using switch-case is safer for future modification of error codes\&. 
+.RE
+.PP
+
+.SS "const \fBRAPIDJSON_ERROR_CHARTYPE\fP * GetValidateError_En (\fBValidateErrorCode\fP validateErrorCode)\fC [inline]\fP"
+
+.PP
+Maps error code of validation into error message\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIvalidateErrorCode\fP Error code obtained from validator\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+the error message\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+User can make a copy of this function for localization\&. Using switch-case is safer for future modification of error codes\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

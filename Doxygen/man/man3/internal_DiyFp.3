@@ -1,0 +1,132 @@
+.TH "internal::DiyFp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+internal::DiyFp
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <diyfp\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDiyFp\fP ()"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP (\fBuint64_t\fP fp, int exp)"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP (double d)"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBoperator\-\fP (const \fBDiyFp\fP &rhs) const"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBoperator*\fP (const \fBDiyFp\fP &rhs) const"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBNormalize\fP () const"
+.br
+.ti -1c
+.RI "\fBDiyFp\fP \fBNormalizeBoundary\fP () const"
+.br
+.ti -1c
+.RI "void \fBNormalizedBoundaries\fP (\fBDiyFp\fP *minus, \fBDiyFp\fP *plus) const"
+.br
+.ti -1c
+.RI "double \fBToDouble\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBuint64_t\fP \fBf\fP"
+.br
+.ti -1c
+.RI "int \fBe\fP"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBkDiySignificandSize\fP = 64"
+.br
+.ti -1c
+.RI "static const int \fBkDpSignificandSize\fP = 52"
+.br
+.ti -1c
+.RI "static const int \fBkDpExponentBias\fP = 0x3FF + \fBkDpSignificandSize\fP"
+.br
+.ti -1c
+.RI "static const int \fBkDpMaxExponent\fP = 0x7FF \- \fBkDpExponentBias\fP"
+.br
+.ti -1c
+.RI "static const int \fBkDpMinExponent\fP = \-\fBkDpExponentBias\fP"
+.br
+.ti -1c
+.RI "static const int \fBkDpDenormalExponent\fP = \-\fBkDpExponentBias\fP + 1"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkDpExponentMask\fP = \fBRAPIDJSON_UINT64_C2\fP(0x7FF00000, 0x00000000)"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkDpSignificandMask\fP = \fBRAPIDJSON_UINT64_C2\fP(0x000FFFFF, 0xFFFFFFFF)"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkDpHiddenBit\fP = \fBRAPIDJSON_UINT64_C2\fP(0x00100000, 0x00000000)"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "internal::DiyFp::DiyFp ()\fC [inline]\fP"
+
+.SS "internal::DiyFp::DiyFp (\fBuint64_t\fP fp, int exp)\fC [inline]\fP"
+
+.SS "internal::DiyFp::DiyFp (double d)\fC [inline]\fP, \fC [explicit]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBDiyFp\fP internal::DiyFp::Normalize () const\fC [inline]\fP"
+
+.SS "\fBDiyFp\fP internal::DiyFp::NormalizeBoundary () const\fC [inline]\fP"
+
+.SS "void internal::DiyFp::NormalizedBoundaries (\fBDiyFp\fP * minus, \fBDiyFp\fP * plus) const\fC [inline]\fP"
+
+.SS "\fBDiyFp\fP internal::DiyFp::operator* (const \fBDiyFp\fP & rhs) const\fC [inline]\fP"
+mult_round
+.SS "\fBDiyFp\fP internal::DiyFp::operator\- (const \fBDiyFp\fP & rhs) const\fC [inline]\fP"
+
+.SS "double internal::DiyFp::ToDouble () const\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "int internal::DiyFp::e"
+
+.SS "\fBuint64_t\fP internal::DiyFp::f"
+
+.SS "const int internal::DiyFp::kDiySignificandSize = 64\fC [static]\fP"
+
+.SS "const int internal::DiyFp::kDpDenormalExponent = \-\fBkDpExponentBias\fP + 1\fC [static]\fP"
+
+.SS "const int internal::DiyFp::kDpExponentBias = 0x3FF + \fBkDpSignificandSize\fP\fC [static]\fP"
+
+.SS "const \fBuint64_t\fP internal::DiyFp::kDpExponentMask = \fBRAPIDJSON_UINT64_C2\fP(0x7FF00000, 0x00000000)\fC [static]\fP"
+
+.SS "const \fBuint64_t\fP internal::DiyFp::kDpHiddenBit = \fBRAPIDJSON_UINT64_C2\fP(0x00100000, 0x00000000)\fC [static]\fP"
+
+.SS "const int internal::DiyFp::kDpMaxExponent = 0x7FF \- \fBkDpExponentBias\fP\fC [static]\fP"
+
+.SS "const int internal::DiyFp::kDpMinExponent = \-\fBkDpExponentBias\fP\fC [static]\fP"
+
+.SS "const \fBuint64_t\fP internal::DiyFp::kDpSignificandMask = \fBRAPIDJSON_UINT64_C2\fP(0x000FFFFF, 0xFFFFFFFF)\fC [static]\fP"
+
+.SS "const int internal::DiyFp::kDpSignificandSize = 52\fC [static]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

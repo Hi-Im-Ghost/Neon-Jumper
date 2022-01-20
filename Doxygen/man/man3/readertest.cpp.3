@@ -1,0 +1,718 @@
+.TH "src/rapidjson/test/unittest/readertest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/unittest/readertest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'unittest\&.h'\fP
+.br
+\fC#include 'rapidjson/reader\&.h'\fP
+.br
+\fC#include 'rapidjson/internal/dtoa\&.h'\fP
+.br
+\fC#include 'rapidjson/internal/itoa\&.h'\fP
+.br
+\fC#include 'rapidjson/memorystream\&.h'\fP
+.br
+\fC#include <limits>\fP
+.br
+\fC#include <sstream>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBParseBoolHandler< expect >\fP"
+.br
+.ti -1c
+.RI "struct \fBParseIntHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseUintHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseInt64Handler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseUint64Handler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseDoubleHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseStringHandler< Encoding >\fP"
+.br
+.ti -1c
+.RI "struct \fBParseArrayHandler< count >\fP"
+.br
+.ti -1c
+.RI "struct \fBParseObjectHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseEmptyObjectHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBParseMultipleRootHandler\fP"
+.br
+.ti -1c
+.RI "class \fBCustomStringStream< Encoding >\fP"
+.br
+.ti -1c
+.RI "class \fBIStreamWrapper\fP"
+.br
+.ti -1c
+.RI "class \fBWIStreamWrapper\fP"
+.br
+.ti -1c
+.RI "struct \fBIterativeParsingReaderHandler< Encoding >\fP"
+.br
+.ti -1c
+.RI "struct \fBHandlerTerminateAtStartObject\fP"
+.br
+.ti -1c
+.RI "struct \fBHandlerTerminateAtStartArray\fP"
+.br
+.ti -1c
+.RI "struct \fBHandlerTerminateAtEndObject\fP"
+.br
+.ti -1c
+.RI "struct \fBHandlerTerminateAtEndArray\fP"
+.br
+.ti -1c
+.RI "struct \fBTerminateHandler< e >\fP"
+.br
+.ti -1c
+.RI "struct \fBNumbersAsStringsHandler\fP"
+.br
+.ti -1c
+.RI "struct \fBNumbersAsStringsHandlerWChar_t\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBTEST_INTEGER\fP(\fBHandler\fP,  str,  x)"
+.br
+.ti -1c
+.RI "#define \fBTEST_DOUBLE\fP(fullPrecision,  str,  x)"
+.br
+.ti -1c
+.RI "#define \fBTEST_NUMBER_ERROR\fP(errorCode,  str,  errorOffset,  streamPos)"
+.br
+.ti -1c
+.RI "#define \fBTEST_STRING\fP(\fBEncoding\fP,  e,  x)"
+.br
+.ti -1c
+.RI "#define \fBARRAY\fP(\&.\&.\&.)   { __VA_ARGS__ }"
+.br
+.ti -1c
+.RI "#define \fBTEST_STRINGARRAY\fP(\fBEncoding\fP,  utype,  array,  x)"
+.br
+.ti -1c
+.RI "#define \fBTEST_STRINGARRAY2\fP(\fBEncoding\fP,  utype,  earray,  xarray)"
+.br
+.ti -1c
+.RI "#define \fBTEST_STRING_ERROR\fP(errorCode,  str,  errorOffset,  streamPos)"
+.br
+.ti -1c
+.RI "#define \fBARRAY\fP(\&.\&.\&.)   { __VA_ARGS__ }"
+.br
+.ti -1c
+.RI "#define \fBTEST_STRINGENCODING_ERROR\fP(\fBEncoding\fP,  TargetEncoding,  utype,  array)"
+.br
+.ti -1c
+.RI "#define \fBTEST_ARRAY_ERROR\fP(errorCode,  str,  errorOffset)"
+.br
+.ti -1c
+.RI "#define \fBTEST_ERROR\fP(errorCode,  str,  errorOffset)"
+.br
+.ti -1c
+.RI "#define \fBTESTERRORHANDLING\fP(text,  errorCode,  offset)"
+.br
+.ti -1c
+.RI "#define \fBTEST_TERMINATION\fP(e,  json)"
+.br
+.ti -1c
+.RI "#define \fBTEST_NAN_INF\fP(str,  x)"
+.br
+.ti -1c
+.RI "#define \fBTEST_NAN_INF_ERROR\fP(errorCode,  str,  errorOffset)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseTrue)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseFalse)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumber_Integer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumber_NormalPrecisionDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumber_FullPrecisionDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumber_NormalPrecisionError)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumberError_NormalPrecisionDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNumberError_FullPrecisionDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseString)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseString_Transcoding)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseString_TranscodingWithValidation)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseString_NonDestructive)"
+.br
+.ti -1c
+.RI "template<typename \fBEncoding\fP > \fBParseErrorCode\fP \fBTestString\fP (const typename Encoding::Ch *str)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseString_Error)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseEmptyArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseArray_Error)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, Parse_EmptyObject)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags> void \fBTestMultipleRoot\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, Parse_MultipleRoot)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseIterative_MultipleRoot)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags> void \fBTestInsituMultipleRoot\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseInsitu_MultipleRoot)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseInsituIterative_MultipleRoot)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseDocument_Error)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseValue_Error)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseObject_Error)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, \fBSkipWhitespace\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, \fBCustomStringStream\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, Parse_IStreamWrapper_StringStream)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IterativeParsing_ErrorHandling)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IterativeParsing_General)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IterativeParsing_Count)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IterativePullParsing_General)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IterativeParsing_ShortCircuit)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, BaseReaderHandler_Default)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseTerminationByHandler)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseComments)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseEmptyInlineComment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseEmptyOnelineComment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseMultipleCommentsInARow)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, InlineCommentsAreDisabledByDefault)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, OnelineCommentsAreDisabledByDefault)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, EofAfterOneLineComment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IncompleteMultilineComment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, IncompleteMultilineComment2)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, UnrecognizedComment)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, NumbersAsStrings)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, NumbersAsStringsWChar_t)"
+.br
+.ti -1c
+.RI "template<unsigned extraFlags> void \fBTestTrailingCommas\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, TrailingCommas)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, TrailingCommasIterative)"
+.br
+.ti -1c
+.RI "template<unsigned extraFlags> void \fBTestMultipleTrailingCommaErrors\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, MultipleTrailingCommaErrors)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, MultipleTrailingCommaErrorsIterative)"
+.br
+.ti -1c
+.RI "template<unsigned extraFlags> void \fBTestEmptyExceptForCommaErrors\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, EmptyExceptForCommaErrors)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, EmptyExceptForCommaErrorsIterative)"
+.br
+.ti -1c
+.RI "template<unsigned extraFlags> void \fBTestTrailingCommaHandlerTermination\fP ()"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, TrailingCommaHandlerTermination)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, TrailingCommaHandlerTerminationIterative)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, ParseNanAndInfinity)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBReader\fP, EscapedApostrophe)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ARRAY( \&.\&.\&.)   { __VA_ARGS__ }"
+
+.SS "#define ARRAY( \&.\&.\&.)   { __VA_ARGS__ }"
+
+.SS "#define TEST_ARRAY_ERROR(errorCode, str, errorOffset)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        unsigned streamPos = errorOffset; \
+        char buffer[1001]; \
+        strncpy(buffer, str, 1000); \
+        InsituStringStream s(buffer); \
+        BaseReaderHandler<> h; \
+        GenericReader<UTF8<>, UTF8<>, CrtAllocator> reader; \
+        EXPECT_FALSE(reader\&.Parse(s, h)); \
+        EXPECT_EQ(errorCode, reader\&.GetParseErrorCode());\
+        EXPECT_EQ(errorOffset, reader\&.GetErrorOffset());\
+        EXPECT_EQ(streamPos, s\&.Tell());\
+    }
+.fi
+.SS "#define TEST_DOUBLE(fullPrecision, str, x)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        StringStream s(str); \
+        ParseDoubleHandler h; \
+        Reader reader; \
+        ASSERT_EQ(kParseErrorNone, reader\&.Parse<fullPrecision ? kParseFullPrecisionFlag : 0>(s, h)\&.Code()); \
+        EXPECT_EQ(1u, h\&.step_); \
+        internal::Double e(x), a(h\&.actual_); \
+        if (fullPrecision) { \
+            EXPECT_EQ(e\&.Uint64Value(), a\&.Uint64Value()); \
+            if (e\&.Uint64Value() != a\&.Uint64Value()) \
+                printf("  String: %s\n  Actual: %\&.17g\nExpected: %\&.17g\n", str, h\&.actual_, x); \
+        } \
+        else { \
+            EXPECT_EQ(e\&.Sign(), a\&.Sign()); /* for 0\&.0 != -0\&.0 */ \
+            EXPECT_DOUBLE_EQ(x, h\&.actual_); \
+        } \
+    }
+.fi
+.SS "#define TEST_ERROR(errorCode, str, errorOffset)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        unsigned streamPos = errorOffset; \
+        char buffer[1001]; \
+        strncpy(buffer, str, 1000); \
+        InsituStringStream s(buffer); \
+        BaseReaderHandler<> h; \
+        Reader reader; \
+        EXPECT_FALSE(reader\&.Parse(s, h)); \
+        EXPECT_EQ(errorCode, reader\&.GetParseErrorCode());\
+        EXPECT_EQ(errorOffset, reader\&.GetErrorOffset());\
+        EXPECT_EQ(streamPos, s\&.Tell());\
+    }
+.fi
+.SS "#define TEST_INTEGER(\fBHandler\fP, str, x)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        StringStream s(str); \
+        Handler h; \
+        Reader reader; \
+        reader\&.Parse(s, h); \
+        EXPECT_EQ(1u, h\&.step_); \
+        EXPECT_EQ(x, h\&.actual_); \
+    }
+.fi
+.SS "#define TEST_NAN_INF(str, x)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        { \
+            StringStream s(str); \
+            ParseDoubleHandler h; \
+            Reader reader; \
+            ASSERT_EQ(kParseErrorNone, reader\&.Parse<kParseNanAndInfFlag>(s, h)\&.Code()); \
+            EXPECT_EQ(1u, h\&.step_); \
+            internal::Double e(x), a(h\&.actual_); \
+            EXPECT_EQ(e\&.IsNan(), a\&.IsNan()); \
+            EXPECT_EQ(e\&.IsInf(), a\&.IsInf()); \
+            if (!e\&.IsNan()) \
+                EXPECT_EQ(e\&.Sign(), a\&.Sign()); \
+        } \
+        { \
+            const char* json = "{ \"naninfdouble\": " str " } "; \
+            StringStream s(json); \
+            NumbersAsStringsHandler h(str); \
+            Reader reader; \
+            EXPECT_TRUE(reader\&.Parse<kParseNumbersAsStringsFlag|kParseNanAndInfFlag>(s, h)); \
+        } \
+        { \
+            char* json = StrDup("{ \"naninfdouble\": " str " } "); \
+            InsituStringStream s(json); \
+            NumbersAsStringsHandler h(str); \
+            Reader reader; \
+            EXPECT_TRUE(reader\&.Parse<kParseInsituFlag|kParseNumbersAsStringsFlag|kParseNanAndInfFlag>(s, h)); \
+            free(json); \
+        } \
+    }
+.fi
+.SS "#define TEST_NAN_INF_ERROR(errorCode, str, errorOffset)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        unsigned streamPos = errorOffset; \
+        char buffer[1001]; \
+        strncpy(buffer, str, 1000); \
+        InsituStringStream s(buffer); \
+        BaseReaderHandler<> h; \
+        Reader reader; \
+        EXPECT_FALSE(reader\&.Parse<kParseNanAndInfFlag>(s, h)); \
+        EXPECT_EQ(errorCode, reader\&.GetParseErrorCode());\
+        EXPECT_EQ(errorOffset, reader\&.GetErrorOffset());\
+        EXPECT_EQ(streamPos, s\&.Tell());\
+    }
+.fi
+.SS "#define TEST_NUMBER_ERROR(errorCode, str, errorOffset, streamPos)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        char buffer[2048]; \
+        ASSERT_LT(std::strlen(str), 2048u); \
+        sprintf(buffer, "%s", str); \
+        InsituStringStream s(buffer); \
+        BaseReaderHandler<> h; \
+        Reader reader; \
+        EXPECT_FALSE(reader\&.Parse<fullPrecision ? kParseFullPrecisionFlag : 0>(s, h)); \
+        EXPECT_EQ(errorCode, reader\&.GetParseErrorCode());\
+        EXPECT_EQ(errorOffset, reader\&.GetErrorOffset());\
+        EXPECT_EQ(streamPos, s\&.Tell());\
+    }
+.fi
+.SS "#define TEST_STRING(\fBEncoding\fP, e, x)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        Encoding::Ch* buffer = StrDup(x); \
+        GenericInsituStringStream<Encoding> is(buffer); \
+        ParseStringHandler<Encoding> h; \
+        GenericReader<Encoding, Encoding> reader; \
+        reader\&.Parse<kParseInsituFlag | kParseValidateEncodingFlag>(is, h); \
+        EXPECT_EQ(0, StrCmp<Encoding::Ch>(e, h\&.str_)); \
+        EXPECT_EQ(StrLen(e), h\&.length_); \
+        free(buffer); \
+        GenericStringStream<Encoding> s(x); \
+        ParseStringHandler<Encoding> h2; \
+        GenericReader<Encoding, Encoding> reader2; \
+        reader2\&.Parse(s, h2); \
+        EXPECT_EQ(0, StrCmp<Encoding::Ch>(e, h2\&.str_)); \
+        EXPECT_EQ(StrLen(e), h2\&.length_); \
+    }
+.fi
+.SS "#define TEST_STRING_ERROR(errorCode, str, errorOffset, streamPos)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    GenericStringStream<UTF8<> > s(str);\
+    BaseReaderHandler<UTF8<> > h;\
+    GenericReader<UTF8<> , UTF8<> > reader;\
+    reader\&.Parse<kParseValidateEncodingFlag>(s, h);\
+    EXPECT_EQ(errorCode, reader\&.GetParseErrorCode());\
+    EXPECT_EQ(errorOffset, reader\&.GetErrorOffset());\
+    EXPECT_EQ(streamPos, s\&.Tell());\
+}
+.fi
+.SS "#define TEST_STRINGARRAY(\fBEncoding\fP, utype, array, x)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        static const utype ue[] = array; \
+        static const Encoding::Ch* e = reinterpret_cast<const Encoding::Ch *>(&ue[0]); \
+        TEST_STRING(Encoding, e, x); \
+    }
+.fi
+.SS "#define TEST_STRINGARRAY2(\fBEncoding\fP, utype, earray, xarray)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        static const utype ue[] = earray; \
+        static const utype xe[] = xarray; \
+        static const Encoding::Ch* e = reinterpret_cast<const Encoding::Ch *>(&ue[0]); \
+        static const Encoding::Ch* x = reinterpret_cast<const Encoding::Ch *>(&xe[0]); \
+        TEST_STRING(Encoding, e, x); \
+    }
+.fi
+.SS "#define TEST_STRINGENCODING_ERROR(\fBEncoding\fP, TargetEncoding, utype, array)"
+\fBValue:\fP
+.PP
+.nf
+    { \
+        static const utype ue[] = array; \
+        static const Encoding::Ch* e = reinterpret_cast<const Encoding::Ch *>(&ue[0]); \
+        EXPECT_EQ(kParseErrorStringInvalidEncoding, TestString<Encoding>(e));\
+        /* decode error */\
+        GenericStringStream<Encoding> s(e);\
+        BaseReaderHandler<TargetEncoding> h;\
+        GenericReader<Encoding, TargetEncoding> reader;\
+        reader\&.Parse(s, h);\
+        EXPECT_EQ(kParseErrorStringInvalidEncoding, reader\&.GetParseErrorCode());\
+    }
+.fi
+.SS "#define TEST_TERMINATION(e, json)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    Reader reader;\
+    TerminateHandler<e> h;\
+    StringStream is(json);\
+    EXPECT_FALSE(reader\&.Parse(is, h));\
+    EXPECT_EQ(kParseErrorTermination, reader\&.GetParseErrorCode());\
+}
+.fi
+.SS "#define TESTERRORHANDLING(text, errorCode, offset)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    unsigned streamPos = offset; \
+    StringStream json(text); \
+    BaseReaderHandler<> handler; \
+    Reader reader; \
+    reader\&.Parse<kParseIterativeFlag>(json, handler); \
+    EXPECT_TRUE(reader\&.HasParseError()); \
+    EXPECT_EQ(errorCode, reader\&.GetParseErrorCode()); \
+    EXPECT_EQ(offset, reader\&.GetErrorOffset()); \
+    EXPECT_EQ(streamPos, json\&.Tell()); \
+}
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "TEST (\fBReader\fP, BaseReaderHandler_Default)"
+
+.SS "TEST (\fBReader\fP, \fBCustomStringStream\fP)"
+
+.SS "TEST (\fBReader\fP, EmptyExceptForCommaErrors)"
+
+.SS "TEST (\fBReader\fP, EmptyExceptForCommaErrorsIterative)"
+
+.SS "TEST (\fBReader\fP, EofAfterOneLineComment)"
+
+.SS "TEST (\fBReader\fP, EscapedApostrophe)"
+
+.SS "TEST (\fBReader\fP, IncompleteMultilineComment)"
+
+.SS "TEST (\fBReader\fP, IncompleteMultilineComment2)"
+
+.SS "TEST (\fBReader\fP, InlineCommentsAreDisabledByDefault)"
+
+.SS "TEST (\fBReader\fP, IterativeParsing_Count)"
+
+.SS "TEST (\fBReader\fP, IterativeParsing_ErrorHandling)"
+
+.SS "TEST (\fBReader\fP, IterativeParsing_General)"
+
+.SS "TEST (\fBReader\fP, IterativeParsing_ShortCircuit)"
+
+.SS "TEST (\fBReader\fP, IterativePullParsing_General)"
+
+.SS "TEST (\fBReader\fP, MultipleTrailingCommaErrors)"
+
+.SS "TEST (\fBReader\fP, MultipleTrailingCommaErrorsIterative)"
+
+.SS "TEST (\fBReader\fP, NumbersAsStrings)"
+
+.SS "TEST (\fBReader\fP, NumbersAsStringsWChar_t)"
+
+.SS "TEST (\fBReader\fP, OnelineCommentsAreDisabledByDefault)"
+
+.SS "TEST (\fBReader\fP, Parse_EmptyObject)"
+
+.SS "TEST (\fBReader\fP, Parse_IStreamWrapper_StringStream)"
+
+.SS "TEST (\fBReader\fP, Parse_MultipleRoot)"
+
+.SS "TEST (\fBReader\fP, ParseArray)"
+
+.SS "TEST (\fBReader\fP, ParseArray_Error)"
+
+.SS "TEST (\fBReader\fP, ParseComments)"
+
+.SS "TEST (\fBReader\fP, ParseDocument_Error)"
+
+.SS "TEST (\fBReader\fP, ParseEmptyArray)"
+
+.SS "TEST (\fBReader\fP, ParseEmptyInlineComment)"
+
+.SS "TEST (\fBReader\fP, ParseEmptyOnelineComment)"
+
+.SS "TEST (\fBReader\fP, ParseFalse)"
+
+.SS "TEST (\fBReader\fP, ParseInsitu_MultipleRoot)"
+
+.SS "TEST (\fBReader\fP, ParseInsituIterative_MultipleRoot)"
+
+.SS "TEST (\fBReader\fP, ParseIterative_MultipleRoot)"
+
+.SS "TEST (\fBReader\fP, ParseMultipleCommentsInARow)"
+
+.SS "TEST (\fBReader\fP, ParseNanAndInfinity)"
+
+.SS "TEST (\fBReader\fP, ParseNumber_FullPrecisionDouble)"
+
+.SS "TEST (\fBReader\fP, ParseNumber_Integer)"
+
+.SS "TEST (\fBReader\fP, ParseNumber_NormalPrecisionDouble)"
+
+.SS "TEST (\fBReader\fP, ParseNumber_NormalPrecisionError)"
+
+.SS "TEST (\fBReader\fP, ParseNumberError_FullPrecisionDouble)"
+
+.SS "TEST (\fBReader\fP, ParseNumberError_NormalPrecisionDouble)"
+
+.SS "TEST (\fBReader\fP, ParseObject)"
+
+.SS "TEST (\fBReader\fP, ParseObject_Error)"
+
+.SS "TEST (\fBReader\fP, ParseString)"
+
+.SS "TEST (\fBReader\fP, ParseString_Error)"
+
+.SS "TEST (\fBReader\fP, ParseString_NonDestructive)"
+
+.SS "TEST (\fBReader\fP, ParseString_Transcoding)"
+
+.SS "TEST (\fBReader\fP, ParseString_TranscodingWithValidation)"
+
+.SS "TEST (\fBReader\fP, ParseTerminationByHandler)"
+
+.SS "TEST (\fBReader\fP, ParseTrue)"
+
+.SS "TEST (\fBReader\fP, ParseValue_Error)"
+
+.SS "TEST (\fBReader\fP, \fBSkipWhitespace\fP)"
+
+.SS "TEST (\fBReader\fP, TrailingCommaHandlerTermination)"
+
+.SS "TEST (\fBReader\fP, TrailingCommaHandlerTerminationIterative)"
+
+.SS "TEST (\fBReader\fP, TrailingCommas)"
+
+.SS "TEST (\fBReader\fP, TrailingCommasIterative)"
+
+.SS "TEST (\fBReader\fP, UnrecognizedComment)"
+
+.SS "template<unsigned extraFlags> void TestEmptyExceptForCommaErrors ()"
+
+.SS "template<unsigned parseFlags> void TestInsituMultipleRoot ()"
+
+.SS "template<unsigned parseFlags> void TestMultipleRoot ()"
+
+.SS "template<unsigned extraFlags> void TestMultipleTrailingCommaErrors ()"
+
+.SS "template<typename \fBEncoding\fP > \fBParseErrorCode\fP TestString (const typename Encoding::Ch * str)"
+
+.SS "template<unsigned extraFlags> void TestTrailingCommaHandlerTermination ()"
+
+.SS "template<unsigned extraFlags> void TestTrailingCommas ()"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

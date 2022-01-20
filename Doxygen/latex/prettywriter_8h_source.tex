@@ -1,0 +1,248 @@
+\hypertarget{prettywriter_8h_source}{}\doxysection{prettywriter.\+h}
+\label{prettywriter_8h_source}\index{src/rapidjson/include/rapidjson/prettywriter.h@{src/rapidjson/include/rapidjson/prettywriter.h}}
+\mbox{\hyperlink{prettywriter_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_PRETTYWRITER\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_PRETTYWRITER\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{writer_8h}{writer.h}}"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{21 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_OFF(effc++)}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{26 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{27 RAPIDJSON\_DIAG\_OFF(c++98-\/compat)}
+\DoxyCodeLine{28 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{33 }
+\DoxyCodeLine{35 \textcolor{keyword}{enum} \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5}{PrettyFormatOptions}} \{}
+\DoxyCodeLine{36     \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed}{kFormatDefault}} = 0,         }
+\DoxyCodeLine{37     \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2}{kFormatSingleLineArray}} = 1  }
+\DoxyCodeLine{38 \};}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{41 }
+\DoxyCodeLine{47 \textcolor{keyword}{template}<\textcolor{keyword}{typename} OutputStream, \textcolor{keyword}{typename} SourceEncoding = UTF8<>, \textcolor{keyword}{typename} TargetEncoding = UTF8<>, \textcolor{keyword}{typename} StackAllocator = CrtAllocator, \textcolor{keywordtype}{unsigned} writeFlags = kWriteDefaultFlags>}
+\DoxyCodeLine{48 \textcolor{keyword}{class }\mbox{\hyperlink{class_pretty_writer}{PrettyWriter}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_writer}{Writer}}<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> \{}
+\DoxyCodeLine{49 \textcolor{keyword}{public}:}
+\DoxyCodeLine{50     \textcolor{keyword}{typedef} \mbox{\hyperlink{class_writer}{Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags>}} \mbox{\hyperlink{class_pretty_writer_a6eecc5c896dcdaffca739dcd39d13a17}{Base}};}
+\DoxyCodeLine{51     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} \mbox{\hyperlink{class_writer_ab08bff5fd2daec65f4a78779ca3d2139}{Base::Ch}} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}};}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{54 }
+\DoxyCodeLine{58     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_pretty_writer_a928ac2a5235b8877048ebdd5f35a556f}{PrettyWriter}}(OutputStream\& os, StackAllocator* allocator = 0, \textcolor{keywordtype}{size\_t} levelDepth = \mbox{\hyperlink{class_writer_a9cb4caeb9d8971f305edff1d70e67acb}{Base::kDefaultLevelDepth}}) : }
+\DoxyCodeLine{59         \mbox{\hyperlink{class_writer}{Base}}(os, allocator, levelDepth), \mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}}(\textcolor{stringliteral}{' '}), \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}}(4), \mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}}(\mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed}{kFormatDefault}}) \{\}}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_pretty_writer_a4a9077e0300c6b0e1c830a58c1e738d2}{PrettyWriter}}(StackAllocator* allocator = 0, \textcolor{keywordtype}{size\_t} levelDepth = \mbox{\hyperlink{class_writer_a9cb4caeb9d8971f305edff1d70e67acb}{Base::kDefaultLevelDepth}}) : }
+\DoxyCodeLine{63         \mbox{\hyperlink{class_writer}{Base}}(allocator, levelDepth), \mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}}(\textcolor{stringliteral}{' '}), \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}}(4), \mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}}(\mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed}{kFormatDefault}}) \{\}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_CXX11\_RVALUE\_REFS}}
+\DoxyCodeLine{66     \mbox{\hyperlink{class_pretty_writer_a928ac2a5235b8877048ebdd5f35a556f}{PrettyWriter}}(\mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\&\& rhs) :}
+\DoxyCodeLine{67         \mbox{\hyperlink{class_pretty_writer_a6eecc5c896dcdaffca739dcd39d13a17}{Base}}(std::forward<\mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}>(rhs)), \mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}}(rhs.\mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}}), \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}}(rhs.\mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}}), \mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}}(rhs.\mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}}) \{\}}
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{71 }
+\DoxyCodeLine{75     \mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\& \mbox{\hyperlink{class_pretty_writer_abbdc83ce02cf4a811a7355aa3879b45a}{SetIndent}}(\mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}} indentChar, \textcolor{keywordtype}{unsigned} indentCharCount) \{}
+\DoxyCodeLine{76         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(indentChar == \textcolor{charliteral}{' '} || indentChar == \textcolor{charliteral}{'\(\backslash\)t'} || indentChar == \textcolor{charliteral}{'\(\backslash\)n'} || indentChar == \textcolor{charliteral}{'\(\backslash\)r'});}
+\DoxyCodeLine{77         \mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}} = indentChar;}
+\DoxyCodeLine{78         \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}} = indentCharCount;}
+\DoxyCodeLine{79         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{80     \}}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{83 }
+\DoxyCodeLine{85     \mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\& \mbox{\hyperlink{class_pretty_writer_aade3381a128071f1da060f5f3075de10}{SetFormatOptions}}(\mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5}{PrettyFormatOptions}} options) \{}
+\DoxyCodeLine{86         \mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}} = options;}
+\DoxyCodeLine{87         \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{88     \}}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_aa144f2d0f0c3c69248cdbe957349528c}{Null}}()                 \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087}{kNullType}});   \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a44862b3eba8d84b909c69aba875c9f4d}{Base::WriteNull}}()); \}}
+\DoxyCodeLine{96     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a6e765ee7ada5ed40f317c78a98f6f90b}{Bool}}(\textcolor{keywordtype}{bool} b)           \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(b ? \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6}{kTrueType}} : \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54}{kFalseType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a42ad68b6950431bb8ca0199568546eaf}{Base::WriteBool}}(b)); \}}
+\DoxyCodeLine{97     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_aa1815263e61cb7af3b6dfba480a0f481}{Int}}(\textcolor{keywordtype}{int} i)             \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a31d0feda654ca245c41462be7dc59998}{Base::WriteInt}}(i)); \}}
+\DoxyCodeLine{98     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a8c82302877a5588eae77eb7d042c49ef}{Uint}}(\textcolor{keywordtype}{unsigned} u)       \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a2861227e93707d1478d2cf56644dca3b}{Base::WriteUint}}(u)); \}}
+\DoxyCodeLine{99     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_ad42b797429f4ee19efdce610f5aff976}{Int64}}(\mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}} i64)     \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_aa58d3f80c06394648de5055ecfb41587}{Base::WriteInt64}}(i64)); \}}
+\DoxyCodeLine{100     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_aba75ac1f13c2629b2a55ffbf3d8a116c}{Uint64}}(\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} u64)   \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_ad07b325157220e3aa791c1c8c904021e}{Base::WriteUint64}}(u64));  \}}
+\DoxyCodeLine{101     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_ad9d592e86b985da666665926e87db415}{Double}}(\textcolor{keywordtype}{double} d)       \{ \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}}); \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_ae7a0fc4740681d845d92c1213bd25aa1}{Base::WriteDouble}}(d)); \}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a3941bc21d6a261ca8a86eff330db30ef}{RawNumber}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length, \textcolor{keywordtype}{bool} copy = \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{104         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(str != 0);}
+\DoxyCodeLine{105         (void)copy;}
+\DoxyCodeLine{106         \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d}{kNumberType}});}
+\DoxyCodeLine{107         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_acda4412ef5f4cac6e89f9544e4b10f70}{Base::WriteString}}(str, length));}
+\DoxyCodeLine{108     \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_ae544ccfe35dd7e80ed694873062409f6}{String}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length, \textcolor{keywordtype}{bool} copy = \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{111         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(str != 0);}
+\DoxyCodeLine{112         (void)copy;}
+\DoxyCodeLine{113         \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338}{kStringType}});}
+\DoxyCodeLine{114         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_acda4412ef5f4cac6e89f9544e4b10f70}{Base::WriteString}}(str, length));}
+\DoxyCodeLine{115     \}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{118     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_ae544ccfe35dd7e80ed694873062409f6}{String}}(\textcolor{keyword}{const} std::basic\_string<Ch>\& str) \{}
+\DoxyCodeLine{119         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_pretty_writer_ae544ccfe35dd7e80ed694873062409f6}{String}}(str.data(), \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(str.size()));}
+\DoxyCodeLine{120     \}}
+\DoxyCodeLine{121 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a27bdda225dc152b8974e44c1df7525b7}{StartObject}}() \{}
+\DoxyCodeLine{124         \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f}{kObjectType}});}
+\DoxyCodeLine{125         \textcolor{keyword}{new} (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.template Push<typename Base::Level>()) \textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}}(\textcolor{keyword}{false});}
+\DoxyCodeLine{126         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_a81c72a2eecd47e042f56ca93a27a5cb1}{Base::WriteStartObject}}();}
+\DoxyCodeLine{127     \}}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a20ecbe1d31a871e4da4a3899b40ad3cd}{Key}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length, \textcolor{keywordtype}{bool} copy = \textcolor{keyword}{false}) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_pretty_writer_ae544ccfe35dd7e80ed694873062409f6}{String}}(str, length, copy); \}}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{131 \textcolor{preprocessor}{\#if RAPIDJSON\_HAS\_STDSTRING}}
+\DoxyCodeLine{132     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a20ecbe1d31a871e4da4a3899b40ad3cd}{Key}}(\textcolor{keyword}{const} std::basic\_string<Ch>\& str) \{}
+\DoxyCodeLine{133         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_pretty_writer_a20ecbe1d31a871e4da4a3899b40ad3cd}{Key}}(str.data(), \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(str.size()));}
+\DoxyCodeLine{134     \}}
+\DoxyCodeLine{135 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{136     }
+\DoxyCodeLine{137     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a6bfdfa4193193ef763cce5c592c4d20c}{EndObject}}(\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} memberCount = 0) \{}
+\DoxyCodeLine{138         (void)memberCount;}
+\DoxyCodeLine{139         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.GetSize() >= \textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}})); \textcolor{comment}{// not inside an Object}}
+\DoxyCodeLine{140         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(!\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.\textcolor{keyword}{template} Top<typename Base::Level>()-\/>inArray); \textcolor{comment}{// currently inside an Array, not Object}}
+\DoxyCodeLine{141         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(0 == \mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.\textcolor{keyword}{template} Top<typename Base::Level>()-\/>valueCount \% 2); \textcolor{comment}{// Object has a Key without a Value}}
+\DoxyCodeLine{142        }
+\DoxyCodeLine{143         \textcolor{keywordtype}{bool} empty = \mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.template Pop<typename Base::Level>(1)-\/>valueCount == 0;}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145         \textcolor{keywordflow}{if} (!empty) \{}
+\DoxyCodeLine{146             \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{147             \mbox{\hyperlink{class_pretty_writer_a6f244ecc94fd5b134d424033b1574b7e}{WriteIndent}}();}
+\DoxyCodeLine{148         \}}
+\DoxyCodeLine{149         \textcolor{keywordtype}{bool} ret = \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a7e3f6760a50a72f4217a9b2d625c43ee}{Base::WriteEndObject}}());}
+\DoxyCodeLine{150         (void)ret;}
+\DoxyCodeLine{151         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(ret == \textcolor{keyword}{true});}
+\DoxyCodeLine{152         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.Empty()) \textcolor{comment}{// end of json text}}
+\DoxyCodeLine{153             \mbox{\hyperlink{class_writer_a8ca4e364c546b2eb526caa68dde011d2}{Base::Flush}}();}
+\DoxyCodeLine{154         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{155     \}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_aec7fdf4798a3af5e31c147633f4798ed}{StartArray}}() \{}
+\DoxyCodeLine{158         \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8}{kArrayType}});}
+\DoxyCodeLine{159         \textcolor{keyword}{new} (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.template Push<typename Base::Level>()) \textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}}(\textcolor{keyword}{true});}
+\DoxyCodeLine{160         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_a3c3560a96cac58f98f4a74d6cb227204}{Base::WriteStartArray}}();}
+\DoxyCodeLine{161     \}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a1e9d97fc950d349f55abd864c787ff37}{EndArray}}(\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} memberCount = 0) \{}
+\DoxyCodeLine{164         (void)memberCount;}
+\DoxyCodeLine{165         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.GetSize() >= \textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}}));}
+\DoxyCodeLine{166         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.\textcolor{keyword}{template} Top<typename Base::Level>()-\/>inArray);}
+\DoxyCodeLine{167         \textcolor{keywordtype}{bool} empty = \mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.template Pop<typename Base::Level>(1)-\/>valueCount == 0;}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169         \textcolor{keywordflow}{if} (!empty \&\& !(\mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}} \& \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2}{kFormatSingleLineArray}})) \{}
+\DoxyCodeLine{170             \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{171             \mbox{\hyperlink{class_pretty_writer_a6f244ecc94fd5b134d424033b1574b7e}{WriteIndent}}();}
+\DoxyCodeLine{172         \}}
+\DoxyCodeLine{173         \textcolor{keywordtype}{bool} ret = \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_aabda2df1be6e83cef416e9b1f042e8f4}{Base::WriteEndArray}}());}
+\DoxyCodeLine{174         (void)ret;}
+\DoxyCodeLine{175         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(ret == \textcolor{keyword}{true});}
+\DoxyCodeLine{176         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.Empty()) \textcolor{comment}{// end of json text}}
+\DoxyCodeLine{177             \mbox{\hyperlink{class_writer_a8ca4e364c546b2eb526caa68dde011d2}{Base::Flush}}();}
+\DoxyCodeLine{178         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{179     \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{182 }
+\DoxyCodeLine{185 }
+\DoxyCodeLine{187     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a7e85689355a827d273f272c26b447225}{String}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* str) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_pretty_writer_a7e85689355a827d273f272c26b447225}{String}}(str, \mbox{\hyperlink{namespaceinternal_a86326fb0c9d7c7ea8edd7deedbb2b26e}{internal::StrLen}}(str)); \}}
+\DoxyCodeLine{188     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a4b2a2a6eef02c12d7a3fd77966bd4499}{Key}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* str) \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_pretty_writer_a4b2a2a6eef02c12d7a3fd77966bd4499}{Key}}(str, \mbox{\hyperlink{namespaceinternal_a86326fb0c9d7c7ea8edd7deedbb2b26e}{internal::StrLen}}(str)); \}}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{191 }
+\DoxyCodeLine{193 }
+\DoxyCodeLine{201     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_pretty_writer_a440890a72408a150ef46edda6becdc94}{RawValue}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}}* json, \textcolor{keywordtype}{size\_t} length, \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{Type}} type) \{}
+\DoxyCodeLine{202         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(json != 0);}
+\DoxyCodeLine{203         \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(type);}
+\DoxyCodeLine{204         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_writer_adc1cadbabc309d31f19cf7463251d879}{Base::EndValue}}(\mbox{\hyperlink{class_writer_a8ee1135b2595261819b134907f67614e}{Base::WriteRawValue}}(json, length));}
+\DoxyCodeLine{205     \}}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{208     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pretty_writer_a09709ffa3b545e007631ecfd35029843}{PrettyPrefix}}(\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{Type}} type) \{}
+\DoxyCodeLine{209         (void)type;}
+\DoxyCodeLine{210         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.GetSize() != 0) \{ \textcolor{comment}{// this value is not at root}}
+\DoxyCodeLine{211             \textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}}* level = \mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.template Top<typename Base::Level>();}
+\DoxyCodeLine{212 }
+\DoxyCodeLine{213             \textcolor{keywordflow}{if} (level-\/>\mbox{\hyperlink{struct_writer_1_1_level_aa009a2d675e98757c2997072aad78789}{inArray}}) \{}
+\DoxyCodeLine{214                 \textcolor{keywordflow}{if} (level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}} > 0) \{}
+\DoxyCodeLine{215                     \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{','}); \textcolor{comment}{// add comma if it is not the first element in array}}
+\DoxyCodeLine{216                     \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}} \& \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2}{kFormatSingleLineArray}})}
+\DoxyCodeLine{217                         \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{' '});}
+\DoxyCodeLine{218                 \}}
+\DoxyCodeLine{219 }
+\DoxyCodeLine{220                 \textcolor{keywordflow}{if} (!(\mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}} \& \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2}{kFormatSingleLineArray}})) \{}
+\DoxyCodeLine{221                     \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{222                     \mbox{\hyperlink{class_pretty_writer_a6f244ecc94fd5b134d424033b1574b7e}{WriteIndent}}();}
+\DoxyCodeLine{223                 \}}
+\DoxyCodeLine{224             \}}
+\DoxyCodeLine{225             \textcolor{keywordflow}{else} \{  \textcolor{comment}{// in object}}
+\DoxyCodeLine{226                 \textcolor{keywordflow}{if} (level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}} > 0) \{}
+\DoxyCodeLine{227                     \textcolor{keywordflow}{if} (level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}} \% 2 == 0) \{}
+\DoxyCodeLine{228                         \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{','});}
+\DoxyCodeLine{229                         \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{230                     \}}
+\DoxyCodeLine{231                     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{232                         \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{':'});}
+\DoxyCodeLine{233                         \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{' '});}
+\DoxyCodeLine{234                     \}}
+\DoxyCodeLine{235                 \}}
+\DoxyCodeLine{236                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{237                     \mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}-\/>Put(\textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239                 \textcolor{keywordflow}{if} (level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}} \% 2 == 0)}
+\DoxyCodeLine{240                     \mbox{\hyperlink{class_pretty_writer_a6f244ecc94fd5b134d424033b1574b7e}{WriteIndent}}();}
+\DoxyCodeLine{241             \}}
+\DoxyCodeLine{242             \textcolor{keywordflow}{if} (!level-\/>\mbox{\hyperlink{struct_writer_1_1_level_aa009a2d675e98757c2997072aad78789}{inArray}} \&\& level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}} \% 2 == 0)}
+\DoxyCodeLine{243                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(type == \mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338}{kStringType}});  \textcolor{comment}{// if it's in object, then even number should be a name}}
+\DoxyCodeLine{244             level-\/>\mbox{\hyperlink{struct_writer_1_1_level_a4a09e5fda49d0d57b2adc041203f244f}{valueCount}}++;}
+\DoxyCodeLine{245         \}}
+\DoxyCodeLine{246         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{247             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(!\mbox{\hyperlink{class_writer_affc6b9e0332b50bee0d33f8b1841c9a6}{Base::hasRoot\_}});  \textcolor{comment}{// Should only has one and only one root.}}
+\DoxyCodeLine{248             \mbox{\hyperlink{class_writer_affc6b9e0332b50bee0d33f8b1841c9a6}{Base::hasRoot\_}} = \textcolor{keyword}{true};}
+\DoxyCodeLine{249         \}}
+\DoxyCodeLine{250     \}}
+\DoxyCodeLine{251 }
+\DoxyCodeLine{252     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_pretty_writer_a6f244ecc94fd5b134d424033b1574b7e}{WriteIndent}}()  \{}
+\DoxyCodeLine{253         \textcolor{keywordtype}{size\_t} count = (\mbox{\hyperlink{class_writer_a9e6c13c06fc721dfd8486f17b9ff29de}{Base::level\_stack\_}}.\mbox{\hyperlink{classinternal_1_1_stack_ac484468a2791bd3e9ba609bd1600ab48}{GetSize}}() / \textcolor{keyword}{sizeof}(\textcolor{keyword}{typename} \mbox{\hyperlink{struct_writer_1_1_level}{Base::Level}})) * \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}};}
+\DoxyCodeLine{254         \mbox{\hyperlink{filewritestream_8h_a5c9b0f0e6249be2acf7f3505c295c132}{PutN}}(*\mbox{\hyperlink{class_writer_a3a3f60140f78dd67b5274978fd3a33ff}{Base::os\_}}, \textcolor{keyword}{static\_cast<}typename OutputStream::Ch\textcolor{keyword}{>}(\mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}}), count);}
+\DoxyCodeLine{255     \}}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257     \mbox{\hyperlink{class_pretty_writer_ae35c89bda4c5d59d3ff6efcf2fea45a3}{Ch}} \mbox{\hyperlink{class_pretty_writer_aaa3f6380daa8466a5101ed18fc33bf04}{indentChar\_}};}
+\DoxyCodeLine{258     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_pretty_writer_a7d00b9716ef3cd7e34ae1b744c968f13}{indentCharCount\_}};}
+\DoxyCodeLine{259     \mbox{\hyperlink{prettywriter_8h_a150fd6ef2dbf4025c33ece85451982d5}{PrettyFormatOptions}} \mbox{\hyperlink{class_pretty_writer_a15505ed4ea0fa85d339b3a987f1a3aaf}{formatOptions\_}};}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261 \textcolor{keyword}{private}:}
+\DoxyCodeLine{262     \textcolor{comment}{// Prohibit copy constructor \& assignment operator.}}
+\DoxyCodeLine{263     \mbox{\hyperlink{class_pretty_writer_a928ac2a5235b8877048ebdd5f35a556f}{PrettyWriter}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\&);}
+\DoxyCodeLine{264     \mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{class_pretty_writer}{PrettyWriter}}\&);}
+\DoxyCodeLine{265 \};}
+\DoxyCodeLine{266 }
+\DoxyCodeLine{267 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 \textcolor{preprocessor}{\#if defined(\_\_clang\_\_)}}
+\DoxyCodeLine{270 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{271 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273 \textcolor{preprocessor}{\#ifdef \_\_GNUC\_\_}}
+\DoxyCodeLine{274 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{275 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{276 }
+\DoxyCodeLine{277 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_RAPIDJSON\_H\_}}
+
+\end{DoxyCode}

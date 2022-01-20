@@ -1,0 +1,299 @@
+\hypertarget{strtod_8h_source}{}\doxysection{strtod.\+h}
+\label{strtod_8h_source}\index{src/rapidjson/include/rapidjson/internal/strtod.h@{src/rapidjson/include/rapidjson/internal/strtod.h}}
+\mbox{\hyperlink{strtod_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_STRTOD\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_STRTOD\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{ieee754_8h}{ieee754.h}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{biginteger_8h}{biginteger.h}}"{}}}
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{diyfp_8h}{diyfp.h}}"{}}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{pow10_8h}{pow10.h}}"{}}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include <climits>}}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#include <limits>}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{26 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespaceinternal}{internal}} \{}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28 \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{namespaceinternal_aa1bb51d788788eb5390a16462b40d98d}{FastPath}}(\textcolor{keywordtype}{double} significand, \textcolor{keywordtype}{int} exp) \{}
+\DoxyCodeLine{29     \textcolor{keywordflow}{if} (exp < -\/308)}
+\DoxyCodeLine{30         \textcolor{keywordflow}{return} 0.0;}
+\DoxyCodeLine{31     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (exp >= 0)}
+\DoxyCodeLine{32         \textcolor{keywordflow}{return} significand * \mbox{\hyperlink{namespaceinternal_af01c41d045d596e2f8d1888cf6fbecb6}{internal::Pow10}}(exp);}
+\DoxyCodeLine{33     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{34         \textcolor{keywordflow}{return} significand / \mbox{\hyperlink{namespaceinternal_af01c41d045d596e2f8d1888cf6fbecb6}{internal::Pow10}}(-\/exp);}
+\DoxyCodeLine{35 \}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{namespaceinternal_a9e5fac4695310f09892fe52b1d24ab19}{StrtodNormalPrecision}}(\textcolor{keywordtype}{double} d, \textcolor{keywordtype}{int} p) \{}
+\DoxyCodeLine{38     \textcolor{keywordflow}{if} (p < -\/308) \{}
+\DoxyCodeLine{39         \textcolor{comment}{// Prevent expSum < -\/308, making Pow10(p) = 0}}
+\DoxyCodeLine{40         d = \mbox{\hyperlink{namespaceinternal_aa1bb51d788788eb5390a16462b40d98d}{FastPath}}(d, -\/308);}
+\DoxyCodeLine{41         d = \mbox{\hyperlink{namespaceinternal_aa1bb51d788788eb5390a16462b40d98d}{FastPath}}(d, p + 308);}
+\DoxyCodeLine{42     \}}
+\DoxyCodeLine{43     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{44         d = \mbox{\hyperlink{namespaceinternal_aa1bb51d788788eb5390a16462b40d98d}{FastPath}}(d, p);}
+\DoxyCodeLine{45     \textcolor{keywordflow}{return} d;}
+\DoxyCodeLine{46 \}}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{49 \textcolor{keyword}{inline} \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}} \mbox{\hyperlink{namespaceinternal_ace304441347098a4953ea99f50805da9}{Min3}}(\mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}} b, \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}} c) \{}
+\DoxyCodeLine{50     \mbox{\hyperlink{prettywritertest_8cpp_a6283df8c4e365cc8a01727e2d7ad44bf}{T}} m = \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}};}
+\DoxyCodeLine{51     \textcolor{keywordflow}{if} (m > b) m = b;}
+\DoxyCodeLine{52     \textcolor{keywordflow}{if} (m > c) m = c;}
+\DoxyCodeLine{53     \textcolor{keywordflow}{return} m;}
+\DoxyCodeLine{54 \}}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56 \textcolor{keyword}{inline} \textcolor{keywordtype}{int} \mbox{\hyperlink{namespaceinternal_a190f9c286df64526a7e3550528ed6b02}{CheckWithinHalfULP}}(\textcolor{keywordtype}{double} b, \textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}}\& d, \textcolor{keywordtype}{int} dExp) \{}
+\DoxyCodeLine{57     \textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_double}{Double}} db(b);}
+\DoxyCodeLine{58     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} bInt = db.\mbox{\hyperlink{classinternal_1_1_double_a1bf89d77be843f69facec9f2bc4dbc72}{IntegerSignificand}}();}
+\DoxyCodeLine{59     \textcolor{keyword}{const} \textcolor{keywordtype}{int} bExp = db.\mbox{\hyperlink{classinternal_1_1_double_a9721e0fdedef4d0fe6c7b411492a88fb}{IntegerExponent}}();}
+\DoxyCodeLine{60     \textcolor{keyword}{const} \textcolor{keywordtype}{int} hExp = bExp -\/ 1;}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \textcolor{keywordtype}{int} dS\_Exp2 = 0, dS\_Exp5 = 0, bS\_Exp2 = 0, bS\_Exp5 = 0, hS\_Exp2 = 0, hS\_Exp5 = 0;}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64     \textcolor{comment}{// Adjust for decimal exponent}}
+\DoxyCodeLine{65     \textcolor{keywordflow}{if} (dExp >= 0) \{}
+\DoxyCodeLine{66         dS\_Exp2 += dExp;}
+\DoxyCodeLine{67         dS\_Exp5 += dExp;}
+\DoxyCodeLine{68     \}}
+\DoxyCodeLine{69     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{70         bS\_Exp2 -\/= dExp;}
+\DoxyCodeLine{71         bS\_Exp5 -\/= dExp;}
+\DoxyCodeLine{72         hS\_Exp2 -\/= dExp;}
+\DoxyCodeLine{73         hS\_Exp5 -\/= dExp;}
+\DoxyCodeLine{74     \}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76     \textcolor{comment}{// Adjust for binary exponent}}
+\DoxyCodeLine{77     \textcolor{keywordflow}{if} (bExp >= 0)}
+\DoxyCodeLine{78         bS\_Exp2 += bExp;}
+\DoxyCodeLine{79     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{80         dS\_Exp2 -\/= bExp;}
+\DoxyCodeLine{81         hS\_Exp2 -\/= bExp;}
+\DoxyCodeLine{82     \}}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{84     \textcolor{comment}{// Adjust for half ulp exponent}}
+\DoxyCodeLine{85     \textcolor{keywordflow}{if} (hExp >= 0)}
+\DoxyCodeLine{86         hS\_Exp2 += hExp;}
+\DoxyCodeLine{87     \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{88         dS\_Exp2 -\/= hExp;}
+\DoxyCodeLine{89         bS\_Exp2 -\/= hExp;}
+\DoxyCodeLine{90     \}}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92     \textcolor{comment}{// Remove common power of two factor from all three scaled values}}
+\DoxyCodeLine{93     \textcolor{keywordtype}{int} common\_Exp2 = \mbox{\hyperlink{namespaceinternal_ace304441347098a4953ea99f50805da9}{Min3}}(dS\_Exp2, bS\_Exp2, hS\_Exp2);}
+\DoxyCodeLine{94     dS\_Exp2 -\/= common\_Exp2;}
+\DoxyCodeLine{95     bS\_Exp2 -\/= common\_Exp2;}
+\DoxyCodeLine{96     hS\_Exp2 -\/= common\_Exp2;}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} dS = d;}
+\DoxyCodeLine{99     dS.\mbox{\hyperlink{classinternal_1_1_big_integer_af491885747a0442492134c23a6ec4c65}{MultiplyPow5}}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(dS\_Exp5)) <<= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(dS\_Exp2);}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} bS(bInt);}
+\DoxyCodeLine{102     bS.\mbox{\hyperlink{classinternal_1_1_big_integer_af491885747a0442492134c23a6ec4c65}{MultiplyPow5}}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(bS\_Exp5)) <<= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(bS\_Exp2);}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} hS(1);}
+\DoxyCodeLine{105     hS.\mbox{\hyperlink{classinternal_1_1_big_integer_af491885747a0442492134c23a6ec4c65}{MultiplyPow5}}(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(hS\_Exp5)) <<= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(hS\_Exp2);}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107     \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} delta(0);}
+\DoxyCodeLine{108     dS.\mbox{\hyperlink{classinternal_1_1_big_integer_ad7ad62e6b62af38283ee940eb4015b26}{Difference}}(bS, \&delta);}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110     \textcolor{keywordflow}{return} delta.\mbox{\hyperlink{classinternal_1_1_big_integer_af8e90fff5382de6c1cda5f751017200c}{Compare}}(hS);}
+\DoxyCodeLine{111 \}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113 \textcolor{keyword}{inline} \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespaceinternal_a598b2d2f85130bff3c3942e4750b9185}{StrtodFast}}(\textcolor{keywordtype}{double} d, \textcolor{keywordtype}{int} p, \textcolor{keywordtype}{double}* result) \{}
+\DoxyCodeLine{114     \textcolor{comment}{// Use fast path for string-\/to-\/double conversion if possible}}
+\DoxyCodeLine{115     \textcolor{comment}{// see http://www.exploringbinary.com/fast-\/path-\/decimal-\/to-\/floating-\/point-\/conversion/}}
+\DoxyCodeLine{116     \textcolor{keywordflow}{if} (p > 22  \&\& p < 22 + 16) \{}
+\DoxyCodeLine{117         \textcolor{comment}{// Fast Path Cases In Disguise}}
+\DoxyCodeLine{118         d *= \mbox{\hyperlink{namespaceinternal_af01c41d045d596e2f8d1888cf6fbecb6}{internal::Pow10}}(p -\/ 22);}
+\DoxyCodeLine{119         p = 22;}
+\DoxyCodeLine{120     \}}
+\DoxyCodeLine{121 }
+\DoxyCodeLine{122     \textcolor{keywordflow}{if} (p >= -\/22 \&\& p <= 22 \&\& d <= 9007199254740991.0) \{ \textcolor{comment}{// 2\string^53 -\/ 1}}
+\DoxyCodeLine{123         *result = \mbox{\hyperlink{namespaceinternal_aa1bb51d788788eb5390a16462b40d98d}{FastPath}}(d, p);}
+\DoxyCodeLine{124         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{125     \}}
+\DoxyCodeLine{126     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{127         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{128 \}}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130 \textcolor{comment}{// Compute an approximation and see if it is within 1/2 ULP}}
+\DoxyCodeLine{131 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{132 \textcolor{keyword}{inline} \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespaceinternal_aab0ac7e895939a3e117ec8e3395fd334}{StrtodDiyFp}}(\textcolor{keyword}{const} Ch* decimals, \textcolor{keywordtype}{int} dLen, \textcolor{keywordtype}{int} dExp, \textcolor{keywordtype}{double}* result) \{}
+\DoxyCodeLine{133     \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} significand = 0;}
+\DoxyCodeLine{134     \textcolor{keywordtype}{int} i = 0;   \textcolor{comment}{// 2\string^64 -\/ 1 = 18446744073709551615, 1844674407370955161 = 0x1999999999999999    }}
+\DoxyCodeLine{135     \textcolor{keywordflow}{for} (; i < dLen; i++) \{}
+\DoxyCodeLine{136         \textcolor{keywordflow}{if} (significand  >  \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x19999999, 0x99999999) ||}
+\DoxyCodeLine{137             (significand == \mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x19999999, 0x99999999) \&\& decimals[i] > Ch(\textcolor{charliteral}{'5'})))}
+\DoxyCodeLine{138             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{139         significand = significand * 10u + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(decimals[i] -\/ Ch(\textcolor{charliteral}{'0'}));}
+\DoxyCodeLine{140     \}}
+\DoxyCodeLine{141     }
+\DoxyCodeLine{142     \textcolor{keywordflow}{if} (i < dLen \&\& decimals[i] >= Ch(\textcolor{charliteral}{'5'})) \textcolor{comment}{// Rounding}}
+\DoxyCodeLine{143         significand++;}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145     \textcolor{keywordtype}{int} remaining = dLen -\/ i;}
+\DoxyCodeLine{146     \textcolor{keyword}{const} \textcolor{keywordtype}{int} kUlpShift = 3;}
+\DoxyCodeLine{147     \textcolor{keyword}{const} \textcolor{keywordtype}{int} kUlp = 1 << kUlpShift;}
+\DoxyCodeLine{148     \mbox{\hyperlink{stdint_8h_a414156feea104f8f75b4ed9e3121b2f6}{int64\_t}} error = (remaining == 0) ? 0 : kUlp / 2;}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} v(significand, 0);}
+\DoxyCodeLine{151     v = v.\mbox{\hyperlink{structinternal_1_1_diy_fp_aa6cbacc8dfcd92cb8c57884e45548976}{Normalize}}();}
+\DoxyCodeLine{152     error <<= -\/v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154     dExp += remaining;}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156     \textcolor{keywordtype}{int} actualExp;}
+\DoxyCodeLine{157     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} cachedPower = \mbox{\hyperlink{namespaceinternal_a74b8503d044bf6c0a5e90c5bea3aba42}{GetCachedPower10}}(dExp, \&actualExp);}
+\DoxyCodeLine{158     \textcolor{keywordflow}{if} (actualExp != dExp) \{}
+\DoxyCodeLine{159         \textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} kPow10[] = \{}
+\DoxyCodeLine{160             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xa0000000, 0x00000000), -\/60),  \textcolor{comment}{// 10\string^1}}
+\DoxyCodeLine{161             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc8000000, 0x00000000), -\/57),  \textcolor{comment}{// 10\string^2}}
+\DoxyCodeLine{162             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xfa000000, 0x00000000), -\/54),  \textcolor{comment}{// 10\string^3}}
+\DoxyCodeLine{163             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x9c400000, 0x00000000), -\/50),  \textcolor{comment}{// 10\string^4}}
+\DoxyCodeLine{164             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xc3500000, 0x00000000), -\/47),  \textcolor{comment}{// 10\string^5}}
+\DoxyCodeLine{165             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0xf4240000, 0x00000000), -\/44),  \textcolor{comment}{// 10\string^6}}
+\DoxyCodeLine{166             \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}}(\mbox{\hyperlink{rapidjson_8h_aaee1245f375a71be1ac9b8a07ba5fb8f}{RAPIDJSON\_UINT64\_C2}}(0x98968000, 0x00000000), -\/40)   \textcolor{comment}{// 10\string^7}}
+\DoxyCodeLine{167         \};}
+\DoxyCodeLine{168         \textcolor{keywordtype}{int} adjustment = dExp -\/ actualExp;}
+\DoxyCodeLine{169         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(adjustment >= 1 \&\& adjustment < 8);}
+\DoxyCodeLine{170         v = v * kPow10[adjustment -\/ 1];}
+\DoxyCodeLine{171         \textcolor{keywordflow}{if} (dLen + adjustment > 19) \textcolor{comment}{// has more digits than decimal digits in 64-\/bit}}
+\DoxyCodeLine{172             error += kUlp / 2;}
+\DoxyCodeLine{173     \}}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175     v = v * cachedPower;}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177     error += kUlp + (error == 0 ? 0 : 1);}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179     \textcolor{keyword}{const} \textcolor{keywordtype}{int} oldExp = v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{180     v = v.\mbox{\hyperlink{structinternal_1_1_diy_fp_aa6cbacc8dfcd92cb8c57884e45548976}{Normalize}}();}
+\DoxyCodeLine{181     error <<= oldExp -\/ v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}};}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183     \textcolor{keyword}{const} \textcolor{keywordtype}{int} effectiveSignificandSize = \mbox{\hyperlink{classinternal_1_1_double_aa710fa4f5e06b0ff4348a13475688f13}{Double::EffectiveSignificandSize}}(64 + v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}});}
+\DoxyCodeLine{184     \textcolor{keywordtype}{int} precisionSize = 64 -\/ effectiveSignificandSize;}
+\DoxyCodeLine{185     \textcolor{keywordflow}{if} (precisionSize + kUlpShift >= 64) \{}
+\DoxyCodeLine{186         \textcolor{keywordtype}{int} scaleExp = (precisionSize + kUlpShift) -\/ 63;}
+\DoxyCodeLine{187         v.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >>= scaleExp;}
+\DoxyCodeLine{188         v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} += scaleExp; }
+\DoxyCodeLine{189         error = (error >> scaleExp) + 1 + kUlp;}
+\DoxyCodeLine{190         precisionSize -\/= scaleExp;}
+\DoxyCodeLine{191     \}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193     \mbox{\hyperlink{structinternal_1_1_diy_fp}{DiyFp}} rounded(v.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >> precisionSize, v.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}} + precisionSize);}
+\DoxyCodeLine{194     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} precisionBits = (v.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& ((\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}(1) << precisionSize) -\/ 1)) * kUlp;}
+\DoxyCodeLine{195     \textcolor{keyword}{const} \mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}} halfWay = (\mbox{\hyperlink{stdint_8h_aec6fcb673ff035718c238c8c9d544c47}{uint64\_t}}(1) << (precisionSize -\/ 1)) * kUlp;}
+\DoxyCodeLine{196     \textcolor{keywordflow}{if} (precisionBits >= halfWay + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(error)) \{}
+\DoxyCodeLine{197         rounded.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}}++;}
+\DoxyCodeLine{198         \textcolor{keywordflow}{if} (rounded.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} \& (\mbox{\hyperlink{structinternal_1_1_diy_fp_a43ea451ce20095b1ff53cccf132ca15f}{DiyFp::kDpHiddenBit}} << 1)) \{ \textcolor{comment}{// rounding overflows mantissa (issue \#340)}}
+\DoxyCodeLine{199             rounded.\mbox{\hyperlink{structinternal_1_1_diy_fp_a09b9217a86e8a2e6aa8d2d48fc351008}{f}} >>= 1;}
+\DoxyCodeLine{200             rounded.\mbox{\hyperlink{structinternal_1_1_diy_fp_afa9db335eeb61c7f966d888d89b1e6f2}{e}}++;}
+\DoxyCodeLine{201         \}}
+\DoxyCodeLine{202     \}}
+\DoxyCodeLine{203 }
+\DoxyCodeLine{204     *result = rounded.\mbox{\hyperlink{structinternal_1_1_diy_fp_acf0e7974f0a1175ae04edf8e4a7d1319}{ToDouble}}();}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206     \textcolor{keywordflow}{return} halfWay -\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(error) >= precisionBits || precisionBits >= halfWay + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(error);}
+\DoxyCodeLine{207 \}}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{210 \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{namespaceinternal_aa69b729bd9d047f70ba772424cfb65cb}{StrtodBigInteger}}(\textcolor{keywordtype}{double} approx, \textcolor{keyword}{const} Ch* decimals, \textcolor{keywordtype}{int} dLen, \textcolor{keywordtype}{int} dExp) \{}
+\DoxyCodeLine{211     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(dLen >= 0);}
+\DoxyCodeLine{212     \textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_big_integer}{BigInteger}} dInt(decimals, \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(dLen));}
+\DoxyCodeLine{213     \mbox{\hyperlink{classinternal_1_1_double}{Double}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}(approx);}
+\DoxyCodeLine{214     \textcolor{keywordtype}{int} cmp = \mbox{\hyperlink{namespaceinternal_a190f9c286df64526a7e3550528ed6b02}{CheckWithinHalfULP}}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Value(), dInt, dExp);}
+\DoxyCodeLine{215     \textcolor{keywordflow}{if} (cmp < 0)}
+\DoxyCodeLine{216         \textcolor{keywordflow}{return} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Value();  \textcolor{comment}{// within half ULP}}
+\DoxyCodeLine{217     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (cmp == 0) \{}
+\DoxyCodeLine{218         \textcolor{comment}{// Round towards even}}
+\DoxyCodeLine{219         \textcolor{keywordflow}{if} (\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Significand() \& 1)}
+\DoxyCodeLine{220             \textcolor{keywordflow}{return} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.NextPositiveDouble();}
+\DoxyCodeLine{221         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{222             \textcolor{keywordflow}{return} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.Value();}
+\DoxyCodeLine{223     \}}
+\DoxyCodeLine{224     \textcolor{keywordflow}{else} \textcolor{comment}{// adjustment}}
+\DoxyCodeLine{225         \textcolor{keywordflow}{return} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.NextPositiveDouble();}
+\DoxyCodeLine{226 \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Ch>}
+\DoxyCodeLine{229 \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{namespaceinternal_a6109c750ee4707d4f71de280816a1a00}{StrtodFullPrecision}}(\textcolor{keywordtype}{double} d, \textcolor{keywordtype}{int} p, \textcolor{keyword}{const} Ch* decimals, \textcolor{keywordtype}{size\_t} length, \textcolor{keywordtype}{size\_t} decimalPosition, \textcolor{keywordtype}{int} exp) \{}
+\DoxyCodeLine{230     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(d >= 0.0);}
+\DoxyCodeLine{231     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(length >= 1);}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233     \textcolor{keywordtype}{double} result = 0.0;}
+\DoxyCodeLine{234     \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespaceinternal_a598b2d2f85130bff3c3942e4750b9185}{StrtodFast}}(d, p, \&result))}
+\DoxyCodeLine{235         \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{236 }
+\DoxyCodeLine{237     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(length <= INT\_MAX);}
+\DoxyCodeLine{238     \textcolor{keywordtype}{int} dLen = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(length);}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(length >= decimalPosition);}
+\DoxyCodeLine{241     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(length -\/ decimalPosition <= INT\_MAX);}
+\DoxyCodeLine{242     \textcolor{keywordtype}{int} dExpAdjust = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(length -\/ decimalPosition);}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(exp >= INT\_MIN + dExpAdjust);}
+\DoxyCodeLine{245     \textcolor{keywordtype}{int} dExp = exp -\/ dExpAdjust;}
+\DoxyCodeLine{246 }
+\DoxyCodeLine{247     \textcolor{comment}{// Make sure length+dExp does not overflow}}
+\DoxyCodeLine{248     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(dExp <= INT\_MAX -\/ dLen);}
+\DoxyCodeLine{249 }
+\DoxyCodeLine{250     \textcolor{comment}{// Trim leading zeros}}
+\DoxyCodeLine{251     \textcolor{keywordflow}{while} (dLen > 0 \&\& *decimals == \textcolor{charliteral}{'0'}) \{}
+\DoxyCodeLine{252         dLen-\/-\/;}
+\DoxyCodeLine{253         decimals++;}
+\DoxyCodeLine{254     \}}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256     \textcolor{comment}{// Trim trailing zeros}}
+\DoxyCodeLine{257     \textcolor{keywordflow}{while} (dLen > 0 \&\& decimals[dLen -\/ 1] == \textcolor{charliteral}{'0'}) \{}
+\DoxyCodeLine{258         dLen-\/-\/;}
+\DoxyCodeLine{259         dExp++;}
+\DoxyCodeLine{260     \}}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262     \textcolor{keywordflow}{if} (dLen == 0) \{ \textcolor{comment}{// Buffer only contains zeros.}}
+\DoxyCodeLine{263         \textcolor{keywordflow}{return} 0.0;}
+\DoxyCodeLine{264     \}}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266     \textcolor{comment}{// Trim right-\/most digits}}
+\DoxyCodeLine{267     \textcolor{keyword}{const} \textcolor{keywordtype}{int} kMaxDecimalDigit = 767 + 1;}
+\DoxyCodeLine{268     \textcolor{keywordflow}{if} (dLen > kMaxDecimalDigit) \{}
+\DoxyCodeLine{269         dExp += dLen -\/ kMaxDecimalDigit;}
+\DoxyCodeLine{270         dLen = kMaxDecimalDigit;}
+\DoxyCodeLine{271     \}}
+\DoxyCodeLine{272 }
+\DoxyCodeLine{273     \textcolor{comment}{// If too small, underflow to zero.}}
+\DoxyCodeLine{274     \textcolor{comment}{// Any x <= 10\string^-\/324 is interpreted as zero.}}
+\DoxyCodeLine{275     \textcolor{keywordflow}{if} (dLen + dExp <= -\/324)}
+\DoxyCodeLine{276         \textcolor{keywordflow}{return} 0.0;}
+\DoxyCodeLine{277 }
+\DoxyCodeLine{278     \textcolor{comment}{// If too large, overflow to infinity.}}
+\DoxyCodeLine{279     \textcolor{comment}{// Any x >= 10\string^309 is interpreted as +infinity.}}
+\DoxyCodeLine{280     \textcolor{keywordflow}{if} (dLen + dExp > 309)}
+\DoxyCodeLine{281         \textcolor{keywordflow}{return} std::numeric\_limits<double>::infinity();}
+\DoxyCodeLine{282 }
+\DoxyCodeLine{283     \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespaceinternal_aab0ac7e895939a3e117ec8e3395fd334}{StrtodDiyFp}}(decimals, dLen, dExp, \&result))}
+\DoxyCodeLine{284         \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{285 }
+\DoxyCodeLine{286     \textcolor{comment}{// Use approximation from StrtodDiyFp and make adjustment with BigInteger comparison}}
+\DoxyCodeLine{287     \textcolor{keywordflow}{return} \mbox{\hyperlink{namespaceinternal_aa69b729bd9d047f70ba772424cfb65cb}{StrtodBigInteger}}(result, decimals, dLen, dExp);}
+\DoxyCodeLine{288 \}}
+\DoxyCodeLine{289 }
+\DoxyCodeLine{290 \} \textcolor{comment}{// namespace internal}}
+\DoxyCodeLine{291 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{292 }
+\DoxyCodeLine{293 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_STRTOD\_}}
+
+\end{DoxyCode}

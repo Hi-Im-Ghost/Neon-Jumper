@@ -1,0 +1,475 @@
+\hypertarget{class_generic_pointer}{}\doxysection{Generic\+Pointer\texorpdfstring{$<$}{<} Value\+Type, Allocator \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_generic_pointer}\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+
+
+Represents a JSON Pointer. Use Pointer for \mbox{\hyperlink{struct_u_t_f8}{UTF8}} encoding and default allocator.  
+
+
+
+
+{\ttfamily \#include $<$pointer.\+h$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_generic_pointer_1_1_percent_encode_stream}{Percent\+Encode\+Stream}}
+\begin{DoxyCompactList}\small\item\em A helper stream to encode character (UTF-\/8 code unit) into percent-\/encoded sequence. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}}
+\begin{DoxyCompactList}\small\item\em A token is the basic units of internal representation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{class_generic_value_a28c2cb8d04d12566c1af37597a46d209}{Value\+Type\+::\+Encoding\+Type}} \mbox{\hyperlink{class_generic_pointer_a4b802da797a7a0b615fd9611cedb7c3b}{Encoding\+Type}}
+\begin{DoxyCompactList}\small\item\em Encoding type from Value. \end{DoxyCompactList}\item 
+typedef \mbox{\hyperlink{class_generic_value_ade0e0ce64ccd5d852da57a35e720bafb}{Value\+Type\+::\+Ch}} \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}}
+\begin{DoxyCompactList}\small\item\em Character type from Value. \end{DoxyCompactList}\item 
+typedef \mbox{\hyperlink{class_generic_uri}{Generic\+Uri}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \mbox{\hyperlink{class_generic_pointer_ac82bc56506218e49644bbbbe752a86cc}{Uri\+Type}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Append token}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$ \mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}
+\item 
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$ \mbox{\hyperlink{class_generic_pointer_a331cffeec161b80ea18ac3f1562851bf}{allocator\+\_\+}}
+\begin{DoxyCompactList}\small\item\em The current allocator. It is either user-\/supplied or equal to own\+Allocator\+\_\+. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$ \mbox{\hyperlink{class_generic_pointer_a99b51c07419ee17d57e97774d8ee63ab}{own\+Allocator\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Allocator owned by this Pointer. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$ \mbox{\hyperlink{class_generic_pointer_a2fd627c663483ad08e4f26707ea5ad86}{name\+Buffer\+\_\+}}
+\begin{DoxyCompactList}\small\item\em A buffer containing all names in tokens. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} $\ast$ \mbox{\hyperlink{class_generic_pointer_a997793c66ea1a264089c37c8731eb138}{tokens\+\_\+}}
+\begin{DoxyCompactList}\small\item\em A list of tokens. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{class_generic_pointer_a7051cf59af6622542a050bd0ff0340f8}{token\+Count\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Number of tokens in tokens\+\_\+. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{class_generic_pointer_ad103ed62e206319f1f0f4aa271866e37}{parse\+Error\+Offset\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Offset in code unit when parsing fail. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gacb2e274f33e54d91b96e9883a99a98be}{Pointer\+Parse\+Error\+Code}} \mbox{\hyperlink{class_generic_pointer_a8898ec432dc40b28f79db78dc4ca83e0}{parse\+Error\+Code\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Parsing error code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \mbox{\hyperlink{class_generic_pointer_aa8f86c0f330807f337351a95ae254b78}{Append}} (const \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} \&token, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}=0) const
+\begin{DoxyCompactList}\small\item\em Append a token and return a new Pointer. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \mbox{\hyperlink{class_generic_pointer_a9f8a1711f5b8e0d951c25c6c65326f77}{Append}} (const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$name, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} length, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}=0) const
+\begin{DoxyCompactList}\small\item\em Append a name token with length, and return a new Pointer. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename \mbox{\hyperlink{writertest_8cpp_a16a0f7e7053a679c9bf4289b441a2be7}{T}} $>$ }\\\mbox{\hyperlink{class_generic_pointer_aaf4d7d852098878d24188d134182d42f}{RAPIDJSON\+\_\+\+DISABLEIF\+\_\+\+RETURN}} ((internal\+::\+Not\+Expr$<$ internal\+::\+Is\+Same$<$ typename internal\+::\+Remove\+Const$<$ \mbox{\hyperlink{writertest_8cpp_a16a0f7e7053a679c9bf4289b441a2be7}{T}} $>$\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{\+::\+Type}}, \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $>$ $>$),(\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}})) \mbox{\hyperlink{class_generic_pointer_aa8f86c0f330807f337351a95ae254b78}{Append}}(\mbox{\hyperlink{writertest_8cpp_a16a0f7e7053a679c9bf4289b441a2be7}{T}} $\ast$name
+\begin{DoxyCompactList}\small\item\em Append a name token without length, and return a new Pointer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Constructors and destructor.}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_generic_pointer_a5d85b7dc82719643e8f7adccd5a74fbe}{Generic\+Pointer}} (\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}=0)
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_a4ad549b8a826c3c2dedf03fcc07be9b0}{Generic\+Pointer}} (const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$\mbox{\hyperlink{pointer_8h_adb82dfe18535e9a30aa97d275f82bd55}{source}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}=0)
+\begin{DoxyCompactList}\small\item\em Constructor that parses a string or URI fragment representation. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_a9c05684ea95306aac7626e70cb3946cc}{Generic\+Pointer}} (const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$\mbox{\hyperlink{pointer_8h_adb82dfe18535e9a30aa97d275f82bd55}{source}}, size\+\_\+t length, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}}=0)
+\begin{DoxyCompactList}\small\item\em Constructor that parses a string or URI fragment representation, with length of the source string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_a524a9921eff68f389a817a20ca7f1d84}{Generic\+Pointer}} (const \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} $\ast$tokens, size\+\_\+t token\+Count)
+\begin{DoxyCompactList}\small\item\em Constructor with user-\/supplied tokens. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_a7803645e8f7f349ee09c7d50351e9432}{Generic\+Pointer}} (const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&rhs)
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_a4395ca3f5c646e47cc9b93d21d1660ae}{Generic\+Pointer}} (const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&rhs, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$\mbox{\hyperlink{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}{allocator}})
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer_acf3eb2f7c4ebf9256f638aafa17534cb}{$\sim$\+Generic\+Pointer}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \& \mbox{\hyperlink{class_generic_pointer_ae1b46fbcab2c8557825f7be842acbfe7}{operator=}} (const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&rhs)
+\begin{DoxyCompactList}\small\item\em Assignment operator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \& \mbox{\hyperlink{class_generic_pointer_af148818f7c2b10243221953d887044c6}{Swap}} (\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&other) RAPIDJSON\+\_\+\+NOEXCEPT
+\begin{DoxyCompactList}\small\item\em Swap the content of this pointer with an other. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_generic_pointer_a249c61b5d4bed20c3f8972c57f46a937}{swap}} (\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \&b) RAPIDJSON\+\_\+\+NOEXCEPT
+\begin{DoxyCompactList}\small\item\em free-\/standing swap function helper \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} = Crt\+Allocator$>$\newline
+class Generic\+Pointer$<$ Value\+Type, Allocator $>$}
+Represents a JSON Pointer. Use Pointer for \mbox{\hyperlink{struct_u_t_f8}{UTF8}} encoding and default allocator. 
+
+This class implements RFC 6901 \char`\"{}\+Java\+Script Object Notation (\+JSON) Pointer\char`\"{} (\href{https://tools.ietf.org/html/rfc6901}{\texttt{ https\+://tools.\+ietf.\+org/html/rfc6901}}).
+
+A JSON pointer is for identifying a specific value in a JSON document (\mbox{\hyperlink{class_generic_document}{Generic\+Document}}). It can simplify coding of DOM tree manipulation, because it can access multiple-\/level depth of DOM tree with single API call.
+
+After it parses a string representation (e.\+g. \char`\"{}/foo/0\char`\"{} or URI fragment representation (e.\+g. \char`\"{}\#/foo/0\char`\"{}) into its internal representation (tokens), it can be used to resolve a specific value in multiple documents, or sub-\/tree of documents.
+
+Contrary to \mbox{\hyperlink{class_generic_value}{Generic\+Value}}, Pointer can be copy constructed and copy assigned. Apart from assignment, a Pointer cannot be modified after construction.
+
+Although Pointer is very convenient, please aware that constructing Pointer involves parsing and dynamic memory allocation. A special constructor with user-\/ supplied tokens eliminates these.
+
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} depends on \mbox{\hyperlink{class_generic_document}{Generic\+Document}} and \mbox{\hyperlink{class_generic_value}{Generic\+Value}}.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Value\+Type} & The value type of the DOM tree. E.\+g. \mbox{\hyperlink{class_generic_value}{Generic\+Value}}\texorpdfstring{$<$}{<}UTF8$<$$>$ \texorpdfstring{$>$}{>} \\
+\hline
+{\em Allocator} & The allocator type for allocating memory for internal representation.\\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyNote}{Note}
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} uses same encoding of Value\+Type. However, Allocator of \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} is independent of Allocator of Value. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}\label{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!Ch@{Ch}}
+\index{Ch@{Ch}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Ch}{Ch}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+typedef \mbox{\hyperlink{class_generic_value_ade0e0ce64ccd5d852da57a35e720bafb}{Value\+Type\+::\+Ch}} \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Ch}
+
+
+
+Character type from Value. 
+
+\mbox{\Hypertarget{class_generic_pointer_a4b802da797a7a0b615fd9611cedb7c3b}\label{class_generic_pointer_a4b802da797a7a0b615fd9611cedb7c3b}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!EncodingType@{EncodingType}}
+\index{EncodingType@{EncodingType}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{EncodingType}{EncodingType}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+typedef \mbox{\hyperlink{class_generic_value_a28c2cb8d04d12566c1af37597a46d209}{Value\+Type\+::\+Encoding\+Type}} \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Encoding\+Type}
+
+
+
+Encoding type from Value. 
+
+\mbox{\Hypertarget{class_generic_pointer_ac82bc56506218e49644bbbbe752a86cc}\label{class_generic_pointer_ac82bc56506218e49644bbbbe752a86cc}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!UriType@{UriType}}
+\index{UriType@{UriType}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{UriType}{UriType}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+typedef \mbox{\hyperlink{class_generic_uri}{Generic\+Uri}}$<$\mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$>$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Uri\+Type}
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_generic_pointer_a5d85b7dc82719643e8f7adccd5a74fbe}\label{class_generic_pointer_a5d85b7dc82719643e8f7adccd5a74fbe}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor. 
+
+\mbox{\Hypertarget{class_generic_pointer_a4ad549b8a826c3c2dedf03fcc07be9b0}\label{class_generic_pointer_a4ad549b8a826c3c2dedf03fcc07be9b0}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$}]{source,  }\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Constructor that parses a string or URI fragment representation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & A null-\/terminated, string or URI fragment representation of JSON pointer. \\
+\hline
+{\em allocator} & User supplied allocator for this pointer. If no allocator is provided, it creates a self-\/owned one. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_generic_pointer_a9c05684ea95306aac7626e70cb3946cc}\label{class_generic_pointer_a9c05684ea95306aac7626e70cb3946cc}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$}]{source,  }\item[{size\+\_\+t}]{length,  }\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor that parses a string or URI fragment representation, with length of the source string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & A string or URI fragment representation of JSON pointer. \\
+\hline
+{\em length} & Length of source. \\
+\hline
+{\em allocator} & User supplied allocator for this pointer. If no allocator is provided, it creates a self-\/owned one. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Slightly faster than the overload without length. 
+\end{DoxyNote}
+\mbox{\Hypertarget{class_generic_pointer_a524a9921eff68f389a817a20ca7f1d84}\label{class_generic_pointer_a524a9921eff68f389a817a20ca7f1d84}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} $\ast$}]{tokens,  }\item[{size\+\_\+t}]{token\+Count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor with user-\/supplied tokens. 
+
+This constructor let user supplies const array of tokens. This prevents the parsing process and eliminates allocation. This is preferred for memory constrained environments.
+
+
+\begin{DoxyParams}{Parameters}
+{\em tokens} & An constant array of tokens representing the JSON pointer. \\
+\hline
+{\em token\+Count} & Number of tokens.\\
+\hline
+\end{DoxyParams}
+{\bfseries{Example}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define NAME(s) \{ s, sizeof(s) / sizeof(s[0]) -\/ 1, kPointerInvalidIndex \}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#define INDEX(i) \{ \#i, sizeof(\#i) -\/ 1, i \}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Pointer::Token}} kTokens[] = \{ \mbox{\hyperlink{pointertest_8cpp_a59c7737920212dcb3bb9df58d7062de4}{NAME}}(\textcolor{stringliteral}{"{}foo"{}}), \mbox{\hyperlink{pointertest_8cpp_aa5fad23b2a5eed790e6661e896a506b7}{INDEX}}(123) \};}
+\DoxyCodeLine{\textcolor{keyword}{static} \textcolor{keyword}{const} \mbox{\hyperlink{class_generic_pointer}{Pointer}} p(kTokens, \textcolor{keyword}{sizeof}(kTokens) / \textcolor{keyword}{sizeof}(kTokens[0]));}
+\DoxyCodeLine{\textcolor{comment}{// Equivalent to static const Pointer p("{}/foo/123"{});}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#undef NAME}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#undef INDEX}}
+
+\end{DoxyCode}
+ \mbox{\Hypertarget{class_generic_pointer_a7803645e8f7f349ee09c7d50351e9432}\label{class_generic_pointer_a7803645e8f7f349ee09c7d50351e9432}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy constructor. 
+
+\mbox{\Hypertarget{class_generic_pointer_a4395ca3f5c646e47cc9b93d21d1660ae}\label{class_generic_pointer_a4395ca3f5c646e47cc9b93d21d1660ae}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!GenericPointer@{GenericPointer}}
+\index{GenericPointer@{GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GenericPointer()}{GenericPointer()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\mbox{\hyperlink{class_generic_pointer}{\+::\+Generic\+Pointer}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{rhs,  }\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copy constructor. 
+
+\mbox{\Hypertarget{class_generic_pointer_acf3eb2f7c4ebf9256f638aafa17534cb}\label{class_generic_pointer_acf3eb2f7c4ebf9256f638aafa17534cb}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!````~GenericPointer@{$\sim$GenericPointer}}
+\index{````~GenericPointer@{$\sim$GenericPointer}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$GenericPointer()}{~GenericPointer()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::$\sim$\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_generic_pointer_a9f8a1711f5b8e0d951c25c6c65326f77}\label{class_generic_pointer_a9f8a1711f5b8e0d951c25c6c65326f77}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!Append@{Append}}
+\index{Append@{Append}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Append()}{Append()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Append (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $\ast$}]{name,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{length,  }\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator = {\ttfamily 0} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Append a name token with length, and return a new Pointer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name to be appended. \\
+\hline
+{\em length} & Length of name. \\
+\hline
+{\em allocator} & Allocator for the newly return Pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Pointer with appended token. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_generic_pointer_aa8f86c0f330807f337351a95ae254b78}\label{class_generic_pointer_aa8f86c0f330807f337351a95ae254b78}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!Append@{Append}}
+\index{Append@{Append}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Append()}{Append()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Append (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} \&}]{token,  }\item[{\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$}]{allocator = {\ttfamily 0} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Append a token and return a new Pointer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em token} & \mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}} to be appended. \\
+\hline
+{\em allocator} & Allocator for the newly return Pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Pointer with appended token. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_generic_pointer_ae1b46fbcab2c8557825f7be842acbfe7}\label{class_generic_pointer_ae1b46fbcab2c8557825f7be842acbfe7}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \& \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Assignment operator. 
+
+\mbox{\Hypertarget{class_generic_pointer_aaf4d7d852098878d24188d134182d42f}\label{class_generic_pointer_aaf4d7d852098878d24188d134182d42f}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!RAPIDJSON\_DISABLEIF\_RETURN@{RAPIDJSON\_DISABLEIF\_RETURN}}
+\index{RAPIDJSON\_DISABLEIF\_RETURN@{RAPIDJSON\_DISABLEIF\_RETURN}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{RAPIDJSON\_DISABLEIF\_RETURN()}{RAPIDJSON\_DISABLEIF\_RETURN()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+template$<$typename \mbox{\hyperlink{writertest_8cpp_a16a0f7e7053a679c9bf4289b441a2be7}{T}} $>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+RAPIDJSON\+\_\+\+DISABLEIF\+\_\+\+RETURN (\begin{DoxyParamCaption}\item[{(internal\+::\+Not\+Expr$<$ internal\+::\+Is\+Same$<$ typename internal\+::\+Remove\+Const$<$ \mbox{\hyperlink{writertest_8cpp_a16a0f7e7053a679c9bf4289b441a2be7}{T}} $>$\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{\+::\+Type}}, \mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}} $>$ $>$)}]{,  }\item[{(\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$)}]{ }\end{DoxyParamCaption})}
+
+
+
+Append a name token without length, and return a new Pointer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name (const Ch$\ast$) to be appended. \\
+\hline
+{\em allocator} & Allocator for the newly return Pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Pointer with appended token. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_generic_pointer_af148818f7c2b10243221953d887044c6}\label{class_generic_pointer_af148818f7c2b10243221953d887044c6}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!Swap@{Swap}}
+\index{Swap@{Swap}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Swap()}{Swap()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}} \& \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Swap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Swap the content of this pointer with an other. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & The pointer to swap with. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Constant complexity. 
+\end{DoxyNote}
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_generic_pointer_a249c61b5d4bed20c3f8972c57f46a937}\label{class_generic_pointer_a249c61b5d4bed20c3f8972c57f46a937}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!swap@{swap}}
+\index{swap@{swap}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{swap}{swap}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+void swap (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{a,  }\item[{\mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+free-\/standing swap function helper 
+
+Helper function to enable support for common swap implementation pattern based on {\ttfamily std\+::swap\+:} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_pointer_a249c61b5d4bed20c3f8972c57f46a937}{swap}}(MyClass\& \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, MyClass\& b) \{}
+\DoxyCodeLine{    \textcolor{keyword}{using} std::swap;}
+\DoxyCodeLine{    \mbox{\hyperlink{class_generic_pointer_a249c61b5d4bed20c3f8972c57f46a937}{swap}}(\mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}.pointer, b.pointer);}
+\DoxyCodeLine{    \textcolor{comment}{// ...}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+ \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{class_generic_pointer_af148818f7c2b10243221953d887044c6}{Swap()}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}\label{class_generic_pointer_aeb61ba8e67260b43090791eeca8b90e0}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!allocator@{allocator}}
+\index{allocator@{allocator}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{allocator}{allocator}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$\ast$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::allocator}
+
+\mbox{\Hypertarget{class_generic_pointer_a331cffeec161b80ea18ac3f1562851bf}\label{class_generic_pointer_a331cffeec161b80ea18ac3f1562851bf}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!allocator\_@{allocator\_}}
+\index{allocator\_@{allocator\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{allocator\_}{allocator\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$\ast$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::allocator\+\_\+}
+
+
+
+The current allocator. It is either user-\/supplied or equal to own\+Allocator\+\_\+. 
+
+\mbox{\Hypertarget{class_generic_pointer_a2fd627c663483ad08e4f26707ea5ad86}\label{class_generic_pointer_a2fd627c663483ad08e4f26707ea5ad86}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!nameBuffer\_@{nameBuffer\_}}
+\index{nameBuffer\_@{nameBuffer\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{nameBuffer\_}{nameBuffer\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{class_generic_pointer_ab292356c11b4015c98d21b966b11f285}{Ch}}$\ast$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::name\+Buffer\+\_\+}
+
+
+
+A buffer containing all names in tokens. 
+
+\mbox{\Hypertarget{class_generic_pointer_a99b51c07419ee17d57e97774d8ee63ab}\label{class_generic_pointer_a99b51c07419ee17d57e97774d8ee63ab}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!ownAllocator\_@{ownAllocator\_}}
+\index{ownAllocator\_@{ownAllocator\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ownAllocator\_}{ownAllocator\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$\ast$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::own\+Allocator\+\_\+}
+
+
+
+Allocator owned by this Pointer. 
+
+\mbox{\Hypertarget{class_generic_pointer_a8898ec432dc40b28f79db78dc4ca83e0}\label{class_generic_pointer_a8898ec432dc40b28f79db78dc4ca83e0}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!parseErrorCode\_@{parseErrorCode\_}}
+\index{parseErrorCode\_@{parseErrorCode\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{parseErrorCode\_}{parseErrorCode\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gacb2e274f33e54d91b96e9883a99a98be}{Pointer\+Parse\+Error\+Code}} \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::parse\+Error\+Code\+\_\+}
+
+
+
+Parsing error code. 
+
+\mbox{\Hypertarget{class_generic_pointer_ad103ed62e206319f1f0f4aa271866e37}\label{class_generic_pointer_ad103ed62e206319f1f0f4aa271866e37}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!parseErrorOffset\_@{parseErrorOffset\_}}
+\index{parseErrorOffset\_@{parseErrorOffset\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{parseErrorOffset\_}{parseErrorOffset\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+size\+\_\+t \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::parse\+Error\+Offset\+\_\+}
+
+
+
+Offset in code unit when parsing fail. 
+
+\mbox{\Hypertarget{class_generic_pointer_a7051cf59af6622542a050bd0ff0340f8}\label{class_generic_pointer_a7051cf59af6622542a050bd0ff0340f8}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!tokenCount\_@{tokenCount\_}}
+\index{tokenCount\_@{tokenCount\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{tokenCount\_}{tokenCount\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+size\+\_\+t \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::token\+Count\+\_\+}
+
+
+
+Number of tokens in tokens\+\_\+. 
+
+\mbox{\Hypertarget{class_generic_pointer_a997793c66ea1a264089c37c8731eb138}\label{class_generic_pointer_a997793c66ea1a264089c37c8731eb138}} 
+\index{GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}!tokens\_@{tokens\_}}
+\index{tokens\_@{tokens\_}!GenericPointer$<$ ValueType, Allocator $>$@{GenericPointer$<$ ValueType, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{tokens\_}{tokens\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{struct_generic_pointer_1_1_token}{Token}}$\ast$ \mbox{\hyperlink{class_generic_pointer}{Generic\+Pointer}}$<$ \mbox{\hyperlink{schemavalidator_8cpp_af2c59956daf09ddf36e71b173b084b0f}{Value\+Type}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::tokens\+\_\+}
+
+
+
+A list of tokens. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/rapidjson/include/rapidjson/\mbox{\hyperlink{fwd_8h}{fwd.\+h}}\item 
+src/rapidjson/include/rapidjson/\mbox{\hyperlink{pointer_8h}{pointer.\+h}}\end{DoxyCompactItemize}

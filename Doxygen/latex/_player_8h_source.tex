@@ -1,0 +1,74 @@
+\hypertarget{_player_8h_source}{}\doxysection{Player.\+h}
+\label{_player_8h_source}\index{src/entities/Player.h@{src/entities/Player.h}}
+\mbox{\hyperlink{_player_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef TREES\_JSON\_PLAYER\_H}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define TREES\_JSON\_PLAYER\_H}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <SFML/Graphics.hpp>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <SFML/Window/Keyboard.hpp>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <SFML/Audio.hpp>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}../modules/Damageable.h"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}../modules/Animated.h"{}}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{15 \textcolor{keyword}{class }\mbox{\hyperlink{class_player}{Player}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_damageable}{Damageable}}, \textcolor{keyword}{public} \mbox{\hyperlink{class_animated}{Animated}} \{}
+\DoxyCodeLine{16 \textcolor{keyword}{private}:}
+\DoxyCodeLine{18     sf::SoundBuffer bufGame;}
+\DoxyCodeLine{20     sf::Sound jumpGame;}
+\DoxyCodeLine{22     sf::Texture \_texture;}
+\DoxyCodeLine{24     sf::Sprite \_sprite;}
+\DoxyCodeLine{26     sf::RectangleShape \_hitbox;}
+\DoxyCodeLine{28     sf::Vector2f \_velocity;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{31     \textcolor{keywordtype}{float} \_acceleration;}
+\DoxyCodeLine{33     \textcolor{keywordtype}{float} \_maxSpeedX;}
+\DoxyCodeLine{35     \textcolor{keywordtype}{float} \_maxSpeedY;}
+\DoxyCodeLine{37     \textcolor{keywordtype}{float} \_jumpForce;}
+\DoxyCodeLine{39     \textcolor{keywordtype}{float} \_gravity;}
+\DoxyCodeLine{41     \textcolor{keywordtype}{float} \_gravityDelta;}
+\DoxyCodeLine{43     \textcolor{keywordtype}{bool} \_bIsGrounded;}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{46     \textcolor{keywordtype}{bool} \_bTimeStopped;}
+\DoxyCodeLine{48     \textcolor{keywordtype}{float} tsValue;}
+\DoxyCodeLine{50     \textcolor{keywordtype}{float} tsFillRate;}
+\DoxyCodeLine{52     sf::Clock tsClock;}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{55     \textcolor{keywordtype}{void} initValues();}
+\DoxyCodeLine{57     \textcolor{keywordtype}{void} initSprite();}
+\DoxyCodeLine{59     \textcolor{keywordtype}{void} initHitbox();}
+\DoxyCodeLine{61     \textcolor{keywordtype}{void} initSoundGame();}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{64     \textcolor{keywordtype}{void} handleInput(\textcolor{keywordtype}{float} deltaTime);}
+\DoxyCodeLine{66     \textcolor{keywordtype}{void} handleCollision(\textcolor{keyword}{const} std::list<sf::RectangleShape>\& allHitboxes);}
+\DoxyCodeLine{68     \textcolor{keywordtype}{void} moveFinal();}
+\DoxyCodeLine{70     \textcolor{keywordtype}{void} applyGravity(\textcolor{keywordtype}{float} deltaSeconds);}
+\DoxyCodeLine{72     \textcolor{keywordtype}{void} jump();}
+\DoxyCodeLine{74     \textcolor{keywordtype}{void} animateMovement();}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{77     \textcolor{keywordtype}{void} timeStop();}
+\DoxyCodeLine{79     \textcolor{keywordtype}{void} timeStart();}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81 \textcolor{keyword}{public}:}
+\DoxyCodeLine{83     \textcolor{keyword}{explicit} \mbox{\hyperlink{class_player_ac1956730c1a4efd8a07546b0276f8b60}{Player}}(\textcolor{keywordtype}{float} x = 0, \textcolor{keywordtype}{float} y = 0);}
+\DoxyCodeLine{84 }
+\DoxyCodeLine{86     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a7ece6518af33ca7bc6a3fc36fd06bd85}{move}}(\textcolor{keywordtype}{float} x, \textcolor{keywordtype}{float} y);}
+\DoxyCodeLine{88     sf::Vector2f \mbox{\hyperlink{class_player_a23356f99a9de86d3d47eadb679b332dc}{getPosition}}();}
+\DoxyCodeLine{90     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a8127e94cc6c15d49f28ad840126a4ae5}{zeroVelocity}}(\textcolor{keywordtype}{bool} x, \textcolor{keywordtype}{bool} y);}
+\DoxyCodeLine{92     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_player_a308bbc68e154a988d40d813d3d1de44c}{checkForIntersection}}(sf::RectangleShape\& shape);}
+\DoxyCodeLine{94     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_player_a045c23cf9bbbebfefbfcf32701ba4faf}{getTimeStopped}}()\textcolor{keyword}{ const }\{\textcolor{keywordflow}{return} \_bTimeStopped;\}}
+\DoxyCodeLine{96     \textcolor{keywordtype}{float} \mbox{\hyperlink{class_player_ad8a8b25b36812e3f2281fffa900312dd}{getTimeStopValue}}()\textcolor{keyword}{ const }\{\textcolor{keywordflow}{return} tsValue;\}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{99     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a0b8b2c0946659d50a45b560cf83815ee}{update}}(\textcolor{keywordtype}{float} deltaTime, \textcolor{keyword}{const} std::list<sf::RectangleShape>\& allHitboxes);}
+\DoxyCodeLine{101     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a317b439dc6ba2bb2b6aad2f82b130c02}{render}}(sf::RenderTarget\& window);}
+\DoxyCodeLine{103     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a64b65de6130f811ce670be4b0ca790b4}{setPosition}}(sf::Vector2f);}
+\DoxyCodeLine{105     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_player_a0b8255feb633ed5922ca99598776de9e}{switchAnimation}}(\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} newAnimation);}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_player_a836420cfbc65547977599ba7c1a5a77c}{isReady}};}
+\DoxyCodeLine{108 \};}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110 }
+\DoxyCodeLine{111 \textcolor{preprocessor}{\#endif }\textcolor{comment}{//TREES\_JSON\_PLAYER\_H}}
+
+\end{DoxyCode}

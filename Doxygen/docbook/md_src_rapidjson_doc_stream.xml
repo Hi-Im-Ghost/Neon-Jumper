@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_stream" xml:lang="en-US">
+
+<para>In RapidJSON, <computeroutput><link linkend="_classrapidjson_1_1_stream">rapidjson::Stream</link></computeroutput> is a concept for reading/writing JSON. Here we&apos;ll first show you how to use provided streams. And then see how to create a custom stream.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1MemoryStreams">
+<title>Memory Streams</title>
+
+<para>Memory streams store JSON in memory.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1StringStream">
+<title>StringStream (Input)</title>
+
+<para><computeroutput>StringStream</computeroutput> is the most basic input stream. It represents a complete, read-only JSON stored in memory. It is defined in <computeroutput><link linkend="_rapidjson_8h">rapidjson/rapidjson.h</link></computeroutput>.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;&#32;//&#32;will&#32;include&#32;&quot;rapidjson/rapidjson.h&quot;
+
+using&#32;namespace&#32;rapidjson;
+
+//&#32;...
+const&#32;char&#32;json[]&#32;=&#32;&quot;[1,&#32;2,&#32;3,&#32;4]&quot;;
+StringStream&#32;s(json);
+
+Document&#32;d;
+d.ParseStream(s);
+</computeroutput></literallayout></para>
+
+<para>Since this is very common usage, <computeroutput>Document::Parse(const char*)</computeroutput> is provided to do exactly the same as above:</para>
+
+<para><literallayout><computeroutput>//&#32;...
+const&#32;char&#32;json[]&#32;=&#32;&quot;[1,&#32;2,&#32;3,&#32;4]&quot;;
+Document&#32;d;
+d.Parse(json);
+</computeroutput></literallayout></para>
+
+<para>Note that, <computeroutput>StringStream</computeroutput> is a typedef of <computeroutput><link linkend="_struct_generic_string_stream">GenericStringStream</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt;</computeroutput>, user may use another encodings to represent the character set of the stream.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1StringBuffer">
+<title>StringBuffer (Output)</title>
+
+<para><computeroutput>StringBuffer</computeroutput> is a simple output stream. It allocates a memory buffer for writing the whole JSON. Use <computeroutput>GetString()</computeroutput> to obtain the buffer.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/stringbuffer.h&quot;
+#include&#32;&lt;rapidjson/writer.h&gt;
+
+StringBuffer&#32;buffer;
+Writer&lt;StringBuffer&gt;&#32;writer(buffer);
+d.Accept(writer);
+
+const&#32;char*&#32;output&#32;=&#32;buffer.GetString();
+</computeroutput></literallayout></para>
+
+<para>When the buffer is full, it will increases the capacity automatically. The default capacity is 256 characters (256 bytes for <link linkend="_struct_u_t_f8">UTF8</link>, 512 bytes for <link linkend="_struct_u_t_f16">UTF16</link>, etc.). User can provide an allocator and an initial capacity.</para>
+
+<para><literallayout><computeroutput>StringBuffer&#32;buffer1(0,&#32;1024);&#32;//&#32;Use&#32;its&#32;allocator,&#32;initial&#32;size&#32;=&#32;1024
+StringBuffer&#32;buffer2(allocator,&#32;1024);
+</computeroutput></literallayout></para>
+
+<para>By default, <computeroutput>StringBuffer</computeroutput> will instantiate an internal allocator.</para>
+
+<para>Similarly, <computeroutput>StringBuffer</computeroutput> is a typedef of <computeroutput><link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt;</computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileStreams">
+<title>File Streams</title>
+
+<para>When parsing a JSON from file, you may read the whole JSON into memory and use <computeroutput>StringStream</computeroutput> above.</para>
+
+<para>However, if the JSON is big, or memory is limited, you can use <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput>. It only read a part of JSON from file into buffer, and then let the part be parsed. If it runs out of characters in the buffer, it will read the next part from file.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileReadStream">
+<title>FileReadStream (Input)</title>
+
+<para><computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> reads the file via a <computeroutput>FILE</computeroutput> pointer. And user need to provide a buffer.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filereadstream.h&quot;
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;big.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;r&quot;
+
+char&#32;readBuffer[65536];
+FileReadStream&#32;is(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+Document&#32;d;
+d.ParseStream(is);
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>Different from string streams, <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> is byte stream. It does not handle encodings. If the file is not UTF-8, the byte stream can be wrapped in a <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput>. We will discuss more about this later in this tutorial.</para>
+
+<para>Apart from reading file, user can also use <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> to read <computeroutput>stdin</computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileWriteStream">
+<title>FileWriteStream (Output)</title>
+
+<para><computeroutput><link linkend="_class_file_write_stream">FileWriteStream</link></computeroutput> is buffered output stream. Its usage is very similar to <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput>.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filewritestream.h&quot;
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+Document&#32;d;
+d.Parse(json);
+//&#32;...
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;output.json&quot;,&#32;&quot;wb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;w&quot;
+
+char&#32;writeBuffer[65536];
+FileWriteStream&#32;os(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+Writer&lt;FileWriteStream&gt;&#32;writer(os);
+d.Accept(writer);
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>It can also redirect the output to <computeroutput>stdout</computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1iostreamWrapper">
+<title>iostream Wrapper</title>
+
+<para>Due to users&apos; requests, RapidJSON also provides official wrappers for <computeroutput>std::basic_istream</computeroutput> and <computeroutput>std::basic_ostream</computeroutput>. However, please note that the performance will be much lower than the other streams above.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1IStreamWrapper">
+<title>IStreamWrapper</title>
+
+<para><computeroutput><link linkend="_class_i_stream_wrapper">IStreamWrapper</link></computeroutput> wraps any class derived from <computeroutput>std::istream</computeroutput>, such as <computeroutput>std::istringstream</computeroutput>, <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ifstream</computeroutput>, <computeroutput>std::fstream</computeroutput>, into RapidJSON&apos;s input stream.</para>
+
+<para><literallayout><computeroutput>#include&#32;&lt;rapidjson/document.h&gt;
+#include&#32;&lt;rapidjson/istreamwrapper.h&gt;
+#include&#32;&lt;fstream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+ifstream&#32;ifs(&quot;test.json&quot;);
+IStreamWrapper&#32;isw(ifs);
+
+Document&#32;d;
+d.ParseStream(isw);
+</computeroutput></literallayout></para>
+
+<para>For classes derived from <computeroutput>std::wistream</computeroutput>, use <computeroutput><link linkend="_class_w_i_stream_wrapper">WIStreamWrapper</link></computeroutput>.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1OStreamWrapper">
+<title>OStreamWrapper</title>
+
+<para>Similarly, <computeroutput><link linkend="_class_o_stream_wrapper">OStreamWrapper</link></computeroutput> wraps any class derived from <computeroutput>std::ostream</computeroutput>, such as <computeroutput>std::ostringstream</computeroutput>, <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ofstream</computeroutput>, <computeroutput>std::fstream</computeroutput>, into RapidJSON&apos;s input stream.</para>
+
+<para><literallayout><computeroutput>#include&#32;&lt;rapidjson/document.h&gt;
+#include&#32;&lt;rapidjson/ostreamwrapper.h&gt;
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;fstream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+Document&#32;d;
+d.Parse(json);
+
+//&#32;...
+
+ofstream&#32;ofs(&quot;output.json&quot;);
+OStreamWrapper&#32;osw(ofs);
+
+Writer&lt;OStreamWrapper&gt;&#32;writer(osw);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>For classes derived from <computeroutput>std::wostream</computeroutput>, use <computeroutput>WOStreamWrapper</computeroutput>.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedStreams">
+<title>Encoded Streams</title>
+
+<para>Encoded streams do not contain JSON itself, but they wrap byte streams to provide basic encoding/decoding function.</para>
+
+<para>As mentioned above, UTF-8 byte streams can be read directly. However, UTF-16 and UTF-32 have endian issue. To handle endian correctly, it needs to convert bytes into characters (e.g. <computeroutput>wchar_t</computeroutput> for UTF-16) while reading, and characters into bytes while writing.</para>
+
+<para>Besides, it also need to handle <link xlink:href="http://en.wikipedia.org/wiki/Byte_order_mark">byte order mark (BOM)</link>. When reading from a byte stream, it is needed to detect or just consume the BOM if exists. When writing to a byte stream, it can optionally write BOM.</para>
+
+<para>If the encoding of stream is known during compile-time, you may use <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> and <computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput>. If the stream can be UTF-8, UTF-16LE, UTF-16BE, UTF-32LE, UTF-32BE JSON, and it is only known in runtime, you may use <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> and <computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput>. These streams are defined in <computeroutput><link linkend="_encodedstream_8h">rapidjson/encodedstream.h</link></computeroutput>.</para>
+
+<para>Note that, these encoded streams can be applied to streams other than file. For example, you may have a file in memory, or a custom byte stream, be wrapped in encoded streams.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedInputStream">
+<title>EncodedInputStream</title>
+
+<para><computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> has two template parameters. The first one is a <computeroutput>Encoding</computeroutput> class, such as <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>, <computeroutput><link linkend="_struct_u_t_f16_l_e">UTF16LE</link></computeroutput>, defined in <computeroutput><link linkend="_encodings_8h">rapidjson/encodings.h</link></computeroutput>. The second one is the class of stream to be wrapped.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/filereadstream.h&quot;&#32;&#32;&#32;//&#32;FileReadStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;EncodedInputStream
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;utf16le.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+EncodedInputStream&lt;UTF16LE&lt;&gt;,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;wraps&#32;bis&#32;into&#32;eis
+
+Document&#32;d;&#32;//&#32;Document&#32;is&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+d.ParseStream&lt;0,&#32;UTF16LE&lt;&gt;&#32;&gt;(eis);&#32;&#32;//&#32;Parses&#32;UTF-16LE&#32;file&#32;into&#32;UTF-8&#32;in&#32;memory
+
+fclose(fp);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedOutputStream">
+<title>EncodedOutputStream</title>
+
+<para><computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput> is similar but it has a <computeroutput>bool putBOM</computeroutput> parameter in the constructor, controlling whether to write BOM into output byte stream.</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filewritestream.h&quot;&#32;&#32;//&#32;FileWriteStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;EncodedOutputStream
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;cstdio&gt;
+
+Document&#32;d;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Document&#32;is&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+//&#32;...
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;output_utf32le.json&quot;,&#32;&quot;wb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;w&quot;
+
+char&#32;writeBuffer[256];
+FileWriteStream&#32;bos(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+typedef&#32;EncodedOutputStream&lt;UTF32LE&lt;&gt;,&#32;FileWriteStream&gt;&#32;OutputStream;
+OutputStream&#32;eos(bos,&#32;true);&#32;&#32;&#32;//&#32;Write&#32;BOM
+
+Writer&lt;OutputStream,&#32;UTF8&lt;&gt;,&#32;UTF32LE&lt;&gt;&gt;&#32;writer(eos);
+d.Accept(writer);&#32;&#32;&#32;//&#32;This&#32;generates&#32;UTF32-LE&#32;file&#32;from&#32;UTF-8&#32;in&#32;memory
+
+fclose(fp);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1AutoUTFInputStream">
+<title>AutoUTFInputStream</title>
+
+<para>Sometimes an application may want to handle all supported JSON encoding. <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> will detection encoding by BOM first. If BOM is unavailable, it will use characteristics of valid JSON to make detection. If neither method success, it falls back to the UTF type provided in constructor.</para>
+
+<para>Since the characters (code units) may be 8-bit, 16-bit or 32-bit. <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> requires a character type which can hold at least 32-bit. We may use <computeroutput>unsigned</computeroutput>, as in the template parameter:</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/filereadstream.h&quot;&#32;&#32;&#32;//&#32;FileReadStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;AutoUTFInputStream
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;any.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;non-Windows&#32;use&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+AutoUTFInputStream&lt;unsigned,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;wraps&#32;bis&#32;into&#32;eis
+
+Document&#32;d;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Document&#32;is&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+d.ParseStream&lt;0,&#32;AutoUTF&lt;unsigned&gt;&#32;&gt;(eis);&#32;//&#32;This&#32;parses&#32;any&#32;UTF&#32;file&#32;into&#32;UTF-8&#32;in&#32;memory
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>When specifying the encoding of stream, uses <computeroutput><link linkend="_struct_auto_u_t_f">AutoUTF</link>&lt;CharType&gt;</computeroutput> as in <computeroutput>ParseStream()</computeroutput> above.</para>
+
+<para>You can obtain the type of UTF via <computeroutput>UTFType GetType()</computeroutput>. And check whether a BOM is found by <computeroutput>HasBOM()</computeroutput></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1AutoUTFOutputStream">
+<title>AutoUTFOutputStream</title>
+
+<para>Similarly, to choose encoding for output during runtime, we can use <computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput>. This class is not automatic <emphasis>per se</emphasis>. You need to specify the UTF type and whether to write BOM in runtime.</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+void&#32;WriteJSONFile(FILE*&#32;fp,&#32;UTFType&#32;type,&#32;bool&#32;putBOM,&#32;const&#32;Document&amp;&#32;d)&#32;{
+&#32;&#32;&#32;&#32;char&#32;writeBuffer[256];
+&#32;&#32;&#32;&#32;FileWriteStream&#32;bos(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+&#32;&#32;&#32;&#32;typedef&#32;AutoUTFOutputStream&lt;unsigned,&#32;FileWriteStream&gt;&#32;OutputStream;
+&#32;&#32;&#32;&#32;OutputStream&#32;eos(bos,&#32;type,&#32;putBOM);
+&#32;&#32;&#32;&#32;
+&#32;&#32;&#32;&#32;Writer&lt;OutputStream,&#32;UTF8&lt;&gt;,&#32;AutoUTF&lt;&gt;&#32;&gt;&#32;writer;
+&#32;&#32;&#32;&#32;d.Accept(writer);
+}
+</computeroutput></literallayout></para>
+
+<para><computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> and <computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput> is more convenient than <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> and <computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput>. They just incur a little bit runtime overheads.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1CustomStream">
+<title>Custom Stream</title>
+
+<para>In addition to memory/file streams, user can create their own stream classes which fits RapidJSON&apos;s API. For example, you may create network stream, stream from compressed file, etc.</para>
+
+<para>RapidJSON combines different types using templates. A class containing all required interface can be a stream. The Stream interface is defined in comments of <computeroutput><link linkend="_rapidjson_8h">rapidjson/rapidjson.h</link></computeroutput>:</para>
+
+<para><literallayout><computeroutput>concept&#32;Stream&#32;{
+&#32;&#32;&#32;&#32;typename&#32;Ch;&#32;&#32;&#32;&#32;//!&lt;&#32;Character&#32;type&#32;of&#32;the&#32;stream.
+
+&#32;&#32;&#32;&#32;//!&#32;Read&#32;the&#32;current&#32;character&#32;from&#32;stream&#32;without&#32;moving&#32;the&#32;read&#32;cursor.
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const;
+
+&#32;&#32;&#32;&#32;//!&#32;Read&#32;the&#32;current&#32;character&#32;from&#32;stream&#32;and&#32;moving&#32;the&#32;read&#32;cursor&#32;to&#32;next&#32;character.
+&#32;&#32;&#32;&#32;Ch&#32;Take();
+
+&#32;&#32;&#32;&#32;//!&#32;Get&#32;the&#32;current&#32;read&#32;cursor.
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;Number&#32;of&#32;characters&#32;read&#32;from&#32;start.
+&#32;&#32;&#32;&#32;size_t&#32;Tell();
+
+&#32;&#32;&#32;&#32;//!&#32;Begin&#32;writing&#32;operation&#32;at&#32;the&#32;current&#32;read&#32;pointer.
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;The&#32;begin&#32;writer&#32;pointer.
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin();
+
+&#32;&#32;&#32;&#32;//!&#32;Write&#32;a&#32;character.
+&#32;&#32;&#32;&#32;void&#32;Put(Ch&#32;c);
+
+&#32;&#32;&#32;&#32;//!&#32;Flush&#32;the&#32;buffer.
+&#32;&#32;&#32;&#32;void&#32;Flush();
+
+&#32;&#32;&#32;&#32;//!&#32;End&#32;the&#32;writing&#32;operation.
+&#32;&#32;&#32;&#32;//!&#32;\param&#32;begin&#32;The&#32;begin&#32;write&#32;pointer&#32;returned&#32;by&#32;PutBegin().
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;Number&#32;of&#32;characters&#32;written.
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*&#32;begin);
+}
+</computeroutput></literallayout></para>
+
+<para>For input stream, they must implement <computeroutput>Peek()</computeroutput>, <computeroutput>Take()</computeroutput> and <computeroutput>Tell()</computeroutput>. For output stream, they must implement <computeroutput>Put()</computeroutput> and <computeroutput>Flush()</computeroutput>. There are two special interface, <computeroutput>PutBegin()</computeroutput> and <computeroutput>PutEnd()</computeroutput>, which are only for <emphasis>in situ</emphasis> parsing. Normal streams do not implement them. However, if the interface is not needed for a particular stream, it is still need to a dummy implementation, otherwise will generate compilation error.</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1ExampleIStreamWrapper">
+<title>Example: istream wrapper</title>
+
+<para>The following example is a simple wrapper of <computeroutput>std::istream</computeroutput>, which only implements 3 functions.</para>
+
+<para><literallayout><computeroutput>class&#32;MyIStreamWrapper&#32;{
+public:
+&#32;&#32;&#32;&#32;typedef&#32;char&#32;Ch;
+
+&#32;&#32;&#32;&#32;MyIStreamWrapper(std::istream&amp;&#32;is)&#32;:&#32;is_(is)&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const&#32;{&#32;//&#32;1
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;int&#32;c&#32;=&#32;is_.peek();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;c&#32;==&#32;std::char_traits&lt;char&gt;::eof()&#32;?&#32;&apos;\0&apos;&#32;:&#32;(Ch)c;
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Take()&#32;{&#32;//&#32;2
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;int&#32;c&#32;=&#32;is_.get();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;c&#32;==&#32;std::char_traits&lt;char&gt;::eof()&#32;?&#32;&apos;\0&apos;&#32;:&#32;(Ch)c;
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;size_t&#32;Tell()&#32;const&#32;{&#32;return&#32;(size_t)is_.tellg();&#32;}&#32;//&#32;3
+
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin()&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+&#32;&#32;&#32;&#32;void&#32;Put(Ch)&#32;{&#32;assert(false);&#32;}
+&#32;&#32;&#32;&#32;void&#32;Flush()&#32;{&#32;assert(false);&#32;}
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*)&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+
+private:
+&#32;&#32;&#32;&#32;MyIStreamWrapper(const&#32;MyIStreamWrapper&amp;);
+&#32;&#32;&#32;&#32;MyIStreamWrapper&amp;&#32;operator=(const&#32;MyIStreamWrapper&amp;);
+
+&#32;&#32;&#32;&#32;std::istream&amp;&#32;is_;
+};
+</computeroutput></literallayout></para>
+
+<para>User can use it to wrap instances of <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ifstream</computeroutput>.</para>
+
+<para><literallayout><computeroutput>const&#32;char*&#32;json&#32;=&#32;&quot;[1,2,3,4]&quot;;
+std::stringstream&#32;ss(json);
+MyIStreamWrapper&#32;is(ss);
+
+Document&#32;d;
+d.ParseStream(is);
+</computeroutput></literallayout></para>
+
+<para>Note that, this implementation may not be as efficient as RapidJSON&apos;s memory or file streams, due to internal overheads of the standard library.</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1ExampleOStreamWrapper">
+<title>Example: ostream wrapper</title>
+
+<para>The following example is a simple wrapper of <computeroutput>std::istream</computeroutput>, which only implements 2 functions.</para>
+
+<para><literallayout><computeroutput>class&#32;MyOStreamWrapper&#32;{
+public:
+&#32;&#32;&#32;&#32;typedef&#32;char&#32;Ch;
+
+&#32;&#32;&#32;&#32;MyOStreamWrapper(std::ostream&amp;&#32;os)&#32;:&#32;os_(os)&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const&#32;{&#32;assert(false);&#32;return&#32;&apos;\0&apos;;&#32;}
+&#32;&#32;&#32;&#32;Ch&#32;Take()&#32;{&#32;assert(false);&#32;return&#32;&apos;\0&apos;;&#32;}
+&#32;&#32;&#32;&#32;size_t&#32;Tell()&#32;const&#32;{&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin()&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+&#32;&#32;&#32;&#32;void&#32;Put(Ch&#32;c)&#32;{&#32;os_.put(c);&#32;}&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;1
+&#32;&#32;&#32;&#32;void&#32;Flush()&#32;{&#32;os_.flush();&#32;}&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;2
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*)&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+
+private:
+&#32;&#32;&#32;&#32;MyOStreamWrapper(const&#32;MyOStreamWrapper&amp;);
+&#32;&#32;&#32;&#32;MyOStreamWrapper&amp;&#32;operator=(const&#32;MyOStreamWrapper&amp;);
+
+&#32;&#32;&#32;&#32;std::ostream&amp;&#32;os_;
+};
+</computeroutput></literallayout></para>
+
+<para>User can use it to wrap instances of <computeroutput>std::stringstream</computeroutput>, <computeroutput>std::ofstream</computeroutput>.</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+//&#32;...
+
+std::stringstream&#32;ss;
+MyOStreamWrapper&#32;os(ss);
+
+Writer&lt;MyOStreamWrapper&gt;&#32;writer(os);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>Note that, this implementation may not be as efficient as RapidJSON&apos;s memory or file streams, due to internal overheads of the standard library.</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1Summary">
+<title>Summary</title>
+
+<para>This section describes stream classes available in RapidJSON. Memory streams are simple. File stream can reduce the memory required during JSON parsing and generation, if the JSON is stored in file system. Encoded streams converts between byte streams and character streams. Finally, user may create custom streams using a simple interface. </para>
+</section>
+</section>

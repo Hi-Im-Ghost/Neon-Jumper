@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="__tile_map_8h_source" xml:lang="en-US">
+<title>TileMap.h</title>
+<indexterm><primary>src/TileMap.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;PLATFORMER2D_TILEMAP_H</emphasis>
+2 <emphasis role="preprocessor">#define&#32;PLATFORMER2D_TILEMAP_H</emphasis>
+3 
+4 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics.hpp&gt;</emphasis>
+5 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="__tile_set_8h">TileSet.h</link>&quot;</emphasis>
+6 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="__layer_8h">Layer.h</link>&quot;</emphasis>
+7 <emphasis role="preprocessor">#include&#32;&lt;cmath&gt;</emphasis>
+8 
+9 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_tile_map">TileMap</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;sf::Drawable,&#32;<emphasis role="keyword">public</emphasis>&#32;sf::Transformable&#32;{
+10 <emphasis role="keyword">public</emphasis>:
+11 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_tile_map_1af4b93ab43aa7a1d6a707ddd7173b6c10">load</link>(<link linkend="_class_tile_set">TileSet</link>&#32;tileset,&#32;<link linkend="_class_layer">Layer</link>&#32;layer)&#32;{
+12 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tex.loadFromFile(tileset.<link linkend="_class_tile_set_1a54b601b224260a5f04c6915461c8f44c">getImage</link>());
+13 
+14 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;verts.setPrimitiveType(sf::Quads);
+15 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;verts.resize(layer.<link linkend="_class_layer_1a39e3b346235715e15d99a0a8ac95e0a7">getWidth</link>()&#32;*&#32;layer.<link linkend="_class_layer_1a974c0866509db4c131f8f38d281fbcd1">getHeight</link>()&#32;*&#32;4);
+16 
+17 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::vector&lt;int&gt;&#32;data&#32;=&#32;layer.<link linkend="_class_layer_1abd8ad603c5223d39187225e1fce2ac72">getData</link>();
+18 
+19 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;data.size();&#32;i++)&#32;{
+20 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(data[i]&#32;!=&#32;0)&#32;{
+21 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;columns&#32;=&#32;tileset.<link linkend="_class_tile_set_1a1abfb2a123c3cf7c3ee8ededeeeb7ad6">getColumns</link>();
+22 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;val&#32;=&#32;data[i]&#32;-&#32;tileset.<link linkend="_class_tile_set_1a2f62e9ee145a6d3056061cd67dca2406">getFirstGid</link>();
+23 
+24 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;y&#32;=&#32;floor(val&#32;/&#32;columns);
+25 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;x&#32;=&#32;val&#32;%&#32;columns;
+26 
+27 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;yPos&#32;=&#32;floor(i&#32;/&#32;layer.<link linkend="_class_layer_1a39e3b346235715e15d99a0a8ac95e0a7">getWidth</link>());
+28 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;xPos&#32;=&#32;i&#32;%&#32;layer.<link linkend="_class_layer_1a39e3b346235715e15d99a0a8ac95e0a7">getWidth</link>();
+29 
+30 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sf::Vertex*&#32;quad&#32;=&#32;&amp;verts[i*4];
+31 
+32 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;xPos1&#32;=&#32;xPos&#32;*&#32;tileset.<link linkend="_class_tile_set_1a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</link>();
+33 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;xPos2&#32;=&#32;(xPos&#32;+&#32;1)&#32;*&#32;tileset.<link linkend="_class_tile_set_1a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</link>();
+34 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;yPos1&#32;=&#32;yPos&#32;*&#32;tileset.<link linkend="_class_tile_set_1aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</link>();
+35 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;yPos2&#32;=&#32;(yPos&#32;+&#32;1)&#32;*&#32;tileset.<link linkend="_class_tile_set_1aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</link>();
+36 
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;x1&#32;=&#32;x&#32;*&#32;tileset.<link linkend="_class_tile_set_1a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</link>();
+38 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;x2&#32;=&#32;(x&#32;+&#32;1)&#32;*&#32;tileset.<link linkend="_class_tile_set_1a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</link>();
+39 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;y1&#32;=&#32;y&#32;*&#32;tileset.<link linkend="_class_tile_set_1aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</link>();
+40 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;y2&#32;=&#32;(y&#32;+&#32;1)&#32;*&#32;tileset.<link linkend="_class_tile_set_1aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</link>();
+41 
+42 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[0].position&#32;=&#32;sf::Vector2f(xPos1,&#32;yPos1);
+43 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[1].position&#32;=&#32;sf::Vector2f(xPos2,&#32;yPos1);
+44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[2].position&#32;=&#32;sf::Vector2f(xPos2,&#32;yPos2);
+45 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[3].position&#32;=&#32;sf::Vector2f(xPos1,&#32;yPos2);
+46 
+47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[0].texCoords&#32;=&#32;sf::Vector2f(x1,&#32;y1);
+48 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[1].texCoords&#32;=&#32;sf::Vector2f(x2,&#32;y1);
+49 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[2].texCoords&#32;=&#32;sf::Vector2f(x2,&#32;y2);
+50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;quad[3].texCoords&#32;=&#32;sf::Vector2f(x1,&#32;y2);
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+54 &#32;&#32;&#32;&#32;}
+55 <emphasis role="keyword">private</emphasis>:
+56 &#32;&#32;&#32;&#32;<emphasis role="keyword">virtual</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;draw(sf::RenderTarget&amp;&#32;target,&#32;sf::RenderStates&#32;states)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;states.transform&#32;*=&#32;getTransform();
+58 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;states.texture&#32;=&#32;&amp;tex;
+59 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;target.draw(verts,&#32;states);
+60 &#32;&#32;&#32;&#32;}
+61 
+62 &#32;&#32;&#32;&#32;sf::VertexArray&#32;verts;
+63 &#32;&#32;&#32;&#32;sf::Texture&#32;tex;
+64 };
+65 
+66 
+67 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//PLATFORMER2D_TILEMAP_H</emphasis>
+</programlisting></section>

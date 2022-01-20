@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_stream_zh_cn" xml:lang="en-US">
+
+<para>在 RapidJSON 中，<computeroutput><link linkend="_classrapidjson_1_1_stream">rapidjson::Stream</link></computeroutput> 是用於读写 JSON 的概念（概念是指 C++ 的 concept）。在这里我们先介绍如何使用 RapidJSON 提供的各种流。然后再看看如何自行定义流。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1MemoryStreams">
+<title>Memory Streams</title>
+
+<para>内存流把 JSON 存储在内存之中。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1StringStream">
+<title>StringStream (Input)</title>
+
+<para><computeroutput>StringStream</computeroutput> 是最基本的输入流，它表示一个完整的、只读的、存储于内存的 JSON。它在 <computeroutput><link linkend="_rapidjson_8h">rapidjson/rapidjson.h</link></computeroutput> 中定义。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;&#32;//&#32;会包含&#32;&quot;rapidjson/rapidjson.h&quot;
+
+using&#32;namespace&#32;rapidjson;
+
+//&#32;...
+const&#32;char&#32;json[]&#32;=&#32;&quot;[1,&#32;2,&#32;3,&#32;4]&quot;;
+StringStream&#32;s(json);
+
+Document&#32;d;
+d.ParseStream(s);
+</computeroutput></literallayout></para>
+
+<para>由于这是非常常用的用法，RapidJSON 提供 <computeroutput>Document::Parse(const char*)</computeroutput> 去做完全相同的事情：</para>
+
+<para><literallayout><computeroutput>//&#32;...
+const&#32;char&#32;json[]&#32;=&#32;&quot;[1,&#32;2,&#32;3,&#32;4]&quot;;
+Document&#32;d;
+d.Parse(json);
+</computeroutput></literallayout></para>
+
+<para>需要注意，<computeroutput>StringStream</computeroutput> 是 <computeroutput><link linkend="_struct_generic_string_stream">GenericStringStream</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt;</computeroutput> 的 typedef，使用者可用其他编码类去代表流所使用的字符集。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1StringBuffer">
+<title>StringBuffer (Output)</title>
+
+<para><computeroutput>StringBuffer</computeroutput> 是一个简单的输出流。它分配一个内存缓冲区，供写入整个 JSON。可使用 <computeroutput>GetString()</computeroutput> 来获取该缓冲区。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/stringbuffer.h&quot;
+#include&#32;&lt;rapidjson/writer.h&gt;
+
+StringBuffer&#32;buffer;
+Writer&lt;StringBuffer&gt;&#32;writer(buffer);
+d.Accept(writer);
+
+const&#32;char*&#32;output&#32;=&#32;buffer.GetString();
+</computeroutput></literallayout></para>
+
+<para>当缓冲区满溢，它将自动增加容量。缺省容量是 256 个字符（UTF8 是 256 字节，UTF16 是 512 字节等）。使用者能自行提供分配器及初始容量。</para>
+
+<para><literallayout><computeroutput>StringBuffer&#32;buffer1(0,&#32;1024);&#32;//&#32;使用它的分配器，初始大小&#32;=&#32;1024
+StringBuffer&#32;buffer2(allocator,&#32;1024);
+</computeroutput></literallayout></para>
+
+<para>如无设置分配器，<computeroutput>StringBuffer</computeroutput> 会自行实例化一个内部分配器。</para>
+
+<para>相似地，<computeroutput>StringBuffer</computeroutput> 是 <computeroutput><link linkend="_class_generic_string_buffer">GenericStringBuffer</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt; &gt;</computeroutput> 的 typedef。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileStreams">
+<title>File Streams</title>
+
+<para>当要从文件解析一个 JSON，你可以把整个 JSON 读入内存并使用上述的 <computeroutput>StringStream</computeroutput>。</para>
+
+<para>然而，若 JSON 很大，或是内存有限，你可以改用 <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput>。它只会从文件读取一部分至缓冲区，然后让那部分被解析。若缓冲区的字符都被读完，它会再从文件读取下一部分。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileReadStream">
+<title>FileReadStream (Input)</title>
+
+<para><computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 通过 <computeroutput>FILE</computeroutput> 指针读取文件。使用者需要提供一个缓冲区。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filereadstream.h&quot;
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;big.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;r&quot;
+
+char&#32;readBuffer[65536];
+FileReadStream&#32;is(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+Document&#32;d;
+d.ParseStream(is);
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>与 <computeroutput>StringStreams</computeroutput> 不一样，<computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 是一个字节流。它不处理编码。若文件并非 UTF-8 编码，可以把字节流用 <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> 包装。我们很快会讨论这个问题。</para>
+
+<para>除了读取文件，使用者也可以使用 <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 来读取 <computeroutput>stdin</computeroutput>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1FileWriteStream">
+<title>FileWriteStream (Output)</title>
+
+<para><computeroutput><link linkend="_class_file_write_stream">FileWriteStream</link></computeroutput> 是一个含缓冲功能的输出流。它的用法与 <computeroutput><link linkend="_class_file_read_stream">FileReadStream</link></computeroutput> 非常相似。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filewritestream.h&quot;
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+Document&#32;d;
+d.Parse(json);
+//&#32;...
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;output.json&quot;,&#32;&quot;wb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;w&quot;
+
+char&#32;writeBuffer[65536];
+FileWriteStream&#32;os(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+Writer&lt;FileWriteStream&gt;&#32;writer(os);
+d.Accept(writer);
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>它也可以把输出导向 <computeroutput>stdout</computeroutput>。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1iostreamWrapper">
+<title>iostream Wrapper</title>
+
+<para>基于用户的要求，RapidJSON 提供了正式的 <computeroutput>std::basic_istream</computeroutput> 和 <computeroutput>std::basic_ostream</computeroutput> 包装类。然而，请注意其性能会大大低于以上的其他流。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1IStreamWrapper">
+<title>IStreamWrapper</title>
+
+<para><computeroutput><link linkend="_class_i_stream_wrapper">IStreamWrapper</link></computeroutput> 把任何继承自 <computeroutput>std::istream</computeroutput> 的类（如 <computeroutput>std::istringstream</computeroutput>、<computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ifstream</computeroutput>、<computeroutput>std::fstream</computeroutput>）包装成 RapidJSON 的输入流。</para>
+
+<para><literallayout><computeroutput>#include&#32;&lt;rapidjson/document.h&gt;
+#include&#32;&lt;rapidjson/istreamwrapper.h&gt;
+#include&#32;&lt;fstream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+ifstream&#32;ifs(&quot;test.json&quot;);
+IStreamWrapper&#32;isw(ifs);
+
+Document&#32;d;
+d.ParseStream(isw);
+</computeroutput></literallayout></para>
+
+<para>对于继承自 <computeroutput>std::wistream</computeroutput> 的类，则使用 <computeroutput><link linkend="_class_w_i_stream_wrapper">WIStreamWrapper</link></computeroutput>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1OStreamWrapper">
+<title>OStreamWrapper</title>
+
+<para>相似地，<computeroutput><link linkend="_class_o_stream_wrapper">OStreamWrapper</link></computeroutput> 把任何继承自 <computeroutput>std::ostream</computeroutput> 的类（如 <computeroutput>std::ostringstream</computeroutput>、<computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ofstream</computeroutput>、<computeroutput>std::fstream</computeroutput>）包装成 RapidJSON 的输出流。</para>
+
+<para><literallayout><computeroutput>#include&#32;&lt;rapidjson/document.h&gt;
+#include&#32;&lt;rapidjson/ostreamwrapper.h&gt;
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;fstream&gt;
+
+using&#32;namespace&#32;rapidjson;
+using&#32;namespace&#32;std;
+
+Document&#32;d;
+d.Parse(json);
+
+//&#32;...
+
+ofstream&#32;ofs(&quot;output.json&quot;);
+OStreamWrapper&#32;osw(ofs);
+
+Writer&lt;OStreamWrapper&gt;&#32;writer(osw);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>对于继承自 <computeroutput>std::wistream</computeroutput> 的类，则使用 <computeroutput><link linkend="_class_w_i_stream_wrapper">WIStreamWrapper</link></computeroutput>。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedStreams">
+<title>Encoded Streams</title>
+
+<para>编码流（encoded streams）本身不存储 JSON，它们是通过包装字节流来提供基本的编码／解码功能。</para>
+
+<para>如上所述，我们可以直接读入 UTF-8 字节流。然而，UTF-16 及 UTF-32 有字节序（endian）问题。要正确地处理字节序，需要在读取时把字节转换成字符（如对 UTF-16 使用 <computeroutput>wchar_t</computeroutput>），以及在写入时把字符转换为字节。</para>
+
+<para>除此以外，我们也需要处理 <link xlink:href="http://en.wikipedia.org/wiki/Byte_order_mark">字节顺序标记（byte order mark, BOM）</link>。当从一个字节流读取时，需要检测 BOM，或者仅仅是把存在的 BOM 消去。当把 JSON 写入字节流时，也可选择写入 BOM。</para>
+
+<para>若一个流的编码在编译期已知，你可使用 <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> 及 <computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput>。若一个流可能存储 UTF-8、UTF-16LE、UTF-16BE、UTF-32LE、UTF-32BE 的 JSON，并且编码只能在运行时得知，你便可以使用 <computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> 及 <computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput>。这些流定义在 <computeroutput><link linkend="_encodedstream_8h">rapidjson/encodedstream.h</link></computeroutput>。</para>
+
+<para>注意到，这些编码流可以施于文件以外的流。例如，你可以用编码流包装内存中的文件或自定义的字节流。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedInputStream">
+<title>EncodedInputStream</title>
+
+<para><computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput> 含两个模板参数。第一个是 <computeroutput>Encoding</computeroutput> 类型，例如定义于 <computeroutput><link linkend="_encodings_8h">rapidjson/encodings.h</link></computeroutput> 的 <computeroutput><link linkend="_struct_u_t_f8">UTF8</link></computeroutput>、<computeroutput><link linkend="_struct_u_t_f16_l_e">UTF16LE</link></computeroutput>。第二个参数是被包装的流的类型。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/filereadstream.h&quot;&#32;&#32;&#32;//&#32;FileReadStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;EncodedInputStream
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;utf16le.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+EncodedInputStream&lt;UTF16LE&lt;&gt;,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;用&#32;eis&#32;包装&#32;bis
+
+Document&#32;d;&#32;//&#32;Document&#32;为&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+d.ParseStream&lt;0,&#32;UTF16LE&lt;&gt;&#32;&gt;(eis);&#32;&#32;//&#32;把&#32;UTF-16LE&#32;文件解析至内存中的&#32;UTF-8
+
+fclose(fp);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1EncodedOutputStream">
+<title>EncodedOutputStream</title>
+
+<para><computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput> 也是相似的，但它的构造函数有一个 <computeroutput>bool putBOM</computeroutput> 参数，用于控制是否在输出字节流写入 BOM。</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/filewritestream.h&quot;&#32;&#32;//&#32;FileWriteStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;EncodedOutputStream
+#include&#32;&lt;rapidjson/writer.h&gt;
+#include&#32;&lt;cstdio&gt;
+
+Document&#32;d;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Document&#32;为&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+//&#32;...
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;output_utf32le.json&quot;,&#32;&quot;wb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;w&quot;
+
+char&#32;writeBuffer[256];
+FileWriteStream&#32;bos(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+typedef&#32;EncodedOutputStream&lt;UTF32LE&lt;&gt;,&#32;FileWriteStream&gt;&#32;OutputStream;
+OutputStream&#32;eos(bos,&#32;true);&#32;&#32;&#32;//&#32;写入&#32;BOM
+
+Writer&lt;OutputStream,&#32;UTF8&lt;&gt;,&#32;UTF32LE&lt;&gt;&gt;&#32;writer(eos);
+d.Accept(writer);&#32;&#32;&#32;//&#32;这里从内存的&#32;UTF-8&#32;生成&#32;UTF32-LE&#32;文件
+
+fclose(fp);
+</computeroutput></literallayout></para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1AutoUTFInputStream">
+<title>AutoUTFInputStream</title>
+
+<para>有时候，应用软件可能需要㲃理所有可支持的 JSON 编码。<computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> 会先使用 BOM 来检测编码。若 BOM 不存在，它便会使用合法 JSON 的特性来检测。若两种方法都失败，它就会倒退至构造函数提供的 UTF 类型。</para>
+
+<para>由于字符（编码单元／code unit）可能是 8 位、16 位或 32 位，<computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput> 需要一个能至少储存 32 位的字符类型。我们可以使用 <computeroutput>unsigned</computeroutput> 作为模板参数：</para>
+
+<para><literallayout><computeroutput>#include&#32;&quot;rapidjson/document.h&quot;
+#include&#32;&quot;rapidjson/filereadstream.h&quot;&#32;&#32;&#32;//&#32;FileReadStream
+#include&#32;&quot;rapidjson/encodedstream.h&quot;&#32;&#32;&#32;&#32;//&#32;AutoUTFInputStream
+#include&#32;&lt;cstdio&gt;
+
+using&#32;namespace&#32;rapidjson;
+
+FILE*&#32;fp&#32;=&#32;fopen(&quot;any.json&quot;,&#32;&quot;rb&quot;);&#32;//&#32;非&#32;Windows&#32;平台使用&#32;&quot;r&quot;
+
+char&#32;readBuffer[256];
+FileReadStream&#32;bis(fp,&#32;readBuffer,&#32;sizeof(readBuffer));
+
+AutoUTFInputStream&lt;unsigned,&#32;FileReadStream&gt;&#32;eis(bis);&#32;&#32;//&#32;用&#32;eis&#32;包装&#32;bis
+
+Document&#32;d;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;Document&#32;为&#32;GenericDocument&lt;UTF8&lt;&gt;&#32;&gt;&#32;
+d.ParseStream&lt;0,&#32;AutoUTF&lt;unsigned&gt;&#32;&gt;(eis);&#32;//&#32;把任何&#32;UTF&#32;编码的文件解析至内存中的&#32;UTF-8
+
+fclose(fp);
+</computeroutput></literallayout></para>
+
+<para>当要指定流的编码，可使用上面例子中 <computeroutput>ParseStream()</computeroutput> 的参数 <computeroutput><link linkend="_struct_auto_u_t_f">AutoUTF</link>&lt;CharType&gt;</computeroutput>。</para>
+
+<para>你可以使用 <computeroutput>UTFType GetType()</computeroutput> 去获取 UTF 类型，并且用 <computeroutput>HasBOM()</computeroutput> 检测输入流是否含有 BOM。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1AutoUTFOutputStream">
+<title>AutoUTFOutputStream</title>
+
+<para>相似地，要在运行时选择输出的编码，我们可使用 <computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput>。这个类本身并非「自动」。你需要在运行时指定 UTF 类型，以及是否写入 BOM。</para>
+
+<para><literallayout><computeroutput>using&#32;namespace&#32;rapidjson;
+
+void&#32;WriteJSONFile(FILE*&#32;fp,&#32;UTFType&#32;type,&#32;bool&#32;putBOM,&#32;const&#32;Document&amp;&#32;d)&#32;{
+&#32;&#32;&#32;&#32;char&#32;writeBuffer[256];
+&#32;&#32;&#32;&#32;FileWriteStream&#32;bos(fp,&#32;writeBuffer,&#32;sizeof(writeBuffer));
+
+&#32;&#32;&#32;&#32;typedef&#32;AutoUTFOutputStream&lt;unsigned,&#32;FileWriteStream&gt;&#32;OutputStream;
+&#32;&#32;&#32;&#32;OutputStream&#32;eos(bos,&#32;type,&#32;putBOM);
+&#32;&#32;&#32;&#32;
+&#32;&#32;&#32;&#32;Writer&lt;OutputStream,&#32;UTF8&lt;&gt;,&#32;AutoUTF&lt;&gt;&#32;&gt;&#32;writer;
+&#32;&#32;&#32;&#32;d.Accept(writer);
+}
+</computeroutput></literallayout></para>
+
+<para><computeroutput><link linkend="_class_auto_u_t_f_input_stream">AutoUTFInputStream</link></computeroutput>／<computeroutput><link linkend="_class_auto_u_t_f_output_stream">AutoUTFOutputStream</link></computeroutput> 是比 <computeroutput><link linkend="_class_encoded_input_stream">EncodedInputStream</link></computeroutput>／<computeroutput><link linkend="_class_encoded_output_stream">EncodedOutputStream</link></computeroutput> 方便。但前者会产生一点运行期额外开销。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1CustomStream">
+<title>Custom Stream</title>
+
+<para>除了内存／文件流，使用者可创建自行定义适配 RapidJSON API 的流类。例如，你可以创建网络流、从压缩文件读取的流等等。</para>
+
+<para>RapidJSON 利用模板结合不同的类型。只要一个类包含所有所需的接口，就可以作为一个流。流的接合定义在 <computeroutput><link linkend="_rapidjson_8h">rapidjson/rapidjson.h</link></computeroutput> 的注释里：</para>
+
+<para><literallayout><computeroutput>concept&#32;Stream&#32;{
+&#32;&#32;&#32;&#32;typename&#32;Ch;&#32;&#32;&#32;&#32;//!&lt;&#32;流的字符类型
+
+&#32;&#32;&#32;&#32;//!&#32;从流读取当前字符，不移动读取指针（read&#32;cursor）
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const;
+
+&#32;&#32;&#32;&#32;//!&#32;从流读取当前字符，移动读取指针至下一字符。
+&#32;&#32;&#32;&#32;Ch&#32;Take();
+
+&#32;&#32;&#32;&#32;//!&#32;获取读取指针。
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;从开始以来所读过的字符数量。
+&#32;&#32;&#32;&#32;size_t&#32;Tell();
+
+&#32;&#32;&#32;&#32;//!&#32;从当前读取指针开始写入操作。
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;返回开始写入的指针。
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin();
+
+&#32;&#32;&#32;&#32;//!&#32;写入一个字符。
+&#32;&#32;&#32;&#32;void&#32;Put(Ch&#32;c);
+
+&#32;&#32;&#32;&#32;//!&#32;清空缓冲区。
+&#32;&#32;&#32;&#32;void&#32;Flush();
+
+&#32;&#32;&#32;&#32;//!&#32;完成写作操作。
+&#32;&#32;&#32;&#32;//!&#32;\param&#32;begin&#32;PutBegin()&#32;返回的开始写入指针。
+&#32;&#32;&#32;&#32;//!&#32;\return&#32;已写入的字符数量。
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*&#32;begin);
+}
+</computeroutput></literallayout></para>
+
+<para>输入流必须实现 <computeroutput>Peek()</computeroutput>、<computeroutput>Take()</computeroutput> 及 <computeroutput>Tell()</computeroutput>。 输出流必须实现 <computeroutput>Put()</computeroutput> 及 <computeroutput>Flush()</computeroutput>。 <computeroutput>PutBegin()</computeroutput> 及 <computeroutput>PutEnd()</computeroutput> 是特殊的接口，仅用于原位（*in situ*）解析。一般的流不需实现它们。然而，即使接口不需用于某些流，仍然需要提供空实现，否则会产生编译错误。</para>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1ExampleIStreamWrapper">
+<title>Example: istream wrapper</title>
+
+<para>以下的简单例子是 <computeroutput>std::istream</computeroutput> 的包装类，它只需现 3 个函数。</para>
+
+<para><literallayout><computeroutput>class&#32;MyIStreamWrapper&#32;{
+public:
+&#32;&#32;&#32;&#32;typedef&#32;char&#32;Ch;
+
+&#32;&#32;&#32;&#32;MyIStreamWrapper(std::istream&amp;&#32;is)&#32;:&#32;is_(is)&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const&#32;{&#32;//&#32;1
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;int&#32;c&#32;=&#32;is_.peek();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;c&#32;==&#32;std::char_traits&lt;char&gt;::eof()&#32;?&#32;&apos;\0&apos;&#32;:&#32;(Ch)c;
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Take()&#32;{&#32;//&#32;2
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;int&#32;c&#32;=&#32;is_.get();
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;return&#32;c&#32;==&#32;std::char_traits&lt;char&gt;::eof()&#32;?&#32;&apos;\0&apos;&#32;:&#32;(Ch)c;
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;size_t&#32;Tell()&#32;const&#32;{&#32;return&#32;(size_t)is_.tellg();&#32;}&#32;//&#32;3
+
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin()&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+&#32;&#32;&#32;&#32;void&#32;Put(Ch)&#32;{&#32;assert(false);&#32;}
+&#32;&#32;&#32;&#32;void&#32;Flush()&#32;{&#32;assert(false);&#32;}
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*)&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+
+private:
+&#32;&#32;&#32;&#32;MyIStreamWrapper(const&#32;MyIStreamWrapper&amp;);
+&#32;&#32;&#32;&#32;MyIStreamWrapper&amp;&#32;operator=(const&#32;MyIStreamWrapper&amp;);
+
+&#32;&#32;&#32;&#32;std::istream&amp;&#32;is_;
+};
+</computeroutput></literallayout></para>
+
+<para>使用者能用它来包装 <computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ifstream</computeroutput> 的实例。</para>
+
+<para><literallayout><computeroutput>const&#32;char*&#32;json&#32;=&#32;&quot;[1,2,3,4]&quot;;
+std::stringstream&#32;ss(json);
+MyIStreamWrapper&#32;is(ss);
+
+Document&#32;d;
+d.ParseStream(is);
+</computeroutput></literallayout></para>
+
+<para>但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1ExampleOStreamWrapper">
+<title>Example: ostream wrapper</title>
+
+<para>以下的例子是 <computeroutput>std::istream</computeroutput> 的包装类，它只需实现 2 个函数。</para>
+
+<para><literallayout><computeroutput>class&#32;MyOStreamWrapper&#32;{
+public:
+&#32;&#32;&#32;&#32;typedef&#32;char&#32;Ch;
+
+&#32;&#32;&#32;&#32;OStreamWrapper(std::ostream&amp;&#32;os)&#32;:&#32;os_(os)&#32;{
+&#32;&#32;&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch&#32;Peek()&#32;const&#32;{&#32;assert(false);&#32;return&#32;&apos;\0&apos;;&#32;}
+&#32;&#32;&#32;&#32;Ch&#32;Take()&#32;{&#32;assert(false);&#32;return&#32;&apos;\0&apos;;&#32;}
+&#32;&#32;&#32;&#32;size_t&#32;Tell()&#32;const&#32;{&#32;&#32;}
+
+&#32;&#32;&#32;&#32;Ch*&#32;PutBegin()&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+&#32;&#32;&#32;&#32;void&#32;Put(Ch&#32;c)&#32;{&#32;os_.put(c);&#32;}&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;1
+&#32;&#32;&#32;&#32;void&#32;Flush()&#32;{&#32;os_.flush();&#32;}&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;//&#32;2
+&#32;&#32;&#32;&#32;size_t&#32;PutEnd(Ch*)&#32;{&#32;assert(false);&#32;return&#32;0;&#32;}
+
+private:
+&#32;&#32;&#32;&#32;MyOStreamWrapper(const&#32;MyOStreamWrapper&amp;);
+&#32;&#32;&#32;&#32;MyOStreamWrapper&amp;&#32;operator=(const&#32;MyOStreamWrapper&amp;);
+
+&#32;&#32;&#32;&#32;std::ostream&amp;&#32;os_;
+};
+</computeroutput></literallayout></para>
+
+<para>使用者能用它来包装 <computeroutput>std::stringstream</computeroutput>、<computeroutput>std::ofstream</computeroutput> 的实例。</para>
+
+<para><literallayout><computeroutput>Document&#32;d;
+//&#32;...
+
+std::stringstream&#32;ss;
+MyOStreamWrapper&#32;os(ss);
+
+Writer&lt;MyOStreamWrapper&gt;&#32;writer(os);
+d.Accept(writer);
+</computeroutput></literallayout></para>
+
+<para>但要注意，由于标准库的内部开销问，此实现的性能可能不如 RapidJSON 的内存／文件流。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_stream_zh_cn_1Summary">
+<title>Summary</title>
+
+<para>本节描述了 RapidJSON 提供的各种流的类。内存流很简单。若 JSON 存储在文件中，文件流可减少 JSON 解析及生成所需的内存量。编码流在字节流和字符流之间作转换。最后，使用者可使用一个简单接口创建自定义的流。 </para>
+</section>
+</section>

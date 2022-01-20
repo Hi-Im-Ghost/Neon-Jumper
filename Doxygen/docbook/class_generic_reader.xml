@@ -1,0 +1,433 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_generic_reader" xml:lang="en-US">
+<title>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt; Class Template Reference</title>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary></indexterm>
+<para>
+
+<para>SAX-style JSON parser. Use <link linkend="_md_src_rapidjson_doc_sax_zh_cn_1Reader">Reader</link> for <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;reader.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Types    </title>
+        <itemizedlist>
+            <listitem><para>typedef SourceEncoding::Ch <link linkend="_class_generic_reader_1ab39a92bb26d50aee6469df604622218a">Ch</link></para>
+
+<para>SourceEncoding character type. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_generic_reader_1aab875a34b3092df9fb4e2b8eac6dbb96">GenericReader</link> (StackAllocator *stackAllocator=0, size_t stackCapacity=kDefaultStackCapacity)</para>
+
+<para>Constructor. </para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099">Parse</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+
+<para>Parse JSON text. </para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader_1a76d91e5fd8dfe48aea7dd6d8a51dd6dc">Parse</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+
+<para>Parse JSON text (with <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9104b0946d648e9467cb7a967401ec80">kParseDefaultFlags</link>) </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_reader_1a7de472eda2ad9de13cfd8c1de74f1754">IterativeParseInit</link> ()</para>
+
+<para>Initialize JSON text token-by-token parsing. </para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>bool <link linkend="_class_generic_reader_1a257891331e0c259903e7066fb4cebf92">IterativeParseNext</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+
+<para>Parse one token from JSON text. </para>
+</listitem>
+            <listitem><para>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader_1aa1e9e1eef614fde971550ed2f955151d">IterativeParseComplete</link> () const</para>
+
+<para>Check if token-by-token parsing JSON text is complete. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_generic_reader_1ac417441794477ea747b63adb6d3653a9">HasParseError</link> () const</para>
+
+<para>Whether a parse error has occurred in the last parsing. </para>
+</listitem>
+            <listitem><para><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> <link linkend="_class_generic_reader_1a937bf90919f50e1c370b312cee5833e8">GetParseErrorCode</link> () const</para>
+
+<para>Get the <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> of last parsing. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_generic_reader_1ae9008523ccd06d839a57335835cb4091">GetErrorOffset</link> () const</para>
+
+<para>Get the position of last parsing error in input, 0 otherwise. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Protected Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>void <link linkend="_class_generic_reader_1ae50079444295bf109730c3b708a818a6">SetParseError</link> (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> code, size_t offset)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename SourceEncoding, typename TargetEncoding, typename StackAllocator = CrtAllocator&gt;
+class GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</title></simplesect>
+
+<para>SAX-style JSON parser. Use <link linkend="_md_src_rapidjson_doc_sax_zh_cn_1Reader">Reader</link> for <link linkend="_struct_u_t_f8">UTF8</link> encoding and default allocator. </para>
+
+
+
+<para><link linkend="_class_generic_reader">GenericReader</link> parses JSON text from a stream, and send events synchronously to an object implementing Handler concept.</para>
+
+<para>It needs to allocate a stack for storing a single decoded string during non-destructive parsing.</para>
+
+<para>For in-situ parsing, the decoded string is directly written to the source text string, no temporary buffer is required.</para>
+
+<para>A <link linkend="_class_generic_reader">GenericReader</link> object can be reused for parsing multiple JSON text.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>SourceEncoding</entry><entry>
+<para>Encoding of the input stream. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>TargetEncoding</entry><entry>
+<para>Encoding of the parse output. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>StackAllocator</entry><entry>
+<para>Allocator type for stack. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<section>
+<title>Member Typedef Documentation</title>
+<anchor xml:id="_class_generic_reader_1ab39a92bb26d50aee6469df604622218a"/><section>
+    <title>Ch</title>
+<indexterm><primary>Ch</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Ch</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef SourceEncoding::Ch <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Ch</computeroutput></para><para>
+
+<para>SourceEncoding character type. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_generic_reader_1aab875a34b3092df9fb4e2b8eac6dbb96"/><section>
+    <title>GenericReader()</title>
+<indexterm><primary>GenericReader</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>GenericReader</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;<link linkend="_class_generic_reader">::GenericReader</link> (StackAllocator * stackAllocator = <computeroutput>0</computeroutput>
+, size_t stackCapacity = <computeroutput>kDefaultStackCapacity</computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Constructor. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>stackAllocator</entry><entry>
+<para>Optional allocator for allocating stack memory. (Only use for non-destructive parsing) </para>
+</entry>
+                            </row>
+                            <row>
+<entry>stackCapacity</entry><entry>
+<para>stack capacity in bytes for storing a single decoded string. (Only use for non-destructive parsing) </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_generic_reader_1ae9008523ccd06d839a57335835cb4091"/><section>
+    <title>GetErrorOffset()</title>
+<indexterm><primary>GetErrorOffset</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>GetErrorOffset</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::GetErrorOffset ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Get the position of last parsing error in input, 0 otherwise. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a937bf90919f50e1c370b312cee5833e8"/><section>
+    <title>GetParseErrorCode()</title>
+<indexterm><primary>GetParseErrorCode</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>GetParseErrorCode</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::GetParseErrorCode ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Get the <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> of last parsing. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1ac417441794477ea747b63adb6d3653a9"/><section>
+    <title>HasParseError()</title>
+<indexterm><primary>HasParseError</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>HasParseError</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::HasParseError ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Whether a parse error has occurred in the last parsing. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1aa1e9e1eef614fde971550ed2f955151d"/><section>
+    <title>IterativeParseComplete()</title>
+<indexterm><primary>IterativeParseComplete</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParseComplete</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IterativeParseComplete ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Check if token-by-token parsing JSON text is complete. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>Whether the JSON has been fully decoded. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a7de472eda2ad9de13cfd8c1de74f1754"/><section>
+    <title>IterativeParseInit()</title>
+<indexterm><primary>IterativeParseInit</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParseInit</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IterativeParseInit ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Initialize JSON text token-by-token parsing. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a257891331e0c259903e7066fb4cebf92"/><section>
+    <title>IterativeParseNext()</title>
+<indexterm><primary>IterativeParseNext</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParseNext</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IterativeParseNext (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Parse one token from JSON text. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>InputStream</entry><entry>
+<para>Type of input stream, implementing Stream concept </para>
+</entry>
+                            </row>
+                            <row>
+<entry>Handler</entry><entry>
+<para>Type of handler, implementing Handler concept. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>is</entry><entry>
+<para>Input stream to be parsed. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>handler</entry><entry>
+<para>The handler to receive events. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>Whether the parsing is successful. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099"/><section>
+    <title>Parse()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>Parse</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Parse</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Parse (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Parse JSON text. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>parseFlags</entry><entry>
+<para>Combination of <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450">ParseFlag</link>. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>InputStream</entry><entry>
+<para>Type of input stream, implementing Stream concept. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>Handler</entry><entry>
+<para>Type of handler, implementing Handler concept. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>is</entry><entry>
+<para>Input stream to be parsed. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>handler</entry><entry>
+<para>The handler to receive events. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>Whether the parsing is successful. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a76d91e5fd8dfe48aea7dd6d8a51dd6dc"/><section>
+    <title>Parse()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>Parse</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Parse</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Parse (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Parse JSON text (with <link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9104b0946d648e9467cb7a967401ec80">kParseDefaultFlags</link>) </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>InputStream</entry><entry>
+<para>Type of input stream, implementing Stream concept </para>
+</entry>
+                            </row>
+                            <row>
+<entry>Handler</entry><entry>
+<para>Type of handler, implementing Handler concept. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>is</entry><entry>
+<para>Input stream to be parsed. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>handler</entry><entry>
+<para>The handler to receive events. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>Whether the parsing is successful. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1ae50079444295bf109730c3b708a818a6"/><section>
+    <title>SetParseError()</title>
+<indexterm><primary>SetParseError</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>SetParseError</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::SetParseError (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> code, size_t offset)<computeroutput>[inline]</computeroutput>, <computeroutput>[protected]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/rapidjson/include/rapidjson/<link linkend="_fwd_8h">fwd.h</link>src/rapidjson/include/rapidjson/<link linkend="_reader_8h">reader.h</link></section>
+</section>

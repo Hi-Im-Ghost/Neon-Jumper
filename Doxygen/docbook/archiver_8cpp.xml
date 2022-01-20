@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_archiver_8cpp" xml:lang="en-US">
+<title>src/rapidjson/example/archiver/archiver.cpp File Reference</title>
+<indexterm><primary>src/rapidjson/example/archiver/archiver.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;archiver.h&quot;
+#include &lt;cassert&gt;
+#include &lt;stack&gt;
+#include &quot;rapidjson/document.h&quot;
+#include &quot;rapidjson/prettywriter.h&quot;
+#include &quot;rapidjson/stringbuffer.h&quot;
+</programlisting><simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_json_reader_stack_item">JsonReaderStackItem</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1a149b55eb821bfd8722c37788381acd09">DOCUMENT</link>   reinterpret_cast&lt;<link linkend="_document_8h_1ac6ea5b168e3fe8c7fa532450fc9391f7">Document</link>*&gt;(mDocument)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1a2cc8f2d83039de1aef6590f9782921ee">STACK</link>   (reinterpret_cast&lt;<link linkend="_archiver_8cpp_1ae895071c91568125917165b3aa4a9708">JsonReaderStack</link>*&gt;(mStack))</para>
+</listitem>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1afc0eef637f1016e8786e45e106a4881e">TOP</link>   (<link linkend="_archiver_8cpp_1a2cc8f2d83039de1aef6590f9782921ee">STACK</link>-&gt;top())</para>
+</listitem>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1a1f957b762e025dae67967a36c86dcfc1">CURRENT</link>   (*<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">TOP.value</link>)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1a092368cb0c35415b27ffe320e390e82b">WRITER</link>   reinterpret_cast&lt;<link linkend="_class_pretty_writer">PrettyWriter</link>&lt;<link linkend="_fwd_8h_1ab956b6537825abf8aac4112e81cfad7e">StringBuffer</link>&gt;*&gt;(mWriter)</para>
+</listitem>
+            <listitem><para>#define <link linkend="_archiver_8cpp_1aa57974323bef0262551029d83546b8e9">STREAM</link>   reinterpret_cast&lt;<link linkend="_fwd_8h_1ab956b6537825abf8aac4112e81cfad7e">StringBuffer</link>*&gt;(mStream)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Typedefs    </title>
+        <itemizedlist>
+            <listitem><para>typedef std::stack&lt; <link linkend="_struct_json_reader_stack_item">JsonReaderStackItem</link> &gt; <link linkend="_archiver_8cpp_1ae895071c91568125917165b3aa4a9708">JsonReaderStack</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_archiver_8cpp_1a1f957b762e025dae67967a36c86dcfc1"/><section>
+    <title>CURRENT</title>
+<indexterm><primary>CURRENT</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>CURRENT</secondary></indexterm>
+<para><computeroutput>#define CURRENT   (*<link linkend="_pointer_8h_1a32aff7c6c4cd253fdf6563677afab5ce">TOP.value</link>)</computeroutput></para></section>
+<anchor xml:id="_archiver_8cpp_1a149b55eb821bfd8722c37788381acd09"/><section>
+    <title>DOCUMENT</title>
+<indexterm><primary>DOCUMENT</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>DOCUMENT</secondary></indexterm>
+<para><computeroutput>#define DOCUMENT   reinterpret_cast&lt;<link linkend="_document_8h_1ac6ea5b168e3fe8c7fa532450fc9391f7">Document</link>*&gt;(mDocument)</computeroutput></para></section>
+<anchor xml:id="_archiver_8cpp_1a2cc8f2d83039de1aef6590f9782921ee"/><section>
+    <title>STACK</title>
+<indexterm><primary>STACK</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>STACK</secondary></indexterm>
+<para><computeroutput>#define STACK   (reinterpret_cast&lt;<link linkend="_archiver_8cpp_1ae895071c91568125917165b3aa4a9708">JsonReaderStack</link>*&gt;(mStack))</computeroutput></para></section>
+<anchor xml:id="_archiver_8cpp_1aa57974323bef0262551029d83546b8e9"/><section>
+    <title>STREAM</title>
+<indexterm><primary>STREAM</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>STREAM</secondary></indexterm>
+<para><computeroutput>#define STREAM   reinterpret_cast&lt;<link linkend="_fwd_8h_1ab956b6537825abf8aac4112e81cfad7e">StringBuffer</link>*&gt;(mStream)</computeroutput></para></section>
+<anchor xml:id="_archiver_8cpp_1afc0eef637f1016e8786e45e106a4881e"/><section>
+    <title>TOP</title>
+<indexterm><primary>TOP</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>TOP</secondary></indexterm>
+<para><computeroutput>#define TOP   (<link linkend="_archiver_8cpp_1a2cc8f2d83039de1aef6590f9782921ee">STACK</link>-&gt;top())</computeroutput></para></section>
+<anchor xml:id="_archiver_8cpp_1a092368cb0c35415b27ffe320e390e82b"/><section>
+    <title>WRITER</title>
+<indexterm><primary>WRITER</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>WRITER</secondary></indexterm>
+<para><computeroutput>#define WRITER   reinterpret_cast&lt;<link linkend="_class_pretty_writer">PrettyWriter</link>&lt;<link linkend="_fwd_8h_1ab956b6537825abf8aac4112e81cfad7e">StringBuffer</link>&gt;*&gt;(mWriter)</computeroutput></para></section>
+</section>
+<section>
+<title>Typedef Documentation</title>
+<anchor xml:id="_archiver_8cpp_1ae895071c91568125917165b3aa4a9708"/><section>
+    <title>JsonReaderStack</title>
+<indexterm><primary>JsonReaderStack</primary><secondary>archiver.cpp</secondary></indexterm>
+<indexterm><primary>archiver.cpp</primary><secondary>JsonReaderStack</secondary></indexterm>
+<para><computeroutput>typedef std::stack&lt;<link linkend="_struct_json_reader_stack_item">JsonReaderStackItem</link>&gt; <link linkend="_archiver_8cpp_1ae895071c91568125917165b3aa4a9708">JsonReaderStack</link></computeroutput></para></section>
+</section>
+</section>

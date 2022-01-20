@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_prettywriter_8h_source" xml:lang="en-US">
+<title>prettywriter.h</title>
+<indexterm><primary>src/rapidjson/include/rapidjson/prettywriter.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="comment">//&#32;Tencent&#32;is&#32;pleased&#32;to&#32;support&#32;the&#32;open&#32;source&#32;community&#32;by&#32;making&#32;RapidJSON&#32;available.</emphasis>
+2 <emphasis role="comment">//&#32;</emphasis>
+3 <emphasis role="comment">//&#32;Copyright&#32;(C)&#32;2015&#32;THL&#32;A29&#32;Limited,&#32;a&#32;Tencent&#32;company,&#32;and&#32;Milo&#32;Yip.</emphasis>
+4 <emphasis role="comment">//</emphasis>
+5 <emphasis role="comment">//&#32;Licensed&#32;under&#32;the&#32;MIT&#32;License&#32;(the&#32;&quot;License&quot;);&#32;you&#32;may&#32;not&#32;use&#32;this&#32;file&#32;except</emphasis>
+6 <emphasis role="comment">//&#32;in&#32;compliance&#32;with&#32;the&#32;License.&#32;You&#32;may&#32;obtain&#32;a&#32;copy&#32;of&#32;the&#32;License&#32;at</emphasis>
+7 <emphasis role="comment">//</emphasis>
+8 <emphasis role="comment">//&#32;http://opensource.org/licenses/MIT</emphasis>
+9 <emphasis role="comment">//</emphasis>
+10 <emphasis role="comment">//&#32;Unless&#32;required&#32;by&#32;applicable&#32;law&#32;or&#32;agreed&#32;to&#32;in&#32;writing,&#32;software&#32;distributed&#32;</emphasis>
+11 <emphasis role="comment">//&#32;under&#32;the&#32;License&#32;is&#32;distributed&#32;on&#32;an&#32;&quot;AS&#32;IS&quot;&#32;BASIS,&#32;WITHOUT&#32;WARRANTIES&#32;OR&#32;</emphasis>
+12 <emphasis role="comment">//&#32;CONDITIONS&#32;OF&#32;ANY&#32;KIND,&#32;either&#32;express&#32;or&#32;implied.&#32;See&#32;the&#32;License&#32;for&#32;the&#32;</emphasis>
+13 <emphasis role="comment">//&#32;specific&#32;language&#32;governing&#32;permissions&#32;and&#32;limitations&#32;under&#32;the&#32;License.</emphasis>
+14 
+15 <emphasis role="preprocessor">#ifndef&#32;RAPIDJSON_PRETTYWRITER_H_</emphasis>
+16 <emphasis role="preprocessor">#define&#32;RAPIDJSON_PRETTYWRITER_H_</emphasis>
+17 
+18 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_writer_8h">writer.h</link>&quot;</emphasis>
+19 
+20 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+21 RAPIDJSON_DIAG_PUSH
+22 RAPIDJSON_DIAG_OFF(effc++)
+23 <emphasis role="preprocessor">#endif</emphasis>
+24 
+25 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+26 RAPIDJSON_DIAG_PUSH
+27 RAPIDJSON_DIAG_OFF(c++98-compat)
+28 <emphasis role="preprocessor">#endif</emphasis>
+29 
+30 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
+31 
+33 
+35 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5">PrettyFormatOptions</link>&#32;{
+36 &#32;&#32;&#32;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed">kFormatDefault</link>&#32;=&#32;0,&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+37 &#32;&#32;&#32;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2">kFormatSingleLineArray</link>&#32;=&#32;1&#32;&#32;
+38 };
+39 
+41 
+47 <emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;SourceEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;<emphasis role="keyword">typename</emphasis>&#32;TargetEncoding&#32;=&#32;UTF8&lt;&gt;,&#32;<emphasis role="keyword">typename</emphasis>&#32;StackAllocator&#32;=&#32;CrtAllocator,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;writeFlags&#32;=&#32;kWriteDefaultFlags&gt;
+48 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_pretty_writer">PrettyWriter</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_writer">Writer</link>&lt;OutputStream,&#32;SourceEncoding,&#32;TargetEncoding,&#32;StackAllocator,&#32;writeFlags&gt;&#32;{
+49 <emphasis role="keyword">public</emphasis>:
+50 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_writer">Writer&lt;OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags&gt;</link>&#32;<link linkend="_class_pretty_writer_1a6eecc5c896dcdaffca739dcd39d13a17">Base</link>;
+51 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_class_writer_1ab08bff5fd2daec65f4a78779ca3d2139">Base::Ch</link>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>;
+52 
+54 
+58 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_pretty_writer_1a928ac2a5235b8877048ebdd5f35a556f">PrettyWriter</link>(OutputStream&amp;&#32;os,&#32;StackAllocator*&#32;allocator&#32;=&#32;0,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;levelDepth&#32;=&#32;<link linkend="_class_writer_1a9cb4caeb9d8971f305edff1d70e67acb">Base::kDefaultLevelDepth</link>)&#32;:&#32;
+59 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer">Base</link>(os,&#32;allocator,&#32;levelDepth),&#32;<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>(<emphasis role="stringliteral">&apos;&#32;&apos;</emphasis>),&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>(4),&#32;<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>(<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed">kFormatDefault</link>)&#32;{}
+60 
+61 
+62 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_pretty_writer_1a4a9077e0300c6b0e1c830a58c1e738d2">PrettyWriter</link>(StackAllocator*&#32;allocator&#32;=&#32;0,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;levelDepth&#32;=&#32;<link linkend="_class_writer_1a9cb4caeb9d8971f305edff1d70e67acb">Base::kDefaultLevelDepth</link>)&#32;:&#32;
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer">Base</link>(allocator,&#32;levelDepth),&#32;<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>(<emphasis role="stringliteral">&apos;&#32;&apos;</emphasis>),&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>(4),&#32;<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>(<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5a00acc6a868833bb14b6426314f09cbed">kFormatDefault</link>)&#32;{}
+64 
+65 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
+66 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a928ac2a5235b8877048ebdd5f35a556f">PrettyWriter</link>(<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;&amp;&#32;rhs)&#32;:
+67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a6eecc5c896dcdaffca739dcd39d13a17">Base</link>(std::forward&lt;<link linkend="_class_pretty_writer">PrettyWriter</link>&gt;(rhs)),&#32;<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>(rhs.<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>),&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>(rhs.<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>),&#32;<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>(rhs.<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>)&#32;{}
+68 <emphasis role="preprocessor">#endif</emphasis>
+69 
+71 
+75 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;&#32;<link linkend="_class_pretty_writer_1abbdc83ce02cf4a811a7355aa3879b45a">SetIndent</link>(<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>&#32;indentChar,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;indentCharCount)&#32;{
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(indentChar&#32;==&#32;<emphasis role="charliteral">&apos;&#32;&apos;</emphasis>&#32;||&#32;indentChar&#32;==&#32;<emphasis role="charliteral">&apos;\t&apos;</emphasis>&#32;||&#32;indentChar&#32;==&#32;<emphasis role="charliteral">&apos;\n&apos;</emphasis>&#32;||&#32;indentChar&#32;==&#32;<emphasis role="charliteral">&apos;\r&apos;</emphasis>);
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>&#32;=&#32;indentChar;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>&#32;=&#32;indentCharCount;
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
+80 &#32;&#32;&#32;&#32;}
+81 
+83 
+85 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;&#32;<link linkend="_class_pretty_writer_1aade3381a128071f1da060f5f3075de10">SetFormatOptions</link>(<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5">PrettyFormatOptions</link>&#32;options)&#32;{
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>&#32;=&#32;options;
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
+88 &#32;&#32;&#32;&#32;}
+89 
+94 
+95 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1aa144f2d0f0c3c69248cdbe957349528c">Null</link>()&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7aa09befbfb4f2e1409f237817979d8087">kNullType</link>);&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a44862b3eba8d84b909c69aba875c9f4d">Base::WriteNull</link>());&#32;}
+96 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a6e765ee7ada5ed40f317c78a98f6f90b">Bool</link>(<emphasis role="keywordtype">bool</emphasis>&#32;b)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(b&#32;?&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a209434e5edd66630011ca19d710d7cd6">kTrueType</link>&#32;:&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a062b8296274a258acf0e142868684c54">kFalseType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a42ad68b6950431bb8ca0199568546eaf">Base::WriteBool</link>(b));&#32;}
+97 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1aa1815263e61cb7af3b6dfba480a0f481">Int</link>(<emphasis role="keywordtype">int</emphasis>&#32;i)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a31d0feda654ca245c41462be7dc59998">Base::WriteInt</link>(i));&#32;}
+98 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a8c82302877a5588eae77eb7d042c49ef">Uint</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;u)&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a2861227e93707d1478d2cf56644dca3b">Base::WriteUint</link>(u));&#32;}
+99 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1ad42b797429f4ee19efdce610f5aff976">Int64</link>(<link linkend="_stdint_8h_1a414156feea104f8f75b4ed9e3121b2f6">int64_t</link>&#32;i64)&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1aa58d3f80c06394648de5055ecfb41587">Base::WriteInt64</link>(i64));&#32;}
+100 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1aba75ac1f13c2629b2a55ffbf3d8a116c">Uint64</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u64)&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1ad07b325157220e3aa791c1c8c904021e">Base::WriteUint64</link>(u64));&#32;&#32;}
+101 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1ad9d592e86b985da666665926e87db415">Double</link>(<emphasis role="keywordtype">double</emphasis>&#32;d)&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1ae7a0fc4740681d845d92c1213bd25aa1">Base::WriteDouble</link>(d));&#32;}
+102 
+103 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a3941bc21d6a261ca8a86eff330db30ef">RawNumber</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{
+104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(str&#32;!=&#32;0);
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)copy;
+106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7afc9f813b7aaf71911bdae20a86b2702d">kNumberType</link>);
+107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1acda4412ef5f4cac6e89f9544e4b10f70">Base::WriteString</link>(str,&#32;length));
+108 &#32;&#32;&#32;&#32;}
+109 
+110 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1ae544ccfe35dd7e80ed694873062409f6">String</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{
+111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(str&#32;!=&#32;0);
+112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)copy;
+113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link>);
+114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1acda4412ef5f4cac6e89f9544e4b10f70">Base::WriteString</link>(str,&#32;length));
+115 &#32;&#32;&#32;&#32;}
+116 
+117 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+118 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1ae544ccfe35dd7e80ed694873062409f6">String</link>(<emphasis role="keyword">const</emphasis>&#32;std::basic_string&lt;Ch&gt;&amp;&#32;str)&#32;{
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_pretty_writer_1ae544ccfe35dd7e80ed694873062409f6">String</link>(str.data(),&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>(str.size()));
+120 &#32;&#32;&#32;&#32;}
+121 <emphasis role="preprocessor">#endif</emphasis>
+122 
+123 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a27bdda225dc152b8974e44c1df7525b7">StartObject</link>()&#32;{
+124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f">kObjectType</link>);
+125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">new</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.template&#32;Push&lt;typename&#32;Base::Level&gt;())&#32;<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>(<emphasis role="keyword">false</emphasis>);
+126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a81c72a2eecd47e042f56ca93a27a5cb1">Base::WriteStartObject</link>();
+127 &#32;&#32;&#32;&#32;}
+128 
+129 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a20ecbe1d31a871e4da4a3899b40ad3cd">Key</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;str,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;copy&#32;=&#32;<emphasis role="keyword">false</emphasis>)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_pretty_writer_1ae544ccfe35dd7e80ed694873062409f6">String</link>(str,&#32;length,&#32;copy);&#32;}
+130 
+131 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_STDSTRING</emphasis>
+132 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a20ecbe1d31a871e4da4a3899b40ad3cd">Key</link>(<emphasis role="keyword">const</emphasis>&#32;std::basic_string&lt;Ch&gt;&amp;&#32;str)&#32;{
+133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_pretty_writer_1a20ecbe1d31a871e4da4a3899b40ad3cd">Key</link>(str.data(),&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>(str.size()));
+134 &#32;&#32;&#32;&#32;}
+135 <emphasis role="preprocessor">#endif</emphasis>
+136 &#32;&#32;&#32;&#32;
+137 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a6bfdfa4193193ef763cce5c592c4d20c">EndObject</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;memberCount&#32;=&#32;0)&#32;{
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)memberCount;
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>));&#32;<emphasis role="comment">//&#32;not&#32;inside&#32;an&#32;Object</emphasis>
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(!<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.<emphasis role="keyword">template</emphasis>&#32;Top&lt;typename&#32;Base::Level&gt;()-&gt;inArray);&#32;<emphasis role="comment">//&#32;currently&#32;inside&#32;an&#32;Array,&#32;not&#32;Object</emphasis>
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(0&#32;==&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.<emphasis role="keyword">template</emphasis>&#32;Top&lt;typename&#32;Base::Level&gt;()-&gt;valueCount&#32;%&#32;2);&#32;<emphasis role="comment">//&#32;Object&#32;has&#32;a&#32;Key&#32;without&#32;a&#32;Value</emphasis>
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;empty&#32;=&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.template&#32;Pop&lt;typename&#32;Base::Level&gt;(1)-&gt;valueCount&#32;==&#32;0;
+144 
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!empty)&#32;{
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;\n&apos;</emphasis>);
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a6f244ecc94fd5b134d424033b1574b7e">WriteIndent</link>();
+148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ret&#32;=&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a7e3f6760a50a72f4217a9b2d625c43ee">Base::WriteEndObject</link>());
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)ret;
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(ret&#32;==&#32;<emphasis role="keyword">true</emphasis>);
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.Empty())&#32;<emphasis role="comment">//&#32;end&#32;of&#32;json&#32;text</emphasis>
+153 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a8ca4e364c546b2eb526caa68dde011d2">Base::Flush</link>();
+154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+155 &#32;&#32;&#32;&#32;}
+156 
+157 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1aec7fdf4798a3af5e31c147633f4798ed">StartArray</link>()&#32;{
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>);
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">new</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.template&#32;Push&lt;typename&#32;Base::Level&gt;())&#32;<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>(<emphasis role="keyword">true</emphasis>);
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1a3c3560a96cac58f98f4a74d6cb227204">Base::WriteStartArray</link>();
+161 &#32;&#32;&#32;&#32;}
+162 
+163 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a1e9d97fc950d349f55abd864c787ff37">EndArray</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;memberCount&#32;=&#32;0)&#32;{
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)memberCount;
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>));
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.<emphasis role="keyword">template</emphasis>&#32;Top&lt;typename&#32;Base::Level&gt;()-&gt;inArray);
+167 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;empty&#32;=&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.template&#32;Pop&lt;typename&#32;Base::Level&gt;(1)-&gt;valueCount&#32;==&#32;0;
+168 
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!empty&#32;&amp;&amp;&#32;!(<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>&#32;&amp;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2">kFormatSingleLineArray</link>))&#32;{
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;\n&apos;</emphasis>);
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a6f244ecc94fd5b134d424033b1574b7e">WriteIndent</link>();
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+173 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ret&#32;=&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1aabda2df1be6e83cef416e9b1f042e8f4">Base::WriteEndArray</link>());
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)ret;
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(ret&#32;==&#32;<emphasis role="keyword">true</emphasis>);
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.Empty())&#32;<emphasis role="comment">//&#32;end&#32;of&#32;json&#32;text</emphasis>
+177 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a8ca4e364c546b2eb526caa68dde011d2">Base::Flush</link>();
+178 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+179 &#32;&#32;&#32;&#32;}
+180 
+182 
+185 
+187 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a7e85689355a827d273f272c26b447225">String</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;str)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_pretty_writer_1a7e85689355a827d273f272c26b447225">String</link>(str,&#32;<link linkend="_namespaceinternal_1a86326fb0c9d7c7ea8edd7deedbb2b26e">internal::StrLen</link>(str));&#32;}
+188 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a4b2a2a6eef02c12d7a3fd77966bd4499">Key</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;str)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_pretty_writer_1a4b2a2a6eef02c12d7a3fd77966bd4499">Key</link>(str,&#32;<link linkend="_namespaceinternal_1a86326fb0c9d7c7ea8edd7deedbb2b26e">internal::StrLen</link>(str));&#32;}
+189 
+191 
+193 
+201 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_pretty_writer_1a440890a72408a150ef46edda6becdc94">RawValue</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>*&#32;json,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length,&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;type)&#32;{
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(json&#32;!=&#32;0);
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(type);
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_writer_1adc1cadbabc309d31f19cf7463251d879">Base::EndValue</link>(<link linkend="_class_writer_1a8ee1135b2595261819b134907f67614e">Base::WriteRawValue</link>(json,&#32;length));
+205 &#32;&#32;&#32;&#32;}
+206 
+207 <emphasis role="keyword">protected</emphasis>:
+208 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_pretty_writer_1a09709ffa3b545e007631ecfd35029843">PrettyPrefix</link>(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;type)&#32;{
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(void)type;
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.GetSize()&#32;!=&#32;0)&#32;{&#32;<emphasis role="comment">//&#32;this&#32;value&#32;is&#32;not&#32;at&#32;root</emphasis>
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>*&#32;level&#32;=&#32;<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.template&#32;Top&lt;typename&#32;Base::Level&gt;();
+212 
+213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>)&#32;{
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;&gt;&#32;0)&#32;{
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;,&apos;</emphasis>);&#32;<emphasis role="comment">//&#32;add&#32;comma&#32;if&#32;it&#32;is&#32;not&#32;the&#32;first&#32;element&#32;in&#32;array</emphasis>
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>&#32;&amp;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2">kFormatSingleLineArray</link>)
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;&#32;&apos;</emphasis>);
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+219 
+220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>&#32;&amp;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5addf85c922d2d597ab1074a55b27c3fe2">kFormatSingleLineArray</link>))&#32;{
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;\n&apos;</emphasis>);
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a6f244ecc94fd5b134d424033b1574b7e">WriteIndent</link>();
+223 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{&#32;&#32;<emphasis role="comment">//&#32;in&#32;object</emphasis>
+226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;&gt;&#32;0)&#32;{
+227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;%&#32;2&#32;==&#32;0)&#32;{
+228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;,&apos;</emphasis>);
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;\n&apos;</emphasis>);
+230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;:&apos;</emphasis>);
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;&#32;&apos;</emphasis>);
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+236 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>-&gt;Put(<emphasis role="charliteral">&apos;\n&apos;</emphasis>);
+238 
+239 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;%&#32;2&#32;==&#32;0)
+240 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a6f244ecc94fd5b134d424033b1574b7e">WriteIndent</link>();
+241 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!level-&gt;<link linkend="_struct_writer_1_1_level_1aa009a2d675e98757c2997072aad78789">inArray</link>&#32;&amp;&amp;&#32;level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>&#32;%&#32;2&#32;==&#32;0)
+243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(type&#32;==&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a2d823b89b055bc743d05c03183d3f338">kStringType</link>);&#32;&#32;<emphasis role="comment">//&#32;if&#32;it&apos;s&#32;in&#32;object,&#32;then&#32;even&#32;number&#32;should&#32;be&#32;a&#32;name</emphasis>
+244 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;level-&gt;<link linkend="_struct_writer_1_1_level_1a4a09e5fda49d0d57b2adc041203f244f">valueCount</link>++;
+245 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+246 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(!<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">Base::hasRoot_</link>);&#32;&#32;<emphasis role="comment">//&#32;Should&#32;only&#32;has&#32;one&#32;and&#32;only&#32;one&#32;root.</emphasis>
+248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_writer_1affc6b9e0332b50bee0d33f8b1841c9a6">Base::hasRoot_</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+250 &#32;&#32;&#32;&#32;}
+251 
+252 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_pretty_writer_1a6f244ecc94fd5b134d424033b1574b7e">WriteIndent</link>()&#32;&#32;{
+253 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count&#32;=&#32;(<link linkend="_class_writer_1a9e6c13c06fc721dfd8486f17b9ff29de">Base::level_stack_</link>.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keyword">typename</emphasis>&#32;<link linkend="_struct_writer_1_1_level">Base::Level</link>))&#32;*&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>;
+254 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_filewritestream_8h_1a5c9b0f0e6249be2acf7f3505c295c132">PutN</link>(*<link linkend="_class_writer_1a3a3f60140f78dd67b5274978fd3a33ff">Base::os_</link>,&#32;<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>),&#32;count);
+255 &#32;&#32;&#32;&#32;}
+256 
+257 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1ae35c89bda4c5d59d3ff6efcf2fea45a3">Ch</link>&#32;<link linkend="_class_pretty_writer_1aaa3f6380daa8466a5101ed18fc33bf04">indentChar_</link>;
+258 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_class_pretty_writer_1a7d00b9716ef3cd7e34ae1b744c968f13">indentCharCount_</link>;
+259 &#32;&#32;&#32;&#32;<link linkend="_prettywriter_8h_1a150fd6ef2dbf4025c33ece85451982d5">PrettyFormatOptions</link>&#32;<link linkend="_class_pretty_writer_1a15505ed4ea0fa85d339b3a987f1a3aaf">formatOptions_</link>;
+260 
+261 <emphasis role="keyword">private</emphasis>:
+262 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prohibit&#32;copy&#32;constructor&#32;&amp;&#32;assignment&#32;operator.</emphasis>
+263 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer_1a928ac2a5235b8877048ebdd5f35a556f">PrettyWriter</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;);
+264 &#32;&#32;&#32;&#32;<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_pretty_writer">PrettyWriter</link>&amp;);
+265 };
+266 
+267 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>
+268 
+269 <emphasis role="preprocessor">#if&#32;defined(__clang__)</emphasis>
+270 RAPIDJSON_DIAG_POP
+271 <emphasis role="preprocessor">#endif</emphasis>
+272 
+273 <emphasis role="preprocessor">#ifdef&#32;__GNUC__</emphasis>
+274 RAPIDJSON_DIAG_POP
+275 <emphasis role="preprocessor">#endif</emphasis>
+276 
+277 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//&#32;RAPIDJSON_RAPIDJSON_H_</emphasis>
+</programlisting></section>

@@ -1,0 +1,374 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_memory_pool_allocator" xml:lang="en-US">
+<title>MemoryPoolAllocator&lt; BaseAllocator &gt; Class Template Reference</title>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary></indexterm>
+<para>
+
+<para>Default memory allocator used by the parser and DOM. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;allocators.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link> (size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</para>
+
+<para>Constructor with chunkSize. </para>
+</listitem>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf">MemoryPoolAllocator</link> (void *buffer, size_t size, size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</para>
+
+<para>Constructor with user-supplied buffer. </para>
+</listitem>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1afa7a6555d8a6e151148c8876c60a36c5">MemoryPoolAllocator</link> (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp;rhs) RAPIDJSON_NOEXCEPT</para>
+</listitem>
+            <listitem><para><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp; <link linkend="_class_memory_pool_allocator_1a32812539a2d21759082f325ee78565c7">operator=</link> (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp;rhs) RAPIDJSON_NOEXCEPT</para>
+</listitem>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e">~MemoryPoolAllocator</link> () RAPIDJSON_NOEXCEPT</para>
+
+<para>Destructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1">Clear</link> () RAPIDJSON_NOEXCEPT</para>
+
+<para>Deallocates all memory chunks, excluding the first/user one. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f">Capacity</link> () const RAPIDJSON_NOEXCEPT</para>
+
+<para>Computes the total capacity of allocated memory chunks. </para>
+</listitem>
+            <listitem><para>size_t <link linkend="_class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d">Size</link> () const RAPIDJSON_NOEXCEPT</para>
+
+<para>Computes the memory blocks allocated. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_memory_pool_allocator_1aee5e0b6d09dfbbc9bbbc59399a14cc53">Shared</link> () const RAPIDJSON_NOEXCEPT</para>
+
+<para>Whether the allocator is shared. </para>
+</listitem>
+            <listitem><para>void * <link linkend="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48">Malloc</link> (size_t size)</para>
+
+<para>Allocates a memory block. (concept Allocator) </para>
+</listitem>
+            <listitem><para>void * <link linkend="_class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074">Realloc</link> (void *originalPtr, size_t originalSize, size_t newSize)</para>
+
+<para>Resizes a memory block (concept Allocator) </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408">operator==</link> (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp;rhs) const RAPIDJSON_NOEXCEPT</para>
+
+<para>Compare (equality) with another <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_memory_pool_allocator_1ab81d11c88aef06b905cece2e5a4e7b4d">operator!=</link> (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp;rhs) const RAPIDJSON_NOEXCEPT</para>
+
+<para>Compare (inequality) with another <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>static void <link linkend="_class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33">Free</link> (void *ptr) RAPIDJSON_NOEXCEPT</para>
+
+<para>Frees a memory block (concept Allocator) </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const bool <link linkend="_class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f">kNeedFree</link> = false</para>
+
+<para>Tell users that no need to call <link linkend="_class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33">Free()</link> with this allocator. (concept Allocator) </para>
+</listitem>
+            <listitem><para>static const bool <link linkend="_class_memory_pool_allocator_1a3a18920d6afd9e9c9e62d8fd8f73e095">kRefCounted</link> = true</para>
+
+<para>Tell users that this allocator is reference counted on copy. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<simplesect><title>template&lt;typename BaseAllocator = CrtAllocator&gt;
+class MemoryPoolAllocator&lt; BaseAllocator &gt;</title></simplesect>
+
+<para>Default memory allocator used by the parser and DOM. </para>
+
+
+
+<para>This allocator allocate memory blocks from pre-allocated memory chunks.</para>
+
+<para>It does not free memory blocks. And <link linkend="_class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074">Realloc()</link> only allocate new memory.</para>
+
+<para>The memory chunks are allocated by BaseAllocator, which is <link linkend="_class_crt_allocator">CrtAllocator</link> by default.</para>
+
+<para>User may also supply a buffer as the first chunk.</para>
+
+<para>If the user-buffer is full then additional chunks are allocated by BaseAllocator.</para>
+
+<para>The user-buffer is not deallocated by this allocator.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Template Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>BaseAllocator</entry><entry>
+<para>the allocator type for allocating memory chunks. Default is <link linkend="_class_crt_allocator">CrtAllocator</link>. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>implements Allocator concept </para>
+</note>
+</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209"/><section>
+    <title>MemoryPoolAllocator()<computeroutput>[1/3]</computeroutput></title>
+<indexterm><primary>MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>MemoryPoolAllocator</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (size_t chunkSize = <computeroutput>kDefaultChunkCapacity</computeroutput>
+, BaseAllocator * baseAllocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput>, <computeroutput>[explicit]</computeroutput></computeroutput></para><para>
+
+<para>Constructor with chunkSize. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>chunkSize</entry><entry>
+<para>The size of memory chunk. The default is kDefaultChunkSize. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>baseAllocator</entry><entry>
+<para>The allocator for allocating memory chunks. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf"/><section>
+    <title>MemoryPoolAllocator()<computeroutput>[2/3]</computeroutput></title>
+<indexterm><primary>MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>MemoryPoolAllocator</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (void * buffer, size_t size, size_t chunkSize = <computeroutput>kDefaultChunkCapacity</computeroutput>
+, BaseAllocator * baseAllocator = <computeroutput>0</computeroutput>
+)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Constructor with user-supplied buffer. </para>
+</para>
+
+<para>The user buffer will be used firstly. When it is full, memory pool allocates new chunk with chunk size.</para>
+
+<para>The user buffer will not be deallocated when this allocator is destructed.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>buffer</entry><entry>
+<para>User supplied buffer. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>size</entry><entry>
+<para>Size of the buffer in bytes. It must at least larger than sizeof(ChunkHeader). </para>
+</entry>
+                            </row>
+                            <row>
+<entry>chunkSize</entry><entry>
+<para>The size of memory chunk. The default is kDefaultChunkSize. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>baseAllocator</entry><entry>
+<para>The allocator for allocating memory chunks. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1afa7a6555d8a6e151148c8876c60a36c5"/><section>
+    <title>MemoryPoolAllocator()<computeroutput>[3/3]</computeroutput></title>
+<indexterm><primary>MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>MemoryPoolAllocator</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt; &amp; rhs)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e"/><section>
+    <title>~MemoryPoolAllocator()</title>
+<indexterm><primary>~MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>~MemoryPoolAllocator</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::~<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Destructor. </para>
+</para>
+
+<para>This deallocates all memory chunks, excluding the user-supplied buffer. </para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f"/><section>
+    <title>Capacity()</title>
+<indexterm><primary>Capacity</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Capacity</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Capacity ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Computes the total capacity of allocated memory chunks. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>total capacity in bytes. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1"/><section>
+    <title>Clear()</title>
+<indexterm><primary>Clear</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Clear</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Clear ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Deallocates all memory chunks, excluding the first/user one. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33"/><section>
+    <title>Free()</title>
+<indexterm><primary>Free</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Free</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>static void <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Free (void * ptr)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput></computeroutput></para><para>
+
+<para>Frees a memory block (concept Allocator) </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48"/><section>
+    <title>Malloc()</title>
+<indexterm><primary>Malloc</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Malloc</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void * <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Malloc (size_t size)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Allocates a memory block. (concept Allocator) </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1ab81d11c88aef06b905cece2e5a4e7b4d"/><section>
+    <title>operator!=()</title>
+<indexterm><primary>operator!=</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>operator!=</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::operator!= (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt; &amp; rhs) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Compare (inequality) with another <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a32812539a2d21759082f325ee78565c7"/><section>
+    <title>operator=()</title>
+<indexterm><primary>operator=</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>operator=</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link> &amp; <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::operator= (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt; &amp; rhs)<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408"/><section>
+    <title>operator==()</title>
+<indexterm><primary>operator==</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>operator==</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::operator== (const <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt; &amp; rhs) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Compare (equality) with another <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a7c273279d361b207ff622d4bdfc63074"/><section>
+    <title>Realloc()</title>
+<indexterm><primary>Realloc</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Realloc</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void * <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Realloc (void * originalPtr, size_t originalSize, size_t newSize)<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Resizes a memory block (concept Allocator) </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1aee5e0b6d09dfbbc9bbbc59399a14cc53"/><section>
+    <title>Shared()</title>
+<indexterm><primary>Shared</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Shared</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Shared ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Whether the allocator is shared. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>true or false. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d"/><section>
+    <title>Size()</title>
+<indexterm><primary>Size</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>Size</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::Size ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Computes the memory blocks allocated. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>total used bytes. </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f"/><section>
+    <title>kNeedFree</title>
+<indexterm><primary>kNeedFree</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>kNeedFree</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::kNeedFree = false<computeroutput>[static]</computeroutput></computeroutput></para><para>
+
+<para>Tell users that no need to call <link linkend="_class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33">Free()</link> with this allocator. (concept Allocator) </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a3a18920d6afd9e9c9e62d8fd8f73e095"/><section>
+    <title>kRefCounted</title>
+<indexterm><primary>kRefCounted</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>kRefCounted</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::kRefCounted = true<computeroutput>[static]</computeroutput></computeroutput></para><para>
+
+<para>Tell users that this allocator is reference counted on copy. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/rapidjson/include/rapidjson/<link linkend="_allocators_8h">allocators.h</link></section>
+</section>

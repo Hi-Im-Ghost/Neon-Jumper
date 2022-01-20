@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="__level_one_state_8h_source" xml:lang="en-US">
+<title>LevelOneState.h</title>
+<indexterm><primary>src/states/LevelOneState.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;TREES_JSON_LEVELONESTATE_H</emphasis>
+2 <emphasis role="preprocessor">#define&#32;TREES_JSON_LEVELONESTATE_H</emphasis>
+3 
+4 
+5 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="__game_state_8h">GameState.h</link>&quot;</emphasis>
+6 <emphasis role="preprocessor">#include&#32;&quot;../LoadMap.h&quot;</emphasis>
+7 <emphasis role="preprocessor">#include&#32;&quot;../entities/Player.h&quot;</emphasis>
+8 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="__level_two_state_8h">LevelTwoState.h</link>&quot;</emphasis>
+9 <emphasis role="preprocessor">#include&#32;&quot;../modules/PlayerHUD.h&quot;</emphasis>
+10 <emphasis role="preprocessor">#include&#32;&quot;../entities/Slime.h&quot;</emphasis>
+11 
+15 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_level_one_state">LevelOneState</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_game_state">GameState</link>&#32;{
+16 <emphasis role="keyword">private</emphasis>:
+18 &#32;&#32;&#32;&#32;<link linkend="_class_player">Player</link>*&#32;player;
+20 &#32;&#32;&#32;&#32;std::list&lt;sf::RectangleShape&gt;&#32;hitboxes;
+22 &#32;&#32;&#32;&#32;std::list&lt;sf::RectangleShape&gt;&#32;dmgboxes;
+24 &#32;&#32;&#32;&#32;<link linkend="_class_load_map">LoadMap</link>&#32;map;
+25 
+27 &#32;&#32;&#32;&#32;std::list&lt;Enemy*&gt;&#32;enemies;
+28 
+30 &#32;&#32;&#32;&#32;<link linkend="_class_button">Button</link>*&#32;endMenuBtn;
+32 &#32;&#32;&#32;&#32;<link linkend="_class_button">Button</link>*&#32;pauseResumeBtn;
+34 &#32;&#32;&#32;&#32;<link linkend="_class_button">Button</link>*&#32;pauseExitBtn;
+36 &#32;&#32;&#32;&#32;<link linkend="_class_button">Button</link>*&#32;loadBtn;
+38 &#32;&#32;&#32;&#32;<link linkend="_class_button">Button</link>*&#32;saveBtn;
+40 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;renderHitboxes&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+42 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;1;
+44 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;x&#32;=&#32;1;
+45 
+46 
+48 &#32;&#32;&#32;&#32;sf::RectangleShape&#32;endLevelTrigger;
+50 &#32;&#32;&#32;&#32;<link linkend="_class_player_h_u_d">PlayerHUD</link>*&#32;hud;
+51 
+53 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initValues();
+55 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initHitboxes();
+57 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initDmgBoxes();
+59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initPauseButtons();
+61 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initDeadButtons();
+63 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initEndTrigger();
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initView(sf::RenderTarget&amp;&#32;window);
+67 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initViewPlayer(sf::RenderTarget&#32;&amp;window);
+69 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initEnemies();
+70 
+72 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateInput();
+74 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updatePaused();
+76 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateDead();
+78 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateEntities(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime);
+80 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;renderPaused(sf::RenderTarget&amp;&#32;window);
+82 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;renderDead(sf::RenderTarget&amp;&#32;window);
+84 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;renderEntities(sf::RenderTarget&amp;&#32;window);
+85 
+87 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateEndTrigger();
+89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateDeadTrigger();
+91 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;updateDmgTriggers();
+93 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;killPlayerTriggers();
+94 
+96 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;saveGame();
+98 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;loadGame();
+99 
+100 <emphasis role="keyword">public</emphasis>:
+102 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_level_one_state_1a3c7442500fb80b2cea0c79f3c855c11b">LevelOneState</link>(std::stack&lt;GameState*&gt;*&#32;<link linkend="_class_game_state_1a6e9e1aa616cd1071425f2766a76957ec">states</link>);
+103 
+105 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_level_one_state_1a75b5cebe202e376c76974148252978cc">update</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime)&#32;<emphasis role="keyword">override</emphasis>;
+107 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_level_one_state_1a2f451c45e79cda05456e9f93a62d04ce">render</link>(sf::RenderTarget&amp;&#32;window)&#32;<emphasis role="keyword">override</emphasis>;
+108 };
+109 
+110 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//TREES_JSON_LEVELONESTATE_H</emphasis>
+</programlisting></section>

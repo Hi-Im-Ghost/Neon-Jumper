@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="src_2rapidjson_2bin_2jsonschema_2_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">JSON<sp/>Schema<sp/>Test<sp/>Suite<sp/>[![Build<sp/>Status](https://travis-ci.org/json-schema/JSON-Schema-Test-Suite.png?branch=develop)](https://travis-ci.org/json-schema/JSON-Schema-Test-Suite)</highlight></codeline>
+<codeline><highlight class="normal">======================</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>repository<sp/>contains<sp/>a<sp/>set<sp/>of<sp/>JSON<sp/>objects<sp/>that<sp/>implementors<sp/>of<sp/>JSON<sp/>Schema</highlight></codeline>
+<codeline><highlight class="normal">validation<sp/>libraries<sp/>can<sp/>use<sp/>to<sp/>test<sp/>their<sp/>validators.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">It<sp/>is<sp/>meant<sp/>to<sp/>be<sp/>language<sp/>agnostic<sp/>and<sp/>should<sp/>require<sp/>only<sp/>a<sp/>JSON<sp/>parser.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>conversion<sp/>of<sp/>the<sp/>JSON<sp/>objects<sp/>into<sp/>tests<sp/>within<sp/>your<sp/>test<sp/>framework<sp/>of</highlight></codeline>
+<codeline><highlight class="normal">choice<sp/>is<sp/>still<sp/>the<sp/>job<sp/>of<sp/>the<sp/>validator<sp/>implementor.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Structure<sp/>of<sp/>a<sp/>Test</highlight></codeline>
+<codeline><highlight class="normal">-------------------</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you&apos;re<sp/>going<sp/>to<sp/>use<sp/>this<sp/>suite,<sp/>you<sp/>need<sp/>to<sp/>know<sp/>how<sp/>tests<sp/>are<sp/>laid<sp/>out.<sp/>The</highlight></codeline>
+<codeline><highlight class="normal">tests<sp/>are<sp/>contained<sp/>in<sp/>the<sp/>`tests`<sp/>directory<sp/>at<sp/>the<sp/>root<sp/>of<sp/>this<sp/>repository.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Inside<sp/>that<sp/>directory<sp/>is<sp/>a<sp/>subdirectory<sp/>for<sp/>each<sp/>draft<sp/>or<sp/>version<sp/>of<sp/>the</highlight></codeline>
+<codeline><highlight class="normal">schema.<sp/>We&apos;ll<sp/>use<sp/>`draft3`<sp/>as<sp/>an<sp/>example.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>look<sp/>inside<sp/>the<sp/>draft<sp/>directory,<sp/>there<sp/>are<sp/>a<sp/>number<sp/>of<sp/>`.json`<sp/>files,</highlight></codeline>
+<codeline><highlight class="normal">which<sp/>logically<sp/>group<sp/>a<sp/>set<sp/>of<sp/>test<sp/>cases<sp/>together.<sp/>Often<sp/>the<sp/>grouping<sp/>is<sp/>by</highlight></codeline>
+<codeline><highlight class="normal">property<sp/>under<sp/>test,<sp/>but<sp/>not<sp/>always,<sp/>especially<sp/>within<sp/>optional<sp/>test<sp/>files</highlight></codeline>
+<codeline><highlight class="normal">(discussed<sp/>below).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Inside<sp/>each<sp/>`.json`<sp/>file<sp/>is<sp/>a<sp/>single<sp/>array<sp/>containing<sp/>objects.<sp/>It&apos;s<sp/>easiest<sp/>to</highlight></codeline>
+<codeline><highlight class="normal">illustrate<sp/>the<sp/>structure<sp/>of<sp/>these<sp/>with<sp/>an<sp/>example:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```json</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;the<sp/>description<sp/>of<sp/>the<sp/>test<sp/>case&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;schema&quot;:<sp/>{&quot;the<sp/>schema<sp/>that<sp/>should&quot;<sp/>:<sp/>&quot;be<sp/>validated<sp/>against&quot;},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;tests&quot;:<sp/>[</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;a<sp/>specific<sp/>test<sp/>of<sp/>a<sp/>valid<sp/>instance&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;data&quot;:<sp/>&quot;the<sp/>instance&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;valid&quot;:<sp/>true</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;description&quot;:<sp/>&quot;another<sp/>specific<sp/>test<sp/>this<sp/>time,<sp/>invalid&quot;,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;data&quot;:<sp/>15,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>&quot;valid&quot;:<sp/>false</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">So<sp/>a<sp/>description,<sp/>a<sp/>schema,<sp/>and<sp/>some<sp/>tests,<sp/>where<sp/>tests<sp/>is<sp/>an<sp/>array<sp/>containing</highlight></codeline>
+<codeline><highlight class="normal">one<sp/>or<sp/>more<sp/>objects<sp/>with<sp/>descriptions,<sp/>data,<sp/>and<sp/>a<sp/>boolean<sp/>indicating<sp/>whether</highlight></codeline>
+<codeline><highlight class="normal">they<sp/>should<sp/>be<sp/>valid<sp/>or<sp/>invalid.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Coverage</highlight></codeline>
+<codeline><highlight class="normal">--------</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Draft<sp/>3<sp/>and<sp/>4<sp/>should<sp/>have<sp/>full<sp/>coverage.<sp/>If<sp/>you<sp/>see<sp/>anything<sp/>missing<sp/>or<sp/>think</highlight></codeline>
+<codeline><highlight class="normal">there<sp/>is<sp/>a<sp/>useful<sp/>test<sp/>missing,<sp/>please<sp/>send<sp/>a<sp/>pull<sp/>request<sp/>or<sp/>open<sp/>an<sp/>issue.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Who<sp/>Uses<sp/>the<sp/>Test<sp/>Suite</highlight></codeline>
+<codeline><highlight class="normal">-----------------------</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>suite<sp/>is<sp/>being<sp/>used<sp/>by:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Coffeescript<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[jsck](https://github.com/pandastrike/jsck)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Dart<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[json_schema](https://github.com/patefacio/json_schema)<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Erlang<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[jesse](https://github.com/klarna/jesse)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Go<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[gojsonschema](https://github.com/sigu-399/gojsonschema)<sp/></highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[validate-json](https://github.com/cesanta/validate-json)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Haskell<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[aeson-schema](https://github.com/timjb/aeson-schema)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[hjsonschema](https://github.com/seagreen/hjsonschema)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Java<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[json-schema-validator](https://github.com/fge/json-schema-validator)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>JavaScript<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[json-schema-benchmark](https://github.com/Muscula/json-schema-benchmark)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[direct-schema](https://github.com/IreneKnapp/direct-schema)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[is-my-json-valid](https://github.com/mafintosh/is-my-json-valid)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[jassi](https://github.com/iclanzan/jassi)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[JaySchema](https://github.com/natesilva/jayschema)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[json-schema-valid](https://github.com/ericgj/json-schema-valid)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[Jsonary](https://github.com/jsonary-js/jsonary)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[jsonschema](https://github.com/tdegrunt/jsonschema)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[request-validator](https://github.com/bugventure/request-validator)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[skeemas](https://github.com/Prestaul/skeemas)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[tv4](https://github.com/geraintluff/tv4)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[z-schema](https://github.com/zaggino/z-schema)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[jsen](https://github.com/bugventure/jsen)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>[ajv](https://github.com/epoberezkin/ajv)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Node.js<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>JSON<sp/>Schema<sp/>Test<sp/>Suite<sp/>is<sp/>also<sp/>available<sp/>as<sp/>an</highlight></codeline>
+<codeline><highlight class="normal">[npm](https://www.npmjs.com/package/json-schema-test-suite)<sp/>package.</highlight></codeline>
+<codeline><highlight class="normal">Node-specific<sp/>support<sp/>is<sp/>maintained<sp/>on<sp/>the<sp/>[node<sp/>branch](https://github.com/json-schema/JSON-Schema-Test-Suite/tree/node).</highlight></codeline>
+<codeline><highlight class="normal">See<sp/>[NODE-README.md](https://github.com/json-schema/JSON-Schema-Test-Suite/blob/node/NODE-README.md)</highlight></codeline>
+<codeline><highlight class="normal">for<sp/>more<sp/>information.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>.NET<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[Newtonsoft.Json.Schema](https://github.com/JamesNK/Newtonsoft.Json.Schema)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>PHP<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[json-schema](https://github.com/justinrainbow/json-schema)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Python<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[jsonschema](https://github.com/Julian/jsonschema)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Ruby<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[json-schema](https://github.com/hoxworth/json-schema)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Rust<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[valico](https://github.com/rustless/valico)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Swift<sp/>###</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>[JSONSchema](https://github.com/kylef/JSONSchema.swift)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>use<sp/>it<sp/>as<sp/>well,<sp/>please<sp/>fork<sp/>and<sp/>send<sp/>a<sp/>pull<sp/>request<sp/>adding<sp/>yourself<sp/>to</highlight></codeline>
+<codeline><highlight class="normal">the<sp/>list<sp/>:).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Contributing</highlight></codeline>
+<codeline><highlight class="normal">------------</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>see<sp/>something<sp/>missing<sp/>or<sp/>incorrect,<sp/>a<sp/>pull<sp/>request<sp/>is<sp/>most<sp/>welcome!</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">There<sp/>are<sp/>some<sp/>sanity<sp/>checks<sp/>in<sp/>place<sp/>for<sp/>testing<sp/>the<sp/>test<sp/>suite.<sp/>You<sp/>can<sp/>run</highlight></codeline>
+<codeline><highlight class="normal">them<sp/>with<sp/>`bin/jsonschema_suite<sp/>check`<sp/>or<sp/>`tox`.<sp/>They<sp/>will<sp/>be<sp/>run<sp/>automatically<sp/>by</highlight></codeline>
+<codeline><highlight class="normal">[Travis<sp/>CI](https://travis-ci.org/)<sp/>as<sp/>well.</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/bin/jsonschema/README.md"/>
+  </compounddef>
+</doxygen>

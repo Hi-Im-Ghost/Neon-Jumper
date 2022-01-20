@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="encoding_8zh-cn_8md" kind="file" language="Markdown">
+    <compoundname>encoding.zh-cn.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>编码</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">根据<sp/>[ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>Introduction)<sp/>JSON<sp/>text<sp/>is<sp/>a<sp/>sequence<sp/>of<sp/>Unicode<sp/>code<sp/>points.</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>翻译：JSON<sp/>文本是<sp/>Unicode<sp/>码点的序列。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">较早的<sp/>[RFC4627](http://www.ietf.org/rfc/rfc4627.txt)<sp/>申明：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>§3)<sp/>JSON<sp/>text<sp/>SHALL<sp/>be<sp/>encoded<sp/>in<sp/>Unicode.<sp/><sp/>The<sp/>default<sp/>encoding<sp/>is<sp/>UTF-8.</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>翻译：JSON<sp/>文本应该以<sp/>Unicode<sp/>编码。缺省的编码为<sp/>UTF-8。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>(in<sp/>§6)<sp/>JSON<sp/>may<sp/>be<sp/>represented<sp/>using<sp/>UTF-8,<sp/>UTF-16,<sp/>or<sp/>UTF-32.<sp/>When<sp/>JSON<sp/>is<sp/>written<sp/>in<sp/>UTF-8,<sp/>JSON<sp/>is<sp/>8bit<sp/>compatible.<sp/><sp/>When<sp/>JSON<sp/>is<sp/>written<sp/>in<sp/>UTF-16<sp/>or<sp/>UTF-32,<sp/>the<sp/>binary<sp/>content-transfer-encoding<sp/>must<sp/>be<sp/>used.</highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/></highlight></codeline>
+<codeline><highlight class="normal">&gt;<sp/>翻译：JSON<sp/>可使用<sp/>UTF-8、UTF-16<sp/>或<sp/>UTF-32<sp/>表示。当<sp/>JSON<sp/>以<sp/>UTF-8<sp/>写入，该<sp/>JSON<sp/>是<sp/>8<sp/>位兼容的。当<sp/>JSON<sp/>以<sp/>UTF-16<sp/>或<sp/>UTF-32<sp/>写入，就必须使用二进制的内容传送编码。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>支持多种编码。它也能检查<sp/>JSON<sp/>的编码，以及在不同编码中进行转码。所有这些功能都是在内部实现，无需使用外部的程序库（如<sp/>[ICU](http://site.icu-project.org/)）。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[TOC]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Unicode<sp/>{#Unicode}</highlight></codeline>
+<codeline><highlight class="normal">根据<sp/>[Unicode<sp/>的官方网站](http://www.unicode.org/standard/translations/t-chinese.html)：</highlight></codeline>
+<codeline><highlight class="normal">&gt;Unicode<sp/>给每个字符提供了一个唯一的数字，</highlight></codeline>
+<codeline><highlight class="normal">不论是什么平台、</highlight></codeline>
+<codeline><highlight class="normal">不论是什么程序、</highlight></codeline>
+<codeline><highlight class="normal">不论是什么语言。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">这些唯一数字称为码点（code<sp/>point），其范围介乎<sp/>`0x0`<sp/>至<sp/>`0x10FFFF`<sp/>之间。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Unicode<sp/>转换格式<sp/>{#UTF}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">存储<sp/>Unicode<sp/>码点有多种编码方式。这些称为<sp/>Unicode<sp/>转换格式（Unicode<sp/>Transformation<sp/>Format,<sp/>UTF）。RapidJSON<sp/>支持最常用的<sp/>UTF，包括：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-8：8<sp/>位可变长度编码。它把一个码点映射至<sp/>1<sp/>至<sp/>4<sp/>个字节。</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-16：16<sp/>位可变长度编码。它把一个码点映射至<sp/>1<sp/>至<sp/>2<sp/>个<sp/>16<sp/>位编码单元（即<sp/>2<sp/>至<sp/>4<sp/>个字节）。</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>UTF-32：32<sp/>位固定长度编码。它直接把码点映射至单个<sp/>32<sp/>位编码单元（即<sp/>4<sp/>字节）。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">对于<sp/>UTF-16<sp/>及<sp/>UTF-32<sp/>来说，字节序（endianness）是有影响的。在内存中，它们通常都是以该计算机的字节序来存储。然而，当要储存在文件中或在网上传输，我们需要指明字节序列的字节序，是小端（little<sp/>endian,<sp/>LE）还是大端（big-endian,<sp/>BE）。<sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">RapidJSON<sp/>通过<sp/>`rapidjson/encodings.h`<sp/>中的<sp/>struct<sp/>去提供各种编码：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">namespace<sp/>rapidjson<sp/>{</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>char&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF8;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16LE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>wchar_t&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF16BE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32LE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">template&lt;typename<sp/>CharType<sp/>=<sp/>unsigned&gt;</highlight></codeline>
+<codeline><highlight class="normal">struct<sp/>UTF32BE;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">}<sp/>//<sp/>namespace<sp/>rapidjson</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">对于在内存中的文本，我们正常会使用<sp/>`UTF8`、`UTF16`<sp/>或<sp/>`UTF32`。对于处理经过<sp/>I/O<sp/>的文本，我们可使用<sp/>`UTF8`、`UTF16LE`、`UTF16BE`、`UTF32LE`<sp/>或<sp/>`UTF32BE`。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">当使用<sp/>DOM<sp/>风格的<sp/>API，`GenericValue&lt;Encoding&gt;`<sp/>及<sp/>`GenericDocument&lt;Encoding&gt;`<sp/>里的<sp/>`Encoding`<sp/>模板参数是用于指明内存中存储的<sp/>JSON<sp/>字符串使用哪种编码。因此通常我们会在此参数中使用<sp/>`UTF8`、`UTF16`<sp/>或<sp/>`UTF32`。如何选择，视乎应用软件所使用的操作系统及其他程序库。例如，Windows<sp/>API<sp/>使用<sp/>UTF-16<sp/>表示<sp/>Unicode<sp/>字符，而多数的<sp/>Linux<sp/>发行版本及应用软件则更喜欢<sp/>UTF-8。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">使用<sp/>UTF-16<sp/>的<sp/>DOM<sp/>声明例子：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericDocument&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WDocument;</highlight></codeline>
+<codeline><highlight class="normal">typedef<sp/>GenericValue&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>WValue;</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">可以在<sp/>[DOM&apos;s<sp/>Encoding](doc/stream.zh-cn.md)<sp/>一节看到更详细的使用例子。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>字符类型<sp/>{#CharacterType}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">从之前的声明中可以看到，每个编码都有一个<sp/>`CharType`<sp/>模板参数。这可能比较容易混淆，实际上，每个<sp/>`CharType`<sp/>存储一个编码单元，而不是一个字符（码点）。如之前所谈及，在<sp/>UTF-8<sp/>中一个码点可能会编码成<sp/>1<sp/>至<sp/>4<sp/>个编码单元。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">对于<sp/>`UTF16(LE|BE)`<sp/>及<sp/>`UTF32(LE|BE)`<sp/>来说，`CharType`<sp/>必须分别是一个至少<sp/>2<sp/>及<sp/>4<sp/>字节的整数类型。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">注意<sp/>C++11<sp/>新添了<sp/>`char16_t`<sp/>及<sp/>`char32_t`<sp/>类型，也可分别用于<sp/>`UTF16`<sp/>及<sp/>`UTF32`。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>AutoUTF<sp/>{#AutoUTF}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">上述所介绍的编码都是在编译期静态挷定的。换句话说，使用者必须知道内存或流之中使用了哪种编码。然而，有时候我们可能需要读写不同编码的文件，而且这些编码需要在运行时才能决定。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`AutoUTF`<sp/>是为此而设计的编码。它根据输入或输出流来选择使用哪种编码。目前它应该与<sp/>`EncodedInputStream`<sp/>及<sp/>`EncodedOutputStream`<sp/>结合使用。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>ASCII<sp/>{#ASCII}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">虽然<sp/>JSON<sp/>标准并未提及<sp/>[ASCII](http://en.wikipedia.org/wiki/ASCII)，有时候我们希望写入<sp/>7<sp/>位的<sp/>ASCII<sp/>JSON，以供未能处理<sp/>UTF-8<sp/>的应用程序使用。由于任<sp/>JSON<sp/>都可以把<sp/>Unicode<sp/>字符表示为<sp/>`\uXXXX`<sp/>转义序列，JSON<sp/>总是可用<sp/>ASCII<sp/>来编码。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下的例子把<sp/>UTF-8<sp/>的<sp/>DOM<sp/>写成<sp/>ASCII<sp/>的<sp/>JSON：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline><highlight class="normal">Document<sp/>d;<sp/>//<sp/>UTF8&lt;&gt;</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">StringBuffer<sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal">Writer&lt;StringBuffer,<sp/>Document::EncodingType,<sp/>ASCII&lt;&gt;<sp/>&gt;<sp/>writer(buffer);</highlight></codeline>
+<codeline><highlight class="normal">d.Accept(writer);</highlight></codeline>
+<codeline><highlight class="normal">std::cout<sp/>&lt;&lt;<sp/>buffer.GetString();</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ASCII<sp/>可用于输入流。当输入流包含大于<sp/>127<sp/>的字节，就会导致<sp/>`kParseErrorStringInvalidEncoding`<sp/>错误。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">ASCII<sp/>*<sp/>不能<sp/>*<sp/>用于内存（`Document`<sp/>的编码，或<sp/>`Reader`<sp/>的目标编码)，因为它不能表示<sp/>Unicode<sp/>码点。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>校验及转码<sp/>{#ValidationTranscoding}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">当<sp/>RapidJSON<sp/>解析一个<sp/>JSON<sp/>时，它能校验输入<sp/>JSON，判断它是否所标明编码的合法序列。要开启此选项，请把<sp/>`kParseValidateEncodingFlag`<sp/>加入<sp/>`parseFlags`<sp/>模板参数。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">若输入编码和输出编码并不相同，`Reader`<sp/>及<sp/>`Writer`<sp/>会算把文本转码。在这种情况下，并不需要<sp/>`kParseValidateEncodingFlag`，因为它必须解码输入序列。若序列不能被解码，它必然是不合法的。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>转码器<sp/>{#Transcoder}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">虽然<sp/>RapidJSON<sp/>的编码功能是为<sp/>JSON<sp/>解析／生成而设计，使用者也可以“滥用”它们来为非<sp/>JSON<sp/>字符串转码。</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">以下的例子把<sp/>UTF-8<sp/>字符串转码成<sp/>UTF-16：</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~cpp</highlight></codeline>
+<codeline><highlight class="normal">#include<sp/>&quot;rapidjson/encodings.h&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">using<sp/>namespace<sp/>rapidjson;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">const<sp/>char*<sp/>s<sp/>=<sp/>&quot;...&quot;;<sp/>//<sp/>UTF-8<sp/>string</highlight></codeline>
+<codeline><highlight class="normal">StringStream<sp/>source(s);</highlight></codeline>
+<codeline><highlight class="normal">GenericStringBuffer&lt;UTF16&lt;&gt;<sp/>&gt;<sp/>target;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">bool<sp/>hasError<sp/>=<sp/>false;</highlight></codeline>
+<codeline><highlight class="normal">while<sp/>(source.Peek()<sp/>!=<sp/>&apos;\0&apos;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(!Transcoder&lt;UTF8&lt;&gt;,<sp/>UTF16&lt;&gt;<sp/>&gt;::Transcode(source,<sp/>target))<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hasError<sp/>=<sp/>true;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>break;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">if<sp/>(!hasError)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>const<sp/>wchar_t*<sp/>t<sp/>=<sp/>target.GetString();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>...</highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+<codeline><highlight class="normal">~~~~~~~~~~</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">你也可以用<sp/>`AutoUTF`<sp/>及对应的流来在运行时设置内源／目的之编码。</highlight></codeline>
+    </programlisting>
+    <location file="src/rapidjson/doc/encoding.zh-cn.md"/>
+  </compounddef>
+</doxygen>

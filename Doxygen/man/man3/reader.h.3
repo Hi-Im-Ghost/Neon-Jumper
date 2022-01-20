@@ -1,0 +1,181 @@
+.TH "src/rapidjson/include/rapidjson/reader.h" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/include/rapidjson/reader.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'allocators\&.h'\fP
+.br
+\fC#include 'stream\&.h'\fP
+.br
+\fC#include 'encodedstream\&.h'\fP
+.br
+\fC#include 'internal/clzll\&.h'\fP
+.br
+\fC#include 'internal/meta\&.h'\fP
+.br
+\fC#include 'internal/stack\&.h'\fP
+.br
+\fC#include 'internal/strtod\&.h'\fP
+.br
+\fC#include <limits>\fP
+.br
+\fC#include 'error/error\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBBaseReaderHandler< Encoding, Derived >\fP"
+.br
+.RI "Default implementation of Handler\&. "
+.ti -1c
+.RI "class \fBinternal::StreamLocalCopy< Stream, 1 >\fP"
+.br
+.RI "Do copy optimization\&. "
+.ti -1c
+.RI "class \fBinternal::StreamLocalCopy< Stream, 0 >\fP"
+.br
+.RI "Keep reference\&. "
+.ti -1c
+.RI "class \fBGenericReader< SourceEncoding, TargetEncoding, StackAllocator >\fP"
+.br
+.RI "SAX-style JSON parser\&. Use \fBReader\fP for \fBUTF8\fP encoding and default allocator\&. "
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBinternal\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_PARSE_ERROR_NORETURN\fP(parseErrorCode,  offset)"
+.br
+.RI "Macro to indicate a parse error\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_PARSE_ERROR\fP(parseErrorCode,  offset)"
+.br
+.RI "(Internal) macro to indicate and handle a parse error\&. "
+.ti -1c
+.RI "#define \fBRAPIDJSON_PARSE_DEFAULT_FLAGS\fP   \fBkParseNoFlags\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericReader\fP< \fBUTF8\fP<>, \fBUTF8\fP<> > \fBReader\fP"
+.br
+.RI "Reader with \fBUTF8\fP encoding and default allocator\&. "
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBParseFlag\fP { \fBkParseNoFlags\fP = 0, \fBkParseInsituFlag\fP = 1, \fBkParseValidateEncodingFlag\fP = 2, \fBkParseIterativeFlag\fP = 4, \fBkParseStopWhenDoneFlag\fP = 8, \fBkParseFullPrecisionFlag\fP = 16, \fBkParseCommentsFlag\fP = 32, \fBkParseNumbersAsStringsFlag\fP = 64, \fBkParseTrailingCommasFlag\fP = 128, \fBkParseNanAndInfFlag\fP = 256, \fBkParseEscapedApostropheFlag\fP = 512, \fBkParseDefaultFlags\fP = RAPIDJSON_PARSE_DEFAULT_FLAGS }"
+.br
+.RI "Combination of parseFlags\&. "
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename InputStream > void \fBSkipWhitespace\fP (InputStream &is)"
+.br
+.RI "Skip the JSON white spaces in a stream\&. "
+.ti -1c
+.RI "const char * \fBSkipWhitespace\fP (const char *p, const char *end)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define RAPIDJSON_PARSE_DEFAULT_FLAGS   \fBkParseNoFlags\fP"
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef \fBGenericReader\fP<\fBUTF8\fP<>, \fBUTF8\fP<> > \fBReader\fP"
+
+.PP
+Reader with \fBUTF8\fP encoding and default allocator\&. 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBParseFlag\fP"
+
+.PP
+Combination of parseFlags\&. 
+.PP
+\fBSee also\fP
+.RS 4
+\fBReader::Parse\fP, \fBDocument::Parse\fP, \fBDocument::ParseInsitu\fP, \fBDocument::ParseStream\fP 
+.RE
+.PP
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkParseNoFlags \fP\fP
+No flags are set\&. 
+.TP
+\fB\fIkParseInsituFlag \fP\fP
+In-situ(destructive) parsing\&. 
+.TP
+\fB\fIkParseValidateEncodingFlag \fP\fP
+Validate encoding of JSON strings\&. 
+.TP
+\fB\fIkParseIterativeFlag \fP\fP
+Iterative(constant complexity in terms of function call stack size) parsing\&. 
+.TP
+\fB\fIkParseStopWhenDoneFlag \fP\fP
+After parsing a complete JSON root from stream, stop further processing the rest of stream\&. When this flag is used, parser will not generate kParseErrorDocumentRootNotSingular error\&. 
+.TP
+\fB\fIkParseFullPrecisionFlag \fP\fP
+Parse number in full precision (but slower)\&. 
+.TP
+\fB\fIkParseCommentsFlag \fP\fP
+Allow one-line (//) and multi-line (/**/) comments\&. 
+.TP
+\fB\fIkParseNumbersAsStringsFlag \fP\fP
+Parse all numbers (ints/doubles) as strings\&. 
+.TP
+\fB\fIkParseTrailingCommasFlag \fP\fP
+Allow trailing commas at the end of objects and arrays\&. 
+.TP
+\fB\fIkParseNanAndInfFlag \fP\fP
+Allow parsing NaN, Inf, Infinity, -Inf and -Infinity as doubles\&. 
+.TP
+\fB\fIkParseEscapedApostropheFlag \fP\fP
+Allow escaped apostrophe in strings\&. 
+.TP
+\fB\fIkParseDefaultFlags \fP\fP
+Default parse flags\&. Can be customized by defining RAPIDJSON_PARSE_DEFAULT_FLAGS\&. 
+.SH "Function Documentation"
+.PP 
+.SS "const char * SkipWhitespace (const char * p, const char * end)\fC [inline]\fP"
+
+.SS "template<typename InputStream > void SkipWhitespace (InputStream & is)"
+
+.PP
+Skip the JSON white spaces in a stream\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIis\fP A input stream for skipping white spaces\&. 
+.RE
+.PP
+\fBNote\fP
+.RS 4
+This function has SSE2/SSE4\&.2 specialization\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

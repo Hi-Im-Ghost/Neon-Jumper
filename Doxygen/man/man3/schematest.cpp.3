@@ -1,0 +1,538 @@
+.TH "src/rapidjson/test/unittest/schematest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/rapidjson/test/unittest/schematest.cpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'unittest\&.h'\fP
+.br
+\fC#include 'rapidjson/schema\&.h'\fP
+.br
+\fC#include 'rapidjson/stringbuffer\&.h'\fP
+.br
+\fC#include 'rapidjson/writer\&.h'\fP
+.br
+\fC#include 'rapidjson/error/error\&.h'\fP
+.br
+\fC#include 'rapidjson/error/en\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBRemoteSchemaDocumentProvider< SchemaDocumentType >\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBRAPIDJSON_SCHEMA_VERBOSE\fP   0"
+.br
+.ti -1c
+.RI "#define \fBRAPIDJSON_HAS_STDSTRING\fP   1"
+.br
+.ti -1c
+.RI "#define \fBTEST_HASHER\fP(json1,  json2,  expected)"
+.br
+.ti -1c
+.RI "#define \fBVALIDATE\fP(schema,  json,  expected)"
+.br
+.ti -1c
+.RI "#define \fBINVALIDATE\fP(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error)"
+.br
+.ti -1c
+.RI "#define \fBINVALIDATE_\fP(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error,  flags,  SchemaValidatorType,  PointerType)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Hasher)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Typeless)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, MultiType)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Enum_Typed)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Enum_Typless)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Enum_InvalidType)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, AllOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, AnyOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, OneOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Not)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_AllOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, String)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, String_LengthRange)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_Range)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_Range64Boundary)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_RangeU64Boundary)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_Range64BoundaryExclusive)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_MultipleOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Integer_MultipleOf64Boundary)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_Range)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_RangeInt)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_RangeDouble)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_RangeDoubleU64Boundary)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_MultipleOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Number_MultipleOfOne)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_Properties)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_AdditionalPropertiesBoolean)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_AdditionalPropertiesObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_Required)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_Required_PassWithDefault)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_PropertiesRange)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_PropertyDependencies)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Object_SchemaDependencies)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array_ItemsList)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array_ItemsTuple)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array_AdditionalItems)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array_ItemsRange)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Array_UniqueItems)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Boolean)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Null)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ObjectInArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, MultiTypeInObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, MultiTypeWithObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, AllOf_Nested)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, EscapedPointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, SchemaPointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ValidateMetaSchema)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ValidateMetaSchema_UTF16)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, TestSuite)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidatingReader\fP, Simple)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidatingReader\fP, Invalid)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (SchemaValidatingWriter, Simple)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchema\fP, Issue848)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Issue608)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Issue728_AllOfRef)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Issue1017_allOfHandler)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_uri)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_relative_path)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_absolute_path)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_absolute_path_document)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_internal_id_1)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_internal_id_2)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_internal_id_in_array)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_internal_id_and_schema_pointer)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_internal_multiple_ids)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Ref_remote_issue1210)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_OneOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_AllOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_AnyOf)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_UniqueItems)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_Enum)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_RogueArray)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_RogueObject)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_RogueString)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, ContinueOnErrors_Issue2)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBSchemaValidator\fP, Schema_UnknownError)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define INVALIDATE(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    INVALIDATE_(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error, kValidateDefaultFlags, SchemaValidator, Pointer) \
+}
+.fi
+.SS "#define INVALIDATE_(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error, flags, SchemaValidatorType, PointerType)"
+
+.SS "#define RAPIDJSON_HAS_STDSTRING   1"
+
+.SS "#define RAPIDJSON_SCHEMA_VERBOSE   0"
+
+.SS "#define TEST_HASHER(json1, json2, expected)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    Document d1, d2;\
+    d1\&.Parse(json1);\
+    ASSERT_FALSE(d1\&.HasParseError());\
+    d2\&.Parse(json2);\
+    ASSERT_FALSE(d2\&.HasParseError());\
+    internal::Hasher<Value, CrtAllocator> h1, h2;\
+    d1\&.Accept(h1);\
+    d2\&.Accept(h2);\
+    ASSERT_TRUE(h1\&.IsValid());\
+    ASSERT_TRUE(h2\&.IsValid());\
+    /*printf("%s: 0x%016llx\n%s: 0x%016llx\n\n", json1, h1\&.GetHashCode(), json2, h2\&.GetHashCode());*/\
+    EXPECT_TRUE(expected == (h1\&.GetHashCode() == h2\&.GetHashCode()));\
+}
+.fi
+.SS "#define VALIDATE(schema, json, expected)"
+\fBValue:\fP
+.PP
+.nf
+{\
+    SchemaValidator validator(schema);\
+    Document d;\
+    /*printf("\n%s\n", json);*/\
+    d\&.Parse(json);\
+    EXPECT_FALSE(d\&.HasParseError());\
+    EXPECT_TRUE(expected == d\&.Accept(validator));\
+    EXPECT_TRUE(expected == validator\&.IsValid());\
+    ValidateErrorCode code = validator\&.GetInvalidSchemaCode();\
+    if (expected) {\
+      EXPECT_TRUE(code == kValidateErrorNone);\
+      EXPECT_TRUE(validator\&.GetInvalidSchemaKeyword() == 0);\
+    }\
+    if ((expected) && !validator\&.IsValid()) {\
+        StringBuffer sb;\
+        validator\&.GetInvalidSchemaPointer()\&.StringifyUriFragment(sb);\
+        printf("Invalid schema: %s\n", sb\&.GetString());\
+        printf("Invalid keyword: %s\n", validator\&.GetInvalidSchemaKeyword());\
+        printf("Invalid code: %d\n", code);\
+        printf("Invalid message: %s\n", GetValidateError_En(code));\
+        sb\&.Clear();\
+        validator\&.GetInvalidDocumentPointer()\&.StringifyUriFragment(sb);\
+        printf("Invalid document: %s\n", sb\&.GetString());\
+        sb\&.Clear();\
+        Writer<StringBuffer> w(sb);\
+        validator\&.GetError()\&.Accept(w);\
+        printf("Validation error: %s\n", sb\&.GetString());\
+    }\
+}
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "TEST (\fBSchema\fP, Issue848)"
+
+.SS "TEST (\fBSchemaValidatingReader\fP, Invalid)"
+
+.SS "TEST (\fBSchemaValidatingReader\fP, Simple)"
+
+.SS "TEST (SchemaValidatingWriter, Simple)"
+
+.SS "TEST (\fBSchemaValidator\fP, AllOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, AllOf_Nested)"
+
+.SS "TEST (\fBSchemaValidator\fP, AnyOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array_AdditionalItems)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array_ItemsList)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array_ItemsRange)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array_ItemsTuple)"
+
+.SS "TEST (\fBSchemaValidator\fP, Array_UniqueItems)"
+
+.SS "TEST (\fBSchemaValidator\fP, Boolean)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_AllOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_AnyOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_Enum)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_Issue2)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_OneOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_RogueArray)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_RogueObject)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_RogueString)"
+
+.SS "TEST (\fBSchemaValidator\fP, ContinueOnErrors_UniqueItems)"
+
+.SS "TEST (\fBSchemaValidator\fP, Enum_InvalidType)"
+
+.SS "TEST (\fBSchemaValidator\fP, Enum_Typed)"
+
+.SS "TEST (\fBSchemaValidator\fP, Enum_Typless)"
+
+.SS "TEST (\fBSchemaValidator\fP, EscapedPointer)"
+
+.SS "TEST (\fBSchemaValidator\fP, Hasher)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_MultipleOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_MultipleOf64Boundary)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_Range)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_Range64Boundary)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_Range64BoundaryExclusive)"
+
+.SS "TEST (\fBSchemaValidator\fP, Integer_RangeU64Boundary)"
+
+.SS "TEST (\fBSchemaValidator\fP, Issue1017_allOfHandler)"
+
+.SS "TEST (\fBSchemaValidator\fP, Issue608)"
+
+.SS "TEST (\fBSchemaValidator\fP, Issue728_AllOfRef)"
+
+.SS "TEST (\fBSchemaValidator\fP, MultiType)"
+
+.SS "TEST (\fBSchemaValidator\fP, MultiTypeInObject)"
+
+.SS "TEST (\fBSchemaValidator\fP, MultiTypeWithObject)"
+
+.SS "TEST (\fBSchemaValidator\fP, Not)"
+
+.SS "TEST (\fBSchemaValidator\fP, Null)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_MultipleOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_MultipleOfOne)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_Range)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_RangeDouble)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_RangeDoubleU64Boundary)"
+
+.SS "TEST (\fBSchemaValidator\fP, Number_RangeInt)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_AdditionalPropertiesBoolean)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_AdditionalPropertiesObject)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_Properties)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_PropertiesRange)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_PropertyDependencies)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_Required)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_Required_PassWithDefault)"
+
+.SS "TEST (\fBSchemaValidator\fP, Object_SchemaDependencies)"
+
+.SS "TEST (\fBSchemaValidator\fP, ObjectInArray)"
+
+.SS "TEST (\fBSchemaValidator\fP, OneOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_AllOf)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_internal_id_1)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_internal_id_2)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_internal_id_and_schema_pointer)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_internal_id_in_array)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_internal_multiple_ids)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_absolute_path)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_absolute_path_document)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_relative_path)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote_change_resolution_scope_uri)"
+
+.SS "TEST (\fBSchemaValidator\fP, Ref_remote_issue1210)"
+
+.SS "TEST (\fBSchemaValidator\fP, Schema_UnknownError)"
+
+.SS "TEST (\fBSchemaValidator\fP, SchemaPointer)"
+
+.SS "TEST (\fBSchemaValidator\fP, String)"
+
+.SS "TEST (\fBSchemaValidator\fP, String_LengthRange)"
+
+.SS "TEST (\fBSchemaValidator\fP, TestSuite)"
+
+.SS "TEST (\fBSchemaValidator\fP, Typeless)"
+
+.SS "TEST (\fBSchemaValidator\fP, ValidateMetaSchema)"
+
+.SS "TEST (\fBSchemaValidator\fP, ValidateMetaSchema_UTF16)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

@@ -1,0 +1,79 @@
+\hypertarget{cursorstreamwrapper_8h_source}{}\doxysection{cursorstreamwrapper.\+h}
+\label{cursorstreamwrapper_8h_source}\index{src/rapidjson/include/rapidjson/cursorstreamwrapper.h@{src/rapidjson/include/rapidjson/cursorstreamwrapper.h}}
+\mbox{\hyperlink{cursorstreamwrapper_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{//}}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed}}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR}}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the}}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_CURSORSTREAMWRAPPER\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_CURSORSTREAMWRAPPER\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stream_8h}{stream.h}}"{}}}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{20 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{21 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_OFF(effc++)}
+\DoxyCodeLine{23 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& \_MSC\_VER <= 1800}}
+\DoxyCodeLine{26 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{27 RAPIDJSON\_DIAG\_OFF(4702)  \textcolor{comment}{// unreachable code}}
+\DoxyCodeLine{28 RAPIDJSON\_DIAG\_OFF(4512)  \textcolor{comment}{// assignment operator could not be generated}}
+\DoxyCodeLine{29 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33 }
+\DoxyCodeLine{35 }
+\DoxyCodeLine{38 \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Encoding = UTF8<> >}
+\DoxyCodeLine{39 \textcolor{keyword}{class }\mbox{\hyperlink{class_cursor_stream_wrapper}{CursorStreamWrapper}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_generic_stream_wrapper}{GenericStreamWrapper}}<InputStream, Encoding> \{}
+\DoxyCodeLine{40 \textcolor{keyword}{public}:}
+\DoxyCodeLine{41     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} Encoding::Ch \mbox{\hyperlink{class_cursor_stream_wrapper_a4bab1186bfeebbcf00719c2613b0dca6}{Ch}};}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43     \mbox{\hyperlink{class_cursor_stream_wrapper_a8d9a0109e19ab4fb7a79091cefe608a7}{CursorStreamWrapper}}(InputStream\& is):}
+\DoxyCodeLine{44         \mbox{\hyperlink{class_generic_stream_wrapper}{GenericStreamWrapper}}<InputStream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}>(is), line\_(1), col\_(0) \{\}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{comment}{// counting line and column number}}
+\DoxyCodeLine{47     \mbox{\hyperlink{class_cursor_stream_wrapper_a4bab1186bfeebbcf00719c2613b0dca6}{Ch}} \mbox{\hyperlink{class_cursor_stream_wrapper_af0bbad24ff7ad101cdf9842760deb0f6}{Take}}() \{}
+\DoxyCodeLine{48         \mbox{\hyperlink{class_cursor_stream_wrapper_a4bab1186bfeebbcf00719c2613b0dca6}{Ch}} ch = this-\/>\mbox{\hyperlink{class_generic_stream_wrapper_a2b44ae2c9460c2e18aca6ba25c537cc5}{is\_}}.Take();}
+\DoxyCodeLine{49         \textcolor{keywordflow}{if}(ch == \textcolor{charliteral}{'\(\backslash\)n'}) \{}
+\DoxyCodeLine{50             line\_ ++;}
+\DoxyCodeLine{51             col\_ = 0;}
+\DoxyCodeLine{52         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{53             col\_ ++;}
+\DoxyCodeLine{54         \}}
+\DoxyCodeLine{55         \textcolor{keywordflow}{return} ch;}
+\DoxyCodeLine{56     \}}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{59     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_cursor_stream_wrapper_ad5cc5b06be7fb5afb7c3d4a82b5ef8ce}{GetLine}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} line\_; \}}
+\DoxyCodeLine{61     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_cursor_stream_wrapper_afdd243889599c9c9edfacea82674a8f4}{GetColumn}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} col\_; \}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63 \textcolor{keyword}{private}:}
+\DoxyCodeLine{64     \textcolor{keywordtype}{size\_t} line\_;   }
+\DoxyCodeLine{65     \textcolor{keywordtype}{size\_t} col\_;    }
+\DoxyCodeLine{66 \};}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68 \textcolor{preprocessor}{\#if defined(\_MSC\_VER) \&\& \_MSC\_VER <= 1800}}
+\DoxyCodeLine{69 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72 \textcolor{preprocessor}{\#if defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{73 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{74 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{76 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{77 }
+\DoxyCodeLine{78 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_CURSORSTREAMWRAPPER\_H\_}}
+
+\end{DoxyCode}

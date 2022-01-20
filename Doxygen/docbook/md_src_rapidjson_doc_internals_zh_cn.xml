@@ -1,0 +1,1403 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_src_rapidjson_doc_internals_zh_cn" xml:lang="en-US">
+
+<para>本部分记录了一些设计和实现细节。</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Architecture">
+<title>Architecture</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1autotoc_md96">
+<title>SAX 和 DOM</title>
+
+<para>下面的 UML 图显示了 SAX 和 DOM 的基本关系。</para>
+
+<para></para>
+
+<para>关系的核心是 <computeroutput>Handler</computeroutput> 概念。在 SAX 一边，<computeroutput>Reader</computeroutput> 从流解析 JSON 并将事件发送到 <computeroutput>Handler</computeroutput>。<computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 实现了 <computeroutput>Handler</computeroutput> 概念，用于处理相同的事件。在 DOM 一边，<computeroutput>Document</computeroutput> 实现了 <computeroutput>Handler</computeroutput> 概念，用于通过这些时间来构建 DOM。<computeroutput>Value</computeroutput> 支持了 <computeroutput>Value::Accept(Handler&amp;)</computeroutput> 函数，它可以将 DOM 转换为事件进行发送。</para>
+
+<para>在这个设计，SAX 是不依赖于 DOM 的。甚至 <computeroutput>Reader</computeroutput> 和 <computeroutput><link linkend="_class_writer">Writer</link></computeroutput> 之间也没有依赖。这提供了连接事件发送器和处理器的灵活性。除此之外，<computeroutput>Value</computeroutput> 也是不依赖于 SAX 的。所以，除了将 DOM 序列化为 JSON 之外，用户也可以将其序列化为 XML，或者做任何其他事情。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1autotoc_md97">
+<title>工具类</title>
+
+<para>SAX 和 DOM API 都依赖于3个额外的概念：<computeroutput>Allocator</computeroutput>、<computeroutput>Encoding</computeroutput> 和 <computeroutput>Stream</computeroutput>。它们的继承层次结构如下图所示。</para>
+
+<para></para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Value">
+<title>Value</title>
+
+<para><computeroutput>Value</computeroutput> （实际上被定义为 <computeroutput><link linkend="_class_generic_value">GenericValue</link>&lt;<link linkend="_struct_u_t_f8">UTF8</link>&lt;&gt;&gt;</computeroutput>）是 DOM API 的核心。本部分描述了它的设计。</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1DataLayout">
+<title>Data Layout</title>
+
+<para><computeroutput>Value</computeroutput> 是<link xlink:href="http://en.wikipedia.org/wiki/Variant_type">可变类型</link>。在 RapidJSON 的上下文中，一个 <computeroutput>Value</computeroutput> 的实例可以包含6种 JSON 数据类型之一。通过使用 <computeroutput>union</computeroutput> ，这是可能实现的。每一个 <computeroutput>Value</computeroutput> 包含两个成员：<computeroutput>union Data data_</computeroutput> 和 <computeroutput>unsigned flags_</computeroutput>。<computeroutput>flags_</computeroutput> 表明了 JSON 类型，以及附加的信息。</para>
+
+<para>下表显示了所有类型的数据布局。32位/64位列表明了字段所占用的字节数。</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Null   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNullType kNullFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Bool   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kBoolType</computeroutput> (either <computeroutput>kTrueFlag</computeroutput> or <computeroutput>kFalseFlag</computeroutput>)   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>String   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Ch* str</computeroutput>   </para>
+</entry><entry>
+<para>指向字符串的指针（可能拥有所有权）   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType length</computeroutput>   </para>
+</entry><entry>
+<para>字符串长度   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Object   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Member* members</computeroutput>   </para>
+</entry><entry>
+<para>指向成员数组的指针（拥有所有权）   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry>
+<para>成员数量   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry>
+<para>成员容量   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kObjectType kObjectFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Array   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Value* values</computeroutput>   </para>
+</entry><entry>
+<para>指向值数组的指针（拥有所有权）   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>SizeType size</computeroutput>   </para>
+</entry><entry>
+<para>值数量   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>SizeType capacity</computeroutput>   </para>
+</entry><entry>
+<para>值容量   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kArrayType kArrayFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Int)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>int i</computeroutput>   </para>
+</entry><entry>
+<para>32位有符号整数   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（零填充）   </para>
+</entry><entry>
+<para>0   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kIntFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (UInt)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned u</computeroutput>   </para>
+</entry><entry>
+<para>32位无符号整数   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（零填充）   </para>
+</entry><entry>
+<para>0   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kUintFlag kUint64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Int64)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>int64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>64位有符号整数   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Uint64)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>64位无符号整数   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kInt64Flag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>Number (Double)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>uint64_t i64</computeroutput>   </para>
+</entry><entry>
+<para>双精度浮点数   </para>
+</entry><entry align='center'>
+<para>8   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para>（未使用）   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>8    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kNumberType kNumberFlag kDoubleFlag</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>这里有一些需要注意的地方：<itemizedlist>
+<listitem>
+<para>为了减少在64位架构上的内存消耗，<computeroutput>SizeType</computeroutput> 被定义为 <computeroutput>unsigned</computeroutput> 而不是 <computeroutput>size_t</computeroutput>。</para>
+</listitem><listitem>
+<para>32位整数的零填充可能被放在实际类型的前面或后面，这依赖于字节序。这使得它可以将32位整数不经过任何转换就可以解释为64位整数。</para>
+</listitem><listitem>
+<para><computeroutput>Int</computeroutput> 永远是 <computeroutput>Int64</computeroutput>，反之不然。</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Flags">
+<title>Flags</title>
+
+<para>32位的 <computeroutput>flags_</computeroutput> 包含了 JSON 类型和其他信息。如前文中的表所述，每一种 JSON 类型包含了冗余的 <computeroutput>kXXXType</computeroutput> 和 <computeroutput>kXXXFlag</computeroutput>。这个设计是为了优化测试位标志（<computeroutput>IsNumber()</computeroutput>）和获取每一种类型的序列号（<computeroutput>GetType()</computeroutput>）。</para>
+
+<para>字符串有两个可选的标志。<computeroutput>kCopyFlag</computeroutput> 表明这个字符串拥有字符串拷贝的所有权。而 <computeroutput>kInlineStrFlag</computeroutput> 意味着使用了<link linkend="_md_src_rapidjson_doc_internals_zh_cn_1ShortString">短字符串优化</link>。</para>
+
+<para>数字更加复杂一些。对于普通的整数值，它可以包含 <computeroutput>kIntFlag</computeroutput>、<computeroutput>kUintFlag</computeroutput>、 <computeroutput>kInt64Flag</computeroutput> 和/或 <computeroutput>kUint64Flag</computeroutput>，这由整数的范围决定。带有小数或者超过64位所能表达的范围的整数的数字会被存储为带有 <computeroutput>kDoubleFlag</computeroutput> 的 <computeroutput>double</computeroutput>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ShortString">
+<title>Short-String Optimization</title>
+
+<para><link xlink:href="https://github.com/Kosta-Github">Kosta</link> 提供了很棒的短字符串优化。这个优化的xxx如下所述。除去 <computeroutput>flags_</computeroutput> ，<computeroutput>Value</computeroutput> 有12或16字节（对于32位或64位）来存储实际的数据。这为在其内部直接存储短字符串而不是存储字符串的指针创造了可能。对于1字节的字符类型（例如 <computeroutput>char</computeroutput>），它可以在 <computeroutput>Value</computeroutput> 类型内部存储至多11或15个字符的字符串。</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="4" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry>
+<para>ShortString (Ch=char)   </para>
+</entry><entry>
+<para></para>
+</entry><entry align='center'>
+<para>32位   </para>
+</entry><entry align='center'>
+<para>64位    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>Ch str[MaxChars]</computeroutput>   </para>
+</entry><entry>
+<para>字符串缓冲区   </para>
+</entry><entry align='center'>
+<para>11   </para>
+</entry><entry align='center'>
+<para>15    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry>
+<para><computeroutput>Ch invLength</computeroutput>   </para>
+</entry><entry>
+<para>MaxChars - Length   </para>
+</entry><entry align='center'>
+<para>1   </para>
+</entry><entry align='center'>
+<para>1    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry>
+<para><computeroutput>unsigned flags_</computeroutput>   </para>
+</entry><entry>
+<para><computeroutput>kStringType kStringFlag ...</computeroutput>   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry><entry align='center'>
+<para>4   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>这里使用了一项特殊的技术。它存储了 (MaxChars - length) 而不直接存储字符串的长度。这使得存储11个字符并且带有后缀 <computeroutput>\0</computeroutput> 成为可能。</para>
+
+<para>这个优化可以减少字符串拷贝内存占用。它也改善了缓存一致性，并进一步提高了运行时性能。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1InternalAllocator">
+<title>Allocator</title>
+
+<para><computeroutput>Allocator</computeroutput> 是 RapidJSON 中的概念： <literallayout><computeroutput>concept&#32;Allocator&#32;{
+&#32;&#32;&#32;&#32;static&#32;const&#32;bool&#32;kNeedFree;&#32;&#32;&#32;&#32;//!&lt;&#32;表明这个分配器是否需要调用&#32;Free()。
+
+&#32;&#32;&#32;&#32;//&#32;申请内存块。
+&#32;&#32;&#32;&#32;//&#32;\param&#32;size&#32;内存块的大小，以字节记。
+&#32;&#32;&#32;&#32;//&#32;\returns&#32;指向内存块的指针。
+&#32;&#32;&#32;&#32;void*&#32;Malloc(size_t&#32;size);
+
+&#32;&#32;&#32;&#32;//&#32;调整内存块的大小。
+&#32;&#32;&#32;&#32;//&#32;\param&#32;originalPtr&#32;当前内存块的指针。空指针是被允许的。
+&#32;&#32;&#32;&#32;//&#32;\param&#32;originalSize&#32;当前大小，以字节记。（设计问题：因为有些分配器可能不会记录它，显示的传递它可以节约内存。）
+&#32;&#32;&#32;&#32;//&#32;\param&#32;newSize&#32;新大小，以字节记。
+&#32;&#32;&#32;&#32;void*&#32;Realloc(void*&#32;originalPtr,&#32;size_t&#32;originalSize,&#32;size_t&#32;newSize);
+
+&#32;&#32;&#32;&#32;//&#32;释放内存块。
+&#32;&#32;&#32;&#32;//&#32;\param&#32;ptr&#32;指向内存块的指针。空指针是被允许的。
+&#32;&#32;&#32;&#32;static&#32;void&#32;Free(void&#32;*ptr);
+};
+</computeroutput></literallayout></para>
+
+<para>需要注意的是 <computeroutput><link linkend="_allocators_8h_1a7e0ace0214f18427d9ee8e76a5b3dcdf">Malloc()</link></computeroutput> 和 <computeroutput><link linkend="_allocators_8h_1a8e4137cbc097868e8c3d785f6cca1223">Realloc()</link></computeroutput> 是成员函数而 <computeroutput><link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Free()</link></computeroutput> 是静态成员函数。</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1MemoryPoolAllocator">
+<title>MemoryPoolAllocator</title>
+
+<para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link></computeroutput> 是 DOM 的默认内存分配器。它只申请内存而不释放内存。这对于构建 DOM 树非常合适。</para>
+
+<para>在它的内部，它从基础的内存分配器申请内存块（默认为 <computeroutput><link linkend="_class_crt_allocator">CrtAllocator</link></computeroutput>）并将这些内存块存储为单向链表。当用户请求申请内存，它会遵循下列步骤来申请内存：</para>
+
+<para><orderedlist>
+<listitem>
+<para>如果可用，使用用户提供的缓冲区。（见 <link linkend="_dom_8md">User Buffer section in DOM</link>）</para>
+</listitem><listitem>
+<para>如果用户提供的缓冲区已满，使用当前内存块。</para>
+</listitem><listitem>
+<para>如果当前内存块已满，申请新的内存块。</para>
+</listitem></orderedlist>
+</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ParsingOptimization">
+<title>Parsing Optimization</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1SkipwhitespaceWithSIMD">
+<title>Skip Whitespaces with SIMD</title>
+
+<para>当从流中解析 JSON 时，解析器需要跳过4种空格字符：</para>
+
+<para><orderedlist>
+<listitem>
+<para>空格 (<computeroutput>U+0020</computeroutput>)</para>
+</listitem><listitem>
+<para>制表符 (<computeroutput>U+000B</computeroutput>)</para>
+</listitem><listitem>
+<para>换行 (<computeroutput>U+000A</computeroutput>)</para>
+</listitem><listitem>
+<para>回车 (<computeroutput>U+000D</computeroutput>)</para>
+</listitem></orderedlist>
+</para>
+
+<para>这是一份简单的实现： <literallayout><computeroutput>void&#32;SkipWhitespace(InputStream&amp;&#32;s)&#32;{
+&#32;&#32;&#32;&#32;while&#32;(s.Peek()&#32;==&#32;&apos;&#32;&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\n&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\r&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\t&apos;)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s.Take();
+}
+</computeroutput></literallayout></para>
+
+<para>但是，这需要对每个字符进行4次比较以及一些分支。这被发现是一个热点。</para>
+
+<para>为了加速这一处理，RapidJSON 使用 SIMD 来在一次迭代中比较16个字符和4个空格。目前 RapidJSON 支持 SSE2 ， SSE4.2 和 ARM Neon 指令。同时它也只会对 UTF-8 内存流启用，包括字符串流或 <emphasis>原位</emphasis> 解析。</para>
+
+<para>你可以通过在包含 <computeroutput><link linkend="_rapidjson_8h">rapidjson.h</link></computeroutput> 之前定义 <computeroutput>RAPIDJSON_SSE2</computeroutput> ， <computeroutput>RAPIDJSON_SSE42</computeroutput> 或 <computeroutput>RAPIDJSON_NEON</computeroutput> 来启用这个优化。一些编译器可以检测这个设置，如 <computeroutput><link linkend="_perftest_8h">perftest.h</link></computeroutput>：</para>
+
+<para><literallayout><computeroutput>//&#32;__SSE2__&#32;和&#32;__SSE4_2__&#32;可被&#32;gcc、clang&#32;和&#32;Intel&#32;编译器识别：
+//&#32;如果支持的话，我们在&#32;gmake&#32;中使用了&#32;-march=native&#32;来启用&#32;-msse2&#32;和&#32;-msse4.2
+//&#32;同样的，&#32;__ARM_NEON&#32;被用于识别Neon
+#if&#32;defined(__SSE4_2__)
+#&#32;&#32;define&#32;RAPIDJSON_SSE42
+#elif&#32;defined(__SSE2__)
+#&#32;&#32;define&#32;RAPIDJSON_SSE2
+#elif&#32;defined(__ARM_NEON)
+#&#32;&#32;define&#32;RAPIDJSON_NEON
+#endif
+</computeroutput></literallayout></para>
+
+<para>需要注意的是，这是编译期的设置。在不支持这些指令的机器上运行可执行文件会使它崩溃。</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1autotoc_md98">
+<title>页面对齐问题</title>
+
+<para>在 RapidJSON 的早期版本中，被报告了<link xlink:href="https://code.google.com/archive/p/rapidjson/issues/104">一个问题</link>：<computeroutput>SkipWhitespace_SIMD()</computeroutput> 会罕见地导致崩溃（约五十万分之一的几率）。在调查之后，怀疑是 <computeroutput>_mm_loadu_si128()</computeroutput> 访问了 &#8216;&#8217;\0&apos;` 之后的内存，并越过被保护的页面边界。</para>
+
+<para>在 <link xlink:href="http://www.intel.com/content/www/us/en/architecture-and-technology/64-ia-32-architectures-optimization-manual.html">Intel® 64 and IA-32 Architectures Optimization Reference Manual</link> 中，章节 10.2.1：</para>
+
+<para><blockquote>
+<para>&#8205;为了支持需要费对齐的128位 SIMD 内存访问的算法，调用者的内存缓冲区申请应当考虑添加一些填充空间，这样被调用的函数可以安全地将地址指针用于未对齐的128位 SIMD 内存操作。 在结合非对齐的 SIMD 内存操作中，最小的对齐大小应该等于 SIMD 寄存器的大小。 </para>
+</blockquote>对于 RapidJSON 来说，这显然是不可行的，因为 RapidJSON 不应当强迫用户进行内存对齐。</para>
+
+<para>为了修复这个问题，当前的代码会先按字节处理直到下一个对齐的地址。在这之后，使用对齐读取来进行 SIMD 处理。见 <link xlink:href="https://github.com/Tencent/rapidjson/issues/85">#85</link>。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1LocalStreamCopy">
+<title>Local Stream Copy</title>
+
+<para>在优化的过程中，我们发现一些编译器不能将访问流的一些成员数据放入局部变量或者寄存器中。测试结果显示，对于一些流类型，创建流的拷贝并将其用于内层循环中可以改善性能。例如，实际（非 SIMD）的 <computeroutput><link linkend="_reader_8h_1a60338858b2582eca23f3e509a2d82e0e">SkipWhitespace()</link></computeroutput> 被实现为：</para>
+
+<para><literallayout><computeroutput>template&lt;typename&#32;InputStream&gt;
+void&#32;SkipWhitespace(InputStream&amp;&#32;is)&#32;{
+&#32;&#32;&#32;&#32;internal::StreamLocalCopy&lt;InputStream&gt;&#32;copy(is);
+&#32;&#32;&#32;&#32;InputStream&amp;&#32;s(copy.s);
+
+&#32;&#32;&#32;&#32;while&#32;(s.Peek()&#32;==&#32;&apos;&#32;&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\n&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\r&apos;&#32;||&#32;s.Peek()&#32;==&#32;&apos;\t&apos;)
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s.Take();
+}
+</computeroutput></literallayout></para>
+
+<para>基于流的特征，<computeroutput>StreamLocalCopy</computeroutput> 会创建（或不创建）流对象的拷贝，在局部使用它并将流的状态拷贝回原来的流。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1ParsingDouble">
+<title>Parsing to Double</title>
+
+<para>将字符串解析为 <computeroutput>double</computeroutput> 并不简单。标准库函数 <computeroutput>strtod()</computeroutput> 可以胜任这项工作，但它比较缓慢。默认情况下，解析器使用默认的精度设置。这最多有 3<link xlink:href="http://en.wikipedia.org/wiki/Unit_in_the_last_place">ULP</link> 的误差，并实现在 <computeroutput><link linkend="_namespaceinternal_1a9e5fac4695310f09892fe52b1d24ab19">internal::StrtodNormalPrecision()</link></computeroutput> 中。</para>
+
+<para>当使用 <computeroutput>kParseFullPrecisionFlag</computeroutput> 时，编译器会改为调用 <computeroutput><link linkend="_namespaceinternal_1a6109c750ee4707d4f71de280816a1a00">internal::StrtodFullPrecision()</link></computeroutput> ，这个函数会自动调用三个版本的转换。<orderedlist>
+<listitem>
+<para><link xlink:href="http://www.exploringbinary.com/fast-path-decimal-to-floating-point-conversion/">Fast-Path</link>。</para>
+</listitem><listitem>
+<para><link xlink:href="https://github.com/floitsch/double-conversion">double-conversion</link> 中的自定义 DIY-FP 实现。</para>
+</listitem><listitem>
+<para>（Clinger, William D. How to read floating point numbers accurately. Vol. 25. No. 6. ACM, 1990） 中的大整数算法。</para>
+</listitem></orderedlist>
+</para>
+
+<para>如果第一个转换方法失败，则尝试使用第二种方法，以此类推。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1GenerationOptimization">
+<title>Generation Optimization</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1itoa">
+<title>Integer-to-String conversion</title>
+
+<para>整数到字符串转换的朴素算法需要对每一个十进制位进行一次除法。我们实现了若干版本并在 <link xlink:href="https://github.com/miloyip/itoa-benchmark">itoa-benchmark</link> 中对它们进行了评估。</para>
+
+<para>虽然 SSE2 版本是最快的，但它和第二快的 <computeroutput>branchlut</computeroutput> 差距不大。而且 <computeroutput>branchlut</computeroutput> 是纯C++实现，所以我们在 RapidJSON 中使用了 <computeroutput>branchlut</computeroutput>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1dtoa">
+<title>Double-to-String conversion</title>
+
+<para>原来 RapidJSON 使用 <computeroutput>snprintf(..., ..., &quot;%g&quot;)</computeroutput> 来进行双精度浮点数到字符串的转换。这是不准确的，因为默认的精度是6。随后我们发现它很缓慢，而且有其它的替代品。</para>
+
+<para>Google 的 V8 <link xlink:href="https://github.com/floitsch/double-conversion">double-conversion</link> 实现了更新的、快速的被称为 Grisu3 的算法（Loitsch, Florian. &quot;Printing floating-point numbers quickly and accurately with integers.&quot; ACM Sigplan Notices 45.6 (2010): 233-243.）。</para>
+
+<para>然而，这个实现不是仅头文件的，所以我们实现了一个仅头文件的 Grisu2 版本。这个算法保证了结果永远精确。而且在大多数情况下，它会生成最短的（可选）字符串表示。</para>
+
+<para>这个仅头文件的转换函数在 <link xlink:href="https://github.com/miloyip/dtoa-benchmark">dtoa-benchmark</link> 中进行评估。</para>
+</section>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1Parser">
+<title>Parser</title>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParser">
+<title>Iterative Parser</title>
+
+<para>迭代解析器是一个以非递归方式实现的递归下降的 LL(1) 解析器。</para>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserGrammar">
+<title>Grammar</title>
+
+<para>解析器使用的语法是基于严格 JSON 语法的： <literallayout><computeroutput>S&#32;-&gt;&#32;array&#32;|&#32;object
+array&#32;-&gt;&#32;[&#32;values&#32;]
+object&#32;-&gt;&#32;{&#32;members&#32;}
+values&#32;-&gt;&#32;non-empty-values&#32;|&#32;ε
+non-empty-values&#32;-&gt;&#32;value&#32;addition-values
+addition-values&#32;-&gt;&#32;ε&#32;|&#32;,&#32;non-empty-values
+members&#32;-&gt;&#32;non-empty-members&#32;|&#32;ε
+non-empty-members&#32;-&gt;&#32;member&#32;addition-members
+addition-members&#32;-&gt;&#32;ε&#32;|&#32;,&#32;non-empty-members
+member&#32;-&gt;&#32;STRING&#32;:&#32;value
+value&#32;-&gt;&#32;STRING&#32;|&#32;NUMBER&#32;|&#32;NULL&#32;|&#32;BOOLEAN&#32;|&#32;object&#32;|&#32;array
+</computeroutput></literallayout></para>
+
+<para>注意到左因子被加入了非终结符的 <computeroutput>values</computeroutput> 和 <computeroutput>members</computeroutput> 来保证语法是 LL(1) 的。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserParsingTable">
+<title>Parsing Table</title>
+
+<para>基于这份语法，我们可以构造 FIRST 和 FOLLOW 集合。</para>
+
+<para>非终结符的 FIRST 集合如下所示：</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>FIRST    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>[    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para>{    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>ε STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para>ε COMMA    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para>ε STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para>ε COMMA    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para>STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>STRING NUMBER NULL BOOLEAN { [    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>[ {    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para>STRING    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>STRING NUMBER NULL BOOLEAN { [   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>FOLLOW 集合如下所示：</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>FOLLOW    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>$    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>, $ } ]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para>, $ } ]    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para>]    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para>}    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para>, }    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>, } ]   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>最终可以从 FIRST 和 FOLLOW 集合生成解析表：</para>
+
+<para><informaltable frame="all">
+    <tgroup cols="11" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+      <colspec colname='c3'/>
+      <colspec colname='c4'/>
+      <colspec colname='c5'/>
+      <colspec colname='c6'/>
+      <colspec colname='c7'/>
+      <colspec colname='c8'/>
+      <colspec colname='c9'/>
+      <colspec colname='c10'/>
+      <colspec colname='c11'/>
+<thead>
+      <row  class='markdownTableHead'>
+<entry align='center'>
+<para>NON-TERMINAL   </para>
+</entry><entry align='center'>
+<para>[   </para>
+</entry><entry align='center'>
+<para>{   </para>
+</entry><entry align='center'>
+<para>,   </para>
+</entry><entry align='center'>
+<para>:   </para>
+</entry><entry align='center'>
+<para>]   </para>
+</entry><entry align='center'>
+<para>}   </para>
+</entry><entry align='center'>
+<para>STRING   </para>
+</entry><entry align='center'>
+<para>NUMBER   </para>
+</entry><entry align='center'>
+<para>NULL   </para>
+</entry><entry align='center'>
+<para>BOOLEAN    </para>
+</entry></row>
+</thead><tbody>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>S   </para>
+</entry><entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>[ values ]   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>{ members }   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>non-empty-values    </para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>non-empty-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values   </para>
+</entry><entry align='center'>
+<para>value addition-values    </para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>addition-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>, non-empty-values   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>member addition-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>addition-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>, non-empty-members   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>ε   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowEven'>
+<entry align='center'>
+<para>member   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>STRING : value   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry></row>
+      <row  class='markdownTableRowOdd'>
+<entry align='center'>
+<para>value   </para>
+</entry><entry align='center'>
+<para>array   </para>
+</entry><entry align='center'>
+<para>object   </para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para></para>
+</entry><entry align='center'>
+<para>STRING   </para>
+</entry><entry align='center'>
+<para>NUMBER   </para>
+</entry><entry align='center'>
+<para>NULL   </para>
+</entry><entry align='center'>
+<para>BOOLEAN   </para>
+</entry></row>
+    </tbody>
+    </tgroup>
+</informaltable>
+</para>
+
+<para>对于上面的语法分析，这里有一个很棒的<link xlink:href="http://hackingoff.com/compilers/predict-first-follow-set">工具</link>。</para>
+</section>
+<section xml:id="_md_src_rapidjson_doc_internals_zh_cn_1IterativeParserImplementation">
+<title>Implementation</title>
+
+<para>基于这份解析表，一个直接的（常规的）将规则反向入栈的实现可以正常工作。</para>
+
+<para>在 RapidJSON 中，对直接的实现进行了一些修改：</para>
+
+<para>首先，在 RapidJSON 中，这份解析表被编码为状态机。 规则由头部和主体组成。 状态转换由规则构造。 除此之外，额外的状态被添加到与 <computeroutput>array</computeroutput> 和 <computeroutput>object</computeroutput> 有关的规则。 通过这种方式，生成数组值或对象成员可以只用一次状态转移便可完成， 而不需要在直接的实现中的多次出栈/入栈操作。 这也使得估计栈的大小更加容易。</para>
+
+<para>状态图如如下所示：</para>
+
+<para></para>
+
+<para>第二，迭代解析器也在内部栈保存了数组的值个数和对象成员的数量，这也与传统的实现不同。 </para>
+</section>
+</section>
+</section>
+</section>

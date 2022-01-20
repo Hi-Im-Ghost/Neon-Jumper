@@ -1,0 +1,106 @@
+\hypertarget{filewritestream_8h_source}{}\doxysection{filewritestream.\+h}
+\label{filewritestream_8h_source}\index{src/rapidjson/include/rapidjson/filewritestream.h@{src/rapidjson/include/rapidjson/filewritestream.h}}
+\mbox{\hyperlink{filewritestream_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Tencent is pleased to support the open source community by making RapidJSON available.}}
+\DoxyCodeLine{2 \textcolor{comment}{// }}
+\DoxyCodeLine{3 \textcolor{comment}{// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.}}
+\DoxyCodeLine{4 \textcolor{comment}{//}}
+\DoxyCodeLine{5 \textcolor{comment}{// Licensed under the MIT License (the "{}License"{}); you may not use this file except}}
+\DoxyCodeLine{6 \textcolor{comment}{// in compliance with the License. You may obtain a copy of the License at}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// http://opensource.org/licenses/MIT}}
+\DoxyCodeLine{9 \textcolor{comment}{//}}
+\DoxyCodeLine{10 \textcolor{comment}{// Unless required by applicable law or agreed to in writing, software distributed }}
+\DoxyCodeLine{11 \textcolor{comment}{// under the License is distributed on an "{}AS IS"{} BASIS, WITHOUT WARRANTIES OR }}
+\DoxyCodeLine{12 \textcolor{comment}{// CONDITIONS OF ANY KIND, either express or implied. See the License for the }}
+\DoxyCodeLine{13 \textcolor{comment}{// specific language governing permissions and limitations under the License.}}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#ifndef RAPIDJSON\_FILEWRITESTREAM\_H\_}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#define RAPIDJSON\_FILEWRITESTREAM\_H\_}}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{stream_8h}{stream.h}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include <cstdio>}}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{22 RAPIDJSON\_DIAG\_PUSH}
+\DoxyCodeLine{23 RAPIDJSON\_DIAG\_OFF(unreachable-\/code)}
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gad3806c8251fdc7da9618b7e922674ffc}{RAPIDJSON\_NAMESPACE\_BEGIN}}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{29 }
+\DoxyCodeLine{32 \textcolor{keyword}{class }\mbox{\hyperlink{class_file_write_stream}{FileWriteStream}} \{}
+\DoxyCodeLine{33 \textcolor{keyword}{public}:}
+\DoxyCodeLine{34     \textcolor{keyword}{typedef} \textcolor{keywordtype}{char} \mbox{\hyperlink{class_file_write_stream_abc16aeb69ad4176263ddfcb837fb7b49}{Ch}};    }
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36     \mbox{\hyperlink{class_file_write_stream_a553ea3e7377a7f7cace2daa3cc90e1a1}{FileWriteStream}}(std::FILE* fp, \textcolor{keywordtype}{char}* buffer, \textcolor{keywordtype}{size\_t} bufferSize) : fp\_(fp), buffer\_(buffer), bufferEnd\_(buffer + bufferSize), current\_(buffer\_) \{ }
+\DoxyCodeLine{37         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(fp\_ != 0);}
+\DoxyCodeLine{38     \}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_file_write_stream_af6a6061d0accd939fa475b9b34427d85}{Put}}(\textcolor{keywordtype}{char} c) \{ }
+\DoxyCodeLine{41         \textcolor{keywordflow}{if} (current\_ >= bufferEnd\_)}
+\DoxyCodeLine{42             \mbox{\hyperlink{class_file_write_stream_a939fbf183ba36464c5e0837df4329d37}{Flush}}();}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44         *current\_++ = c;}
+\DoxyCodeLine{45     \}}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_file_write_stream_ad9ec108b24316a2c1c83c6ddc75d308a}{PutN}}(\textcolor{keywordtype}{char} c, \textcolor{keywordtype}{size\_t} n) \{}
+\DoxyCodeLine{48         \textcolor{keywordtype}{size\_t} avail = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(bufferEnd\_ -\/ current\_);}
+\DoxyCodeLine{49         \textcolor{keywordflow}{while} (n > avail) \{}
+\DoxyCodeLine{50             std::memset(current\_, c, avail);}
+\DoxyCodeLine{51             current\_ += avail;}
+\DoxyCodeLine{52             \mbox{\hyperlink{class_file_write_stream_a939fbf183ba36464c5e0837df4329d37}{Flush}}();}
+\DoxyCodeLine{53             n -\/= avail;}
+\DoxyCodeLine{54             avail = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(bufferEnd\_ -\/ current\_);}
+\DoxyCodeLine{55         \}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57         \textcolor{keywordflow}{if} (n > 0) \{}
+\DoxyCodeLine{58             std::memset(current\_, c, n);}
+\DoxyCodeLine{59             current\_ += n;}
+\DoxyCodeLine{60         \}}
+\DoxyCodeLine{61     \}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_file_write_stream_a939fbf183ba36464c5e0837df4329d37}{Flush}}() \{}
+\DoxyCodeLine{64         \textcolor{keywordflow}{if} (current\_ != buffer\_) \{}
+\DoxyCodeLine{65             \textcolor{keywordtype}{size\_t} result = std::fwrite(buffer\_, 1, \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(current\_ -\/ buffer\_), fp\_);}
+\DoxyCodeLine{66             \textcolor{keywordflow}{if} (result < \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(current\_ -\/ buffer\_)) \{}
+\DoxyCodeLine{67                 \textcolor{comment}{// failure deliberately ignored at this time}}
+\DoxyCodeLine{68                 \textcolor{comment}{// added to avoid warn\_unused\_result build errors}}
+\DoxyCodeLine{69             \}}
+\DoxyCodeLine{70             current\_ = buffer\_;}
+\DoxyCodeLine{71         \}}
+\DoxyCodeLine{72     \}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74     \textcolor{comment}{// Not implemented}}
+\DoxyCodeLine{75     \textcolor{keywordtype}{char} \mbox{\hyperlink{class_file_write_stream_ab556c7e26346ddff0e579a53c09c3a13}{Peek}}()\textcolor{keyword}{ const }\{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{76     \textcolor{keywordtype}{char} \mbox{\hyperlink{class_file_write_stream_ac927a0ae09a85eaba58a74ceb04b40ed}{Take}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{77     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_file_write_stream_a06272de32d6ac4d10c9bd5deb79a0234}{Tell}}()\textcolor{keyword}{ const }\{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{78     \textcolor{keywordtype}{char}* \mbox{\hyperlink{class_file_write_stream_a3805559e228703c94d1165f0653e1f64}{PutBegin}}() \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{79     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_file_write_stream_a54b14047e4c998db0594290605f8f0dc}{PutEnd}}(\textcolor{keywordtype}{char}*) \{ \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\textcolor{keyword}{false}); \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81 \textcolor{keyword}{private}:}
+\DoxyCodeLine{82     \textcolor{comment}{// Prohibit copy constructor \& assignment operator.}}
+\DoxyCodeLine{83     \mbox{\hyperlink{class_file_write_stream_a553ea3e7377a7f7cace2daa3cc90e1a1}{FileWriteStream}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_file_write_stream}{FileWriteStream}}\&);}
+\DoxyCodeLine{84     \mbox{\hyperlink{class_file_write_stream}{FileWriteStream}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{class_file_write_stream}{FileWriteStream}}\&);}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86     std::FILE* fp\_;}
+\DoxyCodeLine{87     \textcolor{keywordtype}{char} *buffer\_;}
+\DoxyCodeLine{88     \textcolor{keywordtype}{char} *bufferEnd\_;}
+\DoxyCodeLine{89     \textcolor{keywordtype}{char} *current\_;}
+\DoxyCodeLine{90 \};}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{93 \textcolor{keyword}{template}<>}
+\DoxyCodeLine{94 \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{filewritestream_8h_a5c9b0f0e6249be2acf7f3505c295c132}{PutN}}(\mbox{\hyperlink{class_file_write_stream}{FileWriteStream}}\& stream, \textcolor{keywordtype}{char} c, \textcolor{keywordtype}{size\_t} n) \{}
+\DoxyCodeLine{95     stream.\mbox{\hyperlink{class_file_write_stream_ad9ec108b24316a2c1c83c6ddc75d308a}{PutN}}(c, n);}
+\DoxyCodeLine{96 \}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gaf18f052a98b9f5df5448d39484b743c1}{RAPIDJSON\_NAMESPACE\_END}}}
+\DoxyCodeLine{99 }
+\DoxyCodeLine{100 \textcolor{preprocessor}{\#ifdef \_\_clang\_\_}}
+\DoxyCodeLine{101 RAPIDJSON\_DIAG\_POP}
+\DoxyCodeLine{102 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_FILESTREAM\_H\_}}
+
+\end{DoxyCode}
