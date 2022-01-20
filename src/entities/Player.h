@@ -82,6 +82,7 @@ private:
     void animateMovement();
 
     // Shooting
+    /// Oddaje strzał
     void shoot() override;
 
     // Time stop functions

@@ -19,7 +19,6 @@ LevelOneState::LevelOneState(std::stack<GameState*>* states)
 void LevelOneState::initValues() {
     player = new Player(10*3, 250*3);
     hud = new PlayerHUD();
-    //ProjectileBucket::initProjectileBucket( new std::list<Projectile*>() );
 }
 
 void LevelOneState::update(float dt) {

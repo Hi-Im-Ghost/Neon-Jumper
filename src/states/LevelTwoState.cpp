@@ -402,10 +402,14 @@ void LevelTwoState::updateEntities(float dt) {
     // Update every enemy
     for (auto& e : enemies) {
         e->update(dt);
-    }
 
-    // Update enemy collision with player
-    for (auto & e : enemies) {
+        // Check collision with projectiles
+        if (player->checkIsProjectileColliding(e->getHitbox())) {
+            e->takeDamage(1);
+            break;
+        }
+
+        // Check collisions with player
         if (player->checkForIntersection(e->getHitbox())) {
             deathGame.play();
             hud->takedDmg = true;
