@@ -15,6 +15,8 @@ class GameState {
 private:
     ///Zmienna która komunikuje o wczytaniu gry z menu
     static bool menuLoad;
+    ///Zmienna określająca czy wczytaliśmy grę
+    static bool loadSave;
 protected:
     /// Tekst przechowujący napis do gry
     sf::Text nameTextGame;
@@ -71,8 +73,6 @@ protected:
     float playerPositionY;
     ///Zmienna do której zapisywana jest ilość hp gracza dla zapisu stanu gry i wczytywania
     int playerHP;
-    ///Zmienna określająca czy wczytaliśmy grę
-    bool loadSave = false;
 
     /// Pozwala na aktualizowanie pozycji myszy na ekranie
     void updateMousePosition();
@@ -124,7 +124,7 @@ public:
      * @param window okno na którym wyświetlony zostanie przeciwnik
      */
     virtual void render(sf::RenderTarget& window) {};
-    /*** Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu
+    /** Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu
      * @param bool parametr którego ustawiamy na true bądź false
      */
     static void setLoadMenu(bool);
@@ -132,6 +132,14 @@ public:
      * @return zwraca wartość menuLoad, jeśli wynosi true gra zostanie wczytana, jeśli false to nie
      */
     bool getLoadMenu(){return GameState::menuLoad;}
+    /** Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu
+ * @param bool parametr którego ustawiamy na true bądź false
+ */
+    static void setLoadSave(bool);
+    /** Funkcja, która zwraca nam wartość zmiennej menuLoad
+     * @return zwraca wartość menuLoad, jeśli wynosi true gra zostanie wczytana, jeśli false to nie
+     */
+    bool getLoadSave(){return GameState::loadSave;}
 };
 
 

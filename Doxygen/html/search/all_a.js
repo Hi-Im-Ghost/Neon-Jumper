@@ -10,7 +10,7 @@ var searchData=
   ['jsonwriter_7',['JsonWriter',['../class_json_writer.html',1,'JsonWriter'],['../class_json_writer.html#ac236bb60b9ae908fd178baff276df0c8',1,'JsonWriter::JsonWriter()'],['../class_json_writer.html#af1ca4863002e7604f5f55adaf9b22f00',1,'JsonWriter::JsonWriter(const JsonWriter &amp;)']]],
   ['jsonx_2ecpp_8',['jsonx.cpp',['../jsonx_8cpp.html',1,'']]],
   ['jsonxwriter_9',['JsonxWriter',['../class_jsonx_writer.html',1,'JsonxWriter&lt; OutputStream &gt;'],['../class_jsonx_writer.html#aa43c2ee8f8c1875a20e120bcc174f70d',1,'JsonxWriter::JsonxWriter()']]],
-  ['jump_10',['jump',['../class_player.html#a70e21ca98281b7d72f105f2693113d7e',1,'Player']]],
-  ['jump_11',['JUMP',['../class_animated.html#a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964',1,'Animated']]],
+  ['jump_10',['JUMP',['../class_animated.html#a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964',1,'Animated']]],
+  ['jump_11',['jump',['../class_player.html#a70e21ca98281b7d72f105f2693113d7e',1,'Player']]],
   ['jumpgame_12',['jumpGame',['../class_player.html#ac9dbdbba328a44a98a13d55662d11321',1,'Player']]]
 ];

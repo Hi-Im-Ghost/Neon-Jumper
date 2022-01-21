@@ -93,3 +93,10 @@ bool GameState::menuLoad = false;
 void GameState::setLoadMenu(bool val) {
     GameState::menuLoad=val;
 }
+
+
+bool GameState::loadSave = false;
+
+void GameState::setLoadSave(bool val) {
+    GameState::loadSave=val;
+}

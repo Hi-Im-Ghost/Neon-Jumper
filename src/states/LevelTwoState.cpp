@@ -13,7 +13,7 @@ LevelTwoState::LevelTwoState(std::stack<GameState*>* states)
     initTextGame();
     initTextPause();
     musicGame.play();
-    if(loadSave) {
+    if(getLoadSave()) {
         player->setPosition({playerPositionX, playerPositionY});
         player->setHP(playerHP);
     }
@@ -377,9 +377,9 @@ void LevelTwoState::loadGame() {
     player->setHP(playerHP);
     if(checkLevel>0){
         if(level2){
-            loadSave=false;
+            setLoadSave(false);
         }else {
-            loadSave = true;
+            setLoadSave(true);
             bnextLevel = true;
             musicGame.stop();
         }
@@ -387,7 +387,7 @@ void LevelTwoState::loadGame() {
     else{
         player->setPosition({0,247});
         player->setHP(player->getMaxHP());
-        loadSave=false;
+        setLoadSave(false);
         bnextLevel=false;
     }
     load.close();

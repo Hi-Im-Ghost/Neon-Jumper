@@ -388,12 +388,12 @@ void LevelOneState::loadGame() {
     player->setPosition({playerPositionX,playerPositionY});
     player->setHP(playerHP);
     if(checkLevel>0){
-        loadSave=true;
+        setLoadSave(true);
         bnextLevel=true;
         musicGame.stop();
     }
     else{
-        loadSave=false;
+        setLoadSave(false);
         bnextLevel=false;
     }
     load.close();

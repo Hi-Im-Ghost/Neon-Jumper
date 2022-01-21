@@ -1,4 +1,4 @@
-.TH "GameState" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
+.TH "GameState" 3 "Fri Jan 21 2022" "Version 1.0" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -37,12 +37,18 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .ti -1c
 .RI "bool \fBgetLoadMenu\fP ()"
 .br
+.ti -1c
+.RI "bool \fBgetLoadSave\fP ()"
+.br
 .in -1c
 .SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "static void \fBsetLoadMenu\fP (bool)"
+.br
+.ti -1c
+.RI "static void \fBsetLoadSave\fP (bool)"
 .br
 .in -1c
 .SS "Protected Member Functions"
@@ -212,10 +218,6 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .RI "int \fBplayerHP\fP"
 .br
 .RI "Zmienna do której zapisywana jest ilość hp gracza dla zapisu stanu gry i wczytywania\&. "
-.ti -1c
-.RI "bool \fBloadSave\fP = false"
-.br
-.RI "Zmienna określająca czy wczytaliśmy grę "
 .in -1c
 .SS "Static Private Attributes"
 
@@ -224,6 +226,10 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .RI "static bool \fBmenuLoad\fP = false"
 .br
 .RI "Zmienna która komunikuje o wczytaniu gry z menu\&. "
+.ti -1c
+.RI "static bool \fBloadSave\fP = false"
+.br
+.RI "Zmienna określająca czy wczytaliśmy grę "
 .in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -255,6 +261,15 @@ Pozwala uzyskać informację, czy należy zakończyć stan\&.
 .PP
 Pozwala przejść do drugiego poziomu gry\&. 
 .SS "bool GameState::getLoadMenu ()\fC [inline]\fP"
+
+.SS "bool GameState::getLoadSave ()\fC [inline]\fP"
+Funkcja, która zwraca nam wartość zmiennej menuLoad 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca wartość menuLoad, jeśli wynosi true gra zostanie wczytana, jeśli false to nie 
+.RE
+.PP
 
 .SS "void GameState::initMusicGame ()\fC [protected]\fP"
 
@@ -300,6 +315,22 @@ Funkcja zarządzająca renderowaniem grafiki stanu
 .PP
 Reimplemented in \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
 .SS "void GameState::setLoadMenu (bool val)\fC [static]\fP"
+Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbool\fP parametr którego ustawiamy na true bądź false 
+.RE
+.PP
+
+.SS "void GameState::setLoadSave (bool val)\fC [static]\fP"
+Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIbool\fP parametr którego ustawiamy na true bądź false 
+.RE
+.PP
 
 .SS "void GameState::unEndGame ()\fC [inline]\fP, \fC [protected]\fP"
 
@@ -386,7 +417,7 @@ Przechowuje dźwięk smierci gracza\&.
 
 .PP
 Przechowuje dźwięk trafienia\&. 
-.SS "bool GameState::loadSave = false\fC [protected]\fP"
+.SS "bool GameState::loadSave = false\fC [static]\fP, \fC [private]\fP"
 
 .PP
 Zmienna określająca czy wczytaliśmy grę 
