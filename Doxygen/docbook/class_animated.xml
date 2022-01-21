@@ -30,16 +30,10 @@
     <title>Public Member Functions    </title>
         <itemizedlist>
             <listitem><para>void <link linkend="_class_animated_1a72005d589aed57e4661825032986346c">animate</link> (sf::Sprite &amp;sprite, bool noWait=false)</para>
-
-<para>Animuje przekazanego sprite-a z odpowiednią częstotliwością </para>
 </listitem>
-            <listitem><para>void <link linkend="_class_animated_1a81fd919be841d41a23f27909e2ebdb1a">switchAnimation</link> (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)</para>
-
-<para>Zmienia obecną animację na podaną w argumencie. </para>
+            <listitem><para>virtual void <link linkend="_class_animated_1a81fd919be841d41a23f27909e2ebdb1a">switchAnimation</link> (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)</para>
 </listitem>
             <listitem><para><link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> <link linkend="_class_animated_1a99e20c6b161c742283e1b3eabc2c365c">getCurrentAinmation</link> ()</para>
-
-<para>Pobiera obecnie używaną animację </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -47,8 +41,6 @@
     <title>Protected Member Functions    </title>
         <itemizedlist>
             <listitem><para>void <link linkend="_class_animated_1a11a766414913f383e89df00b0fb88179">setAnimValues</link> (sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping)</para>
-
-<para>Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji. </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -58,6 +50,50 @@
             <listitem><para>bool <link linkend="_class_animated_1ab0734224d6f30a675322dfd7be78693d">_bIsFlipped</link></para>
 
 <para>Określa czy sprite jest obrócony w drugą stronę </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>void <link linkend="_class_animated_1add31b912197172fcdff850dd99f33cf9">setFrame</link> (sf::Sprite &amp;sprite)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>sf::Vector2i <link linkend="_class_animated_1a25e6c03f52d0d5c6ac2cefd5574f524e">_frameSize</link></para>
+
+<para>Rozmiar pojedynczej klatki animacji. </para>
+</listitem>
+            <listitem><para>sf::Vector2i <link linkend="_class_animated_1a2cd20e0f47fc392b999d8279d05ea5df">_frameOrigin</link></para>
+
+<para>Lewy-górny punkt obecnej klatki animacji. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_animated_1a1922bb84e3d440d5cc8ccc0de7673440">_bLooping</link></para>
+
+<para>Określa czy animacja powinna się zapętlać </para>
+</listitem>
+            <listitem><para>int <link linkend="_class_animated_1af1f9d78d8aef4d8f6d83571231168398">_maxFrameNumber</link></para>
+
+<para>Określa ile klatek powinna mieć obecna animacja. </para>
+</listitem>
+            <listitem><para>int <link linkend="_class_animated_1a584376f9605a3651f311ce4caab93055">_startingX</link></para>
+
+<para>Pozycja x klatki animacji od której powinna się zacząć animacji. </para>
+</listitem>
+            <listitem><para><link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> <link linkend="_class_animated_1aff38365b0e9c2133bcc8659a05d07f4e">_currAnim</link></para>
+
+<para>Obecnie używana animacja. </para>
+</listitem>
+            <listitem><para>sf::Clock <link linkend="_class_animated_1acae281f71d22c1be3661cdf9a1a98bd1">_animClock</link></para>
+
+<para>Mierzy czas jaki upłynął od ostatniej klatki animacji. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_animated_1ae8abaf7ce36d3f0c19b8d406e24bbf42">frameIntervalTime</link> = 0.7f</para>
+
+<para>Określa czas jaki musi upłynąć, by zmienić klatkę animacji. </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -79,13 +115,21 @@
 <tbody>
 <row><entry><indexterm><primary>IDLE</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>IDLE</secondary></indexterm>
-<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba4be1f25948cbb0724e96f2b75e354c47"/>IDLE</entry><entry></entry></row><row><entry><indexterm><primary>WALK</primary><secondary>Animated</secondary></indexterm>
+<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba4be1f25948cbb0724e96f2b75e354c47"/>IDLE</entry><entry>
+<para>Animacja stania w miejscu. </para>
+</entry></row><row><entry><indexterm><primary>WALK</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>WALK</secondary></indexterm>
-<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba068868841d5d16c4f643105c1ee80831"/>WALK</entry><entry></entry></row><row><entry><indexterm><primary>JUMP</primary><secondary>Animated</secondary></indexterm>
+<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba068868841d5d16c4f643105c1ee80831"/>WALK</entry><entry>
+<para>Animacja chodzenia. </para>
+</entry></row><row><entry><indexterm><primary>JUMP</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>JUMP</secondary></indexterm>
-<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964"/>JUMP</entry><entry></entry></row><row><entry><indexterm><primary>FALL</primary><secondary>Animated</secondary></indexterm>
+<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964"/>JUMP</entry><entry>
+<para>Animacja skakania. </para>
+</entry></row><row><entry><indexterm><primary>FALL</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>FALL</secondary></indexterm>
-<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba33c4e60ae5c29beb7265fa30891026e7"/>FALL</entry><entry></entry></row>    </tbody>
+<anchor xml:id="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fba33c4e60ae5c29beb7265fa30891026e7"/>FALL</entry><entry>
+<para>Animacja spadania. </para>
+</entry></row>    </tbody>
     </tgroup>
 </informaltable>
 </section>
@@ -97,10 +141,33 @@
 <indexterm><primary>animate</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>animate</secondary></indexterm>
 <para><computeroutput>void Animated::animate (sf::Sprite &amp; sprite, bool noWait = <computeroutput>false</computeroutput>
-)</computeroutput></para><para>
-
-<para>Animuje przekazanego sprite-a z odpowiednią częstotliwością </para>
-</para>
+)</computeroutput></para>
+<para>Animuje przekazanego sprite-a z odpowiednią częstotliwością 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>sprite</entry><entry>
+<para>sprite do animacji </para>
+</entry>
+                            </row>
+                            <row>
+<entry>noWait</entry><entry>
+<para>ignoruj intervalTime i animuj klatkę od razu </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 
 <para>Sprawdza, czy czas, który upłynął od ostatniej klatki animacji jest większy niż czas pomiędzy klatkami</para>
 
@@ -110,32 +177,134 @@
     <title>getCurrentAinmation()</title>
 <indexterm><primary>getCurrentAinmation</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>getCurrentAinmation</secondary></indexterm>
-<para><computeroutput><link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> Animated::getCurrentAinmation ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+<para><computeroutput><link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> Animated::getCurrentAinmation ( )<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Pobiera obecnie używaną animację <formalpara><title>Returns</title>
 
-<para>Pobiera obecnie używaną animację </para>
+<para>obecnie używana animacja </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_animated_1a11a766414913f383e89df00b0fb88179"/><section>
     <title>setAnimValues()</title>
 <indexterm><primary>setAnimValues</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>setAnimValues</secondary></indexterm>
-<para><computeroutput>void Animated::setAnimValues (sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping)<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+<para><computeroutput>void Animated::setAnimValues (sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>frameOrigin</entry><entry>
+<para>pozycja lewego-górnego punktu klatki na teksturze </para>
+</entry>
+                            </row>
+                            <row>
+<entry>frameSize</entry><entry>
+<para>rozmiar klatki animacji </para>
+</entry>
+                            </row>
+                            <row>
+<entry>frameCount</entry><entry>
+<para>ilość klatek do animacji </para>
+</entry>
+                            </row>
+                            <row>
+<entry>intervalTime</entry><entry>
+<para>czas pomiędzy klatkami animacji </para>
+</entry>
+                            </row>
+                            <row>
+<entry>isLooping</entry><entry>
+<para>czy animacja powinna się zapętlać </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_animated_1add31b912197172fcdff850dd99f33cf9"/><section>
+    <title>setFrame()</title>
+<indexterm><primary>setFrame</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>setFrame</secondary></indexterm>
+<para><computeroutput>void Animated::setFrame (sf::Sprite &amp; sprite)<computeroutput>[private]</computeroutput></computeroutput></para>
+<para>Wczytuje następną klatkę i aktualizuje podany sprite 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>sprite</entry><entry>
+<para>sprite do animacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 
-<para>Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji. </para>
-</para>
+<para>Zmienia teksturę źródłową sprite na taką o zadanych współrzędnych</para>
+
+<para>przesuwa ramkę o jedną klatkę do przodu</para>
+
+<para>Jeżeli współrzędne następnej klatki wychodzą poza rozmiar tekstury, przejdź do początkowej klatki</para>
 </section>
 <anchor xml:id="_class_animated_1a81fd919be841d41a23f27909e2ebdb1a"/><section>
     <title>switchAnimation()</title>
 <indexterm><primary>switchAnimation</primary><secondary>Animated</secondary></indexterm>
 <indexterm><primary>Animated</primary><secondary>switchAnimation</secondary></indexterm>
-<para><computeroutput>void Animated::switchAnimation (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)</computeroutput></para><para>
-
-<para>Zmienia obecną animację na podaną w argumencie. </para>
-</para>
+<para><computeroutput>void Animated::switchAnimation (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)<computeroutput>[virtual]</computeroutput></computeroutput></para>
+<para>Zmienia obecną animację na podaną w argumencie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>newAnimation</entry><entry>
+<para>nowa animacja </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Reimplemented in <link linkend="_class_player_1a856f53d1ff0e6f44cda41a25c791f865">Player</link>.</para>
 </section>
 </section>
 <section>
 <title>Member Data Documentation</title>
+<anchor xml:id="_class_animated_1acae281f71d22c1be3661cdf9a1a98bd1"/><section>
+    <title>_animClock</title>
+<indexterm><primary>_animClock</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_animClock</secondary></indexterm>
+<para><computeroutput>sf::Clock Animated::_animClock<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Mierzy czas jaki upłynął od ostatniej klatki animacji. </para>
+</para>
+</section>
 <anchor xml:id="_class_animated_1ab0734224d6f30a675322dfd7be78693d"/><section>
     <title>_bIsFlipped</title>
 <indexterm><primary>_bIsFlipped</primary><secondary>Animated</secondary></indexterm>
@@ -143,6 +312,69 @@
 <para><computeroutput>bool Animated::_bIsFlipped<computeroutput>[protected]</computeroutput></computeroutput></para><para>
 
 <para>Określa czy sprite jest obrócony w drugą stronę </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1a1922bb84e3d440d5cc8ccc0de7673440"/><section>
+    <title>_bLooping</title>
+<indexterm><primary>_bLooping</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_bLooping</secondary></indexterm>
+<para><computeroutput>bool Animated::_bLooping<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa czy animacja powinna się zapętlać </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1aff38365b0e9c2133bcc8659a05d07f4e"/><section>
+    <title>_currAnim</title>
+<indexterm><primary>_currAnim</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_currAnim</secondary></indexterm>
+<para><computeroutput><link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> Animated::_currAnim<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Obecnie używana animacja. </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1a2cd20e0f47fc392b999d8279d05ea5df"/><section>
+    <title>_frameOrigin</title>
+<indexterm><primary>_frameOrigin</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_frameOrigin</secondary></indexterm>
+<para><computeroutput>sf::Vector2i Animated::_frameOrigin<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Lewy-górny punkt obecnej klatki animacji. </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1a25e6c03f52d0d5c6ac2cefd5574f524e"/><section>
+    <title>_frameSize</title>
+<indexterm><primary>_frameSize</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_frameSize</secondary></indexterm>
+<para><computeroutput>sf::Vector2i Animated::_frameSize<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Rozmiar pojedynczej klatki animacji. </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1af1f9d78d8aef4d8f6d83571231168398"/><section>
+    <title>_maxFrameNumber</title>
+<indexterm><primary>_maxFrameNumber</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_maxFrameNumber</secondary></indexterm>
+<para><computeroutput>int Animated::_maxFrameNumber<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa ile klatek powinna mieć obecna animacja. </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1a584376f9605a3651f311ce4caab93055"/><section>
+    <title>_startingX</title>
+<indexterm><primary>_startingX</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>_startingX</secondary></indexterm>
+<para><computeroutput>int Animated::_startingX<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Pozycja x klatki animacji od której powinna się zacząć animacji. </para>
+</para>
+</section>
+<anchor xml:id="_class_animated_1ae8abaf7ce36d3f0c19b8d406e24bbf42"/><section>
+    <title>frameIntervalTime</title>
+<indexterm><primary>frameIntervalTime</primary><secondary>Animated</secondary></indexterm>
+<indexterm><primary>Animated</primary><secondary>frameIntervalTime</secondary></indexterm>
+<para><computeroutput>float Animated::frameIntervalTime = 0.7f<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa czas jaki musi upłynąć, by zmienić klatkę animacji. </para>
 </para>
 </section>
 <para>

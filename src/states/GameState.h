@@ -13,7 +13,8 @@
  */
 class GameState {
 private:
-
+    ///Zmienna która komunikuje o wczytaniu gry z menu
+    static bool menuLoad;
 protected:
     /// Tekst przechowujący napis do gry
     sf::Text nameTextGame;
@@ -29,12 +30,24 @@ protected:
     sf::Music musicGame;
     /// Buffor dla dzwieku klikania
     sf::SoundBuffer buf;
+    /// Buffor dla dzwieku zwycienstwa
+    sf::SoundBuffer bufOh;
+    /// Buffor dla dzwieku cheatowania
+    sf::SoundBuffer bufCheat;
     /// Buffor dla dzwieku smierci gracza
     sf::SoundBuffer bufdeath;
+    /// Buffor dla dzwieku trafienia
+    sf::SoundBuffer bufHit;
     /// Przechowuje dźwięk naciśnięcia przycisku
     sf::Sound clickMenu;
     /// Przechowuje dźwięk smierci gracza
     sf::Sound deathGame;
+    /// Przechowuje dźwięk uzycia cheatu
+    sf::Sound cheatGame;
+    /// Przechowuje dźwięk trafienia
+    sf::Sound hitGame;
+    /// Przechowuje dźwięk zwycienstwa
+    sf::Sound ohGame;
     /// Przechowuje pozycję kursora myszy na ekranie
     sf::Vector2f mousePosition;
     /// Określa, czy należy już wyjść ze stanu
@@ -111,6 +124,14 @@ public:
      * @param window okno na którym wyświetlony zostanie przeciwnik
      */
     virtual void render(sf::RenderTarget& window) {};
+    /*** Funkcja, która pozwala nam na zakomunikowaniu że wczytaliśmy grę z menu
+     * @param bool parametr którego ustawiamy na true bądź false
+     */
+    static void setLoadMenu(bool);
+    /*** Funkcja, która zwraca nam wartość zmiennej menuLoad
+     * @return zwraca wartość menuLoad, jeśli wynosi true gra zostanie wczytana, jeśli false to nie
+     */
+    bool getLoadMenu(){return GameState::menuLoad;}
 };
 
 

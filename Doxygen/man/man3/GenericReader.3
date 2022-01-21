@@ -1,4 +1,4 @@
-.TH "GenericReader< SourceEncoding, TargetEncoding, StackAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericReader< SourceEncoding, TargetEncoding, StackAllocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,28 @@ GenericReader< SourceEncoding, TargetEncoding, StackAllocator > \- SAX-style JSO
 .PP
 .PP
 \fC#include <reader\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBClearStackOnExit\fP"
+.br
+.ti -1c
+.RI "class \fBNumberStream\fP"
+.br
+.ti -1c
+.RI "class \fBNumberStream< InputStream, StackCharacter, false, false >\fP"
+.br
+.ti -1c
+.RI "class \fBNumberStream< InputStream, StackCharacter, true, false >\fP"
+.br
+.ti -1c
+.RI "class \fBNumberStream< InputStream, StackCharacter, true, true >\fP"
+.br
+.ti -1c
+.RI "class \fBStackStream\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -21,7 +43,7 @@ GenericReader< SourceEncoding, TargetEncoding, StackAllocator > \- SAX-style JSO
 
 .in +1c
 .ti -1c
-.RI "\fBGenericReader\fP (StackAllocator *stackAllocator=0, size_t stackCapacity=kDefaultStackCapacity)"
+.RI "\fBGenericReader\fP (StackAllocator *stackAllocator=0, size_t stackCapacity=\fBkDefaultStackCapacity\fP)"
 .br
 .RI "Constructor\&. "
 .ti -1c
@@ -64,6 +86,115 @@ GenericReader< SourceEncoding, TargetEncoding, StackAllocator > \- SAX-style JSO
 .RI "void \fBSetParseError\fP (\fBParseErrorCode\fP code, size_t offset)"
 .br
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBIterativeParsingState\fP { \fBIterativeParsingFinishState\fP = 0, \fBIterativeParsingErrorState\fP, \fBIterativeParsingStartState\fP, \fBIterativeParsingObjectInitialState\fP, \fBIterativeParsingMemberKeyState\fP, \fBIterativeParsingMemberValueState\fP, \fBIterativeParsingObjectFinishState\fP, \fBIterativeParsingArrayInitialState\fP, \fBIterativeParsingElementState\fP, \fBIterativeParsingArrayFinishState\fP, \fBIterativeParsingValueState\fP, \fBIterativeParsingElementDelimiterState\fP, \fBIterativeParsingMemberDelimiterState\fP, \fBIterativeParsingKeyValueDelimiterState\fP, \fBcIterativeParsingStateCount\fP }"
+.br
+.ti -1c
+.RI "enum \fBToken\fP { \fBLeftBracketToken\fP = 0, \fBRightBracketToken\fP, \fBLeftCurlyBracketToken\fP, \fBRightCurlyBracketToken\fP, \fBCommaToken\fP, \fBColonToken\fP, \fBStringToken\fP, \fBFalseToken\fP, \fBTrueToken\fP, \fBNullToken\fP, \fBNumberToken\fP, \fBkTokenCount\fP }"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericReader\fP (const \fBGenericReader\fP &)"
+.br
+.ti -1c
+.RI "\fBGenericReader\fP & \fBoperator=\fP (const \fBGenericReader\fP &)"
+.br
+.ti -1c
+.RI "void \fBClearStack\fP ()"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream > void \fBSkipWhitespaceAndComments\fP (InputStream &is)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseObject\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseArray\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseNull\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseTrue\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseFalse\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<typename InputStream > unsigned \fBParseHex4\fP (InputStream &is, size_t escapeOffset)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseString\fP (InputStream &is, \fBHandler\fP &handler, bool isKey=false)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename SEncoding , typename TEncoding , typename InputStream , typename OutputStream > RAPIDJSON_FORCEINLINE void \fBParseStringToStream\fP (InputStream &is, OutputStream &os)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseNumber\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBParseValue\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBToken\fP \fBTokenize\fP (\fBCh\fP c) const"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE \fBIterativeParsingState\fP \fBPredict\fP (\fBIterativeParsingState\fP state, \fBToken\fP token) const"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > RAPIDJSON_FORCEINLINE \fBIterativeParsingState\fP \fBTransit\fP (\fBIterativeParsingState\fP src, \fBToken\fP token, \fBIterativeParsingState\fP dst, InputStream &is, \fBHandler\fP &handler)"
+.br
+.ti -1c
+.RI "template<typename InputStream > void \fBHandleError\fP (\fBIterativeParsingState\fP src, InputStream &is)"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE bool \fBIsIterativeParsingDelimiterState\fP (\fBIterativeParsingState\fP s) const"
+.br
+.ti -1c
+.RI "RAPIDJSON_FORCEINLINE bool \fBIsIterativeParsingCompleteState\fP (\fBIterativeParsingState\fP s) const"
+.br
+.ti -1c
+.RI "template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > \fBParseResult\fP \fBIterativeParse\fP (InputStream &is, \fBHandler\fP &handler)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename InputStream > static RAPIDJSON_FORCEINLINE bool \fBConsume\fP (InputStream &is, typename InputStream::Ch expect)"
+.br
+.ti -1c
+.RI "template<typename InputStream , typename OutputStream > static RAPIDJSON_FORCEINLINE void \fBScanCopyUnescapedString\fP (InputStream &, OutputStream &)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBinternal::Stack\fP< StackAllocator > \fBstack_\fP"
+.br
+.RI "A stack for storing decoded string temporarily during non-destructive parsing\&. "
+.ti -1c
+.RI "\fBParseResult\fP \fBparseResult_\fP"
+.br
+.ti -1c
+.RI "\fBIterativeParsingState\fP \fBstate_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkDefaultStackCapacity\fP = 256"
+.br
+.RI "Default stack capacity in bytes for storing a single decoded string\&. "
+.in -1c
 .SH "Detailed Description"
 .PP 
 
@@ -95,9 +226,75 @@ A \fBGenericReader\fP object can be reused for parsing multiple JSON text\&.
 
 .PP
 SourceEncoding character type\&. 
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> enum \fBGenericReader::IterativeParsingState\fP\fC [private]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIIterativeParsingFinishState \fP\fP
+.TP
+\fB\fIIterativeParsingErrorState \fP\fP
+.TP
+\fB\fIIterativeParsingStartState \fP\fP
+.TP
+\fB\fIIterativeParsingObjectInitialState \fP\fP
+.TP
+\fB\fIIterativeParsingMemberKeyState \fP\fP
+.TP
+\fB\fIIterativeParsingMemberValueState \fP\fP
+.TP
+\fB\fIIterativeParsingObjectFinishState \fP\fP
+.TP
+\fB\fIIterativeParsingArrayInitialState \fP\fP
+.TP
+\fB\fIIterativeParsingElementState \fP\fP
+.TP
+\fB\fIIterativeParsingArrayFinishState \fP\fP
+.TP
+\fB\fIIterativeParsingValueState \fP\fP
+.TP
+\fB\fIIterativeParsingElementDelimiterState \fP\fP
+.TP
+\fB\fIIterativeParsingMemberDelimiterState \fP\fP
+.TP
+\fB\fIIterativeParsingKeyValueDelimiterState \fP\fP
+.TP
+\fB\fIcIterativeParsingStateCount \fP\fP
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> enum \fBGenericReader::Token\fP\fC [private]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fILeftBracketToken \fP\fP
+.TP
+\fB\fIRightBracketToken \fP\fP
+.TP
+\fB\fILeftCurlyBracketToken \fP\fP
+.TP
+\fB\fIRightCurlyBracketToken \fP\fP
+.TP
+\fB\fICommaToken \fP\fP
+.TP
+\fB\fIColonToken \fP\fP
+.TP
+\fB\fIStringToken \fP\fP
+.TP
+\fB\fIFalseToken \fP\fP
+.TP
+\fB\fITrueToken \fP\fP
+.TP
+\fB\fINullToken \fP\fP
+.TP
+\fB\fINumberToken \fP\fP
+.TP
+\fB\fIkTokenCount \fP\fP
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >\fB::GenericReader\fP (StackAllocator * stackAllocator = \fC0\fP, size_t stackCapacity = \fCkDefaultStackCapacity\fP)\fC [inline]\fP"
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >\fB::GenericReader\fP (StackAllocator * stackAllocator = \fC0\fP, size_t stackCapacity = \fC\fBkDefaultStackCapacity\fP\fP)\fC [inline]\fP"
 
 .PP
 Constructor\&. 
@@ -110,8 +307,14 @@ Constructor\&.
 .RE
 .PP
 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >\fB::GenericReader\fP (const \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator > &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ClearStack ()\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<typename InputStream > static RAPIDJSON_FORCEINLINE bool \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::Consume (InputStream & is, typename InputStream::Ch expect)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
 .SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> size_t \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::GetErrorOffset () const\fC [inline]\fP"
 
 .PP
@@ -120,10 +323,18 @@ Get the position of last parsing error in input, 0 otherwise\&.
 
 .PP
 Get the \fBParseErrorCode\fP of last parsing\&. 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<typename InputStream > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::HandleError (\fBIterativeParsingState\fP src, InputStream & is)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> bool \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::HasParseError () const\fC [inline]\fP"
 
 .PP
 Whether a parse error has occurred in the last parsing\&. 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> RAPIDJSON_FORCEINLINE bool \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::IsIterativeParsingCompleteState (\fBIterativeParsingState\fP s) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> RAPIDJSON_FORCEINLINE bool \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::IsIterativeParsingDelimiterState (\fBIterativeParsingState\fP s) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > \fBParseResult\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::IterativeParse (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> RAPIDJSON_FORCEINLINE bool \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::IterativeParseComplete () const\fC [inline]\fP"
 
 .PP
@@ -163,6 +374,8 @@ Parse one token from JSON text\&.
 Whether the parsing is successful\&. 
 .RE
 .PP
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBGenericReader\fP & \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::operator= (const \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator > &)\fC [private]\fP"
 
 .SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > \fBParseResult\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::Parse (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP"
 
@@ -216,7 +429,51 @@ Whether the parsing is successful\&.
 .RE
 .PP
 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseArray (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseFalse (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<typename InputStream > unsigned \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseHex4 (InputStream & is, size_t escapeOffset)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseNull (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseNumber (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseObject (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseString (InputStream & is, \fBHandler\fP & handler, bool isKey = \fCfalse\fP)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename SEncoding , typename TEncoding , typename InputStream , typename OutputStream > RAPIDJSON_FORCEINLINE void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseStringToStream (InputStream & is, OutputStream & os)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseTrue (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ParseValue (InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> RAPIDJSON_FORCEINLINE \fBIterativeParsingState\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::Predict (\fBIterativeParsingState\fP state, \fBToken\fP token) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<typename InputStream , typename OutputStream > static RAPIDJSON_FORCEINLINE void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::ScanCopyUnescapedString (InputStream &, OutputStream &)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
 .SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::SetParseError (\fBParseErrorCode\fP code, size_t offset)\fC [inline]\fP, \fC [protected]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream > void \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::SkipWhitespaceAndComments (InputStream & is)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> RAPIDJSON_FORCEINLINE \fBToken\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::Tokenize (\fBCh\fP c) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> template<unsigned parseFlags, typename InputStream , typename \fBHandler\fP > RAPIDJSON_FORCEINLINE \fBIterativeParsingState\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::Transit (\fBIterativeParsingState\fP src, \fBToken\fP token, \fBIterativeParsingState\fP dst, InputStream & is, \fBHandler\fP & handler)\fC [inline]\fP, \fC [private]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> const size_t \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::kDefaultStackCapacity = 256\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Default stack capacity in bytes for storing a single decoded string\&. 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBParseResult\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::parseResult_\fC [private]\fP"
+
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBinternal::Stack\fP<StackAllocator> \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::stack_\fC [private]\fP"
+
+.PP
+A stack for storing decoded string temporarily during non-destructive parsing\&. 
+.SS "template<typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator> \fBIterativeParsingState\fP \fBGenericReader\fP< SourceEncoding, TargetEncoding, StackAllocator >::state_\fC [private]\fP"
 
 
 .SH "Author"

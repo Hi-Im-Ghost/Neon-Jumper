@@ -1,4 +1,4 @@
-.TH "JsonReader" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "JsonReader" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ JsonReader \- Represents a JSON reader which implements \fBArchiver\fP concept\&
 
 .in +1c
 .ti -1c
-.RI "\fBJsonReader\fP (const char *json)"
+.RI "\fBJsonReader\fP (const char *\fBjson\fP)"
 .br
 .RI "Constructor\&. "
 .ti -1c
@@ -70,6 +70,35 @@ JsonReader \- Represents a JSON reader which implements \fBArchiver\fP concept\&
 .RI "static const bool \fBIsWriter\fP = !\fBIsReader\fP"
 .br
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBJsonReader\fP (const \fBJsonReader\fP &)"
+.br
+.ti -1c
+.RI "\fBJsonReader\fP & \fBoperator=\fP (const \fBJsonReader\fP &)"
+.br
+.ti -1c
+.RI "void \fBNext\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "void * \fBmDocument\fP"
+.br
+.RI "DOM result of parsing\&. "
+.ti -1c
+.RI "void * \fBmStack\fP"
+.br
+.RI "Stack for iterating the DOM\&. "
+.ti -1c
+.RI "bool \fBmError\fP"
+.br
+.RI "Whether an error has occurred\&. "
+.in -1c
 .SH "Detailed Description"
 .PP 
 Represents a JSON reader which implements \fBArchiver\fP concept\&. 
@@ -95,6 +124,8 @@ in-situ means the source JSON string will be modified after parsing\&.
 
 .PP
 Destructor\&. 
+.SS "JsonReader::JsonReader (const \fBJsonReader\fP &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "\fBJsonReader\fP & JsonReader::EndArray ()"
@@ -104,6 +135,8 @@ Destructor\&.
 .SS "bool JsonReader::HasMember (const char * name) const"
 
 .SS "\fBJsonReader\fP & JsonReader::Member (const char * name)"
+
+.SS "void JsonReader::Next ()\fC [private]\fP"
 
 .SS "JsonReader::operator bool () const\fC [inline]\fP"
 
@@ -117,6 +150,8 @@ Destructor\&.
 
 .SS "\fBJsonReader\fP & JsonReader::operator& (unsigned & u)"
 
+.SS "\fBJsonReader\fP & JsonReader::operator= (const \fBJsonReader\fP &)\fC [private]\fP"
+
 .SS "\fBJsonReader\fP & JsonReader::SetNull ()"
 
 .SS "\fBJsonReader\fP & JsonReader::StartArray (size_t * size = \fC0\fP)"
@@ -129,6 +164,18 @@ Destructor\&.
 
 .SS "const bool JsonReader::IsWriter = !\fBIsReader\fP\fC [static]\fP"
 
+.SS "void* JsonReader::mDocument\fC [private]\fP"
+
+.PP
+DOM result of parsing\&. 
+.SS "bool JsonReader::mError\fC [private]\fP"
+
+.PP
+Whether an error has occurred\&. 
+.SS "void* JsonReader::mStack\fC [private]\fP"
+
+.PP
+Stack for iterating the DOM\&. 
 
 .SH "Author"
 .PP 

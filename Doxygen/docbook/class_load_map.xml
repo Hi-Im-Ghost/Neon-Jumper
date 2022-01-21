@@ -9,28 +9,41 @@
     <title>Public Member Functions    </title>
         <itemizedlist>
             <listitem><para><link linkend="_class_load_map_1ae780842a81d47d2463f40bf561fbdfa7">LoadMap</link> (std::string mapFileName)</para>
-
-<para>Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy. </para>
 </listitem>
             <listitem><para>std::ifstream <link linkend="_class_load_map_1ae3d1eb7e8e3f5748430e1189d72a3849">readFile</link> (std::string)</para>
-
-<para>Metoda która słuzy do wczytywania danych z pliku. </para>
 </listitem>
             <listitem><para><link linkend="_class_tile_set">TileSet</link> <link linkend="_class_load_map_1aae3bcc5f28ae22b7cda5ae6785b04a4c">findTileSet</link> (<link linkend="_class_layer">Layer</link> &amp;, std::vector&lt; <link linkend="_class_tile_set">TileSet</link> &gt; &amp;)</para>
-
-<para>Metoda która służy do znalezienia przekazanej w parametrze warstwy. </para>
 </listitem>
             <listitem><para><link linkend="_class_layer">Layer</link> <link linkend="_class_load_map_1a1c887ad2112bf7d749d0254309c1ab73">getSolidLayer</link> ()</para>
-
-<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla terenu. </para>
 </listitem>
             <listitem><para><link linkend="_class_layer">Layer</link> <link linkend="_class_load_map_1a21f5bf47590f84c73e4850a20acad787">getDamageLayer</link> ()</para>
-
-<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_load_map_1a7020a11fa9a16e73ff62bbdd93d2db8c">draw</link> (sf::RenderTarget &amp;window)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>sf::Texture <link linkend="_class_load_map_1a53959655400892dc7ea5249e5e5114f8">bg</link></para>
 
-<para>Służy do wyświetlania na ekranie warstw. </para>
+<para>Zmienna która przechowuje teksturę dla tła. </para>
+</listitem>
+            <listitem><para>sf::Sprite <link linkend="_class_load_map_1a91692f7e88c0262bb8e33c4c47b51cc4">bgSpr</link></para>
+
+<para>Zmienna która służy do przeniesienia tekstury tła na ekran. </para>
+</listitem>
+            <listitem><para>std::vector&lt; <link linkend="_class_tile_map">TileMap</link> &gt; <link linkend="_class_load_map_1afee37ee6c7a216eda99611d06658808d">tilemap_render</link></para>
+
+<para>Vector który przechowuje wszystkie elementy mapy do wyrenderowania. </para>
+</listitem>
+            <listitem><para><link linkend="_class_layer">Layer</link> <link linkend="_class_load_map_1a0d53f21ac37c0c7b9911a491bd13e3c8">solidLayer</link></para>
+
+<para>Obiekt warstwy gry który przechowuje hitboxy dla terenu. </para>
+</listitem>
+            <listitem><para><link linkend="_class_layer">Layer</link> <link linkend="_class_load_map_1ad30ea2f20fde1331c978b4f85301c34c">damageLayer</link></para>
+
+<para>Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia. </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -40,10 +53,28 @@
     <title>LoadMap()</title>
 <indexterm><primary>LoadMap</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>LoadMap</secondary></indexterm>
-<para><computeroutput>LoadMap::LoadMap (std::string mapFileName)</computeroutput></para><para>
-
-<para>Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy. </para>
-</para>
+<para><computeroutput>LoadMap::LoadMap (std::string mapFileName)</computeroutput></para>
+<para>Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>mapFileName</entry><entry>
+<para>- nazwa pliku json w której to znajdują się elementy mapy </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 </section>
 <section>
@@ -52,45 +83,119 @@
     <title>draw()</title>
 <indexterm><primary>draw</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>draw</secondary></indexterm>
-<para><computeroutput>void LoadMap::draw (sf::RenderTarget &amp; window)</computeroutput></para><para>
-
-<para>Służy do wyświetlania na ekranie warstw. </para>
-</para>
+<para><computeroutput>void LoadMap::draw (sf::RenderTarget &amp; window)</computeroutput></para>
+<para>Służy do wyświetlania na ekranie warstw 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>window</entry><entry>
+<para>- okno na którym elementy mają być wyświetlane </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 <anchor xml:id="_class_load_map_1aae3bcc5f28ae22b7cda5ae6785b04a4c"/><section>
     <title>findTileSet()</title>
 <indexterm><primary>findTileSet</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>findTileSet</secondary></indexterm>
-<para><computeroutput><link linkend="_class_tile_set">TileSet</link> LoadMap::findTileSet (<link linkend="_class_layer">Layer</link> &amp; layer, std::vector&lt; <link linkend="_class_tile_set">TileSet</link> &gt; &amp; tilesets)</computeroutput></para><para>
+<para><computeroutput><link linkend="_class_tile_set">TileSet</link> LoadMap::findTileSet (<link linkend="_class_layer">Layer</link> &amp; layer, std::vector&lt; <link linkend="_class_tile_set">TileSet</link> &gt; &amp; tilesets)</computeroutput></para>
+<para>Metoda która służy do znalezienia przekazanej w parametrze warstwy <formalpara><title>Returns</title>
 
-<para>Metoda która służy do znalezienia przekazanej w parametrze warstwy. </para>
+<para>zwraca warstwie kafelków </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_load_map_1a21f5bf47590f84c73e4850a20acad787"/><section>
     <title>getDamageLayer()</title>
 <indexterm><primary>getDamageLayer</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>getDamageLayer</secondary></indexterm>
-<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::getDamageLayer ( )</computeroutput></para><para>
+<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::getDamageLayer ( )</computeroutput></para>
+<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia <formalpara><title>Returns</title>
 
-<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia. </para>
+<para>zwraca warstwie, która reprezentuje hitboxy dla obiektów zadających obrażenia </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_load_map_1a1c887ad2112bf7d749d0254309c1ab73"/><section>
     <title>getSolidLayer()</title>
 <indexterm><primary>getSolidLayer</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>getSolidLayer</secondary></indexterm>
-<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::getSolidLayer ( )</computeroutput></para><para>
+<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::getSolidLayer ( )</computeroutput></para>
+<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla terenu <formalpara><title>Returns</title>
 
-<para>Metoda klasy <link linkend="_class_layer">Layer</link> która zwraca warstwe hitboxow dla terenu. </para>
+<para>zwraca warstwe, która reprezentuje hitboxy terenu </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_load_map_1ae3d1eb7e8e3f5748430e1189d72a3849"/><section>
     <title>readFile()</title>
 <indexterm><primary>readFile</primary><secondary>LoadMap</secondary></indexterm>
 <indexterm><primary>LoadMap</primary><secondary>readFile</secondary></indexterm>
-<para><computeroutput>std::ifstream LoadMap::readFile (std::string path)</computeroutput></para><para>
+<para><computeroutput>std::ifstream LoadMap::readFile (std::string path)</computeroutput></para>
+<para>Metoda która słuzy do wczytywania danych z pliku <formalpara><title>Returns</title>
 
-<para>Metoda która słuzy do wczytywania danych z pliku. </para>
+<para>zwraca tekst wczytany z pliku </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_load_map_1a53959655400892dc7ea5249e5e5114f8"/><section>
+    <title>bg</title>
+<indexterm><primary>bg</primary><secondary>LoadMap</secondary></indexterm>
+<indexterm><primary>LoadMap</primary><secondary>bg</secondary></indexterm>
+<para><computeroutput>sf::Texture LoadMap::bg<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Zmienna która przechowuje teksturę dla tła. </para>
+</para>
+</section>
+<anchor xml:id="_class_load_map_1a91692f7e88c0262bb8e33c4c47b51cc4"/><section>
+    <title>bgSpr</title>
+<indexterm><primary>bgSpr</primary><secondary>LoadMap</secondary></indexterm>
+<indexterm><primary>LoadMap</primary><secondary>bgSpr</secondary></indexterm>
+<para><computeroutput>sf::Sprite LoadMap::bgSpr<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Zmienna która służy do przeniesienia tekstury tła na ekran. </para>
+</para>
+</section>
+<anchor xml:id="_class_load_map_1ad30ea2f20fde1331c978b4f85301c34c"/><section>
+    <title>damageLayer</title>
+<indexterm><primary>damageLayer</primary><secondary>LoadMap</secondary></indexterm>
+<indexterm><primary>LoadMap</primary><secondary>damageLayer</secondary></indexterm>
+<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::damageLayer<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia. </para>
+</para>
+</section>
+<anchor xml:id="_class_load_map_1a0d53f21ac37c0c7b9911a491bd13e3c8"/><section>
+    <title>solidLayer</title>
+<indexterm><primary>solidLayer</primary><secondary>LoadMap</secondary></indexterm>
+<indexterm><primary>LoadMap</primary><secondary>solidLayer</secondary></indexterm>
+<para><computeroutput><link linkend="_class_layer">Layer</link> LoadMap::solidLayer<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Obiekt warstwy gry który przechowuje hitboxy dla terenu. </para>
+</para>
+</section>
+<anchor xml:id="_class_load_map_1afee37ee6c7a216eda99611d06658808d"/><section>
+    <title>tilemap_render</title>
+<indexterm><primary>tilemap_render</primary><secondary>LoadMap</secondary></indexterm>
+<indexterm><primary>LoadMap</primary><secondary>tilemap_render</secondary></indexterm>
+<para><computeroutput>std::vector&lt;<link linkend="_class_tile_map">TileMap</link>&gt; LoadMap::tilemap_render<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Vector który przechowuje wszystkie elementy mapy do wyrenderowania. </para>
 </para>
 </section>
 <para>

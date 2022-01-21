@@ -1,0 +1,213 @@
+.TH "Projectile" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Projectile
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Projectile\&.h>\fP
+.PP
+Inherited by \fBBullet\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBProjectile\fP (sf::Vector2f pos, bool movingRight)"
+.br
+.ti -1c
+.RI "sf::Vector2f \fBgetPosition\fP ()"
+.br
+.ti -1c
+.RI "bool \fBgetIsMovingRight\fP () const"
+.br
+.ti -1c
+.RI "bool \fBgetShouldBeDestroyed\fP () const"
+.br
+.ti -1c
+.RI "bool \fBisColliding\fP (const sf::RectangleShape &recShape)"
+.br
+.ti -1c
+.RI "void \fBmarkForDestruction\fP ()"
+.br
+.RI "Oznacza pocisk jako gotowy do zniszczenia\&. "
+.ti -1c
+.RI "virtual void \fBupdate\fP (float deltaTime)"
+.br
+.ti -1c
+.RI "void \fBrender\fP (sf::RenderTarget &window)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBmove\fP ()=0"
+.br
+.RI "Porusza pociskiem w odpowiedni sposób\&. "
+.ti -1c
+.RI "void \fBsetPosition\fP (float x, float y)"
+.br
+.ti -1c
+.RI "void \fBinitTexture\fP (const std::string &path, sf::IntRect textureRect)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Texture \fB_texture\fP"
+.br
+.RI "Tekstura pocisku\&. "
+.ti -1c
+.RI "sf::Sprite \fB_sprite\fP"
+.br
+.RI "Sprite pocisku wczytywany z tekstury\&. "
+.ti -1c
+.RI "sf::RectangleShape \fB_hitbox\fP"
+.br
+.RI "Kształt odpowiadający za wykrywanie kolizji pocisku\&. "
+.ti -1c
+.RI "bool \fB_bMovingRight\fP"
+.br
+.RI "Określa czy pocisk porysza się w prawo, czy w lewo\&. "
+.ti -1c
+.RI "bool \fB_bShouldBeDestroyed\fP = false"
+.br
+.RI "Określa czy pocisk powinien być zniszczony\&. "
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Projectile::Projectile (sf::Vector2f pos, bool movingRight)"
+Konstruktor pocisku 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpos\fP początkowa pozycja pocisku na mapie 
+.br
+\fImovingRight\fP określa czy pocisk powinien poruszać się w prawo czy w lewo 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "bool Projectile::getIsMovingRight () const\fC [inline]\fP"
+Zwraca informację, czy pocisk porusza się w prawo 
+.PP
+\fBReturns\fP
+.RS 4
+informacja, czy pocisk porusza się w prawo 
+.RE
+.PP
+
+.SS "sf::Vector2f Projectile::getPosition ()"
+Zwraca pozycję pocisku na mapie 
+.PP
+\fBReturns\fP
+.RS 4
+pozycja pocisku na mapie 
+.RE
+.PP
+
+.SS "bool Projectile::getShouldBeDestroyed () const\fC [inline]\fP"
+Zwraca informację, czy pocisk powinien zostać zniszczony 
+.PP
+\fBReturns\fP
+.RS 4
+informacja, czy pocisk powinien zostać zniszcczony 
+.RE
+.PP
+
+.SS "void Projectile::initTexture (const std::string & path, sf::IntRect textureRect)\fC [protected]\fP"
+Inicjalizacja tekstury i sprite pocisku 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpath\fP ścieżka do pliku tekstury 
+.br
+\fItextureRect\fP fragment tekstury, który zostanie wczytany do sprite 
+.RE
+.PP
+
+.SS "bool Projectile::isColliding (const sf::RectangleShape & recShape)"
+Sprawdza, czy pocisk koliduje z podanym kształtem 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrecShape\fP kształt z którym pocisk testuje kolizje 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true - jeżeli nastąpiła kolizja, false - jeżeli nie 
+.RE
+.PP
+
+.SS "void Projectile::markForDestruction ()\fC [inline]\fP"
+
+.PP
+Oznacza pocisk jako gotowy do zniszczenia\&. 
+.SS "virtual void Projectile::move ()\fC [protected]\fP, \fC [pure virtual]\fP"
+
+.PP
+Porusza pociskiem w odpowiedni sposób\&. 
+.PP
+Implemented in \fBBullet\fP\&.
+.SS "void Projectile::render (sf::RenderTarget & window)"
+Renderowanie pocisku na oknie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno, na którym renderowany jest pocisk 
+.RE
+.PP
+
+.SS "void Projectile::setPosition (float x, float y)\fC [protected]\fP"
+Ustawia pozycję pozisku na mapie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP pozycja x na mapie 
+.br
+\fIy\fP pozycja y na mapie 
+.RE
+.PP
+
+.SS "void Projectile::update (float deltaTime)\fC [virtual]\fP"
+Odświeżanie logiki pocisku 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBBullet\fP\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "bool Projectile::_bMovingRight\fC [private]\fP"
+
+.PP
+Określa czy pocisk porysza się w prawo, czy w lewo\&. 
+.SS "bool Projectile::_bShouldBeDestroyed = false\fC [private]\fP"
+
+.PP
+Określa czy pocisk powinien być zniszczony\&. 
+.SS "sf::RectangleShape Projectile::_hitbox\fC [private]\fP"
+
+.PP
+Kształt odpowiadający za wykrywanie kolizji pocisku\&. 
+.SS "sf::Sprite Projectile::_sprite\fC [private]\fP"
+
+.PP
+Sprite pocisku wczytywany z tekstury\&. 
+.SS "sf::Texture Projectile::_texture\fC [private]\fP"
+
+.PP
+Tekstura pocisku\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

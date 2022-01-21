@@ -1,4 +1,4 @@
-.TH "Layer" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Layer" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,7 +18,6 @@ Layer
 .ti -1c
 .RI "\fBLayer\fP (\fBrapidjson::Value\fP &\fBvalue\fP)"
 .br
-.RI "Konstruktor który przyjmuje sparsowane wartości z json'a\&. "
 .ti -1c
 .RI "\fB~Layer\fP ()"
 .br
@@ -26,51 +25,91 @@ Layer
 .ti -1c
 .RI "std::vector< int > \fBgetData\fP ()"
 .br
-.RI "Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy\&. "
 .ti -1c
 .RI "int \fBgetHeight\fP ()"
 .br
-.RI "Zwraca wysokość warstwy\&. "
 .ti -1c
 .RI "int \fBgetId\fP ()"
 .br
-.RI "Zwraca id warstwy\&. "
 .ti -1c
 .RI "std::string \fBgetImage\fP ()"
 .br
-.RI "Zwraca sciezke do obrazka\&. "
 .ti -1c
 .RI "std::string \fBgetName\fP ()"
 .br
-.RI "Zwraca nazwe\&. "
 .ti -1c
 .RI "int \fBgetOpacity\fP ()"
 .br
-.RI "Zwraca informacje o przezroczystości\&. "
 .ti -1c
 .RI "std::string \fBgetType\fP ()"
 .br
-.RI "Zwraca informacje o typie\&. "
 .ti -1c
 .RI "bool \fBisVisible\fP ()"
 .br
-.RI "Zwraca informacje o widoczności\&. "
 .ti -1c
 .RI "int \fBgetWidth\fP ()"
 .br
-.RI "Zwraca szerokość warstwy\&. "
 .ti -1c
 .RI "int \fBgetX\fP ()"
 .br
-.RI "Zwraca współrzędną x\&. "
 .ti -1c
 .RI "int \fBgetY\fP ()"
 .br
-.RI "Zwraca współrzędną y\&. "
 .ti -1c
 .RI "std::vector< \fBLayerObject\fP > \fBgetObjects\fP ()"
 .br
-.RI "Zwraca obiekty występujące w warstwie\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< int > \fBdata\fP"
+.br
+.RI "Wektor który przechowuje informacje o występieniach na mapie danej warstwy\&. "
+.ti -1c
+.RI "int \fBheight\fP"
+.br
+.RI "Zmienna przechowująca wysokość "
+.ti -1c
+.RI "int \fBid\fP"
+.br
+.RI "Zmienna przechowująca id\&. "
+.ti -1c
+.RI "std::string \fBimage\fP"
+.br
+.RI "Zmienna przechowująca ściezke do obrazka\&. "
+.ti -1c
+.RI "std::string \fBname\fP"
+.br
+.RI "Zmienna przechowująca nazwe\&. "
+.ti -1c
+.RI "int \fBopacity\fP"
+.br
+.RI "Zmienna przechowująca przezroczystość "
+.ti -1c
+.RI "std::string \fBtype\fP"
+.br
+.RI "Zmienna przechowująca informacje o typie\&. "
+.ti -1c
+.RI "bool \fBvisible\fP"
+.br
+.RI "Zmienna przechowująca informacje o widoczności\&. "
+.ti -1c
+.RI "int \fBwidth\fP"
+.br
+.RI "Zmienna przechowująca szerokość "
+.ti -1c
+.RI "int \fBx\fP"
+.br
+.RI "Zmienna przechowujaca współrzędną x\&. "
+.ti -1c
+.RI "int \fBy\fP"
+.br
+.RI "Zmienna przechowująca współrzędną y\&. "
+.ti -1c
+.RI "std::vector< \fBLayerObject\fP > \fBobjects\fP"
+.br
+.RI "Wektor który przechowuje obiekty warstwy\&. "
 .in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -79,9 +118,14 @@ Layer
 .PP
 Konstruktor pusty\&. 
 .SS "Layer::Layer (\fBrapidjson::Value\fP & value)"
-
+Konstruktor który przyjmuje sparsowane wartości z json'a 
 .PP
-Konstruktor który przyjmuje sparsowane wartości z json'a\&. 
+\fBParameters\fP
+.RS 4
+\fIvalue\fP - sparsowane wartości json 
+.RE
+.PP
+
 .SS "Layer::~Layer ()\fC [default]\fP"
 
 .PP
@@ -89,53 +133,163 @@ Destruktor\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "std::vector< int > Layer::getData ()\fC [inline]\fP"
-
+Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy 
 .PP
-Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca date, ktora zawiera informacje o wystapieniach na mapie danej warstwy 
+.RE
+.PP
+
 .SS "int Layer::getHeight ()\fC [inline]\fP"
-
+Zwraca wysokość warstwy 
 .PP
-Zwraca wysokość warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę oznaczająca wysokość 
+.RE
+.PP
+
 .SS "int Layer::getId ()\fC [inline]\fP"
-
+Zwraca id warstwy 
 .PP
-Zwraca id warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę która reprezentuje id dla warstwy 
+.RE
+.PP
+
 .SS "std::string Layer::getImage ()\fC [inline]\fP"
-
+Zwraca sciezke do obrazka 
 .PP
-Zwraca sciezke do obrazka\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje ścieżke do obrazka 
+.RE
+.PP
+
 .SS "std::string Layer::getName ()\fC [inline]\fP"
-
+Zwraca nazwe 
 .PP
-Zwraca nazwe\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje nazwe warstwy 
+.RE
+.PP
+
 .SS "std::vector< \fBLayerObject\fP > Layer::getObjects ()\fC [inline]\fP"
-
+Zwraca obiekty występujące w warstwie 
 .PP
-Zwraca obiekty występujące w warstwie\&. 
+\fBReturns\fP
+.RS 4
+zwraca obiekty, które występują w warstwie 
+.RE
+.PP
+
 .SS "int Layer::getOpacity ()\fC [inline]\fP"
-
+Zwraca informacje o przezroczystości 
 .PP
-Zwraca informacje o przezroczystości\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje przezroczystość dla warstwy 
+.RE
+.PP
+
 .SS "std::string Layer::getType ()\fC [inline]\fP"
-
+Zwraca informacje o typie 
 .PP
-Zwraca informacje o typie\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje typ dla warstwy 
+.RE
+.PP
+
 .SS "int Layer::getWidth ()\fC [inline]\fP"
-
+Zwraca szerokość warstwy 
 .PP
-Zwraca szerokość warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę która reprezentuje szerokość warstwy 
+.RE
+.PP
+
 .SS "int Layer::getX ()\fC [inline]\fP"
-
+Zwraca współrzędną x 
 .PP
-Zwraca współrzędną x\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje współrzedną x dla warstwy 
+.RE
+.PP
+
 .SS "int Layer::getY ()\fC [inline]\fP"
-
+Zwraca współrzędną y 
 .PP
-Zwraca współrzędną y\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje współrzedną y dla warstwy 
+.RE
+.PP
+
 .SS "bool Layer::isVisible ()\fC [inline]\fP"
+Zwraca informacje o widoczności 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca true jeśli warstwa jest widoczna lub false jeśli nie widoczna 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<int> Layer::data\fC [private]\fP"
 
 .PP
-Zwraca informacje o widoczności\&. 
+Wektor który przechowuje informacje o występieniach na mapie danej warstwy\&. 
+.SS "int Layer::height\fC [private]\fP"
+
+.PP
+Zmienna przechowująca wysokość 
+.SS "int Layer::id\fC [private]\fP"
+
+.PP
+Zmienna przechowująca id\&. 
+.SS "std::string Layer::image\fC [private]\fP"
+
+.PP
+Zmienna przechowująca ściezke do obrazka\&. 
+.SS "std::string Layer::name\fC [private]\fP"
+
+.PP
+Zmienna przechowująca nazwe\&. 
+.SS "std::vector<\fBLayerObject\fP> Layer::objects\fC [private]\fP"
+
+.PP
+Wektor który przechowuje obiekty warstwy\&. 
+.SS "int Layer::opacity\fC [private]\fP"
+
+.PP
+Zmienna przechowująca przezroczystość 
+.SS "std::string Layer::type\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o typie\&. 
+.SS "bool Layer::visible\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o widoczności\&. 
+.SS "int Layer::width\fC [private]\fP"
+
+.PP
+Zmienna przechowująca szerokość 
+.SS "int Layer::x\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca współrzędną x\&. 
+.SS "int Layer::y\fC [private]\fP"
+
+.PP
+Zmienna przechowująca współrzędną y\&. 
 
 .SH "Author"
 .PP 

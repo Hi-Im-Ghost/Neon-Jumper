@@ -8,8 +8,7 @@
  */
 class TileSetMap {
 public:
-    /***
-     * Metoda która ustawia zmienne kafelków z pobranych wartości json
+    /** Metoda która ustawia zmienne kafelków z pobranych wartości json
      * @param value - wartości pobrane z json
      */
     TileSetMap(rapidjson::Value& value) {
@@ -18,13 +17,11 @@ public:
     }
     ///Destruktor kafelków mapy
     ~TileSetMap() {}
-    /***
-     * Metoda która zwraca informacje o pierwszy globalny identyfikator kafelka wybranego zestawu
+    /** Metoda która zwraca informacje o pierwszy globalny identyfikator kafelka wybranego zestawu
      * @return zwraca liczbe która reprezentuje id pierwszego kafelka w danym zestawie
      */
     int getFirstGId() { return firstgid; }
-    /***
-     * Metoda która zwraca informacje ścieżke do pliku w którym przechowywanym jest zestaw kafelków
+    /** Metoda która zwraca informacje ścieżke do pliku w którym przechowywanym jest zestaw kafelków
      * @return zwraca ścieżke do zestawu kafelków
      */
     std::string getSource() { return source; }

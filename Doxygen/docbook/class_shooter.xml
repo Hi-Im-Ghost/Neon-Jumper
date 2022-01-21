@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_shooter" xml:lang="en-US">
+<title>Shooter Class Reference</title>
+<indexterm><primary>Shooter</primary></indexterm>
+<para>
+<computeroutput>#include &lt;Shooter.h&gt;</computeroutput>
+</para>
+<para>Inheritance diagram for Shooter:    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="class_shooter.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>bool <link linkend="_class_shooter_1a3838adc2010436b8872f8f08f2f99eb6">checkIsProjectileColliding</link> (const sf::RectangleShape &amp;recShape)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Protected Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>virtual void <link linkend="_class_shooter_1aa2d08f6a1f98d5da51748a3e7784999f">shoot</link> ()=0</para>
+
+<para>Wykonuje strzał </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_shooter_1a0b8ba43cde1eaf758225a93e489ab06f">addToList</link> (<link linkend="_class_projectile">Projectile</link> *projectile)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_shooter_1a5e16af875520610c3bac9dbeae635ef7">removeFromList</link> (<link linkend="_class_projectile">Projectile</link> *projectile)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_shooter_1a0905439266568a30d70e57793bb281dc">renderProjectiles</link> (sf::RenderTarget &amp;window)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_shooter_1a26068f026f6c75c16479822eaa8cc38e">updateProjectiles</link> (float deltaTime)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Protected Attributes    </title>
+        <itemizedlist>
+            <listitem><para>sf::Vector2f <link linkend="_class_shooter_1a32c7198c6509792cb7281da21dd4e2ab">shootingPoint</link></para>
+
+<para>Pozycja z której obiekt wykonuje strzał </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_shooter_1ad5b87e6e7cfbe84d4f2787a575aba816">shootingCooldown</link></para>
+
+<para>Odstęp czasowy pomiędzy strzałami. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>std::list&lt; <link linkend="_class_projectile">Projectile</link> * &gt; <link linkend="_class_shooter_1acc9c0cf2ad3787d94a5791e2a05ae107">projectileList</link></para>
+
+<para>Lista wystrzelonych przez ten obiekt pocisków. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_shooter_1a0b8ba43cde1eaf758225a93e489ab06f"/><section>
+    <title>addToList()</title>
+<indexterm><primary>addToList</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>addToList</secondary></indexterm>
+<para><computeroutput>void Shooter::addToList (<link linkend="_class_projectile">Projectile</link> * projectile)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Dodaje podany pocisk do listy pocisków &apos;projectileList&apos; 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>projectile</entry><entry>
+<para>Odniesienie do pocisku, który należy dodać do listy </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_shooter_1a3838adc2010436b8872f8f08f2f99eb6"/><section>
+    <title>checkIsProjectileColliding()</title>
+<indexterm><primary>checkIsProjectileColliding</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>checkIsProjectileColliding</secondary></indexterm>
+<para><computeroutput>bool Shooter::checkIsProjectileColliding (const sf::RectangleShape &amp; recShape)</computeroutput></para>
+<para>Sprawdza, czy jakikolwiek pocisk z listy koliduje z podanym kształtem, a jeżeli tak, to od razu usuwa go z listy 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>recShape</entry><entry>
+<para>Kształt na którym testowana jest kolizja z pociskami </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>true - jeżeli którykolwiek z pocisków trafił w podany kształt, false - jeżeli kolizja nie zachodzi </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_shooter_1a5e16af875520610c3bac9dbeae635ef7"/><section>
+    <title>removeFromList()</title>
+<indexterm><primary>removeFromList</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>removeFromList</secondary></indexterm>
+<para><computeroutput>void Shooter::removeFromList (<link linkend="_class_projectile">Projectile</link> * projectile)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Usuwa podany pocisk z listy &apos;projectileList&apos; 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>projectile</entry><entry>
+<para>Odniesienie do pocisku, który należy usunąć z listy </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_shooter_1a0905439266568a30d70e57793bb281dc"/><section>
+    <title>renderProjectiles()</title>
+<indexterm><primary>renderProjectiles</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>renderProjectiles</secondary></indexterm>
+<para><computeroutput>void Shooter::renderProjectiles (sf::RenderTarget &amp; window)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Renderowanie pocisków na podanym oknie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>window</entry><entry>
+<para>Okno na którym mają być renderowane pociski </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_shooter_1aa2d08f6a1f98d5da51748a3e7784999f"/><section>
+    <title>shoot()</title>
+<indexterm><primary>shoot</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>shoot</secondary></indexterm>
+<para><computeroutput>virtual void Shooter::shoot ( )<computeroutput>[protected]</computeroutput>, <computeroutput>[pure virtual]</computeroutput></computeroutput></para><para>
+
+<para>Wykonuje strzał </para>
+</para>
+<para>
+Implemented in <link linkend="_class_player_1a14a11ab2c2d986763f7c901c6bcce38a">Player</link>.</para>
+</section>
+<anchor xml:id="_class_shooter_1a26068f026f6c75c16479822eaa8cc38e"/><section>
+    <title>updateProjectiles()</title>
+<indexterm><primary>updateProjectiles</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>updateProjectiles</secondary></indexterm>
+<para><computeroutput>void Shooter::updateProjectiles (float deltaTime)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Odświeżanie logiki pocisków 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>Czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_shooter_1acc9c0cf2ad3787d94a5791e2a05ae107"/><section>
+    <title>projectileList</title>
+<indexterm><primary>projectileList</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>projectileList</secondary></indexterm>
+<para><computeroutput>std::list&lt;<link linkend="_class_projectile">Projectile</link>*&gt; Shooter::projectileList<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Lista wystrzelonych przez ten obiekt pocisków. </para>
+</para>
+</section>
+<anchor xml:id="_class_shooter_1ad5b87e6e7cfbe84d4f2787a575aba816"/><section>
+    <title>shootingCooldown</title>
+<indexterm><primary>shootingCooldown</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>shootingCooldown</secondary></indexterm>
+<para><computeroutput>float Shooter::shootingCooldown<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Odstęp czasowy pomiędzy strzałami. </para>
+</para>
+</section>
+<anchor xml:id="_class_shooter_1a32c7198c6509792cb7281da21dd4e2ab"/><section>
+    <title>shootingPoint</title>
+<indexterm><primary>shootingPoint</primary><secondary>Shooter</secondary></indexterm>
+<indexterm><primary>Shooter</primary><secondary>shootingPoint</secondary></indexterm>
+<para><computeroutput>sf::Vector2f Shooter::shootingPoint<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Pozycja z której obiekt wykonuje strzał </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/modules/<link linkend="__shooter_8h">Shooter.h</link>src/modules/<link linkend="__shooter_8cpp">Shooter.cpp</link></section>
+</section>

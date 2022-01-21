@@ -23,21 +23,45 @@ enum \mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animatio
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_animated_a72005d589aed57e4661825032986346c}{animate}} (sf\+::\+Sprite \&sprite, bool no\+Wait=false)
-\begin{DoxyCompactList}\small\item\em Animuje przekazanego sprite-\/a z odpowiednią częstotliwością \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_animated_a81fd919be841d41a23f27909e2ebdb1a}{switch\+Animation}} (\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} new\+Animation)
-\begin{DoxyCompactList}\small\item\em Zmienia obecną animację na podaną w argumencie. \end{DoxyCompactList}\item 
+\item 
+virtual void \mbox{\hyperlink{class_animated_a81fd919be841d41a23f27909e2ebdb1a}{switch\+Animation}} (\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} new\+Animation)
+\item 
 \mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} \mbox{\hyperlink{class_animated_a99e20c6b161c742283e1b3eabc2c365c}{get\+Current\+Ainmation}} ()
-\begin{DoxyCompactList}\small\item\em Pobiera obecnie używaną animację \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{class_animated_a11a766414913f383e89df00b0fb88179}{set\+Anim\+Values}} (sf\+::\+Vector2i frame\+Origin, sf\+::\+Vector2i frame\+Size, int frame\+Count, float interval\+Time, bool is\+Looping)
-\begin{DoxyCompactList}\small\item\em Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
 bool \mbox{\hyperlink{class_animated_ab0734224d6f30a675322dfd7be78693d}{\+\_\+b\+Is\+Flipped}}
 \begin{DoxyCompactList}\small\item\em Określa czy sprite jest obrócony w drugą stronę \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_animated_add31b912197172fcdff850dd99f33cf9}{set\+Frame}} (sf\+::\+Sprite \&sprite)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Vector2i \mbox{\hyperlink{class_animated_a25e6c03f52d0d5c6ac2cefd5574f524e}{\+\_\+frame\+Size}}
+\begin{DoxyCompactList}\small\item\em Rozmiar pojedynczej klatki animacji. \end{DoxyCompactList}\item 
+sf\+::\+Vector2i \mbox{\hyperlink{class_animated_a2cd20e0f47fc392b999d8279d05ea5df}{\+\_\+frame\+Origin}}
+\begin{DoxyCompactList}\small\item\em Lewy-\/górny punkt obecnej klatki animacji. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_animated_a1922bb84e3d440d5cc8ccc0de7673440}{\+\_\+b\+Looping}}
+\begin{DoxyCompactList}\small\item\em Określa czy animacja powinna się zapętlać \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_animated_af1f9d78d8aef4d8f6d83571231168398}{\+\_\+max\+Frame\+Number}}
+\begin{DoxyCompactList}\small\item\em Określa ile klatek powinna mieć obecna animacja. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_animated_a584376f9605a3651f311ce4caab93055}{\+\_\+startingX}}
+\begin{DoxyCompactList}\small\item\em Pozycja x klatki animacji od której powinna się zacząć animacji. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} \mbox{\hyperlink{class_animated_aff38365b0e9c2133bcc8659a05d07f4e}{\+\_\+curr\+Anim}}
+\begin{DoxyCompactList}\small\item\em Obecnie używana animacja. \end{DoxyCompactList}\item 
+sf\+::\+Clock \mbox{\hyperlink{class_animated_acae281f71d22c1be3661cdf9a1a98bd1}{\+\_\+anim\+Clock}}
+\begin{DoxyCompactList}\small\item\em Mierzy czas jaki upłynął od ostatniej klatki animacji. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_animated_ae8abaf7ce36d3f0c19b8d406e24bbf42}{frame\+Interval\+Time}} = 0.\+7f
+\begin{DoxyCompactList}\small\item\em Określa czas jaki musi upłynąć, by zmienić klatkę animacji. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Member Enumeration Documentation}
@@ -53,19 +77,19 @@ Enumerator reprezentujący dostępne animacje.
 
 \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{IDLE@{IDLE}!Animated@{Animated}}\index{Animated@{Animated}!IDLE@{IDLE}}}\mbox{\Hypertarget{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba4be1f25948cbb0724e96f2b75e354c47}\label{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba4be1f25948cbb0724e96f2b75e354c47}} 
-IDLE&\\
+IDLE&Animacja stania w miejscu. \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{WALK@{WALK}!Animated@{Animated}}\index{Animated@{Animated}!WALK@{WALK}}}\mbox{\Hypertarget{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba068868841d5d16c4f643105c1ee80831}\label{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba068868841d5d16c4f643105c1ee80831}} 
-WALK&\\
+WALK&Animacja chodzenia. \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{JUMP@{JUMP}!Animated@{Animated}}\index{Animated@{Animated}!JUMP@{JUMP}}}\mbox{\Hypertarget{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964}\label{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba71c9a846352c128a0509dd271be15964}} 
-JUMP&\\
+JUMP&Animacja skakania. \\
 \hline
 
 \raisebox{\heightof{T}}[0pt][0pt]{\index{FALL@{FALL}!Animated@{Animated}}\index{Animated@{Animated}!FALL@{FALL}}}\mbox{\Hypertarget{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba33c4e60ae5c29beb7265fa30891026e7}\label{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fba33c4e60ae5c29beb7265fa30891026e7}} 
-FALL&\\
+FALL&Animacja spadania. \\
 \hline
 
 \end{DoxyEnumFields}
@@ -78,10 +102,13 @@ FALL&\\
 \doxysubsubsection{\texorpdfstring{animate()}{animate()}}
 {\footnotesize\ttfamily void Animated\+::animate (\begin{DoxyParamCaption}\item[{sf\+::\+Sprite \&}]{sprite,  }\item[{bool}]{no\+Wait = {\ttfamily false} }\end{DoxyParamCaption})}
 
-
-
 Animuje przekazanego sprite-\/a z odpowiednią częstotliwością 
-
+\begin{DoxyParams}{Parameters}
+{\em sprite} & sprite do animacji \\
+\hline
+{\em no\+Wait} & ignoruj interval\+Time i animuj klatkę od razu \\
+\hline
+\end{DoxyParams}
 Sprawdza, czy czas, który upłynął od ostatniej klatki animacji jest większy niż czas pomiędzy klatkami
 
 resetuje zegar animacji\mbox{\Hypertarget{class_animated_a99e20c6b161c742283e1b3eabc2c365c}\label{class_animated_a99e20c6b161c742283e1b3eabc2c365c}} 
@@ -90,33 +117,71 @@ resetuje zegar animacji\mbox{\Hypertarget{class_animated_a99e20c6b161c742283e1b3
 \doxysubsubsection{\texorpdfstring{getCurrentAinmation()}{getCurrentAinmation()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} Animated\+::get\+Current\+Ainmation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-
-
-Pobiera obecnie używaną animację 
-
+Pobiera obecnie używaną animację \begin{DoxyReturn}{Returns}
+obecnie używana animacja 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_animated_a11a766414913f383e89df00b0fb88179}\label{class_animated_a11a766414913f383e89df00b0fb88179}} 
 \index{Animated@{Animated}!setAnimValues@{setAnimValues}}
 \index{setAnimValues@{setAnimValues}!Animated@{Animated}}
 \doxysubsubsection{\texorpdfstring{setAnimValues()}{setAnimValues()}}
 {\footnotesize\ttfamily void Animated\+::set\+Anim\+Values (\begin{DoxyParamCaption}\item[{sf\+::\+Vector2i}]{frame\+Origin,  }\item[{sf\+::\+Vector2i}]{frame\+Size,  }\item[{int}]{frame\+Count,  }\item[{float}]{interval\+Time,  }\item[{bool}]{is\+Looping }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
+Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji 
+\begin{DoxyParams}{Parameters}
+{\em frame\+Origin} & pozycja lewego-\/górnego punktu klatki na teksturze \\
+\hline
+{\em frame\+Size} & rozmiar klatki animacji \\
+\hline
+{\em frame\+Count} & ilość klatek do animacji \\
+\hline
+{\em interval\+Time} & czas pomiędzy klatkami animacji \\
+\hline
+{\em is\+Looping} & czy animacja powinna się zapętlać \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_animated_add31b912197172fcdff850dd99f33cf9}\label{class_animated_add31b912197172fcdff850dd99f33cf9}} 
+\index{Animated@{Animated}!setFrame@{setFrame}}
+\index{setFrame@{setFrame}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{setFrame()}{setFrame()}}
+{\footnotesize\ttfamily void Animated\+::set\+Frame (\begin{DoxyParamCaption}\item[{sf\+::\+Sprite \&}]{sprite }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
+Wczytuje następną klatkę i aktualizuje podany sprite 
+\begin{DoxyParams}{Parameters}
+{\em sprite} & sprite do animacji \\
+\hline
+\end{DoxyParams}
+Zmienia teksturę źródłową sprite na taką o zadanych współrzędnych
 
-Ustawia wartości animacji, które używane będą przy animowaniu. Używane przy zmianie animacji. 
+przesuwa ramkę o jedną klatkę do przodu
 
-\mbox{\Hypertarget{class_animated_a81fd919be841d41a23f27909e2ebdb1a}\label{class_animated_a81fd919be841d41a23f27909e2ebdb1a}} 
+Jeżeli współrzędne następnej klatki wychodzą poza rozmiar tekstury, przejdź do początkowej klatki\mbox{\Hypertarget{class_animated_a81fd919be841d41a23f27909e2ebdb1a}\label{class_animated_a81fd919be841d41a23f27909e2ebdb1a}} 
 \index{Animated@{Animated}!switchAnimation@{switchAnimation}}
 \index{switchAnimation@{switchAnimation}!Animated@{Animated}}
 \doxysubsubsection{\texorpdfstring{switchAnimation()}{switchAnimation()}}
-{\footnotesize\ttfamily void Animated\+::switch\+Animation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}}}]{new\+Animation }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Animated\+::switch\+Animation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}}}]{new\+Animation }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Zmienia obecną animację na podaną w argumencie 
+\begin{DoxyParams}{Parameters}
+{\em new\+Animation} & nowa animacja \\
+\hline
+\end{DoxyParams}
 
 
-
-Zmienia obecną animację na podaną w argumencie. 
+Reimplemented in \mbox{\hyperlink{class_player_a856f53d1ff0e6f44cda41a25c791f865}{Player}}.
 
 
 
 \doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_animated_acae281f71d22c1be3661cdf9a1a98bd1}\label{class_animated_acae281f71d22c1be3661cdf9a1a98bd1}} 
+\index{Animated@{Animated}!\_animClock@{\_animClock}}
+\index{\_animClock@{\_animClock}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_animClock}{\_animClock}}
+{\footnotesize\ttfamily sf\+::\+Clock Animated\+::\+\_\+anim\+Clock\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Mierzy czas jaki upłynął od ostatniej klatki animacji. 
+
 \mbox{\Hypertarget{class_animated_ab0734224d6f30a675322dfd7be78693d}\label{class_animated_ab0734224d6f30a675322dfd7be78693d}} 
 \index{Animated@{Animated}!\_bIsFlipped@{\_bIsFlipped}}
 \index{\_bIsFlipped@{\_bIsFlipped}!Animated@{Animated}}
@@ -126,6 +191,76 @@ Zmienia obecną animację na podaną w argumencie.
 
 
 Określa czy sprite jest obrócony w drugą stronę 
+
+\mbox{\Hypertarget{class_animated_a1922bb84e3d440d5cc8ccc0de7673440}\label{class_animated_a1922bb84e3d440d5cc8ccc0de7673440}} 
+\index{Animated@{Animated}!\_bLooping@{\_bLooping}}
+\index{\_bLooping@{\_bLooping}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_bLooping}{\_bLooping}}
+{\footnotesize\ttfamily bool Animated\+::\+\_\+b\+Looping\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa czy animacja powinna się zapętlać 
+
+\mbox{\Hypertarget{class_animated_aff38365b0e9c2133bcc8659a05d07f4e}\label{class_animated_aff38365b0e9c2133bcc8659a05d07f4e}} 
+\index{Animated@{Animated}!\_currAnim@{\_currAnim}}
+\index{\_currAnim@{\_currAnim}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_currAnim}{\_currAnim}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} Animated\+::\+\_\+curr\+Anim\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Obecnie używana animacja. 
+
+\mbox{\Hypertarget{class_animated_a2cd20e0f47fc392b999d8279d05ea5df}\label{class_animated_a2cd20e0f47fc392b999d8279d05ea5df}} 
+\index{Animated@{Animated}!\_frameOrigin@{\_frameOrigin}}
+\index{\_frameOrigin@{\_frameOrigin}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_frameOrigin}{\_frameOrigin}}
+{\footnotesize\ttfamily sf\+::\+Vector2i Animated\+::\+\_\+frame\+Origin\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Lewy-\/górny punkt obecnej klatki animacji. 
+
+\mbox{\Hypertarget{class_animated_a25e6c03f52d0d5c6ac2cefd5574f524e}\label{class_animated_a25e6c03f52d0d5c6ac2cefd5574f524e}} 
+\index{Animated@{Animated}!\_frameSize@{\_frameSize}}
+\index{\_frameSize@{\_frameSize}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_frameSize}{\_frameSize}}
+{\footnotesize\ttfamily sf\+::\+Vector2i Animated\+::\+\_\+frame\+Size\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Rozmiar pojedynczej klatki animacji. 
+
+\mbox{\Hypertarget{class_animated_af1f9d78d8aef4d8f6d83571231168398}\label{class_animated_af1f9d78d8aef4d8f6d83571231168398}} 
+\index{Animated@{Animated}!\_maxFrameNumber@{\_maxFrameNumber}}
+\index{\_maxFrameNumber@{\_maxFrameNumber}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_maxFrameNumber}{\_maxFrameNumber}}
+{\footnotesize\ttfamily int Animated\+::\+\_\+max\+Frame\+Number\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa ile klatek powinna mieć obecna animacja. 
+
+\mbox{\Hypertarget{class_animated_a584376f9605a3651f311ce4caab93055}\label{class_animated_a584376f9605a3651f311ce4caab93055}} 
+\index{Animated@{Animated}!\_startingX@{\_startingX}}
+\index{\_startingX@{\_startingX}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{\_startingX}{\_startingX}}
+{\footnotesize\ttfamily int Animated\+::\+\_\+startingX\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pozycja x klatki animacji od której powinna się zacząć animacji. 
+
+\mbox{\Hypertarget{class_animated_ae8abaf7ce36d3f0c19b8d406e24bbf42}\label{class_animated_ae8abaf7ce36d3f0c19b8d406e24bbf42}} 
+\index{Animated@{Animated}!frameIntervalTime@{frameIntervalTime}}
+\index{frameIntervalTime@{frameIntervalTime}!Animated@{Animated}}
+\doxysubsubsection{\texorpdfstring{frameIntervalTime}{frameIntervalTime}}
+{\footnotesize\ttfamily float Animated\+::frame\+Interval\+Time = 0.\+7f\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa czas jaki musi upłynąć, by zmienić klatkę animacji. 
 
 
 

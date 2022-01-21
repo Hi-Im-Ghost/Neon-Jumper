@@ -17,55 +17,167 @@
     <title>Public Member Functions    </title>
         <itemizedlist>
             <listitem><para><link linkend="_class_player_1ac1956730c1a4efd8a07546b0276f8b60">Player</link> (float x=0, float y=0)</para>
-
-<para>Konstruktor gracza z opcją podania lokalizacji początkowej na mapie. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85">move</link> (float x, float y)</para>
-
-<para>Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. </para>
 </listitem>
             <listitem><para>sf::Vector2f <link linkend="_class_player_1a23356f99a9de86d3d47eadb679b332dc">getPosition</link> ()</para>
-
-<para>Zwraca pozycję gracza. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_player_1a8127e94cc6c15d49f28ad840126a4ae5">zeroVelocity</link> (bool x, bool y)</para>
-
-<para>Zeruje x - poziomą, y - pionową prędkość gracza. </para>
 </listitem>
             <listitem><para>bool <link linkend="_class_player_1a308bbc68e154a988d40d813d3d1de44c">checkForIntersection</link> (sf::RectangleShape &amp;shape)</para>
-
-<para>Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze. </para>
 </listitem>
             <listitem><para>bool <link linkend="_class_player_1a045c23cf9bbbebfefbfcf32701ba4faf">getTimeStopped</link> () const</para>
-
-<para>Pozwala sprawdzić czy czas jest zatrzymany. </para>
 </listitem>
             <listitem><para>float <link linkend="_class_player_1ad8a8b25b36812e3f2281fffa900312dd">getTimeStopValue</link> () const</para>
-
-<para>Zwraca wartość 0-1 reprezentującą stopień naładowania umiejętności zatrzymania czasu. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_player_1a0b8b2c0946659d50a45b560cf83815ee">update</link> (float deltaTime, const std::list&lt; sf::RectangleShape &gt; &amp;allHitboxes)</para>
-
-<para>Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_player_1a317b439dc6ba2bb2b6aad2f82b130c02">render</link> (sf::RenderTarget &amp;window)</para>
-
-<para>Wyświetla postać gracza na ekranie. </para>
 </listitem>
-            <listitem><para>void <link linkend="_class_player_1a64b65de6130f811ce670be4b0ca790b4">setPosition</link> (sf::Vector2f)</para>
-
-<para>Ustawia pozycję postaci gracza a mapie. </para>
+            <listitem><para>void <link linkend="_class_player_1a876818716e936257241f6febfa6c3cc6">setPosition</link> (sf::Vector2f position)</para>
 </listitem>
-            <listitem><para>void <link linkend="_class_player_1a0b8255feb633ed5922ca99598776de9e">switchAnimation</link> (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)</para>
-
-<para>Zmienia stan animacji gracza na podany. </para>
+            <listitem><para>void <link linkend="_class_player_1a856f53d1ff0e6f44cda41a25c791f865">switchAnimation</link> (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation) override</para>
 </listitem>
         </itemizedlist>
 </simplesect>
 <simplesect>
     <title>Public Attributes    </title>
         <itemizedlist>
-            <listitem><para>bool <link linkend="_class_player_1a836420cfbc65547977599ba7c1a5a77c">isReady</link></para>
+            <listitem><para>bool <link linkend="_class_player_1a4f0b069f0d135ac2bdc8c8ef367699a3">bTimeStopReady</link></para>
+
+<para>Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>void <link linkend="_class_player_1ae4ac5d977f9c70585164515b248536ce">initValues</link> ()</para>
+
+<para>Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a8fbd417981761d02ec3ca227a204f2fd">initSprite</link> ()</para>
+
+<para>Wczytanie tekstury z pliku i zaaplikowanie jej do sprite. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a26c6b7dff7e105778f83839d0752c07b">initHitbox</link> ()</para>
+
+<para>Nadaje początkowe parametry hitboxowi. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a5ea1ca7cf8793c37b6ffe450c8a52c4e">initSoundGame</link> ()</para>
+
+<para>Wczytuje z pliku i zapisuje dźwięki dla gracza. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a22c77aea817fb52c33280b2792992123">handleInput</link> (float deltaTime)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a827529f746003c695ff6891b767f932b">handleCollision</link> (const std::list&lt; sf::RectangleShape &gt; &amp;allHitboxes)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1ac851a358edb1d38a96d183cc31f16ad3">moveFinal</link> ()</para>
+
+<para>Aplikuje prędkość do pozycji gracza. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1ac5720f4a7a1f612438dabb512e81b503">applyGravity</link> (float deltaSeconds)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a70e21ca98281b7d72f105f2693113d7e">jump</link> ()</para>
+
+<para>Wykonuje skok. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a9aa98a8a224ba98b0b7cb09b8577e140">animateMovement</link> ()</para>
+
+<para>Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1a14a11ab2c2d986763f7c901c6bcce38a">shoot</link> () override</para>
+
+<para>Oddaje strzał </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1ad9e19d7afb03af7413f3c867808e9467">timeStop</link> ()</para>
+
+<para>Służy do zatrzymywania czasu. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_player_1aa2544174089ab6274a6098b44dbc770b">timeStart</link> ()</para>
+
+<para>Służy do wznawiania czasu. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>sf::SoundBuffer <link linkend="_class_player_1a31e073a8f4f3fe96721530790a606062">bufGame</link></para>
+
+<para>Bufor dla dźwięku skoku. </para>
+</listitem>
+            <listitem><para>sf::SoundBuffer <link linkend="_class_player_1af25adbe154db7426cde75356ecfba357">bufShoot</link></para>
+
+<para>Bufor dla dźwięku strzalu. </para>
+</listitem>
+            <listitem><para>sf::Sound <link linkend="_class_player_1ac9dbdbba328a44a98a13d55662d11321">jumpGame</link></para>
+
+<para>Dźwięk skoku. </para>
+</listitem>
+            <listitem><para>sf::Sound <link linkend="_class_player_1ad0749a5673870ef7a90a1dab5932a5e3">shootGame</link></para>
+
+<para>Przechowuje dźwięk strzalu. </para>
+</listitem>
+            <listitem><para>sf::Texture <link linkend="_class_player_1a7e9ddc3338b5a6057a3b0245003aedc5">_texture</link></para>
+
+<para>Tekstura gracza. </para>
+</listitem>
+            <listitem><para>sf::Sprite <link linkend="_class_player_1a41b3ca516dd0f87bfd4615883820843b">_sprite</link></para>
+
+<para>Sprite gracza wczytywany z tekstury. </para>
+</listitem>
+            <listitem><para>sf::RectangleShape <link linkend="_class_player_1adaa6f1b79a9ed3515746712ea60bf4a8">_hitbox</link></para>
+
+<para>Kształt odpowiadający za kolizje i poruszanie się </para>
+</listitem>
+            <listitem><para>sf::Vector2f <link linkend="_class_player_1a573c5f0b04d5d50a2ada502db95f0383">_velocity</link></para>
+
+<para>Prędkość gracza. Dodaje się ją do poprzedniej prędkości symulując ruch. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1a0feed10ca401149f797fb30793e68368">_acceleration</link></para>
+
+<para>Przyspieszenie gracza podczas poruszania się </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1a2d7c4e0b5752e65ad80707e0a4dac58c">_maxSpeedX</link></para>
+
+<para>Maksymalna prędkość pozioma gracza. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1a9a03effad4eb5f778fef1f09cb332443">_maxSpeedY</link></para>
+
+<para>Maksymalna prędkość pionowa gracza. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1a357a0400d9672a25afc5d0ad0563b101">_jumpForce</link></para>
+
+<para>Siła skoku. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1ac9b249735071967211c621cf9b22ab79">_gravity</link></para>
+
+<para>Siła grawitacji działająca na gracza. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1aad2ef4eda64386467e646f9a5d1b45c2">_gravityDelta</link></para>
+
+<para>Różnica siły grawitacji używana do lepszego symulowania skoku. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_player_1afd11abf2a5c38f93d97d187cabdf8168">_bIsGrounded</link></para>
+
+<para>Pokazuje czy gracz stoi na jakimś podłożu. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_player_1a8385e0c0c1ac711c3fdb9652375bbad2">_bTimeStopped</link></para>
+
+<para>Pozwala określić, czy czas jest w tej chwili zatrzymany. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be">tsValue</link></para>
+
+<para>Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_player_1abe400aaae509dd4e583a8c9f9b019a2b">tsFillRate</link></para>
+
+<para>Określa z jaką prędkością napełnia się wartość tsValue. </para>
+</listitem>
+            <listitem><para>sf::Clock <link linkend="_class_player_1abb1e0fe2d5bb333a4959f6643bb78c17">tsClock</link></para>
+
+<para>Liczy czas po którym czas zostanie wznowiony. </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -80,112 +192,636 @@
 <indexterm><primary>Player</primary><secondary>Player</secondary></indexterm>
 <para><computeroutput>Player::Player (float x = <computeroutput>0</computeroutput>
 , float y = <computeroutput>0</computeroutput>
-)<computeroutput>[explicit]</computeroutput></computeroutput></para><para>
-
-<para>Konstruktor gracza z opcją podania lokalizacji początkowej na mapie. </para>
-</para>
+)<computeroutput>[explicit]</computeroutput></computeroutput></para>
+<para>Konstruktor gracza z opcją podania lokalizacji początkowej na mapie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>x</entry><entry>
+<para>początkowa pozycja x gracza na mapie </para>
+</entry>
+                            </row>
+                            <row>
+<entry>y</entry><entry>
+<para>początkowa pozycja y gracza na mapie </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 </section>
 <section>
 <title>Member Function Documentation</title>
+<anchor xml:id="_class_player_1a9aa98a8a224ba98b0b7cb09b8577e140"/><section>
+    <title>animateMovement()</title>
+<indexterm><primary>animateMovement</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>animateMovement</secondary></indexterm>
+<para><computeroutput>void Player::animateMovement ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ac5720f4a7a1f612438dabb512e81b503"/><section>
+    <title>applyGravity()</title>
+<indexterm><primary>applyGravity</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>applyGravity</secondary></indexterm>
+<para><computeroutput>void Player::applyGravity (float deltaSeconds)<computeroutput>[private]</computeroutput></computeroutput></para>
+<para>Dodaje do prędkości wartość grawitacji 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaSeconds</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
 <anchor xml:id="_class_player_1a308bbc68e154a988d40d813d3d1de44c"/><section>
     <title>checkForIntersection()</title>
 <indexterm><primary>checkForIntersection</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>checkForIntersection</secondary></indexterm>
-<para><computeroutput>bool Player::checkForIntersection (sf::RectangleShape &amp; shape)</computeroutput></para><para>
+<para><computeroutput>bool Player::checkForIntersection (sf::RectangleShape &amp; shape)</computeroutput></para>
+<para>Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>shape</entry><entry>
+<para>hitbox, który ma być sprawdzany pod kątem nachodzenia na hitbox gracza </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
 
-<para>Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze. </para>
+<para>true - jeżeli hitboxy na siebie nachodzą, false - jeżeli hitboxy na siebie nie nachodzą </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_player_1a23356f99a9de86d3d47eadb679b332dc"/><section>
     <title>getPosition()</title>
 <indexterm><primary>getPosition</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>getPosition</secondary></indexterm>
-<para><computeroutput>sf::Vector2f Player::getPosition ( )</computeroutput></para><para>
+<para><computeroutput>sf::Vector2f Player::getPosition ( )</computeroutput></para>
+<para>Zwraca pozycję gracza <formalpara><title>Returns</title>
 
-<para>Zwraca pozycję gracza. </para>
+<para>Pozycja gracza </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_player_1a045c23cf9bbbebfefbfcf32701ba4faf"/><section>
     <title>getTimeStopped()</title>
 <indexterm><primary>getTimeStopped</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>getTimeStopped</secondary></indexterm>
-<para><computeroutput>bool Player::getTimeStopped ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+<para><computeroutput>bool Player::getTimeStopped ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Pozwala sprawdzić czy czas jest zatrzymany <formalpara><title>Returns</title>
 
-<para>Pozwala sprawdzić czy czas jest zatrzymany. </para>
+<para>true - jeżeli czas jest zatrzymany, false - jeżeli czas płynie </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_player_1ad8a8b25b36812e3f2281fffa900312dd"/><section>
     <title>getTimeStopValue()</title>
 <indexterm><primary>getTimeStopValue</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>getTimeStopValue</secondary></indexterm>
-<para><computeroutput>float Player::getTimeStopValue ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+<para><computeroutput>float Player::getTimeStopValue ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Pobiera stopień naładowania umiejętności zatrzymania czasu <formalpara><title>Returns</title>
 
-<para>Zwraca wartość 0-1 reprezentującą stopień naładowania umiejętności zatrzymania czasu. </para>
+<para>wartość od 0 do 1 reprezentująca stopień naładowania umiejętności </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_player_1a827529f746003c695ff6891b767f932b"/><section>
+    <title>handleCollision()</title>
+<indexterm><primary>handleCollision</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>handleCollision</secondary></indexterm>
+<para><computeroutput>void Player::handleCollision (const std::list&lt; sf::RectangleShape &gt; &amp; allHitboxes)<computeroutput>[private]</computeroutput></computeroutput></para>
+<para>Sprawdza kolizję gracza ze wszystkimi obiektami terenu i w przypadku kolizji zeruje prędkość gracza 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>allHitboxes</entry><entry>
+<para>lista wszystkich hitboksów otoczenia na mapie </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_player_1a22c77aea817fb52c33280b2792992123"/><section>
+    <title>handleInput()</title>
+<indexterm><primary>handleInput</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>handleInput</secondary></indexterm>
+<para><computeroutput>void Player::handleInput (float deltaTime)<computeroutput>[private]</computeroutput></computeroutput></para>
+<para>Sprawdza, czy użytkownik nacisnął odpowiedni przycisk oraz wykonuje odpowiednią akcję 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_player_1a26c6b7dff7e105778f83839d0752c07b"/><section>
+    <title>initHitbox()</title>
+<indexterm><primary>initHitbox</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>initHitbox</secondary></indexterm>
+<para><computeroutput>void Player::initHitbox ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Nadaje początkowe parametry hitboxowi. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a5ea1ca7cf8793c37b6ffe450c8a52c4e"/><section>
+    <title>initSoundGame()</title>
+<indexterm><primary>initSoundGame</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>initSoundGame</secondary></indexterm>
+<para><computeroutput>void Player::initSoundGame ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Wczytuje z pliku i zapisuje dźwięki dla gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a8fbd417981761d02ec3ca227a204f2fd"/><section>
+    <title>initSprite()</title>
+<indexterm><primary>initSprite</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>initSprite</secondary></indexterm>
+<para><computeroutput>void Player::initSprite ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Wczytanie tekstury z pliku i zaaplikowanie jej do sprite. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ae4ac5d977f9c70585164515b248536ce"/><section>
+    <title>initValues()</title>
+<indexterm><primary>initValues</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>initValues</secondary></indexterm>
+<para><computeroutput>void Player::initValues ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a70e21ca98281b7d72f105f2693113d7e"/><section>
+    <title>jump()</title>
+<indexterm><primary>jump</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>jump</secondary></indexterm>
+<para><computeroutput>void Player::jump ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Wykonuje skok. </para>
 </para>
 </section>
 <anchor xml:id="_class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85"/><section>
     <title>move()</title>
 <indexterm><primary>move</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>move</secondary></indexterm>
-<para><computeroutput>void Player::move (float x, float y)</computeroutput></para><para>
+<para><computeroutput>void Player::move (float x, float y)</computeroutput></para>
+<para>Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. Podanie do parametrów wartości 1, lub -1 jest domyślnym sposobem korzystania z metody. Podanie większej, lub mniejszej wartości skutkować będzie zmianą prędkości poruszania się. Podane wartości nie zmieniają prędkości bezpośrednio, a tylko dodają wartość do wektora prędkości. 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>x</entry><entry>
+<para>wartość o którą gracz zostanie poruszony poziomo </para>
+</entry>
+                            </row>
+                            <row>
+<entry>y</entry><entry>
+<para>wartość o którą gracz zostanie poruszony pionowo </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_player_1ac851a358edb1d38a96d183cc31f16ad3"/><section>
+    <title>moveFinal()</title>
+<indexterm><primary>moveFinal</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>moveFinal</secondary></indexterm>
+<para><computeroutput>void Player::moveFinal ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
 
-<para>Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. </para>
+<para>Aplikuje prędkość do pozycji gracza. </para>
 </para>
 </section>
 <anchor xml:id="_class_player_1a317b439dc6ba2bb2b6aad2f82b130c02"/><section>
     <title>render()</title>
 <indexterm><primary>render</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>render</secondary></indexterm>
-<para><computeroutput>void Player::render (sf::RenderTarget &amp; window)</computeroutput></para><para>
-
-<para>Wyświetla postać gracza na ekranie. </para>
-</para>
+<para><computeroutput>void Player::render (sf::RenderTarget &amp; window)</computeroutput></para>
+<para>Wyświetla postać gracza na ekranie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>window</entry><entry>
+<para>okno na którym renderowany jest gracz </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
-<anchor xml:id="_class_player_1a64b65de6130f811ce670be4b0ca790b4"/><section>
+<anchor xml:id="_class_player_1a876818716e936257241f6febfa6c3cc6"/><section>
     <title>setPosition()</title>
 <indexterm><primary>setPosition</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>setPosition</secondary></indexterm>
-<para><computeroutput>void Player::setPosition (sf::Vector2f newPos)</computeroutput></para><para>
-
-<para>Ustawia pozycję postaci gracza a mapie. </para>
-</para>
+<para><computeroutput>void Player::setPosition (sf::Vector2f position)</computeroutput></para>
+<para>Ustawia pozycję postaci gracza a mapie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>position</entry><entry>
+<para>nowa pozycja gracza </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
-<anchor xml:id="_class_player_1a0b8255feb633ed5922ca99598776de9e"/><section>
+<anchor xml:id="_class_player_1a14a11ab2c2d986763f7c901c6bcce38a"/><section>
+    <title>shoot()</title>
+<indexterm><primary>shoot</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>shoot</secondary></indexterm>
+<para><computeroutput>void Player::shoot ( )<computeroutput>[override]</computeroutput>, <computeroutput>[private]</computeroutput>, <computeroutput>[virtual]</computeroutput></computeroutput></para><para>
+
+<para>Oddaje strzał </para>
+</para>
+<para>
+Implements <link linkend="_class_shooter_1aa2d08f6a1f98d5da51748a3e7784999f">Shooter</link>.</para>
+</section>
+<anchor xml:id="_class_player_1a856f53d1ff0e6f44cda41a25c791f865"/><section>
     <title>switchAnimation()</title>
 <indexterm><primary>switchAnimation</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>switchAnimation</secondary></indexterm>
-<para><computeroutput>void Player::switchAnimation (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)</computeroutput></para><para>
+<para><computeroutput>void Player::switchAnimation (<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link> newAnimation)<computeroutput>[override]</computeroutput>, <computeroutput>[virtual]</computeroutput></computeroutput></para>
+<para>Zmienia stan animacji gracza na podany 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>newAnimation</entry><entry>
+<para>nowa animacja typu enum Animation zdefiniowanego w <link linkend="__animated_8h">Animated.h</link> </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Reimplemented from <link linkend="_class_animated_1a81fd919be841d41a23f27909e2ebdb1a">Animated</link>.</para>
+</section>
+<anchor xml:id="_class_player_1aa2544174089ab6274a6098b44dbc770b"/><section>
+    <title>timeStart()</title>
+<indexterm><primary>timeStart</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>timeStart</secondary></indexterm>
+<para><computeroutput>void Player::timeStart ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
 
-<para>Zmienia stan animacji gracza na podany. </para>
+<para>Służy do wznawiania czasu. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ad9e19d7afb03af7413f3c867808e9467"/><section>
+    <title>timeStop()</title>
+<indexterm><primary>timeStop</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>timeStop</secondary></indexterm>
+<para><computeroutput>void Player::timeStop ( )<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Służy do zatrzymywania czasu. </para>
 </para>
 </section>
 <anchor xml:id="_class_player_1a0b8b2c0946659d50a45b560cf83815ee"/><section>
     <title>update()</title>
 <indexterm><primary>update</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>update</secondary></indexterm>
-<para><computeroutput>void Player::update (float deltaTime, const std::list&lt; sf::RectangleShape &gt; &amp; allHitboxes)</computeroutput></para><para>
-
-<para>Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd. </para>
-</para>
+<para><computeroutput>void Player::update (float deltaTime, const std::list&lt; sf::RectangleShape &gt; &amp; allHitboxes)</computeroutput></para>
+<para>Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd. 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                            <row>
+<entry>allHitboxes</entry><entry>
+<para>lista wszystkich hitboksów otoczenia na mapie </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 <anchor xml:id="_class_player_1a8127e94cc6c15d49f28ad840126a4ae5"/><section>
     <title>zeroVelocity()</title>
 <indexterm><primary>zeroVelocity</primary><secondary>Player</secondary></indexterm>
 <indexterm><primary>Player</primary><secondary>zeroVelocity</secondary></indexterm>
-<para><computeroutput>void Player::zeroVelocity (bool x, bool y)</computeroutput></para><para>
-
-<para>Zeruje x - poziomą, y - pionową prędkość gracza. </para>
-</para>
+<para><computeroutput>void Player::zeroVelocity (bool x, bool y)</computeroutput></para>
+<para>Zerowanie wektora prędkości na osi 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>x</entry><entry>
+<para>zerowanie zmiennej x wektora </para>
+</entry>
+                            </row>
+                            <row>
+<entry>y</entry><entry>
+<para>zerowanie zmiennej y wektora </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 </section>
 <section>
 <title>Member Data Documentation</title>
-<anchor xml:id="_class_player_1a836420cfbc65547977599ba7c1a5a77c"/><section>
-    <title>isReady</title>
-<indexterm><primary>isReady</primary><secondary>Player</secondary></indexterm>
-<indexterm><primary>Player</primary><secondary>isReady</secondary></indexterm>
-<para><computeroutput>bool Player::isReady</computeroutput></para></section>
+<anchor xml:id="_class_player_1a0feed10ca401149f797fb30793e68368"/><section>
+    <title>_acceleration</title>
+<indexterm><primary>_acceleration</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_acceleration</secondary></indexterm>
+<para><computeroutput>float Player::_acceleration<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Przyspieszenie gracza podczas poruszania się </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1afd11abf2a5c38f93d97d187cabdf8168"/><section>
+    <title>_bIsGrounded</title>
+<indexterm><primary>_bIsGrounded</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_bIsGrounded</secondary></indexterm>
+<para><computeroutput>bool Player::_bIsGrounded<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Pokazuje czy gracz stoi na jakimś podłożu. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a8385e0c0c1ac711c3fdb9652375bbad2"/><section>
+    <title>_bTimeStopped</title>
+<indexterm><primary>_bTimeStopped</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_bTimeStopped</secondary></indexterm>
+<para><computeroutput>bool Player::_bTimeStopped<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Pozwala określić, czy czas jest w tej chwili zatrzymany. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ac9b249735071967211c621cf9b22ab79"/><section>
+    <title>_gravity</title>
+<indexterm><primary>_gravity</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_gravity</secondary></indexterm>
+<para><computeroutput>float Player::_gravity<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Siła grawitacji działająca na gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1aad2ef4eda64386467e646f9a5d1b45c2"/><section>
+    <title>_gravityDelta</title>
+<indexterm><primary>_gravityDelta</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_gravityDelta</secondary></indexterm>
+<para><computeroutput>float Player::_gravityDelta<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Różnica siły grawitacji używana do lepszego symulowania skoku. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1adaa6f1b79a9ed3515746712ea60bf4a8"/><section>
+    <title>_hitbox</title>
+<indexterm><primary>_hitbox</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_hitbox</secondary></indexterm>
+<para><computeroutput>sf::RectangleShape Player::_hitbox<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Kształt odpowiadający za kolizje i poruszanie się </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a357a0400d9672a25afc5d0ad0563b101"/><section>
+    <title>_jumpForce</title>
+<indexterm><primary>_jumpForce</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_jumpForce</secondary></indexterm>
+<para><computeroutput>float Player::_jumpForce<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Siła skoku. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a2d7c4e0b5752e65ad80707e0a4dac58c"/><section>
+    <title>_maxSpeedX</title>
+<indexterm><primary>_maxSpeedX</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_maxSpeedX</secondary></indexterm>
+<para><computeroutput>float Player::_maxSpeedX<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Maksymalna prędkość pozioma gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a9a03effad4eb5f778fef1f09cb332443"/><section>
+    <title>_maxSpeedY</title>
+<indexterm><primary>_maxSpeedY</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_maxSpeedY</secondary></indexterm>
+<para><computeroutput>float Player::_maxSpeedY<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Maksymalna prędkość pionowa gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a41b3ca516dd0f87bfd4615883820843b"/><section>
+    <title>_sprite</title>
+<indexterm><primary>_sprite</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_sprite</secondary></indexterm>
+<para><computeroutput>sf::Sprite Player::_sprite<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Sprite gracza wczytywany z tekstury. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a7e9ddc3338b5a6057a3b0245003aedc5"/><section>
+    <title>_texture</title>
+<indexterm><primary>_texture</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_texture</secondary></indexterm>
+<para><computeroutput>sf::Texture Player::_texture<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Tekstura gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a573c5f0b04d5d50a2ada502db95f0383"/><section>
+    <title>_velocity</title>
+<indexterm><primary>_velocity</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>_velocity</secondary></indexterm>
+<para><computeroutput>sf::Vector2f Player::_velocity<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Prędkość gracza. Dodaje się ją do poprzedniej prędkości symulując ruch. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a4f0b069f0d135ac2bdc8c8ef367699a3"/><section>
+    <title>bTimeStopReady</title>
+<indexterm><primary>bTimeStopReady</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>bTimeStopReady</secondary></indexterm>
+<para><computeroutput>bool Player::bTimeStopReady</computeroutput></para><para>
+
+<para>Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a31e073a8f4f3fe96721530790a606062"/><section>
+    <title>bufGame</title>
+<indexterm><primary>bufGame</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>bufGame</secondary></indexterm>
+<para><computeroutput>sf::SoundBuffer Player::bufGame<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Bufor dla dźwięku skoku. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1af25adbe154db7426cde75356ecfba357"/><section>
+    <title>bufShoot</title>
+<indexterm><primary>bufShoot</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>bufShoot</secondary></indexterm>
+<para><computeroutput>sf::SoundBuffer Player::bufShoot<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Bufor dla dźwięku strzalu. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ac9dbdbba328a44a98a13d55662d11321"/><section>
+    <title>jumpGame</title>
+<indexterm><primary>jumpGame</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>jumpGame</secondary></indexterm>
+<para><computeroutput>sf::Sound Player::jumpGame<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Dźwięk skoku. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1ad0749a5673870ef7a90a1dab5932a5e3"/><section>
+    <title>shootGame</title>
+<indexterm><primary>shootGame</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>shootGame</secondary></indexterm>
+<para><computeroutput>sf::Sound Player::shootGame<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Przechowuje dźwięk strzalu. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1abb1e0fe2d5bb333a4959f6643bb78c17"/><section>
+    <title>tsClock</title>
+<indexterm><primary>tsClock</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>tsClock</secondary></indexterm>
+<para><computeroutput>sf::Clock Player::tsClock<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Liczy czas po którym czas zostanie wznowiony. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1abe400aaae509dd4e583a8c9f9b019a2b"/><section>
+    <title>tsFillRate</title>
+<indexterm><primary>tsFillRate</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>tsFillRate</secondary></indexterm>
+<para><computeroutput>float Player::tsFillRate<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa z jaką prędkością napełnia się wartość tsValue. </para>
+</para>
+</section>
+<anchor xml:id="_class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be"/><section>
+    <title>tsValue</title>
+<indexterm><primary>tsValue</primary><secondary>Player</secondary></indexterm>
+<indexterm><primary>Player</primary><secondary>tsValue</secondary></indexterm>
+<para><computeroutput>float Player::tsValue<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się </para>
+</para>
+</section>
 <para>
 The documentation for this class was generated from the following files:</para>
 src/entities/<link linkend="__player_8h">Player.h</link>src/entities/<link linkend="__player_8cpp">Player.cpp</link></section>

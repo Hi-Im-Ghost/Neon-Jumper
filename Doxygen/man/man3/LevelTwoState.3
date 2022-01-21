@@ -1,4 +1,4 @@
-.TH "LevelTwoState" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "LevelTwoState" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,45 +16,379 @@ Inherits \fBGameState\fP\&.
 .ti -1c
 .RI "\fBLevelTwoState\fP (std::stack< \fBGameState\fP * > *\fBstates\fP)"
 .br
-.RI "Konstruktor przyjmujący odniesienie do stosu stanów aplikacji\&. "
 .ti -1c
 .RI "void \fBupdate\fP (float deltaTime) override"
 .br
-.RI "Odświeża logikę stanu\&. "
 .ti -1c
 .RI "void \fBrender\fP (sf::RenderTarget &window) override"
 .br
-.RI "Wyświetla elementy stanu na ekranie\&. "
 .ti -1c
 .RI "void \fBloadGame\fP ()"
 .br
 .RI "Wczytuje grę "
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitValues\fP ()"
+.br
+.RI "Inicjalizacja podstawowych wartości klasy\&. "
+.ti -1c
+.RI "void \fBinitHitboxes\fP ()"
+.br
+.RI "Rozmieszczenie hitboxów na mapie\&. "
+.ti -1c
+.RI "void \fBinitDmgBoxes\fP ()"
+.br
+.RI "Rozmieszczenie obszarów zadających obrażenia na mapie\&. "
+.ti -1c
+.RI "void \fBinitPauseButtons\fP ()"
+.br
+.RI "Inicjalizacja przycisków menu pauzy\&. "
+.ti -1c
+.RI "void \fBinitEndButtons\fP ()"
+.br
+.RI "Inicjalizacja przycisków ekranu końcowego gry\&. "
+.ti -1c
+.RI "void \fBinitEndTrigger\fP ()"
+.br
+.RI "Inicjalizacja obszaru zakończenia gry\&. "
+.ti -1c
+.RI "void \fBinitView\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBinitViewPlayer\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBinitEnemies\fP ()"
+.br
+.RI "Rozmieszczenie wrogów na mapie\&. "
+.ti -1c
+.RI "void \fBupdateInput\fP ()"
+.br
+.RI "Czytanie klawiatury i wykonywanie odpowiednich operacji\&. "
+.ti -1c
+.RI "void \fBupdatePaused\fP ()"
+.br
+.RI "Aktualizacja logiki gry podczas, gdy jest zapauzowana\&. "
+.ti -1c
+.RI "void \fBupdateEnd\fP ()"
+.br
+.RI "Aktualizacja logiki po zakończeniu gry\&. "
+.ti -1c
+.RI "void \fBupdateEntities\fP (float deltaTime)"
+.br
+.ti -1c
+.RI "void \fBrenderPaused\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBrenderEnd\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBrenderEntities\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBupdateEndTrigger\fP ()"
+.br
+.RI "Sprawdza, czy gracz nie wszedł na teren obszaru kończącego poziom\&. "
+.ti -1c
+.RI "void \fBupdateDmgTriggers\fP ()"
+.br
+.RI "Sprawdza czy gracz nie wszedł na teren obszaru zadającego obrażenia\&. "
+.ti -1c
+.RI "void \fBkillPlayerTriggers\fP ()"
+.br
+.RI "Sprawdza czy gracz nie utonął, jeśli tak to zabija go\&. "
+.ti -1c
+.RI "void \fBsaveGame\fP ()"
+.br
+.RI "Zapisuje grę "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPlayer\fP * \fBplayer\fP"
+.br
+.RI "Odniesienie do obiektu gracza\&. "
+.ti -1c
+.RI "std::list< sf::RectangleShape > \fBhitboxes\fP"
+.br
+.RI "Lista hitboxów otoczenia\&. "
+.ti -1c
+.RI "std::list< sf::RectangleShape > \fBdmgboxes\fP"
+.br
+.RI "Lista obszarów zadających obrażenia\&. "
+.ti -1c
+.RI "\fBLoadMap\fP \fBmap\fP"
+.br
+.RI "Odniesienie do wybranej przez nas mapy\&. "
+.ti -1c
+.RI "std::list< \fBEnemy\fP * > \fBenemies\fP"
+.br
+.RI "Lista odniesień do wszystkich wrogów\&. "
+.ti -1c
+.RI "\fBButton\fP * \fBendMenuBtn\fP"
+.br
+.RI "Odniesienie do przycisku wyjścia do menu\&. "
+.ti -1c
+.RI "\fBButton\fP * \fBpauseResumeBtn\fP"
+.br
+.RI "Odniesienie do przycisku powrotu do rozgrywki\&. "
+.ti -1c
+.RI "\fBButton\fP * \fBpauseExitBtn\fP"
+.br
+.RI "Odniesienie do przycisku wyjścia do menu\&. "
+.ti -1c
+.RI "\fBButton\fP * \fBloadBtn\fP"
+.br
+.RI "Odniesienie do przycisku wczytania zapisu gry\&. "
+.ti -1c
+.RI "\fBButton\fP * \fBsaveBtn\fP"
+.br
+.RI "Odniesienie do przycisku zapisu gry\&. "
+.ti -1c
+.RI "bool \fBrenderHitboxes\fP = false"
+.br
+.RI "Zmienna debug służąca do renderowania hitbox-ów\&. "
+.ti -1c
+.RI "bool \fBlevel2\fP"
+.br
+.RI "zmienna okreslajaca czy jestesmy na lvl2 "
+.ti -1c
+.RI "int \fBi\fP = 1"
+.br
+.RI "zmienna okreslajaca czas widocznosci hud "
+.ti -1c
+.RI "int \fBx\fP = 1"
+.br
+.RI "zmienna okreslajaca czas widocznosci hud "
+.ti -1c
+.RI "sf::RectangleShape \fBendLevelTrigger\fP"
+.br
+.RI "Obszar wykrywający czy gracz przeszedł poziom\&. "
+.ti -1c
+.RI "\fBPlayerHUD\fP * \fBhud\fP"
+.br
+.RI "Odniesienie do interfejsu użytkownika\&. "
+.in -1c
 .SS "Additional Inherited Members"
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "LevelTwoState::LevelTwoState (std::stack< \fBGameState\fP * > * states)\fC [explicit]\fP"
-
+Konstruktor przyjmujący odniesienie do stosu stanów aplikacji 
 .PP
-Konstruktor przyjmujący odniesienie do stosu stanów aplikacji\&. 
+\fBParameters\fP
+.RS 4
+\fIstates\fP odniesienie do stosu wszystkich stanów aplikacji 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
+.SS "void LevelTwoState::initDmgBoxes ()\fC [private]\fP"
+
+.PP
+Rozmieszczenie obszarów zadających obrażenia na mapie\&. 
+.SS "void LevelTwoState::initEndButtons ()\fC [private]\fP"
+
+.PP
+Inicjalizacja przycisków ekranu końcowego gry\&. 
+.SS "void LevelTwoState::initEndTrigger ()\fC [private]\fP"
+
+.PP
+Inicjalizacja obszaru zakończenia gry\&. 
+.SS "void LevelTwoState::initEnemies ()\fC [private]\fP"
+
+.PP
+Rozmieszczenie wrogów na mapie\&. 
+.SS "void LevelTwoState::initHitboxes ()\fC [private]\fP"
+
+.PP
+Rozmieszczenie hitboxów na mapie\&. 
+.SS "void LevelTwoState::initPauseButtons ()\fC [private]\fP"
+
+.PP
+Inicjalizacja przycisków menu pauzy\&. 
+.SS "void LevelTwoState::initValues ()\fC [private]\fP"
+
+.PP
+Inicjalizacja podstawowych wartości klasy\&. 
+.SS "void LevelTwoState::initView (sf::RenderTarget & window)\fC [private]\fP"
+Inicjalizacja kamery dla menu pauzy 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP 
+.RE
+.PP
+
+.SS "void LevelTwoState::initViewPlayer (sf::RenderTarget & window)\fC [private]\fP"
+Inicjalizacja kamery gracza 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP 
+.RE
+.PP
+
+.SS "void LevelTwoState::killPlayerTriggers ()\fC [private]\fP"
+
+.PP
+Sprawdza czy gracz nie utonął, jeśli tak to zabija go\&. 
 .SS "void LevelTwoState::loadGame ()"
 
 .PP
 Wczytuje grę 
 .SS "void LevelTwoState::render (sf::RenderTarget & window)\fC [override]\fP, \fC [virtual]\fP"
-
+Wyświetla elementy stanu na ekranie 
 .PP
-Wyświetla elementy stanu na ekranie\&. 
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowane są elementy 
+.RE
+.PP
+
 .PP
 Reimplemented from \fBGameState\fP\&.
-.SS "void LevelTwoState::update (float deltaTime)\fC [override]\fP, \fC [virtual]\fP"
+.SS "void LevelTwoState::renderEnd (sf::RenderTarget & window)\fC [private]\fP"
+Wyświetlanie elementów gdy gracz zakończy grę 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowane są elementy 
+.RE
+.PP
+
+.SS "void LevelTwoState::renderEntities (sf::RenderTarget & window)\fC [private]\fP"
+Wyświetlanie przeciwników i gracza na ekranie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowane są elementy 
+.RE
+.PP
+
+.SS "void LevelTwoState::renderPaused (sf::RenderTarget & window)\fC [private]\fP"
+Wyświetlanie na ekranie elementów, gdy rozgrywka jest spauzowana 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowane są elementy 
+.RE
+.PP
+
+.SS "void LevelTwoState::saveGame ()\fC [private]\fP"
 
 .PP
-Odświeża logikę stanu\&. 
+Zapisuje grę 
+.SS "void LevelTwoState::update (float deltaTime)\fC [override]\fP, \fC [virtual]\fP"
+Odświeża logikę stanu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
 .PP
 Implements \fBGameState\fP\&.
+.SS "void LevelTwoState::updateDmgTriggers ()\fC [private]\fP"
+
+.PP
+Sprawdza czy gracz nie wszedł na teren obszaru zadającego obrażenia\&. 
+.SS "void LevelTwoState::updateEnd ()\fC [private]\fP"
+
+.PP
+Aktualizacja logiki po zakończeniu gry\&. 
+.SS "void LevelTwoState::updateEndTrigger ()\fC [private]\fP"
+
+.PP
+Sprawdza, czy gracz nie wszedł na teren obszaru kończącego poziom\&. 
+.SS "void LevelTwoState::updateEntities (float deltaTime)\fC [private]\fP"
+Aktualizacja logiki wrogów na mapie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
+.SS "void LevelTwoState::updateInput ()\fC [private]\fP"
+
+.PP
+Czytanie klawiatury i wykonywanie odpowiednich operacji\&. 
+.SS "void LevelTwoState::updatePaused ()\fC [private]\fP"
+
+.PP
+Aktualizacja logiki gry podczas, gdy jest zapauzowana\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "std::list<sf::RectangleShape> LevelTwoState::dmgboxes\fC [private]\fP"
+
+.PP
+Lista obszarów zadających obrażenia\&. 
+.SS "sf::RectangleShape LevelTwoState::endLevelTrigger\fC [private]\fP"
+
+.PP
+Obszar wykrywający czy gracz przeszedł poziom\&. 
+.SS "\fBButton\fP* LevelTwoState::endMenuBtn\fC [private]\fP"
+
+.PP
+Odniesienie do przycisku wyjścia do menu\&. 
+.SS "std::list<\fBEnemy\fP*> LevelTwoState::enemies\fC [private]\fP"
+
+.PP
+Lista odniesień do wszystkich wrogów\&. 
+.SS "std::list<sf::RectangleShape> LevelTwoState::hitboxes\fC [private]\fP"
+
+.PP
+Lista hitboxów otoczenia\&. 
+.SS "\fBPlayerHUD\fP* LevelTwoState::hud\fC [private]\fP"
+
+.PP
+Odniesienie do interfejsu użytkownika\&. 
+.SS "int LevelTwoState::i = 1\fC [private]\fP"
+
+.PP
+zmienna okreslajaca czas widocznosci hud 
+.SS "bool LevelTwoState::level2\fC [private]\fP"
+
+.PP
+zmienna okreslajaca czy jestesmy na lvl2 
+.SS "\fBButton\fP* LevelTwoState::loadBtn\fC [private]\fP"
+
+.PP
+Odniesienie do przycisku wczytania zapisu gry\&. 
+.SS "\fBLoadMap\fP LevelTwoState::map\fC [private]\fP"
+
+.PP
+Odniesienie do wybranej przez nas mapy\&. 
+.SS "\fBButton\fP* LevelTwoState::pauseExitBtn\fC [private]\fP"
+
+.PP
+Odniesienie do przycisku wyjścia do menu\&. 
+.SS "\fBButton\fP* LevelTwoState::pauseResumeBtn\fC [private]\fP"
+
+.PP
+Odniesienie do przycisku powrotu do rozgrywki\&. 
+.SS "\fBPlayer\fP* LevelTwoState::player\fC [private]\fP"
+
+.PP
+Odniesienie do obiektu gracza\&. 
+.SS "bool LevelTwoState::renderHitboxes = false\fC [private]\fP"
+
+.PP
+Zmienna debug służąca do renderowania hitbox-ów\&. 
+.SS "\fBButton\fP* LevelTwoState::saveBtn\fC [private]\fP"
+
+.PP
+Odniesienie do przycisku zapisu gry\&. 
+.SS "int LevelTwoState::x = 1\fC [private]\fP"
+
+.PP
+zmienna okreslajaca czas widocznosci hud 
 
 .SH "Author"
 .PP 

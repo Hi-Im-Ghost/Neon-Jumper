@@ -1,4 +1,4 @@
-.TH "internal::Double" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::Double" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -70,6 +70,47 @@ internal::Double
 .RI "static int \fBEffectiveSignificandSize\fP (int order)"
 .br
 .in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   double \fBd_\fP"
+.br
+.ti -1c
+.RI "   \fBuint64_t\fP \fBu_\fP"
+.br
+.ti -1c
+.RI "}; "
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBkSignificandSize\fP = 52"
+.br
+.ti -1c
+.RI "static const int \fBkExponentBias\fP = 0x3FF"
+.br
+.ti -1c
+.RI "static const int \fBkDenormalExponent\fP = 1 \- \fBkExponentBias\fP"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkSignMask\fP = \fBRAPIDJSON_UINT64_C2\fP(0x80000000, 0x00000000)"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkExponentMask\fP = \fBRAPIDJSON_UINT64_C2\fP(0x7FF00000, 0x00000000)"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkSignificandMask\fP = \fBRAPIDJSON_UINT64_C2\fP(0x000FFFFF, 0xFFFFFFFF)"
+.br
+.ti -1c
+.RI "static const \fBuint64_t\fP \fBkHiddenBit\fP = \fBRAPIDJSON_UINT64_C2\fP(0x00100000, 0x00000000)"
+.br
+.in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "internal::Double::Double ()\fC [inline]\fP"
@@ -112,7 +153,23 @@ internal::Double
 
 .SH "Member Data Documentation"
 .PP 
+.SS "union  { \&.\&.\&. }  internal::Double::@8\fC [private]\fP"
+
 .SS "double internal::Double::d_"
+
+.SS "const int internal::Double::kDenormalExponent = 1 \- \fBkExponentBias\fP\fC [static]\fP, \fC [private]\fP"
+
+.SS "const int internal::Double::kExponentBias = 0x3FF\fC [static]\fP, \fC [private]\fP"
+
+.SS "const \fBuint64_t\fP internal::Double::kExponentMask = \fBRAPIDJSON_UINT64_C2\fP(0x7FF00000, 0x00000000)\fC [static]\fP, \fC [private]\fP"
+
+.SS "const \fBuint64_t\fP internal::Double::kHiddenBit = \fBRAPIDJSON_UINT64_C2\fP(0x00100000, 0x00000000)\fC [static]\fP, \fC [private]\fP"
+
+.SS "const \fBuint64_t\fP internal::Double::kSignificandMask = \fBRAPIDJSON_UINT64_C2\fP(0x000FFFFF, 0xFFFFFFFF)\fC [static]\fP, \fC [private]\fP"
+
+.SS "const int internal::Double::kSignificandSize = 52\fC [static]\fP, \fC [private]\fP"
+
+.SS "const \fBuint64_t\fP internal::Double::kSignMask = \fBRAPIDJSON_UINT64_C2\fP(0x80000000, 0x00000000)\fC [static]\fP, \fC [private]\fP"
 
 .SS "\fBuint64_t\fP internal::Double::u_"
 

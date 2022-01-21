@@ -1,4 +1,4 @@
-.TH "FileWriteStream" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "FileWriteStream" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -48,6 +48,32 @@ FileWriteStream \- Wrapper of C file stream for output using fwrite()\&.
 .RI "size_t \fBPutEnd\fP (char *)"
 .br
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFileWriteStream\fP (const \fBFileWriteStream\fP &)"
+.br
+.ti -1c
+.RI "\fBFileWriteStream\fP & \fBoperator=\fP (const \fBFileWriteStream\fP &)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::FILE * \fBfp_\fP"
+.br
+.ti -1c
+.RI "char * \fBbuffer_\fP"
+.br
+.ti -1c
+.RI "char * \fBbufferEnd_\fP"
+.br
+.ti -1c
+.RI "char * \fBcurrent_\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 Wrapper of C file stream for output using fwrite()\&. 
@@ -70,9 +96,13 @@ Character type\&. Only support char\&.
 .PP 
 .SS "FileWriteStream::FileWriteStream (std::FILE * fp, char * buffer, size_t bufferSize)\fC [inline]\fP"
 
+.SS "FileWriteStream::FileWriteStream (const \fBFileWriteStream\fP &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "void FileWriteStream::Flush ()\fC [inline]\fP"
+
+.SS "\fBFileWriteStream\fP & FileWriteStream::operator= (const \fBFileWriteStream\fP &)\fC [private]\fP"
 
 .SS "char FileWriteStream::Peek () const\fC [inline]\fP"
 
@@ -87,6 +117,16 @@ Character type\&. Only support char\&.
 .SS "char FileWriteStream::Take ()\fC [inline]\fP"
 
 .SS "size_t FileWriteStream::Tell () const\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "char* FileWriteStream::buffer_\fC [private]\fP"
+
+.SS "char* FileWriteStream::bufferEnd_\fC [private]\fP"
+
+.SS "char* FileWriteStream::current_\fC [private]\fP"
+
+.SS "std::FILE* FileWriteStream::fp_\fC [private]\fP"
 
 
 .SH "Author"

@@ -11,6 +11,17 @@
 <computeroutput>#include &lt;regex.h&gt;</computeroutput>
 </para>
 <simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link></para>
+</listitem>
+            <listitem><para>struct <link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
     <title>Public Types    </title>
         <itemizedlist>
             <listitem><para>typedef <link linkend="_classrapidjson_1_1_encoding">Encoding</link> <link linkend="_classinternal_1_1_generic_regex_1a8d0eb2f6a71868b2a8f03382b7836d30">EncodingType</link></para>
@@ -27,6 +38,105 @@
             <listitem><para><link linkend="_classinternal_1_1_generic_regex_1a6a4956c0391bccbf8580b2e047d5bc35">~GenericRegex</link> ()</para>
 </listitem>
             <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8">IsValid</link> () const</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Types    </title>
+        <itemizedlist>
+            <listitem><para>enum <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">Operator</link> { 
+<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>
+, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f">kZeroOrMore</link>
+, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3">kOneOrMore</link>
+, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>
+, 
+<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4">kAlternation</link>
+, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54">kLeftParenthesis</link>
+ }</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link> &amp; <link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index)</para>
+</listitem>
+            <listitem><para>const <link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link> &amp; <link linkend="_classinternal_1_1_generic_regex_1ada0efa1a7089e9d58376e3fc2821a234">GetState</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index) const</para>
+</listitem>
+            <listitem><para><link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link> &amp; <link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index)</para>
+</listitem>
+            <listitem><para>const <link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link> &amp; <link linkend="_classinternal_1_1_generic_regex_1a7725f5a459796b58736b6cddcd19e335">GetRange</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index) const</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>void <link linkend="_classinternal_1_1_generic_regex_1a038af33f370a14f987fb79d78f0d1c75">Parse</link> (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp;ds)</para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> out, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> out1, unsigned codepoint)</para>
+</listitem>
+            <listitem><para>void <link linkend="_classinternal_1_1_generic_regex_1a1a3ea65f584e0dba5815a1232f9a770e">PushOperand</link> (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;operandStack, unsigned codepoint)</para>
+</listitem>
+            <listitem><para>void <link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link> (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;atomCountStack, <link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;operatorStack)</para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1a96b270e845e58787b624604531598517">Append</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l1, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l2)</para>
+</listitem>
+            <listitem><para>void <link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> s)</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link> (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;operandStack, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">Operator</link> op)</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1a71f934ac6c4b2b4f63b0c5fc68797933">EvalQuantifier</link> (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;operandStack, unsigned n, unsigned m)</para>
+</listitem>
+            <listitem><para>void <link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link> (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp;operandStack)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>bool <link linkend="_classinternal_1_1_generic_regex_1a16d0bf927741c666f46eed1c66f04150">ParseUnsigned</link> (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp;ds, unsigned *u)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>bool <link linkend="_classinternal_1_1_generic_regex_1aa7336514ba21536ec90aaf2188581c1e">ParseRange</link> (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp;ds, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> *range)</para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1a868d6e44d0782e9fbdd476243daa578f">NewRange</link> (unsigned codepoint)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>bool <link linkend="_classinternal_1_1_generic_regex_1ae46593a63a93b8bc34d044800777b72d">CharacterEscape</link> (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp;ds, unsigned *escapedCodepoint)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>static <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1a064e15b8c9c222a07e143ec5847c6ec6">Min</link> (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> b)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classrapidjson_1_1_allocator">Allocator</link> * <link linkend="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8">ownAllocator_</link></para>
+</listitem>
+            <listitem><para><link linkend="_classrapidjson_1_1_allocator">Allocator</link> * <link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link></para>
+</listitem>
+            <listitem><para><link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; <link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link></para>
+</listitem>
+            <listitem><para><link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; <link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link></para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link></para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link></para>
+</listitem>
+            <listitem><para><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link></para>
+</listitem>
+            <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1ac99b045cc5250649ea3708bee95a56e8">anchorBegin_</link></para>
+</listitem>
+            <listitem><para>bool <link linkend="_classinternal_1_1_generic_regex_1adbd19f8921ece1563d02e74f479d2e13">anchorEnd_</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const unsigned <link linkend="_classinternal_1_1_generic_regex_1a1f3b72c56d5eab221ba46a473ff611dd">kAnyCharacterClass</link> = 0xFFFFFFFF</para>
+
+<para>For &apos;.&apos;. </para>
+</listitem>
+            <listitem><para>static const unsigned <link linkend="_classinternal_1_1_generic_regex_1aec665a90fdb2372dbc18a6ca0971e886">kRangeCharacterClass</link> = 0xFFFFFFFE</para>
+</listitem>
+            <listitem><para>static const unsigned <link linkend="_classinternal_1_1_generic_regex_1ae435570506343e24811e588614f6842b">kRangeNegationFlag</link> = 0x80000000</para>
+</listitem>
+            <listitem><para>static const unsigned <link linkend="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3">kInfinityQuantifier</link> = ~0u</para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -118,6 +228,35 @@ class internal::GenericRegex&lt; Encoding, Allocator &gt;</title></simplesect>
 <computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>typedef <link linkend="_classrapidjson_1_1_encoding">Encoding</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::EncodingType</computeroutput></para></section>
 </section>
 <section>
+<title>Member Enumeration Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673"/><section>
+    <title>Operator</title>
+<indexterm><primary>Operator</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Operator</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>enum <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">internal::GenericRegex::Operator</link><computeroutput>[private]</computeroutput></computeroutput></para><informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>kZeroOrOne</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kZeroOrOne</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3"/>kZeroOrOne</entry><entry></entry></row><row><entry><indexterm><primary>kZeroOrMore</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kZeroOrMore</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f"/>kZeroOrMore</entry><entry></entry></row><row><entry><indexterm><primary>kOneOrMore</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kOneOrMore</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3"/>kOneOrMore</entry><entry></entry></row><row><entry><indexterm><primary>kConcatenation</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kConcatenation</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2"/>kConcatenation</entry><entry></entry></row><row><entry><indexterm><primary>kAlternation</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kAlternation</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4"/>kAlternation</entry><entry></entry></row><row><entry><indexterm><primary>kLeftParenthesis</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kLeftParenthesis</secondary></indexterm>
+<anchor xml:id="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54"/>kLeftParenthesis</entry><entry></entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+</section>
+<section>
 <title>Constructor &amp; Destructor Documentation</title>
 <anchor xml:id="_classinternal_1_1_generic_regex_1a35c3a49bc4545a991ab039858227df0f"/><section>
     <title>GenericRegex()</title>
@@ -133,11 +272,101 @@ class internal::GenericRegex&lt; Encoding, Allocator &gt;</title></simplesect>
 </section>
 <section>
 <title>Member Function Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a96b270e845e58787b624604531598517"/><section>
+    <title>Append()</title>
+<indexterm><primary>Append</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Append</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Append (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l1, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l2)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ae46593a63a93b8bc34d044800777b72d"/><section>
+    <title>CharacterEscape()</title>
+<indexterm><primary>CharacterEscape</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>CharacterEscape</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::CharacterEscape (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp; ds, unsigned * escapedCodepoint)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f"/><section>
+    <title>CloneTopOperand()</title>
+<indexterm><primary>CloneTopOperand</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>CloneTopOperand</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::CloneTopOperand (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; operandStack)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26"/><section>
+    <title>Eval()</title>
+<indexterm><primary>Eval</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Eval</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Eval (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; operandStack, <link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">Operator</link> op)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a71f934ac6c4b2b4f63b0c5fc68797933"/><section>
+    <title>EvalQuantifier()</title>
+<indexterm><primary>EvalQuantifier</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>EvalQuantifier</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::EvalQuantifier (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; operandStack, unsigned n, unsigned m)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91"/><section>
+    <title>GetRange()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>GetRange</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GetRange</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link> &amp; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetRange (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a7725f5a459796b58736b6cddcd19e335"/><section>
+    <title>GetRange()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>GetRange</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GetRange</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link> &amp; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetRange (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3"/><section>
+    <title>GetState()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>GetState</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GetState</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link> &amp; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetState (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ada0efa1a7089e9d58376e3fc2821a234"/><section>
+    <title>GetState()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>GetState</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GetState</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const <link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link> &amp; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::GetState (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> index) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b"/><section>
+    <title>ImplicitConcatenation()</title>
+<indexterm><primary>ImplicitConcatenation</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>ImplicitConcatenation</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ImplicitConcatenation (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; atomCountStack, <link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; operatorStack)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8"/><section>
     <title>IsValid()</title>
 <indexterm><primary>IsValid</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
 <indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>IsValid</secondary></indexterm>
 <computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::IsValid ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a064e15b8c9c222a07e143ec5847c6ec6"/><section>
+    <title>Min()</title>
+<indexterm><primary>Min</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Min</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>static <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Min (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> a, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> b)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a868d6e44d0782e9fbdd476243daa578f"/><section>
+    <title>NewRange()</title>
+<indexterm><primary>NewRange</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>NewRange</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::NewRange (unsigned codepoint)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b"/><section>
+    <title>NewState()</title>
+<indexterm><primary>NewState</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>NewState</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::NewState (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> out, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> out1, unsigned codepoint)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a038af33f370a14f987fb79d78f0d1c75"/><section>
+    <title>Parse()</title>
+<indexterm><primary>Parse</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Parse</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>void <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Parse (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp; ds)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1aa7336514ba21536ec90aaf2188581c1e"/><section>
+    <title>ParseRange()</title>
+<indexterm><primary>ParseRange</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>ParseRange</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ParseRange (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp; ds, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> * range)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a16d0bf927741c666f46eed1c66f04150"/><section>
+    <title>ParseUnsigned()</title>
+<indexterm><primary>ParseUnsigned</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>ParseUnsigned</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ParseUnsigned (<link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&lt; InputStream, <link linkend="_classrapidjson_1_1_encoding">Encoding</link> &gt; &amp; ds, unsigned * u)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e"/><section>
+    <title>Patch()</title>
+<indexterm><primary>Patch</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>Patch</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::Patch (<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> l, <link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> s)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a1a3ea65f584e0dba5815a1232f9a770e"/><section>
+    <title>PushOperand()</title>
+<indexterm><primary>PushOperand</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>PushOperand</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::PushOperand (<link linkend="_classinternal_1_1_stack">Stack</link>&lt; <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt; &amp; operandStack, unsigned codepoint)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 </section>
 <section>
 <title>Friends And Related Function Documentation</title>
@@ -146,6 +375,78 @@ class internal::GenericRegex&lt; Encoding, Allocator &gt;</title></simplesect>
 <indexterm><primary>GenericRegexSearch</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
 <indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>GenericRegexSearch</secondary></indexterm>
 <computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename , typename &gt; </computeroutput><para><computeroutput>friend class <link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link><computeroutput>[friend]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3"/><section>
+    <title>allocator_</title>
+<indexterm><primary>allocator_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>allocator_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classrapidjson_1_1_allocator">Allocator</link>* <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::allocator_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ac99b045cc5250649ea3708bee95a56e8"/><section>
+    <title>anchorBegin_</title>
+<indexterm><primary>anchorBegin_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>anchorBegin_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::anchorBegin_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1adbd19f8921ece1563d02e74f479d2e13"/><section>
+    <title>anchorEnd_</title>
+<indexterm><primary>anchorEnd_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>anchorEnd_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::anchorEnd_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a1f3b72c56d5eab221ba46a473ff611dd"/><section>
+    <title>kAnyCharacterClass</title>
+<indexterm><primary>kAnyCharacterClass</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kAnyCharacterClass</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const unsigned <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kAnyCharacterClass = 0xFFFFFFFF<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>For &apos;.&apos;. </para>
+</para>
+</section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3"/><section>
+    <title>kInfinityQuantifier</title>
+<indexterm><primary>kInfinityQuantifier</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kInfinityQuantifier</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const unsigned <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kInfinityQuantifier = ~0u<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1aec665a90fdb2372dbc18a6ca0971e886"/><section>
+    <title>kRangeCharacterClass</title>
+<indexterm><primary>kRangeCharacterClass</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kRangeCharacterClass</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const unsigned <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kRangeCharacterClass = 0xFFFFFFFE<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ae435570506343e24811e588614f6842b"/><section>
+    <title>kRangeNegationFlag</title>
+<indexterm><primary>kRangeNegationFlag</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>kRangeNegationFlag</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput>const unsigned <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::kRangeNegationFlag = 0x80000000<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8"/><section>
+    <title>ownAllocator_</title>
+<indexterm><primary>ownAllocator_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>ownAllocator_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classrapidjson_1_1_allocator">Allocator</link>* <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ownAllocator_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619"/><section>
+    <title>rangeCount_</title>
+<indexterm><primary>rangeCount_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>rangeCount_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::rangeCount_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140"/><section>
+    <title>ranges_</title>
+<indexterm><primary>ranges_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>ranges_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_stack">Stack</link>&lt;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>&gt; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::ranges_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201"/><section>
+    <title>root_</title>
+<indexterm><primary>root_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>root_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::root_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db"/><section>
+    <title>stateCount_</title>
+<indexterm><primary>stateCount_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>stateCount_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link> <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::stateCount_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0"/><section>
+    <title>states_</title>
+<indexterm><primary>states_</primary><secondary>internal::GenericRegex&lt; Encoding, Allocator &gt;</secondary></indexterm>
+<indexterm><primary>internal::GenericRegex&lt; Encoding, Allocator &gt;</primary><secondary>states_</secondary></indexterm>
+<computeroutput>template&lt;typename <link linkend="_classrapidjson_1_1_encoding">Encoding</link> , typename <link linkend="_classrapidjson_1_1_allocator">Allocator</link>  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_stack">Stack</link>&lt;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>&gt; <link linkend="_classinternal_1_1_generic_regex">internal::GenericRegex</link>&lt; <link linkend="_classrapidjson_1_1_encoding">Encoding</link>, <link linkend="_classrapidjson_1_1_allocator">Allocator</link> &gt;::states_<computeroutput>[private]</computeroutput></computeroutput></para></section>
 <para>
 The documentation for this class was generated from the following file:</para>
 src/rapidjson/include/rapidjson/internal/<link linkend="_regex_8h">regex.h</link></section>

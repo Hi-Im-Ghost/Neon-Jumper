@@ -33,7 +33,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 29 
 30 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gad3806c8251fdc7da9618b7e922674ffc">RAPIDJSON_NAMESPACE_BEGIN</link>
 31 
-32 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;kPointerInvalidIndex&#32;=&#32;~SizeType(0);&#32;&#32;
+32 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;=&#32;~SizeType(0);&#32;&#32;
 33 
 35 
 38 <emphasis role="keyword">enum</emphasis>&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gacb2e274f33e54d91b96e9883a99a98be">PointerParseErrorCode</link>&#32;{
@@ -153,7 +153,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 257 
 259 
 265 &#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer">GenericPointer</link>&#32;<link linkend="_class_generic_pointer_1a9f8a1711f5b8e0d951c25c6c65326f77">Append</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_generic_pointer_1ab292356c11b4015c98d21b966b11f285">Ch</link>*&#32;name,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;length,&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>&#32;=&#32;0)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-266 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_pointer_1_1_token">Token</link>&#32;token&#32;=&#32;{&#32;name,&#32;length,&#32;kPointerInvalidIndex&#32;};
+266 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_pointer_1_1_token">Token</link>&#32;token&#32;=&#32;{&#32;name,&#32;length,&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;};
 267 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_generic_pointer_1aa8f86c0f330807f337351a95ae254b78">Append</link>(token,&#32;<link linkend="_class_generic_pointer_1aeb61ba8e67260b43090791eeca8b90e0">allocator</link>);
 268 &#32;&#32;&#32;&#32;}
 269 
@@ -296,7 +296,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;exist&#32;=&#32;<emphasis role="keyword">false</emphasis>;
 473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 474 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
-475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;kPointerInvalidIndex)&#32;{&#32;<emphasis role="comment">//&#32;must&#32;be&#32;object&#32;name</emphasis>
+475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>)&#32;{&#32;<emphasis role="comment">//&#32;must&#32;be&#32;object&#32;name</emphasis>
 476 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!v-&gt;IsObject())
 477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v-&gt;SetObject();&#32;<emphasis role="comment">//&#32;Change&#32;to&#32;Object</emphasis>
 478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
@@ -367,7 +367,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 566 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 567 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
 568 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>:
-569 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;kPointerInvalidIndex&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
+569 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
 570 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 571 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v&#32;=&#32;&amp;((*v)[t-&gt;index]);
 572 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
@@ -405,7 +405,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 619 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
 620 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>:
-621 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;kPointerInvalidIndex&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
+621 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
 622 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 623 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v&#32;=&#32;&amp;((*v)[t-&gt;index]);
 624 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
@@ -572,7 +572,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 854 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 855 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 856 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>:
-857 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;kPointerInvalidIndex&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
+857 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(t-&gt;index&#32;==&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;||&#32;t-&gt;index&#32;&gt;=&#32;v-&gt;Size())
 858 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 859 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v&#32;=&#32;&amp;((*v)[t-&gt;index]);
 860 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
@@ -585,7 +585,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 867 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7a146f46700e905e8df96a6a90b5c7640f">kObjectType</link>:
 868 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;v-&gt;EraseMember(<link linkend="_struct_generic_string_ref">GenericStringRef&lt;Ch&gt;</link>(last-&gt;name,&#32;last-&gt;length));
 869 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7af41527d6925efa3c5c3dadb23dfef7c8">kArrayType</link>:
-870 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(last-&gt;index&#32;==&#32;kPointerInvalidIndex&#32;||&#32;last-&gt;index&#32;&gt;=&#32;v-&gt;Size())
+870 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(last-&gt;index&#32;==&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>&#32;||&#32;last-&gt;index&#32;&gt;=&#32;v-&gt;Size())
 871 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 872 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;v-&gt;Erase(v-&gt;Begin()&#32;+&#32;last-&gt;index);
 873 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
@@ -744,7 +744,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 1042 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 1043 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 1044 
-1045 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;token-&gt;index&#32;=&#32;isNumber&#32;?&#32;n&#32;:&#32;kPointerInvalidIndex;
+1045 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;token-&gt;index&#32;=&#32;isNumber&#32;?&#32;n&#32;:&#32;<link linkend="_pointer_8h_1ae54ef57a7b599e262127c5adcc55960e">kPointerInvalidIndex</link>;
 1046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;token++;
 1047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 1048 
@@ -839,16 +839,16 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 1152 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;OutputStream&gt;
 1153 &#32;&#32;&#32;&#32;<emphasis role="keyword">class&#32;</emphasis><link linkend="_class_generic_pointer_1_1_percent_encode_stream">PercentEncodeStream</link>&#32;{
 1154 &#32;&#32;&#32;&#32;<emphasis role="keyword">public</emphasis>:
-1155 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a8e16af18669e49d0ab528ba0066475d2">PercentEncodeStream</link>(OutputStream&amp;&#32;os)&#32;:&#32;os_(os)&#32;{}
+1155 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a8e16af18669e49d0ab528ba0066475d2">PercentEncodeStream</link>(OutputStream&amp;&#32;os)&#32;:&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a973de3c4a6b987a4fd301b8266d45d4a">os_</link>(os)&#32;{}
 1156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1ab932ed9ab00c9e0672755133fc8d8c11">Put</link>(<emphasis role="keywordtype">char</emphasis>&#32;c)&#32;{&#32;<emphasis role="comment">//&#32;UTF-8&#32;must&#32;be&#32;byte</emphasis>
 1157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;u&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">char</emphasis><emphasis role="keyword">&gt;</emphasis>(c);
 1158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;hexDigits[16]&#32;=&#32;{&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;1&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;2&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;3&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;4&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;5&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;6&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;7&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;8&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;A&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;B&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;C&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;D&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;E&apos;</emphasis>,&#32;<emphasis role="charliteral">&apos;F&apos;</emphasis>&#32;};
-1159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os_.Put(<emphasis role="charliteral">&apos;%&apos;</emphasis>);
-1160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os_.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(hexDigits[u&#32;&gt;&gt;&#32;4]));
-1161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;os_.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(hexDigits[u&#32;&amp;&#32;15]));
+1159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a973de3c4a6b987a4fd301b8266d45d4a">os_</link>.Put(<emphasis role="charliteral">&apos;%&apos;</emphasis>);
+1160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a973de3c4a6b987a4fd301b8266d45d4a">os_</link>.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(hexDigits[u&#32;&gt;&gt;&#32;4]));
+1161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a973de3c4a6b987a4fd301b8266d45d4a">os_</link>.Put(<emphasis role="keyword">static_cast&lt;</emphasis>typename&#32;OutputStream::Ch<emphasis role="keyword">&gt;</emphasis>(hexDigits[u&#32;&amp;&#32;15]));
 1162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 1163 &#32;&#32;&#32;&#32;<emphasis role="keyword">private</emphasis>:
-1164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;OutputStream&amp;&#32;os_;
+1164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;OutputStream&amp;&#32;<link linkend="_class_generic_pointer_1_1_percent_encode_stream_1a973de3c4a6b987a4fd301b8266d45d4a">os_</link>;
 1165 &#32;&#32;&#32;&#32;};
 1166 
 1167 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_class_generic_pointer_1a331cffeec161b80ea18ac3f1562851bf">allocator_</link>;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;

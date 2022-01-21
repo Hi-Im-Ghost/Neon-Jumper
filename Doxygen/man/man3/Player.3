@@ -1,4 +1,4 @@
-.TH "Player" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Player" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,115 +9,455 @@ Player
 .PP
 \fC#include <Player\&.h>\fP
 .PP
-Inherits \fBDamageable\fP, and \fBAnimated\fP\&.
+Inherits \fBDamageable\fP, \fBAnimated\fP, and \fBShooter\fP\&.
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "\fBPlayer\fP (float x=0, float y=0)"
 .br
-.RI "Konstruktor gracza z opcją podania lokalizacji początkowej na mapie\&. "
 .ti -1c
 .RI "void \fBmove\fP (float x, float y)"
 .br
-.RI "Służy do poruszania graczem\&. Podanie wartości 1 jako argument porusza graczem w domyślny sposób\&. "
 .ti -1c
 .RI "sf::Vector2f \fBgetPosition\fP ()"
 .br
-.RI "Zwraca pozycję gracza\&. "
 .ti -1c
 .RI "void \fBzeroVelocity\fP (bool x, bool y)"
 .br
-.RI "Zeruje x - poziomą, y - pionową prędkość gracza\&. "
 .ti -1c
 .RI "bool \fBcheckForIntersection\fP (sf::RectangleShape &shape)"
 .br
-.RI "Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze\&. "
 .ti -1c
 .RI "bool \fBgetTimeStopped\fP () const"
 .br
-.RI "Pozwala sprawdzić czy czas jest zatrzymany\&. "
 .ti -1c
 .RI "float \fBgetTimeStopValue\fP () const"
 .br
-.RI "Zwraca wartość 0-1 reprezentującą stopień naładowania umiejętności zatrzymania czasu\&. "
 .ti -1c
 .RI "void \fBupdate\fP (float deltaTime, const std::list< sf::RectangleShape > &allHitboxes)"
 .br
-.RI "Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd\&. "
 .ti -1c
 .RI "void \fBrender\fP (sf::RenderTarget &window)"
 .br
-.RI "Wyświetla postać gracza na ekranie\&. "
 .ti -1c
-.RI "void \fBsetPosition\fP (sf::Vector2f)"
+.RI "void \fBsetPosition\fP (sf::Vector2f position)"
 .br
-.RI "Ustawia pozycję postaci gracza a mapie\&. "
 .ti -1c
-.RI "void \fBswitchAnimation\fP (\fBAnimation\fP newAnimation)"
+.RI "void \fBswitchAnimation\fP (\fBAnimation\fP newAnimation) override"
 .br
-.RI "Zmienia stan animacji gracza na podany\&. "
 .in -1c
 .SS "Public Attributes"
 
 .in +1c
 .ti -1c
-.RI "bool \fBisReady\fP"
+.RI "bool \fBbTimeStopReady\fP"
 .br
+.RI "Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia\&. "
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitValues\fP ()"
+.br
+.RI "Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie\&. "
+.ti -1c
+.RI "void \fBinitSprite\fP ()"
+.br
+.RI "Wczytanie tekstury z pliku i zaaplikowanie jej do sprite\&. "
+.ti -1c
+.RI "void \fBinitHitbox\fP ()"
+.br
+.RI "Nadaje początkowe parametry hitboxowi\&. "
+.ti -1c
+.RI "void \fBinitSoundGame\fP ()"
+.br
+.RI "Wczytuje z pliku i zapisuje dźwięki dla gracza\&. "
+.ti -1c
+.RI "void \fBhandleInput\fP (float deltaTime)"
+.br
+.ti -1c
+.RI "void \fBhandleCollision\fP (const std::list< sf::RectangleShape > &allHitboxes)"
+.br
+.ti -1c
+.RI "void \fBmoveFinal\fP ()"
+.br
+.RI "Aplikuje prędkość do pozycji gracza\&. "
+.ti -1c
+.RI "void \fBapplyGravity\fP (float deltaSeconds)"
+.br
+.ti -1c
+.RI "void \fBjump\fP ()"
+.br
+.RI "Wykonuje skok\&. "
+.ti -1c
+.RI "void \fBanimateMovement\fP ()"
+.br
+.RI "Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza\&. "
+.ti -1c
+.RI "void \fBshoot\fP () override"
+.br
+.RI "Oddaje strzał "
+.ti -1c
+.RI "void \fBtimeStop\fP ()"
+.br
+.RI "Służy do zatrzymywania czasu\&. "
+.ti -1c
+.RI "void \fBtimeStart\fP ()"
+.br
+.RI "Służy do wznawiania czasu\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::SoundBuffer \fBbufGame\fP"
+.br
+.RI "Bufor dla dźwięku skoku\&. "
+.ti -1c
+.RI "sf::SoundBuffer \fBbufShoot\fP"
+.br
+.RI "Bufor dla dźwięku strzalu\&. "
+.ti -1c
+.RI "sf::Sound \fBjumpGame\fP"
+.br
+.RI "Dźwięk skoku\&. "
+.ti -1c
+.RI "sf::Sound \fBshootGame\fP"
+.br
+.RI "Przechowuje dźwięk strzalu\&. "
+.ti -1c
+.RI "sf::Texture \fB_texture\fP"
+.br
+.RI "Tekstura gracza\&. "
+.ti -1c
+.RI "sf::Sprite \fB_sprite\fP"
+.br
+.RI "Sprite gracza wczytywany z tekstury\&. "
+.ti -1c
+.RI "sf::RectangleShape \fB_hitbox\fP"
+.br
+.RI "Kształt odpowiadający za kolizje i poruszanie się "
+.ti -1c
+.RI "sf::Vector2f \fB_velocity\fP"
+.br
+.RI "Prędkość gracza\&. Dodaje się ją do poprzedniej prędkości symulując ruch\&. "
+.ti -1c
+.RI "float \fB_acceleration\fP"
+.br
+.RI "Przyspieszenie gracza podczas poruszania się "
+.ti -1c
+.RI "float \fB_maxSpeedX\fP"
+.br
+.RI "Maksymalna prędkość pozioma gracza\&. "
+.ti -1c
+.RI "float \fB_maxSpeedY\fP"
+.br
+.RI "Maksymalna prędkość pionowa gracza\&. "
+.ti -1c
+.RI "float \fB_jumpForce\fP"
+.br
+.RI "Siła skoku\&. "
+.ti -1c
+.RI "float \fB_gravity\fP"
+.br
+.RI "Siła grawitacji działająca na gracza\&. "
+.ti -1c
+.RI "float \fB_gravityDelta\fP"
+.br
+.RI "Różnica siły grawitacji używana do lepszego symulowania skoku\&. "
+.ti -1c
+.RI "bool \fB_bIsGrounded\fP"
+.br
+.RI "Pokazuje czy gracz stoi na jakimś podłożu\&. "
+.ti -1c
+.RI "bool \fB_bTimeStopped\fP"
+.br
+.RI "Pozwala określić, czy czas jest w tej chwili zatrzymany\&. "
+.ti -1c
+.RI "float \fBtsValue\fP"
+.br
+.RI "Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się "
+.ti -1c
+.RI "float \fBtsFillRate\fP"
+.br
+.RI "Określa z jaką prędkością napełnia się wartość tsValue\&. "
+.ti -1c
+.RI "sf::Clock \fBtsClock\fP"
+.br
+.RI "Liczy czas po którym czas zostanie wznowiony\&. "
 .in -1c
 .SS "Additional Inherited Members"
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Player::Player (float x = \fC0\fP, float y = \fC0\fP)\fC [explicit]\fP"
-
+Konstruktor gracza z opcją podania lokalizacji początkowej na mapie 
 .PP
-Konstruktor gracza z opcją podania lokalizacji początkowej na mapie\&. 
+\fBParameters\fP
+.RS 4
+\fIx\fP początkowa pozycja x gracza na mapie 
+.br
+\fIy\fP początkowa pozycja y gracza na mapie 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
+.SS "void Player::animateMovement ()\fC [private]\fP"
+
+.PP
+Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza\&. 
+.SS "void Player::applyGravity (float deltaSeconds)\fC [private]\fP"
+Dodaje do prędkości wartość grawitacji 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaSeconds\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
 .SS "bool Player::checkForIntersection (sf::RectangleShape & shape)"
-
+Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze 
 .PP
-Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze\&. 
+\fBParameters\fP
+.RS 4
+\fIshape\fP hitbox, który ma być sprawdzany pod kątem nachodzenia na hitbox gracza 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true - jeżeli hitboxy na siebie nachodzą, false - jeżeli hitboxy na siebie nie nachodzą 
+.RE
+.PP
+
 .SS "sf::Vector2f Player::getPosition ()"
-
+Zwraca pozycję gracza 
 .PP
-Zwraca pozycję gracza\&. 
+\fBReturns\fP
+.RS 4
+Pozycja gracza 
+.RE
+.PP
+
 .SS "bool Player::getTimeStopped () const\fC [inline]\fP"
-
+Pozwala sprawdzić czy czas jest zatrzymany 
 .PP
-Pozwala sprawdzić czy czas jest zatrzymany\&. 
+\fBReturns\fP
+.RS 4
+true - jeżeli czas jest zatrzymany, false - jeżeli czas płynie 
+.RE
+.PP
+
 .SS "float Player::getTimeStopValue () const\fC [inline]\fP"
+Pobiera stopień naładowania umiejętności zatrzymania czasu 
+.PP
+\fBReturns\fP
+.RS 4
+wartość od 0 do 1 reprezentująca stopień naładowania umiejętności 
+.RE
+.PP
+
+.SS "void Player::handleCollision (const std::list< sf::RectangleShape > & allHitboxes)\fC [private]\fP"
+Sprawdza kolizję gracza ze wszystkimi obiektami terenu i w przypadku kolizji zeruje prędkość gracza 
+.PP
+\fBParameters\fP
+.RS 4
+\fIallHitboxes\fP lista wszystkich hitboksów otoczenia na mapie 
+.RE
+.PP
+
+.SS "void Player::handleInput (float deltaTime)\fC [private]\fP"
+Sprawdza, czy użytkownik nacisnął odpowiedni przycisk oraz wykonuje odpowiednią akcję 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
+.SS "void Player::initHitbox ()\fC [private]\fP"
 
 .PP
-Zwraca wartość 0-1 reprezentującą stopień naładowania umiejętności zatrzymania czasu\&. 
+Nadaje początkowe parametry hitboxowi\&. 
+.SS "void Player::initSoundGame ()\fC [private]\fP"
+
+.PP
+Wczytuje z pliku i zapisuje dźwięki dla gracza\&. 
+.SS "void Player::initSprite ()\fC [private]\fP"
+
+.PP
+Wczytanie tekstury z pliku i zaaplikowanie jej do sprite\&. 
+.SS "void Player::initValues ()\fC [private]\fP"
+
+.PP
+Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie\&. 
+.SS "void Player::jump ()\fC [private]\fP"
+
+.PP
+Wykonuje skok\&. 
 .SS "void Player::move (float x, float y)"
+Służy do poruszania graczem\&. Podanie wartości 1 jako argument porusza graczem w domyślny sposób\&. Podanie do parametrów wartości 1, lub -1 jest domyślnym sposobem korzystania z metody\&. Podanie większej, lub mniejszej wartości skutkować będzie zmianą prędkości poruszania się\&. Podane wartości nie zmieniają prędkości bezpośrednio, a tylko dodają wartość do wektora prędkości\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP wartość o którą gracz zostanie poruszony poziomo 
+.br
+\fIy\fP wartość o którą gracz zostanie poruszony pionowo 
+.RE
+.PP
+
+.SS "void Player::moveFinal ()\fC [private]\fP"
 
 .PP
-Służy do poruszania graczem\&. Podanie wartości 1 jako argument porusza graczem w domyślny sposób\&. 
+Aplikuje prędkość do pozycji gracza\&. 
 .SS "void Player::render (sf::RenderTarget & window)"
+Wyświetla postać gracza na ekranie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowany jest gracz 
+.RE
+.PP
+
+.SS "void Player::setPosition (sf::Vector2f position)"
+Ustawia pozycję postaci gracza a mapie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIposition\fP nowa pozycja gracza 
+.RE
+.PP
+
+.SS "void Player::shoot ()\fC [override]\fP, \fC [private]\fP, \fC [virtual]\fP"
 
 .PP
-Wyświetla postać gracza na ekranie\&. 
-.SS "void Player::setPosition (sf::Vector2f newPos)"
+Oddaje strzał 
+.PP
+Implements \fBShooter\fP\&.
+.SS "void Player::switchAnimation (\fBAnimation\fP newAnimation)\fC [override]\fP, \fC [virtual]\fP"
+Zmienia stan animacji gracza na podany 
+.PP
+\fBParameters\fP
+.RS 4
+\fInewAnimation\fP nowa animacja typu enum Animation zdefiniowanego w \fBAnimated\&.h\fP 
+.RE
+.PP
 
 .PP
-Ustawia pozycję postaci gracza a mapie\&. 
-.SS "void Player::switchAnimation (\fBAnimation\fP newAnimation)"
+Reimplemented from \fBAnimated\fP\&.
+.SS "void Player::timeStart ()\fC [private]\fP"
 
 .PP
-Zmienia stan animacji gracza na podany\&. 
+Służy do wznawiania czasu\&. 
+.SS "void Player::timeStop ()\fC [private]\fP"
+
+.PP
+Służy do zatrzymywania czasu\&. 
 .SS "void Player::update (float deltaTime, const std::list< sf::RectangleShape > & allHitboxes)"
-
-.PP
 Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd\&. 
-.SS "void Player::zeroVelocity (bool x, bool y)"
-
 .PP
-Zeruje x - poziomą, y - pionową prędkość gracza\&. 
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.br
+\fIallHitboxes\fP lista wszystkich hitboksów otoczenia na mapie 
+.RE
+.PP
+
+.SS "void Player::zeroVelocity (bool x, bool y)"
+Zerowanie wektora prędkości na osi 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP zerowanie zmiennej x wektora 
+.br
+\fIy\fP zerowanie zmiennej y wektora 
+.RE
+.PP
+
 .SH "Member Data Documentation"
 .PP 
-.SS "bool Player::isReady"
+.SS "float Player::_acceleration\fC [private]\fP"
 
+.PP
+Przyspieszenie gracza podczas poruszania się 
+.SS "bool Player::_bIsGrounded\fC [private]\fP"
+
+.PP
+Pokazuje czy gracz stoi na jakimś podłożu\&. 
+.SS "bool Player::_bTimeStopped\fC [private]\fP"
+
+.PP
+Pozwala określić, czy czas jest w tej chwili zatrzymany\&. 
+.SS "float Player::_gravity\fC [private]\fP"
+
+.PP
+Siła grawitacji działająca na gracza\&. 
+.SS "float Player::_gravityDelta\fC [private]\fP"
+
+.PP
+Różnica siły grawitacji używana do lepszego symulowania skoku\&. 
+.SS "sf::RectangleShape Player::_hitbox\fC [private]\fP"
+
+.PP
+Kształt odpowiadający za kolizje i poruszanie się 
+.SS "float Player::_jumpForce\fC [private]\fP"
+
+.PP
+Siła skoku\&. 
+.SS "float Player::_maxSpeedX\fC [private]\fP"
+
+.PP
+Maksymalna prędkość pozioma gracza\&. 
+.SS "float Player::_maxSpeedY\fC [private]\fP"
+
+.PP
+Maksymalna prędkość pionowa gracza\&. 
+.SS "sf::Sprite Player::_sprite\fC [private]\fP"
+
+.PP
+Sprite gracza wczytywany z tekstury\&. 
+.SS "sf::Texture Player::_texture\fC [private]\fP"
+
+.PP
+Tekstura gracza\&. 
+.SS "sf::Vector2f Player::_velocity\fC [private]\fP"
+
+.PP
+Prędkość gracza\&. Dodaje się ją do poprzedniej prędkości symulując ruch\&. 
+.SS "bool Player::bTimeStopReady"
+
+.PP
+Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia\&. 
+.SS "sf::SoundBuffer Player::bufGame\fC [private]\fP"
+
+.PP
+Bufor dla dźwięku skoku\&. 
+.SS "sf::SoundBuffer Player::bufShoot\fC [private]\fP"
+
+.PP
+Bufor dla dźwięku strzalu\&. 
+.SS "sf::Sound Player::jumpGame\fC [private]\fP"
+
+.PP
+Dźwięk skoku\&. 
+.SS "sf::Sound Player::shootGame\fC [private]\fP"
+
+.PP
+Przechowuje dźwięk strzalu\&. 
+.SS "sf::Clock Player::tsClock\fC [private]\fP"
+
+.PP
+Liczy czas po którym czas zostanie wznowiony\&. 
+.SS "float Player::tsFillRate\fC [private]\fP"
+
+.PP
+Określa z jaką prędkością napełnia się wartość tsValue\&. 
+.SS "float Player::tsValue\fC [private]\fP"
+
+.PP
+Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się 
 
 .SH "Author"
 .PP 

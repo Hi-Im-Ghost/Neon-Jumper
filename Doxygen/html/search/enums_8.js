@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['writeflag_0',['WriteFlag',['../writer_8h.html#ab05d31260e712ed01daa80077f21e0a5',1,'writer.h']]]
+  ['utftype_0',['UTFType',['../encodings_8h.html#ac9448aedf514a5bb509bae73a9ce4e58',1,'encodings.h']]]
 ];

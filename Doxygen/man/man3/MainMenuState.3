@@ -1,4 +1,4 @@
-.TH "MainMenuState" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "MainMenuState" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,37 +16,131 @@ Inherits \fBGameState\fP\&.
 .ti -1c
 .RI "\fBMainMenuState\fP (std::stack< \fBGameState\fP * > *\fBstates\fP)"
 .br
-.RI "Konstruktor przyjmujący stos stanów programu\&. "
 .ti -1c
 .RI "void \fBrender\fP (sf::RenderTarget &window) override"
 .br
-.RI "Definicja funkcji render klasy \fBGameState\fP\&. "
 .ti -1c
 .RI "void \fBupdate\fP (float deltaTime) override"
 .br
-.RI "Definicja funkcji update klasy \fBGameState\fP\&. "
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBupdateButtons\fP ()"
+.br
+.RI "Odświeżanie logiki przycisków menu\&. "
+.ti -1c
+.RI "void \fBinitBackground\fP ()"
+.br
+.RI "Inicjacja tła menu\&. "
+.ti -1c
+.RI "void \fBinitButtons\fP ()"
+.br
+.RI "Inicjacja przycisków menu\&. "
+.ti -1c
+.RI "void \fBinitText\fP ()"
+.br
+.RI "Inicjacja tekstu nazwy gry\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Texture \fBbgTexture\fP"
+.br
+.RI "Tekstura tła menu\&. "
+.ti -1c
+.RI "sf::Sprite \fBbgSprite\fP"
+.br
+.RI "Sprite tła menu\&. "
+.ti -1c
+.RI "sf::Text \fBgamenameText\fP"
+.br
+.RI "Tekst przechowujący nazwę gry\&. "
+.ti -1c
+.RI "sf::Font \fBgamenameFont\fP"
+.br
+.RI "Czciona używana do tekstu nazwy gry\&. "
+.ti -1c
+.RI "std::map< std::string, \fBButton\fP * > \fBbuttons\fP"
+.br
+.RI "Lista przycisków menu z nazwami\&. "
 .in -1c
 .SS "Additional Inherited Members"
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "MainMenuState::MainMenuState (std::stack< \fBGameState\fP * > * states)\fC [explicit]\fP"
-
+Konstruktor przyjmujący stos stanów programu 
 .PP
-Konstruktor przyjmujący stos stanów programu\&. 
+\fBParameters\fP
+.RS 4
+\fIstates\fP odniesienie do stosu wszystkich stanów aplikacji 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void MainMenuState::render (sf::RenderTarget & window)\fC [override]\fP, \fC [virtual]\fP"
+.SS "void MainMenuState::initBackground ()\fC [private]\fP"
 
 .PP
-Definicja funkcji render klasy \fBGameState\fP\&. 
+Inicjacja tła menu\&. 
+.SS "void MainMenuState::initButtons ()\fC [private]\fP"
+
+.PP
+Inicjacja przycisków menu\&. 
+.SS "void MainMenuState::initText ()\fC [private]\fP"
+
+.PP
+Inicjacja tekstu nazwy gry\&. 
+.SS "void MainMenuState::render (sf::RenderTarget & window)\fC [override]\fP, \fC [virtual]\fP"
+Definicja funkcji render klasy \fBGameState\fP 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym renderowane są elementy 
+.RE
+.PP
+
 .PP
 Reimplemented from \fBGameState\fP\&.
 .SS "void MainMenuState::update (float deltaTime)\fC [override]\fP, \fC [virtual]\fP"
+Definicja funkcji update klasy \fBGameState\fP 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
 
 .PP
-Definicja funkcji update klasy \fBGameState\fP\&. 
-.PP
 Implements \fBGameState\fP\&.
+.SS "void MainMenuState::updateButtons ()\fC [private]\fP"
+
+.PP
+Odświeżanie logiki przycisków menu\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "sf::Sprite MainMenuState::bgSprite\fC [private]\fP"
+
+.PP
+Sprite tła menu\&. 
+.SS "sf::Texture MainMenuState::bgTexture\fC [private]\fP"
+
+.PP
+Tekstura tła menu\&. 
+.SS "std::map<std::string, \fBButton\fP*> MainMenuState::buttons\fC [private]\fP"
+
+.PP
+Lista przycisków menu z nazwami\&. 
+.SS "sf::Font MainMenuState::gamenameFont\fC [private]\fP"
+
+.PP
+Czciona używana do tekstu nazwy gry\&. 
+.SS "sf::Text MainMenuState::gamenameText\fC [private]\fP"
+
+.PP
+Tekst przechowujący nazwę gry\&. 
 
 .SH "Author"
 .PP 

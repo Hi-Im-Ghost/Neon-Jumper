@@ -27,7 +27,7 @@ Parse it into a {\ttfamily Document}\+:
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{comment}{// ...}}
 \DoxyCodeLine{\mbox{\hyperlink{class_generic_document}{Document}} document;}
-\DoxyCodeLine{document.\mbox{\hyperlink{class_generic_document_a901db1678f99a1b550003eed75bc380a}{Parse}}(json);}
+\DoxyCodeLine{document.\mbox{\hyperlink{class_generic_document_a901db1678f99a1b550003eed75bc380a}{Parse}}(\mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}});}
 
 \end{DoxyCode}
 
@@ -47,7 +47,7 @@ Let\textquotesingle{}s query whether a {\ttfamily \char`\"{}hello\char`\"{}} mem
 \begin{DoxyCode}{0}
 \DoxyCodeLine{assert(document.HasMember(\textcolor{stringliteral}{"{}hello"{}}));}
 \DoxyCodeLine{assert(document[\textcolor{stringliteral}{"{}hello"{}}].IsString());}
-\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}hello = \%s\(\backslash\)n"{}}, document[\textcolor{stringliteral}{"{}hello"{}}].GetString());}
+\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}hello = \%s\(\backslash\)n"{}}, document[\textcolor{stringliteral}{"{}hello"{}}].\mbox{\hyperlink{schemavalidator_8cpp_a6d90bf6105415d941d0ee014f2aa79c0}{GetString}}());}
 
 \end{DoxyCode}
 
@@ -264,7 +264,7 @@ When querying a number, you can check whether the number can be obtained as the 
 Note that, an integer value may be obtained in various ways without conversion. For example, A value {\ttfamily x} containing 123 will make {\ttfamily x.\+Is\+Int() == x.\+Is\+Uint() == x.\+Is\+Int64() == x.\+Is\+Uint64() == true}. But a value {\ttfamily y} containing -\/3000000000 will only make {\ttfamily x.\+Is\+Int64() == true}.
 
 When obtaining the numeric values, {\ttfamily Get\+Double()} will convert internal integer representation to a {\ttfamily double}. Note that, {\ttfamily int} and {\ttfamily unsigned} can be safely converted to {\ttfamily double}, but {\ttfamily int64\+\_\+t} and {\ttfamily uint64\+\_\+t} may lose precision (since mantissa of {\ttfamily double} is only 52-\/bits).\hypertarget{md_src_rapidjson_doc_tutorial_zh_cn_QueryString}{}\doxysubsection{Query String}\label{md_src_rapidjson_doc_tutorial_zh_cn_QueryString}
-In addition to {\ttfamily Get\+String()}, the {\ttfamily Value} class also contains {\ttfamily Get\+String\+Length()}. Here explains why\+:
+In addition to {\ttfamily \mbox{\hyperlink{schemavalidator_8cpp_a6d90bf6105415d941d0ee014f2aa79c0}{Get\+String()}}}, the {\ttfamily Value} class also contains {\ttfamily Get\+String\+Length()}. Here explains why\+:
 
 According to RFC 4627, JSON strings can contain Unicode character {\ttfamily U+0000}, which must be escaped as {\ttfamily \char`\"{}\textbackslash{}u0000\char`\"{}}. The problem is that, C/\+C++ often uses null-\/terminated string, which treats {\ttfamily \textbackslash{}0} as the terminator symbol.
 

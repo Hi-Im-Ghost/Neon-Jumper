@@ -1,4 +1,4 @@
-.TH "Animated" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Animated" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,15 +24,12 @@ Inherited by \fBEnemy\fP, and \fBPlayer\fP\&.
 .ti -1c
 .RI "void \fBanimate\fP (sf::Sprite &sprite, bool noWait=false)"
 .br
-.RI "Animuje przekazanego sprite-a z odpowiednią częstotliwością "
 .ti -1c
-.RI "void \fBswitchAnimation\fP (\fBAnimation\fP newAnimation)"
+.RI "virtual void \fBswitchAnimation\fP (\fBAnimation\fP newAnimation)"
 .br
-.RI "Zmienia obecną animację na podaną w argumencie\&. "
 .ti -1c
 .RI "\fBAnimation\fP \fBgetCurrentAinmation\fP ()"
 .br
-.RI "Pobiera obecnie używaną animację "
 .in -1c
 .SS "Protected Member Functions"
 
@@ -40,7 +37,6 @@ Inherited by \fBEnemy\fP, and \fBPlayer\fP\&.
 .ti -1c
 .RI "void \fBsetAnimValues\fP (sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping)"
 .br
-.RI "Ustawia wartości animacji, które używane będą przy animowaniu\&. Używane przy zmianie animacji\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -49,6 +45,49 @@ Inherited by \fBEnemy\fP, and \fBPlayer\fP\&.
 .RI "bool \fB_bIsFlipped\fP"
 .br
 .RI "Określa czy sprite jest obrócony w drugą stronę "
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsetFrame\fP (sf::Sprite &sprite)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Vector2i \fB_frameSize\fP"
+.br
+.RI "Rozmiar pojedynczej klatki animacji\&. "
+.ti -1c
+.RI "sf::Vector2i \fB_frameOrigin\fP"
+.br
+.RI "Lewy-górny punkt obecnej klatki animacji\&. "
+.ti -1c
+.RI "bool \fB_bLooping\fP"
+.br
+.RI "Określa czy animacja powinna się zapętlać "
+.ti -1c
+.RI "int \fB_maxFrameNumber\fP"
+.br
+.RI "Określa ile klatek powinna mieć obecna animacja\&. "
+.ti -1c
+.RI "int \fB_startingX\fP"
+.br
+.RI "Pozycja x klatki animacji od której powinna się zacząć animacji\&. "
+.ti -1c
+.RI "\fBAnimation\fP \fB_currAnim\fP"
+.br
+.RI "Obecnie używana animacja\&. "
+.ti -1c
+.RI "sf::Clock \fB_animClock\fP"
+.br
+.RI "Mierzy czas jaki upłynął od ostatniej klatki animacji\&. "
+.ti -1c
+.RI "float \fBframeIntervalTime\fP = 0\&.7f"
+.br
+.RI "Określa czas jaki musi upłynąć, by zmienić klatkę animacji\&. "
 .in -1c
 .SH "Member Enumeration Documentation"
 .PP 
@@ -61,38 +100,119 @@ Enumerator reprezentujący dostępne animacje\&.
 .in +1c
 .TP
 \fB\fIIDLE \fP\fP
+Animacja stania w miejscu\&. 
 .TP
 \fB\fIWALK \fP\fP
+Animacja chodzenia\&. 
 .TP
 \fB\fIJUMP \fP\fP
+Animacja skakania\&. 
 .TP
 \fB\fIFALL \fP\fP
+Animacja spadania\&. 
 .SH "Member Function Documentation"
 .PP 
 .SS "void Animated::animate (sf::Sprite & sprite, bool noWait = \fCfalse\fP)"
-
+Animuje przekazanego sprite-a z odpowiednią częstotliwością 
 .PP
-Animuje przekazanego sprite-a z odpowiednią częstotliwością Sprawdza, czy czas, który upłynął od ostatniej klatki animacji jest większy niż czas pomiędzy klatkami
+\fBParameters\fP
+.RS 4
+\fIsprite\fP sprite do animacji 
+.br
+\fInoWait\fP ignoruj intervalTime i animuj klatkę od razu 
+.RE
+.PP
+Sprawdza, czy czas, który upłynął od ostatniej klatki animacji jest większy niż czas pomiędzy klatkami
 .PP
 resetuje zegar animacji
 .SS "\fBAnimation\fP Animated::getCurrentAinmation ()\fC [inline]\fP"
-
-.PP
 Pobiera obecnie używaną animację 
+.PP
+\fBReturns\fP
+.RS 4
+obecnie używana animacja 
+.RE
+.PP
+
 .SS "void Animated::setAnimValues (sf::Vector2i frameOrigin, sf::Vector2i frameSize, int frameCount, float intervalTime, bool isLooping)\fC [protected]\fP"
+Ustawia wartości animacji, które używane będą przy animowaniu\&. Używane przy zmianie animacji 
+.PP
+\fBParameters\fP
+.RS 4
+\fIframeOrigin\fP pozycja lewego-górnego punktu klatki na teksturze 
+.br
+\fIframeSize\fP rozmiar klatki animacji 
+.br
+\fIframeCount\fP ilość klatek do animacji 
+.br
+\fIintervalTime\fP czas pomiędzy klatkami animacji 
+.br
+\fIisLooping\fP czy animacja powinna się zapętlać 
+.RE
+.PP
+
+.SS "void Animated::setFrame (sf::Sprite & sprite)\fC [private]\fP"
+Wczytuje następną klatkę i aktualizuje podany sprite 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsprite\fP sprite do animacji 
+.RE
+.PP
+Zmienia teksturę źródłową sprite na taką o zadanych współrzędnych
+.PP
+przesuwa ramkę o jedną klatkę do przodu
+.PP
+Jeżeli współrzędne następnej klatki wychodzą poza rozmiar tekstury, przejdź do początkowej klatki
+.SS "void Animated::switchAnimation (\fBAnimation\fP newAnimation)\fC [virtual]\fP"
+Zmienia obecną animację na podaną w argumencie 
+.PP
+\fBParameters\fP
+.RS 4
+\fInewAnimation\fP nowa animacja 
+.RE
+.PP
 
 .PP
-Ustawia wartości animacji, które używane będą przy animowaniu\&. Używane przy zmianie animacji\&. 
-.SS "void Animated::switchAnimation (\fBAnimation\fP newAnimation)"
-
-.PP
-Zmienia obecną animację na podaną w argumencie\&. 
+Reimplemented in \fBPlayer\fP\&.
 .SH "Member Data Documentation"
 .PP 
+.SS "sf::Clock Animated::_animClock\fC [private]\fP"
+
+.PP
+Mierzy czas jaki upłynął od ostatniej klatki animacji\&. 
 .SS "bool Animated::_bIsFlipped\fC [protected]\fP"
 
 .PP
 Określa czy sprite jest obrócony w drugą stronę 
+.SS "bool Animated::_bLooping\fC [private]\fP"
+
+.PP
+Określa czy animacja powinna się zapętlać 
+.SS "\fBAnimation\fP Animated::_currAnim\fC [private]\fP"
+
+.PP
+Obecnie używana animacja\&. 
+.SS "sf::Vector2i Animated::_frameOrigin\fC [private]\fP"
+
+.PP
+Lewy-górny punkt obecnej klatki animacji\&. 
+.SS "sf::Vector2i Animated::_frameSize\fC [private]\fP"
+
+.PP
+Rozmiar pojedynczej klatki animacji\&. 
+.SS "int Animated::_maxFrameNumber\fC [private]\fP"
+
+.PP
+Określa ile klatek powinna mieć obecna animacja\&. 
+.SS "int Animated::_startingX\fC [private]\fP"
+
+.PP
+Pozycja x klatki animacji od której powinna się zacząć animacji\&. 
+.SS "float Animated::frameIntervalTime = 0\&.7f\fC [private]\fP"
+
+.PP
+Określa czas jaki musi upłynąć, by zmienić klatkę animacji\&. 
 
 .SH "Author"
 .PP 

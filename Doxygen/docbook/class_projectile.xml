@@ -1,0 +1,369 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_class_projectile" xml:lang="en-US">
+<title>Projectile Class Reference</title>
+<indexterm><primary>Projectile</primary></indexterm>
+<para>
+<computeroutput>#include &lt;Projectile.h&gt;</computeroutput>
+</para>
+<para>Inheritance diagram for Projectile:    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="class_projectile.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_projectile_1a3f19ab91fddb8211bac7e1196b0f15c0">Projectile</link> (sf::Vector2f pos, bool movingRight)</para>
+</listitem>
+            <listitem><para>sf::Vector2f <link linkend="_class_projectile_1a88ed5be04ec9eddeb83deb201607368c">getPosition</link> ()</para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_projectile_1a91ca302f63a06df2c67b9b94a478b0f6">getIsMovingRight</link> () const</para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_projectile_1a321c90dbedd089ad2d0b3ec8f21d5922">getShouldBeDestroyed</link> () const</para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_projectile_1a429879cf9406d612f95183e9428f104b">isColliding</link> (const sf::RectangleShape &amp;recShape)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_projectile_1a970ca4296053eaff4665f0c4ff3e83c7">markForDestruction</link> ()</para>
+
+<para>Oznacza pocisk jako gotowy do zniszczenia. </para>
+</listitem>
+            <listitem><para>virtual void <link linkend="_class_projectile_1a5bc646de87829b911d6817a6478c353e">update</link> (float deltaTime)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_projectile_1a44595d2283e231188003bef859f98eb9">render</link> (sf::RenderTarget &amp;window)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Protected Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>virtual void <link linkend="_class_projectile_1a1e7043391129f4b34c7b9ab011edb3ef">move</link> ()=0</para>
+
+<para>Porusza pociskiem w odpowiedni sposób. </para>
+</listitem>
+            <listitem><para>void <link linkend="_class_projectile_1acdf51147e7efc2a15af8bca73b3243be">setPosition</link> (float x, float y)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_projectile_1a76008c00d23d28ef400a863bd0b56257">initTexture</link> (const std::string &amp;path, sf::IntRect textureRect)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>sf::Texture <link linkend="_class_projectile_1a1220dfd08fe74bb7ab09e8008d1cf70d">_texture</link></para>
+
+<para>Tekstura pocisku. </para>
+</listitem>
+            <listitem><para>sf::Sprite <link linkend="_class_projectile_1af96e1c6bd505495166db6c59f5301656">_sprite</link></para>
+
+<para>Sprite pocisku wczytywany z tekstury. </para>
+</listitem>
+            <listitem><para>sf::RectangleShape <link linkend="_class_projectile_1ae13dbe19f644c0f60751e75f5edcbc2a">_hitbox</link></para>
+
+<para>Kształt odpowiadający za wykrywanie kolizji pocisku. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_projectile_1a57cd904f69bfb6291ac3fb9807e7ba32">_bMovingRight</link></para>
+
+<para>Określa czy pocisk porysza się w prawo, czy w lewo. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_projectile_1a7220229e045cd2d5bc18dcf42c483c43">_bShouldBeDestroyed</link> = false</para>
+
+<para>Określa czy pocisk powinien być zniszczony. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_class_projectile_1a3f19ab91fddb8211bac7e1196b0f15c0"/><section>
+    <title>Projectile()</title>
+<indexterm><primary>Projectile</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>Projectile</secondary></indexterm>
+<para><computeroutput>Projectile::Projectile (sf::Vector2f pos, bool movingRight)</computeroutput></para>
+<para>Konstruktor pocisku 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>pos</entry><entry>
+<para>początkowa pozycja pocisku na mapie </para>
+</entry>
+                            </row>
+                            <row>
+<entry>movingRight</entry><entry>
+<para>określa czy pocisk powinien poruszać się w prawo czy w lewo </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_class_projectile_1a91ca302f63a06df2c67b9b94a478b0f6"/><section>
+    <title>getIsMovingRight()</title>
+<indexterm><primary>getIsMovingRight</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>getIsMovingRight</secondary></indexterm>
+<para><computeroutput>bool Projectile::getIsMovingRight ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Zwraca informację, czy pocisk porusza się w prawo <formalpara><title>Returns</title>
+
+<para>informacja, czy pocisk porusza się w prawo </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a88ed5be04ec9eddeb83deb201607368c"/><section>
+    <title>getPosition()</title>
+<indexterm><primary>getPosition</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>getPosition</secondary></indexterm>
+<para><computeroutput>sf::Vector2f Projectile::getPosition ( )</computeroutput></para>
+<para>Zwraca pozycję pocisku na mapie <formalpara><title>Returns</title>
+
+<para>pozycja pocisku na mapie </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a321c90dbedd089ad2d0b3ec8f21d5922"/><section>
+    <title>getShouldBeDestroyed()</title>
+<indexterm><primary>getShouldBeDestroyed</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>getShouldBeDestroyed</secondary></indexterm>
+<para><computeroutput>bool Projectile::getShouldBeDestroyed ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Zwraca informację, czy pocisk powinien zostać zniszczony <formalpara><title>Returns</title>
+
+<para>informacja, czy pocisk powinien zostać zniszcczony </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a76008c00d23d28ef400a863bd0b56257"/><section>
+    <title>initTexture()</title>
+<indexterm><primary>initTexture</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>initTexture</secondary></indexterm>
+<para><computeroutput>void Projectile::initTexture (const std::string &amp; path, sf::IntRect textureRect)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Inicjalizacja tekstury i sprite pocisku 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>path</entry><entry>
+<para>ścieżka do pliku tekstury </para>
+</entry>
+                            </row>
+                            <row>
+<entry>textureRect</entry><entry>
+<para>fragment tekstury, który zostanie wczytany do sprite </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_projectile_1a429879cf9406d612f95183e9428f104b"/><section>
+    <title>isColliding()</title>
+<indexterm><primary>isColliding</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>isColliding</secondary></indexterm>
+<para><computeroutput>bool Projectile::isColliding (const sf::RectangleShape &amp; recShape)</computeroutput></para>
+<para>Sprawdza, czy pocisk koliduje z podanym kształtem 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>recShape</entry><entry>
+<para>kształt z którym pocisk testuje kolizje </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>true - jeżeli nastąpiła kolizja, false - jeżeli nie </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a970ca4296053eaff4665f0c4ff3e83c7"/><section>
+    <title>markForDestruction()</title>
+<indexterm><primary>markForDestruction</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>markForDestruction</secondary></indexterm>
+<para><computeroutput>void Projectile::markForDestruction ( )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+
+<para>Oznacza pocisk jako gotowy do zniszczenia. </para>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a1e7043391129f4b34c7b9ab011edb3ef"/><section>
+    <title>move()</title>
+<indexterm><primary>move</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>move</secondary></indexterm>
+<para><computeroutput>virtual void Projectile::move ( )<computeroutput>[protected]</computeroutput>, <computeroutput>[pure virtual]</computeroutput></computeroutput></para><para>
+
+<para>Porusza pociskiem w odpowiedni sposób. </para>
+</para>
+<para>
+Implemented in <link linkend="_class_bullet_1a88af6034543e11dd8e4b5539b7634838">Bullet</link>.</para>
+</section>
+<anchor xml:id="_class_projectile_1a44595d2283e231188003bef859f98eb9"/><section>
+    <title>render()</title>
+<indexterm><primary>render</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>render</secondary></indexterm>
+<para><computeroutput>void Projectile::render (sf::RenderTarget &amp; window)</computeroutput></para>
+<para>Renderowanie pocisku na oknie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>window</entry><entry>
+<para>okno, na którym renderowany jest pocisk </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_projectile_1acdf51147e7efc2a15af8bca73b3243be"/><section>
+    <title>setPosition()</title>
+<indexterm><primary>setPosition</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>setPosition</secondary></indexterm>
+<para><computeroutput>void Projectile::setPosition (float x, float y)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Ustawia pozycję pozisku na mapie 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>x</entry><entry>
+<para>pozycja x na mapie </para>
+</entry>
+                            </row>
+                            <row>
+<entry>y</entry><entry>
+<para>pozycja y na mapie </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+<anchor xml:id="_class_projectile_1a5bc646de87829b911d6817a6478c353e"/><section>
+    <title>update()</title>
+<indexterm><primary>update</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>update</secondary></indexterm>
+<para><computeroutput>void Projectile::update (float deltaTime)<computeroutput>[virtual]</computeroutput></computeroutput></para>
+<para>Odświeżanie logiki pocisku 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Reimplemented in <link linkend="_class_bullet_1a0f8a91fcf01c7e95f25bb9754bac6cfd">Bullet</link>.</para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_projectile_1a57cd904f69bfb6291ac3fb9807e7ba32"/><section>
+    <title>_bMovingRight</title>
+<indexterm><primary>_bMovingRight</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>_bMovingRight</secondary></indexterm>
+<para><computeroutput>bool Projectile::_bMovingRight<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa czy pocisk porysza się w prawo, czy w lewo. </para>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a7220229e045cd2d5bc18dcf42c483c43"/><section>
+    <title>_bShouldBeDestroyed</title>
+<indexterm><primary>_bShouldBeDestroyed</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>_bShouldBeDestroyed</secondary></indexterm>
+<para><computeroutput>bool Projectile::_bShouldBeDestroyed = false<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Określa czy pocisk powinien być zniszczony. </para>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1ae13dbe19f644c0f60751e75f5edcbc2a"/><section>
+    <title>_hitbox</title>
+<indexterm><primary>_hitbox</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>_hitbox</secondary></indexterm>
+<para><computeroutput>sf::RectangleShape Projectile::_hitbox<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Kształt odpowiadający za wykrywanie kolizji pocisku. </para>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1af96e1c6bd505495166db6c59f5301656"/><section>
+    <title>_sprite</title>
+<indexterm><primary>_sprite</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>_sprite</secondary></indexterm>
+<para><computeroutput>sf::Sprite Projectile::_sprite<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Sprite pocisku wczytywany z tekstury. </para>
+</para>
+</section>
+<anchor xml:id="_class_projectile_1a1220dfd08fe74bb7ab09e8008d1cf70d"/><section>
+    <title>_texture</title>
+<indexterm><primary>_texture</primary><secondary>Projectile</secondary></indexterm>
+<indexterm><primary>Projectile</primary><secondary>_texture</secondary></indexterm>
+<para><computeroutput>sf::Texture Projectile::_texture<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Tekstura pocisku. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/entities/projectiles/<link linkend="__projectile_8h">Projectile.h</link>src/entities/projectiles/<link linkend="__projectile_8cpp">Projectile.cpp</link></section>
+</section>

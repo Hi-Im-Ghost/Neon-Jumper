@@ -1,4 +1,4 @@
-.TH "Writer< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Writer< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -161,7 +161,7 @@ Handler
 .RI "bool \fBKey\fP (const \fBCh\fP *const &str)"
 .br
 .ti -1c
-.RI "bool \fBRawValue\fP (const \fBCh\fP *json, size_t length, \fBType\fP type)"
+.RI "bool \fBRawValue\fP (const \fBCh\fP *\fBjson\fP, size_t length, \fBType\fP type)"
 .br
 .RI "Write a raw JSON value\&. "
 .ti -1c
@@ -208,13 +208,19 @@ Handler
 .RI "bool \fBWriteEndArray\fP ()"
 .br
 .ti -1c
-.RI "bool \fBWriteRawValue\fP (const \fBCh\fP *json, size_t length)"
+.RI "bool \fBWriteRawValue\fP (const \fBCh\fP *\fBjson\fP, size_t length)"
 .br
 .ti -1c
 .RI "void \fBPrefix\fP (\fBType\fP type)"
 .br
 .ti -1c
 .RI "bool \fBEndValue\fP (bool ret)"
+.br
+.ti -1c
+.RI "\fBWriter\fP (const \fBWriter\fP &)"
+.br
+.ti -1c
+.RI "\fBWriter\fP & \fBoperator=\fP (const \fBWriter\fP &)"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -272,6 +278,8 @@ Constructor\&.
 
 .SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::Writer\fP (StackAllocator * allocator = \fC0\fP, size_t levelDepth = \fC\fBkDefaultLevelDepth\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
 
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >\fB::Writer\fP (const \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags > &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Bool (bool b)\fC [inline]\fP"
@@ -317,6 +325,8 @@ Checks whether the output is a complete JSON\&. A complete JSON has a complete r
 .SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Key (const \fBCh\fP * str, \fBSizeType\fP length, bool copy = \fCfalse\fP)\fC [inline]\fP"
 
 .SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> bool \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Null ()\fC [inline]\fP"
+
+.SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> \fBWriter\fP & \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::operator= (const \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags > &)\fC [private]\fP"
 
 .SS "template<typename OutputStream , typename SourceEncoding  = UTF8<>, typename TargetEncoding  = UTF8<>, typename StackAllocator  = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags> void \fBWriter\fP< OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags >::Prefix (\fBType\fP type)\fC [inline]\fP, \fC [protected]\fP"
 

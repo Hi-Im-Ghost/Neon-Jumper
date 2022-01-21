@@ -1,0 +1,135 @@
+.TH "Shooter" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Shooter
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <Shooter\&.h>\fP
+.PP
+Inherited by \fBPlayer\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBcheckIsProjectileColliding\fP (const sf::RectangleShape &recShape)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBshoot\fP ()=0"
+.br
+.RI "Wykonuje strzał "
+.ti -1c
+.RI "void \fBaddToList\fP (\fBProjectile\fP *projectile)"
+.br
+.ti -1c
+.RI "void \fBremoveFromList\fP (\fBProjectile\fP *projectile)"
+.br
+.ti -1c
+.RI "void \fBrenderProjectiles\fP (sf::RenderTarget &window)"
+.br
+.ti -1c
+.RI "void \fBupdateProjectiles\fP (float deltaTime)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Vector2f \fBshootingPoint\fP"
+.br
+.RI "Pozycja z której obiekt wykonuje strzał "
+.ti -1c
+.RI "float \fBshootingCooldown\fP"
+.br
+.RI "Odstęp czasowy pomiędzy strzałami\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::list< \fBProjectile\fP * > \fBprojectileList\fP"
+.br
+.RI "Lista wystrzelonych przez ten obiekt pocisków\&. "
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "void Shooter::addToList (\fBProjectile\fP * projectile)\fC [protected]\fP"
+Dodaje podany pocisk do listy pocisków 'projectileList' 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprojectile\fP Odniesienie do pocisku, który należy dodać do listy 
+.RE
+.PP
+
+.SS "bool Shooter::checkIsProjectileColliding (const sf::RectangleShape & recShape)"
+Sprawdza, czy jakikolwiek pocisk z listy koliduje z podanym kształtem, a jeżeli tak, to od razu usuwa go z listy 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrecShape\fP Kształt na którym testowana jest kolizja z pociskami 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true - jeżeli którykolwiek z pocisków trafił w podany kształt, false - jeżeli kolizja nie zachodzi 
+.RE
+.PP
+
+.SS "void Shooter::removeFromList (\fBProjectile\fP * projectile)\fC [protected]\fP"
+Usuwa podany pocisk z listy 'projectileList' 
+.PP
+\fBParameters\fP
+.RS 4
+\fIprojectile\fP Odniesienie do pocisku, który należy usunąć z listy 
+.RE
+.PP
+
+.SS "void Shooter::renderProjectiles (sf::RenderTarget & window)\fC [protected]\fP"
+Renderowanie pocisków na podanym oknie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP Okno na którym mają być renderowane pociski 
+.RE
+.PP
+
+.SS "virtual void Shooter::shoot ()\fC [protected]\fP, \fC [pure virtual]\fP"
+
+.PP
+Wykonuje strzał 
+.PP
+Implemented in \fBPlayer\fP\&.
+.SS "void Shooter::updateProjectiles (float deltaTime)\fC [protected]\fP"
+Odświeżanie logiki pocisków 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP Czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "std::list<\fBProjectile\fP*> Shooter::projectileList\fC [private]\fP"
+
+.PP
+Lista wystrzelonych przez ten obiekt pocisków\&. 
+.SS "float Shooter::shootingCooldown\fC [protected]\fP"
+
+.PP
+Odstęp czasowy pomiędzy strzałami\&. 
+.SS "sf::Vector2f Shooter::shootingPoint\fC [protected]\fP"
+
+.PP
+Pozycja z której obiekt wykonuje strzał 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Neon Jumper from the source code\&.

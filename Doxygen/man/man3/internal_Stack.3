@@ -1,4 +1,4 @@
-.TH "internal::Stack< Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::Stack< Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -73,6 +73,47 @@ internal::Stack< Allocator > \- A type-unsafe stack for storing different types 
 .RI "size_t \fBGetCapacity\fP () const"
 .br
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename \fBT\fP > void \fBExpand\fP (size_t count)"
+.br
+.ti -1c
+.RI "void \fBResize\fP (size_t newCapacity)"
+.br
+.ti -1c
+.RI "void \fBDestroy\fP ()"
+.br
+.ti -1c
+.RI "\fBStack\fP (const \fBStack\fP &)"
+.br
+.ti -1c
+.RI "\fBStack\fP & \fBoperator=\fP (const \fBStack\fP &)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.ti -1c
+.RI "char * \fBstack_\fP"
+.br
+.ti -1c
+.RI "char * \fBstackTop_\fP"
+.br
+.ti -1c
+.RI "char * \fBstackEnd_\fP"
+.br
+.ti -1c
+.RI "size_t \fBinitialCapacity_\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 
@@ -94,6 +135,8 @@ class internal::Stack< Allocator >"A type-unsafe stack for storing different typ
 
 .SS "template<typename \fBAllocator\fP > \fBinternal::Stack\fP< \fBAllocator\fP >::~\fBStack\fP ()\fC [inline]\fP"
 
+.SS "template<typename \fBAllocator\fP > \fBinternal::Stack\fP< \fBAllocator\fP >::Stack (const \fBStack\fP< \fBAllocator\fP > &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::Bottom ()\fC [inline]\fP"
@@ -102,11 +145,15 @@ class internal::Stack< Allocator >"A type-unsafe stack for storing different typ
 
 .SS "template<typename \fBAllocator\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::Clear ()\fC [inline]\fP"
 
+.SS "template<typename \fBAllocator\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::Destroy ()\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename \fBAllocator\fP > bool \fBinternal::Stack\fP< \fBAllocator\fP >::Empty () const\fC [inline]\fP"
 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::End ()\fC [inline]\fP"
 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > const \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::End () const\fC [inline]\fP"
+
+.SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::Expand (size_t count)\fC [inline]\fP, \fC [private]\fP"
 
 .SS "template<typename \fBAllocator\fP > \fBAllocator\fP & \fBinternal::Stack\fP< \fBAllocator\fP >::GetAllocator ()\fC [inline]\fP"
 
@@ -116,6 +163,8 @@ class internal::Stack< Allocator >"A type-unsafe stack for storing different typ
 
 .SS "template<typename \fBAllocator\fP > bool \fBinternal::Stack\fP< \fBAllocator\fP >::HasAllocator () const\fC [inline]\fP"
 
+.SS "template<typename \fBAllocator\fP > \fBStack\fP & \fBinternal::Stack\fP< \fBAllocator\fP >::operator= (const \fBStack\fP< \fBAllocator\fP > &)\fC [private]\fP"
+
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::Pop (size_t count)\fC [inline]\fP"
 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > RAPIDJSON_FORCEINLINE \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::Push (size_t count = \fC1\fP)\fC [inline]\fP"
@@ -124,6 +173,8 @@ class internal::Stack< Allocator >"A type-unsafe stack for storing different typ
 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > RAPIDJSON_FORCEINLINE void \fBinternal::Stack\fP< \fBAllocator\fP >::Reserve (size_t count = \fC1\fP)\fC [inline]\fP"
 
+.SS "template<typename \fBAllocator\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::Resize (size_t newCapacity)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename \fBAllocator\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::ShrinkToFit ()\fC [inline]\fP"
 
 .SS "template<typename \fBAllocator\fP > void \fBinternal::Stack\fP< \fBAllocator\fP >::Swap (\fBStack\fP< \fBAllocator\fP > & rhs)\fC [inline]\fP"
@@ -131,6 +182,20 @@ class internal::Stack< Allocator >"A type-unsafe stack for storing different typ
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::Top ()\fC [inline]\fP"
 
 .SS "template<typename \fBAllocator\fP > template<typename \fBT\fP > const \fBT\fP * \fBinternal::Stack\fP< \fBAllocator\fP >::Top () const\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBAllocator\fP > \fBAllocator\fP* \fBinternal::Stack\fP< \fBAllocator\fP >::allocator_\fC [private]\fP"
+
+.SS "template<typename \fBAllocator\fP > size_t \fBinternal::Stack\fP< \fBAllocator\fP >::initialCapacity_\fC [private]\fP"
+
+.SS "template<typename \fBAllocator\fP > \fBAllocator\fP* \fBinternal::Stack\fP< \fBAllocator\fP >::ownAllocator_\fC [private]\fP"
+
+.SS "template<typename \fBAllocator\fP > char* \fBinternal::Stack\fP< \fBAllocator\fP >::stack_\fC [private]\fP"
+
+.SS "template<typename \fBAllocator\fP > char* \fBinternal::Stack\fP< \fBAllocator\fP >::stackEnd_\fC [private]\fP"
+
+.SS "template<typename \fBAllocator\fP > char* \fBinternal::Stack\fP< \fBAllocator\fP >::stackTop_\fC [private]\fP"
 
 
 .SH "Author"

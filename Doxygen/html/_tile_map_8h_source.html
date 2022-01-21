@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Neon Jumper<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Neon Jumper
    </div>
   </td>
  </tr>
@@ -76,80 +76,81 @@ $(function() {
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="_tile_set_8h.html">TileSet.h</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="_layer_8h.html">Layer.h</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="class_tile_map.html">    9</a></span><span class="keyword">class </span><a class="code hl_class" href="class_tile_map.html">TileMap</a> : <span class="keyword">public</span> sf::Drawable, <span class="keyword">public</span> sf::Transformable {</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">   11</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">load</a>(<a class="code hl_class" href="class_tile_set.html">TileSet</a> tileset, <a class="code hl_class" href="class_layer.html">Layer</a> layer) {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>        tex.loadFromFile(tileset.<a class="code hl_function" href="class_tile_set.html#a54b601b224260a5f04c6915461c8f44c">getImage</a>());</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        verts.setPrimitiveType(sf::Quads);</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        verts.resize(layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>() * layer.<a class="code hl_function" href="class_layer.html#a974c0866509db4c131f8f38d281fbcd1">getHeight</a>() * 4);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        std::vector&lt;int&gt; data = layer.<a class="code hl_function" href="class_layer.html#abd8ad603c5223d39187225e1fce2ac72">getData</a>();</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; data.size(); i++) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordflow">if</span> (data[i] != 0) {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                <span class="keywordtype">size_t</span> columns = tileset.<a class="code hl_function" href="class_tile_set.html#a1abfb2a123c3cf7c3ee8ededeeeb7ad6">getColumns</a>();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>                <span class="keywordtype">size_t</span> val = data[i] - tileset.<a class="code hl_function" href="class_tile_set.html#a2f62e9ee145a6d3056061cd67dca2406">getFirstGid</a>();</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="class_tile_map.html">   11</a></span><span class="keyword">class </span><a class="code hl_class" href="class_tile_map.html">TileMap</a> : <span class="keyword">public</span> sf::Drawable, <span class="keyword">public</span> sf::Transformable {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">   18</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">load</a>(<a class="code hl_class" href="class_tile_set.html">TileSet</a> tileset, <a class="code hl_class" href="class_layer.html">Layer</a> layer) {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <a class="code hl_variable" href="class_tile_map.html#a78f75e81230c61f79fbab2c38ae3d7ad">tex</a>.loadFromFile(tileset.<a class="code hl_function" href="class_tile_set.html#a54b601b224260a5f04c6915461c8f44c">getImage</a>());</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <a class="code hl_variable" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">verts</a>.setPrimitiveType(sf::Quads);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_variable" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">verts</a>.resize(layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>() * layer.<a class="code hl_function" href="class_layer.html#a974c0866509db4c131f8f38d281fbcd1">getHeight</a>() * 4);</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>                <span class="keywordtype">size_t</span> y = floor(val / columns);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                <span class="keywordtype">size_t</span> x = val % columns;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                <span class="keywordtype">size_t</span> yPos = floor(i / layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>());</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                <span class="keywordtype">size_t</span> xPos = i % layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>();</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                sf::Vertex* quad = &amp;verts[i*4];</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                <span class="keywordtype">float</span> xPos1 = xPos * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>                <span class="keywordtype">float</span> xPos2 = (xPos + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                <span class="keywordtype">float</span> yPos1 = yPos * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                <span class="keywordtype">float</span> yPos2 = (yPos + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        std::vector&lt;int&gt; data = layer.<a class="code hl_function" href="class_layer.html#abd8ad603c5223d39187225e1fce2ac72">getData</a>();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; data.size(); i++) {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            <span class="keywordflow">if</span> (data[i] != 0) {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>                <span class="keywordtype">size_t</span> columns = tileset.<a class="code hl_function" href="class_tile_set.html#a1abfb2a123c3cf7c3ee8ededeeeb7ad6">getColumns</a>();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                <span class="keywordtype">size_t</span> val = data[i] - tileset.<a class="code hl_function" href="class_tile_set.html#a2f62e9ee145a6d3056061cd67dca2406">getFirstGid</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                <span class="keywordtype">size_t</span> y = floor(val / columns);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                <span class="keywordtype">size_t</span> x = val % columns;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                <span class="keywordtype">size_t</span> yPos = floor(i / layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>());</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                <span class="keywordtype">size_t</span> xPos = i % layer.<a class="code hl_function" href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">getWidth</a>();</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                <span class="keywordtype">float</span> x1 = x * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                <span class="keywordtype">float</span> x2 = (x + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                <span class="keywordtype">float</span> y1 = y * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                <span class="keywordtype">float</span> y2 = (y + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                quad[0].position = sf::Vector2f(xPos1, yPos1);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                quad[1].position = sf::Vector2f(xPos2, yPos1);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                quad[2].position = sf::Vector2f(xPos2, yPos2);</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                quad[3].position = sf::Vector2f(xPos1, yPos2);</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                quad[0].texCoords = sf::Vector2f(x1, y1);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                quad[1].texCoords = sf::Vector2f(x2, y1);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                quad[2].texCoords = sf::Vector2f(x2, y2);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                quad[3].texCoords = sf::Vector2f(x1, y2);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            }</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        }</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    }</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> draw(sf::RenderTarget&amp; target, sf::RenderStates states)<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        states.transform *= getTransform();</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        states.texture = &amp;tex;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        target.draw(verts, states);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    sf::VertexArray verts;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    sf::Texture tex;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>};</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">#endif </span><span class="comment">//PLATFORMER2D_TILEMAP_H</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                sf::Vertex* quad = &amp;<a class="code hl_variable" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">verts</a>[i*4];</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                <span class="keywordtype">float</span> xPos1 = xPos * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                <span class="keywordtype">float</span> xPos2 = (xPos + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                <span class="keywordtype">float</span> yPos1 = yPos * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                <span class="keywordtype">float</span> yPos2 = (yPos + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                <span class="keywordtype">float</span> x1 = x * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                <span class="keywordtype">float</span> x2 = (x + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">getTileWidth</a>();</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                <span class="keywordtype">float</span> y1 = y * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                <span class="keywordtype">float</span> y2 = (y + 1) * tileset.<a class="code hl_function" href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">getTileHeight</a>();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                quad[0].position = sf::Vector2f(xPos1, yPos1);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                quad[1].position = sf::Vector2f(xPos2, yPos1);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                quad[2].position = sf::Vector2f(xPos2, yPos2);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                quad[3].position = sf::Vector2f(xPos1, yPos2);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                quad[0].texCoords = sf::Vector2f(x1, y1);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                quad[1].texCoords = sf::Vector2f(x2, y1);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                quad[2].texCoords = sf::Vector2f(x2, y2);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                quad[3].texCoords = sf::Vector2f(x1, y2);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            }</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        }</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="class_tile_map.html#a52562e9fb37f32fc482d7d64a2e48630">   67</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="class_tile_map.html#a52562e9fb37f32fc482d7d64a2e48630">draw</a>(sf::RenderTarget&amp; target, sf::RenderStates states)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        states.transform *= getTransform();</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        states.texture = &amp;<a class="code hl_variable" href="class_tile_map.html#a78f75e81230c61f79fbab2c38ae3d7ad">tex</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        target.draw(<a class="code hl_variable" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">verts</a>, states);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">   73</a></span>    sf::VertexArray <a class="code hl_variable" href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">verts</a>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="class_tile_map.html#a78f75e81230c61f79fbab2c38ae3d7ad">   75</a></span>    sf::Texture <a class="code hl_variable" href="class_tile_map.html#a78f75e81230c61f79fbab2c38ae3d7ad">tex</a>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>};</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#endif </span><span class="comment">//PLATFORMER2D_TILEMAP_H</span></div>
 <div class="ttc" id="a_layer_8h_html"><div class="ttname"><a href="_layer_8h.html">Layer.h</a></div></div>
 <div class="ttc" id="a_tile_set_8h_html"><div class="ttname"><a href="_tile_set_8h.html">TileSet.h</a></div></div>
-<div class="ttc" id="aclass_layer_html"><div class="ttname"><a href="class_layer.html">Layer</a></div><div class="ttdef"><b>Definition:</b> Layer.h:26</div></div>
-<div class="ttc" id="aclass_layer_html_a39e3b346235715e15d99a0a8ac95e0a7"><div class="ttname"><a href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">Layer::getWidth</a></div><div class="ttdeci">int getWidth()</div><div class="ttdoc">Zwraca szerokość warstwy.</div><div class="ttdef"><b>Definition:</b> Layer.h:52</div></div>
-<div class="ttc" id="aclass_layer_html_a974c0866509db4c131f8f38d281fbcd1"><div class="ttname"><a href="class_layer.html#a974c0866509db4c131f8f38d281fbcd1">Layer::getHeight</a></div><div class="ttdeci">int getHeight()</div><div class="ttdoc">Zwraca wysokość warstwy.</div><div class="ttdef"><b>Definition:</b> Layer.h:38</div></div>
-<div class="ttc" id="aclass_layer_html_abd8ad603c5223d39187225e1fce2ac72"><div class="ttname"><a href="class_layer.html#abd8ad603c5223d39187225e1fce2ac72">Layer::getData</a></div><div class="ttdeci">std::vector&lt; int &gt; getData()</div><div class="ttdoc">Służy do zwracania informacji o miejscach wystąpienia na mapie danej warstwy.</div><div class="ttdef"><b>Definition:</b> Layer.h:36</div></div>
-<div class="ttc" id="aclass_tile_map_html"><div class="ttname"><a href="class_tile_map.html">TileMap</a></div><div class="ttdef"><b>Definition:</b> TileMap.h:9</div></div>
-<div class="ttc" id="aclass_tile_map_html_af4b93ab43aa7a1d6a707ddd7173b6c10"><div class="ttname"><a href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">TileMap::load</a></div><div class="ttdeci">bool load(TileSet tileset, Layer layer)</div><div class="ttdef"><b>Definition:</b> TileMap.h:11</div></div>
+<div class="ttc" id="aclass_layer_html"><div class="ttname"><a href="class_layer.html">Layer</a></div><div class="ttdef"><b>Definition:</b> Layer.h:31</div></div>
+<div class="ttc" id="aclass_layer_html_a39e3b346235715e15d99a0a8ac95e0a7"><div class="ttname"><a href="class_layer.html#a39e3b346235715e15d99a0a8ac95e0a7">Layer::getWidth</a></div><div class="ttdeci">int getWidth()</div><div class="ttdef"><b>Definition:</b> Layer.h:77</div></div>
+<div class="ttc" id="aclass_layer_html_a974c0866509db4c131f8f38d281fbcd1"><div class="ttname"><a href="class_layer.html#a974c0866509db4c131f8f38d281fbcd1">Layer::getHeight</a></div><div class="ttdeci">int getHeight()</div><div class="ttdef"><b>Definition:</b> Layer.h:49</div></div>
+<div class="ttc" id="aclass_layer_html_abd8ad603c5223d39187225e1fce2ac72"><div class="ttname"><a href="class_layer.html#abd8ad603c5223d39187225e1fce2ac72">Layer::getData</a></div><div class="ttdeci">std::vector&lt; int &gt; getData()</div><div class="ttdef"><b>Definition:</b> Layer.h:45</div></div>
+<div class="ttc" id="aclass_tile_map_html"><div class="ttname"><a href="class_tile_map.html">TileMap</a></div><div class="ttdef"><b>Definition:</b> TileMap.h:11</div></div>
+<div class="ttc" id="aclass_tile_map_html_a46abda32d95936295fbeb8d35d3fe08e"><div class="ttname"><a href="class_tile_map.html#a46abda32d95936295fbeb8d35d3fe08e">TileMap::verts</a></div><div class="ttdeci">sf::VertexArray verts</div><div class="ttdoc">Tablica która przechowuje wierzchołki.</div><div class="ttdef"><b>Definition:</b> TileMap.h:73</div></div>
+<div class="ttc" id="aclass_tile_map_html_a52562e9fb37f32fc482d7d64a2e48630"><div class="ttname"><a href="class_tile_map.html#a52562e9fb37f32fc482d7d64a2e48630">TileMap::draw</a></div><div class="ttdeci">virtual void draw(sf::RenderTarget &amp;target, sf::RenderStates states) const</div><div class="ttdef"><b>Definition:</b> TileMap.h:67</div></div>
+<div class="ttc" id="aclass_tile_map_html_a78f75e81230c61f79fbab2c38ae3d7ad"><div class="ttname"><a href="class_tile_map.html#a78f75e81230c61f79fbab2c38ae3d7ad">TileMap::tex</a></div><div class="ttdeci">sf::Texture tex</div><div class="ttdoc">Przechowuje teksture kafelków.</div><div class="ttdef"><b>Definition:</b> TileMap.h:75</div></div>
+<div class="ttc" id="aclass_tile_map_html_af4b93ab43aa7a1d6a707ddd7173b6c10"><div class="ttname"><a href="class_tile_map.html#af4b93ab43aa7a1d6a707ddd7173b6c10">TileMap::load</a></div><div class="ttdeci">bool load(TileSet tileset, Layer layer)</div><div class="ttdef"><b>Definition:</b> TileMap.h:18</div></div>
 <div class="ttc" id="aclass_tile_set_html"><div class="ttname"><a href="class_tile_set.html">TileSet</a></div><div class="ttdef"><b>Definition:</b> TileSet.h:9</div></div>
-<div class="ttc" id="aclass_tile_set_html_a1abfb2a123c3cf7c3ee8ededeeeb7ad6"><div class="ttname"><a href="class_tile_set.html#a1abfb2a123c3cf7c3ee8ededeeeb7ad6">TileSet::getColumns</a></div><div class="ttdeci">int getColumns()</div><div class="ttdoc">Zwraca numer kolumny.</div><div class="ttdef"><b>Definition:</b> TileSet.h:21</div></div>
-<div class="ttc" id="aclass_tile_set_html_a2f62e9ee145a6d3056061cd67dca2406"><div class="ttname"><a href="class_tile_set.html#a2f62e9ee145a6d3056061cd67dca2406">TileSet::getFirstGid</a></div><div class="ttdeci">int getFirstGid()</div><div class="ttdoc">Zwraca numer kafelka.</div><div class="ttdef"><b>Definition:</b> TileSet.h:19</div></div>
-<div class="ttc" id="aclass_tile_set_html_a54b601b224260a5f04c6915461c8f44c"><div class="ttname"><a href="class_tile_set.html#a54b601b224260a5f04c6915461c8f44c">TileSet::getImage</a></div><div class="ttdeci">std::string getImage()</div><div class="ttdoc">Zwraca informacje o obrazku kafelka.</div><div class="ttdef"><b>Definition:</b> TileSet.h:23</div></div>
-<div class="ttc" id="aclass_tile_set_html_a950dd1e0e25fd562c61aace8d24fdf8e"><div class="ttname"><a href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">TileSet::getTileWidth</a></div><div class="ttdeci">int getTileWidth()</div><div class="ttdoc">Zwraca szerokosc kafelka.</div><div class="ttdef"><b>Definition:</b> TileSet.h:41</div></div>
-<div class="ttc" id="aclass_tile_set_html_aeedceaf4edae81341cfae186dbc8aa62"><div class="ttname"><a href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">TileSet::getTileHeight</a></div><div class="ttdeci">int getTileHeight()</div><div class="ttdoc">Zwraca wysokosc kafelka.</div><div class="ttdef"><b>Definition:</b> TileSet.h:39</div></div>
+<div class="ttc" id="aclass_tile_set_html_a1abfb2a123c3cf7c3ee8ededeeeb7ad6"><div class="ttname"><a href="class_tile_set.html#a1abfb2a123c3cf7c3ee8ededeeeb7ad6">TileSet::getColumns</a></div><div class="ttdeci">int getColumns()</div><div class="ttdef"><b>Definition:</b> TileSet.h:28</div></div>
+<div class="ttc" id="aclass_tile_set_html_a2f62e9ee145a6d3056061cd67dca2406"><div class="ttname"><a href="class_tile_set.html#a2f62e9ee145a6d3056061cd67dca2406">TileSet::getFirstGid</a></div><div class="ttdeci">int getFirstGid()</div><div class="ttdef"><b>Definition:</b> TileSet.h:24</div></div>
+<div class="ttc" id="aclass_tile_set_html_a54b601b224260a5f04c6915461c8f44c"><div class="ttname"><a href="class_tile_set.html#a54b601b224260a5f04c6915461c8f44c">TileSet::getImage</a></div><div class="ttdeci">std::string getImage()</div><div class="ttdef"><b>Definition:</b> TileSet.h:32</div></div>
+<div class="ttc" id="aclass_tile_set_html_a950dd1e0e25fd562c61aace8d24fdf8e"><div class="ttname"><a href="class_tile_set.html#a950dd1e0e25fd562c61aace8d24fdf8e">TileSet::getTileWidth</a></div><div class="ttdeci">int getTileWidth()</div><div class="ttdef"><b>Definition:</b> TileSet.h:68</div></div>
+<div class="ttc" id="aclass_tile_set_html_aeedceaf4edae81341cfae186dbc8aa62"><div class="ttname"><a href="class_tile_set.html#aeedceaf4edae81341cfae186dbc8aa62">TileSet::getTileHeight</a></div><div class="ttdeci">int getTileHeight()</div><div class="ttdef"><b>Definition:</b> TileSet.h:64</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

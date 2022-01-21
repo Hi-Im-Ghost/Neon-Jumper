@@ -1,4 +1,4 @@
-.TH "internal::GenericRegexSearch< RegexType, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::GenericRegexSearch< RegexType, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -40,11 +40,63 @@ internal::GenericRegexSearch< RegexType, Allocator >
 .RI "bool \fBSearch\fP (const \fBCh\fP *s)"
 .br
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef RegexType::State \fBState\fP"
+.br
+.ti -1c
+.RI "typedef RegexType::Range \fBRange\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename InputStream > bool \fBSearchWithAnchoring\fP (InputStream &is, bool anchorBegin, bool anchorEnd)"
+.br
+.ti -1c
+.RI "size_t \fBGetStateSetSize\fP () const"
+.br
+.ti -1c
+.RI "bool \fBAddState\fP (\fBStack\fP< \fBAllocator\fP > &l, \fBSizeType\fP index)"
+.br
+.ti -1c
+.RI "bool \fBMatchRange\fP (\fBSizeType\fP rangeIndex, unsigned codepoint) const"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const RegexType & \fBregex_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.ti -1c
+.RI "\fBStack\fP< \fBAllocator\fP > \fBstate0_\fP"
+.br
+.ti -1c
+.RI "\fBStack\fP< \fBAllocator\fP > \fBstate1_\fP"
+.br
+.ti -1c
+.RI "\fBuint32_t\fP * \fBstateSet_\fP"
+.br
+.in -1c
 .SH "Member Typedef Documentation"
 .PP 
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> typedef Encoding::Ch \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Ch"
 
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> typedef RegexType::EncodingType \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >\fB::Encoding\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> typedef RegexType::Range \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Range\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> typedef RegexType::State \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::State\fC [private]\fP"
 
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -54,13 +106,35 @@ internal::GenericRegexSearch< RegexType, Allocator >
 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::AddState (\fBStack\fP< \fBAllocator\fP > & l, \fBSizeType\fP index)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> size_t \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::GetStateSetSize () const\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Match (const \fBCh\fP * s)\fC [inline]\fP"
 
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Match (InputStream & is)\fC [inline]\fP"
 
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::MatchRange (\fBSizeType\fP rangeIndex, unsigned codepoint) const\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Search (const \fBCh\fP * s)\fC [inline]\fP"
 
 .SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::Search (InputStream & is)\fC [inline]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::SearchWithAnchoring (InputStream & is, bool anchorBegin, bool anchorEnd)\fC [inline]\fP, \fC [private]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::allocator_\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::ownAllocator_\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> const RegexType& \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::regex_\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> \fBStack\fP<\fBAllocator\fP> \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::state0_\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> \fBStack\fP<\fBAllocator\fP> \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::state1_\fC [private]\fP"
+
+.SS "template<typename RegexType , typename \fBAllocator\fP  = CrtAllocator> \fBuint32_t\fP* \fBinternal::GenericRegexSearch\fP< RegexType, \fBAllocator\fP >::stateSet_\fC [private]\fP"
 
 
 .SH "Author"

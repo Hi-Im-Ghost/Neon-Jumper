@@ -8,17 +8,30 @@
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_load_map_ae780842a81d47d2463f40bf561fbdfa7}{Load\+Map}} (std\+::string map\+File\+Name)
-\begin{DoxyCompactList}\small\item\em Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy. \end{DoxyCompactList}\item 
+\item 
 std\+::ifstream \mbox{\hyperlink{class_load_map_ae3d1eb7e8e3f5748430e1189d72a3849}{read\+File}} (std\+::string)
-\begin{DoxyCompactList}\small\item\em Metoda która słuzy do wczytywania danych z pliku. \end{DoxyCompactList}\item 
+\item 
 \mbox{\hyperlink{class_tile_set}{Tile\+Set}} \mbox{\hyperlink{class_load_map_aae3bcc5f28ae22b7cda5ae6785b04a4c}{find\+Tile\+Set}} (\mbox{\hyperlink{class_layer}{Layer}} \&, std\+::vector$<$ \mbox{\hyperlink{class_tile_set}{Tile\+Set}} $>$ \&)
-\begin{DoxyCompactList}\small\item\em Metoda która służy do znalezienia przekazanej w parametrze warstwy. \end{DoxyCompactList}\item 
+\item 
 \mbox{\hyperlink{class_layer}{Layer}} \mbox{\hyperlink{class_load_map_a1c887ad2112bf7d749d0254309c1ab73}{get\+Solid\+Layer}} ()
-\begin{DoxyCompactList}\small\item\em Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla terenu. \end{DoxyCompactList}\item 
+\item 
 \mbox{\hyperlink{class_layer}{Layer}} \mbox{\hyperlink{class_load_map_a21f5bf47590f84c73e4850a20acad787}{get\+Damage\+Layer}} ()
-\begin{DoxyCompactList}\small\item\em Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_load_map_a7020a11fa9a16e73ff62bbdd93d2db8c}{draw}} (sf\+::\+Render\+Target \&window)
-\begin{DoxyCompactList}\small\item\em Służy do wyświetlania na ekranie warstw. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{class_load_map_a53959655400892dc7ea5249e5e5114f8}{bg}}
+\begin{DoxyCompactList}\small\item\em Zmienna która przechowuje teksturę dla tła. \end{DoxyCompactList}\item 
+sf\+::\+Sprite \mbox{\hyperlink{class_load_map_a91692f7e88c0262bb8e33c4c47b51cc4}{bg\+Spr}}
+\begin{DoxyCompactList}\small\item\em Zmienna która służy do przeniesienia tekstury tła na ekran. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_tile_map}{Tile\+Map}} $>$ \mbox{\hyperlink{class_load_map_afee37ee6c7a216eda99611d06658808d}{tilemap\+\_\+render}}
+\begin{DoxyCompactList}\small\item\em Vector który przechowuje wszystkie elementy mapy do wyrenderowania. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_layer}{Layer}} \mbox{\hyperlink{class_load_map_a0d53f21ac37c0c7b9911a491bd13e3c8}{solid\+Layer}}
+\begin{DoxyCompactList}\small\item\em Obiekt warstwy gry który przechowuje hitboxy dla terenu. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_layer}{Layer}} \mbox{\hyperlink{class_load_map_ad30ea2f20fde1331c978b4f85301c34c}{damage\+Layer}}
+\begin{DoxyCompactList}\small\item\em Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
@@ -28,10 +41,11 @@ void \mbox{\hyperlink{class_load_map_a7020a11fa9a16e73ff62bbdd93d2db8c}{draw}} (
 \doxysubsubsection{\texorpdfstring{LoadMap()}{LoadMap()}}
 {\footnotesize\ttfamily Load\+Map\+::\+Load\+Map (\begin{DoxyParamCaption}\item[{std\+::string}]{map\+File\+Name }\end{DoxyParamCaption})}
 
-
-
-Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy. 
-
+Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy 
+\begin{DoxyParams}{Parameters}
+{\em map\+File\+Name} & -\/ nazwa pliku json w której to znajdują się elementy mapy \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Function Documentation}
@@ -41,49 +55,99 @@ Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elem
 \doxysubsubsection{\texorpdfstring{draw()}{draw()}}
 {\footnotesize\ttfamily void Load\+Map\+::draw (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Target \&}]{window }\end{DoxyParamCaption})}
 
-
-
-Służy do wyświetlania na ekranie warstw. 
-
+Służy do wyświetlania na ekranie warstw 
+\begin{DoxyParams}{Parameters}
+{\em window} & -\/ okno na którym elementy mają być wyświetlane \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_load_map_aae3bcc5f28ae22b7cda5ae6785b04a4c}\label{class_load_map_aae3bcc5f28ae22b7cda5ae6785b04a4c}} 
 \index{LoadMap@{LoadMap}!findTileSet@{findTileSet}}
 \index{findTileSet@{findTileSet}!LoadMap@{LoadMap}}
 \doxysubsubsection{\texorpdfstring{findTileSet()}{findTileSet()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_tile_set}{Tile\+Set}} Load\+Map\+::find\+Tile\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_layer}{Layer}} \&}]{layer,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_tile_set}{Tile\+Set}} $>$ \&}]{tilesets }\end{DoxyParamCaption})}
 
-
-
-Metoda która służy do znalezienia przekazanej w parametrze warstwy. 
-
+Metoda która służy do znalezienia przekazanej w parametrze warstwy \begin{DoxyReturn}{Returns}
+zwraca warstwie kafelków 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_load_map_a21f5bf47590f84c73e4850a20acad787}\label{class_load_map_a21f5bf47590f84c73e4850a20acad787}} 
 \index{LoadMap@{LoadMap}!getDamageLayer@{getDamageLayer}}
 \index{getDamageLayer@{getDamageLayer}!LoadMap@{LoadMap}}
 \doxysubsubsection{\texorpdfstring{getDamageLayer()}{getDamageLayer()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_layer}{Layer}} Load\+Map\+::get\+Damage\+Layer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia. 
-
+Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia \begin{DoxyReturn}{Returns}
+zwraca warstwie, która reprezentuje hitboxy dla obiektów zadających obrażenia 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_load_map_a1c887ad2112bf7d749d0254309c1ab73}\label{class_load_map_a1c887ad2112bf7d749d0254309c1ab73}} 
 \index{LoadMap@{LoadMap}!getSolidLayer@{getSolidLayer}}
 \index{getSolidLayer@{getSolidLayer}!LoadMap@{LoadMap}}
 \doxysubsubsection{\texorpdfstring{getSolidLayer()}{getSolidLayer()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_layer}{Layer}} Load\+Map\+::get\+Solid\+Layer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla terenu. 
-
+Metoda klasy \mbox{\hyperlink{class_layer}{Layer}} która zwraca warstwe hitboxow dla terenu \begin{DoxyReturn}{Returns}
+zwraca warstwe, która reprezentuje hitboxy terenu 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_load_map_ae3d1eb7e8e3f5748430e1189d72a3849}\label{class_load_map_ae3d1eb7e8e3f5748430e1189d72a3849}} 
 \index{LoadMap@{LoadMap}!readFile@{readFile}}
 \index{readFile@{readFile}!LoadMap@{LoadMap}}
 \doxysubsubsection{\texorpdfstring{readFile()}{readFile()}}
 {\footnotesize\ttfamily std\+::ifstream Load\+Map\+::read\+File (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})}
 
+Metoda która słuzy do wczytywania danych z pliku \begin{DoxyReturn}{Returns}
+zwraca tekst wczytany z pliku 
+\end{DoxyReturn}
 
 
-Metoda która słuzy do wczytywania danych z pliku. 
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_load_map_a53959655400892dc7ea5249e5e5114f8}\label{class_load_map_a53959655400892dc7ea5249e5e5114f8}} 
+\index{LoadMap@{LoadMap}!bg@{bg}}
+\index{bg@{bg}!LoadMap@{LoadMap}}
+\doxysubsubsection{\texorpdfstring{bg}{bg}}
+{\footnotesize\ttfamily sf\+::\+Texture Load\+Map\+::bg\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Zmienna która przechowuje teksturę dla tła. 
+
+\mbox{\Hypertarget{class_load_map_a91692f7e88c0262bb8e33c4c47b51cc4}\label{class_load_map_a91692f7e88c0262bb8e33c4c47b51cc4}} 
+\index{LoadMap@{LoadMap}!bgSpr@{bgSpr}}
+\index{bgSpr@{bgSpr}!LoadMap@{LoadMap}}
+\doxysubsubsection{\texorpdfstring{bgSpr}{bgSpr}}
+{\footnotesize\ttfamily sf\+::\+Sprite Load\+Map\+::bg\+Spr\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Zmienna która służy do przeniesienia tekstury tła na ekran. 
+
+\mbox{\Hypertarget{class_load_map_ad30ea2f20fde1331c978b4f85301c34c}\label{class_load_map_ad30ea2f20fde1331c978b4f85301c34c}} 
+\index{LoadMap@{LoadMap}!damageLayer@{damageLayer}}
+\index{damageLayer@{damageLayer}!LoadMap@{LoadMap}}
+\doxysubsubsection{\texorpdfstring{damageLayer}{damageLayer}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_layer}{Layer}} Load\+Map\+::damage\+Layer\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia. 
+
+\mbox{\Hypertarget{class_load_map_a0d53f21ac37c0c7b9911a491bd13e3c8}\label{class_load_map_a0d53f21ac37c0c7b9911a491bd13e3c8}} 
+\index{LoadMap@{LoadMap}!solidLayer@{solidLayer}}
+\index{solidLayer@{solidLayer}!LoadMap@{LoadMap}}
+\doxysubsubsection{\texorpdfstring{solidLayer}{solidLayer}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_layer}{Layer}} Load\+Map\+::solid\+Layer\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Obiekt warstwy gry który przechowuje hitboxy dla terenu. 
+
+\mbox{\Hypertarget{class_load_map_afee37ee6c7a216eda99611d06658808d}\label{class_load_map_afee37ee6c7a216eda99611d06658808d}} 
+\index{LoadMap@{LoadMap}!tilemap\_render@{tilemap\_render}}
+\index{tilemap\_render@{tilemap\_render}!LoadMap@{LoadMap}}
+\doxysubsubsection{\texorpdfstring{tilemap\_render}{tilemap\_render}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{class_tile_map}{Tile\+Map}}$>$ Load\+Map\+::tilemap\+\_\+render\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Vector który przechowuje wszystkie elementy mapy do wyrenderowania. 
 
 
 

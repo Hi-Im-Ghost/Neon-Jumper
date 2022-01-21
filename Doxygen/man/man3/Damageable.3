@@ -1,4 +1,4 @@
-.TH "Damageable" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Damageable" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,31 +16,24 @@ Inherited by \fBEnemy\fP, and \fBPlayer\fP\&.
 .ti -1c
 .RI "void \fBtakeDamage\fP (int damage)"
 .br
-.RI "Powoduje odjęcie punktów życia o wartość damage\&. "
 .ti -1c
-.RI "void \fBsetMaxHP\fP (unsigned newMax)"
+.RI "void \fBsetMaxHP\fP (int newMax)"
 .br
-.RI "Ustawia ilość maksymalnych punktów życia\&. "
 .ti -1c
 .RI "int \fBgetMaxHP\fP () const"
 .br
-.RI "Pozwala uzyskać ilość maksymalnych punktów życia\&. "
 .ti -1c
-.RI "void \fBsetHP\fP (unsigned newHP)"
+.RI "void \fBsetHP\fP (int newHP)"
 .br
-.RI "Ustawia ilość punktów życia\&. "
 .ti -1c
 .RI "int \fBgetHP\fP () const"
 .br
-.RI "Pozwala uzyskać aktualną ilość punktów życia\&. "
 .ti -1c
 .RI "bool \fBgetIsInvincible\fP () const"
 .br
-.RI "Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń "
 .ti -1c
-.RI "bool \fBisDead\fP ()"
+.RI "bool \fBisDead\fP () const"
 .br
-.RI "Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0\&. "
 .in -1c
 .SS "Protected Member Functions"
 
@@ -48,42 +41,128 @@ Inherited by \fBEnemy\fP, and \fBPlayer\fP\&.
 .ti -1c
 .RI "void \fBupdateInvincibilityTimer\fP (float deltaTime)"
 .br
-.RI "Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia\&. "
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "float \fBdefaultInvincibilityTime\fP = 1\&.0f"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBhp\fP = 3"
+.br
+.RI "Aktualna ilość punktów życia obiektu\&. "
+.ti -1c
+.RI "int \fBmaxHP\fP = 3"
+.br
+.RI "Maksymalna ilość punktów życia obiektu\&. "
+.ti -1c
+.RI "bool \fB_bIsInvincible\fP = false"
+.br
+.RI "Określa, czy obiekt może przyjąć obrażenia\&. "
+.ti -1c
+.RI "float \fBinvTime\fP = 1\&.0f"
+.br
+.RI "Częstotliwość z jaką możliwe jest otrzymywanie obrażeń "
 .in -1c
 .SH "Member Function Documentation"
 .PP 
 .SS "int Damageable::getHP () const"
-
+Pozwala uzyskać aktualną ilość punktów życia 
 .PP
-Pozwala uzyskać aktualną ilość punktów życia\&. 
+\fBReturns\fP
+.RS 4
+obecna wartość punktów życia 
+.RE
+.PP
+
 .SS "bool Damageable::getIsInvincible () const\fC [inline]\fP"
-
-.PP
 Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń 
+.PP
+\fBReturns\fP
+.RS 4
+wartość bool określająca, czy gracz jest nieśmiertelny 
+.RE
+.PP
+
 .SS "int Damageable::getMaxHP () const"
-
+Pozwala uzyskać ilość maksymalnych punktów życia 
 .PP
-Pozwala uzyskać ilość maksymalnych punktów życia\&. 
-.SS "bool Damageable::isDead ()"
-
+\fBReturns\fP
+.RS 4
+obecna ilość maksymalnych punktów życia 
+.RE
 .PP
-Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0\&. 
-.SS "void Damageable::setHP (unsigned newHP)"
 
+.SS "bool Damageable::isDead () const"
+Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0 
 .PP
-Ustawia ilość punktów życia\&. 
-.SS "void Damageable::setMaxHP (unsigned newMax)"
+\fBReturns\fP
+.RS 4
+wartość bool określająca, czy punkty życia gracza zeszły do zera 
+.RE
+.PP
 
+.SS "void Damageable::setHP (int newHP)"
+Ustawia ilość punktów życia 
 .PP
-Ustawia ilość maksymalnych punktów życia\&. 
+\fBParameters\fP
+.RS 4
+\fInewHP\fP nowa wartość punktów życia 
+.RE
+.PP
+
+.SS "void Damageable::setMaxHP (int newMax)"
+Ustawia ilość maksymalnych punktów życia 
+.PP
+\fBParameters\fP
+.RS 4
+\fInewMax\fP nowa wartość maksymalna punktów życia 
+.RE
+.PP
+
 .SS "void Damageable::takeDamage (int damage)"
-
+Powoduje odjęcie punktów życia o wartość damage 
 .PP
-Powoduje odjęcie punktów życia o wartość damage\&. 
+\fBParameters\fP
+.RS 4
+\fIdamage\fP wartość obrażeń do zadania 
+.RE
+.PP
+
 .SS "void Damageable::updateInvincibilityTimer (float deltaTime)\fC [protected]\fP"
+Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "bool Damageable::_bIsInvincible = false\fC [private]\fP"
 
 .PP
-Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia\&. 
+Określa, czy obiekt może przyjąć obrażenia\&. 
+.SS "float Damageable::defaultInvincibilityTime = 1\&.0f\fC [protected]\fP"
+Częstotliwość z jaką możliwe jest otrzymywanie obrażeń\&. W przeciwieństwie do invTime ta zmienna nie zmienia się w trakcie działania programu i jest punktem powrotu invTime do wartości początkowej\&. 
+.SS "int Damageable::hp = 3\fC [private]\fP"
+
+.PP
+Aktualna ilość punktów życia obiektu\&. 
+.SS "float Damageable::invTime = 1\&.0f\fC [private]\fP"
+
+.PP
+Częstotliwość z jaką możliwe jest otrzymywanie obrażeń 
+.SS "int Damageable::maxHP = 3\fC [private]\fP"
+
+.PP
+Maksymalna ilość punktów życia obiektu\&. 
 
 .SH "Author"
 .PP 

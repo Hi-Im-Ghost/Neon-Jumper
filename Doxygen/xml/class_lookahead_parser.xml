@@ -270,7 +270,11 @@
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="17">
+      <node id="19">
+        <label>CrtAllocator</label>
+        <link refid="class_crt_allocator"/>
+      </node>
+      <node id="21">
         <label>GenericInsituStringStream&lt; UTF8&lt; char &gt; &gt;</label>
         <link refid="struct_generic_insitu_string_stream"/>
       </node>
@@ -285,6 +289,15 @@
       <node id="16">
         <label>GenericReader&lt; UTF8&lt; char &gt;, UTF8&lt; char &gt;, CrtAllocator &gt;</label>
         <link refid="class_generic_reader"/>
+        <childnode refid="17" relation="usage">
+          <edgelabel>kDefaultStackCapacity</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>stack_</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>parseResult_</edgelabel>
+        </childnode>
       </node>
       <node id="14">
         <label>GenericValue&lt; Encoding, Allocator &gt;</label>
@@ -388,9 +401,30 @@
         <childnode refid="16" relation="usage">
           <edgelabel>r_</edgelabel>
         </childnode>
-        <childnode refid="17" relation="usage">
+        <childnode refid="21" relation="usage">
           <edgelabel>ss_</edgelabel>
         </childnode>
+      </node>
+      <node id="20">
+        <label>ParseResult</label>
+        <link refid="struct_parse_result"/>
+        <childnode refid="17" relation="usage">
+          <edgelabel>offset_</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>internal::Stack&lt; CrtAllocator &gt;</label>
+        <link refid="classinternal_1_1_stack"/>
+        <childnode refid="19" relation="usage">
+          <edgelabel>allocator_</edgelabel>
+          <edgelabel>ownAllocator_</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>initialCapacity_</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>size_t</label>
       </node>
     </collaborationgraph>
     <location file="src/rapidjson/example/lookaheadparser/lookaheadparser.cpp" line="101" column="1" bodyfile="src/rapidjson/example/lookaheadparser/lookaheadparser.cpp" bodystart="101" bodyend="125"/>

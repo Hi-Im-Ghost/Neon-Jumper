@@ -1,4 +1,4 @@
-.TH "GenericDocument< Encoding, Allocator, StackAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericDocument< Encoding, Allocator, StackAllocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,13 @@ GenericDocument< Encoding, Allocator, StackAllocator > \- A document for parsing
 \fC#include <document\&.h>\fP
 .PP
 Inherits \fBGenericValue< Encoding, RAPIDJSON_DEFAULT_ALLOCATOR >\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBClearStackOnExit\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -31,11 +38,11 @@ Inherits \fBGenericValue< Encoding, RAPIDJSON_DEFAULT_ALLOCATOR >\fP\&.
 
 .in +1c
 .ti -1c
-.RI "\fBGenericDocument\fP (\fBType\fP type, \fBAllocator\fP *allocator=0, size_t stackCapacity=kDefaultStackCapacity, StackAllocator *stackAllocator=0)"
+.RI "\fBGenericDocument\fP (\fBType\fP type, \fBAllocator\fP *allocator=0, size_t stackCapacity=\fBkDefaultStackCapacity\fP, StackAllocator *stackAllocator=0)"
 .br
 .RI "Constructor\&. "
 .ti -1c
-.RI "\fBGenericDocument\fP (\fBAllocator\fP *allocator=0, size_t stackCapacity=kDefaultStackCapacity, StackAllocator *stackAllocator=0)"
+.RI "\fBGenericDocument\fP (\fBAllocator\fP *allocator=0, size_t stackCapacity=\fBkDefaultStackCapacity\fP, StackAllocator *stackAllocator=0)"
 .br
 .RI "Constructor\&. "
 .ti -1c
@@ -189,6 +196,47 @@ Inherits \fBGenericValue< Encoding, RAPIDJSON_DEFAULT_ALLOCATOR >\fP\&.
 .RI "Implicit conversion to get the last parse result\&. "
 .in -1c
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericDocument\fP (const \fBGenericDocument\fP &)"
+.br
+.RI "Prohibit copying\&. "
+.ti -1c
+.RI "\fBGenericDocument\fP & \fBoperator=\fP (const \fBGenericDocument\fP &)"
+.br
+.RI "Prohibit assignment\&. "
+.ti -1c
+.RI "void \fBClearStack\fP ()"
+.br
+.ti -1c
+.RI "void \fBDestroy\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.ti -1c
+.RI "\fBinternal::Stack\fP< StackAllocator > \fBstack_\fP"
+.br
+.ti -1c
+.RI "\fBParseResult\fP \fBparseResult_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkDefaultStackCapacity\fP = 1024"
+.br
+.in -1c
 .SS "Friends"
 
 .in +1c
@@ -246,7 +294,7 @@ Character type derived from Encoding\&.
 Value type of the document\&. 
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBType\fP type, \fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fCkDefaultStackCapacity\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBType\fP type, \fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fC\fBkDefaultStackCapacity\fP\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
 
 .PP
 Constructor\&. Creates an empty document of specified type\&. 
@@ -263,7 +311,7 @@ Constructor\&. Creates an empty document of specified type\&.
 .RE
 .PP
 
-.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fCkDefaultStackCapacity\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP"
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (\fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fC\fBkDefaultStackCapacity\fP\fP, StackAllocator * stackAllocator = \fC0\fP)\fC [inline]\fP"
 
 .PP
 Constructor\&. Creates an empty document which type is Null\&. 
@@ -280,9 +328,17 @@ Constructor\&. Creates an empty document which type is Null\&.
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::~\fBGenericDocument\fP ()\fC [inline]\fP"
 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >\fB::GenericDocument\fP (const \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator > &)\fC [private]\fP"
+
+.PP
+Prohibit copying\&. 
 .SH "Member Function Documentation"
 .PP 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Bool (bool b)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> void \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ClearStack ()\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> void \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Destroy ()\fC [inline]\fP, \fC [private]\fP"
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> bool \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Double (double d)\fC [inline]\fP"
 
@@ -337,6 +393,10 @@ if (!ok)
 .fi
 .PP
  
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::operator= (const \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator > &)\fC [private]\fP"
+
+.PP
+Prohibit assignment\&. 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> template<unsigned parseFlags> \fBGenericDocument\fP & \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::Parse (const \fBCh\fP * str)\fC [inline]\fP"
 
 .PP
@@ -573,6 +633,18 @@ void swap(MyClass& a, MyClass& b) {
 \fBSwap()\fP 
 .RE
 .PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBAllocator\fP* \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::allocator_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> const size_t \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::kDefaultStackCapacity = 1024\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBAllocator\fP* \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::ownAllocator_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBParseResult\fP \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::parseResult_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = RAPIDJSON_DEFAULT_ALLOCATOR, typename StackAllocator  = RAPIDJSON_DEFAULT_STACK_ALLOCATOR> \fBinternal::Stack\fP<StackAllocator> \fBGenericDocument\fP< \fBEncoding\fP, \fBAllocator\fP, StackAllocator >::stack_\fC [private]\fP"
 
 
 .SH "Author"

@@ -20,5 +20,6 @@ var searchData=
   ['basicostreamwrapper_17',['BasicOStreamWrapper',['../class_basic_o_stream_wrapper.html',1,'']]],
   ['biginteger_18',['BigInteger',['../classinternal_1_1_big_integer.html',1,'internal']]],
   ['box_19',['Box',['../class_box.html',1,'']]],
-  ['button_20',['Button',['../class_button.html',1,'']]]
+  ['bullet_20',['Bullet',['../class_bullet.html',1,'']]],
+  ['button_21',['Button',['../class_button.html',1,'']]]
 ];

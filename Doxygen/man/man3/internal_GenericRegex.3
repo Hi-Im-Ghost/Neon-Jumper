@@ -1,4 +1,4 @@
-.TH "internal::GenericRegex< Encoding, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::GenericRegex< Encoding, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,19 @@ internal::GenericRegex< Encoding, Allocator > \- Regular expression engine with 
 .PP
 .PP
 \fC#include <regex\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFrag\fP"
+.br
+.ti -1c
+.RI "struct \fBRange\fP"
+.br
+.ti -1c
+.RI "struct \fBState\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -30,6 +43,123 @@ internal::GenericRegex< Encoding, Allocator > \- Regular expression engine with 
 .br
 .ti -1c
 .RI "bool \fBIsValid\fP () const"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBOperator\fP { \fBkZeroOrOne\fP, \fBkZeroOrMore\fP, \fBkOneOrMore\fP, \fBkConcatenation\fP, \fBkAlternation\fP, \fBkLeftParenthesis\fP }"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBState\fP & \fBGetState\fP (\fBSizeType\fP index)"
+.br
+.ti -1c
+.RI "const \fBState\fP & \fBGetState\fP (\fBSizeType\fP index) const"
+.br
+.ti -1c
+.RI "\fBRange\fP & \fBGetRange\fP (\fBSizeType\fP index)"
+.br
+.ti -1c
+.RI "const \fBRange\fP & \fBGetRange\fP (\fBSizeType\fP index) const"
+.br
+.ti -1c
+.RI "template<typename InputStream > void \fBParse\fP (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > &ds)"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBNewState\fP (\fBSizeType\fP out, \fBSizeType\fP out1, unsigned codepoint)"
+.br
+.ti -1c
+.RI "void \fBPushOperand\fP (\fBStack\fP< \fBAllocator\fP > &operandStack, unsigned codepoint)"
+.br
+.ti -1c
+.RI "void \fBImplicitConcatenation\fP (\fBStack\fP< \fBAllocator\fP > &atomCountStack, \fBStack\fP< \fBAllocator\fP > &operatorStack)"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBAppend\fP (\fBSizeType\fP l1, \fBSizeType\fP l2)"
+.br
+.ti -1c
+.RI "void \fBPatch\fP (\fBSizeType\fP l, \fBSizeType\fP s)"
+.br
+.ti -1c
+.RI "bool \fBEval\fP (\fBStack\fP< \fBAllocator\fP > &operandStack, \fBOperator\fP op)"
+.br
+.ti -1c
+.RI "bool \fBEvalQuantifier\fP (\fBStack\fP< \fBAllocator\fP > &operandStack, unsigned n, unsigned m)"
+.br
+.ti -1c
+.RI "void \fBCloneTopOperand\fP (\fBStack\fP< \fBAllocator\fP > &operandStack)"
+.br
+.ti -1c
+.RI "template<typename InputStream > bool \fBParseUnsigned\fP (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > &ds, unsigned *u)"
+.br
+.ti -1c
+.RI "template<typename InputStream > bool \fBParseRange\fP (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > &ds, \fBSizeType\fP *range)"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBNewRange\fP (unsigned codepoint)"
+.br
+.ti -1c
+.RI "template<typename InputStream > bool \fBCharacterEscape\fP (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > &ds, unsigned *escapedCodepoint)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBSizeType\fP \fBMin\fP (\fBSizeType\fP \fBa\fP, \fBSizeType\fP b)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBStack\fP< \fBAllocator\fP > \fBstates_\fP"
+.br
+.ti -1c
+.RI "\fBStack\fP< \fBAllocator\fP > \fBranges_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBroot_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBstateCount_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBrangeCount_\fP"
+.br
+.ti -1c
+.RI "bool \fBanchorBegin_\fP"
+.br
+.ti -1c
+.RI "bool \fBanchorEnd_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const unsigned \fBkAnyCharacterClass\fP = 0xFFFFFFFF"
+.br
+.RI "For '\&.'\&. "
+.ti -1c
+.RI "static const unsigned \fBkRangeCharacterClass\fP = 0xFFFFFFFE"
+.br
+.ti -1c
+.RI "static const unsigned \fBkRangeNegationFlag\fP = 0x80000000"
+.br
+.ti -1c
+.RI "static const unsigned \fBkInfinityQuantifier\fP = ~0u"
 .br
 .in -1c
 .SS "Friends"
@@ -109,6 +239,25 @@ This is a Thompson NFA engine, implemented with reference to Cox, Russ\&. 'Regul
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> typedef \fBEncoding\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::EncodingType"
 
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> enum \fBinternal::GenericRegex::Operator\fP\fC [private]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkZeroOrOne \fP\fP
+.TP
+\fB\fIkZeroOrMore \fP\fP
+.TP
+\fB\fIkOneOrMore \fP\fP
+.TP
+\fB\fIkConcatenation \fP\fP
+.TP
+\fB\fIkAlternation \fP\fP
+.TP
+\fB\fIkLeftParenthesis \fP\fP
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::GenericRegex (const \fBCh\fP * source, \fBAllocator\fP * allocator = \fC0\fP)\fC [inline]\fP"
@@ -117,11 +266,77 @@ This is a Thompson NFA engine, implemented with reference to Cox, Russ\&. 'Regul
 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::Append (\fBSizeType\fP l1, \fBSizeType\fP l2)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::CharacterEscape (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > & ds, unsigned * escapedCodepoint)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::CloneTopOperand (\fBStack\fP< \fBAllocator\fP > & operandStack)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::Eval (\fBStack\fP< \fBAllocator\fP > & operandStack, \fBOperator\fP op)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::EvalQuantifier (\fBStack\fP< \fBAllocator\fP > & operandStack, unsigned n, unsigned m)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBRange\fP & \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::GetRange (\fBSizeType\fP index)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const \fBRange\fP & \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::GetRange (\fBSizeType\fP index) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBState\fP & \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::GetState (\fBSizeType\fP index)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const \fBState\fP & \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::GetState (\fBSizeType\fP index) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::ImplicitConcatenation (\fBStack\fP< \fBAllocator\fP > & atomCountStack, \fBStack\fP< \fBAllocator\fP > & operatorStack)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::IsValid () const\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> static \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::Min (\fBSizeType\fP a, \fBSizeType\fP b)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::NewRange (unsigned codepoint)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::NewState (\fBSizeType\fP out, \fBSizeType\fP out1, unsigned codepoint)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > void \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::Parse (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > & ds)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::ParseRange (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > & ds, \fBSizeType\fP * range)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename InputStream > bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::ParseUnsigned (\fBDecodedStream\fP< InputStream, \fBEncoding\fP > & ds, unsigned * u)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::Patch (\fBSizeType\fP l, \fBSizeType\fP s)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::PushOperand (\fBStack\fP< \fBAllocator\fP > & operandStack, unsigned codepoint)\fC [inline]\fP, \fC [private]\fP"
 
 .SH "Friends And Related Function Documentation"
 .PP 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename , typename > friend class \fBGenericRegexSearch\fP\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::allocator_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::anchorBegin_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> bool \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::anchorEnd_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const unsigned \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::kAnyCharacterClass = 0xFFFFFFFF\fC [static]\fP, \fC [private]\fP"
+
+.PP
+For '\&.'\&. 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const unsigned \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::kInfinityQuantifier = ~0u\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const unsigned \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::kRangeCharacterClass = 0xFFFFFFFE\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> const unsigned \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::kRangeNegationFlag = 0x80000000\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::ownAllocator_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::rangeCount_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBStack\fP<\fBAllocator\fP> \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::ranges_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::root_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBSizeType\fP \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::stateCount_\fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP  = CrtAllocator> \fBStack\fP<\fBAllocator\fP> \fBinternal::GenericRegex\fP< \fBEncoding\fP, \fBAllocator\fP >::states_\fC [private]\fP"
 
 
 .SH "Author"

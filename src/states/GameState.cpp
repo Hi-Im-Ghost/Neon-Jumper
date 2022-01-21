@@ -26,11 +26,20 @@ void GameState::updateVirtualCursor() {
 
 void GameState::initSoundMenu() {
     buf.loadFromFile("../resources/music/click.wav");
+    bufOh.loadFromFile("../resources/music/oh.wav");
     bufdeath.loadFromFile("../resources/music/death.wav");
+    bufHit.loadFromFile("../resources/music/hit.wav");
+    bufCheat.loadFromFile("../resources/music/cheat.wav");
     clickMenu.setBuffer(buf);
     clickMenu.setVolume(20);
     deathGame.setBuffer(bufdeath);
     deathGame.setVolume(30);
+    hitGame.setBuffer(bufHit);
+    hitGame.setVolume(60);
+    ohGame.setBuffer(bufOh);
+    ohGame.setVolume(50);
+    cheatGame.setBuffer(bufCheat);
+    cheatGame.setVolume(50);
 }
 
 void GameState::initMusicMenu() {
@@ -75,7 +84,12 @@ void GameState::initTextPlay() {
     sf::Color color(21, 235, 53);
     this->nameTextPlay.setFillColor(color);
     nameTextPlay.setCharacterSize(20);
-    this->nameTextPlay.setString("A-D - PORUSZANIE \n\n SPACE - SKOK \n\n ENTER - UMIEJETNOSC \n\n ESC - PAUZA");
+    this->nameTextPlay.setString("A-D - PORUSZANIE \n\n W - SKOK \n\n SPACE - STRZELANIE \n\n ENTER - UMIEJETNOSC \n\n ESC - PAUZA");
 
     this->nameTextPlay.setPosition(300 - nameTextPlay.getGlobalBounds().width/2, 100);
+}
+bool GameState::menuLoad = false;
+
+void GameState::setLoadMenu(bool val) {
+    GameState::menuLoad=val;
 }

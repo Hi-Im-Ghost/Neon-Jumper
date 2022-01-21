@@ -14,6 +14,15 @@ LevelOneState::LevelOneState(std::stack<GameState*>* states)
     initTextPlay();
     initTextPause();
     musicGame.play();
+    if(GameState::getLoadMenu()){
+        loadGame();
+        unpause();
+        GameState::setLoadMenu(false);
+        if(checkLevel==1){
+            musicGame.stop();
+        }else
+            musicGame.play();
+    }
 }
 
 void LevelOneState::initValues() {
@@ -62,7 +71,7 @@ void LevelOneState::render(sf::RenderTarget &window) {
         window.draw(endLevelTrigger);
     }
 
-    if (bPaused)
+    if(bPaused)
         renderPaused(window);
 
     if(bEndGame){
@@ -107,13 +116,24 @@ void LevelOneState::updateInput() {
 
         // Get player location
         std::cout << "L1: " << player->getPosition().x << ", " << player->getPosition().y << "\n";
-
         // Cheat go to level 2
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+            cheatGame.play();
             bnextLevel = true;
+            if(bnextLevel){
+                checkLevel = 1;
+            }
+            else {
+                checkLevel = 0;
+            }
+            std::cout << "Next Level!\n";
+            musicGame.stop();
+        }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
             player->takeDamage(1);
+            deathGame.play();
+        }
     }
     else
         renderHitboxes = false;
@@ -417,6 +437,7 @@ void LevelOneState::updateEntities(float dt) {
         e->update(dt);
         // check collision with projectiles
         if (player->checkIsProjectileColliding(e->getHitbox())) {
+            hitGame.play();
             e->takeDamage(1);
             break;
         }

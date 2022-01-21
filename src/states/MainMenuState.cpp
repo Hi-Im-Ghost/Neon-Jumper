@@ -5,7 +5,6 @@ MainMenuState::MainMenuState(std::stack<GameState *> *states) : GameState(states
     initButtons();
     initVirtualCursor();
     initText();
-
     musicMenu.play();
 }
 
@@ -16,7 +15,8 @@ void MainMenuState::initBackground() {
 
 void MainMenuState::initButtons() {
     buttons["START"] = new Button("Graj", 960, 480, 200, 100);
-    buttons["EXIT"] = new Button("Wyjdz", 960, 600, 200, 100);
+    buttons["WCZYTAJ"] = new Button("Wczytaj", 960, 600, 200, 100);
+    buttons["EXIT"] = new Button("Wyjdz", 960, 720, 200, 100);
 }
 
 void MainMenuState::updateButtons() {
@@ -27,6 +27,16 @@ void MainMenuState::updateButtons() {
             clickMenu.play();
             musicMenu.stop();
             states->push(new LevelOneState(states));
+        }
+    }else if(buttons["WCZYTAJ"]->intersects(virtualCursor)){
+        {
+            // LOAD
+            if(!sf::Mouse::isButtonPressed(sf::Mouse::Left) && buttons["WCZYTAJ"]->getState() == Button::ACTIVE) {
+                GameState::setLoadMenu(true);
+                clickMenu.play();
+                musicMenu.stop();
+                states->push(new LevelOneState(states));
+            }
         }
     }
     else if (buttons["EXIT"]->intersects(virtualCursor))
@@ -73,4 +83,3 @@ void MainMenuState::initText() {
 
     this->gamenameText.setPosition(960 - gamenameText.getGlobalBounds().width/2, 300);
 }
-

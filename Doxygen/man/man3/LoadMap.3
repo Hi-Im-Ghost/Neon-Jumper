@@ -1,4 +1,4 @@
-.TH "LoadMap" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "LoadMap" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,56 +14,126 @@ LoadMap
 .ti -1c
 .RI "\fBLoadMap\fP (std::string mapFileName)"
 .br
-.RI "Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy\&. "
 .ti -1c
 .RI "std::ifstream \fBreadFile\fP (std::string)"
 .br
-.RI "Metoda która słuzy do wczytywania danych z pliku\&. "
 .ti -1c
 .RI "\fBTileSet\fP \fBfindTileSet\fP (\fBLayer\fP &, std::vector< \fBTileSet\fP > &)"
 .br
-.RI "Metoda która służy do znalezienia przekazanej w parametrze warstwy\&. "
 .ti -1c
 .RI "\fBLayer\fP \fBgetSolidLayer\fP ()"
 .br
-.RI "Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla terenu\&. "
 .ti -1c
 .RI "\fBLayer\fP \fBgetDamageLayer\fP ()"
 .br
-.RI "Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia\&. "
 .ti -1c
 .RI "void \fBdraw\fP (sf::RenderTarget &window)"
 .br
-.RI "Służy do wyświetlania na ekranie warstw\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::Texture \fBbg\fP"
+.br
+.RI "Zmienna która przechowuje teksturę dla tła\&. "
+.ti -1c
+.RI "sf::Sprite \fBbgSpr\fP"
+.br
+.RI "Zmienna która służy do przeniesienia tekstury tła na ekran\&. "
+.ti -1c
+.RI "std::vector< \fBTileMap\fP > \fBtilemap_render\fP"
+.br
+.RI "Vector który przechowuje wszystkie elementy mapy do wyrenderowania\&. "
+.ti -1c
+.RI "\fBLayer\fP \fBsolidLayer\fP"
+.br
+.RI "Obiekt warstwy gry który przechowuje hitboxy dla terenu\&. "
+.ti -1c
+.RI "\fBLayer\fP \fBdamageLayer\fP"
+.br
+.RI "Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia\&. "
 .in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "LoadMap::LoadMap (std::string mapFileName)"
-
+Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy 
 .PP
-Konstruktor, który przyjmuje nazwę pliku json w którym to znajdują się elementy mapy\&. 
+\fBParameters\fP
+.RS 4
+\fImapFileName\fP - nazwa pliku json w której to znajdują się elementy mapy 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
 .SS "void LoadMap::draw (sf::RenderTarget & window)"
-
+Służy do wyświetlania na ekranie warstw 
 .PP
-Służy do wyświetlania na ekranie warstw\&. 
+\fBParameters\fP
+.RS 4
+\fIwindow\fP - okno na którym elementy mają być wyświetlane 
+.RE
+.PP
+
 .SS "\fBTileSet\fP LoadMap::findTileSet (\fBLayer\fP & layer, std::vector< \fBTileSet\fP > & tilesets)"
-
+Metoda która służy do znalezienia przekazanej w parametrze warstwy 
 .PP
-Metoda która służy do znalezienia przekazanej w parametrze warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca warstwie kafelków 
+.RE
+.PP
+
 .SS "\fBLayer\fP LoadMap::getDamageLayer ()"
-
+Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia 
 .PP
-Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla obiektow ktore zadaja obrazenia\&. 
+\fBReturns\fP
+.RS 4
+zwraca warstwie, która reprezentuje hitboxy dla obiektów zadających obrażenia 
+.RE
+.PP
+
 .SS "\fBLayer\fP LoadMap::getSolidLayer ()"
-
+Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla terenu 
 .PP
-Metoda klasy \fBLayer\fP która zwraca warstwe hitboxow dla terenu\&. 
+\fBReturns\fP
+.RS 4
+zwraca warstwe, która reprezentuje hitboxy terenu 
+.RE
+.PP
+
 .SS "std::ifstream LoadMap::readFile (std::string path)"
+Metoda która słuzy do wczytywania danych z pliku 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca tekst wczytany z pliku 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "sf::Texture LoadMap::bg\fC [private]\fP"
 
 .PP
-Metoda która słuzy do wczytywania danych z pliku\&. 
+Zmienna która przechowuje teksturę dla tła\&. 
+.SS "sf::Sprite LoadMap::bgSpr\fC [private]\fP"
+
+.PP
+Zmienna która służy do przeniesienia tekstury tła na ekran\&. 
+.SS "\fBLayer\fP LoadMap::damageLayer\fC [private]\fP"
+
+.PP
+Obiekt warstawy gry który przechowuje hitboxy dla obiektów które zadają obrażenia\&. 
+.SS "\fBLayer\fP LoadMap::solidLayer\fC [private]\fP"
+
+.PP
+Obiekt warstwy gry który przechowuje hitboxy dla terenu\&. 
+.SS "std::vector<\fBTileMap\fP> LoadMap::tilemap_render\fC [private]\fP"
+
+.PP
+Vector który przechowuje wszystkie elementy mapy do wyrenderowania\&. 
 
 .SH "Author"
 .PP 

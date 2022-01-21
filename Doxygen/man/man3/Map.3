@@ -1,4 +1,4 @@
-.TH "Map" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Map" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,7 +14,6 @@ Map
 .ti -1c
 .RI "\fBMap\fP (std::string mapa)"
 .br
-.RI "Konstruktor który parsuje przekazana w parametrze mape\&. "
 .ti -1c
 .RI "\fB~Map\fP ()"
 .br
@@ -22,66 +21,120 @@ Map
 .ti -1c
 .RI "int \fBgetHeight\fP ()"
 .br
-.RI "Zwraca wysokość "
 .ti -1c
 .RI "bool \fBisInfinite\fP ()"
 .br
-.RI "Sprawdza czy wystepuje niesokonczoność "
 .ti -1c
 .RI "std::vector< \fBLayer\fP > \fBgetLayers\fP ()"
 .br
-.RI "Zwraca poszczególne warstwy\&. "
 .ti -1c
 .RI "int \fBgetNextLayerId\fP ()"
 .br
-.RI "Zwaraca nastepne id warstwy\&. "
 .ti -1c
 .RI "int \fBgetNextObjectId\fP ()"
 .br
-.RI "Zwraca nastepny id obiektu\&. "
 .ti -1c
 .RI "std::string \fBgetOrientation\fP ()"
 .br
-.RI "Zwraca informacje o orientacji\&. "
 .ti -1c
 .RI "std::string \fBgetRenderOrder\fP ()"
 .br
-.RI "Zwraca informacje o renderowaniu\&. "
 .ti -1c
 .RI "std::string \fBgetTiledVersion\fP ()"
 .br
-.RI "Zwraca informacje o wersji\&. "
 .ti -1c
 .RI "int \fBgetTileHeight\fP ()"
 .br
-.RI "Zwraca informacje o wysokosci kafelka\&. "
 .ti -1c
 .RI "std::vector< \fBTileSetMap\fP > \fBgetTileSetMap\fP ()"
 .br
-.RI "Zwraca kafelki mapy\&. "
 .ti -1c
 .RI "int \fBgetTileWidth\fP ()"
 .br
-.RI "Zwraca szerokosc kafelka\&. "
 .ti -1c
 .RI "std::string \fBgetType\fP ()"
 .br
-.RI "Zwraca informacje o typie\&. "
 .ti -1c
 .RI "float \fBgetVersion\fP ()"
 .br
-.RI "Zwraca informacje o uzytej wersji zapisu\&. "
 .ti -1c
 .RI "int \fBgetWidth\fP ()"
 .br
-.RI "Zwraca szerokość "
 .in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBheight\fP"
+.br
+.RI "Zmienna do wysokości\&. "
+.ti -1c
+.RI "bool \fBinfinite\fP"
+.br
+.RI "Zmienna określjąca czy jest nieskończoność "
+.ti -1c
+.RI "std::vector< \fBLayer\fP > \fBlayers\fP"
+.br
+.RI "Zmienna przechowująca warstwy\&. "
+.ti -1c
+.RI "int \fBnextlayerid\fP"
+.br
+.RI "Zmienna przechowująca id następnej warstwy\&. "
+.ti -1c
+.RI "int \fBnextobjectid\fP"
+.br
+.RI "Zmienna przechowująca id nastepnego obiektu\&. "
+.ti -1c
+.RI "std::string \fBorientation\fP"
+.br
+.RI "Zmienna przechowująca informacje o orientacji na mapie\&. "
+.ti -1c
+.RI "std::string \fBrenderorder\fP"
+.br
+.RI "Zmienna przechowująca informacje o renderowaniu\&. "
+.ti -1c
+.RI "std::string \fBtiledversion\fP"
+.br
+.RI "Zmienna przechowująca informacje o wersji\&. "
+.ti -1c
+.RI "int \fBtileheight\fP"
+.br
+.RI "Zmienna przechowująca informacje o wysokości kafelka\&. "
+.ti -1c
+.RI "std::vector< \fBTileSetMap\fP > \fBtilesets\fP"
+.br
+.RI "Zmienna przechowują kafleki\&. "
+.ti -1c
+.RI "int \fBtilewidth\fP"
+.br
+.RI "Zmienna przechowujaca informacje o szerokości kafelka\&. "
+.ti -1c
+.RI "std::string \fBtype\fP"
+.br
+.RI "Zmienna przechowująca informacje o typie\&. "
+.ti -1c
+.RI "float \fBversion\fP"
+.br
+.RI "Zmienna przechowujaca informacje o wersji zapisu\&. "
+.ti -1c
+.RI "int \fBwidth\fP"
+.br
+.RI "Zmienna przechowujaca informacje o szerokosci\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+służy do pobrania informacji o mapie z pliku json 
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Map::Map (std::string mapa)"
-
+Konstruktor który parsuje przekazana w parametrze mape 
 .PP
-Konstruktor który parsuje przekazana w parametrze mape\&. 
+\fBParameters\fP
+.RS 4
+\fImapa\fP - tekst, który reprezentuje nazwe pliku w którym przechowywana jest mapa 
+.RE
+.PP
+
 .SS "Map::~Map ()\fC [default]\fP"
 
 .PP
@@ -89,61 +142,189 @@ Destruktor\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "int Map::getHeight ()\fC [inline]\fP"
-
-.PP
 Zwraca wysokość 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje wysokość mapy 
+.RE
+.PP
+
 .SS "std::vector< \fBLayer\fP > Map::getLayers ()\fC [inline]\fP"
-
+Zwraca poszczególne warstwy 
 .PP
-Zwraca poszczególne warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca kolekcje vector, która przechowuje warstwy mapy 
+.RE
+.PP
+
 .SS "int Map::getNextLayerId ()\fC [inline]\fP"
-
+Zwaraca nastepne id warstwy 
 .PP
-Zwaraca nastepne id warstwy\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe reprezentujacą id kolejnej warstwy mapy 
+.RE
+.PP
+
 .SS "int Map::getNextObjectId ()\fC [inline]\fP"
-
+Zwraca nastepny id obiektu 
 .PP
-Zwraca nastepny id obiektu\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje id kolejnego obiektu mapy 
+.RE
+.PP
+
 .SS "std::string Map::getOrientation ()\fC [inline]\fP"
-
+Zwraca informacje o orientacji mapy 
 .PP
-Zwraca informacje o orientacji\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje orientacje 
+.RE
+.PP
+
 .SS "std::string Map::getRenderOrder ()\fC [inline]\fP"
-
+Zwraca informacje o renderowaniu 
 .PP
-Zwraca informacje o renderowaniu\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który informuje o kolejności renderowania obiektów na mapie 
+.RE
+.PP
+
 .SS "std::string Map::getTiledVersion ()\fC [inline]\fP"
-
+Zwraca informacje o wersji programu użytego do tworzenia mapy 
 .PP
-Zwraca informacje o wersji\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje wersje programu 
+.RE
+.PP
+
 .SS "int Map::getTileHeight ()\fC [inline]\fP"
-
+Zwraca informacje o wysokosci kafelka 
 .PP
-Zwraca informacje o wysokosci kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje wysokość kafelka 
+.RE
+.PP
+
 .SS "std::vector< \fBTileSetMap\fP > Map::getTileSetMap ()\fC [inline]\fP"
-
+Zwraca kafelki mapy 
 .PP
-Zwraca kafelki mapy\&. 
+\fBReturns\fP
+.RS 4
+zwraca kolekcje vector, która przechowuje kafelki użyte na mapie 
+.RE
+.PP
+
 .SS "int Map::getTileWidth ()\fC [inline]\fP"
-
+Zwraca szerokosc kafelka 
 .PP
-Zwraca szerokosc kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje szerokość kafelka 
+.RE
+.PP
+
 .SS "std::string Map::getType ()\fC [inline]\fP"
-
+Zwraca informacje o typie 
 .PP
-Zwraca informacje o typie\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje informacje o typie 
+.RE
+.PP
+
 .SS "float Map::getVersion ()\fC [inline]\fP"
-
+Zwraca informacje o uzytej wersji zapisu 
 .PP
-Zwraca informacje o uzytej wersji zapisu\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę zmiennoprzecinkową, która reprezentuje wersję użytą do zapisu do pliku json 
+.RE
+.PP
+
 .SS "int Map::getWidth ()\fC [inline]\fP"
-
-.PP
 Zwraca szerokość 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje szerokość mapy 
+.RE
+.PP
+
 .SS "bool Map::isInfinite ()\fC [inline]\fP"
+Sprawdza czy wystepuje niesokonczoność 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca true jeśli mapa jest nieskończona lub false jeśli nie jest 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "int Map::height\fC [private]\fP"
 
 .PP
-Sprawdza czy wystepuje niesokonczoność 
+Zmienna do wysokości\&. 
+.SS "bool Map::infinite\fC [private]\fP"
+
+.PP
+Zmienna określjąca czy jest nieskończoność 
+.SS "std::vector<\fBLayer\fP> Map::layers\fC [private]\fP"
+
+.PP
+Zmienna przechowująca warstwy\&. 
+.SS "int Map::nextlayerid\fC [private]\fP"
+
+.PP
+Zmienna przechowująca id następnej warstwy\&. 
+.SS "int Map::nextobjectid\fC [private]\fP"
+
+.PP
+Zmienna przechowująca id nastepnego obiektu\&. 
+.SS "std::string Map::orientation\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o orientacji na mapie\&. 
+.SS "std::string Map::renderorder\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o renderowaniu\&. 
+.SS "std::string Map::tiledversion\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o wersji\&. 
+.SS "int Map::tileheight\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o wysokości kafelka\&. 
+.SS "std::vector<\fBTileSetMap\fP> Map::tilesets\fC [private]\fP"
+
+.PP
+Zmienna przechowują kafleki\&. 
+.SS "int Map::tilewidth\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca informacje o szerokości kafelka\&. 
+.SS "std::string Map::type\fC [private]\fP"
+
+.PP
+Zmienna przechowująca informacje o typie\&. 
+.SS "float Map::version\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca informacje o wersji zapisu\&. 
+.SS "int Map::width\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca informacje o szerokosci\&. 
 
 .SH "Author"
 .PP 

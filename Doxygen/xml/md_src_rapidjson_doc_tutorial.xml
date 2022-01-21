@@ -31,7 +31,7 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
-<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(<ref refid="namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee" kindref="member">json</ref>);</highlight></codeline>
 </programlisting></para>
 <para>The JSON is now parsed into <computeroutput>document</computeroutput> as a <emphasis>DOM tree</emphasis>:</para>
 <para><image type="html" name="diagram/tutorial.png" alt="DOM in the tutorial" inline="yes"></image>
@@ -40,7 +40,7 @@
 </programlisting></para>
 <para>Let&apos;s query whether a <computeroutput>&quot;hello&quot;</computeroutput> member exists in the root object. Since a <computeroutput>Value</computeroutput> can contain different types of value, we may need to verify its type and use suitable API to obtain the value. In this example, <computeroutput>&quot;hello&quot;</computeroutput> member associates with a JSON string. <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.HasMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">));</highlight></codeline>
 <codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].IsString());</highlight></codeline>
-<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].GetString());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].<ref refid="schemavalidator_8cpp_1a6d90bf6105415d941d0ee014f2aa79c0" kindref="member">GetString</ref>());</highlight></codeline>
 </programlisting></para>
 <para><programlisting><codeline><highlight class="normal">hello<sp/>=<sp/>world</highlight></codeline>
 </programlisting></para>
@@ -204,7 +204,7 @@
 </sect2>
 <sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryString">
 <title>Query String</title>
-<para>In addition to <computeroutput>GetString()</computeroutput>, the <computeroutput>Value</computeroutput> class also contains <computeroutput>GetStringLength()</computeroutput>. Here explains why:</para>
+<para>In addition to <computeroutput><ref refid="schemavalidator_8cpp_1a6d90bf6105415d941d0ee014f2aa79c0" kindref="member">GetString()</ref></computeroutput>, the <computeroutput>Value</computeroutput> class also contains <computeroutput>GetStringLength()</computeroutput>. Here explains why:</para>
 <para>According to RFC 4627, JSON strings can contain Unicode character <computeroutput>U+0000</computeroutput>, which must be escaped as <computeroutput>&quot;\u0000&quot;</computeroutput>. The problem is that, C/C++ often uses null-terminated string, which treats <computeroutput>\0</computeroutput> as the terminator symbol.</para>
 <para>To conform with RFC 4627, RapidJSON supports string containing <computeroutput>U+0000</computeroutput> character. If you need to handle this, you can use <computeroutput>GetStringLength()</computeroutput> to obtain the correct string length.</para>
 <para>For example, after parsing the following JSON to <computeroutput>Document d</computeroutput>:</para>

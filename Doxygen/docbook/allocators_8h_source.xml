@@ -73,32 +73,32 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 128 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;BaseAllocator&#32;=&#32;CrtAllocator&gt;
 129 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&#32;{
 131 
-133 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>ChunkHeader&#32;{
-134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;capacity;&#32;&#32;&#32;&#32;
-135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;size;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
-136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ChunkHeader&#32;*next;&#32;&#32;
+133 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>&#32;{
+134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ae19df98bce5dd485a23f953112ecde5f">capacity</link>;&#32;&#32;&#32;&#32;
+135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>&#32;*<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>;&#32;&#32;
 137 &#32;&#32;&#32;&#32;};
 138 
-139 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>SharedData&#32;{
-140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ChunkHeader&#32;*chunkHead;&#32;&#32;
-141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseAllocator*&#32;ownBaseAllocator;&#32;
-142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;refcount;
-143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ownBuffer;
+139 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>&#32;{
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>&#32;*<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>;&#32;&#32;
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseAllocator*&#32;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>;&#32;
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>;
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a89636640af96ac5eddb73c7377981eb9">ownBuffer</link>;
 144 &#32;&#32;&#32;&#32;};
 145 
-146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;SIZEOF_SHARED_DATA&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(<emphasis role="keyword">sizeof</emphasis>(SharedData));
-147 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;SIZEOF_CHUNK_HEADER&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(<emphasis role="keyword">sizeof</emphasis>(ChunkHeader));
+146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link>&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>));
+147 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(<emphasis role="keyword">sizeof</emphasis>(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>));
 148 
-149 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;ChunkHeader&#32;*GetChunkHead(SharedData&#32;*shared)
+149 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>&#32;*<link linkend="_class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda">GetChunkHead</link>(<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>&#32;*shared)
 150 &#32;&#32;&#32;&#32;{
-151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis>ChunkHeader*<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>*<emphasis role="keyword">&gt;</emphasis>(shared)&#32;+&#32;SIZEOF_SHARED_DATA);
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*<emphasis role="keyword">&gt;</emphasis>(<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>*<emphasis role="keyword">&gt;</emphasis>(shared)&#32;+&#32;<link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link>);
 152 &#32;&#32;&#32;&#32;}
-153 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;<link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;*GetChunkBuffer(SharedData&#32;*shared)
+153 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;<link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>&#32;*<link linkend="_class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5">GetChunkBuffer</link>(<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>&#32;*shared)
 154 &#32;&#32;&#32;&#32;{
-155 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>*<emphasis role="keyword">&gt;</emphasis>(shared-&gt;chunkHead)&#32;+&#32;SIZEOF_CHUNK_HEADER;
+155 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">reinterpret_cast&lt;</emphasis><link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link>*<emphasis role="keyword">&gt;</emphasis>(shared-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>)&#32;+&#32;<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>;
 156 &#32;&#32;&#32;&#32;}
 157 
-158 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kDefaultChunkCapacity&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga860570d04d489be08b9835d2ec58bac5">RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY</link>;&#32;
+158 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link>&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga860570d04d489be08b9835d2ec58bac5">RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY</link>;&#32;
 159 
 160 <emphasis role="keyword">public</emphasis>:
 161 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f">kNeedFree</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;&#32;&#32;&#32;&#32;
@@ -106,67 +106,67 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 163 
 165 
 168 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>
-169 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;chunkSize&#32;=&#32;kDefaultChunkCapacity,&#32;BaseAllocator*&#32;baseAllocator&#32;=&#32;0)&#32;:&#32;
-170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_(chunkSize),
-171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(baseAllocator&#32;?&#32;baseAllocator&#32;:&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(BaseAllocator)()),
-172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_(static_cast&lt;SharedData*&gt;(baseAllocator_&#32;?&#32;baseAllocator_-&gt;<link linkend="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48">Malloc</link>(SIZEOF_SHARED_DATA&#32;+&#32;SIZEOF_CHUNK_HEADER)&#32;:&#32;0))
+169 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;chunkSize&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link>,&#32;BaseAllocator*&#32;baseAllocator&#32;=&#32;0)&#32;:&#32;
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>(chunkSize),
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>(baseAllocator&#32;?&#32;baseAllocator&#32;:&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(BaseAllocator)()),
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>(static_cast&lt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>*&gt;(<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>&#32;?&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>-&gt;<link linkend="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48">Malloc</link>(<link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link>&#32;+&#32;<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>)&#32;:&#32;0))
 173 &#32;&#32;&#32;&#32;{
-174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(baseAllocator_&#32;!=&#32;0);
-175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(shared_&#32;!=&#32;0);
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>&#32;!=&#32;0);
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>&#32;!=&#32;0);
 176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(baseAllocator)&#32;{
-177 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBaseAllocator&#32;=&#32;0;
+177 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>&#32;=&#32;0;
 178 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 179 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
-180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBaseAllocator&#32;=&#32;baseAllocator_;
+180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>;
 181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-182 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead&#32;=&#32;GetChunkHead(shared_);
-183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;capacity&#32;=&#32;0;
-184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;size&#32;=&#32;0;
-185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;next&#32;=&#32;0;
-186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBuffer&#32;=&#32;<emphasis role="keyword">true</emphasis>;
-187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;refcount&#32;=&#32;1;
+182 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda">GetChunkHead</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>);
+183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ae19df98bce5dd485a23f953112ecde5f">capacity</link>&#32;=&#32;0;
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;=&#32;0;
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>&#32;=&#32;0;
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a89636640af96ac5eddb73c7377981eb9">ownBuffer</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+187 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;=&#32;1;
 188 &#32;&#32;&#32;&#32;}
 189 
 191 
-200 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf">MemoryPoolAllocator</link>(<emphasis role="keywordtype">void</emphasis>&#32;*buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;size,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;chunkSize&#32;=&#32;kDefaultChunkCapacity,&#32;BaseAllocator*&#32;baseAllocator&#32;=&#32;0)&#32;:
-201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_(chunkSize),
-202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(baseAllocator),
-203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_(static_cast&lt;SharedData*&gt;(AlignBuffer(buffer,&#32;size)))
+200 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf">MemoryPoolAllocator</link>(<emphasis role="keywordtype">void</emphasis>&#32;*buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;size,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;chunkSize&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link>,&#32;BaseAllocator*&#32;baseAllocator&#32;=&#32;0)&#32;:
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>(chunkSize),
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>(baseAllocator),
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>(static_cast&lt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>*&gt;(<link linkend="_class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842">AlignBuffer</link>(buffer,&#32;size)))
 204 &#32;&#32;&#32;&#32;{
-205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(size&#32;&gt;=&#32;SIZEOF_SHARED_DATA&#32;+&#32;SIZEOF_CHUNK_HEADER);
-206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead&#32;=&#32;GetChunkHead(shared_);
-207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;capacity&#32;=&#32;size&#32;-&#32;SIZEOF_SHARED_DATA&#32;-&#32;SIZEOF_CHUNK_HEADER;
-208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;size&#32;=&#32;0;
-209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;next&#32;=&#32;0;
-210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBaseAllocator&#32;=&#32;0;
-211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBuffer&#32;=&#32;<emphasis role="keyword">false</emphasis>;
-212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;refcount&#32;=&#32;1;
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(size&#32;&gt;=&#32;<link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link>&#32;+&#32;<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>);
+206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda">GetChunkHead</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>);
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ae19df98bce5dd485a23f953112ecde5f">capacity</link>&#32;=&#32;size&#32;-&#32;<link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link>&#32;-&#32;<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>;
+208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;=&#32;0;
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>&#32;=&#32;0;
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>&#32;=&#32;0;
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a89636640af96ac5eddb73c7377981eb9">ownBuffer</link>&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;=&#32;1;
 213 &#32;&#32;&#32;&#32;}
 214 
 215 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1afa7a6555d8a6e151148c8876c60a36c5">MemoryPoolAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_(rhs.chunk_capacity_),
-217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_),
-218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_(rhs.shared_)
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>(rhs.chunk_capacity_),
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>(rhs.baseAllocator_),
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>(rhs.shared_)
 219 &#32;&#32;&#32;&#32;{
-220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
-221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++shared_-&gt;refcount;
+220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>;
 222 &#32;&#32;&#32;&#32;}
 223 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&#32;<link linkend="_class_memory_pool_allocator_1a32812539a2d21759082f325ee78565c7">operator=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT
 224 &#32;&#32;&#32;&#32;{
 225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(rhs.shared_-&gt;refcount&#32;&gt;&#32;0);
 226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++rhs.shared_-&gt;refcount;
 227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;this-&gt;<link linkend="_class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e">~MemoryPoolAllocator</link>();
-228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_&#32;=&#32;rhs.baseAllocator_;
-229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_&#32;=&#32;rhs.chunk_capacity_;
-230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_&#32;=&#32;rhs.shared_;
+228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>&#32;=&#32;rhs.baseAllocator_;
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>&#32;=&#32;rhs.chunk_capacity_;
+230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>&#32;=&#32;rhs.shared_;
 231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 232 &#32;&#32;&#32;&#32;}
 233 
 234 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
 235 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link>(<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-236 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_(rhs.chunk_capacity_),
-237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_),
-238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_(rhs.shared_)
+236 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>(rhs.chunk_capacity_),
+237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>(rhs.baseAllocator_),
+238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>(rhs.shared_)
 239 &#32;&#32;&#32;&#32;{
 240 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(rhs.shared_-&gt;refcount&#32;&gt;&#32;0);
 241 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.shared_&#32;=&#32;0;
@@ -175,9 +175,9 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 244 &#32;&#32;&#32;&#32;{
 245 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(rhs.shared_-&gt;refcount&#32;&gt;&#32;0);
 246 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;this-&gt;<link linkend="_class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e">~MemoryPoolAllocator</link>();
-247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_&#32;=&#32;rhs.baseAllocator_;
-248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk_capacity_&#32;=&#32;rhs.chunk_capacity_;
-249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_&#32;=&#32;rhs.shared_;
+247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>&#32;=&#32;rhs.baseAllocator_;
+248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>&#32;=&#32;rhs.chunk_capacity_;
+249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>&#32;=&#32;rhs.shared_;
 250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rhs.shared_&#32;=&#32;0;
 251 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 252 &#32;&#32;&#32;&#32;}
@@ -185,71 +185,71 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 254 
 256 
 258 &#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1aff48c4c1fa43bdd3a2b406231f0eb00e">~MemoryPoolAllocator</link>()&#32;RAPIDJSON_NOEXCEPT&#32;{
-259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!shared_)&#32;{
+259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>)&#32;{
 260 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;do&#32;nothing&#32;if&#32;moved</emphasis>
 261 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 262 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(shared_-&gt;refcount&#32;&gt;&#32;1)&#32;{
-264 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;--shared_-&gt;refcount;
+263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;1)&#32;{
+264 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;--<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>;
 265 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 266 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 267 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1">Clear</link>();
-268 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseAllocator&#32;*<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;=&#32;shared_-&gt;ownBaseAllocator;
-269 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(shared_-&gt;ownBuffer)&#32;{
-270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_-&gt;Free(shared_);
+268 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;BaseAllocator&#32;*<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>;
+269 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a89636640af96ac5eddb73c7377981eb9">ownBuffer</link>)&#32;{
+270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>-&gt;Free(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>);
 271 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 272 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>);
 273 &#32;&#32;&#32;&#32;}
 274 
 276 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a6f6dce308aa10a28c898348db3bc75c1">Clear</link>()&#32;RAPIDJSON_NOEXCEPT&#32;{
-277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 278 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(;;)&#32;{
-279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ChunkHeader*&#32;c&#32;=&#32;shared_-&gt;chunkHead;
-280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!c-&gt;next)&#32;{
+279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*&#32;c&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>;
+280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!c-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>)&#32;{
 281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 282 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead&#32;=&#32;c-&gt;next;
-284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_-&gt;Free(c);
+283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>&#32;=&#32;c-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>;
+284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>-&gt;Free(c);
 285 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-286 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;size&#32;=&#32;0;
+286 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;=&#32;0;
 287 &#32;&#32;&#32;&#32;}
 288 
 290 
 292 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f">Capacity</link>()&#32;const&#32;RAPIDJSON_NOEXCEPT&#32;{
-293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 294 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;capacity&#32;=&#32;0;
-295 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(ChunkHeader*&#32;c&#32;=&#32;shared_-&gt;chunkHead;&#32;c&#32;!=&#32;0;&#32;c&#32;=&#32;c-&gt;next)
+295 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*&#32;c&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>;&#32;c&#32;!=&#32;0;&#32;c&#32;=&#32;c-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>)
 296 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;capacity&#32;+=&#32;c-&gt;capacity;
 297 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;capacity;
 298 &#32;&#32;&#32;&#32;}
 299 
 301 
 303 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a53abb6188aea4a687ca9f6d778fd1d2d">Size</link>()&#32;const&#32;RAPIDJSON_NOEXCEPT&#32;{
-304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 305 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;size&#32;=&#32;0;
-306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(ChunkHeader*&#32;c&#32;=&#32;shared_-&gt;chunkHead;&#32;c&#32;!=&#32;0;&#32;c&#32;=&#32;c-&gt;next)
+306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*&#32;c&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>;&#32;c&#32;!=&#32;0;&#32;c&#32;=&#32;c-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1a4d24357c177824b3af56ec1098d9d9dc">next</link>)
 307 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;size&#32;+=&#32;c-&gt;size;
 308 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;size;
 309 &#32;&#32;&#32;&#32;}
 310 
 312 
 314 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1aee5e0b6d09dfbbc9bbbc59399a14cc53">Shared</link>()&#32;const&#32;RAPIDJSON_NOEXCEPT&#32;{
-315 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
-316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;shared_-&gt;refcount&#32;&gt;&#32;1;
+315 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
+316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;1;
 317 &#32;&#32;&#32;&#32;}
 318 
 320 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;<link linkend="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48">Malloc</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;size)&#32;{
-321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 322 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!size)
 323 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;NULL;
 324 
 325 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;size&#32;=&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(size);
-326 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(shared_-&gt;chunkHead-&gt;size&#32;+&#32;size&#32;&gt;&#32;shared_-&gt;chunkHead-&gt;capacity))
-327 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!AddChunk(chunk_capacity_&#32;&gt;&#32;size&#32;?&#32;chunk_capacity_&#32;:&#32;size))
+326 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga6a2b1695c13e77ae425e3cbac980ccb5">RAPIDJSON_UNLIKELY</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;+&#32;size&#32;&gt;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ae19df98bce5dd485a23f953112ecde5f">capacity</link>))
+327 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc">AddChunk</link>(<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>&#32;&gt;&#32;size&#32;?&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>&#32;:&#32;size))
 328 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;NULL;
 329 
-330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;*buffer&#32;=&#32;GetChunkBuffer(shared_)&#32;+&#32;shared_-&gt;chunkHead-&gt;size;
-331 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;size&#32;+=&#32;size;
+330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;*buffer&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5">GetChunkBuffer</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>)&#32;+&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>;
+331 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;+=&#32;size;
 332 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;buffer;
 333 &#32;&#32;&#32;&#32;}
 334 
@@ -257,7 +257,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 337 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(originalPtr&#32;==&#32;0)
 338 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48">Malloc</link>(newSize);
 339 
-340 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+340 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 341 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(newSize&#32;==&#32;0)
 342 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;NULL;
 343 
@@ -269,10 +269,10 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 349 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;originalPtr;
 350 
 351 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Simply&#32;expand&#32;it&#32;if&#32;it&#32;is&#32;the&#32;last&#32;allocation&#32;and&#32;there&#32;is&#32;sufficient&#32;space</emphasis>
-352 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(originalPtr&#32;==&#32;GetChunkBuffer(shared_)&#32;+&#32;shared_-&gt;chunkHead-&gt;size&#32;-&#32;originalSize)&#32;{
+352 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(originalPtr&#32;==&#32;<link linkend="_class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5">GetChunkBuffer</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>)&#32;+&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;-&#32;originalSize)&#32;{
 353 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;increment&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(newSize&#32;-&#32;originalSize);
-354 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(shared_-&gt;chunkHead-&gt;size&#32;+&#32;increment&#32;&lt;=&#32;shared_-&gt;chunkHead-&gt;capacity)&#32;{
-355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead-&gt;size&#32;+=&#32;increment;
+354 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;+&#32;increment&#32;&lt;=&#32;shared_-&gt;chunkHead-&gt;capacity)&#32;{
+355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_chunk_header_1ac9f3868f4cd36cdb7c712c9a48686680">size</link>&#32;+=&#32;increment;
 356 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;originalPtr;
 357 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 358 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
@@ -290,9 +290,9 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 371 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1ab2ba66e50d09ab315fbfb37f2a231f33">Free</link>(<emphasis role="keywordtype">void</emphasis>&#32;*ptr)&#32;RAPIDJSON_NOEXCEPT&#32;{&#32;(void)ptr;&#32;}&#32;<emphasis role="comment">//&#32;Do&#32;nothing</emphasis>
 372 
 374 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408">operator==</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&#32;rhs)&#32;<emphasis role="keyword">const</emphasis>&#32;RAPIDJSON_NOEXCEPT&#32;{
-375 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(shared_-&gt;refcount&#32;&gt;&#32;0);
+375 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a518c933b79807f4fd3518ce6d426f2dc">refcount</link>&#32;&gt;&#32;0);
 376 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(rhs.shared_-&gt;refcount&#32;&gt;&#32;0);
-377 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;shared_&#32;==&#32;rhs.shared_;
+377 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>&#32;==&#32;rhs.shared_;
 378 &#32;&#32;&#32;&#32;}
 380 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1ab81d11c88aef06b905cece2e5a4e7b4d">operator!=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&amp;&#32;rhs)&#32;<emphasis role="keyword">const</emphasis>&#32;RAPIDJSON_NOEXCEPT&#32;{
 381 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;!<link linkend="_class_memory_pool_allocator_1ab2b847d46e865b541c38fb68dfc7d408">operator==</link>(rhs);
@@ -300,21 +300,21 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 383 
 384 <emphasis role="keyword">private</emphasis>:
 386 
-389 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;AddChunk(<emphasis role="keywordtype">size_t</emphasis>&#32;capacity)&#32;{
-390 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!baseAllocator_)
-391 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;ownBaseAllocator&#32;=&#32;baseAllocator_&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(BaseAllocator)();
-392 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ChunkHeader*&#32;chunk&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis>ChunkHeader*<emphasis role="keyword">&gt;</emphasis>(baseAllocator_-&gt;Malloc(SIZEOF_CHUNK_HEADER&#32;+&#32;capacity)))&#32;{
+389 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc">AddChunk</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;capacity)&#32;{
+390 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>)
+391 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a8e991b807bbdde89645a19bde7398bf7">ownBaseAllocator</link>&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(BaseAllocator)();
+392 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*&#32;chunk&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>*<emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>-&gt;Malloc(<link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link>&#32;+&#32;capacity)))&#32;{
 393 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk-&gt;capacity&#32;=&#32;capacity;
 394 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk-&gt;size&#32;=&#32;0;
-395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk-&gt;next&#32;=&#32;shared_-&gt;chunkHead;
-396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;shared_-&gt;chunkHead&#32;=&#32;chunk;
+395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;chunk-&gt;next&#32;=&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>;
+396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>-&gt;<link linkend="_struct_memory_pool_allocator_1_1_shared_data_1a1f6aa37c67bc020bd9e5490a8c5bdfb9">chunkHead</link>&#32;=&#32;chunk;
 397 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 398 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 399 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
 400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 401 &#32;&#32;&#32;&#32;}
 402 
-403 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>*&#32;AlignBuffer(<emphasis role="keywordtype">void</emphasis>*&#32;buf,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;&amp;size)
+403 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">inline</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>*&#32;<link linkend="_class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842">AlignBuffer</link>(<emphasis role="keywordtype">void</emphasis>*&#32;buf,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;&amp;size)
 404 &#32;&#32;&#32;&#32;{
 405 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga2b2a0d9143aa4fb31205a85b34c43952">RAPIDJSON_NOEXCEPT_ASSERT</link>(buf&#32;!=&#32;0);
 406 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1a31b85deecb45924320becd11d3ee16ce">uintptr_t</link>&#32;mask&#32;=&#32;<emphasis role="keyword">sizeof</emphasis>(<emphasis role="keywordtype">void</emphasis>*)&#32;-&#32;1;
@@ -328,9 +328,9 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 414 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;buf;
 415 &#32;&#32;&#32;&#32;}
 416 
-417 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;chunk_capacity_;&#32;&#32;&#32;&#32;&#32;
-418 &#32;&#32;&#32;&#32;BaseAllocator*&#32;baseAllocator_;&#32;&#32;
-419 &#32;&#32;&#32;&#32;SharedData&#32;*shared_;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+417 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link>;&#32;&#32;&#32;&#32;&#32;
+418 &#32;&#32;&#32;&#32;BaseAllocator*&#32;<link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link>;&#32;&#32;
+419 &#32;&#32;&#32;&#32;<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>&#32;*<link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link>;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
 420 };
 421 
 422 <emphasis role="keyword">namespace&#32;</emphasis><link linkend="_namespaceinternal">internal</link>&#32;{
@@ -372,36 +372,36 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 458 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_std_allocator">StdAllocator</link>&#32;:
 459 &#32;&#32;&#32;&#32;<emphasis role="keyword">public</emphasis>&#32;std::allocator&lt;T&gt;
 460 {
-461 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator&lt;T&gt;&#32;allocator_type;
+461 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator&lt;T&gt;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>;
 462 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11</emphasis>
-463 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator_traits&lt;allocator_type&gt;&#32;traits_type;
+463 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator_traits&lt;allocator_type&gt;&#32;<link linkend="_class_std_allocator_1a5cc8d5905b0333753db9d7437aeadfc0">traits_type</link>;
 464 <emphasis role="preprocessor">#else</emphasis>
-465 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;allocator_type&#32;traits_type;
+465 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>&#32;<link linkend="_class_std_allocator_1a5cc8d5905b0333753db9d7437aeadfc0">traits_type</link>;
 466 <emphasis role="preprocessor">#endif</emphasis>
 467 
 468 <emphasis role="keyword">public</emphasis>:
 469 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;BaseAllocator&#32;<link linkend="_class_std_allocator_1a09e7299a6c14e2d234bd469f1162bb21">BaseAllocatorType</link>;
 470 
 471 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1afdef530c5dbd0c4e86922ab263c8ca83">StdAllocator</link>()&#32;RAPIDJSON_NOEXCEPT&#32;:
-472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(),
-473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_()
+472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(),
+473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>()
 474 &#32;&#32;&#32;&#32;{&#32;}
 475 
 476 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1abfb16c76a06015f0ec1abe704375ace8">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(rhs),
-478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_)
+477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(rhs),
+478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(rhs.baseAllocator_)
 479 &#32;&#32;&#32;&#32;{&#32;}
 480 
 481 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 482 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1ab41a5cbaf54473e1e10468258629bd1b">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator&lt;U, BaseAllocator&gt;</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-483 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(rhs),
-484 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_)
+483 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(rhs),
+484 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(rhs.baseAllocator_)
 485 &#32;&#32;&#32;&#32;{&#32;}
 486 
 487 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11_RVALUE_REFS</emphasis>
 488 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1afb3a6a655f835f6b9ec21fab41291287">StdAllocator</link>(<link linkend="_class_std_allocator">StdAllocator</link>&amp;&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(std::move(rhs)),
-490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(std::move(rhs.baseAllocator_))
+489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(std::move(rhs)),
+490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(std::move(rhs.baseAllocator_))
 491 &#32;&#32;&#32;&#32;{&#32;}
 492 <emphasis role="preprocessor">#endif</emphasis>
 493 <emphasis role="preprocessor">#if&#32;RAPIDJSON_HAS_CXX11</emphasis>
@@ -411,8 +411,8 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 497 
 498 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;implicit&#32;*/</emphasis>
 499 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a40ffe84a544bd5fe938581d09595bd1f">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;BaseAllocator&amp;&#32;allocator)&#32;RAPIDJSON_NOEXCEPT&#32;:
-500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(),
-501 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(allocator)
+500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(),
+501 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(allocator)
 502 &#32;&#32;&#32;&#32;{&#32;}
 503 
 504 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a3d1703f93d5929c71a35e0c9baf9ceb1">~StdAllocator</link>()&#32;RAPIDJSON_NOEXCEPT
@@ -492,12 +492,12 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 578 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 579 &#32;&#32;&#32;&#32;U*&#32;<link linkend="_class_std_allocator_1a8c60bc907eb5ecb9bc174de469394e7b">allocate</link>(<link linkend="_class_std_allocator_1af0b177dc293fe5b985ba9e27de23b2c1">size_type</link>&#32;n&#32;=&#32;1,&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>*&#32;=&#32;0)
 580 &#32;&#32;&#32;&#32;{
-581 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;RAPIDJSON_NAMESPACE::Malloc&lt;U&gt;(baseAllocator_,&#32;n);
+581 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;RAPIDJSON_NAMESPACE::Malloc&lt;U&gt;(<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>,&#32;n);
 582 &#32;&#32;&#32;&#32;}
 583 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 584 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_std_allocator_1a92371ba62f651185c0d3eef856080cfa">deallocate</link>(U*&#32;p,&#32;<link linkend="_class_std_allocator_1af0b177dc293fe5b985ba9e27de23b2c1">size_type</link>&#32;n&#32;=&#32;1)
 585 &#32;&#32;&#32;&#32;{
-586 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_NAMESPACE::Free&lt;U&gt;(baseAllocator_,&#32;p,&#32;n);
+586 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_NAMESPACE::Free&lt;U&gt;(<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>,&#32;p,&#32;n);
 587 &#32;&#32;&#32;&#32;}
 588 
 589 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a0c970fb2525af736640f0ac3a29d45c5">pointer</link>&#32;<link linkend="_class_std_allocator_1aa301f003f6722d438834b377c314247e">allocate</link>(<link linkend="_class_std_allocator_1af0b177dc293fe5b985ba9e27de23b2c1">size_type</link>&#32;n&#32;=&#32;1,&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>*&#32;=&#32;0)
@@ -516,7 +516,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 602 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 603 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_std_allocator_1acec867ea79558926a5e3a5f9bbafaf31">operator==</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator&lt;U, BaseAllocator&gt;</link>&amp;&#32;rhs)&#32;<emphasis role="keyword">const</emphasis>&#32;RAPIDJSON_NOEXCEPT
 604 &#32;&#32;&#32;&#32;{
-605 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;baseAllocator_&#32;==&#32;rhs.baseAllocator_;
+605 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>&#32;==&#32;rhs.baseAllocator_;
 606 &#32;&#32;&#32;&#32;}
 607 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 608 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_std_allocator_1a6d1d3ae1297ec63f6043f06d26b99df7">operator!=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator&lt;U, BaseAllocator&gt;</link>&amp;&#32;rhs)&#32;<emphasis role="keyword">const</emphasis>&#32;RAPIDJSON_NOEXCEPT
@@ -528,11 +528,11 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 615 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_std_allocator_1afd2564e7c3121474d93c805839fa5f83">kRefCounted</link>&#32;=&#32;<link linkend="_structinternal_1_1_is_ref_counted">internal::IsRefCounted&lt;BaseAllocator&gt;::Value</link>;
 616 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;<link linkend="_class_std_allocator_1a0499a9aa57a19d5ae174bedf8c80da87">Malloc</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;size)
 617 &#32;&#32;&#32;&#32;{
-618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;baseAllocator_.Malloc(size);
+618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>.Malloc(size);
 619 &#32;&#32;&#32;&#32;}
 620 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>*&#32;<link linkend="_class_std_allocator_1a97fb4098726bc00def3a205698517b8b">Realloc</link>(<emphasis role="keywordtype">void</emphasis>*&#32;originalPtr,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;originalSize,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;newSize)
 621 &#32;&#32;&#32;&#32;{
-622 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;baseAllocator_.Realloc(originalPtr,&#32;originalSize,&#32;newSize);
+622 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>.Realloc(originalPtr,&#32;originalSize,&#32;newSize);
 623 &#32;&#32;&#32;&#32;}
 624 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_std_allocator_1ae3b6918eee229eeb89e9535d65296d6d">Free</link>(<emphasis role="keywordtype">void</emphasis>&#32;*ptr)&#32;RAPIDJSON_NOEXCEPT
 625 &#32;&#32;&#32;&#32;{
@@ -543,7 +543,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 630 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>,&#32;<emphasis role="keyword">typename</emphasis>&gt;
 631 &#32;&#32;&#32;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keyword">class&#32;</emphasis><link linkend="_class_std_allocator">StdAllocator</link>;&#32;<emphasis role="comment">//&#32;access&#32;to&#32;StdAllocator&lt;!T&gt;.*</emphasis>
 632 
-633 &#32;&#32;&#32;&#32;BaseAllocator&#32;baseAllocator_;
+633 &#32;&#32;&#32;&#32;BaseAllocator&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>;
 634 };
 635 
 636 <emphasis role="preprocessor">#if&#32;!RAPIDJSON_HAS_CXX17&#32;</emphasis><emphasis role="comment">//&#32;std::allocator&lt;void&gt;&#32;deprecated&#32;in&#32;C++17</emphasis>
@@ -551,31 +551,31 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 638 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_std_allocator">StdAllocator</link>&lt;void,&#32;BaseAllocator&gt;&#32;:
 639 &#32;&#32;&#32;&#32;<emphasis role="keyword">public</emphasis>&#32;std::allocator&lt;void&gt;
 640 {
-641 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator&lt;void&gt;&#32;allocator_type;
+641 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;std::allocator&lt;void&gt;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1aa894cbe0a0970c07b34e4320e6054c10">allocator_type</link>;
 642 
 643 <emphasis role="keyword">public</emphasis>:
 644 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;BaseAllocator&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1a72dfb6c478f475a31ef99be2fbe9332f">BaseAllocatorType</link>;
 645 
 646 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1ae04f7a523d5d80dde6ce700e2807ff27">StdAllocator</link>()&#32;RAPIDJSON_NOEXCEPT&#32;:
-647 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(),
-648 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_()
+647 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1aa894cbe0a0970c07b34e4320e6054c10">allocator_type</link>(),
+648 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>()
 649 &#32;&#32;&#32;&#32;{&#32;}
 650 
 651 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1ab7d8af9c46aaee8e3e2c60b95b1d595d">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-652 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(rhs),
-653 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_)
+652 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(rhs),
+653 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(rhs.baseAllocator_)
 654 &#32;&#32;&#32;&#32;{&#32;}
 655 
 656 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;U&gt;
 657 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1a47cf6d8a7f37c6f1c03c158948d88553">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_std_allocator">StdAllocator&lt;U, BaseAllocator&gt;</link>&amp;&#32;rhs)&#32;RAPIDJSON_NOEXCEPT&#32;:
-658 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(rhs),
-659 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(rhs.baseAllocator_)
+658 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(rhs),
+659 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(rhs.baseAllocator_)
 660 &#32;&#32;&#32;&#32;{&#32;}
 661 
 662 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;implicit&#32;*/</emphasis>
 663 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1a8ee693f821d2a7209947faab4a77e304">StdAllocator</link>(<emphasis role="keyword">const</emphasis>&#32;BaseAllocator&amp;&#32;baseAllocator)&#32;RAPIDJSON_NOEXCEPT&#32;:
-664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;allocator_type(),
-665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;baseAllocator_(baseAllocator)
+664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a572b0281d5b161135a426d3ff348d997">allocator_type</link>(),
+665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_1a66c60fe437ac39440d37410884dd18be">baseAllocator_</link>(baseAllocator)
 666 &#32;&#32;&#32;&#32;{&#32;}
 667 
 668 &#32;&#32;&#32;&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1a223afcc6a4765478ca3c89f1164913d4">~StdAllocator</link>()&#32;RAPIDJSON_NOEXCEPT
@@ -592,7 +592,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 679 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>,&#32;<emphasis role="keyword">typename</emphasis>&gt;
 680 &#32;&#32;&#32;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keyword">class&#32;</emphasis><link linkend="_class_std_allocator">StdAllocator</link>;&#32;<emphasis role="comment">//&#32;access&#32;to&#32;StdAllocator&lt;!T&gt;.*</emphasis>
 681 
-682 &#32;&#32;&#32;&#32;BaseAllocator&#32;baseAllocator_;
+682 &#32;&#32;&#32;&#32;BaseAllocator&#32;<link linkend="_class_std_allocator_3_01void_00_01_base_allocator_01_4_1ac691821bb9f8c7f557c7d3c069b37dc2">baseAllocator_</link>;
 683 };
 684 <emphasis role="preprocessor">#endif</emphasis>
 685 

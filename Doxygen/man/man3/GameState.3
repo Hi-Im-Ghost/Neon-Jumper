@@ -1,4 +1,4 @@
-.TH "GameState" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GameState" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,7 +16,6 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .ti -1c
 .RI "\fBGameState\fP (std::stack< \fBGameState\fP * > *\fBstates\fP)"
 .br
-.RI "Konstruktor przyjmuje odniesienie do stosu wszystkich stanów\&. "
 .ti -1c
 .RI "void \fBendState\fP ()"
 .br
@@ -32,11 +31,19 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .ti -1c
 .RI "virtual void \fBupdate\fP (float deltaTime)=0"
 .br
-.RI "Funkcja zarządzająca odświeżaniem logiki stanu\&. "
 .ti -1c
 .RI "virtual void \fBrender\fP (sf::RenderTarget &window)"
 .br
-.RI "Funkcja zarządzająca renderowaniem grafiki stanu\&. "
+.ti -1c
+.RI "bool \fBgetLoadMenu\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBsetLoadMenu\fP (bool)"
+.br
 .in -1c
 .SS "Protected Member Functions"
 
@@ -126,9 +133,21 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .br
 .RI "Buffor dla dzwieku klikania\&. "
 .ti -1c
+.RI "sf::SoundBuffer \fBbufOh\fP"
+.br
+.RI "Buffor dla dzwieku zwycienstwa\&. "
+.ti -1c
+.RI "sf::SoundBuffer \fBbufCheat\fP"
+.br
+.RI "Buffor dla dzwieku cheatowania\&. "
+.ti -1c
 .RI "sf::SoundBuffer \fBbufdeath\fP"
 .br
 .RI "Buffor dla dzwieku smierci gracza\&. "
+.ti -1c
+.RI "sf::SoundBuffer \fBbufHit\fP"
+.br
+.RI "Buffor dla dzwieku trafienia\&. "
 .ti -1c
 .RI "sf::Sound \fBclickMenu\fP"
 .br
@@ -137,6 +156,18 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .RI "sf::Sound \fBdeathGame\fP"
 .br
 .RI "Przechowuje dźwięk smierci gracza\&. "
+.ti -1c
+.RI "sf::Sound \fBcheatGame\fP"
+.br
+.RI "Przechowuje dźwięk uzycia cheatu\&. "
+.ti -1c
+.RI "sf::Sound \fBhitGame\fP"
+.br
+.RI "Przechowuje dźwięk trafienia\&. "
+.ti -1c
+.RI "sf::Sound \fBohGame\fP"
+.br
+.RI "Przechowuje dźwięk zwycienstwa\&. "
 .ti -1c
 .RI "sf::Vector2f \fBmousePosition\fP"
 .br
@@ -186,12 +217,25 @@ Inherited by \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&
 .br
 .RI "Zmienna określająca czy wczytaliśmy grę "
 .in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBmenuLoad\fP = false"
+.br
+.RI "Zmienna która komunikuje o wczytaniu gry z menu\&. "
+.in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "GameState::GameState (std::stack< \fBGameState\fP * > * states)\fC [explicit]\fP"
-
+Konstruktor przyjmuje odniesienie do stosu wszystkich stanów 
 .PP
-Konstruktor przyjmuje odniesienie do stosu wszystkich stanów\&. 
+\fBParameters\fP
+.RS 4
+\fIstates\fP odniesienie do stosu wszystkich stanów aplikacji 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
 .SS "void GameState::endGame ()\fC [inline]\fP, \fC [protected]\fP"
@@ -210,6 +254,8 @@ Pozwala uzyskać informację, czy należy zakończyć stan\&.
 
 .PP
 Pozwala przejść do drugiego poziomu gry\&. 
+.SS "bool GameState::getLoadMenu ()\fC [inline]\fP"
+
 .SS "void GameState::initMusicGame ()\fC [protected]\fP"
 
 .PP
@@ -243,11 +289,18 @@ Inicjuje wirtualny kursor\&.
 .PP
 Pozwala zakomunikować o potrzebie zatrzymania stanu\&. 
 .SS "virtual void GameState::render (sf::RenderTarget & window)\fC [inline]\fP, \fC [virtual]\fP"
+Funkcja zarządzająca renderowaniem grafiki stanu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym wyświetlony zostanie przeciwnik 
+.RE
+.PP
 
 .PP
-Funkcja zarządzająca renderowaniem grafiki stanu\&. 
-.PP
 Reimplemented in \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
+.SS "void GameState::setLoadMenu (bool val)\fC [static]\fP"
+
 .SS "void GameState::unEndGame ()\fC [inline]\fP, \fC [protected]\fP"
 
 .PP
@@ -257,9 +310,14 @@ Pozwala zakomunikować o zmianie stanu konca gry\&.
 .PP
 Pozwala zakomunikować o potrzebie wznowienia stanu\&. 
 .SS "virtual void GameState::update (float deltaTime)\fC [pure virtual]\fP"
-
+Funkcja zarządzająca odświeżaniem logiki stanu 
 .PP
-Funkcja zarządzająca odświeżaniem logiki stanu\&. 
+\fBParameters\fP
+.RS 4
+\fIdeltaTime\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
 .PP
 Implemented in \fBLevelOneState\fP, \fBLevelTwoState\fP, and \fBMainMenuState\fP\&.
 .SS "void GameState::updateMousePosition ()\fC [protected]\fP"
@@ -292,10 +350,26 @@ Określa, czy stan jest zatrzymany\&.
 
 .PP
 Buffor dla dzwieku klikania\&. 
+.SS "sf::SoundBuffer GameState::bufCheat\fC [protected]\fP"
+
+.PP
+Buffor dla dzwieku cheatowania\&. 
 .SS "sf::SoundBuffer GameState::bufdeath\fC [protected]\fP"
 
 .PP
 Buffor dla dzwieku smierci gracza\&. 
+.SS "sf::SoundBuffer GameState::bufHit\fC [protected]\fP"
+
+.PP
+Buffor dla dzwieku trafienia\&. 
+.SS "sf::SoundBuffer GameState::bufOh\fC [protected]\fP"
+
+.PP
+Buffor dla dzwieku zwycienstwa\&. 
+.SS "sf::Sound GameState::cheatGame\fC [protected]\fP"
+
+.PP
+Przechowuje dźwięk uzycia cheatu\&. 
 .SS "int GameState::checkLevel\fC [protected]\fP"
 
 .PP
@@ -308,10 +382,18 @@ Przechowuje dźwięk naciśnięcia przycisku\&.
 
 .PP
 Przechowuje dźwięk smierci gracza\&. 
+.SS "sf::Sound GameState::hitGame\fC [protected]\fP"
+
+.PP
+Przechowuje dźwięk trafienia\&. 
 .SS "bool GameState::loadSave = false\fC [protected]\fP"
 
 .PP
 Zmienna określająca czy wczytaliśmy grę 
+.SS "bool GameState::menuLoad = false\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Zmienna która komunikuje o wczytaniu gry z menu\&. 
 .SS "sf::Vector2f GameState::mousePosition\fC [protected]\fP"
 
 .PP
@@ -340,6 +422,10 @@ Tekst przechowujący napis do pauzy\&.
 
 .PP
 Tekst przechowujący napis do instrukcji gry\&. 
+.SS "sf::Sound GameState::ohGame\fC [protected]\fP"
+
+.PP
+Przechowuje dźwięk zwycienstwa\&. 
 .SS "int GameState::playerHP\fC [protected]\fP"
 
 .PP

@@ -17,8 +17,6 @@
     <title>Public Member Functions    </title>
         <itemizedlist>
             <listitem><para><link linkend="_class_game_state_1a00007967d00ac636381f23f3818f0db1">GameState</link> (std::stack&lt; <link linkend="_class_game_state">GameState</link> * &gt; *<link linkend="_class_game_state_1a6e9e1aa616cd1071425f2766a76957ec">states</link>)</para>
-
-<para>Konstruktor przyjmuje odniesienie do stosu wszystkich stanów. </para>
 </listitem>
             <listitem><para>void <link linkend="_class_game_state_1a5b6ccfff3ca74df5a7e67fdeb4ed5bce">endState</link> ()</para>
 
@@ -33,12 +31,17 @@
 <para>Pozwala przejść do drugiego poziomu gry. </para>
 </listitem>
             <listitem><para>virtual void <link linkend="_class_game_state_1a360521bb5b371ea942a9e4e2ba1e8145">update</link> (float deltaTime)=0</para>
-
-<para>Funkcja zarządzająca odświeżaniem logiki stanu. </para>
 </listitem>
             <listitem><para>virtual void <link linkend="_class_game_state_1ab54d45c62b2ec2719bd48788b982b471">render</link> (sf::RenderTarget &amp;window)</para>
-
-<para>Funkcja zarządzająca renderowaniem grafiki stanu. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_game_state_1ae25dc4ec8c4cdad0ba08407c6551de1a">getLoadMenu</link> ()</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>static void <link linkend="_class_game_state_1ae2ad56203eaca3c61b27aa5ee3bb01e4">setLoadMenu</link> (bool)</para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -130,9 +133,21 @@
 
 <para>Buffor dla dzwieku klikania. </para>
 </listitem>
+            <listitem><para>sf::SoundBuffer <link linkend="_class_game_state_1a707ba322fdd8e73cd7916276343af9d1">bufOh</link></para>
+
+<para>Buffor dla dzwieku zwycienstwa. </para>
+</listitem>
+            <listitem><para>sf::SoundBuffer <link linkend="_class_game_state_1a157f12db69f87073f9dadf31b59c9c65">bufCheat</link></para>
+
+<para>Buffor dla dzwieku cheatowania. </para>
+</listitem>
             <listitem><para>sf::SoundBuffer <link linkend="_class_game_state_1ae9096ac3bc4dc51feccc0854d28c53d3">bufdeath</link></para>
 
 <para>Buffor dla dzwieku smierci gracza. </para>
+</listitem>
+            <listitem><para>sf::SoundBuffer <link linkend="_class_game_state_1a277e5324503573d3fab14db3f180c2e9">bufHit</link></para>
+
+<para>Buffor dla dzwieku trafienia. </para>
 </listitem>
             <listitem><para>sf::Sound <link linkend="_class_game_state_1a3c02c1ddd315e5705bcae85d53d723be">clickMenu</link></para>
 
@@ -141,6 +156,18 @@
             <listitem><para>sf::Sound <link linkend="_class_game_state_1aaa4fb040e1ae9db46ebfcb6f9462d715">deathGame</link></para>
 
 <para>Przechowuje dźwięk smierci gracza. </para>
+</listitem>
+            <listitem><para>sf::Sound <link linkend="_class_game_state_1a6c4ac8efa433f56aa4b1059b1bddd42c">cheatGame</link></para>
+
+<para>Przechowuje dźwięk uzycia cheatu. </para>
+</listitem>
+            <listitem><para>sf::Sound <link linkend="_class_game_state_1ae01419835096c4b52d41eabab8937c49">hitGame</link></para>
+
+<para>Przechowuje dźwięk trafienia. </para>
+</listitem>
+            <listitem><para>sf::Sound <link linkend="_class_game_state_1a59abdca6b881e561f9e7962138075d45">ohGame</link></para>
+
+<para>Przechowuje dźwięk zwycienstwa. </para>
 </listitem>
             <listitem><para>sf::Vector2f <link linkend="_class_game_state_1a48c5d71a7721b49027ebfab4d903e4ca">mousePosition</link></para>
 
@@ -192,16 +219,43 @@
 </listitem>
         </itemizedlist>
 </simplesect>
+<simplesect>
+    <title>Static Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static bool <link linkend="_class_game_state_1a41467c70942235211a73759abb851d3c">menuLoad</link> = false</para>
+
+<para>Zmienna która komunikuje o wczytaniu gry z menu. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
 <section>
 <title>Constructor &amp; Destructor Documentation</title>
 <anchor xml:id="_class_game_state_1a00007967d00ac636381f23f3818f0db1"/><section>
     <title>GameState()</title>
 <indexterm><primary>GameState</primary><secondary>GameState</secondary></indexterm>
 <indexterm><primary>GameState</primary><secondary>GameState</secondary></indexterm>
-<para><computeroutput>GameState::GameState (std::stack&lt; <link linkend="_class_game_state">GameState</link> * &gt; * states)<computeroutput>[explicit]</computeroutput></computeroutput></para><para>
-
-<para>Konstruktor przyjmuje odniesienie do stosu wszystkich stanów. </para>
-</para>
+<para><computeroutput>GameState::GameState (std::stack&lt; <link linkend="_class_game_state">GameState</link> * &gt; * states)<computeroutput>[explicit]</computeroutput></computeroutput></para>
+<para>Konstruktor przyjmuje odniesienie do stosu wszystkich stanów 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>states</entry><entry>
+<para>odniesienie do stosu wszystkich stanów aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 </section>
 <section>
@@ -242,6 +296,11 @@
 <para>Pozwala przejść do drugiego poziomu gry. </para>
 </para>
 </section>
+<anchor xml:id="_class_game_state_1ae25dc4ec8c4cdad0ba08407c6551de1a"/><section>
+    <title>getLoadMenu()</title>
+<indexterm><primary>getLoadMenu</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>getLoadMenu</secondary></indexterm>
+<para><computeroutput>bool GameState::getLoadMenu ( )<computeroutput>[inline]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_game_state_1acb92a3053f84a4bc19ee00dd5c7ef014"/><section>
     <title>initMusicGame()</title>
 <indexterm><primary>initMusicGame</primary><secondary>GameState</secondary></indexterm>
@@ -318,13 +377,36 @@
     <title>render()</title>
 <indexterm><primary>render</primary><secondary>GameState</secondary></indexterm>
 <indexterm><primary>GameState</primary><secondary>render</secondary></indexterm>
-<para><computeroutput>virtual void GameState::render (sf::RenderTarget &amp; window)<computeroutput>[inline]</computeroutput>, <computeroutput>[virtual]</computeroutput></computeroutput></para><para>
-
-<para>Funkcja zarządzająca renderowaniem grafiki stanu. </para>
-</para>
+<para><computeroutput>virtual void GameState::render (sf::RenderTarget &amp; window)<computeroutput>[inline]</computeroutput>, <computeroutput>[virtual]</computeroutput></computeroutput></para>
+<para>Funkcja zarządzająca renderowaniem grafiki stanu 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>window</entry><entry>
+<para>okno na którym wyświetlony zostanie przeciwnik </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 <para>
 Reimplemented in <link linkend="_class_level_one_state_1a2f451c45e79cda05456e9f93a62d04ce">LevelOneState</link>, <link linkend="_class_level_two_state_1a442f2cd1d36c3919177d677c62828a17">LevelTwoState</link>, and <link linkend="_class_main_menu_state_1a93a8d85415f05b01f31832b15a5f74cc">MainMenuState</link>.</para>
 </section>
+<anchor xml:id="_class_game_state_1ae2ad56203eaca3c61b27aa5ee3bb01e4"/><section>
+    <title>setLoadMenu()</title>
+<indexterm><primary>setLoadMenu</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>setLoadMenu</secondary></indexterm>
+<para><computeroutput>void GameState::setLoadMenu (bool val)<computeroutput>[static]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_game_state_1a643419a178b99f865cb7af2373c3dda0"/><section>
     <title>unEndGame()</title>
 <indexterm><primary>unEndGame</primary><secondary>GameState</secondary></indexterm>
@@ -347,10 +429,28 @@ Reimplemented in <link linkend="_class_level_one_state_1a2f451c45e79cda05456e9f9
     <title>update()</title>
 <indexterm><primary>update</primary><secondary>GameState</secondary></indexterm>
 <indexterm><primary>GameState</primary><secondary>update</secondary></indexterm>
-<para><computeroutput>virtual void GameState::update (float deltaTime)<computeroutput>[pure virtual]</computeroutput></computeroutput></para><para>
-
-<para>Funkcja zarządzająca odświeżaniem logiki stanu. </para>
-</para>
+<para><computeroutput>virtual void GameState::update (float deltaTime)<computeroutput>[pure virtual]</computeroutput></computeroutput></para>
+<para>Funkcja zarządzająca odświeżaniem logiki stanu 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 <para>
 Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c76974148252978cc">LevelOneState</link>, <link linkend="_class_level_two_state_1aca927200ca6e61366401ac3ae0247dc1">LevelTwoState</link>, and <link linkend="_class_main_menu_state_1ae905a5d55070c8a3758482df94d42bb5">MainMenuState</link>.</para>
 </section>
@@ -420,6 +520,15 @@ Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c769741482
 <para>Buffor dla dzwieku klikania. </para>
 </para>
 </section>
+<anchor xml:id="_class_game_state_1a157f12db69f87073f9dadf31b59c9c65"/><section>
+    <title>bufCheat</title>
+<indexterm><primary>bufCheat</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>bufCheat</secondary></indexterm>
+<para><computeroutput>sf::SoundBuffer GameState::bufCheat<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Buffor dla dzwieku cheatowania. </para>
+</para>
+</section>
 <anchor xml:id="_class_game_state_1ae9096ac3bc4dc51feccc0854d28c53d3"/><section>
     <title>bufdeath</title>
 <indexterm><primary>bufdeath</primary><secondary>GameState</secondary></indexterm>
@@ -427,6 +536,33 @@ Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c769741482
 <para><computeroutput>sf::SoundBuffer GameState::bufdeath<computeroutput>[protected]</computeroutput></computeroutput></para><para>
 
 <para>Buffor dla dzwieku smierci gracza. </para>
+</para>
+</section>
+<anchor xml:id="_class_game_state_1a277e5324503573d3fab14db3f180c2e9"/><section>
+    <title>bufHit</title>
+<indexterm><primary>bufHit</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>bufHit</secondary></indexterm>
+<para><computeroutput>sf::SoundBuffer GameState::bufHit<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Buffor dla dzwieku trafienia. </para>
+</para>
+</section>
+<anchor xml:id="_class_game_state_1a707ba322fdd8e73cd7916276343af9d1"/><section>
+    <title>bufOh</title>
+<indexterm><primary>bufOh</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>bufOh</secondary></indexterm>
+<para><computeroutput>sf::SoundBuffer GameState::bufOh<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Buffor dla dzwieku zwycienstwa. </para>
+</para>
+</section>
+<anchor xml:id="_class_game_state_1a6c4ac8efa433f56aa4b1059b1bddd42c"/><section>
+    <title>cheatGame</title>
+<indexterm><primary>cheatGame</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>cheatGame</secondary></indexterm>
+<para><computeroutput>sf::Sound GameState::cheatGame<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Przechowuje dźwięk uzycia cheatu. </para>
 </para>
 </section>
 <anchor xml:id="_class_game_state_1a831924eb7e5e953b7a3f319c999fcf2e"/><section>
@@ -456,6 +592,15 @@ Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c769741482
 <para>Przechowuje dźwięk smierci gracza. </para>
 </para>
 </section>
+<anchor xml:id="_class_game_state_1ae01419835096c4b52d41eabab8937c49"/><section>
+    <title>hitGame</title>
+<indexterm><primary>hitGame</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>hitGame</secondary></indexterm>
+<para><computeroutput>sf::Sound GameState::hitGame<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Przechowuje dźwięk trafienia. </para>
+</para>
+</section>
 <anchor xml:id="_class_game_state_1ad5777ac8a3645b733fdb3d4e18a9a2d6"/><section>
     <title>loadSave</title>
 <indexterm><primary>loadSave</primary><secondary>GameState</secondary></indexterm>
@@ -463,6 +608,15 @@ Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c769741482
 <para><computeroutput>bool GameState::loadSave = false<computeroutput>[protected]</computeroutput></computeroutput></para><para>
 
 <para>Zmienna określająca czy wczytaliśmy grę </para>
+</para>
+</section>
+<anchor xml:id="_class_game_state_1a41467c70942235211a73759abb851d3c"/><section>
+    <title>menuLoad</title>
+<indexterm><primary>menuLoad</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>menuLoad</secondary></indexterm>
+<para><computeroutput>bool GameState::menuLoad = false<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Zmienna która komunikuje o wczytaniu gry z menu. </para>
 </para>
 </section>
 <anchor xml:id="_class_game_state_1a48c5d71a7721b49027ebfab4d903e4ca"/><section>
@@ -526,6 +680,15 @@ Implemented in <link linkend="_class_level_one_state_1a75b5cebe202e376c769741482
 <para><computeroutput>sf::Text GameState::nameTextPlay<computeroutput>[protected]</computeroutput></computeroutput></para><para>
 
 <para>Tekst przechowujący napis do instrukcji gry. </para>
+</para>
+</section>
+<anchor xml:id="_class_game_state_1a59abdca6b881e561f9e7962138075d45"/><section>
+    <title>ohGame</title>
+<indexterm><primary>ohGame</primary><secondary>GameState</secondary></indexterm>
+<indexterm><primary>GameState</primary><secondary>ohGame</secondary></indexterm>
+<para><computeroutput>sf::Sound GameState::ohGame<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+
+<para>Przechowuje dźwięk zwycienstwa. </para>
 </para>
 </section>
 <anchor xml:id="_class_game_state_1a05d411d27fbfd2beb8523b461a19b2c3"/><section>

@@ -1,4 +1,4 @@
-.TH "GenericStringRef< CharType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericStringRef< CharType >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -51,6 +51,29 @@ GenericStringRef< CharType > \- Reference to a constant string (not taking a cop
 .RI "const \fBSizeType\fP \fBlength\fP"
 .br
 .RI "length of the string (excluding the trailing NULL terminator) "
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSizeType\fP \fBNotNullStrLen\fP (const CharType *str)"
+.br
+.ti -1c
+.RI "template<\fBSizeType\fP N> \fBGenericStringRef\fP (CharType(&str)[N])"
+.br
+.RI "Disallow construction from non-const array\&. "
+.ti -1c
+.RI "\fBGenericStringRef\fP & \fBoperator=\fP (const \fBGenericStringRef\fP &rhs)"
+.br
+.RI "Copy assignment operator not permitted - immutable type\&. "
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const \fBCh\fP \fBemptyString\fP [] = { CharType() }"
+.br
+.RI "Empty string - used when passing in a NULL pointer\&. "
 .in -1c
 .SS "Related Functions"
 (Note that these are not member functions\&.) 
@@ -190,12 +213,22 @@ Constant complexity\&.
 
 .SS "template<typename CharType > \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (const \fBGenericStringRef\fP< CharType > & rhs)\fC [inline]\fP"
 
+.SS "template<typename CharType > template<\fBSizeType\fP N> \fBGenericStringRef\fP< CharType >\fB::GenericStringRef\fP (CharType(&) str[N])\fC [private]\fP"
+
+.PP
+Disallow construction from non-const array\&. 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename CharType > \fBSizeType\fP \fBGenericStringRef\fP< CharType >::NotNullStrLen (const CharType * str)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename CharType > \fBGenericStringRef\fP< CharType >::operator const \fBCh\fP * () const\fC [inline]\fP"
 
 .PP
 implicit conversion to plain CharType pointer 
+.SS "template<typename CharType > \fBGenericStringRef\fP & \fBGenericStringRef\fP< CharType >::operator= (const \fBGenericStringRef\fP< CharType > & rhs)\fC [private]\fP"
+
+.PP
+Copy assignment operator not permitted - immutable type\&. 
 .SH "Friends And Related Function Documentation"
 .PP 
 .SS "template<typename CharType > \fBGenericStringRef\fP< CharType > StringRef (const CharType * str)\fC [related]\fP"
@@ -251,6 +284,10 @@ This version has better performance with supplied length, and also supports stri
 
 .SH "Member Data Documentation"
 .PP 
+.SS "template<typename CharType > const CharType \fBGenericStringRef\fP< CharType >::emptyString = { CharType() }\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Empty string - used when passing in a NULL pointer\&. 
 .SS "template<typename CharType > const \fBSizeType\fP \fBGenericStringRef\fP< CharType >::length"
 
 .PP

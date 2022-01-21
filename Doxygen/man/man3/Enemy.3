@@ -1,4 +1,4 @@
-.TH "Enemy" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Enemy" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,27 +18,21 @@ Inherited by \fBSlime\fP\&.
 .ti -1c
 .RI "\fBEnemy\fP (float x=0, float y=0)"
 .br
-.RI "Konstruktor przyjmuje początkową pozycję przeciwnika na mapie\&. "
 .ti -1c
 .RI "void \fBmoveHorizontal\fP (float x)"
 .br
-.RI "Porusza przeciwnikiem w poziomej linii o podaną wartość "
 .ti -1c
 .RI "sf::Vector2f \fBgetPosition\fP ()"
 .br
-.RI "Zwraca pozycję przeciwnika na mapie\&. "
 .ti -1c
 .RI "sf::RectangleShape & \fBgetHitbox\fP ()"
 .br
-.RI "Zwraca hitbox przeciwnika\&. Używane do sprawdzania kolizji\&. "
 .ti -1c
 .RI "virtual void \fBupdate\fP (float deltaSeconds)=0"
 .br
-.RI "Odpowiada za odświeżanie logiki przeciwnika\&. "
 .ti -1c
 .RI "virtual void \fBrender\fP (sf::RenderTarget &window)=0"
 .br
-.RI "Wyświetla przeciwnika na ekranie\&. "
 .in -1c
 .SS "Protected Member Functions"
 
@@ -46,19 +40,15 @@ Inherited by \fBSlime\fP\&.
 .ti -1c
 .RI "void \fBinitSprite\fP (const std::string &filePath, sf::IntRect frame)"
 .br
-.RI "Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury\&. "
 .ti -1c
 .RI "void \fBinitHitbox\fP (sf::Vector2f size)"
 .br
-.RI "Nadaje odpowiednie parametry hitboxowi\&. "
 .ti -1c
 .RI "virtual void \fBinitPath\fP (float pointA, float pointB)=0"
 .br
-.RI "Nadaje odpowiednie parametry granicy ruchu\&. "
 .ti -1c
 .RI "void \fBsetPosition\fP (float x, float y)"
 .br
-.RI "Ustawia pozycję przeciwnika na mapie\&. "
 .in -1c
 .SS "Protected Attributes"
 
@@ -88,49 +78,109 @@ Inherited by \fBSlime\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Enemy::Enemy (float x = \fC0\fP, float y = \fC0\fP)\fC [explicit]\fP"
-
+Konstruktor przyjmuje początkową pozycję przeciwnika na mapie 
 .PP
-Konstruktor przyjmuje początkową pozycję przeciwnika na mapie\&. 
+\fBParameters\fP
+.RS 4
+\fIx\fP początkowa pozycja x 
+.br
+\fIy\fP początkowa pozycja y 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
 .SS "sf::RectangleShape & Enemy::getHitbox ()\fC [inline]\fP"
-
+Zwraca hitbox przeciwnika\&. Używane do sprawdzania kolizji 
 .PP
-Zwraca hitbox przeciwnika\&. Używane do sprawdzania kolizji\&. 
+\fBReturns\fP
+.RS 4
+obiekt reprezentujący hitbox 
+.RE
+.PP
+
 .SS "sf::Vector2f Enemy::getPosition ()"
-
+Zwraca pozycję przeciwnika na mapie 
 .PP
-Zwraca pozycję przeciwnika na mapie\&. 
+\fBReturns\fP
+.RS 4
+Pozycja gracza na mapie 
+.RE
+.PP
+
 .SS "void Enemy::initHitbox (sf::Vector2f size)\fC [protected]\fP"
-
+Nadaje odpowiednie parametry hitboxowi 
 .PP
-Nadaje odpowiednie parametry hitboxowi\&. 
+\fBParameters\fP
+.RS 4
+\fIsize\fP wymiary hitboxa 
+.RE
+.PP
+
 .SS "virtual void Enemy::initPath (float pointA, float pointB)\fC [protected]\fP, \fC [pure virtual]\fP"
+Nadaje odpowiednie parametry granicy ruchu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointA\fP wartość x lewego punktu patrolowego 
+.br
+\fIpointB\fP wartość x prawego punktu patrolowego 
+.RE
+.PP
 
 .PP
-Nadaje odpowiednie parametry granicy ruchu\&. 
+Implemented in \fBSlime\fP\&.
 .SS "void Enemy::initSprite (const std::string & filePath, sf::IntRect frame)\fC [protected]\fP"
-
+Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury 
 .PP
-Wczytuje teksturę z pliku, oraz tworzy sprite ze wczytanej tekstury\&. 
+\fBParameters\fP
+.RS 4
+\fIfilePath\fP ścieżka do pliku tekstury 
+.br
+\fIframe\fP określa jakim fragmentem tekstury zostanie zainicjowany sprite 
+.RE
+.PP
+
 .SS "void Enemy::moveHorizontal (float x)"
-
-.PP
 Porusza przeciwnikiem w poziomej linii o podaną wartość 
-.SS "virtual void Enemy::render (sf::RenderTarget & window)\fC [pure virtual]\fP"
-
 .PP
-Wyświetla przeciwnika na ekranie\&. 
+\fBParameters\fP
+.RS 4
+\fIx\fP wartość na osi x o jaką zostanie poruszony przeciwnik 
+.RE
+.PP
+
+.SS "virtual void Enemy::render (sf::RenderTarget & window)\fC [pure virtual]\fP"
+Wyświetla przeciwnika na ekranie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym wyświetlony zostanie przeciwnik 
+.RE
+.PP
+
 .PP
 Implemented in \fBSlime\fP\&.
 .SS "void Enemy::setPosition (float x, float y)\fC [protected]\fP"
-
+Ustawia pozycję przeciwnika na mapie 
 .PP
-Ustawia pozycję przeciwnika na mapie\&. 
+\fBParameters\fP
+.RS 4
+\fIx\fP pozycja na osi x 
+.br
+\fIy\fP pozycja na osi y 
+.RE
+.PP
+
 .SS "virtual void Enemy::update (float deltaSeconds)\fC [pure virtual]\fP"
-
+Odpowiada za odświeżanie logiki przeciwnika 
 .PP
-Odpowiada za odświeżanie logiki przeciwnika\&. 
+\fBParameters\fP
+.RS 4
+\fIdeltaSeconds\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
 .PP
 Implemented in \fBSlime\fP\&.
 .SH "Member Data Documentation"

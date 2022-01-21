@@ -82,11 +82,11 @@
 \DoxyCodeLine{\};}
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{keywordtype}{void} \mbox{\hyperlink{_c_make_c_compiler_id_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}}() \{}
-\DoxyCodeLine{    \textcolor{keyword}{const} \textcolor{keywordtype}{char} json[] = \textcolor{stringliteral}{"{} \{ \(\backslash\)"{}hello\(\backslash\)"{} : \(\backslash\)"{}world\(\backslash\)"{}, \(\backslash\)"{}t\(\backslash\)"{} : true , \(\backslash\)"{}f\(\backslash\)"{} : false, \(\backslash\)"{}n\(\backslash\)"{}: null, \(\backslash\)"{}i\(\backslash\)"{}:123, \(\backslash\)"{}pi\(\backslash\)"{}: 3.1416, \(\backslash\)"{}a\(\backslash\)"{}:[1, 2, 3, 4] \} "{}};}
+\DoxyCodeLine{    \textcolor{keyword}{const} \textcolor{keywordtype}{char} \mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}}[] = \textcolor{stringliteral}{"{} \{ \(\backslash\)"{}hello\(\backslash\)"{} : \(\backslash\)"{}world\(\backslash\)"{}, \(\backslash\)"{}t\(\backslash\)"{} : true , \(\backslash\)"{}f\(\backslash\)"{} : false, \(\backslash\)"{}n\(\backslash\)"{}: null, \(\backslash\)"{}i\(\backslash\)"{}:123, \(\backslash\)"{}pi\(\backslash\)"{}: 3.1416, \(\backslash\)"{}a\(\backslash\)"{}:[1, 2, 3, 4] \} "{}};}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \mbox{\hyperlink{struct_my_handler}{MyHandler}} handler;}
 \DoxyCodeLine{    \mbox{\hyperlink{class_generic_reader}{Reader}} reader;}
-\DoxyCodeLine{    \mbox{\hyperlink{struct_generic_string_stream}{StringStream}} ss(json);}
+\DoxyCodeLine{    \mbox{\hyperlink{struct_generic_string_stream}{StringStream}} ss(\mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}});}
 \DoxyCodeLine{    reader.\mbox{\hyperlink{class_generic_reader_a0c450620d14ff1824e58bb7bd9b42099}{Parse}}(ss, handler);}
 \DoxyCodeLine{\}}
 
@@ -305,7 +305,7 @@ JSON array 与 object 相似，但更简单。在 array 开始时，{\ttfamily R
 
 使用者可以直接使用 {\ttfamily Reader} 去建立其他数据结构。这消除了建立 DOM 的步骤，从而减少了内存开销并改善性能。
 
-在以下的 {\ttfamily messagereader} 例子中，{\ttfamily Parse\+Messages()} 解析一个 JSON，该 JSON 应该是一个含键值对的 object。
+在以下的 {\ttfamily messagereader} 例子中，{\ttfamily \mbox{\hyperlink{messagereader_8cpp_a5cd118312f7d5b3983499e2934611ebf}{Parse\+Messages()}}} 解析一个 JSON，该 JSON 应该是一个含键值对的 object。
 
 
 \begin{DoxyCode}{0}
@@ -363,17 +363,17 @@ JSON array 与 object 相似，但更简单。在 array 开始时，{\ttfamily R
 \DoxyCodeLine{    std::string \mbox{\hyperlink{struct_message_handler_a7a61cf6c752b8829eb9c058341617c69}{name\_}};}
 \DoxyCodeLine{\};}
 \DoxyCodeLine{}
-\DoxyCodeLine{\textcolor{keywordtype}{void} ParseMessages(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* json, \mbox{\hyperlink{messagereader_8cpp_ae2c5980b5eb04369faa7f72447e6d664}{MessageMap}}\& messages) \{}
+\DoxyCodeLine{\textcolor{keywordtype}{void} \mbox{\hyperlink{messagereader_8cpp_a5cd118312f7d5b3983499e2934611ebf}{ParseMessages}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* \mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}}, \mbox{\hyperlink{messagereader_8cpp_ae2c5980b5eb04369faa7f72447e6d664}{MessageMap}}\& messages) \{}
 \DoxyCodeLine{    \mbox{\hyperlink{class_generic_reader}{Reader}} reader;}
 \DoxyCodeLine{    \mbox{\hyperlink{struct_message_handler}{MessageHandler}} handler;}
-\DoxyCodeLine{    \mbox{\hyperlink{struct_generic_string_stream}{StringStream}} ss(json);}
+\DoxyCodeLine{    \mbox{\hyperlink{struct_generic_string_stream}{StringStream}} ss(\mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}});}
 \DoxyCodeLine{    \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_generic_reader_a0c450620d14ff1824e58bb7bd9b42099}{Parse}}(ss, handler))}
 \DoxyCodeLine{        messages.swap(handler.\mbox{\hyperlink{struct_message_handler_a628b5a49349a2027c84ffb4f6249fa51}{messages\_}});   \textcolor{comment}{// Only change it if success.}}
 \DoxyCodeLine{    \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{        \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{ParseErrorCode}} e = reader.\mbox{\hyperlink{class_generic_reader_a937bf90919f50e1c370b312cee5833e8}{GetParseErrorCode}}();}
 \DoxyCodeLine{        \textcolor{keywordtype}{size\_t} o = reader.\mbox{\hyperlink{class_generic_reader_ae9008523ccd06d839a57335835cb4091}{GetErrorOffset}}();}
 \DoxyCodeLine{        cout << \textcolor{stringliteral}{"{}Error: "{}} << \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga28835eb93d2c3c07bbea13515eb31415}{GetParseError\_En}}(e) << endl;;}
-\DoxyCodeLine{        cout << \textcolor{stringliteral}{"{} at offset "{}} << o << \textcolor{stringliteral}{"{} near '"{}} << string(json).substr(o, 10) << \textcolor{stringliteral}{"{}...'"{}} << endl;}
+\DoxyCodeLine{        cout << \textcolor{stringliteral}{"{} at offset "{}} << o << \textcolor{stringliteral}{"{} near '"{}} << string(\mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}}).substr(o, 10) << \textcolor{stringliteral}{"{}...'"{}} << endl;}
 \DoxyCodeLine{    \}}
 \DoxyCodeLine{\}}
 \DoxyCodeLine{}
@@ -382,7 +382,7 @@ JSON array 与 object 相似，但更简单。在 array 开始时，{\ttfamily R
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{keyword}{const} \textcolor{keywordtype}{char}* json1 = \textcolor{stringliteral}{"{}\{ \(\backslash\)"{}greeting\(\backslash\)"{} : \(\backslash\)"{}Hello!\(\backslash\)"{}, \(\backslash\)"{}farewell\(\backslash\)"{} : \(\backslash\)"{}bye-\/bye!\(\backslash\)"{} \}"{}};}
 \DoxyCodeLine{    cout << json1 << endl;}
-\DoxyCodeLine{    ParseMessages(json1, messages);}
+\DoxyCodeLine{    \mbox{\hyperlink{messagereader_8cpp_a5cd118312f7d5b3983499e2934611ebf}{ParseMessages}}(json1, messages);}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{keywordflow}{for} (MessageMap::const\_iterator itr = messages.begin(); itr != messages.end(); ++itr)}
 \DoxyCodeLine{        cout << itr-\/>first << \textcolor{stringliteral}{"{}: "{}} << itr-\/>second << endl;}
@@ -390,7 +390,7 @@ JSON array 与 object 相似，但更简单。在 array 开始时，{\ttfamily R
 \DoxyCodeLine{    cout << endl << \textcolor{stringliteral}{"{}Parse a JSON with invalid schema."{}} << endl;}
 \DoxyCodeLine{    \textcolor{keyword}{const} \textcolor{keywordtype}{char}* json2 = \textcolor{stringliteral}{"{}\{ \(\backslash\)"{}greeting\(\backslash\)"{} : \(\backslash\)"{}Hello!\(\backslash\)"{}, \(\backslash\)"{}farewell\(\backslash\)"{} : \(\backslash\)"{}bye-\/bye!\(\backslash\)"{}, \(\backslash\)"{}foo\(\backslash\)"{} : \{\} \}"{}};}
 \DoxyCodeLine{    cout << json2 << endl;}
-\DoxyCodeLine{    ParseMessages(json2, messages);}
+\DoxyCodeLine{    \mbox{\hyperlink{messagereader_8cpp_a5cd118312f7d5b3983499e2934611ebf}{ParseMessages}}(json2, messages);}
 \DoxyCodeLine{}
 \DoxyCodeLine{    \textcolor{keywordflow}{return} 0;}
 \DoxyCodeLine{\}}

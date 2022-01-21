@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lookaheadparsingstate_0',['LookaheadParsingState',['../class_lookahead_parser_handler.html#ae334adb8f4e9f8ae9912a026eef9f40a',1,'LookaheadParserHandler']]]
+  ['iterativeparsingstate_0',['IterativeParsingState',['../class_generic_reader.html#a269700a68b925db2f3ecc84b75f2277e',1,'GenericReader']]]
 ];

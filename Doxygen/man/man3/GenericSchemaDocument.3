@@ -1,4 +1,4 @@
-.TH "GenericSchemaDocument< ValueT, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericSchemaDocument< ValueT, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,6 +9,13 @@ GenericSchemaDocument< ValueT, Allocator > \- JSON schema document\&.
 .PP
 .PP
 \fC#include <schema\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBSchemaEntry\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -59,6 +66,95 @@ GenericSchemaDocument< ValueT, Allocator > \- JSON schema document\&.
 .br
 .RI "Get the root schema\&. "
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef const \fBPointerType\fP * \fBSchemaRefPtr\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGenericSchemaDocument\fP (const \fBGenericSchemaDocument\fP &)"
+.br
+.RI "Prohibit copying\&. "
+.ti -1c
+.RI "\fBGenericSchemaDocument\fP & \fBoperator=\fP (const \fBGenericSchemaDocument\fP &)"
+.br
+.RI "Prohibit assignment\&. "
+.ti -1c
+.RI "void \fBCreateSchemaRecursive\fP (const \fBSchemaType\fP **schema, const \fBPointerType\fP &\fBpointer\fP, const \fBValueType\fP &v, const \fBValueType\fP &document, const \fBUriType\fP &id)"
+.br
+.ti -1c
+.RI "const \fBUriType\fP & \fBCreateSchema\fP (const \fBSchemaType\fP **schema, const \fBPointerType\fP &\fBpointer\fP, const \fBValueType\fP &v, const \fBValueType\fP &document, const \fBUriType\fP &id)"
+.br
+.ti -1c
+.RI "bool \fBHandleRefSchema\fP (const \fBPointerType\fP &\fBsource\fP, const \fBSchemaType\fP **schema, const \fBValueType\fP &v, const \fBValueType\fP &document, const \fBUriType\fP &id)"
+.br
+.ti -1c
+.RI "\fBValueType\fP * \fBFindId\fP (const \fBValueType\fP &doc, const \fBUriType\fP &finduri, \fBPointerType\fP &resptr, const \fBUriType\fP &baseuri, bool full, const \fBPointerType\fP &here=\fBPointerType\fP()) const"
+.br
+.RI "Find the first subschema with a resolved 'id' that matches the specified URI\&. "
+.ti -1c
+.RI "void \fBAddSchemaRefs\fP (\fBSchemaType\fP *schema)"
+.br
+.ti -1c
+.RI "bool \fBIsCyclicRef\fP (const \fBPointerType\fP &\fBpointer\fP) const"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBGetSchema\fP (const \fBPointerType\fP &\fBpointer\fP) const"
+.br
+.ti -1c
+.RI "\fBPointerType\fP \fBGetPointer\fP (const \fBSchemaType\fP *schema) const"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBGetTypeless\fP () const"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBIRemoteSchemaDocumentProviderType\fP * \fBremoteProvider_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBroot_\fP"
+.br
+.RI "Root schema\&. "
+.ti -1c
+.RI "\fBSchemaType\fP * \fBtypeless_\fP"
+.br
+.ti -1c
+.RI "\fBinternal::Stack\fP< \fBAllocator\fP > \fBschemaMap_\fP"
+.br
+.ti -1c
+.RI "\fBinternal::Stack\fP< \fBAllocator\fP > \fBschemaRef_\fP"
+.br
+.ti -1c
+.RI "\fBSValue\fP \fBuri_\fP"
+.br
+.ti -1c
+.RI "\fBUriType\fP \fBdocId_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkInitialSchemaMapSize\fP = 64"
+.br
+.ti -1c
+.RI "static const size_t \fBkInitialSchemaRefSize\fP = 64"
+.br
+.in -1c
 .SS "Friends"
 
 .in +1c
@@ -103,6 +199,8 @@ This is an immutable class (i\&.e\&. its instance cannot be modified after const
 
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> typedef \fBGenericPointer\fP<\fBValueType\fP, \fBAllocator\fP> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::PointerType"
 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> typedef const \fBPointerType\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::SchemaRefPtr\fC [private]\fP"
+
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> typedef \fBinternal::Schema\fP<\fBGenericSchemaDocument\fP> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::SchemaType"
 
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> typedef \fBGenericValue\fP<\fBEncodingType\fP, \fBAllocatorType\fP> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::SValue"
@@ -138,19 +236,73 @@ Constructor\&. Compile a JSON document into schema document\&.
 
 .PP
 Destructor\&. 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >\fB::GenericSchemaDocument\fP (const \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP > &)\fC [private]\fP"
+
+.PP
+Prohibit copying\&. 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::AddSchemaRefs (\fBSchemaType\fP * schema)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBUriType\fP & \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::CreateSchema (const \fBSchemaType\fP ** schema, const \fBPointerType\fP & pointer, const \fBValueType\fP & v, const \fBValueType\fP & document, const \fBUriType\fP & id)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::CreateSchemaRecursive (const \fBSchemaType\fP ** schema, const \fBPointerType\fP & pointer, const \fBValueType\fP & v, const \fBValueType\fP & document, const \fBUriType\fP & id)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBValueType\fP * \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::FindId (const \fBValueType\fP & doc, const \fBUriType\fP & finduri, \fBPointerType\fP & resptr, const \fBUriType\fP & baseuri, bool full, const \fBPointerType\fP & here = \fC\fBPointerType\fP()\fP) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Find the first subschema with a resolved 'id' that matches the specified URI\&. 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBPointerType\fP \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::GetPointer (const \fBSchemaType\fP * schema) const\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBSchemaType\fP & \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::GetRoot () const\fC [inline]\fP"
 
 .PP
 Get the root schema\&. 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBSchemaType\fP * \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::GetSchema (const \fBPointerType\fP & pointer) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBSchemaType\fP * \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::GetTypeless () const\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBSValue\fP & \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::GetURI () const\fC [inline]\fP"
 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> bool \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::HandleRefSchema (const \fBPointerType\fP & source, const \fBSchemaType\fP ** schema, const \fBValueType\fP & v, const \fBValueType\fP & document, const \fBUriType\fP & id)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> bool \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::IsCyclicRef (const \fBPointerType\fP & pointer) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBGenericSchemaDocument\fP & \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::operator= (const \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP > &)\fC [private]\fP"
+
+.PP
+Prohibit assignment\&. 
 .SH "Friends And Related Function Documentation"
 .PP 
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> template<typename , typename , typename > friend class \fBGenericSchemaValidator\fP\fC [friend]\fP"
 
 .SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> friend class \fBinternal::Schema\fP< \fBGenericSchemaDocument\fP >\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::allocator_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBUriType\fP \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::docId_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const size_t \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::kInitialSchemaMapSize = 64\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const size_t \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::kInitialSchemaRefSize = 64\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::ownAllocator_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBIRemoteSchemaDocumentProviderType\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::remoteProvider_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> const \fBSchemaType\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::root_\fC [private]\fP"
+
+.PP
+Root schema\&. 
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBinternal::Stack\fP<\fBAllocator\fP> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::schemaMap_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBinternal::Stack\fP<\fBAllocator\fP> \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::schemaRef_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBSchemaType\fP* \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::typeless_\fC [private]\fP"
+
+.SS "template<typename ValueT , typename \fBAllocator\fP  = CrtAllocator> \fBSValue\fP \fBGenericSchemaDocument\fP< ValueT, \fBAllocator\fP >::uri_\fC [private]\fP"
 
 
 .SH "Author"

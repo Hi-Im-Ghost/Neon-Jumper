@@ -49,32 +49,32 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 46 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;SourceStream,&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding&gt;
 47 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_decoded_stream">DecodedStream</link>&#32;{
 48 <emphasis role="keyword">public</emphasis>:
-49 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream_1a45cf40c4e515be8aaa8cd020eaa67595">DecodedStream</link>(SourceStream&amp;&#32;ss)&#32;:&#32;ss_(ss),&#32;codepoint_()&#32;{&#32;Decode();&#32;}
-50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;codepoint_;&#32;}
+49 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream_1a45cf40c4e515be8aaa8cd020eaa67595">DecodedStream</link>(SourceStream&amp;&#32;ss)&#32;:&#32;<link linkend="_classinternal_1_1_decoded_stream_1ac87f823c7c950f13145dc3c151dcf714">ss_</link>(ss),&#32;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>()&#32;{&#32;<link linkend="_classinternal_1_1_decoded_stream_1aec6be1692e1f283c1dde407cce1bb873">Decode</link>();&#32;}
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>;&#32;}
 51 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>()&#32;{
-52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;codepoint_;
+52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;c&#32;=&#32;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>;
 53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(c)&#32;<emphasis role="comment">//&#32;No&#32;further&#32;decoding&#32;when&#32;&apos;\0&apos;</emphasis>
-54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Decode();
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream_1aec6be1692e1f283c1dde407cce1bb873">Decode</link>();
 55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;
 56 &#32;&#32;&#32;&#32;}
 57 
 58 <emphasis role="keyword">private</emphasis>:
-59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Decode()&#32;{
-60 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Encoding::Decode(ss_,&#32;&amp;codepoint_))
-61 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;codepoint_&#32;=&#32;0;
+59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1aec6be1692e1f283c1dde407cce1bb873">Decode</link>()&#32;{
+60 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Encoding::Decode(<link linkend="_classinternal_1_1_decoded_stream_1ac87f823c7c950f13145dc3c151dcf714">ss_</link>,&#32;&amp;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>))
+61 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>&#32;=&#32;0;
 62 &#32;&#32;&#32;&#32;}
 63 
-64 &#32;&#32;&#32;&#32;SourceStream&amp;&#32;ss_;
-65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint_;
+64 &#32;&#32;&#32;&#32;SourceStream&amp;&#32;<link linkend="_classinternal_1_1_decoded_stream_1ac87f823c7c950f13145dc3c151dcf714">ss_</link>;
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_decoded_stream_1ab2d66695cea627ac0b2a53a5ff8d5526">codepoint_</link>;
 66 };
 67 
 69 <emphasis role="comment">//&#32;GenericRegex</emphasis>
 70 
-71 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;kRegexInvalidState&#32;=&#32;~SizeType(0);&#32;&#32;
-72 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;kRegexInvalidRange&#32;=&#32;~SizeType(0);
+71 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>&#32;=&#32;~SizeType(0);&#32;&#32;
+72 <emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>&#32;=&#32;~SizeType(0);
 73 
 74 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&gt;
-75 <emphasis role="keyword">class&#32;</emphasis>GenericRegexSearch;
+75 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link>;
 76 
 78 
 109 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;Encoding,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&#32;=&#32;CrtAllocator&gt;
@@ -85,290 +85,290 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 114 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>,&#32;<emphasis role="keyword">typename</emphasis>&gt;&#32;<emphasis role="keyword">friend</emphasis>&#32;<emphasis role="keyword">class&#32;</emphasis><link linkend="_classinternal_1_1_generic_regex_search">GenericRegexSearch</link>;
 115 
 116 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a35c3a49bc4545a991ab039858227df0f">GenericRegex</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a44e1a86ec27e1c5628a7d91c8c3daace">Ch</link>*&#32;<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>,&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator&#32;=&#32;0)&#32;:&#32;
-117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_(allocator&#32;?&#32;0&#32;:&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)()),&#32;allocator_(allocator&#32;?&#32;allocator&#32;:&#32;ownAllocator_),&#32;
-118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;states_(allocator_,&#32;256),&#32;ranges_(allocator_,&#32;256),&#32;root_(kRegexInvalidState),&#32;stateCount_(),&#32;rangeCount_(),&#32;
-119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorBegin_(),&#32;anchorEnd_()
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8">ownAllocator_</link>(allocator&#32;?&#32;0&#32;:&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)()),&#32;<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>(allocator&#32;?&#32;allocator&#32;:&#32;<link linkend="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8">ownAllocator_</link>),&#32;
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>(<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>,&#32;256),&#32;<link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link>(<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>,&#32;256),&#32;<link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>),&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>(),&#32;<link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link>(),&#32;
+119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1ac99b045cc5250649ea3708bee95a56e8">anchorBegin_</link>(),&#32;<link linkend="_classinternal_1_1_generic_regex_1adbd19f8921ece1563d02e74f479d2e13">anchorEnd_</link>()
 120 &#32;&#32;&#32;&#32;{
 121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_struct_generic_string_stream">GenericStringStream&lt;Encoding&gt;</link>&#32;ss(<link linkend="_pointer_8h_1adb82dfe18535e9a30aa97d275f82bd55">source</link>);
 122 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;GenericStringStream&lt;Encoding&gt;</link>,&#32;<link linkend="_classrapidjson_1_1_encoding">Encoding</link>&gt;&#32;ds(ss);
-123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Parse(ds);
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a038af33f370a14f987fb79d78f0d1c75">Parse</link>(ds);
 124 &#32;&#32;&#32;&#32;}
 125 
 126 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a6a4956c0391bccbf8580b2e047d5bc35">~GenericRegex</link>()
 127 &#32;&#32;&#32;&#32;{
-128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(ownAllocator_);
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(<link linkend="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8">ownAllocator_</link>);
 129 &#32;&#32;&#32;&#32;}
 130 
 131 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a34ddb18fa3a2c70203d0fb740443c2a8">IsValid</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
-132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;root_&#32;!=&#32;kRegexInvalidState;
+132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link>&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>;
 133 &#32;&#32;&#32;&#32;}
 134 
 135 <emphasis role="keyword">private</emphasis>:
-136 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;Operator&#32;{
-137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kZeroOrOne,
-138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kZeroOrMore,
-139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kOneOrMore,
-140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kConcatenation,
-141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kAlternation,
-142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;kLeftParenthesis
+136 &#32;&#32;&#32;&#32;<emphasis role="keyword">enum</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">Operator</link>&#32;{
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>,
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f">kZeroOrMore</link>,
+139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3">kOneOrMore</link>,
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>,
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4">kAlternation</link>,
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54">kLeftParenthesis</link>
 143 &#32;&#32;&#32;&#32;};
 144 
-145 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kAnyCharacterClass&#32;=&#32;0xFFFFFFFF;&#32;&#32;&#32;
-146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kRangeCharacterClass&#32;=&#32;0xFFFFFFFE;
-147 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kRangeNegationFlag&#32;=&#32;0x80000000;
+145 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a1f3b72c56d5eab221ba46a473ff611dd">kAnyCharacterClass</link>&#32;=&#32;0xFFFFFFFF;&#32;&#32;&#32;
+146 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1aec665a90fdb2372dbc18a6ca0971e886">kRangeCharacterClass</link>&#32;=&#32;0xFFFFFFFE;
+147 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1ae435570506343e24811e588614f6842b">kRangeNegationFlag</link>&#32;=&#32;0x80000000;
 148 
-149 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>Range&#32;{
-150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;start;&#32;<emphasis role="comment">//&#32;</emphasis>
-151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;end;
-152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;next;
+149 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link>&#32;{
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a7b407235cac7d4245b984c970c8b2026">start</link>;&#32;<emphasis role="comment">//&#32;</emphasis>
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a48a003fe4bf27591ec30595c968953f2">end</link>;
+152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1abaff4592e1947f5368339ebfa7ad9f7f">next</link>;
 153 &#32;&#32;&#32;&#32;};
 154 
-155 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>State&#32;{
-156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out;&#32;&#32;&#32;&#32;&#32;
-157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out1;&#32;&#32;&#32;&#32;
-158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeStart;
-159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
+155 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>&#32;{
+156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>;&#32;&#32;&#32;&#32;&#32;
+157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a018baa62233a52e87df7dac21dcfefc7">out1</link>;&#32;&#32;&#32;&#32;
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a4f994da3eb09d3d86ad7dbfec4dd5c1c">rangeStart</link>;
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1ab085a481f7a18c4a70d4cc534a72a23e">codepoint</link>;
 160 &#32;&#32;&#32;&#32;};
 161 
-162 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>Frag&#32;{
-163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;o,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;m)&#32;:&#32;start(s),&#32;out(o),&#32;minIndex(m)&#32;{}
-164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;start;
-165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out;&#32;
-166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;minIndex;
+162 &#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis><link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;{
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a377c8d806013ce14ff941be9427e80ff">Frag</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;o,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;m)&#32;:&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>(s),&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>(o),&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>(m)&#32;{}
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>;
+165 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>;&#32;
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>;
 167 &#32;&#32;&#32;&#32;};
 168 
-169 &#32;&#32;&#32;&#32;State&amp;&#32;GetState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
-170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;stateCount_);
-171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;states_.template&#32;Bottom&lt;State&gt;()[index];
+169 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>);
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>.template&#32;Bottom&lt;State&gt;()[index];
 172 &#32;&#32;&#32;&#32;}
 173 
-174 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;GetState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;stateCount_);
-176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;states_.template&#32;Bottom&lt;State&gt;()[index];
+174 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_1ada0efa1a7089e9d58376e3fc2821a234">GetState</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>);
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>.template&#32;Bottom&lt;State&gt;()[index];
 177 &#32;&#32;&#32;&#32;}
 178 
-179 &#32;&#32;&#32;&#32;Range&amp;&#32;GetRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
-180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;rangeCount_);
-181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ranges_.template&#32;Bottom&lt;Range&gt;()[index];
+179 &#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link>&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+180 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link>);
+181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link>.template&#32;Bottom&lt;Range&gt;()[index];
 182 &#32;&#32;&#32;&#32;}
 183 
-184 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Range&amp;&#32;GetRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;rangeCount_);
-186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ranges_.template&#32;Bottom&lt;Range&gt;()[index];
+184 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link>&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7725f5a459796b58736b6cddcd19e335">GetRange</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link>);
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link>.template&#32;Bottom&lt;Range&gt;()[index];
 187 &#32;&#32;&#32;&#32;}
 188 
 189 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
-190 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Parse(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds)&#32;{
-191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;operandStack(allocator_,&#32;256);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Frag</emphasis>
-192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;operatorStack(allocator_,&#32;256);&#32;&#32;&#32;<emphasis role="comment">//&#32;Operator</emphasis>
-193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;atomCountStack(allocator_,&#32;256);&#32;&#32;<emphasis role="comment">//&#32;unsigned&#32;(Atom&#32;per&#32;parenthesis)</emphasis>
+190 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a038af33f370a14f987fb79d78f0d1c75">Parse</link>(<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&amp;&#32;ds)&#32;{
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;operandStack(<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>,&#32;256);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Frag</emphasis>
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;operatorStack(<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>,&#32;256);&#32;&#32;&#32;<emphasis role="comment">//&#32;Operator</emphasis>
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;atomCountStack(<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>,&#32;256);&#32;&#32;<emphasis role="comment">//&#32;unsigned&#32;(Atom&#32;per&#32;parenthesis)</emphasis>
 194 
 195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Push&lt;unsigned&gt;()&#32;=&#32;0;
 196 
 197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
-198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.Peek()&#32;!=&#32;0)&#32;{
-199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.Take())&#32;{
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;!=&#32;0)&#32;{
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>())&#32;{
 200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>:
-201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorBegin_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1ac99b045cc5250649ea3708bee95a56e8">anchorBegin_</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
 202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 203 
 204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;$&apos;</emphasis>:
-205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;anchorEnd_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1adbd19f8921ece1563d02e74f479d2e13">anchorEnd_</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
 206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 207 
 208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;|&apos;</emphasis>:
-209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;&lt;&#32;kAlternation)
-210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4">kAlternation</link>)
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
 211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
-212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kAlternation;
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4">kAlternation</link>;
 213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Top&lt;unsigned&gt;()&#32;=&#32;0;
 214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 215 
 216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;(&apos;</emphasis>:
-217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kLeftParenthesis;
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54">kLeftParenthesis</link>;
 218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*atomCountStack.template&#32;Push&lt;unsigned&gt;()&#32;=&#32;0;
 219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 220 
 221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;)&apos;</emphasis>:
-222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;!=&#32;kLeftParenthesis)
-223 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()&#32;&amp;&amp;&#32;*operatorStack.template&#32;Top&lt;Operator&gt;()&#32;!=&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54">kLeftParenthesis</link>)
+223 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
 224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
-225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operatorStack.Empty())
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operatorStack.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>())
 226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;operatorStack.template&#32;Pop&lt;Operator&gt;(1);
 228 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;atomCountStack.template&#32;Pop&lt;unsigned&gt;(1);
-229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link>(atomCountStack,&#32;operatorStack);
 230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 231 
 232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;?&apos;</emphasis>:
-233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kZeroOrOne))
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>))
 234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 235 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 236 
 237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;*&apos;</emphasis>:
-238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kZeroOrMore))
+238 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f">kZeroOrMore</link>))
 239 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 240 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 241 
 242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;+&apos;</emphasis>:
-243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;kOneOrMore))
+243 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3">kOneOrMore</link>))
 244 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 245 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 246 
 247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;{&apos;</emphasis>:
 248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
 249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;n,&#32;m;
-250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseUnsigned(ds,&#32;&amp;n))
+250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a16d0bf927741c666f46eed1c66f04150">ParseUnsigned</link>(ds,&#32;&amp;n))
 251 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 252 
-253 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;,&apos;</emphasis>)&#32;{
-254 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
-255 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
-256 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m&#32;=&#32;kInfinityQuantifier;
-257 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseUnsigned(ds,&#32;&amp;m)&#32;||&#32;m&#32;&lt;&#32;n)
+253 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;==&#32;<emphasis role="charliteral">&apos;,&apos;</emphasis>)&#32;{
+254 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>();
+255 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;==&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
+256 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3">kInfinityQuantifier</link>;
+257 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a16d0bf927741c666f46eed1c66f04150">ParseUnsigned</link>(ds,&#32;&amp;m)&#32;||&#32;m&#32;&lt;&#32;n)
 258 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 260 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
 261 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;m&#32;=&#32;n;
 262 
-263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!EvalQuantifier(operandStack,&#32;n,&#32;m)&#32;||&#32;ds.Peek()&#32;!=&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
+263 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a71f934ac6c4b2b4f63b0c5fc68797933">EvalQuantifier</link>(operandStack,&#32;n,&#32;m)&#32;||&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;!=&#32;<emphasis role="charliteral">&apos;}&apos;</emphasis>)
 264 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
-265 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
+265 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>();
 266 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 267 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 268 
 269 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;.&apos;</emphasis>:
-270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushOperand(operandStack,&#32;kAnyCharacterClass);
-271 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+270 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a1a3ea65f584e0dba5815a1232f9a770e">PushOperand</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1a1f3b72c56d5eab221ba46a473ff611dd">kAnyCharacterClass</link>);
+271 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link>(atomCountStack,&#32;operatorStack);
 272 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 273 
 274 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;[&apos;</emphasis>:
 275 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
 276 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;range;
-277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!ParseRange(ds,&#32;&amp;range))
+277 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1aa7336514ba21536ec90aaf2188581c1e">ParseRange</link>(ds,&#32;&amp;range))
 278 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
-279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;kRangeCharacterClass);
-280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(s).rangeStart&#32;=&#32;range;
-281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;s);
+279 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;<link linkend="_classinternal_1_1_generic_regex_1aec665a90fdb2372dbc18a6ca0971e886">kRangeCharacterClass</link>);
+280 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(s).<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a4f994da3eb09d3d86ad7dbfec4dd5c1c">rangeStart</link>&#32;=&#32;range;
+281 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(s,&#32;s,&#32;s);
 282 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+283 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link>(atomCountStack,&#32;operatorStack);
 284 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
 285 
 286 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>:&#32;<emphasis role="comment">//&#32;Escape&#32;character</emphasis>
-287 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!CharacterEscape(ds,&#32;&amp;codepoint))
+287 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1ae46593a63a93b8bc34d044800777b72d">CharacterEscape</link>(ds,&#32;&amp;codepoint))
 288 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;&#32;<emphasis role="comment">//&#32;Unsupported&#32;escape&#32;character</emphasis>
 289 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fall&#32;through&#32;to&#32;default</emphasis>
 290 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH;
 291 
 292 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:&#32;<emphasis role="comment">//&#32;Pattern&#32;character</emphasis>
-293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushOperand(operandStack,&#32;codepoint);
-294 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ImplicitConcatenation(atomCountStack,&#32;operatorStack);
+293 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a1a3ea65f584e0dba5815a1232f9a770e">PushOperand</link>(operandStack,&#32;codepoint);
+294 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link>(atomCountStack,&#32;operatorStack);
 295 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 296 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 297 
-298 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.Empty())
-299 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!Eval(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
+298 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!operatorStack.<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>())
+299 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;*operatorStack.template&#32;Pop&lt;Operator&gt;(1)))
 300 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>;
 301 
 302 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Link&#32;the&#32;operand&#32;to&#32;matching&#32;state.</emphasis>
-303 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;==&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
-304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag*&#32;e&#32;=&#32;operandStack.template&#32;Pop&lt;Frag&gt;(1);
-305 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e-&gt;out,&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;0));
-306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;root_&#32;=&#32;e-&gt;start;
+303 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;==&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>))&#32;{
+304 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>*&#32;e&#32;=&#32;operandStack.template&#32;Pop&lt;Frag&gt;(1);
+305 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link>(e-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;0));
+306 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link>&#32;=&#32;e-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>;
 307 
 308 <emphasis role="preprocessor">#if&#32;RAPIDJSON_REGEX_VERBOSE</emphasis>
-309 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;root:&#32;%d\n&quot;</emphasis>,&#32;root_);
-310 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;stateCount_&#32;;&#32;i++)&#32;{
-311 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State&amp;&#32;s&#32;=&#32;GetState(i);
-312 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;[%2d]&#32;out:&#32;%2d&#32;out1:&#32;%2d&#32;c:&#32;&apos;%c&apos;\n&quot;</emphasis>,&#32;i,&#32;s.out,&#32;s.out1,&#32;(<emphasis role="keywordtype">char</emphasis>)s.codepoint);
+309 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;root:&#32;%d\n&quot;</emphasis>,&#32;<link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link>);
+310 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>&#32;;&#32;i++)&#32;{
+311 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>&amp;&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(i);
+312 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;[%2d]&#32;out:&#32;%2d&#32;out1:&#32;%2d&#32;c:&#32;&apos;%c&apos;\n&quot;</emphasis>,&#32;i,&#32;s.<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>,&#32;s.<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a018baa62233a52e87df7dac21dcfefc7">out1</link>,&#32;(<emphasis role="keywordtype">char</emphasis>)s.<link linkend="_structinternal_1_1_generic_regex_1_1_state_1ab085a481f7a18c4a70d4cc534a72a23e">codepoint</link>);
 313 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 314 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;printf(<emphasis role="stringliteral">&quot;\n&quot;</emphasis>);
 315 <emphasis role="preprocessor">#endif</emphasis>
 316 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 317 &#32;&#32;&#32;&#32;}
 318 
-319 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;NewState(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out1,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
-320 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State*&#32;s&#32;=&#32;states_.template&#32;Push&lt;State&gt;();
-321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;out&#32;=&#32;out;
-322 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;out1&#32;=&#32;out1;
-323 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;codepoint&#32;=&#32;codepoint;
-324 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;rangeStart&#32;=&#32;kRegexInvalidRange;
-325 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;stateCount_++;
+319 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;out1,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+320 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>*&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>.template&#32;Push&lt;State&gt;();
+321 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>&#32;=&#32;out;
+322 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a018baa62233a52e87df7dac21dcfefc7">out1</link>&#32;=&#32;out1;
+323 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1ab085a481f7a18c4a70d4cc534a72a23e">codepoint</link>&#32;=&#32;codepoint;
+324 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a4f994da3eb09d3d86ad7dbfec4dd5c1c">rangeStart</link>&#32;=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>;
+325 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>++;
 326 &#32;&#32;&#32;&#32;}
 327 
-328 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;PushOperand(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
-329 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;kRegexInvalidState,&#32;codepoint);
-330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;s);
+328 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a1a3ea65f584e0dba5815a1232f9a770e">PushOperand</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+329 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;codepoint);
+330 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(s,&#32;s,&#32;s);
 331 &#32;&#32;&#32;&#32;}
 332 
-333 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;ImplicitConcatenation(Stack&lt;Allocator&gt;&amp;&#32;atomCountStack,&#32;Stack&lt;Allocator&gt;&amp;&#32;operatorStack)&#32;{
+333 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a3b6d21989c3e41e33f6d2a7897ffdd6b">ImplicitConcatenation</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;atomCountStack,&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;operatorStack)&#32;{
 334 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*atomCountStack.template&#32;Top&lt;unsigned&gt;())
-335 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;kConcatenation;
+335 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operatorStack.template&#32;Push&lt;Operator&gt;()&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>;
 336 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(*atomCountStack.template&#32;Top&lt;unsigned&gt;())++;
 337 &#32;&#32;&#32;&#32;}
 338 
-339 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;Append(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l1,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l2)&#32;{
+339 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a96b270e845e58787b624604531598517">Append</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l1,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l2)&#32;{
 340 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;old&#32;=&#32;l1;
-341 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(GetState(l1).out&#32;!=&#32;kRegexInvalidState)
-342 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;l1&#32;=&#32;GetState(l1).out;
-343 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(l1).out&#32;=&#32;l2;
+341 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(l1).out&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>)
+342 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;l1&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(l1).<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>;
+343 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(l1).<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>&#32;=&#32;l2;
 344 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;old;
 345 &#32;&#32;&#32;&#32;}
 346 
-347 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Patch(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s)&#32;{
-348 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;next;&#32;l&#32;!=&#32;kRegexInvalidState;&#32;l&#32;=&#32;next)&#32;{
-349 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;next&#32;=&#32;GetState(l).out;
-350 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetState(l).out&#32;=&#32;s;
+347 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s)&#32;{
+348 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;next;&#32;l&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>;&#32;l&#32;=&#32;next)&#32;{
+349 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;next&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(l).<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>;
+350 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(l).<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>&#32;=&#32;s;
 351 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 352 &#32;&#32;&#32;&#32;}
 353 
-354 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;Eval(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;Operator&#32;op)&#32;{
+354 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673">Operator</link>&#32;op)&#32;{
 355 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(op)&#32;{
-356 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kConcatenation:
-357 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag)&#32;*&#32;2);
+356 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>:
+357 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>)&#32;*&#32;2);
 358 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
-359 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-360 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-361 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e1.out,&#32;e2.start);
-362 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(e1.start,&#32;e2.out,&#32;Min(e1.minIndex,&#32;e2.minIndex));
+359 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+360 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+361 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>);
+362 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;<link linkend="_classinternal_1_1_generic_regex_1a064e15b8c9c222a07e143ec5847c6ec6">Min</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>));
 363 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 364 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 365 
-366 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kAlternation:
-367 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag)&#32;*&#32;2)&#32;{
-368 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-369 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-370 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(e1.start,&#32;e2.start,&#32;0);
-371 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;Append(e1.out,&#32;e2.out),&#32;Min(e1.minIndex,&#32;e2.minIndex));
+366 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4">kAlternation</link>:
+367 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>)&#32;*&#32;2)&#32;{
+368 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e2&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+369 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e1&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+370 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;0);
+371 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(s,&#32;<link linkend="_classinternal_1_1_generic_regex_1a96b270e845e58787b624604531598517">Append</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>),&#32;<link linkend="_classinternal_1_1_generic_regex_1a064e15b8c9c222a07e143ec5847c6ec6">Min</link>(e1.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>,&#32;e2.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>));
 372 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 373 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 374 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 375 
-376 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kZeroOrOne:
-377 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
-378 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-379 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
-380 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;Append(e.out,&#32;s),&#32;e.minIndex);
+376 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>:
+377 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>))&#32;{
+378 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+379 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;0);
+380 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(s,&#32;<link linkend="_classinternal_1_1_generic_regex_1a96b270e845e58787b624604531598517">Append</link>(e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;s),&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>);
 381 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 382 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 383 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 384 
-385 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kZeroOrMore:
-386 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
-387 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-388 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
-389 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e.out,&#32;s);
-390 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(s,&#32;s,&#32;e.minIndex);
+385 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f">kZeroOrMore</link>:
+386 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>))&#32;{
+387 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+388 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;0);
+389 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link>(e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;s);
+390 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(s,&#32;s,&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>);
 391 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 392 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 393 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 394 
-395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;kOneOrMore:
-396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag))&#32;{
-397 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Frag&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
-398 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;NewState(kRegexInvalidState,&#32;e.start,&#32;0);
-399 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Patch(e.out,&#32;s);
-400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(e.start,&#32;s,&#32;e.minIndex);
+395 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3">kOneOrMore</link>:
+396 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>))&#32;{
+397 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;e&#32;=&#32;*operandStack.template&#32;Pop&lt;Frag&gt;(1);
+398 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1ad57a48991e61750ef7426c48b1d3e51b">NewState</link>(<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>,&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;0);
+399 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a90c5c230de4794560971c48e15861f8e">Patch</link>(e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>,&#32;s);
+400 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>,&#32;s,&#32;e.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>);
 401 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 402 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 403 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
@@ -379,85 +379,85 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 408 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 409 &#32;&#32;&#32;&#32;}
 410 
-411 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;EvalQuantifier(Stack&lt;Allocator&gt;&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;n,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;m)&#32;{
+411 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a71f934ac6c4b2b4f63b0c5fc68797933">EvalQuantifier</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;operandStack,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;n,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;m)&#32;{
 412 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(n&#32;&lt;=&#32;m);
-413 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.GetSize()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(Frag));
+413 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(operandStack.<link linkend="_classinternal_1_1_stack_1ac484468a2791bd3e9ba609bd1600ab48">GetSize</link>()&#32;&gt;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>));
 414 
 415 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;==&#32;0)&#32;{
 416 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;0)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0}&#32;not&#32;support</emphasis>
 417 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
-418 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;kInfinityQuantifier)
-419 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrMore);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,}&#32;-&gt;&#32;a*</emphasis>
+418 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;<link linkend="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3">kInfinityQuantifier</link>)
+419 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f">kZeroOrMore</link>);&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,}&#32;-&gt;&#32;a*</emphasis>
 420 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
-421 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrOne);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?</emphasis>
+421 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?</emphasis>
 422 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
-423 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?&#32;a?&#32;a?&#32;a?&#32;a?</emphasis>
+423 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link>(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?&#32;a?&#32;a?&#32;a?&#32;a?</emphasis>
 424 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
-425 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?a?a?a?a?</emphasis>
+425 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>);&#32;<emphasis role="comment">//&#32;a{0,5}&#32;-&gt;&#32;a?a?a?a?a?</emphasis>
 426 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 427 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 428 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 429 
 430 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;n&#32;-&#32;1;&#32;i++)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3}&#32;-&gt;&#32;a&#32;a&#32;a</emphasis>
-431 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);
+431 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link>(operandStack);
 432 
-433 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;kInfinityQuantifier)
-434 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kOneOrMore);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,}&#32;-&gt;&#32;a&#32;a&#32;a+</emphasis>
+433 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;==&#32;<link linkend="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3">kInfinityQuantifier</link>)
+434 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3">kOneOrMore</link>);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,}&#32;-&gt;&#32;a&#32;a&#32;a+</emphasis>
 435 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(m&#32;&gt;&#32;n)&#32;{
-436 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a</emphasis>
-437 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kZeroOrOne);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?</emphasis>
+436 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link>(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a</emphasis>
+437 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3">kZeroOrOne</link>);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?</emphasis>
 438 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;n;&#32;i&#32;&lt;&#32;m&#32;-&#32;1;&#32;i++)
-439 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;CloneTopOperand(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?&#32;a?</emphasis>
+439 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link>(operandStack);&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;a&#32;a?&#32;a?</emphasis>
 440 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;n;&#32;i&#32;&lt;&#32;m;&#32;i++)
-441 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;aa?a?</emphasis>
+441 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>);&#32;<emphasis role="comment">//&#32;a{3,5}&#32;-&gt;&#32;a&#32;a&#32;aa?a?</emphasis>
 442 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 443 
 444 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">unsigned</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;n&#32;-&#32;1;&#32;i++)
-445 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Eval(operandStack,&#32;kConcatenation);&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3}&#32;-&gt;&#32;aaa,&#32;a{3,}&#32;-&gt;&#32;aaa+,&#32;a{3.5}&#32;-&gt;&#32;aaaa?a?</emphasis>
+445 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a0cc7e9e0fa434ded7ed37de54c49ce26">Eval</link>(operandStack,&#32;<link linkend="_classinternal_1_1_generic_regex_1acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2">kConcatenation</link>);&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;a{3}&#32;-&gt;&#32;aaa,&#32;a{3,}&#32;-&gt;&#32;aaa+,&#32;a{3.5}&#32;-&gt;&#32;aaaa?a?</emphasis>
 446 
 447 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 448 &#32;&#32;&#32;&#32;}
 449 
-450 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;Min(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;b)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;&lt;&#32;b&#32;?&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;:&#32;b;&#32;}
+450 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a064e15b8c9c222a07e143ec5847c6ec6">Min</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;b)&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;&lt;&#32;b&#32;?&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>&#32;:&#32;b;&#32;}
 451 
-452 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;CloneTopOperand(Stack&lt;Allocator&gt;&amp;&#32;operandStack)&#32;{
-453 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Frag&#32;src&#32;=&#32;*operandStack.template&#32;Top&lt;Frag&gt;();&#32;<emphasis role="comment">//&#32;Copy&#32;constructor&#32;to&#32;prevent&#32;invalidation</emphasis>
-454 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;count&#32;=&#32;stateCount_&#32;-&#32;src.minIndex;&#32;<emphasis role="comment">//&#32;Assumes&#32;top&#32;operand&#32;contains&#32;states&#32;in&#32;[src-&gt;minIndex,&#32;stateCount_)</emphasis>
-455 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;State*&#32;s&#32;=&#32;states_.template&#32;Push&lt;State&gt;(count);
-456 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;memcpy(s,&#32;&amp;GetState(src.minIndex),&#32;count&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(State));
+452 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a44a907caf47179a3f0edcf46a4be8b2f">CloneTopOperand</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;operandStack)&#32;{
+453 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>&#32;src&#32;=&#32;*operandStack.template&#32;Top&lt;Frag&gt;();&#32;<emphasis role="comment">//&#32;Copy&#32;constructor&#32;to&#32;prevent&#32;invalidation</emphasis>
+454 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;count&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>&#32;-&#32;src.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>;&#32;<emphasis role="comment">//&#32;Assumes&#32;top&#32;operand&#32;contains&#32;states&#32;in&#32;[src-&gt;minIndex,&#32;stateCount_)</emphasis>
+455 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>*&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>.template&#32;Push&lt;State&gt;(count);
+456 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;memcpy(s,&#32;&amp;<link linkend="_classinternal_1_1_generic_regex_1aea17c79a5d4d17a3b21ef86dda9fa0e3">GetState</link>(src.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>),&#32;count&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_structinternal_1_1_generic_regex_1_1_state">State</link>));
 457 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;j&#32;=&#32;0;&#32;j&#32;&lt;&#32;count;&#32;j++)&#32;{
-458 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out&#32;!=&#32;kRegexInvalidState)
-459 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].out&#32;+=&#32;count;
-460 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out1&#32;!=&#32;kRegexInvalidState)
-461 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].out1&#32;+=&#32;count;
+458 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>)
+459 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a2db0ecd5296137b4e27a8bdb9b9b3a36">out</link>&#32;+=&#32;count;
+460 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s[j].out1&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>)
+461 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;s[j].<link linkend="_structinternal_1_1_generic_regex_1_1_state_1a018baa62233a52e87df7dac21dcfefc7">out1</link>&#32;+=&#32;count;
 462 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-463 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;Frag(src.start&#32;+&#32;count,&#32;src.out&#32;+&#32;count,&#32;src.minIndex&#32;+&#32;count);
-464 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateCount_&#32;+=&#32;count;
+463 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*operandStack.template&#32;Push&lt;Frag&gt;()&#32;=&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_frag">Frag</link>(src.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1adec8170ccdf14bfc3138a4df0b2e4abd">start</link>&#32;+&#32;count,&#32;src.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a48b23d866d56328e05c187de2d7443d2">out</link>&#32;+&#32;count,&#32;src.<link linkend="_structinternal_1_1_generic_regex_1_1_frag_1a8007c1e6c879d1fe3eec2327fed0c664">minIndex</link>&#32;+&#32;count);
+464 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>&#32;+=&#32;count;
 465 &#32;&#32;&#32;&#32;}
 466 
 467 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
-468 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ParseUnsigned(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;u)&#32;{
+468 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a16d0bf927741c666f46eed1c66f04150">ParseUnsigned</link>(<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;u)&#32;{
 469 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;r&#32;=&#32;0;
-470 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;&lt;&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;||&#32;ds.Peek()&#32;&gt;&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)
+470 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;&lt;&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;||&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;&gt;&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)
 471 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
-472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.Peek()&#32;&gt;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;&amp;&amp;&#32;ds.Peek()&#32;&lt;=&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)&#32;{
-473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(r&#32;&gt;=&#32;429496729&#32;&amp;&amp;&#32;ds.Peek()&#32;&gt;&#32;<emphasis role="charliteral">&apos;5&apos;</emphasis>)&#32;<emphasis role="comment">//&#32;2^32&#32;-&#32;1&#32;=&#32;4294967295</emphasis>
+472 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;&gt;=&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>&#32;&amp;&amp;&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;&lt;=&#32;<emphasis role="charliteral">&apos;9&apos;</emphasis>)&#32;{
+473 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(r&#32;&gt;=&#32;429496729&#32;&amp;&amp;&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;&gt;&#32;<emphasis role="charliteral">&apos;5&apos;</emphasis>)&#32;<emphasis role="comment">//&#32;2^32&#32;-&#32;1&#32;=&#32;4294967295</emphasis>
 474 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;&#32;<emphasis role="comment">//&#32;overflow</emphasis>
-475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r&#32;=&#32;r&#32;*&#32;10&#32;+&#32;(ds.Take()&#32;-&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>);
+475 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r&#32;=&#32;r&#32;*&#32;10&#32;+&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>()&#32;-&#32;<emphasis role="charliteral">&apos;0&apos;</emphasis>);
 476 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 477 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*u&#32;=&#32;r;
 478 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 479 &#32;&#32;&#32;&#32;}
 480 
 481 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
-482 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ParseRange(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>*&#32;range)&#32;{
+482 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1aa7336514ba21536ec90aaf2188581c1e">ParseRange</link>(<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&amp;&#32;ds,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>*&#32;range)&#32;{
 483 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;isBegin&#32;=&#32;<emphasis role="keyword">true</emphasis>;
 484 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;negate&#32;=&#32;<emphasis role="keyword">false</emphasis>;
 485 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;step&#32;=&#32;0;
-486 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;start&#32;=&#32;kRegexInvalidRange;
-487 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;current&#32;=&#32;kRegexInvalidRange;
+486 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;start&#32;=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>;
+487 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;current&#32;=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>;
 488 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
-489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;((codepoint&#32;=&#32;ds.Take())&#32;!=&#32;0)&#32;{
+489 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;((codepoint&#32;=&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>())&#32;!=&#32;0)&#32;{
 490 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(isBegin)&#32;{
 491 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;isBegin&#32;=&#32;<emphasis role="keyword">false</emphasis>;
 492 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;==&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>)&#32;{
@@ -468,24 +468,24 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 497 
 498 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint)&#32;{
 499 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;]&apos;</emphasis>:
-500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;kRegexInvalidRange)
+500 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>)
 501 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error:&#32;nothing&#32;inside&#32;[]</emphasis>
 502 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(step&#32;==&#32;2)&#32;{&#32;<emphasis role="comment">//&#32;Add&#32;trailing&#32;&apos;-&apos;</emphasis>
-503 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;NewRange(<emphasis role="charliteral">&apos;-&apos;</emphasis>);
-504 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(current&#32;!=&#32;kRegexInvalidRange);
-505 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).next&#32;=&#32;r;
+503 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1a868d6e44d0782e9fbdd476243daa578f">NewRange</link>(<emphasis role="charliteral">&apos;-&apos;</emphasis>);
+504 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(current&#32;!=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>);
+505 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link>(current).<link linkend="_structinternal_1_1_generic_regex_1_1_range_1abaff4592e1947f5368339ebfa7ad9f7f">next</link>&#32;=&#32;r;
 506 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 507 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(negate)
-508 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(start).start&#32;|=&#32;kRangeNegationFlag;
+508 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link>(start).<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a7b407235cac7d4245b984c970c8b2026">start</link>&#32;|=&#32;<link linkend="_classinternal_1_1_generic_regex_1ae435570506343e24811e588614f6842b">kRangeNegationFlag</link>;
 509 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*range&#32;=&#32;start;
 510 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 511 
 512 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;\\&apos;</emphasis>:
-513 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.Peek()&#32;==&#32;<emphasis role="charliteral">&apos;b&apos;</emphasis>)&#32;{
-514 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.Take();
+513 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ds.<link linkend="_classinternal_1_1_decoded_stream_1ac78f2cbc03ae0d79a0fcfe6d56589d70">Peek</link>()&#32;==&#32;<emphasis role="charliteral">&apos;b&apos;</emphasis>)&#32;{
+514 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>();
 515 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;codepoint&#32;=&#32;0x0008;&#32;<emphasis role="comment">//&#32;Escape&#32;backspace&#32;character</emphasis>
 516 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-517 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!CharacterEscape(ds,&#32;&amp;codepoint))
+517 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_1ae46593a63a93b8bc34d044800777b72d">CharacterEscape</link>(ds,&#32;&amp;codepoint))
 518 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 519 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fall&#32;through&#32;to&#32;default</emphasis>
 520 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;RAPIDJSON_DELIBERATE_FALLTHROUGH;
@@ -502,10 +502,10 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 531 
 532 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;0:
 533 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
-534 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;NewRange(codepoint);
-535 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current&#32;!=&#32;kRegexInvalidRange)
-536 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).next&#32;=&#32;r;
-537 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;kRegexInvalidRange)
+534 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;r&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1a868d6e44d0782e9fbdd476243daa578f">NewRange</link>(codepoint);
+535 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current&#32;!=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>)
+536 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link>(current).<link linkend="_structinternal_1_1_generic_regex_1_1_range_1abaff4592e1947f5368339ebfa7ad9f7f">next</link>&#32;=&#32;r;
+537 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(start&#32;==&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>)
 538 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;start&#32;=&#32;r;
 539 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current&#32;=&#32;r;
 540 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
@@ -514,7 +514,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 543 
 544 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">default</emphasis>:
 545 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(step&#32;==&#32;2);
-546 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;GetRange(current).end&#32;=&#32;codepoint;
+546 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_1a7e05e1219867fdbe83cb4e1f6d4aed91">GetRange</link>(current).<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a48a003fe4bf27591ec30595c968953f2">end</link>&#32;=&#32;codepoint;
 547 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;step&#32;=&#32;0;
 548 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 549 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
@@ -522,17 +522,17 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 551 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
 552 &#32;&#32;&#32;&#32;}
 553 &#32;&#32;&#32;&#32;
-554 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;NewRange(<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
-555 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Range*&#32;r&#32;=&#32;ranges_.template&#32;Push&lt;Range&gt;();
-556 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;start&#32;=&#32;r-&gt;end&#32;=&#32;codepoint;
-557 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;next&#32;=&#32;kRegexInvalidRange;
-558 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;rangeCount_++;
+554 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a868d6e44d0782e9fbdd476243daa578f">NewRange</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)&#32;{
+555 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structinternal_1_1_generic_regex_1_1_range">Range</link>*&#32;r&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link>.template&#32;Push&lt;Range&gt;();
+556 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a7b407235cac7d4245b984c970c8b2026">start</link>&#32;=&#32;r-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1a48a003fe4bf27591ec30595c968953f2">end</link>&#32;=&#32;codepoint;
+557 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;r-&gt;<link linkend="_structinternal_1_1_generic_regex_1_1_range_1abaff4592e1947f5368339ebfa7ad9f7f">next</link>&#32;=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>;
+558 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link>++;
 559 &#32;&#32;&#32;&#32;}
 560 
 561 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
-562 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;CharacterEscape(DecodedStream&lt;InputStream,&#32;Encoding&gt;&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;escapedCodepoint)&#32;{
+562 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1ae46593a63a93b8bc34d044800777b72d">CharacterEscape</link>(<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&amp;&#32;ds,&#32;<emphasis role="keywordtype">unsigned</emphasis>*&#32;escapedCodepoint)&#32;{
 563 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
-564 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.Take())&#32;{
+564 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">switch</emphasis>&#32;(codepoint&#32;=&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>())&#32;{
 565 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;^&apos;</emphasis>:
 566 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;$&apos;</emphasis>:
 567 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">case</emphasis>&#32;<emphasis role="charliteral">&apos;|&apos;</emphasis>:
@@ -558,19 +558,19 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 587 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 588 &#32;&#32;&#32;&#32;}
 589 
-590 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;ownAllocator_;
-591 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator_;
-592 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;states_;
-593 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;ranges_;
-594 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;root_;
-595 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;stateCount_;
-596 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeCount_;
+590 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_classinternal_1_1_generic_regex_1a63f4d8c4e3d61fcd9f1489347708ded8">ownAllocator_</link>;
+591 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_classinternal_1_1_generic_regex_1a2fb2543ae1c5ec68f891745fa69af0e3">allocator_</link>;
+592 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a5391b182b60bb8967dd0a6d99db9c9f0">states_</link>;
+593 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1af94c64023502147345303d70ff594140">ranges_</link>;
+594 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1a2af8c29234a2229b509fdf60cf265201">root_</link>;
+595 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1af47146f067e491bb9cb23b13a88a26db">stateCount_</link>;
+596 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;<link linkend="_classinternal_1_1_generic_regex_1ad65c6144b7dc5b0441ef20dc4ef81619">rangeCount_</link>;
 597 
-598 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;kInfinityQuantifier&#32;=&#32;~0u;
+598 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1a12955d17d702f2fa9cf39421666c3ff3">kInfinityQuantifier</link>&#32;=&#32;~0u;
 599 
 600 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;SearchWithAnchoring()</emphasis>
-601 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorBegin_;
-602 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorEnd_;
+601 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1ac99b045cc5250649ea3708bee95a56e8">anchorBegin_</link>;
+602 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_1adbd19f8921ece1563d02e74f479d2e13">anchorEnd_</link>;
 603 };
 604 
 605 <emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;RegexType,&#32;<emphasis role="keyword">typename</emphasis>&#32;Allocator&#32;=&#32;CrtAllocator&gt;
@@ -580,25 +580,25 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 609 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;Encoding::Ch&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>;
 610 
 611 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a72f70e210a4bc944dba62655a008750b">GenericRegexSearch</link>(<emphasis role="keyword">const</emphasis>&#32;RegexType&amp;&#32;regex,&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator&#32;=&#32;0)&#32;:&#32;
-612 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;regex_(regex),&#32;allocator_(allocator),&#32;ownAllocator_(0),
-613 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_(allocator,&#32;0),&#32;state1_(allocator,&#32;0),&#32;stateSet_()
+612 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>(regex),&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa87a7caf0054f4e65446ecd91aba367c">allocator_</link>(allocator),&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a804573e03eb673a9633f638fe3e3b62f">ownAllocator_</link>(0),
+613 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a6b44c058a10cff21c2e3d20d32b84eba">state0_</link>(allocator,&#32;0),&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a029a67ab36e5cb1b1394fc7a688c7cda">state1_</link>(allocator,&#32;0),&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>()
 614 &#32;&#32;&#32;&#32;{
-615 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(regex_.IsValid());
-616 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!allocator_)
-617 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ownAllocator_&#32;=&#32;allocator_&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)();
-618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateSet_&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>*<emphasis role="keyword">&gt;</emphasis>(allocator_-&gt;Malloc(GetStateSetSize()));
-619 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_.template&#32;Reserve&lt;SizeType&gt;(regex_.stateCount_);
-620 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state1_.template&#32;Reserve&lt;SizeType&gt;(regex_.stateCount_);
+615 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.IsValid());
+616 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_classinternal_1_1_generic_regex_search_1aa87a7caf0054f4e65446ecd91aba367c">allocator_</link>)
+617 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a804573e03eb673a9633f638fe3e3b62f">ownAllocator_</link>&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa87a7caf0054f4e65446ecd91aba367c">allocator_</link>&#32;=&#32;<link linkend="_rapidjson_8h_1abdc7cd7902748ffe6626d71c59a73c3b">RAPIDJSON_NEW</link>(<link linkend="_classrapidjson_1_1_allocator">Allocator</link>)();
+618 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">unsigned</emphasis>*<emphasis role="keyword">&gt;</emphasis>(<link linkend="_classinternal_1_1_generic_regex_search_1aa87a7caf0054f4e65446ecd91aba367c">allocator_</link>-&gt;Malloc(<link linkend="_classinternal_1_1_generic_regex_search_1a12ddb6629c0be52801d291a8e5005c06">GetStateSetSize</link>()));
+619 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a6b44c058a10cff21c2e3d20d32b84eba">state0_</link>.template&#32;Reserve&lt;SizeType&gt;(<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.stateCount_);
+620 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a029a67ab36e5cb1b1394fc7a688c7cda">state1_</link>.template&#32;Reserve&lt;SizeType&gt;(<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.stateCount_);
 621 &#32;&#32;&#32;&#32;}
 622 
 623 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1ad14ee51edf6f9bfe3b7cffa59c4c19c9">~GenericRegexSearch</link>()&#32;{
-624 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Allocator::Free</link>(stateSet_);
-625 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(ownAllocator_);
+624 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_allocators_8h_1a471c182d62d396b7d5d564e8d6a62d9e">Allocator::Free</link>(<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>);
+625 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a52c941c3fdd646527cdcd42aa846a28a">RAPIDJSON_DELETE</link>(<link linkend="_classinternal_1_1_generic_regex_search_1a804573e03eb673a9633f638fe3e3b62f">ownAllocator_</link>);
 626 &#32;&#32;&#32;&#32;}
 627 
 628 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
 629 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1ad204164a20e3ac403b405683b51c2d0b">Match</link>(InputStream&amp;&#32;is)&#32;{
-630 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;SearchWithAnchoring(is,&#32;<emphasis role="keyword">true</emphasis>,&#32;<emphasis role="keyword">true</emphasis>);
+630 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a850b4f0e1cf3f7e0f6c02ae3d7da654a">SearchWithAnchoring</link>(is,&#32;<emphasis role="keyword">true</emphasis>,&#32;<emphasis role="keyword">true</emphasis>);
 631 &#32;&#32;&#32;&#32;}
 632 
 633 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a9d3fe83905549d2fd4c513b8eacd14de">Match</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>*&#32;s)&#32;{
@@ -608,7 +608,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 637 
 638 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
 639 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a766c684321471b468ff468648f186cf0">Search</link>(InputStream&amp;&#32;is)&#32;{
-640 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;SearchWithAnchoring(is,&#32;regex_.anchorBegin_,&#32;regex_.anchorEnd_);
+640 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a850b4f0e1cf3f7e0f6c02ae3d7da654a">SearchWithAnchoring</link>(is,&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.anchorBegin_,&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.anchorEnd_);
 641 &#32;&#32;&#32;&#32;}
 642 
 643 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a97398161c60f3ed3e4aabaff952c6f1e">Search</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a966f3a62fc838b5e9350f4c6a624d9a1">Ch</link>*&#32;s)&#32;{
@@ -617,36 +617,36 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 646 &#32;&#32;&#32;&#32;}
 647 
 648 <emphasis role="keyword">private</emphasis>:
-649 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::State&#32;State;
-650 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::Range&#32;Range;
+649 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::State&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a0586261735313d8cf20042e50ee75c92">State</link>;
+650 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keyword">typename</emphasis>&#32;RegexType::Range&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaceb6517b628e447c6df61a8b7b33c7c">Range</link>;
 651 
 652 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&#32;&lt;<emphasis role="keyword">typename</emphasis>&#32;InputStream&gt;
-653 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;SearchWithAnchoring(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorBegin,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorEnd)&#32;{
+653 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a850b4f0e1cf3f7e0f6c02ae3d7da654a">SearchWithAnchoring</link>(InputStream&amp;&#32;is,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorBegin,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;anchorEnd)&#32;{
 654 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_decoded_stream">DecodedStream&lt;InputStream, Encoding&gt;</link>&#32;ds(is);
 655 
-656 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;state0_.Clear();
-657 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;*current&#32;=&#32;&amp;state0_,&#32;*next&#32;=&#32;&amp;state1_;
-658 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;stateSetSize&#32;=&#32;GetStateSetSize();
-659 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(stateSet_,&#32;0,&#32;stateSetSize);
+656 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a6b44c058a10cff21c2e3d20d32b84eba">state0_</link>.Clear();
+657 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;*current&#32;=&#32;&amp;<link linkend="_classinternal_1_1_generic_regex_search_1a6b44c058a10cff21c2e3d20d32b84eba">state0_</link>,&#32;*next&#32;=&#32;&amp;<link linkend="_classinternal_1_1_generic_regex_search_1a029a67ab36e5cb1b1394fc7a688c7cda">state1_</link>;
+658 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;stateSetSize&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a12ddb6629c0be52801d291a8e5005c06">GetStateSetSize</link>();
+659 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>,&#32;0,&#32;stateSetSize);
 660 
-661 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;AddState(*current,&#32;regex_.root_);
+661 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(*current,&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.root_);
 662 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint;
-663 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!current-&gt;<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()&#32;&amp;&amp;&#32;(codepoint&#32;=&#32;ds.Take())&#32;!=&#32;0)&#32;{
-664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(stateSet_,&#32;0,&#32;stateSetSize);
+663 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(!current-&gt;<link linkend="_classinternal_1_1_stack_1a2b8bda380e33838a99e3c73ff9785f03">Empty</link>()&#32;&amp;&amp;&#32;(codepoint&#32;=&#32;ds.<link linkend="_classinternal_1_1_decoded_stream_1a62b45969ce169bef1da0600490329857">Take</link>())&#32;!=&#32;0)&#32;{
+664 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>,&#32;0,&#32;stateSetSize);
 665 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;next-&gt;Clear();
 666 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;matched&#32;=&#32;<emphasis role="keyword">false</emphasis>;
 667 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>*&#32;s&#32;=&#32;current-&gt;template&#32;Bottom&lt;SizeType&gt;();&#32;s&#32;!=&#32;current-&gt;template&#32;End&lt;SizeType&gt;();&#32;++s)&#32;{
-668 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;sr&#32;=&#32;regex_.GetState(*s);
+668 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a0586261735313d8cf20042e50ee75c92">State</link>&amp;&#32;sr&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.GetState(*s);
 669 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(sr.codepoint&#32;==&#32;codepoint&#32;||
 670 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sr.codepoint&#32;==&#32;RegexType::kAnyCharacterClass&#32;||&#32;
-671 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(sr.codepoint&#32;==&#32;RegexType::kRangeCharacterClass&#32;&amp;&amp;&#32;MatchRange(sr.rangeStart,&#32;codepoint)))
+671 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;(sr.codepoint&#32;==&#32;RegexType::kRangeCharacterClass&#32;&amp;&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a1a9c7b4f977805912d1c1f1866442fbe">MatchRange</link>(sr.rangeStart,&#32;codepoint)))
 672 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
-673 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;matched&#32;=&#32;AddState(*next,&#32;sr.out)&#32;||&#32;matched;
+673 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;matched&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(*next,&#32;sr.out)&#32;||&#32;matched;
 674 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!anchorEnd&#32;&amp;&amp;&#32;matched)
 675 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
 676 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 677 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!anchorBegin)
-678 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;AddState(*next,&#32;regex_.root_);
+678 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(*next,&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.root_);
 679 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 680 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_namespaceinternal_1a72b2c71d36273b9691487f58c671ce04">internal::Swap</link>(current,&#32;next);
 681 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
@@ -654,30 +654,30 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 683 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;matched;
 684 &#32;&#32;&#32;&#32;}
 685 
-686 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;GetStateSetSize()<emphasis role="keyword">&#32;const&#32;</emphasis>{
-687 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(regex_.stateCount_&#32;+&#32;31)&#32;/&#32;32&#32;*&#32;4;
+686 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a12ddb6629c0be52801d291a8e5005c06">GetStateSetSize</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
+687 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.stateCount_&#32;+&#32;31)&#32;/&#32;32&#32;*&#32;4;
 688 &#32;&#32;&#32;&#32;}
 689 
 690 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Return&#32;whether&#32;the&#32;added&#32;states&#32;is&#32;a&#32;match&#32;state</emphasis>
-691 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;AddState(Stack&lt;Allocator&gt;&amp;&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
-692 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;!=&#32;kRegexInvalidState);
+691 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&amp;&#32;l,&#32;<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;index)&#32;{
+692 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>);
 693 
-694 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;State&amp;&#32;s&#32;=&#32;regex_.GetState(index);
-695 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s.out1&#32;!=&#32;kRegexInvalidState)&#32;{&#32;<emphasis role="comment">//&#32;Split</emphasis>
-696 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;AddState(l,&#32;s.out);
-697 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;AddState(l,&#32;s.out1)&#32;||&#32;matched;
+694 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a0586261735313d8cf20042e50ee75c92">State</link>&amp;&#32;s&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.GetState(index);
+695 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(s.out1&#32;!=&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>)&#32;{&#32;<emphasis role="comment">//&#32;Split</emphasis>
+696 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;matched&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(l,&#32;s.out);
+697 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa16ed718784de143ec64861b2b662ea4">AddState</link>(l,&#32;s.out1)&#32;||&#32;matched;
 698 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-699 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(stateSet_[index&#32;&gt;&gt;&#32;5]&#32;&amp;&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31))))&#32;{
-700 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stateSet_[index&#32;&gt;&gt;&#32;5]&#32;|=&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31));
+699 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>[index&#32;&gt;&gt;&#32;5]&#32;&amp;&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31))))&#32;{
+700 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>[index&#32;&gt;&gt;&#32;5]&#32;|=&#32;(1u&#32;&lt;&lt;&#32;(index&#32;&amp;&#32;31));
 701 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*l.template&#32;PushUnsafe&lt;SizeType&gt;()&#32;=&#32;index;
 702 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-703 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;s.out&#32;==&#32;kRegexInvalidState;&#32;<emphasis role="comment">//&#32;by&#32;using&#32;PushUnsafe()&#32;above,&#32;we&#32;can&#32;ensure&#32;s&#32;is&#32;not&#32;validated&#32;due&#32;to&#32;reallocation.</emphasis>
+703 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;s.out&#32;==&#32;<link linkend="_namespaceinternal_1abdcff7a639884034f884dab7bd6ae76c">kRegexInvalidState</link>;&#32;<emphasis role="comment">//&#32;by&#32;using&#32;PushUnsafe()&#32;above,&#32;we&#32;can&#32;ensure&#32;s&#32;is&#32;not&#32;validated&#32;due&#32;to&#32;reallocation.</emphasis>
 704 &#32;&#32;&#32;&#32;}
 705 
-706 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;MatchRange(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeIndex,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-707 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;yes&#32;=&#32;(regex_.GetRange(rangeIndex).start&#32;&amp;&#32;RegexType::kRangeNegationFlag)&#32;==&#32;0;
-708 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(rangeIndex&#32;!=&#32;kRegexInvalidRange)&#32;{
-709 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;Range&amp;&#32;r&#32;=&#32;regex_.GetRange(rangeIndex);
+706 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a1a9c7b4f977805912d1c1f1866442fbe">MatchRange</link>(<link linkend="_rapidjson_8h_1a5ed6e6e67250fadbd041127e6386dcb5">SizeType</link>&#32;rangeIndex,&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;codepoint)<emphasis role="keyword">&#32;const&#32;</emphasis>{
+707 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;yes&#32;=&#32;(<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.GetRange(rangeIndex).start&#32;&amp;&#32;RegexType::kRangeNegationFlag)&#32;==&#32;0;
+708 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(rangeIndex&#32;!=&#32;<link linkend="_namespaceinternal_1afc9153a9f72e57e5184d5c54562fa8f7">kRegexInvalidRange</link>)&#32;{
+709 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaceb6517b628e447c6df61a8b7b33c7c">Range</link>&amp;&#32;r&#32;=&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>.GetRange(rangeIndex);
 710 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(codepoint&#32;&gt;=&#32;(r.start&#32;&amp;&#32;~RegexType::kRangeNegationFlag)&#32;&amp;&amp;&#32;codepoint&#32;&lt;=&#32;r.end)
 711 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;yes;
 712 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rangeIndex&#32;=&#32;r.next;
@@ -685,12 +685,12 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 714 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;!yes;
 715 &#32;&#32;&#32;&#32;}
 716 
-717 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;RegexType&amp;&#32;regex_;
-718 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;allocator_;
-719 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;ownAllocator_;
-720 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;state0_;
-721 &#32;&#32;&#32;&#32;Stack&lt;Allocator&gt;&#32;state1_;
-722 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>*&#32;stateSet_;
+717 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;RegexType&amp;&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aaec69557b0641a19b337ebd44b6d7a7b">regex_</link>;
+718 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_classinternal_1_1_generic_regex_search_1aa87a7caf0054f4e65446ecd91aba367c">allocator_</link>;
+719 &#32;&#32;&#32;&#32;<link linkend="_classrapidjson_1_1_allocator">Allocator</link>*&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a804573e03eb673a9633f638fe3e3b62f">ownAllocator_</link>;
+720 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a6b44c058a10cff21c2e3d20d32b84eba">state0_</link>;
+721 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_stack">Stack&lt;Allocator&gt;</link>&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a029a67ab36e5cb1b1394fc7a688c7cda">state1_</link>;
+722 &#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1a435d1572bf3f880d55459d9805097f62">uint32_t</link>*&#32;<link linkend="_classinternal_1_1_generic_regex_search_1a2f697f3edbd1e1f91d3f4535e494f4c2">stateSet_</link>;
 723 };
 724 
 725 <emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_classinternal_1_1_generic_regex">GenericRegex&lt;UTF8&lt;&gt;</link>&#32;&gt;&#32;<link linkend="_namespaceinternal_1ae7fc20c6ee680ae3ba16ae16b4bd5e16">Regex</link>;

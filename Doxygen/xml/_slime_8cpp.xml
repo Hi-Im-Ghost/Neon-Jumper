@@ -56,29 +56,37 @@
 <codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>initHitbox({16*3,<sp/>10*3});</highlight></codeline>
 <codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>initPath(pathPointA,<sp/>pathPointB);</highlight></codeline>
 <codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>this-&gt;movingRight<sp/>=<sp/>moveRight;</highlight></codeline>
-<codeline lineno="9"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="10"><highlight class="normal"></highlight></codeline>
-<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1ab00ca7bbfff73a12570c54c4430379e1" kindref="member">Slime::update</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaSeconds)<sp/>{</highlight></codeline>
-<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>.setPosition(<ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().x,<sp/><ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().y);</highlight></codeline>
-<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_animated_1a72005d589aed57e4661825032986346c" kindref="member">animate</ref>(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a9d2ac11fe3165ce6717eaf9c074c3c40" kindref="member">moveHorizontal</ref>(100<sp/>*<sp/>deltaSeconds);<sp/></highlight><highlight class="comment">//30</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="16"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>setMaxHP(5);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>defaultInvincibilityTime<sp/>=<sp/>0.2f;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1ab00ca7bbfff73a12570c54c4430379e1" kindref="member">Slime::update</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaSeconds)<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>.setPosition(<ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().x,<sp/><ref refid="class_enemy_1a7b692953befb7b2c061a544ecf5a1e0b" kindref="member">getPosition</ref>().y);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_animated_1a72005d589aed57e4661825032986346c" kindref="member">animate</ref>(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight></codeline>
-<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1a5a7031e64b345d3ddfb27f74c8b55042" kindref="member">Slime::render</ref>(sf::RenderTarget<sp/>&amp;window)<sp/>{</highlight></codeline>
-<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>window.draw(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_hitbox);</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_path);</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Slime::initPath(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointA,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointB)<sp/>{</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setPosition(pointA,<sp/>10);</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setSize({pointB-pointA,<sp/>1});</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="class_damageable_1ac250a92465b92863e145840680496352" kindref="member">isDead</ref>())<sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_enemy_1afd8ed95df035e7b9ca8db4282873e1bd" kindref="member">setPosition</ref>(0,<sp/>-100);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_damageable_1a277b1ab8be1a6de8af7869ec1e8b7c41" kindref="member">updateInvincibilityTimer</ref>(deltaSeconds);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a9d2ac11fe3165ce6717eaf9c074c3c40" kindref="member">moveHorizontal</ref>(100<sp/>*<sp/>deltaSeconds);<sp/></highlight><highlight class="comment">//30</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1a5a7031e64b345d3ddfb27f74c8b55042" kindref="member">Slime::render</ref>(sf::RenderTarget<sp/>&amp;window)<sp/>{</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>window.draw(<ref refid="class_enemy_1a5516119a584afa312ddf5d1546de102f" kindref="member">_sprite</ref>);</highlight></codeline>
 <codeline lineno="28"><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineColor(sf::Color::Green);</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineThickness(1);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_hitbox);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//window.draw(_path);</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="31"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_slime_1a589bb593896e7f7262d0a7788c42c7a2" kindref="member">Slime::initPath</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointA,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pointB)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setPosition(pointA,<sp/>10);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setSize({pointB-pointA,<sp/>1});</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineColor(sf::Color::Green);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_enemy_1a8859dd7af4e01335c836348040291ae6" kindref="member">_path</ref>.setOutlineThickness(1);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal">}</highlight></codeline>
     </programlisting>
     <location file="src/entities/Slime.cpp"/>
   </compounddef>

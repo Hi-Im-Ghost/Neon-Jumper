@@ -220,6 +220,10 @@ void Player::initSoundGame() {
     bufGame.loadFromFile("../resources/music/jump.wav");
     jumpGame.setBuffer(bufGame);
     jumpGame.setVolume(30);
+
+    bufShoot.loadFromFile("../resources/music/shoot.wav");
+    shootGame.setBuffer(bufShoot);
+    shootGame.setVolume(30);
 }
 
 bool Player::checkForIntersection(sf::RectangleShape& shape) {
@@ -289,6 +293,7 @@ void Player::timeStart() {
 }
 
 void Player::shoot() {
+    shootGame.play();
     sf::Vector2f sp = shootingPoint;
     sp.x *= (_bIsFlipped) ? -1 : 1;
     Bullet* b = new Bullet(getPosition() + sp, !_bIsFlipped);

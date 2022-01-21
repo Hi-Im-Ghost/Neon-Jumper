@@ -10,8 +10,7 @@
  */
 class TileMap : public sf::Drawable, public sf::Transformable {
 public:
-    /***
-     * Służy do ładowania kafelków użytych w wskazanej przez parametr warstwie
+    /** Służy do ładowania kafelków użytych w wskazanej przez parametr warstwie
      * @param tileset - obiekt z kafelkami
      * @param layer - warstwa
      * @return zwraca true w przypadku załadowania poprawnego lub false w przypadku niepowodzenia
@@ -61,8 +60,7 @@ public:
         return true;
     }
 private:
-    /***
-     * Wirtualna metoda, który służy do przenoszenia elemntów do wyrenderowania na ekran
+    /** Wirtualna metoda, który służy do przenoszenia elemntów do wyrenderowania na ekran
      * @param target - element do wyrenderowania
      * @param states - stany używane do renderowania
      */

@@ -1,4 +1,4 @@
-.TH "GenericMemberIterator< Const, Encoding, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericMemberIterator< Const, Encoding, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -93,6 +93,16 @@ GenericMemberIterator< Const, Encoding, Allocator > \- (Constant) member iterato
 .br
 .in -1c
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBGenericMember\fP< \fBEncoding\fP, \fBAllocator\fP > \fBPlainType\fP"
+.br
+.ti -1c
+.RI "typedef internal::MaybeAddConst< Const, \fBPlainType\fP >\fB::Type\fP \fBValueType\fP"
+.br
+.in -1c
 .SS "Friends"
 
 .in +1c
@@ -107,13 +117,13 @@ GenericMemberIterator< Const, Encoding, Allocator > \- (Constant) member iterato
 
 .in +1c
 .ti -1c
-.RI "typedef ValueType \fBvalue_type\fP"
+.RI "typedef \fBValueType\fP \fBvalue_type\fP"
 .br
 .ti -1c
-.RI "typedef ValueType * \fBpointer\fP"
+.RI "typedef \fBValueType\fP * \fBpointer\fP"
 .br
 .ti -1c
-.RI "typedef ValueType & \fBreference\fP"
+.RI "typedef \fBValueType\fP & \fBreference\fP"
 .br
 .ti -1c
 .RI "typedef std::ptrdiff_t \fBdifference_type\fP"
@@ -149,6 +159,10 @@ GenericMemberIterator< Const, Encoding, Allocator > \- (Constant) member iterato
 
 .in +1c
 .ti -1c
+.RI "\fBPointer\fP \fBptr_\fP"
+.br
+.RI "raw pointer "
+.ti -1c
 .RI "\fBReference\fP \fBoperator*\fP () const"
 .br
 .ti -1c
@@ -161,6 +175,10 @@ GenericMemberIterator< Const, Encoding, Allocator > \- (Constant) member iterato
 .RI "\fBDifferenceType\fP \fBoperator\-\fP (\fBConstIterator\fP that) const"
 .br
 .RI "Distance\&. "
+.ti -1c
+.RI "\fBGenericMemberIterator\fP (\fBPointer\fP p)"
+.br
+.RI "Internal constructor from plain pointer\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -217,19 +235,23 @@ Iterator type itself\&.
 
 .PP
 Non-constant iterator type\&. 
-.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType* \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::pointer"
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBGenericMember\fP<\fBEncoding\fP,\fBAllocator\fP> \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::PlainType\fC [private]\fP"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBValueType\fP* \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::pointer"
 
 .SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBpointer\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::Pointer\fP"
 
 .PP
 Pointer to (const) \fBGenericMember\fP\&. 
-.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType& \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::reference"
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBValueType\fP& \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::reference"
 
 .SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBreference\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::Reference"
 
 .PP
 Reference to (const) \fBGenericMember\fP\&. 
-.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef ValueType \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::value_type"
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef \fBValueType\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::value_type"
+
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > typedef internal::MaybeAddConst<Const,\fBPlainType\fP>\fB::Type\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::ValueType\fP\fC [private]\fP"
 
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -272,6 +294,10 @@ If the \fCConst\fP template parameter is already \fCfalse\fP, this constructor e
 .RE
 .PP
 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >\fB::GenericMemberIterator\fP (\fBPointer\fP p)\fC [inline]\fP, \fC [explicit]\fP, \fC [private]\fP"
+
+.PP
+Internal constructor from plain pointer\&. 
 .SH "Member Function Documentation"
 .PP 
 .SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > template<bool Const_> bool \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::operator!= (const \fBGenericMemberIterator\fP< Const_, \fBEncoding\fP, \fBAllocator\fP > & that) const\fC [inline]\fP"
@@ -320,6 +346,12 @@ Distance\&.
 
 .SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > friend class \fBGenericValue\fP< \fBEncoding\fP, \fBAllocator\fP >\fC [friend]\fP"
 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<bool Const, typename \fBEncoding\fP , typename \fBAllocator\fP > \fBPointer\fP \fBGenericMemberIterator\fP< Const, \fBEncoding\fP, \fBAllocator\fP >::ptr_\fC [private]\fP"
+
+.PP
+raw pointer 
 
 .SH "Author"
 .PP 

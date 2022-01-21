@@ -9,12 +9,19 @@ Default memory allocator used by the parser and DOM.
 
 {\ttfamily \#include $<$allocators.\+h$>$}
 
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_memory_pool_allocator_1_1_chunk_header}{Chunk\+Header}}
+\begin{DoxyCompactList}\small\item\em Chunk header for perpending to each chunk. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_memory_pool_allocator_aeec85ac657f242ac5620115141be5209}{Memory\+Pool\+Allocator}} (size\+\_\+t chunk\+Size=k\+Default\+Chunk\+Capacity, Base\+Allocator $\ast$base\+Allocator=0)
+\mbox{\hyperlink{class_memory_pool_allocator_aeec85ac657f242ac5620115141be5209}{Memory\+Pool\+Allocator}} (size\+\_\+t chunk\+Size=\mbox{\hyperlink{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}{k\+Default\+Chunk\+Capacity}}, Base\+Allocator $\ast$base\+Allocator=0)
 \begin{DoxyCompactList}\small\item\em Constructor with chunk\+Size. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_memory_pool_allocator_a1f0d865093fdb955d956b7a445a8ddbf}{Memory\+Pool\+Allocator}} (void $\ast$buffer, size\+\_\+t size, size\+\_\+t chunk\+Size=k\+Default\+Chunk\+Capacity, Base\+Allocator $\ast$base\+Allocator=0)
+\mbox{\hyperlink{class_memory_pool_allocator_a1f0d865093fdb955d956b7a445a8ddbf}{Memory\+Pool\+Allocator}} (void $\ast$buffer, size\+\_\+t size, size\+\_\+t chunk\+Size=\mbox{\hyperlink{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}{k\+Default\+Chunk\+Capacity}}, Base\+Allocator $\ast$base\+Allocator=0)
 \begin{DoxyCompactList}\small\item\em Constructor with user-\/supplied buffer. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_memory_pool_allocator_afa7a6555d8a6e151148c8876c60a36c5}{Memory\+Pool\+Allocator}} (const \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}} \&rhs) RAPIDJSON\+\_\+\+NOEXCEPT
 \item 
@@ -50,6 +57,38 @@ static const bool \mbox{\hyperlink{class_memory_pool_allocator_ab4c7c5c631e45168
 \begin{DoxyCompactList}\small\item\em Tell users that no need to call \mbox{\hyperlink{class_memory_pool_allocator_ab2ba66e50d09ab315fbfb37f2a231f33}{Free()}} with this allocator. (concept Allocator) \end{DoxyCompactList}\item 
 static const bool \mbox{\hyperlink{class_memory_pool_allocator_a3a18920d6afd9e9c9e62d8fd8f73e095}{k\+Ref\+Counted}} = true
 \begin{DoxyCompactList}\small\item\em Tell users that this allocator is reference counted on copy. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_memory_pool_allocator_a41bebe49979dc69921519c7556af18fc}{Add\+Chunk}} (size\+\_\+t capacity)
+\begin{DoxyCompactList}\small\item\em Creates a new chunk. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{struct_memory_pool_allocator_1_1_chunk_header}{Chunk\+Header}} $\ast$ \mbox{\hyperlink{class_memory_pool_allocator_a9e67d84bf86241a3da276057f4458cda}{Get\+Chunk\+Head}} (\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}} $\ast$shared)
+\item 
+static \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} $\ast$ \mbox{\hyperlink{class_memory_pool_allocator_a76f41aff1e8a9f82abc571df564c18d5}{Get\+Chunk\+Buffer}} (\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}} $\ast$shared)
+\item 
+static void $\ast$ \mbox{\hyperlink{class_memory_pool_allocator_ab0eabf761ffa8641236acd99cbe22842}{Align\+Buffer}} (void $\ast$buf, size\+\_\+t \&size)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator_a67909468c193d429a227a74d35c4d8cb}{chunk\+\_\+capacity\+\_\+}}
+\begin{DoxyCompactList}\small\item\em The minimum capacity of chunk when they are allocated. \end{DoxyCompactList}\item 
+Base\+Allocator $\ast$ \mbox{\hyperlink{class_memory_pool_allocator_a628cd7f46e838fb37ceccf65dd17bce6}{base\+Allocator\+\_\+}}
+\begin{DoxyCompactList}\small\item\em base allocator for allocating memory chunks. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}} $\ast$ \mbox{\hyperlink{class_memory_pool_allocator_a17d48b0a767d489eed4241444702368c}{shared\+\_\+}}
+\begin{DoxyCompactList}\small\item\em The shared data of the allocator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator_aa2538f9ce977f511009747f60b1ae552}{SIZEOF\+\_\+\+SHARED\+\_\+\+DATA}} = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga583915242504c7fdb36e826f02f76242}{RAPIDJSON\+\_\+\+ALIGN}}(sizeof(\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}}))
+\item 
+static const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator_a195c16fcdba57918869168c48d97737f}{SIZEOF\+\_\+\+CHUNK\+\_\+\+HEADER}} = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga583915242504c7fdb36e826f02f76242}{RAPIDJSON\+\_\+\+ALIGN}}(sizeof(\mbox{\hyperlink{struct_memory_pool_allocator_1_1_chunk_header}{Chunk\+Header}}))
+\item 
+static const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}{k\+Default\+Chunk\+Capacity}} = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga860570d04d489be08b9835d2ec58bac5}{RAPIDJSON\+\_\+\+ALLOCATOR\+\_\+\+DEFAULT\+\_\+\+CHUNK\+\_\+\+CAPACITY}}
+\begin{DoxyCompactList}\small\item\em Default chunk capacity. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -85,7 +124,7 @@ implements Allocator concept
 \index{MemoryPoolAllocator@{MemoryPoolAllocator}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
 \doxysubsubsection{\texorpdfstring{MemoryPoolAllocator()}{MemoryPoolAllocator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
 {\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
-\mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\mbox{\hyperlink{class_memory_pool_allocator}{\+::\+Memory\+Pool\+Allocator}} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{chunk\+Size = {\ttfamily kDefaultChunkCapacity},  }\item[{Base\+Allocator $\ast$}]{base\+Allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+\mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\mbox{\hyperlink{class_memory_pool_allocator}{\+::\+Memory\+Pool\+Allocator}} (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{chunk\+Size = {\ttfamily \mbox{\hyperlink{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}{k\+Default\+Chunk\+Capacity}}},  }\item[{Base\+Allocator $\ast$}]{base\+Allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
 
 
 
@@ -103,7 +142,7 @@ Constructor with chunk\+Size.
 \index{MemoryPoolAllocator@{MemoryPoolAllocator}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
 \doxysubsubsection{\texorpdfstring{MemoryPoolAllocator()}{MemoryPoolAllocator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
 {\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
-\mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\mbox{\hyperlink{class_memory_pool_allocator}{\+::\+Memory\+Pool\+Allocator}} (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{chunk\+Size = {\ttfamily kDefaultChunkCapacity},  }\item[{Base\+Allocator $\ast$}]{base\+Allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\mbox{\hyperlink{class_memory_pool_allocator}{\+::\+Memory\+Pool\+Allocator}} (\begin{DoxyParamCaption}\item[{void $\ast$}]{buffer,  }\item[{size\+\_\+t}]{size,  }\item[{size\+\_\+t}]{chunk\+Size = {\ttfamily \mbox{\hyperlink{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}{k\+Default\+Chunk\+Capacity}}},  }\item[{Base\+Allocator $\ast$}]{base\+Allocator = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -145,6 +184,32 @@ Destructor.
 This deallocates all memory chunks, excluding the user-\/supplied buffer. 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_memory_pool_allocator_a41bebe49979dc69921519c7556af18fc}\label{class_memory_pool_allocator_a41bebe49979dc69921519c7556af18fc}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!AddChunk@{AddChunk}}
+\index{AddChunk@{AddChunk}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{AddChunk()}{AddChunk()}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+bool \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+Add\+Chunk (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{capacity }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+
+
+Creates a new chunk. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em capacity} & Capacity of the chunk in bytes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if success. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_memory_pool_allocator_ab0eabf761ffa8641236acd99cbe22842}\label{class_memory_pool_allocator_ab0eabf761ffa8641236acd99cbe22842}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!AlignBuffer@{AlignBuffer}}
+\index{AlignBuffer@{AlignBuffer}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{AlignBuffer()}{AlignBuffer()}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+static void $\ast$ \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+Align\+Buffer (\begin{DoxyParamCaption}\item[{void $\ast$}]{buf,  }\item[{size\+\_\+t \&}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
 \mbox{\Hypertarget{class_memory_pool_allocator_a60526f0a1e6bb225c49f10537635e30f}\label{class_memory_pool_allocator_a60526f0a1e6bb225c49f10537635e30f}} 
 \index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!Capacity@{Capacity}}
 \index{Capacity@{Capacity}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
@@ -180,6 +245,20 @@ static void \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocato
 
 
 Frees a memory block (concept Allocator) 
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a76f41aff1e8a9f82abc571df564c18d5}\label{class_memory_pool_allocator_a76f41aff1e8a9f82abc571df564c18d5}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!GetChunkBuffer@{GetChunkBuffer}}
+\index{GetChunkBuffer@{GetChunkBuffer}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkBuffer()}{GetChunkBuffer()}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+static \mbox{\hyperlink{stdint_8h_aba7bc1797add20fe3efdf37ced1182c5}{uint8\+\_\+t}} $\ast$ \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+Get\+Chunk\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}} $\ast$}]{shared }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a9e67d84bf86241a3da276057f4458cda}\label{class_memory_pool_allocator_a9e67d84bf86241a3da276057f4458cda}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!GetChunkHead@{GetChunkHead}}
+\index{GetChunkHead@{GetChunkHead}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetChunkHead()}{GetChunkHead()}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+static \mbox{\hyperlink{struct_memory_pool_allocator_1_1_chunk_header}{Chunk\+Header}} $\ast$ \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+Get\+Chunk\+Head (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}} $\ast$}]{shared }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
 
 \mbox{\Hypertarget{class_memory_pool_allocator_a8d300531c1f556172aef1259ff55cb48}\label{class_memory_pool_allocator_a8d300531c1f556172aef1259ff55cb48}} 
 \index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!Malloc@{Malloc}}
@@ -263,6 +342,39 @@ total used bytes.
 
 
 \doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_memory_pool_allocator_a628cd7f46e838fb37ceccf65dd17bce6}\label{class_memory_pool_allocator_a628cd7f46e838fb37ceccf65dd17bce6}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!baseAllocator\_@{baseAllocator\_}}
+\index{baseAllocator\_@{baseAllocator\_}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{baseAllocator\_}{baseAllocator\_}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+Base\+Allocator$\ast$ \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::base\+Allocator\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+base allocator for allocating memory chunks. 
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a67909468c193d429a227a74d35c4d8cb}\label{class_memory_pool_allocator_a67909468c193d429a227a74d35c4d8cb}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!chunk\_capacity\_@{chunk\_capacity\_}}
+\index{chunk\_capacity\_@{chunk\_capacity\_}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{chunk\_capacity\_}{chunk\_capacity\_}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::chunk\+\_\+capacity\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The minimum capacity of chunk when they are allocated. 
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}\label{class_memory_pool_allocator_a8d9337bc406a25dd06a24ee3fa5fb58c}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!kDefaultChunkCapacity@{kDefaultChunkCapacity}}
+\index{kDefaultChunkCapacity@{kDefaultChunkCapacity}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{kDefaultChunkCapacity}{kDefaultChunkCapacity}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::k\+Default\+Chunk\+Capacity = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga860570d04d489be08b9835d2ec58bac5}{RAPIDJSON\+\_\+\+ALLOCATOR\+\_\+\+DEFAULT\+\_\+\+CHUNK\+\_\+\+CAPACITY}}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Default chunk capacity. 
+
 \mbox{\Hypertarget{class_memory_pool_allocator_ab4c7c5c631e451689bc9da392a65194f}\label{class_memory_pool_allocator_ab4c7c5c631e451689bc9da392a65194f}} 
 \index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!kNeedFree@{kNeedFree}}
 \index{kNeedFree@{kNeedFree}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
@@ -284,6 +396,31 @@ const bool \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator
 
 
 Tell users that this allocator is reference counted on copy. 
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a17d48b0a767d489eed4241444702368c}\label{class_memory_pool_allocator_a17d48b0a767d489eed4241444702368c}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!shared\_@{shared\_}}
+\index{shared\_@{shared\_}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{shared\_}{shared\_}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}}$\ast$ \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::shared\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The shared data of the allocator. 
+
+\mbox{\Hypertarget{class_memory_pool_allocator_a195c16fcdba57918869168c48d97737f}\label{class_memory_pool_allocator_a195c16fcdba57918869168c48d97737f}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!SIZEOF\_CHUNK\_HEADER@{SIZEOF\_CHUNK\_HEADER}}
+\index{SIZEOF\_CHUNK\_HEADER@{SIZEOF\_CHUNK\_HEADER}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{SIZEOF\_CHUNK\_HEADER}{SIZEOF\_CHUNK\_HEADER}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+SIZEOF\+\_\+\+CHUNK\+\_\+\+HEADER = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga583915242504c7fdb36e826f02f76242}{RAPIDJSON\+\_\+\+ALIGN}}(sizeof(\mbox{\hyperlink{struct_memory_pool_allocator_1_1_chunk_header}{Chunk\+Header}}))\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_memory_pool_allocator_aa2538f9ce977f511009747f60b1ae552}\label{class_memory_pool_allocator_aa2538f9ce977f511009747f60b1ae552}} 
+\index{MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}!SIZEOF\_SHARED\_DATA@{SIZEOF\_SHARED\_DATA}}
+\index{SIZEOF\_SHARED\_DATA@{SIZEOF\_SHARED\_DATA}!MemoryPoolAllocator$<$ BaseAllocator $>$@{MemoryPoolAllocator$<$ BaseAllocator $>$}}
+\doxysubsubsection{\texorpdfstring{SIZEOF\_SHARED\_DATA}{SIZEOF\_SHARED\_DATA}}
+{\footnotesize\ttfamily template$<$typename Base\+Allocator  = Crt\+Allocator$>$ \\
+const size\+\_\+t \mbox{\hyperlink{class_memory_pool_allocator}{Memory\+Pool\+Allocator}}$<$ Base\+Allocator $>$\+::\+SIZEOF\+\_\+\+SHARED\+\_\+\+DATA = \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga583915242504c7fdb36e826f02f76242}{RAPIDJSON\+\_\+\+ALIGN}}(sizeof(\mbox{\hyperlink{struct_memory_pool_allocator_1_1_shared_data}{Shared\+Data}}))\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
 
 
 

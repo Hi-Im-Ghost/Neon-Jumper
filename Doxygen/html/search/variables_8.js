@@ -1,8 +1,20 @@
 var searchData=
 [
-  ['hashcode_0',['hashcode',['../struct_generic_value_1_1_string.html#a73631052aeb72fbabb6eaab0175f858e',1,'GenericValue::String']]],
-  ['hasher_1',['hasher',['../structinternal_1_1_schema_validation_context.html#a4b419775e207cf72834f895dc30ac596',1,'internal::SchemaValidationContext']]],
-  ['hasroot_5f_2',['hasRoot_',['../class_writer.html#affc6b9e0332b50bee0d33f8b1841c9a6',1,'Writer']]],
-  ['head_5f_3',['head_',['../struct_generic_string_stream.html#a3c86ef1e1f0655028cb8a3afce11ee4f',1,'GenericStringStream::head_()'],['../struct_generic_insitu_string_stream.html#af5a7116bdd9bfde5141c298a5b7566b0',1,'GenericInsituStringStream::head_()']]],
-  ['height_4',['height',['../class_layer_object.html#a08c0c2d958beda7e94e3b7a639b3c6bd',1,'LayerObject::height()'],['../struct_student.html#a3678b8d546afa6efa6120e22c51f49c3',1,'Student::height()']]]
+  ['hasbom_5f_0',['hasBOM_',['../class_auto_u_t_f_input_stream.html#ac329c186f5b0dc82433effecaaf1bf46',1,'AutoUTFInputStream']]],
+  ['hasdependencies_5f_1',['hasDependencies_',['../classinternal_1_1_schema.html#ae918428f55f1ad36a94ec377e1436e5c',1,'internal::Schema']]],
+  ['hashcode_2',['hashcode',['../struct_generic_value_1_1_string.html#a73631052aeb72fbabb6eaab0175f858e',1,'GenericValue::String']]],
+  ['hasher_3',['hasher',['../structinternal_1_1_schema_validation_context.html#a4b419775e207cf72834f895dc30ac596',1,'internal::SchemaValidationContext']]],
+  ['hasname_5f_4',['hasName_',['../class_jsonx_writer.html#abaa32267fab1e1350176ed296b36ce6f',1,'JsonxWriter']]],
+  ['hasrequired_5f_5',['hasRequired_',['../classinternal_1_1_schema.html#ad6cb5137e20f36267efc52373ffcd53c',1,'internal::Schema']]],
+  ['hasroot_5f_6',['hasRoot_',['../class_writer.html#affc6b9e0332b50bee0d33f8b1841c9a6',1,'Writer']]],
+  ['hasschemadependencies_5f_7',['hasSchemaDependencies_',['../classinternal_1_1_schema.html#ab1f5c3de1e83368f044b08f571186a9c',1,'internal::Schema']]],
+  ['head_5f_8',['head_',['../struct_generic_string_stream.html#a3c86ef1e1f0655028cb8a3afce11ee4f',1,'GenericStringStream::head_()'],['../struct_generic_insitu_string_stream.html#af5a7116bdd9bfde5141c298a5b7566b0',1,'GenericInsituStringStream::head_()'],['../class_custom_string_stream.html#a6f0a05ce91c9c36b6c093eb0fe4bcc01',1,'CustomStringStream::head_()']]],
+  ['hearths_9',['hearths',['../class_player_h_u_d.html#ab62b8f94887328017940df1b76db315e',1,'PlayerHUD']]],
+  ['height_10',['height',['../class_layer_object.html#a08c0c2d958beda7e94e3b7a639b3c6bd',1,'LayerObject::height()'],['../class_layer.html#a6a0bc24033339368a0ca9747485f0053',1,'Layer::height()'],['../class_map.html#a0546fef98caebe38385bb2e0c7a15da1',1,'Map::height()'],['../struct_student.html#a3678b8d546afa6efa6120e22c51f49c3',1,'Student::height()'],['../class_button.html#ab646f3e8a3cb3e76e26391ef94a2f9d7',1,'Button::height()']]],
+  ['height_5f_11',['height_',['../class_box.html#a9b372de7550463c8bad45d61a23bfe5a',1,'Box']]],
+  ['hitboxes_12',['hitboxes',['../class_level_one_state.html#a71cb269c3f41ff9c3662890cb24696bb',1,'LevelOneState::hitboxes()'],['../class_level_two_state.html#a7ad92daf6ef97e948859dc855312d559',1,'LevelTwoState::hitboxes()']]],
+  ['hitgame_13',['hitGame',['../class_game_state.html#ae01419835096c4b52d41eabab8937c49',1,'GameState']]],
+  ['hp_14',['hp',['../class_damageable.html#aa0220222ac061629216802d4d63362fa',1,'Damageable']]],
+  ['htfull_15',['htfull',['../class_player_h_u_d.html#a16b04d388879c874d07dc38c97de53c2',1,'PlayerHUD']]],
+  ['hud_16',['hud',['../class_level_one_state.html#aa289900c937c916cad577eb634304000',1,'LevelOneState::hud()'],['../class_level_two_state.html#a8fbdb4026b243b58cebd89fe0f1455a1',1,'LevelTwoState::hud()']]]
 ];

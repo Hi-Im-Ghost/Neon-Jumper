@@ -17,8 +17,12 @@ class Player : public Damageable, public Animated, public Shooter {
 private:
     /// Bufor dla dźwięku skoku
     sf::SoundBuffer bufGame;
+    /// Bufor dla dźwięku strzalu
+    sf::SoundBuffer bufShoot;
     /// Dźwięk skoku
     sf::Sound jumpGame;
+    /// Przechowuje dźwięk strzalu
+    sf::Sound shootGame;
     /// Tekstura gracza
     sf::Texture _texture;
     /// Sprite gracza wczytywany z tekstury

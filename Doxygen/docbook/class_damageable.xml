@@ -17,32 +17,18 @@
     <title>Public Member Functions    </title>
         <itemizedlist>
             <listitem><para>void <link linkend="_class_damageable_1a11ef6567fa56532a64ef1f59a298b1dc">takeDamage</link> (int damage)</para>
-
-<para>Powoduje odjęcie punktów życia o wartość damage. </para>
 </listitem>
-            <listitem><para>void <link linkend="_class_damageable_1a74b39da9a9983afddeed50e74ef838a2">setMaxHP</link> (unsigned newMax)</para>
-
-<para>Ustawia ilość maksymalnych punktów życia. </para>
+            <listitem><para>void <link linkend="_class_damageable_1a315e2a10cc093d04e7b39bae57d294d5">setMaxHP</link> (int newMax)</para>
 </listitem>
             <listitem><para>int <link linkend="_class_damageable_1a2babc0ff0f6b3e78440c71291c727e44">getMaxHP</link> () const</para>
-
-<para>Pozwala uzyskać ilość maksymalnych punktów życia. </para>
 </listitem>
-            <listitem><para>void <link linkend="_class_damageable_1a85c9ee9faee9f45d76e2a8bf8345670d">setHP</link> (unsigned newHP)</para>
-
-<para>Ustawia ilość punktów życia. </para>
+            <listitem><para>void <link linkend="_class_damageable_1a4804ae4896484ee71ff7cef6207fdfa7">setHP</link> (int newHP)</para>
 </listitem>
             <listitem><para>int <link linkend="_class_damageable_1a3c6239facd5bd44ded1a93b657706dae">getHP</link> () const</para>
-
-<para>Pozwala uzyskać aktualną ilość punktów życia. </para>
 </listitem>
             <listitem><para>bool <link linkend="_class_damageable_1aaca986bb54bb1d762837c0ed30362725">getIsInvincible</link> () const</para>
-
-<para>Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń </para>
 </listitem>
-            <listitem><para>bool <link linkend="_class_damageable_1a125647c54da3ac37588acf783a1bc27e">isDead</link> ()</para>
-
-<para>Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0. </para>
+            <listitem><para>bool <link linkend="_class_damageable_1ac250a92465b92863e145840680496352">isDead</link> () const</para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -50,8 +36,34 @@
     <title>Protected Member Functions    </title>
         <itemizedlist>
             <listitem><para>void <link linkend="_class_damageable_1a277b1ab8be1a6de8af7869ec1e8b7c41">updateInvincibilityTimer</link> (float deltaTime)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Protected Attributes    </title>
+        <itemizedlist>
+            <listitem><para>float <link linkend="_class_damageable_1aeaf6d38e4e7e47a89c7ea7759e6f733e">defaultInvincibilityTime</link> = 1.0f</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>int <link linkend="_class_damageable_1aa0220222ac061629216802d4d63362fa">hp</link> = 3</para>
 
-<para>Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia. </para>
+<para>Aktualna ilość punktów życia obiektu. </para>
+</listitem>
+            <listitem><para>int <link linkend="_class_damageable_1a7bbb7f85ffe542d5b6b176b2400f0e31">maxHP</link> = 3</para>
+
+<para>Maksymalna ilość punktów życia obiektu. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_class_damageable_1a89a266e4c17b8270d82fb1e46a0371c9">_bIsInvincible</link> = false</para>
+
+<para>Określa, czy obiekt może przyjąć obrażenia. </para>
+</listitem>
+            <listitem><para>float <link linkend="_class_damageable_1ae6f6d15957aa52a086d27973511d84a5">invTime</link> = 1.0f</para>
+
+<para>Częstotliwość z jaką możliwe jest otrzymywanie obrażeń </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -61,72 +73,198 @@
     <title>getHP()</title>
 <indexterm><primary>getHP</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>getHP</secondary></indexterm>
-<para><computeroutput>int Damageable::getHP ( ) const</computeroutput></para><para>
+<para><computeroutput>int Damageable::getHP ( ) const</computeroutput></para>
+<para>Pozwala uzyskać aktualną ilość punktów życia <formalpara><title>Returns</title>
 
-<para>Pozwala uzyskać aktualną ilość punktów życia. </para>
+<para>obecna wartość punktów życia </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_damageable_1aaca986bb54bb1d762837c0ed30362725"/><section>
     <title>getIsInvincible()</title>
 <indexterm><primary>getIsInvincible</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>getIsInvincible</secondary></indexterm>
-<para><computeroutput>bool Damageable::getIsInvincible ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para><para>
+<para><computeroutput>bool Damageable::getIsInvincible ( ) const<computeroutput>[inline]</computeroutput></computeroutput></para>
+<para>Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń <formalpara><title>Returns</title>
 
-<para>Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń </para>
+<para>wartość bool określająca, czy gracz jest nieśmiertelny </para>
+</formalpara>
 </para>
 </section>
 <anchor xml:id="_class_damageable_1a2babc0ff0f6b3e78440c71291c727e44"/><section>
     <title>getMaxHP()</title>
 <indexterm><primary>getMaxHP</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>getMaxHP</secondary></indexterm>
-<para><computeroutput>int Damageable::getMaxHP ( ) const</computeroutput></para><para>
+<para><computeroutput>int Damageable::getMaxHP ( ) const</computeroutput></para>
+<para>Pozwala uzyskać ilość maksymalnych punktów życia <formalpara><title>Returns</title>
 
-<para>Pozwala uzyskać ilość maksymalnych punktów życia. </para>
+<para>obecna ilość maksymalnych punktów życia </para>
+</formalpara>
 </para>
 </section>
-<anchor xml:id="_class_damageable_1a125647c54da3ac37588acf783a1bc27e"/><section>
+<anchor xml:id="_class_damageable_1ac250a92465b92863e145840680496352"/><section>
     <title>isDead()</title>
 <indexterm><primary>isDead</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>isDead</secondary></indexterm>
-<para><computeroutput>bool Damageable::isDead ( )</computeroutput></para><para>
+<para><computeroutput>bool Damageable::isDead ( ) const</computeroutput></para>
+<para>Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0 <formalpara><title>Returns</title>
 
-<para>Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0. </para>
+<para>wartość bool określająca, czy punkty życia gracza zeszły do zera </para>
+</formalpara>
 </para>
 </section>
-<anchor xml:id="_class_damageable_1a85c9ee9faee9f45d76e2a8bf8345670d"/><section>
+<anchor xml:id="_class_damageable_1a4804ae4896484ee71ff7cef6207fdfa7"/><section>
     <title>setHP()</title>
 <indexterm><primary>setHP</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>setHP</secondary></indexterm>
-<para><computeroutput>void Damageable::setHP (unsigned newHP)</computeroutput></para><para>
-
-<para>Ustawia ilość punktów życia. </para>
-</para>
+<para><computeroutput>void Damageable::setHP (int newHP)</computeroutput></para>
+<para>Ustawia ilość punktów życia 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>newHP</entry><entry>
+<para>nowa wartość punktów życia </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
-<anchor xml:id="_class_damageable_1a74b39da9a9983afddeed50e74ef838a2"/><section>
+<anchor xml:id="_class_damageable_1a315e2a10cc093d04e7b39bae57d294d5"/><section>
     <title>setMaxHP()</title>
 <indexterm><primary>setMaxHP</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>setMaxHP</secondary></indexterm>
-<para><computeroutput>void Damageable::setMaxHP (unsigned newMax)</computeroutput></para><para>
-
-<para>Ustawia ilość maksymalnych punktów życia. </para>
-</para>
+<para><computeroutput>void Damageable::setMaxHP (int newMax)</computeroutput></para>
+<para>Ustawia ilość maksymalnych punktów życia 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>newMax</entry><entry>
+<para>nowa wartość maksymalna punktów życia </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 <anchor xml:id="_class_damageable_1a11ef6567fa56532a64ef1f59a298b1dc"/><section>
     <title>takeDamage()</title>
 <indexterm><primary>takeDamage</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>takeDamage</secondary></indexterm>
-<para><computeroutput>void Damageable::takeDamage (int damage)</computeroutput></para><para>
-
-<para>Powoduje odjęcie punktów życia o wartość damage. </para>
-</para>
+<para><computeroutput>void Damageable::takeDamage (int damage)</computeroutput></para>
+<para>Powoduje odjęcie punktów życia o wartość damage 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>damage</entry><entry>
+<para>wartość obrażeń do zadania </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
 </section>
 <anchor xml:id="_class_damageable_1a277b1ab8be1a6de8af7869ec1e8b7c41"/><section>
     <title>updateInvincibilityTimer()</title>
 <indexterm><primary>updateInvincibilityTimer</primary><secondary>Damageable</secondary></indexterm>
 <indexterm><primary>Damageable</primary><secondary>updateInvincibilityTimer</secondary></indexterm>
-<para><computeroutput>void Damageable::updateInvincibilityTimer (float deltaTime)<computeroutput>[protected]</computeroutput></computeroutput></para><para>
+<para><computeroutput>void Damageable::updateInvincibilityTimer (float deltaTime)<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia 
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>deltaTime</entry><entry>
+<para>czas pomiędzy klatkami aplikacji </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+</section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_damageable_1a89a266e4c17b8270d82fb1e46a0371c9"/><section>
+    <title>_bIsInvincible</title>
+<indexterm><primary>_bIsInvincible</primary><secondary>Damageable</secondary></indexterm>
+<indexterm><primary>Damageable</primary><secondary>_bIsInvincible</secondary></indexterm>
+<para><computeroutput>bool Damageable::_bIsInvincible = false<computeroutput>[private]</computeroutput></computeroutput></para><para>
 
-<para>Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia. </para>
+<para>Określa, czy obiekt może przyjąć obrażenia. </para>
+</para>
+</section>
+<anchor xml:id="_class_damageable_1aeaf6d38e4e7e47a89c7ea7759e6f733e"/><section>
+    <title>defaultInvincibilityTime</title>
+<indexterm><primary>defaultInvincibilityTime</primary><secondary>Damageable</secondary></indexterm>
+<indexterm><primary>Damageable</primary><secondary>defaultInvincibilityTime</secondary></indexterm>
+<para><computeroutput>float Damageable::defaultInvincibilityTime = 1.0f<computeroutput>[protected]</computeroutput></computeroutput></para>
+<para>Częstotliwość z jaką możliwe jest otrzymywanie obrażeń. W przeciwieństwie do invTime ta zmienna nie zmienia się w trakcie działania programu i jest punktem powrotu invTime do wartości początkowej. </para>
+</section>
+<anchor xml:id="_class_damageable_1aa0220222ac061629216802d4d63362fa"/><section>
+    <title>hp</title>
+<indexterm><primary>hp</primary><secondary>Damageable</secondary></indexterm>
+<indexterm><primary>Damageable</primary><secondary>hp</secondary></indexterm>
+<para><computeroutput>int Damageable::hp = 3<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Aktualna ilość punktów życia obiektu. </para>
+</para>
+</section>
+<anchor xml:id="_class_damageable_1ae6f6d15957aa52a086d27973511d84a5"/><section>
+    <title>invTime</title>
+<indexterm><primary>invTime</primary><secondary>Damageable</secondary></indexterm>
+<indexterm><primary>Damageable</primary><secondary>invTime</secondary></indexterm>
+<para><computeroutput>float Damageable::invTime = 1.0f<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Częstotliwość z jaką możliwe jest otrzymywanie obrażeń </para>
+</para>
+</section>
+<anchor xml:id="_class_damageable_1a7bbb7f85ffe542d5b6b176b2400f0e31"/><section>
+    <title>maxHP</title>
+<indexterm><primary>maxHP</primary><secondary>Damageable</secondary></indexterm>
+<indexterm><primary>Damageable</primary><secondary>maxHP</secondary></indexterm>
+<para><computeroutput>int Damageable::maxHP = 3<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Maksymalna ilość punktów życia obiektu. </para>
 </para>
 </section>
 <para>

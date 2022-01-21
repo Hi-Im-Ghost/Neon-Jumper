@@ -11,13 +11,24 @@
 <computeroutput>#include &lt;allocators.h&gt;</computeroutput>
 </para>
 <simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link></para>
+
+<para>Chunk header for perpending to each chunk. </para>
+</listitem>
+            <listitem><para>struct <link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
     <title>Public Member Functions    </title>
         <itemizedlist>
-            <listitem><para><link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link> (size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</para>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1aeec85ac657f242ac5620115141be5209">MemoryPoolAllocator</link> (size_t chunkSize=<link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link>, BaseAllocator *baseAllocator=0)</para>
 
 <para>Constructor with chunkSize. </para>
 </listitem>
-            <listitem><para><link linkend="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf">MemoryPoolAllocator</link> (void *buffer, size_t size, size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)</para>
+            <listitem><para><link linkend="_class_memory_pool_allocator_1a1f0d865093fdb955d956b7a445a8ddbf">MemoryPoolAllocator</link> (void *buffer, size_t size, size_t chunkSize=<link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link>, BaseAllocator *baseAllocator=0)</para>
 
 <para>Constructor with user-supplied buffer. </para>
 </listitem>
@@ -85,6 +96,56 @@
 </listitem>
         </itemizedlist>
 </simplesect>
+<simplesect>
+    <title>Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>bool <link linkend="_class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc">AddChunk</link> (size_t capacity)</para>
+
+<para>Creates a new chunk. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>static <link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link> * <link linkend="_class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda">GetChunkHead</link> (<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link> *shared)</para>
+</listitem>
+            <listitem><para>static <link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link> * <link linkend="_class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5">GetChunkBuffer</link> (<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link> *shared)</para>
+</listitem>
+            <listitem><para>static void * <link linkend="_class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842">AlignBuffer</link> (void *buf, size_t &amp;size)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>size_t <link linkend="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb">chunk_capacity_</link></para>
+
+<para>The minimum capacity of chunk when they are allocated. </para>
+</listitem>
+            <listitem><para>BaseAllocator * <link linkend="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6">baseAllocator_</link></para>
+
+<para>base allocator for allocating memory chunks. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link> * <link linkend="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c">shared_</link></para>
+
+<para>The shared data of the allocator. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const size_t <link linkend="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552">SIZEOF_SHARED_DATA</link> = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(sizeof(<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>))</para>
+</listitem>
+            <listitem><para>static const size_t <link linkend="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f">SIZEOF_CHUNK_HEADER</link> = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(sizeof(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>))</para>
+</listitem>
+            <listitem><para>static const size_t <link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link> = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga860570d04d489be08b9835d2ec58bac5">RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY</link></para>
+
+<para>Default chunk capacity. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
 <section>
 <title>Detailed Description</title>
 <simplesect><title>template&lt;typename BaseAllocator = CrtAllocator&gt;
@@ -138,7 +199,7 @@ Template Parameters</title>
     <title>MemoryPoolAllocator()<computeroutput>[1/3]</computeroutput></title>
 <indexterm><primary>MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
 <indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>MemoryPoolAllocator</secondary></indexterm>
-<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (size_t chunkSize = <computeroutput>kDefaultChunkCapacity</computeroutput>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (size_t chunkSize = <computeroutput><link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link></computeroutput>
 , BaseAllocator * baseAllocator = <computeroutput>0</computeroutput>
 )<computeroutput>[inline]</computeroutput>, <computeroutput>[explicit]</computeroutput></computeroutput></para><para>
 
@@ -176,7 +237,7 @@ Parameters</title>
     <title>MemoryPoolAllocator()<computeroutput>[2/3]</computeroutput></title>
 <indexterm><primary>MemoryPoolAllocator</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
 <indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>MemoryPoolAllocator</secondary></indexterm>
-<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (void * buffer, size_t size, size_t chunkSize = <computeroutput>kDefaultChunkCapacity</computeroutput>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;<link linkend="_class_memory_pool_allocator">::MemoryPoolAllocator</link> (void * buffer, size_t size, size_t chunkSize = <computeroutput><link linkend="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c">kDefaultChunkCapacity</link></computeroutput>
 , BaseAllocator * baseAllocator = <computeroutput>0</computeroutput>
 )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
 
@@ -243,6 +304,46 @@ Parameters</title>
 </section>
 <section>
 <title>Member Function Documentation</title>
+<anchor xml:id="_class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc"/><section>
+    <title>AddChunk()</title>
+<indexterm><primary>AddChunk</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>AddChunk</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>bool <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::AddChunk (size_t capacity)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Creates a new chunk. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>capacity</entry><entry>
+<para>Capacity of the chunk in bytes. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>true if success. </para>
+</formalpara>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1ab0eabf761ffa8641236acd99cbe22842"/><section>
+    <title>AlignBuffer()</title>
+<indexterm><primary>AlignBuffer</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>AlignBuffer</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>static void * <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::AlignBuffer (void * buf, size_t &amp; size)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_memory_pool_allocator_1a60526f0a1e6bb225c49f10537635e30f"/><section>
     <title>Capacity()</title>
 <indexterm><primary>Capacity</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
@@ -276,6 +377,16 @@ Parameters</title>
 <para>Frees a memory block (concept Allocator) </para>
 </para>
 </section>
+<anchor xml:id="_class_memory_pool_allocator_1a76f41aff1e8a9f82abc571df564c18d5"/><section>
+    <title>GetChunkBuffer()</title>
+<indexterm><primary>GetChunkBuffer</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>GetChunkBuffer</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>static <link linkend="_stdint_8h_1aba7bc1797add20fe3efdf37ced1182c5">uint8_t</link> * <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::GetChunkBuffer (<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link> * shared)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda"/><section>
+    <title>GetChunkHead()</title>
+<indexterm><primary>GetChunkHead</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>GetChunkHead</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>static <link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link> * <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::GetChunkHead (<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link> * shared)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_memory_pool_allocator_1a8d300531c1f556172aef1259ff55cb48"/><section>
     <title>Malloc()</title>
 <indexterm><primary>Malloc</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
@@ -350,6 +461,33 @@ Parameters</title>
 </section>
 <section>
 <title>Member Data Documentation</title>
+<anchor xml:id="_class_memory_pool_allocator_1a628cd7f46e838fb37ceccf65dd17bce6"/><section>
+    <title>baseAllocator_</title>
+<indexterm><primary>baseAllocator_</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>baseAllocator_</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>BaseAllocator* <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::baseAllocator_<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>base allocator for allocating memory chunks. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a67909468c193d429a227a74d35c4d8cb"/><section>
+    <title>chunk_capacity_</title>
+<indexterm><primary>chunk_capacity_</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>chunk_capacity_</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::chunk_capacity_<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>The minimum capacity of chunk when they are allocated. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c"/><section>
+    <title>kDefaultChunkCapacity</title>
+<indexterm><primary>kDefaultChunkCapacity</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>kDefaultChunkCapacity</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::kDefaultChunkCapacity = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga860570d04d489be08b9835d2ec58bac5">RAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY</link><computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Default chunk capacity. </para>
+</para>
+</section>
 <anchor xml:id="_class_memory_pool_allocator_1ab4c7c5c631e451689bc9da392a65194f"/><section>
     <title>kNeedFree</title>
 <indexterm><primary>kNeedFree</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
@@ -368,6 +506,25 @@ Parameters</title>
 <para>Tell users that this allocator is reference counted on copy. </para>
 </para>
 </section>
+<anchor xml:id="_class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c"/><section>
+    <title>shared_</title>
+<indexterm><primary>shared_</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>shared_</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>* <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::shared_<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>The shared data of the allocator. </para>
+</para>
+</section>
+<anchor xml:id="_class_memory_pool_allocator_1a195c16fcdba57918869168c48d97737f"/><section>
+    <title>SIZEOF_CHUNK_HEADER</title>
+<indexterm><primary>SIZEOF_CHUNK_HEADER</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>SIZEOF_CHUNK_HEADER</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::SIZEOF_CHUNK_HEADER = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(sizeof(<link linkend="_struct_memory_pool_allocator_1_1_chunk_header">ChunkHeader</link>))<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_memory_pool_allocator_1aa2538f9ce977f511009747f60b1ae552"/><section>
+    <title>SIZEOF_SHARED_DATA</title>
+<indexterm><primary>SIZEOF_SHARED_DATA</primary><secondary>MemoryPoolAllocator&lt; BaseAllocator &gt;</secondary></indexterm>
+<indexterm><primary>MemoryPoolAllocator&lt; BaseAllocator &gt;</primary><secondary>SIZEOF_SHARED_DATA</secondary></indexterm>
+<computeroutput>template&lt;typename BaseAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_class_memory_pool_allocator">MemoryPoolAllocator</link>&lt; BaseAllocator &gt;::SIZEOF_SHARED_DATA = <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242">RAPIDJSON_ALIGN</link>(sizeof(<link linkend="_struct_memory_pool_allocator_1_1_shared_data">SharedData</link>))<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <para>
 The documentation for this class was generated from the following file:</para>
 src/rapidjson/include/rapidjson/<link linkend="_allocators_8h">allocators.h</link></section>

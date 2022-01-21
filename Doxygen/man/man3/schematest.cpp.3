@@ -1,4 +1,4 @@
-.TH "src/rapidjson/test/unittest/schematest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "src/rapidjson/test/unittest/schematest.cpp" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,13 +39,13 @@ src/rapidjson/test/unittest/schematest.cpp
 .RI "#define \fBTEST_HASHER\fP(json1,  json2,  expected)"
 .br
 .ti -1c
-.RI "#define \fBVALIDATE\fP(schema,  json,  expected)"
+.RI "#define \fBVALIDATE\fP(schema,  \fBjson\fP,  expected)"
 .br
 .ti -1c
-.RI "#define \fBINVALIDATE\fP(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error)"
+.RI "#define \fBINVALIDATE\fP(schema,  \fBjson\fP,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error)"
 .br
 .ti -1c
-.RI "#define \fBINVALIDATE_\fP(schema,  json,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error,  flags,  SchemaValidatorType,  PointerType)"
+.RI "#define \fBINVALIDATE_\fP(schema,  \fBjson\fP,  invalidSchemaPointer,  invalidSchemaKeyword,  invalidDocumentPointer,  error,  flags,  SchemaValidatorType,  PointerType)"
 .br
 .in -1c
 .SS "Functions"
@@ -202,6 +202,9 @@ src/rapidjson/test/unittest/schematest.cpp
 .RI "\fBTEST\fP (\fBSchemaValidator\fP, SchemaPointer)"
 .br
 .ti -1c
+.RI "template<typename \fBAllocator\fP > static char * \fBReadFile\fP (const char *filename, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
 .RI "\fBTEST\fP (\fBSchemaValidator\fP, ValidateMetaSchema)"
 .br
 .ti -1c
@@ -300,7 +303,7 @@ src/rapidjson/test/unittest/schematest.cpp
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define INVALIDATE(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error)"
+.SS "#define INVALIDATE(schema, \fBjson\fP, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error)"
 \fBValue:\fP
 .PP
 .nf
@@ -308,7 +311,7 @@ src/rapidjson/test/unittest/schematest.cpp
     INVALIDATE_(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error, kValidateDefaultFlags, SchemaValidator, Pointer) \
 }
 .fi
-.SS "#define INVALIDATE_(schema, json, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error, flags, SchemaValidatorType, PointerType)"
+.SS "#define INVALIDATE_(schema, \fBjson\fP, invalidSchemaPointer, invalidSchemaKeyword, invalidDocumentPointer, error, flags, SchemaValidatorType, PointerType)"
 
 .SS "#define RAPIDJSON_HAS_STDSTRING   1"
 
@@ -333,7 +336,7 @@ src/rapidjson/test/unittest/schematest.cpp
     EXPECT_TRUE(expected == (h1\&.GetHashCode() == h2\&.GetHashCode()));\
 }
 .fi
-.SS "#define VALIDATE(schema, json, expected)"
+.SS "#define VALIDATE(schema, \fBjson\fP, expected)"
 \fBValue:\fP
 .PP
 .nf
@@ -369,6 +372,8 @@ src/rapidjson/test/unittest/schematest.cpp
 .fi
 .SH "Function Documentation"
 .PP 
+.SS "template<typename \fBAllocator\fP > static char * ReadFile (const char * filename, \fBAllocator\fP & allocator)\fC [static]\fP"
+
 .SS "TEST (\fBSchema\fP, Issue848)"
 
 .SS "TEST (\fBSchemaValidatingReader\fP, Invalid)"

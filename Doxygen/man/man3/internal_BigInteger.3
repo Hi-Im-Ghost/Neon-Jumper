@@ -1,4 +1,4 @@
-.TH "internal::BigInteger" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::BigInteger" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -70,6 +70,49 @@ internal::BigInteger
 .RI "bool \fBIsZero\fP () const"
 .br
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Ch > void \fBAppendDecimal64\fP (const Ch *begin, const Ch *end)"
+.br
+.ti -1c
+.RI "void \fBPushBack\fP (\fBType\fP digit)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Ch > static \fBuint64_t\fP \fBParseUint64\fP (const Ch *begin, const Ch *end)"
+.br
+.ti -1c
+.RI "static \fBuint64_t\fP \fBMulAdd64\fP (\fBuint64_t\fP \fBa\fP, \fBuint64_t\fP b, \fBuint64_t\fP k, \fBuint64_t\fP *outHigh)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBType\fP \fBdigits_\fP [\fBkCapacity\fP]"
+.br
+.ti -1c
+.RI "size_t \fBcount_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkBitCount\fP = 3328"
+.br
+.ti -1c
+.RI "static const size_t \fBkCapacity\fP = \fBkBitCount\fP / sizeof(\fBType\fP)"
+.br
+.ti -1c
+.RI "static const size_t \fBkTypeBit\fP = sizeof(\fBType\fP) * 8"
+.br
+.in -1c
 .SH "Member Typedef Documentation"
 .PP 
 .SS "typedef \fBuint64_t\fP \fBinternal::BigInteger::Type\fP"
@@ -84,6 +127,8 @@ internal::BigInteger
 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename Ch > void internal::BigInteger::AppendDecimal64 (const Ch * begin, const Ch * end)\fC [inline]\fP, \fC [private]\fP"
+
 .SS "int internal::BigInteger::Compare (const \fBBigInteger\fP & rhs) const\fC [inline]\fP"
 
 .SS "bool internal::BigInteger::Difference (const \fBBigInteger\fP & rhs, \fBBigInteger\fP * out) const\fC [inline]\fP"
@@ -93,6 +138,8 @@ internal::BigInteger
 .SS "\fBType\fP internal::BigInteger::GetDigit (size_t index) const\fC [inline]\fP"
 
 .SS "bool internal::BigInteger::IsZero () const\fC [inline]\fP"
+
+.SS "static \fBuint64_t\fP internal::BigInteger::MulAdd64 (\fBuint64_t\fP a, \fBuint64_t\fP b, \fBuint64_t\fP k, \fBuint64_t\fP * outHigh)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
 
 .SS "\fBBigInteger\fP & internal::BigInteger::MultiplyPow5 (unsigned exp)\fC [inline]\fP"
 
@@ -111,6 +158,22 @@ internal::BigInteger
 .SS "bool internal::BigInteger::operator== (const \fBBigInteger\fP & rhs) const\fC [inline]\fP"
 
 .SS "bool internal::BigInteger::operator== (const \fBType\fP rhs) const\fC [inline]\fP"
+
+.SS "template<typename Ch > static \fBuint64_t\fP internal::BigInteger::ParseUint64 (const Ch * begin, const Ch * end)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.SS "void internal::BigInteger::PushBack (\fBType\fP digit)\fC [inline]\fP, \fC [private]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "size_t internal::BigInteger::count_\fC [private]\fP"
+
+.SS "\fBType\fP internal::BigInteger::digits_[\fBkCapacity\fP]\fC [private]\fP"
+
+.SS "const size_t internal::BigInteger::kBitCount = 3328\fC [static]\fP, \fC [private]\fP"
+
+.SS "const size_t internal::BigInteger::kCapacity = \fBkBitCount\fP / sizeof(\fBType\fP)\fC [static]\fP, \fC [private]\fP"
+
+.SS "const size_t internal::BigInteger::kTypeBit = sizeof(\fBType\fP) * 8\fC [static]\fP, \fC [private]\fP"
 
 
 .SH "Author"

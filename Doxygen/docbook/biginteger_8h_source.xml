@@ -37,58 +37,58 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 33 <emphasis role="keyword">public</emphasis>:
 34 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>;
 35 
-36 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1abec623168bc9494dec2f50643b897f72">BigInteger</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;rhs)&#32;:&#32;count_(rhs.count_)&#32;{
-37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memcpy(digits_,&#32;rhs.digits_,&#32;count_&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
+36 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1abec623168bc9494dec2f50643b897f72">BigInteger</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;rhs)&#32;:&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>(rhs.<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>)&#32;{
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memcpy(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
 38 &#32;&#32;&#32;&#32;}
 39 
-40 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad02b0ef9da203efddd4af07e923732c0">BigInteger</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;:&#32;count_(1)&#32;{
-41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[0]&#32;=&#32;u;
+40 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad02b0ef9da203efddd4af07e923732c0">BigInteger</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;:&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>(1)&#32;{
+41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;=&#32;u;
 42 &#32;&#32;&#32;&#32;}
 43 
 44 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
-45 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a4dc2632b2aa2973d18864a127d7c141a">BigInteger</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;decimals,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;:&#32;count_(1)&#32;{
+45 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a4dc2632b2aa2973d18864a127d7c141a">BigInteger</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;decimals,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;length)&#32;:&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>(1)&#32;{
 46 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(length&#32;&gt;&#32;0);
-47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[0]&#32;=&#32;0;
+47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;=&#32;0;
 48 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;
 49 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kMaxDigitPerIteration&#32;=&#32;19;&#32;&#32;<emphasis role="comment">//&#32;2^64&#32;=&#32;18446744073709551616&#32;&gt;&#32;10^19</emphasis>
 50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(length&#32;&gt;=&#32;kMaxDigitPerIteration)&#32;{
-51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;AppendDecimal64(decimals&#32;+&#32;i,&#32;decimals&#32;+&#32;i&#32;+&#32;kMaxDigitPerIteration);
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1adcdffd9049832290ce37e283c51e2f50">AppendDecimal64</link>(decimals&#32;+&#32;i,&#32;decimals&#32;+&#32;i&#32;+&#32;kMaxDigitPerIteration);
 52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;length&#32;-=&#32;kMaxDigitPerIteration;
 53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;i&#32;+=&#32;kMaxDigitPerIteration;
 54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 55 
 56 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(length&#32;&gt;&#32;0)
-57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;AppendDecimal64(decimals&#32;+&#32;i,&#32;decimals&#32;+&#32;i&#32;+&#32;length);
+57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1adcdffd9049832290ce37e283c51e2f50">AppendDecimal64</link>(decimals&#32;+&#32;i,&#32;decimals&#32;+&#32;i&#32;+&#32;length);
 58 &#32;&#32;&#32;&#32;}
 59 &#32;&#32;&#32;&#32;
 60 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1ac783203409480350dbbcd9e0c95001be">operator=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&#32;&amp;rhs)
 61 &#32;&#32;&#32;&#32;{
 62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<emphasis role="keyword">this</emphasis>&#32;!=&#32;&amp;rhs)&#32;{
-63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;=&#32;rhs.count_;
-64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memcpy(digits_,&#32;rhs.digits_,&#32;count_&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
+63 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;=&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;
+64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memcpy(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
 65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 66 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 67 &#32;&#32;&#32;&#32;}
 68 &#32;&#32;&#32;&#32;
 69 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1a0ffe0c4c762312682d60e82c38b38c45">operator=</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;{
-70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[0]&#32;=&#32;u;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
-71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;=&#32;1;
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;=&#32;u;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;=&#32;1;
 72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 73 &#32;&#32;&#32;&#32;}
 74 
 75 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1ad77a8a66494070c1518d8ca4948cbfae">operator+=</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u)&#32;{
-76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;backup&#32;=&#32;digits_[0];
-77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[0]&#32;+=&#32;u;
-78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;count_&#32;-&#32;1;&#32;i++)&#32;{
-79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(digits_[i]&#32;&gt;=&#32;backup)
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;backup&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0];
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;+=&#32;u;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;-&#32;1;&#32;i++)&#32;{
+79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;&gt;=&#32;backup)
 80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;&#32;<emphasis role="comment">//&#32;no&#32;carry</emphasis>
-81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;backup&#32;=&#32;digits_[i&#32;+&#32;1];
-82 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[i&#32;+&#32;1]&#32;+=&#32;1;
+81 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;backup&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i&#32;+&#32;1];
+82 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i&#32;+&#32;1]&#32;+=&#32;1;
 83 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 84 
 85 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Last&#32;carry</emphasis>
-86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(digits_[count_&#32;-&#32;1]&#32;&lt;&#32;backup)
-87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushBack(1);
+86 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;-&#32;1]&#32;&lt;&#32;backup)
+87 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a18a4939a983f296085fed6bc5b56d5c1">PushBack</link>(1);
 88 
 89 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 90 &#32;&#32;&#32;&#32;}
@@ -99,14 +99,14 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 95 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*<emphasis role="keyword">this</emphasis>&#32;==&#32;1)&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>&#32;=&#32;u;
 96 
 97 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;k&#32;=&#32;0;
-98 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;count_;&#32;i++)&#32;{
+98 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;&#32;i++)&#32;{
 99 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;hi;
-100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[i]&#32;=&#32;MulAdd64(digits_[i],&#32;u,&#32;k,&#32;&amp;hi);
+100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a3857418321694cd20071203b2f08ebfe">MulAdd64</link>(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i],&#32;u,&#32;k,&#32;&amp;hi);
 101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;k&#32;=&#32;hi;
 102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
 104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(k&#32;&gt;&#32;0)
-105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushBack(k);
+105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a18a4939a983f296085fed6bc5b56d5c1">PushBack</link>(k);
 106 
 107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 108 &#32;&#32;&#32;&#32;}
@@ -117,19 +117,19 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(*<emphasis role="keyword">this</emphasis>&#32;==&#32;1)&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>&#32;=&#32;u;
 114 
 115 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;k&#32;=&#32;0;
-116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;count_;&#32;i++)&#32;{
-117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;c&#32;=&#32;digits_[i]&#32;&gt;&gt;&#32;32;
-118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;d&#32;=&#32;digits_[i]&#32;&amp;&#32;0xFFFFFFFF;
+116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;&#32;i++)&#32;{
+117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;c&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;&gt;&gt;&#32;32;
+118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;d&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;&amp;&#32;0xFFFFFFFF;
 119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;uc&#32;=&#32;u&#32;*&#32;c;
 120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;ud&#32;=&#32;u&#32;*&#32;d;
 121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;p0&#32;=&#32;ud&#32;+&#32;k;
 122 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;p1&#32;=&#32;uc&#32;+&#32;(p0&#32;&gt;&gt;&#32;32);
-123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[i]&#32;=&#32;(p0&#32;&amp;&#32;0xFFFFFFFF)&#32;|&#32;(p1&#32;&lt;&lt;&#32;32);
+123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;=&#32;(p0&#32;&amp;&#32;0xFFFFFFFF)&#32;|&#32;(p1&#32;&lt;&lt;&#32;32);
 124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;k&#32;=&#32;p1&#32;&gt;&gt;&#32;32;
 125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
 127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(k&#32;&gt;&#32;0)
-128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;PushBack(k);
+128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a18a4939a983f296085fed6bc5b56d5c1">PushBack</link>(k);
 129 
 130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 131 &#32;&#32;&#32;&#32;}
@@ -137,35 +137,35 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 133 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1a06a6f5d1d81b91248b0ab3c2d65a500a">operator&lt;&lt;=</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;shift)&#32;{
 134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1ae12dd6759f1f76501db3d1bcafce39cd">IsZero</link>()&#32;||&#32;shift&#32;==&#32;0)&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 135 
-136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset&#32;=&#32;shift&#32;/&#32;kTypeBit;
-137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;interShift&#32;=&#32;shift&#32;%&#32;kTypeBit;
-138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(count_&#32;+&#32;offset&#32;&lt;=&#32;kCapacity);
+136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;offset&#32;=&#32;shift&#32;/&#32;<link linkend="_classinternal_1_1_big_integer_1a662666ad4bc9122cb80ba2ac6e88a745">kTypeBit</link>;
+137 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;interShift&#32;=&#32;shift&#32;%&#32;<link linkend="_classinternal_1_1_big_integer_1a662666ad4bc9122cb80ba2ac6e88a745">kTypeBit</link>;
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;+&#32;offset&#32;&lt;=&#32;<link linkend="_classinternal_1_1_big_integer_1a8a908718d685b9bd39fb52f2e511b0c6">kCapacity</link>);
 139 
 140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(interShift&#32;==&#32;0)&#32;{
-141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memmove(digits_&#32;+&#32;offset,&#32;digits_,&#32;count_&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
-142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;+=&#32;offset;
+141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memmove(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>&#32;+&#32;offset,&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;+=&#32;offset;
 143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
-145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[count_]&#32;=&#32;0;
-146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;count_;&#32;i&#32;&gt;&#32;0;&#32;i--)
-147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[i&#32;+&#32;offset]&#32;=&#32;(digits_[i]&#32;&lt;&lt;&#32;interShift)&#32;|&#32;(digits_[i&#32;-&#32;1]&#32;&gt;&gt;&#32;(kTypeBit&#32;-&#32;interShift));
-148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[offset]&#32;=&#32;digits_[0]&#32;&lt;&lt;&#32;interShift;
-149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;+=&#32;offset;
-150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(digits_[count_])
-151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_++;
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>]&#32;=&#32;0;
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;&#32;i&#32;&gt;&#32;0;&#32;i--)
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i&#32;+&#32;offset]&#32;=&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;&lt;&lt;&#32;interShift)&#32;|&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i&#32;-&#32;1]&#32;&gt;&gt;&#32;(<link linkend="_classinternal_1_1_big_integer_1a662666ad4bc9122cb80ba2ac6e88a745">kTypeBit</link>&#32;-&#32;interShift));
+148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[offset]&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;&lt;&lt;&#32;interShift;
+149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;+=&#32;offset;
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>])
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>++;
 152 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 153 
-154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(digits_,&#32;0,&#32;offset&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
+154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;0,&#32;offset&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>));
 155 
 156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<emphasis role="keyword">this</emphasis>;
 157 &#32;&#32;&#32;&#32;}
 158 
 159 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a52b424669238bdebc134e793d3b470ae">operator==</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;rhs)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;==&#32;rhs.count_&#32;&amp;&amp;&#32;std::memcmp(digits_,&#32;rhs.digits_,&#32;count_&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>))&#32;==&#32;0;
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;==&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;&amp;&amp;&#32;std::memcmp(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>,&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;*&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>))&#32;==&#32;0;
 161 &#32;&#32;&#32;&#32;}
 162 
 163 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a8b6ab0d652d461c1136e0388d352628b">operator==</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;rhs)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;==&#32;1&#32;&amp;&amp;&#32;digits_[0]&#32;==&#32;rhs;
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;==&#32;1&#32;&amp;&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;==&#32;rhs;
 165 &#32;&#32;&#32;&#32;}
 166 
 167 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1af491885747a0442492134c23a6ec4c65">MultiplyPow5</link>(<emphasis role="keywordtype">unsigned</emphasis>&#32;exp)&#32;{
@@ -203,36 +203,36 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;borrow&#32;=&#32;0;
 200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>-&gt;count_;&#32;i++)&#32;{
 201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;d&#32;=&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>-&gt;digits_[i]&#32;-&#32;borrow;
-202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(i&#32;&lt;&#32;b-&gt;count_)
-203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;-=&#32;b-&gt;digits_[i];
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(i&#32;&lt;&#32;b-&gt;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>)
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;d&#32;-=&#32;b-&gt;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i];
 204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;borrow&#32;=&#32;(d&#32;&gt;&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>-&gt;digits_[i])&#32;?&#32;1&#32;:&#32;0;
-205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;out-&gt;digits_[i]&#32;=&#32;d;
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;out-&gt;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;=&#32;d;
 206 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(d&#32;!=&#32;0)
-207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;out-&gt;count_&#32;=&#32;i&#32;+&#32;1;
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;out-&gt;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;=&#32;i&#32;+&#32;1;
 208 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 209 
 210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;ret;
 211 &#32;&#32;&#32;&#32;}
 212 
 213 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1af8e90fff5382de6c1cda5f751017200c">Compare</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer">BigInteger</link>&amp;&#32;rhs)<emphasis role="keyword">&#32;const&#32;</emphasis>{
-214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(count_&#32;!=&#32;rhs.count_)
-215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;&lt;&#32;rhs.count_&#32;?&#32;-1&#32;:&#32;1;
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;!=&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>)
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;&lt;&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;?&#32;-1&#32;:&#32;1;
 216 
-217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;count_;&#32;i--&#32;&gt;&#32;0;)
-218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(digits_[i]&#32;!=&#32;rhs.digits_[i])
-219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;digits_[i]&#32;&lt;&#32;rhs.digits_[i]&#32;?&#32;-1&#32;:&#32;1;
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;&#32;i--&#32;&gt;&#32;0;)
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;!=&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i])
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;&lt;&#32;rhs.<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[i]&#32;?&#32;-1&#32;:&#32;1;
 220 
 221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;
 222 &#32;&#32;&#32;&#32;}
 223 
-224 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1aa0ad6e74839b7c7fe77c9742ec079525">GetCount</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_;&#32;}
-225 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;<link linkend="_classinternal_1_1_big_integer_1a7288eefd49735c3c3edec698f56738bd">GetDigit</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;count_);&#32;<emphasis role="keywordflow">return</emphasis>&#32;digits_[index];&#32;}
-226 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ae12dd6759f1f76501db3d1bcafce39cd">IsZero</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;==&#32;1&#32;&amp;&amp;&#32;digits_[0]&#32;==&#32;0;&#32;}
+224 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1aa0ad6e74839b7c7fe77c9742ec079525">GetCount</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;&#32;}
+225 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;<link linkend="_classinternal_1_1_big_integer_1a7288eefd49735c3c3edec698f56738bd">GetDigit</link>(<emphasis role="keywordtype">size_t</emphasis>&#32;index)<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(index&#32;&lt;&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>);&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[index];&#32;}
+226 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ae12dd6759f1f76501db3d1bcafce39cd">IsZero</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;==&#32;1&#32;&amp;&amp;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[0]&#32;==&#32;0;&#32;}
 227 
 228 <emphasis role="keyword">private</emphasis>:
 229 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
-230 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;AppendDecimal64(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;begin,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;end)&#32;{
-231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u&#32;=&#32;ParseUint64(begin,&#32;end);
+230 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1adcdffd9049832290ce37e283c51e2f50">AppendDecimal64</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;begin,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;end)&#32;{
+231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;u&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1acebb94526a2f5f26f0de244b7f76a3db">ParseUint64</link>(begin,&#32;end);
 232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_classinternal_1_1_big_integer_1ae12dd6759f1f76501db3d1bcafce39cd">IsZero</link>())
 233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*<emphasis role="keyword">this</emphasis>&#32;=&#32;u;
 234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
@@ -241,13 +241,13 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 237 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 238 &#32;&#32;&#32;&#32;}
 239 
-240 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;PushBack(<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;digit)&#32;{
-241 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(count_&#32;&lt;&#32;kCapacity);
-242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;digits_[count_++]&#32;=&#32;digit;
+240 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a18a4939a983f296085fed6bc5b56d5c1">PushBack</link>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;digit)&#32;{
+241 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>&#32;&lt;&#32;<link linkend="_classinternal_1_1_big_integer_1a8a908718d685b9bd39fb52f2e511b0c6">kCapacity</link>);
+242 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>++]&#32;=&#32;digit;
 243 &#32;&#32;&#32;&#32;}
 244 
 245 &#32;&#32;&#32;&#32;<emphasis role="keyword">template</emphasis>&lt;<emphasis role="keyword">typename</emphasis>&#32;Ch&gt;
-246 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;ParseUint64(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;begin,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;end)&#32;{
+246 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_big_integer_1acebb94526a2f5f26f0de244b7f76a3db">ParseUint64</link>(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;begin,&#32;<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;end)&#32;{
 247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;r&#32;=&#32;0;
 248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keyword">const</emphasis>&#32;Ch*&#32;p&#32;=&#32;begin;&#32;p&#32;!=&#32;end;&#32;++p)&#32;{
 249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(*p&#32;&gt;=&#32;Ch(<emphasis role="charliteral">&apos;0&apos;</emphasis>)&#32;&amp;&amp;&#32;*p&#32;&lt;=&#32;Ch(<emphasis role="charliteral">&apos;9&apos;</emphasis>));
@@ -257,7 +257,7 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 253 &#32;&#32;&#32;&#32;}
 254 
 255 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Assume&#32;a&#32;*&#32;b&#32;+&#32;k&#32;&lt;&#32;2^128</emphasis>
-256 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;MulAdd64(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;b,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;k,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>*&#32;outHigh)&#32;{
+256 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_classinternal_1_1_big_integer_1a3857418321694cd20071203b2f08ebfe">MulAdd64</link>(<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;b,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;k,&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>*&#32;outHigh)&#32;{
 257 <emphasis role="preprocessor">#if&#32;defined(_MSC_VER)&#32;&amp;&amp;&#32;defined(_M_AMD64)</emphasis>
 258 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_stdint_8h_1aec6fcb673ff035718c238c8c9d544c47">uint64_t</link>&#32;low&#32;=&#32;_umul128(<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>,&#32;b,&#32;outHigh)&#32;+&#32;k;
 259 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(low&#32;&lt;&#32;k)
@@ -287,12 +287,12 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 283 <emphasis role="preprocessor">#endif</emphasis>
 284 &#32;&#32;&#32;&#32;}
 285 
-286 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kBitCount&#32;=&#32;3328;&#32;&#32;<emphasis role="comment">//&#32;64bit&#32;*&#32;54&#32;&gt;&#32;10^1000</emphasis>
-287 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kCapacity&#32;=&#32;kBitCount&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>);
-288 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;kTypeBit&#32;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>)&#32;*&#32;8;
+286 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a89d6a00e78a914d0b873784539416dc5">kBitCount</link>&#32;=&#32;3328;&#32;&#32;<emphasis role="comment">//&#32;64bit&#32;*&#32;54&#32;&gt;&#32;10^1000</emphasis>
+287 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a8a908718d685b9bd39fb52f2e511b0c6">kCapacity</link>&#32;=&#32;<link linkend="_classinternal_1_1_big_integer_1a89d6a00e78a914d0b873784539416dc5">kBitCount</link>&#32;/&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>);
+288 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1a662666ad4bc9122cb80ba2ac6e88a745">kTypeBit</link>&#32;=&#32;<emphasis role="keyword">sizeof</emphasis>(<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>)&#32;*&#32;8;
 289 
-290 &#32;&#32;&#32;&#32;<link linkend="_rapidjson_8h_1a1d1cfd8ffb84e947f82999c682b666a7">Type</link>&#32;digits_[kCapacity];
-291 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count_;
+290 &#32;&#32;&#32;&#32;<link linkend="_classinternal_1_1_big_integer_1a1310812fca26ebae77594ba08678fc4c">Type</link>&#32;<link linkend="_classinternal_1_1_big_integer_1a0b505df38fedd862a748fe1e629d918a">digits_</link>[<link linkend="_classinternal_1_1_big_integer_1a8a908718d685b9bd39fb52f2e511b0c6">kCapacity</link>];
+291 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classinternal_1_1_big_integer_1ad4bf5198afe86d754ec57a82605e644b">count_</link>;
 292 };
 293 
 294 }&#32;<emphasis role="comment">//&#32;namespace&#32;internal</emphasis>

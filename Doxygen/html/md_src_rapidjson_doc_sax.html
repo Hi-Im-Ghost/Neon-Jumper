@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Neon Jumper<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Neon Jumper
    </div>
   </td>
  </tr>
@@ -150,17 +150,18 @@ Reader</h1>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="_c_make_c_compiler_id_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>() {</div>
-<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> json[] = <span class="stringliteral">&quot; { \&quot;hello\&quot; : \&quot;world\&quot;, \&quot;t\&quot; : true , \&quot;f\&quot; : false, \&quot;n\&quot;: null, \&quot;i\&quot;:123, \&quot;pi\&quot;: 3.1416, \&quot;a\&quot;:[1, 2, 3, 4] } &quot;</span>;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span> <a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>[] = <span class="stringliteral">&quot; { \&quot;hello\&quot; : \&quot;world\&quot;, \&quot;t\&quot; : true , \&quot;f\&quot; : false, \&quot;n\&quot;: null, \&quot;i\&quot;:123, \&quot;pi\&quot;: 3.1416, \&quot;a\&quot;:[1, 2, 3, 4] } &quot;</span>;</div>
 <div class="line"> </div>
 <div class="line">    <a class="code hl_struct" href="struct_my_handler.html">MyHandler</a> handler;</div>
 <div class="line">    <a class="code hl_class" href="class_generic_reader.html">Reader</a> reader;</div>
-<div class="line">    <a class="code hl_struct" href="struct_generic_string_stream.html">StringStream</a> ss(json);</div>
+<div class="line">    <a class="code hl_struct" href="struct_generic_string_stream.html">StringStream</a> ss(<a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>);</div>
 <div class="line">    reader.<a class="code hl_function" href="class_generic_reader.html#a0c450620d14ff1824e58bb7bd9b42099">Parse</a>(ss, handler);</div>
 <div class="line">}</div>
 <div class="ttc" id="a_c_make_c_compiler_id_8c_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="_c_make_c_compiler_id_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> CMakeCCompilerId.c:726</div></div>
 <div class="ttc" id="aclass_generic_reader_html"><div class="ttname"><a href="class_generic_reader.html">GenericReader&lt; UTF8&lt; char &gt;, UTF8&lt; char &gt;, CrtAllocator &gt;</a></div></div>
 <div class="ttc" id="aclass_generic_reader_html_a0c450620d14ff1824e58bb7bd9b42099"><div class="ttname"><a href="class_generic_reader.html#a0c450620d14ff1824e58bb7bd9b42099">GenericReader::Parse</a></div><div class="ttdeci">ParseResult Parse(InputStream &amp;is, Handler &amp;handler)</div><div class="ttdoc">Parse JSON text.</div><div class="ttdef"><b>Definition:</b> reader.h:559</div></div>
 <div class="ttc" id="anamespacerapidjson_html"><div class="ttname"><a href="namespacerapidjson.html">rapidjson</a></div><div class="ttdoc">main RapidJSON namespace</div></div>
+<div class="ttc" id="anamespacetest_8cpp_html_a04e873a45a18dab42dc9a0eba4f3deee"><div class="ttname"><a href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a></div><div class="ttdeci">static const char json[]</div><div class="ttdef"><b>Definition:</b> namespacetest.cpp:32</div></div>
 <div class="ttc" id="arapidjson_8h_html_a5ed6e6e67250fadbd041127e6386dcb5"><div class="ttname"><a href="rapidjson_8h.html#a5ed6e6e67250fadbd041127e6386dcb5">SizeType</a></div><div class="ttdeci">RAPIDJSON_NAMESPACE_BEGIN typedef unsigned SizeType</div><div class="ttdoc">Size type (for string lengths, array sizes, etc.)</div><div class="ttdef"><b>Definition:</b> rapidjson.h:415</div></div>
 <div class="ttc" id="areader_8h_html"><div class="ttname"><a href="reader_8h.html">reader.h</a></div></div>
 <div class="ttc" id="astdint_8h_html_a414156feea104f8f75b4ed9e3121b2f6"><div class="ttname"><a href="stdint_8h.html#a414156feea104f8f75b4ed9e3121b2f6">int64_t</a></div><div class="ttdeci">signed __int64 int64_t</div><div class="ttdef"><b>Definition:</b> stdint.h:135</div></div>
@@ -361,7 +362,7 @@ Techniques</h1>
 Parsing JSON to Custom Data Structure</h2>
 <p ><code>Document</code>'s parsing capability is completely based on <code>Reader</code>. Actually <code>Document</code> is a handler which receives events from a reader to build a DOM during parsing.</p>
 <p >User may uses <code>Reader</code> to build other data structures directly. This eliminates building of DOM, thus reducing memory and improving performance.</p>
-<p >In the following <code>messagereader</code> example, <code>ParseMessages()</code> parses a JSON which should be an object with key-string pairs.</p>
+<p >In the following <code>messagereader</code> example, <code><a class="el" href="messagereader_8cpp.html#a5cd118312f7d5b3983499e2934611ebf">ParseMessages()</a></code> parses a JSON which should be an object with key-string pairs.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="reader_8h.html">rapidjson/reader.h</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="en_8h.html">rapidjson/error/en.h</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -416,17 +417,17 @@ Parsing JSON to Custom Data Structure</h2>
 <div class="line">    std::string <a class="code hl_variable" href="struct_message_handler.html#a7a61cf6c752b8829eb9c058341617c69">name_</a>;</div>
 <div class="line">};</div>
 <div class="line"> </div>
-<div class="line"><span class="keywordtype">void</span> ParseMessages(<span class="keyword">const</span> <span class="keywordtype">char</span>* json, <a class="code hl_typedef" href="messagereader_8cpp.html#ae2c5980b5eb04369faa7f72447e6d664">MessageMap</a>&amp; messages) {</div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="messagereader_8cpp.html#a5cd118312f7d5b3983499e2934611ebf">ParseMessages</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>, <a class="code hl_typedef" href="messagereader_8cpp.html#ae2c5980b5eb04369faa7f72447e6d664">MessageMap</a>&amp; messages) {</div>
 <div class="line">    <a class="code hl_class" href="class_generic_reader.html">Reader</a> reader;</div>
 <div class="line">    <a class="code hl_struct" href="struct_message_handler.html">MessageHandler</a> handler;</div>
-<div class="line">    <a class="code hl_struct" href="struct_generic_string_stream.html">StringStream</a> ss(json);</div>
+<div class="line">    <a class="code hl_struct" href="struct_generic_string_stream.html">StringStream</a> ss(<a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>);</div>
 <div class="line">    <span class="keywordflow">if</span> (reader.<a class="code hl_function" href="class_generic_reader.html#a0c450620d14ff1824e58bb7bd9b42099">Parse</a>(ss, handler))</div>
 <div class="line">        messages.swap(handler.<a class="code hl_variable" href="struct_message_handler.html#a628b5a49349a2027c84ffb4f6249fa51">messages_</a>);   <span class="comment">// Only change it if success.</span></div>
 <div class="line">    <span class="keywordflow">else</span> {</div>
 <div class="line">        <a class="code hl_enumeration" href="group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s.html#ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</a> e = reader.<a class="code hl_function" href="class_generic_reader.html#a937bf90919f50e1c370b312cee5833e8">GetParseErrorCode</a>();</div>
 <div class="line">        <span class="keywordtype">size_t</span> o = reader.<a class="code hl_function" href="class_generic_reader.html#ae9008523ccd06d839a57335835cb4091">GetErrorOffset</a>();</div>
 <div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;Error: &quot;</span> &lt;&lt; <a class="code hl_function" href="group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s.html#ga28835eb93d2c3c07bbea13515eb31415">GetParseError_En</a>(e) &lt;&lt; endl;;</div>
-<div class="line">        cout &lt;&lt; <span class="stringliteral">&quot; at offset &quot;</span> &lt;&lt; o &lt;&lt; <span class="stringliteral">&quot; near &#39;&quot;</span> &lt;&lt; string(json).substr(o, 10) &lt;&lt; <span class="stringliteral">&quot;...&#39;&quot;</span> &lt;&lt; endl;</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">&quot; at offset &quot;</span> &lt;&lt; o &lt;&lt; <span class="stringliteral">&quot; near &#39;&quot;</span> &lt;&lt; string(<a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>).substr(o, 10) &lt;&lt; <span class="stringliteral">&quot;...&#39;&quot;</span> &lt;&lt; endl;</div>
 <div class="line">    }</div>
 <div class="line">}</div>
 <div class="line"> </div>
@@ -435,7 +436,7 @@ Parsing JSON to Custom Data Structure</h2>
 <div class="line"> </div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* json1 = <span class="stringliteral">&quot;{ \&quot;greeting\&quot; : \&quot;Hello!\&quot;, \&quot;farewell\&quot; : \&quot;bye-bye!\&quot; }&quot;</span>;</div>
 <div class="line">    cout &lt;&lt; json1 &lt;&lt; endl;</div>
-<div class="line">    ParseMessages(json1, messages);</div>
+<div class="line">    <a class="code hl_function" href="messagereader_8cpp.html#a5cd118312f7d5b3983499e2934611ebf">ParseMessages</a>(json1, messages);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">for</span> (MessageMap::const_iterator itr = messages.begin(); itr != messages.end(); ++itr)</div>
 <div class="line">        cout &lt;&lt; itr-&gt;first &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; itr-&gt;second &lt;&lt; endl;</div>
@@ -443,7 +444,7 @@ Parsing JSON to Custom Data Structure</h2>
 <div class="line">    cout &lt;&lt; endl &lt;&lt; <span class="stringliteral">&quot;Parse a JSON with invalid schema.&quot;</span> &lt;&lt; endl;</div>
 <div class="line">    <span class="keyword">const</span> <span class="keywordtype">char</span>* json2 = <span class="stringliteral">&quot;{ \&quot;greeting\&quot; : \&quot;Hello!\&quot;, \&quot;farewell\&quot; : \&quot;bye-bye!\&quot;, \&quot;foo\&quot; : {} }&quot;</span>;</div>
 <div class="line">    cout &lt;&lt; json2 &lt;&lt; endl;</div>
-<div class="line">    ParseMessages(json2, messages);</div>
+<div class="line">    <a class="code hl_function" href="messagereader_8cpp.html#a5cd118312f7d5b3983499e2934611ebf">ParseMessages</a>(json2, messages);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
@@ -452,6 +453,7 @@ Parsing JSON to Custom Data Structure</h2>
 <div class="ttc" id="aen_8h_html"><div class="ttname"><a href="en_8h.html">en.h</a></div></div>
 <div class="ttc" id="agroup___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_html_ga28835eb93d2c3c07bbea13515eb31415"><div class="ttname"><a href="group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s.html#ga28835eb93d2c3c07bbea13515eb31415">GetParseError_En</a></div><div class="ttdeci">RAPIDJSON_NAMESPACE_BEGIN const RAPIDJSON_ERROR_CHARTYPE * GetParseError_En(ParseErrorCode parseErrorCode)</div><div class="ttdoc">Maps error code of parsing into error message.</div><div class="ttdef"><b>Definition:</b> en.h:36</div></div>
 <div class="ttc" id="agroup___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_html_ga8d4b32dfc45840bca189ade2bbcb6ba7"><div class="ttname"><a href="group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s.html#ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</a></div><div class="ttdeci">ParseErrorCode</div><div class="ttdoc">Error code of parsing.</div><div class="ttdef"><b>Definition:</b> error.h:64</div></div>
+<div class="ttc" id="amessagereader_8cpp_html_a5cd118312f7d5b3983499e2934611ebf"><div class="ttname"><a href="messagereader_8cpp.html#a5cd118312f7d5b3983499e2934611ebf">ParseMessages</a></div><div class="ttdeci">static void ParseMessages(const char *json, MessageMap &amp;messages)</div><div class="ttdef"><b>Definition:</b> messagereader.cpp:75</div></div>
 <div class="ttc" id="amessagereader_8cpp_html_ae2c5980b5eb04369faa7f72447e6d664"><div class="ttname"><a href="messagereader_8cpp.html#ae2c5980b5eb04369faa7f72447e6d664">MessageMap</a></div><div class="ttdeci">map&lt; string, string &gt; MessageMap</div><div class="ttdef"><b>Definition:</b> messagereader.cpp:13</div></div>
 <div class="ttc" id="astruct_message_handler_html"><div class="ttname"><a href="struct_message_handler.html">MessageHandler</a></div><div class="ttdef"><b>Definition:</b> messagereader.cpp:26</div></div>
 <div class="ttc" id="astruct_message_handler_html_a3ab79ae50d26d5b3fb62a9bab58c21bb"><div class="ttname"><a href="struct_message_handler.html#a3ab79ae50d26d5b3fb62a9bab58c21bb">MessageHandler::Default</a></div><div class="ttdeci">bool Default()</div><div class="ttdef"><b>Definition:</b> messagereader.cpp:56</div></div>

@@ -1,4 +1,4 @@
-.TH "src/rapidjson/test/unittest/valuetest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "src/rapidjson/test/unittest/valuetest.cpp" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ src/rapidjson/test/unittest/valuetest.cpp
 
 .in +1c
 .ti -1c
-.RI "#define \fBTEST_TERMINATION\fP(e,  json)"
+.RI "#define \fBTEST_TERMINATION\fP(e,  \fBjson\fP)"
 .br
 .in -1c
 .SS "Functions"
@@ -100,10 +100,16 @@ src/rapidjson/test/unittest/valuetest.cpp
 .RI "\fBTEST\fP (\fBValue\fP, SetStringNull)"
 .br
 .ti -1c
+.RI "template<typename \fBT\fP , typename \fBAllocator\fP > static void \fBTestArray\fP (\fBT\fP &x, \fBAllocator\fP &allocator)"
+.br
+.ti -1c
 .RI "\fBTEST\fP (\fBValue\fP, Array)"
 .br
 .ti -1c
 .RI "\fBTEST\fP (\fBValue\fP, ArrayHelper)"
+.br
+.ti -1c
+.RI "template<typename \fBT\fP , typename \fBAllocator\fP > static void \fBTestObject\fP (\fBT\fP &x, \fBAllocator\fP &allocator)"
 .br
 .ti -1c
 .RI "\fBTEST\fP (\fBValue\fP, Object)"
@@ -127,18 +133,24 @@ src/rapidjson/test/unittest/valuetest.cpp
 .RI "\fBTEST\fP (\fBDocument\fP, \fBCrtAllocator\fP)"
 .br
 .ti -1c
+.RI "static void \fBTestShortStringOptimization\fP (const char *str)"
+.br
+.ti -1c
 .RI "\fBTEST\fP (\fBValue\fP, AllocateShortString)"
 .br
 .ti -1c
 .RI "\fBTEST\fP (\fBValue\fP, AcceptTerminationByHandler)"
 .br
 .ti -1c
-.RI "\fBTEST\fP (\fBValue\fP, MergeDuplicateKey)"
+.RI "static void \fBMergeDuplicateKey\fP (\fBValue\fP &v, \fBValue::AllocatorType\fP &\fBa\fP)"
+.br
+.ti -1c
+.RI "\fBTEST\fP (\fBValue\fP, \fBMergeDuplicateKey\fP)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define TEST_TERMINATION(e, json)"
+.SS "#define TEST_TERMINATION(e, \fBjson\fP)"
 \fBValue:\fP
 .PP
 .nf
@@ -152,6 +164,8 @@ src/rapidjson/test/unittest/valuetest.cpp
 .fi
 .SH "Function Documentation"
 .PP 
+.SS "static void MergeDuplicateKey (\fBValue\fP & v, \fBValue::AllocatorType\fP & a)\fC [static]\fP"
+
 .SS "TEST (\fBDocument\fP, \fBCrtAllocator\fP)"
 
 .SS "TEST (\fBValue\fP, AcceptTerminationByHandler)"
@@ -190,7 +204,7 @@ src/rapidjson/test/unittest/valuetest.cpp
 
 .SS "TEST (\fBValue\fP, IsLosslessFloat)"
 
-.SS "TEST (\fBValue\fP, MergeDuplicateKey)"
+.SS "TEST (\fBValue\fP, \fBMergeDuplicateKey\fP)"
 
 .SS "TEST (\fBValue\fP, Null)"
 
@@ -214,9 +228,15 @@ src/rapidjson/test/unittest/valuetest.cpp
 
 .SS "TEST (\fBValue\fP, Uint64)"
 
+.SS "template<typename \fBT\fP , typename \fBAllocator\fP > static void TestArray (\fBT\fP & x, \fBAllocator\fP & allocator)\fC [static]\fP"
+
 .SS "template<typename \fBValue\fP > void TestCopyFrom ()"
 
 .SS "template<typename A , typename B > void TestEqual (const A & a, const B & b)"
+
+.SS "template<typename \fBT\fP , typename \fBAllocator\fP > static void TestObject (\fBT\fP & x, \fBAllocator\fP & allocator)\fC [static]\fP"
+
+.SS "static void TestShortStringOptimization (const char * str)\fC [static]\fP"
 
 .SS "template<typename A , typename B > void TestUnequal (const A & a, const B & b)"
 

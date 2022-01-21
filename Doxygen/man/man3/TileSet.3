@@ -1,4 +1,4 @@
-.TH "TileSet" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "TileSet" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,9 +16,8 @@ TileSet
 .br
 .RI "Konstruktor pusty\&. "
 .ti -1c
-.RI "\fBTileSet\fP (int firstgid, std::ifstream tileset)"
+.RI "\fBTileSet\fP (int \fBfirstgid\fP, std::ifstream tileset)"
 .br
-.RI "Konstruktor który przyjmuje numer kafelka i jego tileset a nastepnie go parsuje\&. "
 .ti -1c
 .RI "\fB~TileSet\fP ()"
 .br
@@ -26,59 +25,105 @@ TileSet
 .ti -1c
 .RI "int \fBgetFirstGid\fP ()"
 .br
-.RI "Zwraca numer kafelka\&. "
 .ti -1c
 .RI "int \fBgetColumns\fP ()"
 .br
-.RI "Zwraca numer kolumny\&. "
 .ti -1c
 .RI "std::string \fBgetImage\fP ()"
 .br
-.RI "Zwraca informacje o obrazku kafelka\&. "
 .ti -1c
 .RI "int \fBgetImageHeight\fP ()"
 .br
-.RI "Zwraca wysokosc obrazka kafelka\&. "
 .ti -1c
 .RI "int \fBgetImageWidth\fP ()"
 .br
-.RI "Zwraca szerokosc obrazka kafelka\&. "
 .ti -1c
 .RI "int \fBgetMargin\fP ()"
 .br
-.RI "Zwraca margines\&. "
 .ti -1c
 .RI "std::string \fBgetName\fP ()"
 .br
-.RI "Zwraca nazwe\&. "
 .ti -1c
 .RI "int \fBgetSpacing\fP ()"
 .br
-.RI "Zwraca odstep\&. "
 .ti -1c
 .RI "int \fBgetTileCount\fP ()"
 .br
-.RI "Zwraca ilosc kafelkow\&. "
 .ti -1c
 .RI "std::string \fBgetTiledVersion\fP ()"
 .br
-.RI "Zwraca informacje o wersji kafelka\&. "
 .ti -1c
 .RI "int \fBgetTileHeight\fP ()"
 .br
-.RI "Zwraca wysokosc kafelka\&. "
 .ti -1c
 .RI "int \fBgetTileWidth\fP ()"
 .br
-.RI "Zwraca szerokosc kafelka\&. "
 .ti -1c
 .RI "std::string \fBgetType\fP ()"
 .br
-.RI "Zwraca typ\&. "
 .ti -1c
 .RI "float \fBgetVersion\fP ()"
 .br
-.RI "Zwraca numer wersji na której został stworzony kafelek\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBfirstgid\fP"
+.br
+.RI "Zmienna przechowująca numer kafelka\&. "
+.ti -1c
+.RI "int \fBcolumns\fP"
+.br
+.RI "Zmienna przechowujaca numer kolumny\&. "
+.ti -1c
+.RI "std::string \fBimage\fP"
+.br
+.RI "Zmienna przechowujaca sciezke do obrazka dla kafelka\&. "
+.ti -1c
+.RI "int \fBimageHeight\fP"
+.br
+.RI "Zmienna przechowujaca wysokosc obrazka kafelka\&. "
+.ti -1c
+.RI "int \fBimageWidth\fP"
+.br
+.RI "Zmienna przechowujaca szerokosc obrazka kafelka\&. "
+.ti -1c
+.RI "int \fBmargin\fP"
+.br
+.RI "Zmienna przechowujaca margines\&. "
+.ti -1c
+.RI "std::string \fBname\fP"
+.br
+.RI "Zmienna przechowujaca nazwe\&. "
+.ti -1c
+.RI "int \fBspacing\fP"
+.br
+.RI "Zmienna przechowujaca odstep\&. "
+.ti -1c
+.RI "int \fBtilecount\fP"
+.br
+.RI "Zmienna przechowuajca ilosc kafelkow\&. "
+.ti -1c
+.RI "std::string \fBtiledversion\fP"
+.br
+.RI "Zmienna przechowujaca informacje o wersji kafelka\&. "
+.ti -1c
+.RI "int \fBtileheight\fP"
+.br
+.RI "Zmienna przechowujaca wysokosc kafelka\&. "
+.ti -1c
+.RI "int \fBtilewidth\fP"
+.br
+.RI "Zmienna przechowujaca szerokosc kafelka\&. "
+.ti -1c
+.RI "std::string \fBtype\fP"
+.br
+.RI "Zmienna przechowujaca inofrmacje o typie\&. "
+.ti -1c
+.RI "float \fBversion\fP"
+.br
+.RI "Zmienna przechowujca inforamcje o wersji na ktorej zostal stworzony kafelek\&. "
 .in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -87,9 +132,16 @@ TileSet
 .PP
 Konstruktor pusty\&. 
 .SS "TileSet::TileSet (int firstgid, std::ifstream tileset)"
-
+Konstruktor który przyjmuje numer kafelka i jego tileset a nastepnie go parsuje 
 .PP
-Konstruktor który przyjmuje numer kafelka i jego tileset a nastepnie go parsuje\&. 
+\fBParameters\fP
+.RS 4
+\fIfirstgid\fP - pierwszy globalny identyfikator kafelka tego zestawu kafelków 
+.br
+\fItileset\fP - zestaw kafelków 
+.RE
+.PP
+
 .SS "TileSet::~TileSet ()\fC [default]\fP"
 
 .PP
@@ -97,61 +149,189 @@ Destruktor\&.
 .SH "Member Function Documentation"
 .PP 
 .SS "int TileSet::getColumns ()\fC [inline]\fP"
-
+Zwraca numer kolumny 
 .PP
-Zwraca numer kolumny\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje liczbe kolumn kafelków w danym zestawie 
+.RE
+.PP
+
 .SS "int TileSet::getFirstGid ()\fC [inline]\fP"
-
+Metoda która zwraca informacje o pierwszy globalny identyfikator kafelka wybranego zestawu 
 .PP
-Zwraca numer kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe która reprezentuje id pierwszego kafelka w danym zestawie 
+.RE
+.PP
+
 .SS "std::string TileSet::getImage ()\fC [inline]\fP"
-
+Zwraca informacje o obrazku kafelka 
 .PP
-Zwraca informacje o obrazku kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje ścieżke do obrazka dla kafelka 
+.RE
+.PP
+
 .SS "int TileSet::getImageHeight ()\fC [inline]\fP"
-
+Zwraca wysokosc obrazka kafelka 
 .PP
-Zwraca wysokosc obrazka kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje wysokość w pikselach dla obrazka kafelka 
+.RE
+.PP
+
 .SS "int TileSet::getImageWidth ()\fC [inline]\fP"
-
+Zwraca szerokosc obrazka kafelka 
 .PP
-Zwraca szerokosc obrazka kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje szerokosc w pikselach dla obrazka kafelka 
+.RE
+.PP
+
 .SS "int TileSet::getMargin ()\fC [inline]\fP"
-
+Zwraca margines 
 .PP
-Zwraca margines\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje margines w tym zestawie kafelków 
+.RE
+.PP
+
 .SS "std::string TileSet::getName ()\fC [inline]\fP"
-
+Zwraca nazwe 
 .PP
-Zwraca nazwe\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje nazwe tego zestawu kafelka 
+.RE
+.PP
+
 .SS "int TileSet::getSpacing ()\fC [inline]\fP"
-
+Zwraca odstep 
 .PP
-Zwraca odstep\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę, która reprezentuje odstęp w pikselach między kafelkami w tym zestawie 
+.RE
+.PP
+
 .SS "int TileSet::getTileCount ()\fC [inline]\fP"
-
+Zwraca ilosc kafelkow 
 .PP
-Zwraca ilosc kafelkow\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbe, która reprezentuje ilość kafelków w tym zestawie 
+.RE
+.PP
+
 .SS "std::string TileSet::getTiledVersion ()\fC [inline]\fP"
-
+Zwraca informacje o wersji kafelka 
 .PP
-Zwraca informacje o wersji kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje wersję w której został zapisany kafelek 
+.RE
+.PP
+
 .SS "int TileSet::getTileHeight ()\fC [inline]\fP"
-
+Zwraca wysokosc kafelka 
 .PP
-Zwraca wysokosc kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczba która reprezentuje wysokość kafelka 
+.RE
+.PP
+
 .SS "int TileSet::getTileWidth ()\fC [inline]\fP"
-
+Zwraca szerokosc kafelka 
 .PP
-Zwraca szerokosc kafelka\&. 
+\fBReturns\fP
+.RS 4
+zwraca liczbę która reprezentuje szerokość kafelka 
+.RE
+.PP
+
 .SS "std::string TileSet::getType ()\fC [inline]\fP"
-
+Zwraca typ 
 .PP
-Zwraca typ\&. 
+\fBReturns\fP
+.RS 4
+zwraca tekst, który reprezentuje typ 
+.RE
+.PP
+
 .SS "float TileSet::getVersion ()\fC [inline]\fP"
+Zwraca numer wersji na której został stworzony kafelek 
+.PP
+\fBReturns\fP
+.RS 4
+zwraca liczbę float, która reprezentuje wersję w której został stworzony kafelek 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "int TileSet::columns\fC [private]\fP"
 
 .PP
-Zwraca numer wersji na której został stworzony kafelek\&. 
+Zmienna przechowujaca numer kolumny\&. 
+.SS "int TileSet::firstgid\fC [private]\fP"
+
+.PP
+Zmienna przechowująca numer kafelka\&. 
+.SS "std::string TileSet::image\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca sciezke do obrazka dla kafelka\&. 
+.SS "int TileSet::imageHeight\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca wysokosc obrazka kafelka\&. 
+.SS "int TileSet::imageWidth\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca szerokosc obrazka kafelka\&. 
+.SS "int TileSet::margin\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca margines\&. 
+.SS "std::string TileSet::name\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca nazwe\&. 
+.SS "int TileSet::spacing\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca odstep\&. 
+.SS "int TileSet::tilecount\fC [private]\fP"
+
+.PP
+Zmienna przechowuajca ilosc kafelkow\&. 
+.SS "std::string TileSet::tiledversion\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca informacje o wersji kafelka\&. 
+.SS "int TileSet::tileheight\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca wysokosc kafelka\&. 
+.SS "int TileSet::tilewidth\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca szerokosc kafelka\&. 
+.SS "std::string TileSet::type\fC [private]\fP"
+
+.PP
+Zmienna przechowujaca inofrmacje o typie\&. 
+.SS "float TileSet::version\fC [private]\fP"
+
+.PP
+Zmienna przechowujca inforamcje o wersji na ktorej zostal stworzony kafelek\&. 
 
 .SH "Author"
 .PP 

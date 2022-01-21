@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Neon Jumper<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Neon Jumper
    </div>
   </td>
  </tr>
@@ -98,17 +98,19 @@ Query Value</h1>
 <div class="line"> </div>
 <div class="line"><span class="comment">// ...</span></div>
 <div class="line"><a class="code hl_class" href="class_generic_document.html">Document</a> document;</div>
-<div class="line">document.<a class="code hl_function" href="class_generic_document.html#a901db1678f99a1b550003eed75bc380a">Parse</a>(json);</div>
+<div class="line">document.<a class="code hl_function" href="class_generic_document.html#a901db1678f99a1b550003eed75bc380a">Parse</a>(<a class="code hl_variable" href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a>);</div>
 <div class="ttc" id="aclass_generic_document_html"><div class="ttname"><a href="class_generic_document.html">GenericDocument&lt; UTF8&lt;&gt; &gt;</a></div></div>
 <div class="ttc" id="aclass_generic_document_html_a901db1678f99a1b550003eed75bc380a"><div class="ttname"><a href="class_generic_document.html#a901db1678f99a1b550003eed75bc380a">GenericDocument::Parse</a></div><div class="ttdeci">GenericDocument &amp; Parse(const typename SourceEncoding::Ch *str)</div><div class="ttdoc">Parse JSON text from a read-only string (with Encoding conversion)</div><div class="ttdef"><b>Definition:</b> document.h:2692</div></div>
 <div class="ttc" id="adocument_8h_html"><div class="ttname"><a href="document_8h.html">document.h</a></div></div>
 <div class="ttc" id="anamespacerapidjson_html"><div class="ttname"><a href="namespacerapidjson.html">rapidjson</a></div><div class="ttdoc">main RapidJSON namespace</div></div>
+<div class="ttc" id="anamespacetest_8cpp_html_a04e873a45a18dab42dc9a0eba4f3deee"><div class="ttname"><a href="namespacetest_8cpp.html#a04e873a45a18dab42dc9a0eba4f3deee">json</a></div><div class="ttdeci">static const char json[]</div><div class="ttdef"><b>Definition:</b> namespacetest.cpp:32</div></div>
 </div><!-- fragment --><p >那么现在该 JSON 就会被解析至 <code>document</code> 中，成为一棵 *DOM 树 *:</p>
 <p ><img src="diagram/tutorial.png" alt="教程中的 DOM" class="inline"/></p>
 <p >自从 RFC 7159 作出更新，合法 JSON 文件的根可以是任何类型的 JSON 值。而在较早的 RFC 4627 中，根值只允许是 Object 或 Array。而在上述例子中，根是一个 Object。 </p><div class="fragment"><div class="line">assert(document.IsObject());</div>
 </div><!-- fragment --><p >让我们查询一下根 Object 中有没有 <code>"hello"</code> 成员。由于一个 <code>Value</code> 可包含不同类型的值，我们可能需要验证它的类型，并使用合适的 API 去获取其值。在此例中，<code>"hello"</code> 成员关联到一个 JSON String。 </p><div class="fragment"><div class="line">assert(document.HasMember(<span class="stringliteral">&quot;hello&quot;</span>));</div>
 <div class="line">assert(document[<span class="stringliteral">&quot;hello&quot;</span>].IsString());</div>
-<div class="line">printf(<span class="stringliteral">&quot;hello = %s\n&quot;</span>, document[<span class="stringliteral">&quot;hello&quot;</span>].GetString());</div>
+<div class="line">printf(<span class="stringliteral">&quot;hello = %s\n&quot;</span>, document[<span class="stringliteral">&quot;hello&quot;</span>].<a class="code hl_function" href="schemavalidator_8cpp.html#a6d90bf6105415d941d0ee014f2aa79c0">GetString</a>());</div>
+<div class="ttc" id="aschemavalidator_8cpp_html_a6d90bf6105415d941d0ee014f2aa79c0"><div class="ttname"><a href="schemavalidator_8cpp.html#a6d90bf6105415d941d0ee014f2aa79c0">GetString</a></div><div class="ttdeci">static std::string GetString(const ValueType &amp;val)</div><div class="ttdef"><b>Definition:</b> schemavalidator.cpp:24</div></div>
 </div><!-- fragment --><div class="fragment"><div class="line">world</div>
 </div><!-- fragment --><p >JSON True/False 值是以 <code>bool</code> 表示的。 </p><div class="fragment"><div class="line">assert(document[<span class="stringliteral">&quot;t&quot;</span>].IsBool());</div>
 <div class="line">printf(<span class="stringliteral">&quot;t = %s\n&quot;</span>, document[<span class="stringliteral">&quot;t&quot;</span>].GetBool() ? <span class="stringliteral">&quot;true&quot;</span> : <span class="stringliteral">&quot;false&quot;</span>);</div>
@@ -228,7 +230,7 @@ Querying Number</h2>
 <p >当要提取 Number 类型，<code>GetDouble()</code> 是会把内部整数的表示转换成 <code>double</code>。注意 <code>int</code> 和 <code>unsigned</code> 可以安全地转换至 <code>double</code>，但 <code>int64_t</code> 及 <code>uint64_t</code> 可能会丧失精度（因为 <code>double</code> 的尾数只有 52 位）。</p>
 <h2><a class="anchor" id="QueryString"></a>
 Query String</h2>
-<p >除了 <code>GetString()</code>，<code>Value</code> 类也有一个 <code>GetStringLength()</code>。这里会解释个中原因。</p>
+<p >除了 <code><a class="el" href="schemavalidator_8cpp.html#a6d90bf6105415d941d0ee014f2aa79c0">GetString()</a></code>，<code>Value</code> 类也有一个 <code>GetStringLength()</code>。这里会解释个中原因。</p>
 <p >根据 RFC 4627，JSON String 可包含 Unicode 字符 <code>U+0000</code>，在 JSON 中会表示为 <code>"\u0000"</code>。问题是，C/C++ 通常使用空字符结尾字符串（null-terminated string），这种字符串把 `&lsquo;\0&rsquo;` 作为结束符号。</p>
 <p >为了符合 RFC 4627，RapidJSON 支持包含 <code>U+0000</code> 的 String。若你需要处理这些 String，便可使用 <code>GetStringLength()</code> 去获得正确的字符串长度。</p>
 <p >例如，当解析以下的 JSON 至 <code>Document d</code> 之后：</p>

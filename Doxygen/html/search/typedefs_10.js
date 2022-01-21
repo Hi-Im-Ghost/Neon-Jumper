@@ -1,7 +1,19 @@
 var searchData=
 [
-  ['value_0',['Value',['../document_8h.html#a071cf97155ba72ac9a1fc4ad7e63d481',1,'Value():&#160;document.h'],['../fwd_8h.html#a887ce50b3fe61c5e9cfd9b9506548dd9',1,'Value():&#160;fwd.h'],['../namespacemyjson.html#a85df4ee44b7616a2b01bfec8c31aec5f',1,'myjson::Value()']]],
-  ['value_5ftype_1',['value_type',['../class_std_allocator.html#aa9b7be996e5529bd6f1cbacadfa090c7',1,'StdAllocator::value_type()'],['../class_std_allocator_3_01void_00_01_base_allocator_01_4.html#a1df4e2d5cfdec13a30e19fa73507c542',1,'StdAllocator&lt; void, BaseAllocator &gt;::value_type()'],['../class_generic_member_iterator.html#a79326e02032d06d80e09ded797501553',1,'GenericMemberIterator::value_type()']]],
-  ['valueiterator_2',['ValueIterator',['../class_generic_value.html#aee30721a49688ba0f865f5d581eb6be9',1,'GenericValue::ValueIterator()'],['../class_generic_array.html#afc6ad62c3f00531fa378db266182704a',1,'GenericArray::ValueIterator()']]],
-  ['valuetype_3',['ValueType',['../class_generic_value.html#a43a39bb4fca9b9d3de3da6ac353d25ce',1,'GenericValue::ValueType()'],['../class_generic_document.html#a8936205dc215dda029060d7e835e0549',1,'GenericDocument::ValueType()'],['../class_generic_array.html#a93e53f38a99fc5167eb2a28653de64ed',1,'GenericArray::ValueType()'],['../class_generic_object.html#a930aa30f89caee7ba7bff60bf9dc21b1',1,'GenericObject::ValueType()'],['../structinternal_1_1_schema_validation_context.html#acc134e808d3a4dbe8834eb1a3e98e816',1,'internal::SchemaValidationContext::ValueType()'],['../classinternal_1_1_schema.html#a8976b6d7e2a885483d0b51d941019340',1,'internal::Schema::ValueType()'],['../class_i_generic_remote_schema_document_provider.html#aefaefd0d3fc938b6a81634edf1646205',1,'IGenericRemoteSchemaDocumentProvider::ValueType()'],['../class_generic_schema_document.html#ae246f1b6573a5a8a2c0d73d4eb64d53a',1,'GenericSchemaDocument::ValueType()'],['../class_generic_schema_validator.html#a435890a2dddeecb896d4ac76de03ca68',1,'GenericSchemaValidator::ValueType()'],['../class_schema_validating_reader.html#af08b51fcef602c68d95769c35ae606be',1,'SchemaValidatingReader::ValueType()'],['../schemavalidator_8cpp.html#af2c59956daf09ddf36e71b173b084b0f',1,'ValueType():&#160;schemavalidator.cpp']]]
+  ['uint16_5ft_0',['uint16_t',['../stdint_8h.html#a273cf69d639a59973b6019625df33e30',1,'stdint.h']]],
+  ['uint32_5ft_1',['uint32_t',['../stdint_8h.html#a435d1572bf3f880d55459d9805097f62',1,'stdint.h']]],
+  ['uint64_5ft_2',['uint64_t',['../stdint_8h.html#aec6fcb673ff035718c238c8c9d544c47',1,'stdint.h']]],
+  ['uint8_5ft_3',['uint8_t',['../stdint_8h.html#aba7bc1797add20fe3efdf37ced1182c5',1,'stdint.h']]],
+  ['uint_5ffast16_5ft_4',['uint_fast16_t',['../stdint_8h.html#a6ed085329b153773ff76afa0702cf897',1,'stdint.h']]],
+  ['uint_5ffast32_5ft_5',['uint_fast32_t',['../stdint_8h.html#a8f075c759c74e109e8184306c663809d',1,'stdint.h']]],
+  ['uint_5ffast64_5ft_6',['uint_fast64_t',['../stdint_8h.html#a6fd055dddb7d91fab0635146851af8d5',1,'stdint.h']]],
+  ['uint_5ffast8_5ft_7',['uint_fast8_t',['../stdint_8h.html#ad0fca8b15c218d2c687f8c373a71d228',1,'stdint.h']]],
+  ['uint_5fleast16_5ft_8',['uint_least16_t',['../stdint_8h.html#a4f3f6e6631cb4aaeadf1c59ff597b2fb',1,'stdint.h']]],
+  ['uint_5fleast32_5ft_9',['uint_least32_t',['../stdint_8h.html#ac0af81082969e5e3f4d939b1de7002ac',1,'stdint.h']]],
+  ['uint_5fleast64_5ft_10',['uint_least64_t',['../stdint_8h.html#ab604f73dd823867b43702ae88b4f4445',1,'stdint.h']]],
+  ['uint_5fleast8_5ft_11',['uint_least8_t',['../stdint_8h.html#ac76e2383debd5a3b100514044828961a',1,'stdint.h']]],
+  ['uintmax_5ft_12',['uintmax_t',['../stdint_8h.html#a2ba5f6c0633401558d277b2c0e4f758d',1,'stdint.h']]],
+  ['uintptr_5ft_13',['uintptr_t',['../stdint_8h.html#a31b85deecb45924320becd11d3ee16ce',1,'stdint.h']]],
+  ['uri_14',['Uri',['../uri_8h.html#a8ce9b9949b7b615863aa015410222d2d',1,'uri.h']]],
+  ['uritype_15',['UriType',['../class_generic_pointer.html#ac82bc56506218e49644bbbbe752a86cc',1,'GenericPointer::UriType()'],['../classinternal_1_1_schema.html#a3b6cd85c3eeebe870cf8017d9d131d35',1,'internal::Schema::UriType()'],['../class_generic_schema_document.html#afcfefaab7eecec6849d478557392e23c',1,'GenericSchemaDocument::UriType()']]]
 ];

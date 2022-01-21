@@ -1,4 +1,4 @@
-.TH "Slime" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "Slime" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,11 +19,16 @@ Inherits \fBEnemy\fP\&.
 .ti -1c
 .RI "void \fBupdate\fP (float deltaSeconds) override"
 .br
-.RI "Implementacja wirtualnej metody update z \fBEnemy\&.h\fP\&. "
 .ti -1c
 .RI "void \fBrender\fP (sf::RenderTarget &window) override"
 .br
-.RI "Implementacja wirtualnej metody render z \fBEnemy\&.h\fP\&. "
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitPath\fP (float pointA, float pointB) override"
+.br
 .in -1c
 .SS "Additional Inherited Members"
 .SH "Detailed Description"
@@ -32,19 +37,57 @@ przeciwnika, który porusza się poziomo od punktu A do B
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "Slime::Slime (float x, float y, float pathPointA, float pathPointB, bool moveRight)\fC [explicit]\fP"
-Konstruktor przeciwnika slime\&. x i y to pozycja na mapie, pathPointA i pathPointB określają zakres patrolu dla przeciwnika moveRight określa czy początkowo przeciwnik porusza się w lewo czy w prawo 
+Konstruktor przeciwnika slime\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIx\fP pozycja x na mapie 
+.br
+\fIy\fP pozycja y na mapie 
+.br
+\fIpathPointA\fP wartość x lewego punktu patrolowego 
+.br
+\fIpathPointB\fP wartość x prawego punktu patrolowego 
+.br
+\fImoveRight\fP określa czy początkowo przeciwnik porusza się w lewo czy w prawo 
+.RE
+.PP
+
 .SH "Member Function Documentation"
 .PP 
-.SS "void Slime::render (sf::RenderTarget & window)\fC [override]\fP, \fC [virtual]\fP"
+.SS "void Slime::initPath (float pointA, float pointB)\fC [override]\fP, \fC [private]\fP, \fC [virtual]\fP"
+Nadaje odpowiednie parametry granicy ruchu 
+.PP
+\fBParameters\fP
+.RS 4
+\fIpointA\fP wartość x lewego punktu patrolowego 
+.br
+\fIpointB\fP wartość x prawego punktu patrolowego 
+.RE
+.PP
 
 .PP
-Implementacja wirtualnej metody render z \fBEnemy\&.h\fP\&. 
+Implements \fBEnemy\fP\&.
+.SS "void Slime::render (sf::RenderTarget & window)\fC [override]\fP, \fC [virtual]\fP"
+Wyświetla przeciwnika na ekranie 
+.PP
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym wyświetlony zostanie przeciwnik 
+.RE
+.PP
+
 .PP
 Implements \fBEnemy\fP\&.
 .SS "void Slime::update (float deltaSeconds)\fC [override]\fP, \fC [virtual]\fP"
-
+Odpowiada za odświeżanie logiki przeciwnika 
 .PP
-Implementacja wirtualnej metody update z \fBEnemy\&.h\fP\&. 
+\fBParameters\fP
+.RS 4
+\fIdeltaSeconds\fP czas pomiędzy klatkami aplikacji 
+.RE
+.PP
+
 .PP
 Implements \fBEnemy\fP\&.
 

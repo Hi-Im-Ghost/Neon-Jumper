@@ -27,7 +27,7 @@
 \DoxyCodeLine{}
 \DoxyCodeLine{\textcolor{comment}{// ...}}
 \DoxyCodeLine{\mbox{\hyperlink{class_generic_document}{Document}} document;}
-\DoxyCodeLine{document.\mbox{\hyperlink{class_generic_document_a901db1678f99a1b550003eed75bc380a}{Parse}}(json);}
+\DoxyCodeLine{document.\mbox{\hyperlink{class_generic_document_a901db1678f99a1b550003eed75bc380a}{Parse}}(\mbox{\hyperlink{namespacetest_8cpp_a04e873a45a18dab42dc9a0eba4f3deee}{json}});}
 
 \end{DoxyCode}
 
@@ -47,7 +47,7 @@
 \begin{DoxyCode}{0}
 \DoxyCodeLine{assert(document.HasMember(\textcolor{stringliteral}{"{}hello"{}}));}
 \DoxyCodeLine{assert(document[\textcolor{stringliteral}{"{}hello"{}}].IsString());}
-\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}hello = \%s\(\backslash\)n"{}}, document[\textcolor{stringliteral}{"{}hello"{}}].GetString());}
+\DoxyCodeLine{printf(\textcolor{stringliteral}{"{}hello = \%s\(\backslash\)n"{}}, document[\textcolor{stringliteral}{"{}hello"{}}].\mbox{\hyperlink{schemavalidator_8cpp_a6d90bf6105415d941d0ee014f2aa79c0}{GetString}}());}
 
 \end{DoxyCode}
 
@@ -264,7 +264,7 @@ JSON 只提供一种数值类型──\+Number。数字可以是整数或实数�
 注意，一个整数可能用几种类型来提取，而无需转换。例如，一个名为 {\ttfamily x} 的 Value 包含 123，那么 {\ttfamily x.\+Is\+Int() == x.\+Is\+Uint() == x.\+Is\+Int64() == x.\+Is\+Uint64() == true}。但如果一个名为 {\ttfamily y} 的 Value 包含 -\/3000000000，那么仅会令 {\ttfamily x.\+Is\+Int64() == true}。
 
 当要提取 Number 类型，{\ttfamily Get\+Double()} 是会把内部整数的表示转换成 {\ttfamily double}。注意 {\ttfamily int} 和 {\ttfamily unsigned} 可以安全地转换至 {\ttfamily double}，但 {\ttfamily int64\+\_\+t} 及 {\ttfamily uint64\+\_\+t} 可能会丧失精度（因为 {\ttfamily double} 的尾数只有 52 位）。\hypertarget{md_src_rapidjson_doc_tutorial_zh_cn_QueryString}{}\doxysubsection{Query String}\label{md_src_rapidjson_doc_tutorial_zh_cn_QueryString}
-除了 {\ttfamily Get\+String()}，{\ttfamily Value} 类也有一个 {\ttfamily Get\+String\+Length()}。这里会解释个中原因。
+除了 {\ttfamily \mbox{\hyperlink{schemavalidator_8cpp_a6d90bf6105415d941d0ee014f2aa79c0}{Get\+String()}}}，{\ttfamily Value} 类也有一个 {\ttfamily Get\+String\+Length()}。这里会解释个中原因。
 
 根据 RFC 4627，\+JSON String 可包含 Unicode 字符 {\ttfamily U+0000}，在 JSON 中会表示为 {\ttfamily \char`\"{}\textbackslash{}u0000\char`\"{}}。问题是，\+C/\+C++ 通常使用空字符结尾字符串（null-\/terminated string），这种字符串把 \`{}`\textbackslash{}0'\`{} 作为结束符号。
 

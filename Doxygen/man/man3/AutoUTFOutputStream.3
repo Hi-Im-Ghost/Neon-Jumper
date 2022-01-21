@@ -1,4 +1,4 @@
-.TH "AutoUTFOutputStream< CharType, OutputByteStream >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "AutoUTFOutputStream< CharType, OutputByteStream >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -48,6 +48,42 @@ AutoUTFOutputStream< CharType, OutputByteStream > \- Output stream wrapper with 
 .RI "size_t \fBPutEnd\fP (\fBCh\fP *)"
 .br
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef void(* \fBPutFunc\fP) (OutputByteStream &, \fBCh\fP)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRAPIDJSON_STATIC_ASSERT\fP (sizeof(typename OutputByteStream::Ch)==1)"
+.br
+.ti -1c
+.RI "\fBAutoUTFOutputStream\fP (const \fBAutoUTFOutputStream\fP &)"
+.br
+.ti -1c
+.RI "\fBAutoUTFOutputStream\fP & \fBoperator=\fP (const \fBAutoUTFOutputStream\fP &)"
+.br
+.ti -1c
+.RI "void \fBPutBOM\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "OutputByteStream * \fBos_\fP"
+.br
+.ti -1c
+.RI "\fBUTFType\fP \fBtype_\fP"
+.br
+.ti -1c
+.RI "\fBPutFunc\fP \fBputFunc_\fP"
+.br
+.in -1c
 .SH "Detailed Description"
 .PP 
 
@@ -69,6 +105,8 @@ class AutoUTFOutputStream< CharType, OutputByteStream >"Output stream wrapper wi
 .PP 
 .SS "template<typename CharType , typename OutputByteStream > typedef CharType \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::Ch"
 
+.SS "template<typename CharType , typename OutputByteStream > typedef void(* \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::PutFunc) (OutputByteStream &, \fBCh\fP)\fC [private]\fP"
+
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<typename CharType , typename OutputByteStream > \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >\fB::AutoUTFOutputStream\fP (OutputByteStream & os, \fBUTFType\fP type, bool putBOM)\fC [inline]\fP"
@@ -86,11 +124,15 @@ Constructor\&.
 .RE
 .PP
 
+.SS "template<typename CharType , typename OutputByteStream > \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >\fB::AutoUTFOutputStream\fP (const \fBAutoUTFOutputStream\fP< CharType, OutputByteStream > &)\fC [private]\fP"
+
 .SH "Member Function Documentation"
 .PP 
 .SS "template<typename CharType , typename OutputByteStream > void \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::Flush ()\fC [inline]\fP"
 
 .SS "template<typename CharType , typename OutputByteStream > \fBUTFType\fP \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::GetType () const\fC [inline]\fP"
+
+.SS "template<typename CharType , typename OutputByteStream > \fBAutoUTFOutputStream\fP & \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::operator= (const \fBAutoUTFOutputStream\fP< CharType, OutputByteStream > &)\fC [private]\fP"
 
 .SS "template<typename CharType , typename OutputByteStream > \fBCh\fP \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::Peek () const\fC [inline]\fP"
 
@@ -98,11 +140,23 @@ Constructor\&.
 
 .SS "template<typename CharType , typename OutputByteStream > \fBCh\fP * \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::PutBegin ()\fC [inline]\fP"
 
+.SS "template<typename CharType , typename OutputByteStream > void \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::PutBOM ()\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename CharType , typename OutputByteStream > size_t \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::PutEnd (\fBCh\fP *)\fC [inline]\fP"
+
+.SS "template<typename CharType , typename OutputByteStream > \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::RAPIDJSON_STATIC_ASSERT (sizeof(typename OutputByteStream::Ch) = \fC=1\fP)\fC [private]\fP"
 
 .SS "template<typename CharType , typename OutputByteStream > \fBCh\fP \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::Take ()\fC [inline]\fP"
 
 .SS "template<typename CharType , typename OutputByteStream > size_t \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::Tell () const\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename CharType , typename OutputByteStream > OutputByteStream* \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::os_\fC [private]\fP"
+
+.SS "template<typename CharType , typename OutputByteStream > \fBPutFunc\fP \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::putFunc_\fC [private]\fP"
+
+.SS "template<typename CharType , typename OutputByteStream > \fBUTFType\fP \fBAutoUTFOutputStream\fP< CharType, OutputByteStream >::type_\fC [private]\fP"
 
 
 .SH "Author"

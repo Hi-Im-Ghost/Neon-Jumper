@@ -34,41 +34,41 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 33 <emphasis role="keyword">public</emphasis>:
 34 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_class_file_write_stream_1abc16aeb69ad4176263ddfcb837fb7b49">Ch</link>;&#32;&#32;&#32;&#32;
 35 
-36 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a553ea3e7377a7f7cace2daa3cc90e1a1">FileWriteStream</link>(std::FILE*&#32;fp,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;fp_(fp),&#32;buffer_(buffer),&#32;bufferEnd_(buffer&#32;+&#32;bufferSize),&#32;current_(buffer_)&#32;{&#32;
-37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(fp_&#32;!=&#32;0);
+36 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a553ea3e7377a7f7cace2daa3cc90e1a1">FileWriteStream</link>(std::FILE*&#32;fp,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;<link linkend="_class_file_write_stream_1aac23a58bdaa601d276c57b5bcf5b0246">fp_</link>(fp),&#32;<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>(buffer),&#32;<link linkend="_class_file_write_stream_1a1f30d1c653f30ca6e069cefb80881c75">bufferEnd_</link>(buffer&#32;+&#32;bufferSize),&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>(<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>)&#32;{&#32;
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_file_write_stream_1aac23a58bdaa601d276c57b5bcf5b0246">fp_</link>&#32;!=&#32;0);
 38 &#32;&#32;&#32;&#32;}
 39 
 40 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_write_stream_1af6a6061d0accd939fa475b9b34427d85">Put</link>(<emphasis role="keywordtype">char</emphasis>&#32;c)&#32;{&#32;
-41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current_&#32;&gt;=&#32;bufferEnd_)
+41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;&gt;=&#32;<link linkend="_class_file_write_stream_1a1f30d1c653f30ca6e069cefb80881c75">bufferEnd_</link>)
 42 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a939fbf183ba36464c5e0837df4329d37">Flush</link>();
 43 
-44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*current_++&#32;=&#32;c;
+44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;*<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>++&#32;=&#32;c;
 45 &#32;&#32;&#32;&#32;}
 46 
 47 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_write_stream_1ad9ec108b24316a2c1c83c6ddc75d308a">PutN</link>(<emphasis role="keywordtype">char</emphasis>&#32;c,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;n)&#32;{
-48 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;avail&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(bufferEnd_&#32;-&#32;current_);
+48 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;avail&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_file_write_stream_1a1f30d1c653f30ca6e069cefb80881c75">bufferEnd_</link>&#32;-&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>);
 49 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(n&#32;&gt;&#32;avail)&#32;{
-50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(current_,&#32;c,&#32;avail);
-51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;+=&#32;avail;
+50 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>,&#32;c,&#32;avail);
+51 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;+=&#32;avail;
 52 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a939fbf183ba36464c5e0837df4329d37">Flush</link>();
 53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;n&#32;-=&#32;avail;
-54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;avail&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(bufferEnd_&#32;-&#32;current_);
+54 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;avail&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_file_write_stream_1a1f30d1c653f30ca6e069cefb80881c75">bufferEnd_</link>&#32;-&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>);
 55 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 56 
 57 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(n&#32;&gt;&#32;0)&#32;{
-58 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(current_,&#32;c,&#32;n);
-59 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;+=&#32;n;
+58 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::memset(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>,&#32;c,&#32;n);
+59 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;+=&#32;n;
 60 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 61 &#32;&#32;&#32;&#32;}
 62 
 63 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_write_stream_1a939fbf183ba36464c5e0837df4329d37">Flush</link>()&#32;{
-64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current_&#32;!=&#32;buffer_)&#32;{
-65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;result&#32;=&#32;std::fwrite(buffer_,&#32;1,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(current_&#32;-&#32;buffer_),&#32;fp_);
-66 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(result&#32;&lt;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(current_&#32;-&#32;buffer_))&#32;{
+64 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;!=&#32;<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>)&#32;{
+65 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;result&#32;=&#32;std::fwrite(<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>,&#32;1,&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;-&#32;<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>),&#32;<link linkend="_class_file_write_stream_1aac23a58bdaa601d276c57b5bcf5b0246">fp_</link>);
+66 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(result&#32;&lt;&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;-&#32;<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>))&#32;{
 67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;failure&#32;deliberately&#32;ignored&#32;at&#32;this&#32;time</emphasis>
 68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;added&#32;to&#32;avoid&#32;warn_unused_result&#32;build&#32;errors</emphasis>
 69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
-70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;=&#32;buffer_;
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>&#32;=&#32;<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>;
 71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 72 &#32;&#32;&#32;&#32;}
 73 
@@ -81,13 +81,13 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 80 
 81 <emphasis role="keyword">private</emphasis>:
 82 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Prohibit&#32;copy&#32;constructor&#32;&amp;&#32;assignment&#32;operator.</emphasis>
-83 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a553ea3e7377a7f7cace2daa3cc90e1a1">FileWriteStream</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;);
-84 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;&#32;operator=(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;);
+83 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream_1a62cc69f885b946b6bc2935f40c970cbb">FileWriteStream</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;);
+84 &#32;&#32;&#32;&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;&#32;<link linkend="_class_file_write_stream_1a41ed06dc63f576bbab6dd323c6f4056c">operator=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_write_stream">FileWriteStream</link>&amp;);
 85 
-86 &#32;&#32;&#32;&#32;std::FILE*&#32;fp_;
-87 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*buffer_;
-88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*bufferEnd_;
-89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*current_;
+86 &#32;&#32;&#32;&#32;std::FILE*&#32;<link linkend="_class_file_write_stream_1aac23a58bdaa601d276c57b5bcf5b0246">fp_</link>;
+87 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*<link linkend="_class_file_write_stream_1a6a1f0fed15eb38f22935f11af493972f">buffer_</link>;
+88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*<link linkend="_class_file_write_stream_1a1f30d1c653f30ca6e069cefb80881c75">bufferEnd_</link>;
+89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;*<link linkend="_class_file_write_stream_1a3b3ba8e5deef1b12f0662e9031f05c71">current_</link>;
 90 };
 91 
 93 <emphasis role="keyword">template</emphasis>&lt;&gt;

@@ -87,7 +87,7 @@
 </listitem>
             <listitem><para>#define <link linkend="_readertest_8cpp_1a42611f55159ca2d7b080ee7b5995a51e">TESTERRORHANDLING</link>(text,  errorCode,  offset)</para>
 </listitem>
-            <listitem><para>#define <link linkend="_readertest_8cpp_1a59abe708b636f5305e064d40eca97f6e">TEST_TERMINATION</link>(e,  json)</para>
+            <listitem><para>#define <link linkend="_readertest_8cpp_1a59abe708b636f5305e064d40eca97f6e">TEST_TERMINATION</link>(e,  <link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>)</para>
 </listitem>
             <listitem><para>#define <link linkend="_readertest_8cpp_1a0cb67eee4e9c25329656c6c6359073d7">TEST_NAN_INF</link>(str,  x)</para>
 </listitem>
@@ -104,11 +104,15 @@
 </listitem>
             <listitem><para><link linkend="_readertest_8cpp_1a0f338ae50a463adeddde167f9409bedc">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_Integer)</para>
 </listitem>
+            <listitem><para>template&lt;bool fullPrecision&gt; </para><para>static void <link linkend="_readertest_8cpp_1a5c2101dbf9a27e30498703f68bd8c730">TestParseDouble</link> ()</para>
+</listitem>
             <listitem><para><link linkend="_readertest_8cpp_1aa293384d534e668619d44318d3d77d5e">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_NormalPrecisionDouble)</para>
 </listitem>
             <listitem><para><link linkend="_readertest_8cpp_1aa2ce5bf11a889af8f9efe3fd77240fd5">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_FullPrecisionDouble)</para>
 </listitem>
             <listitem><para><link linkend="_readertest_8cpp_1a2be15887d12d0e7bb634d6807da64b17">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumber_NormalPrecisionError)</para>
+</listitem>
+            <listitem><para>template&lt;bool fullPrecision&gt; </para><para>static void <link linkend="_readertest_8cpp_1a79e292edbfa6bebc9c8c3194b8a3696b">TestParseNumberError</link> ()</para>
 </listitem>
             <listitem><para><link linkend="_readertest_8cpp_1a0a70a215ad0f6c5484dfbcb0d32dec72">TEST</link> (<link linkend="_fwd_8h_1ab7f1c1207749ff25c0d7f0cc88e62788">Reader</link>, ParseNumberError_NormalPrecisionDouble)</para>
 </listitem>
@@ -327,19 +331,19 @@
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_EQ(e.Sign(),&#32;<link linkend="_pointer_8h_1aeeddce917cf130d62c370b8f216026dd">a</link>.Sign());&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;\
-&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;const&#32;<emphasis role="keywordtype">char</emphasis>*&#32;json&#32;=&#32;<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>;&#32;\
-&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;const&#32;<emphasis role="keywordtype">char</emphasis>*&#32;<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>&#32;=&#32;<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>;&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;StringStream&#32;s(<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>);&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;NumbersAsStringsHandler&#32;h(str);&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01">kParseNumbersAsStringsFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h));&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;\
-&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char*&#32;json&#32;=&#32;<link linkend="_unittest_8h_1a0b8e1bafb97ad4a272c5cc4469a13687">StrDup</link>(<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>);&#32;\
-&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;char*&#32;<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>&#32;=&#32;<link linkend="_unittest_8h_1a0b8e1bafb97ad4a272c5cc4469a13687">StrDup</link>(<emphasis role="stringliteral">&quot;{&#32;\&quot;naninfdouble\&quot;:&#32;&quot;</emphasis>&#32;str&#32;<emphasis role="stringliteral">&quot;&#32;}&#32;&quot;</emphasis>);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;InsituStringStream&#32;s(<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>);&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;NumbersAsStringsHandler&#32;h(str);&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;EXPECT_TRUE(reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01">kParseInsituFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01">kParseNumbersAsStringsFlag</link>|<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6">kParseNanAndInfFlag</link>&gt;(s,&#32;h));&#32;\
-&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(json);&#32;\
+&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;free(<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>);&#32;\
 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;\
 &#32;&#32;&#32;&#32;}
 </programlisting></section>
@@ -454,10 +458,10 @@
     <title>TEST_TERMINATION</title>
 <indexterm><primary>TEST_TERMINATION</primary><secondary>readertest.cpp</secondary></indexterm>
 <indexterm><primary>readertest.cpp</primary><secondary>TEST_TERMINATION</secondary></indexterm>
-<para><computeroutput>#define TEST_TERMINATION( e,  json)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
+<para><computeroutput>#define TEST_TERMINATION( e,  <link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
 &#32;&#32;&#32;&#32;Reader&#32;reader;\
 &#32;&#32;&#32;&#32;TerminateHandler&lt;e&gt;&#32;h;\
-&#32;&#32;&#32;&#32;StringStream&#32;is(json);\
+&#32;&#32;&#32;&#32;StringStream&#32;is(<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>);\
 &#32;&#32;&#32;&#32;EXPECT_FALSE(reader.Parse(is,&#32;h));\
 &#32;&#32;&#32;&#32;EXPECT_EQ(<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6">kParseErrorTermination</link>,&#32;reader.GetParseErrorCode());\
 }
@@ -468,14 +472,14 @@
 <indexterm><primary>readertest.cpp</primary><secondary>TESTERRORHANDLING</secondary></indexterm>
 <para><computeroutput>#define TESTERRORHANDLING( text,  errorCode,  offset)</computeroutput></para><emphasis role="strong">Value:</emphasis><programlisting linenumbering="unnumbered">{\
 &#32;&#32;&#32;&#32;unsigned&#32;streamPos&#32;=&#32;offset;&#32;\
-&#32;&#32;&#32;&#32;StringStream&#32;json(text);&#32;\
+&#32;&#32;&#32;&#32;StringStream&#32;<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>(text);&#32;\
 &#32;&#32;&#32;&#32;BaseReaderHandler&lt;&gt;&#32;handler;&#32;\
 &#32;&#32;&#32;&#32;Reader&#32;reader;&#32;\
-&#32;&#32;&#32;&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9">kParseIterativeFlag</link>&gt;(json,&#32;handler);&#32;\
+&#32;&#32;&#32;&#32;reader.Parse&lt;<link linkend="_reader_8h_1ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9">kParseIterativeFlag</link>&gt;(<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>,&#32;handler);&#32;\
 &#32;&#32;&#32;&#32;EXPECT_TRUE(reader.HasParseError());&#32;\
 &#32;&#32;&#32;&#32;EXPECT_EQ(errorCode,&#32;reader.GetParseErrorCode());&#32;\
 &#32;&#32;&#32;&#32;EXPECT_EQ(offset,&#32;reader.GetErrorOffset());&#32;\
-&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;json.Tell());&#32;\
+&#32;&#32;&#32;&#32;EXPECT_EQ(streamPos,&#32;<link linkend="_namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee">json</link>.Tell());&#32;\
 }
 </programlisting></section>
 </section>
@@ -786,6 +790,16 @@
 <indexterm><primary>TestMultipleTrailingCommaErrors</primary><secondary>readertest.cpp</secondary></indexterm>
 <indexterm><primary>readertest.cpp</primary><secondary>TestMultipleTrailingCommaErrors</secondary></indexterm>
 <computeroutput>template&lt;unsigned extraFlags&gt; </computeroutput><para><computeroutput>void TestMultipleTrailingCommaErrors ( )</computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a5c2101dbf9a27e30498703f68bd8c730"/><section>
+    <title>TestParseDouble()</title>
+<indexterm><primary>TestParseDouble</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestParseDouble</secondary></indexterm>
+<computeroutput>template&lt;bool fullPrecision&gt; </computeroutput><para><computeroutput>static void TestParseDouble ( )<computeroutput>[static]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_readertest_8cpp_1a79e292edbfa6bebc9c8c3194b8a3696b"/><section>
+    <title>TestParseNumberError()</title>
+<indexterm><primary>TestParseNumberError</primary><secondary>readertest.cpp</secondary></indexterm>
+<indexterm><primary>readertest.cpp</primary><secondary>TestParseNumberError</secondary></indexterm>
+<computeroutput>template&lt;bool fullPrecision&gt; </computeroutput><para><computeroutput>static void TestParseNumberError ( )<computeroutput>[static]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_readertest_8cpp_1aecbde81eaceef1ab965fbccc9c6a2cc1"/><section>
     <title>TestString()</title>
 <indexterm><primary>TestString</primary><secondary>readertest.cpp</secondary></indexterm>

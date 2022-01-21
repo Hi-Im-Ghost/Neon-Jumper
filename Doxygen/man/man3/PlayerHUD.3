@@ -1,4 +1,4 @@
-.TH "PlayerHUD" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "PlayerHUD" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,15 +18,12 @@ PlayerHUD
 .ti -1c
 .RI "void \fBrender\fP (sf::RenderTarget &window)"
 .br
-.RI "Wyświetla tekstury HUD na ekranie\&. "
 .ti -1c
 .RI "void \fBupdate\fP (\fBDamageable\fP *damageableModule, bool playerReady)"
 .br
-.RI "Odświeża stan naszych tekstur HUD\&. "
 .ti -1c
 .RI "void \fBsetPosition\fP (float x, float y)"
 .br
-.RI "Pozwala ustawić pozycje dla tekstur HUD\&. "
 .in -1c
 .SS "Public Attributes"
 
@@ -36,6 +33,41 @@ PlayerHUD
 .br
 .RI "Zmienna pozwalająca sprawdzić czy otrzymaliśmy jakieś obrażenia\&. "
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitTexture\fP ()"
+.br
+.RI "Metoda służąca do inicjalizacji tekstur dla hud gracza\&. "
+.ti -1c
+.RI "void \fBinitHearts\fP ()"
+.br
+.RI "Metoda służąca do inicjalizacji właściwości tekstury życia\&. "
+.ti -1c
+.RI "void \fBinitStopTime\fP ()"
+.br
+.RI "Metoda służąca do inicjalizacji właściwości tekstury umiejętności zatrzymania czasu\&. "
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "sf::RectangleShape \fBhearths\fP [3]"
+.br
+.RI "Tablica przechowująca ilość naszych tekstur życia\&. "
+.ti -1c
+.RI "sf::RectangleShape \fBstopwatch\fP"
+.br
+.ti -1c
+.RI "sf::Texture \fBhtfull\fP"
+.br
+.RI "Tekstura dla ilości żyć gracza\&. "
+.ti -1c
+.RI "sf::Texture \fBstopTime\fP"
+.br
+.RI "Tekstura dla umiejetności gracza\&. "
+.in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "PlayerHUD::PlayerHUD ()"
@@ -44,20 +76,65 @@ PlayerHUD
 Konstruktor dla HUD\&. 
 .SH "Member Function Documentation"
 .PP 
+.SS "void PlayerHUD::initHearts ()\fC [private]\fP"
+
+.PP
+Metoda służąca do inicjalizacji właściwości tekstury życia\&. 
+.SS "void PlayerHUD::initStopTime ()\fC [private]\fP"
+
+.PP
+Metoda służąca do inicjalizacji właściwości tekstury umiejętności zatrzymania czasu\&. 
+.SS "void PlayerHUD::initTexture ()\fC [private]\fP"
+
+.PP
+Metoda służąca do inicjalizacji tekstur dla hud gracza\&. 
 .SS "void PlayerHUD::render (sf::RenderTarget & window)"
-
+Wyświetla tekstury HUD na ekranie 
 .PP
-Wyświetla tekstury HUD na ekranie\&. 
+\fBParameters\fP
+.RS 4
+\fIwindow\fP okno na którym ma być rysowany HUD 
+.RE
+.PP
+
 .SS "void PlayerHUD::setPosition (float x, float y)"
-
+Pozwala ustawić pozycje dla tekstur HUD 
 .PP
-Pozwala ustawić pozycje dla tekstur HUD\&. 
+\fBParameters\fP
+.RS 4
+\fIx\fP pozycja x HUD na ekranie 
+.br
+\fIy\fP pozycja y HUD na ekranie 
+.RE
+.PP
+
 .SS "void PlayerHUD::update (\fBDamageable\fP * damageableModule, bool playerReady)"
-
+Odświeża stan naszych tekstur HUD 
 .PP
-Odświeża stan naszych tekstur HUD\&. 
+\fBParameters\fP
+.RS 4
+\fIdamageableModule\fP moduł \fBDamageable\fP, który przechowuje dane o ilości życia obiektu 
+.br
+\fIplayerReady\fP Wartość pokazująca, czy umiejętność zatrzymania czasu jest gotowa do użycia 
+.RE
+.PP
+
 .SH "Member Data Documentation"
 .PP 
+.SS "sf::RectangleShape PlayerHUD::hearths[3]\fC [private]\fP"
+
+.PP
+Tablica przechowująca ilość naszych tekstur życia\&. 
+.SS "sf::Texture PlayerHUD::htfull\fC [private]\fP"
+
+.PP
+Tekstura dla ilości żyć gracza\&. 
+.SS "sf::Texture PlayerHUD::stopTime\fC [private]\fP"
+
+.PP
+Tekstura dla umiejetności gracza\&. 
+.SS "sf::RectangleShape PlayerHUD::stopwatch\fC [private]\fP"
+
 .SS "bool PlayerHUD::takedDmg"
 
 .PP

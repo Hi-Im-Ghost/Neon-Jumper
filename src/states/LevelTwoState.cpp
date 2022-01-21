@@ -17,6 +17,7 @@ LevelTwoState::LevelTwoState(std::stack<GameState*>* states)
         player->setPosition({playerPositionX, playerPositionY});
         player->setHP(playerHP);
     }
+
 }
 
 void LevelTwoState::initValues() {
@@ -292,6 +293,9 @@ void LevelTwoState::initEndTrigger() {
 void LevelTwoState::updateEndTrigger() {
     if (player->checkForIntersection(endLevelTrigger) || player->isDead())
     {
+        if(player->checkForIntersection(endLevelTrigger)){
+            ohGame.play();
+        }
         // end game
         // states->push(new LevelTwoState(states));
         std::cout << "End Game!\n";
@@ -405,6 +409,7 @@ void LevelTwoState::updateEntities(float dt) {
 
         // Check collision with projectiles
         if (player->checkIsProjectileColliding(e->getHitbox())) {
+            hitGame.play();
             e->takeDamage(1);
             break;
         }

@@ -12,11 +12,14 @@ var searchData=
   ['parsestringhandler_9',['ParseStringHandler',['../struct_parse_string_handler.html',1,'']]],
   ['parseuint64handler_10',['ParseUint64Handler',['../struct_parse_uint64_handler.html',1,'']]],
   ['parseuinthandler_11',['ParseUintHandler',['../struct_parse_uint_handler.html',1,'']]],
-  ['percentencodestream_12',['PercentEncodeStream',['../class_generic_pointer_1_1_percent_encode_stream.html',1,'GenericPointer']]],
-  ['person_13',['Person',['../class_person.html',1,'']]],
-  ['player_14',['Player',['../class_player.html',1,'']]],
-  ['playerhud_15',['PlayerHUD',['../class_player_h_u_d.html',1,'']]],
-  ['prettywriter_16',['PrettyWriter',['../class_pretty_writer.html',1,'']]],
-  ['prettywriter_3c_20genericstringbuffer_2c_20utf8_3c_20char_20_3e_2c_20utf8_3c_20char_20_3e_2c_20crtallocator_2c_200_20_3e_17',['PrettyWriter&lt; GenericStringBuffer, UTF8&lt; char &gt;, UTF8&lt; char &gt;, CrtAllocator, 0 &gt;',['../class_pretty_writer.html',1,'']]],
-  ['przedstawia_18',['Przedstawia',['../class_przedstawia.html',1,'']]]
+  ['patternproperty_12',['PatternProperty',['../structinternal_1_1_schema_1_1_pattern_property.html',1,'internal::Schema']]],
+  ['percentencodestream_13',['PercentEncodeStream',['../class_generic_pointer_1_1_percent_encode_stream.html',1,'GenericPointer']]],
+  ['person_14',['Person',['../class_person.html',1,'']]],
+  ['player_15',['Player',['../class_player.html',1,'']]],
+  ['playerhud_16',['PlayerHUD',['../class_player_h_u_d.html',1,'']]],
+  ['prettywriter_17',['PrettyWriter',['../class_pretty_writer.html',1,'']]],
+  ['prettywriter_3c_20genericstringbuffer_2c_20utf8_3c_20char_20_3e_2c_20utf8_3c_20char_20_3e_2c_20crtallocator_2c_200_20_3e_18',['PrettyWriter&lt; GenericStringBuffer, UTF8&lt; char &gt;, UTF8&lt; char &gt;, CrtAllocator, 0 &gt;',['../class_pretty_writer.html',1,'']]],
+  ['projectile_19',['Projectile',['../class_projectile.html',1,'']]],
+  ['property_20',['Property',['../structinternal_1_1_schema_1_1_property.html',1,'internal::Schema']]],
+  ['przedstawia_21',['Przedstawia',['../class_przedstawia.html',1,'']]]
 ];

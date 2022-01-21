@@ -9,6 +9,15 @@ Regular expression engine with subset of ECMAscript grammar.
 
 {\ttfamily \#include $<$regex.\+h$>$}
 
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_frag}{Frag}}
+\item 
+struct \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_range}{Range}}
+\item 
+struct \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_state}{State}}
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
@@ -24,6 +33,93 @@ typedef Encoding\+::\+Ch \mbox{\hyperlink{classinternal_1_1_generic_regex_a44e1a
 \mbox{\hyperlink{classinternal_1_1_generic_regex_a6a4956c0391bccbf8580b2e047d5bc35}{$\sim$\+Generic\+Regex}} ()
 \item 
 bool \mbox{\hyperlink{classinternal_1_1_generic_regex_a34ddb18fa3a2c70203d0fb740443c2a8}{Is\+Valid}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}{Operator}} \{ \newline
+\mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3}{k\+Zero\+Or\+One}}
+, \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f}{k\+Zero\+Or\+More}}
+, \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3}{k\+One\+Or\+More}}
+, \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2}{k\+Concatenation}}
+, \newline
+\mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4}{k\+Alternation}}
+, \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54}{k\+Left\+Parenthesis}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_state}{State}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex_aea17c79a5d4d17a3b21ef86dda9fa0e3}{Get\+State}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} index)
+\item 
+const \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_state}{State}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex_ada0efa1a7089e9d58376e3fc2821a234}{Get\+State}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} index) const
+\item 
+\mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_range}{Range}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex_a7e05e1219867fdbe83cb4e1f6d4aed91}{Get\+Range}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} index)
+\item 
+const \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_range}{Range}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex_a7725f5a459796b58736b6cddcd19e335}{Get\+Range}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} index) const
+\item 
+{\footnotesize template$<$typename Input\+Stream $>$ }\\void \mbox{\hyperlink{classinternal_1_1_generic_regex_a038af33f370a14f987fb79d78f0d1c75}{Parse}} (\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&ds)
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_ad57a48991e61750ef7426c48b1d3e51b}{New\+State}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} out, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} out1, unsigned codepoint)
+\item 
+void \mbox{\hyperlink{classinternal_1_1_generic_regex_a1a3ea65f584e0dba5815a1232f9a770e}{Push\+Operand}} (\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&operand\+Stack, unsigned codepoint)
+\item 
+void \mbox{\hyperlink{classinternal_1_1_generic_regex_a3b6d21989c3e41e33f6d2a7897ffdd6b}{Implicit\+Concatenation}} (\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&atom\+Count\+Stack, \mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&operator\+Stack)
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_a96b270e845e58787b624604531598517}{Append}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} l1, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} l2)
+\item 
+void \mbox{\hyperlink{classinternal_1_1_generic_regex_a90c5c230de4794560971c48e15861f8e}{Patch}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} l, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} s)
+\item 
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex_a0cc7e9e0fa434ded7ed37de54c49ce26}{Eval}} (\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&operand\+Stack, \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}{Operator}} op)
+\item 
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex_a71f934ac6c4b2b4f63b0c5fc68797933}{Eval\+Quantifier}} (\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&operand\+Stack, unsigned n, unsigned m)
+\item 
+void \mbox{\hyperlink{classinternal_1_1_generic_regex_a44a907caf47179a3f0edcf46a4be8b2f}{Clone\+Top\+Operand}} (\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&operand\+Stack)
+\item 
+{\footnotesize template$<$typename Input\+Stream $>$ }\\bool \mbox{\hyperlink{classinternal_1_1_generic_regex_a16d0bf927741c666f46eed1c66f04150}{Parse\+Unsigned}} (\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&ds, unsigned $\ast$u)
+\item 
+{\footnotesize template$<$typename Input\+Stream $>$ }\\bool \mbox{\hyperlink{classinternal_1_1_generic_regex_aa7336514ba21536ec90aaf2188581c1e}{Parse\+Range}} (\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&ds, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} $\ast$range)
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_a868d6e44d0782e9fbdd476243daa578f}{New\+Range}} (unsigned codepoint)
+\item 
+{\footnotesize template$<$typename Input\+Stream $>$ }\\bool \mbox{\hyperlink{classinternal_1_1_generic_regex_ae46593a63a93b8bc34d044800777b72d}{Character\+Escape}} (\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&ds, unsigned $\ast$escaped\+Codepoint)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_a064e15b8c9c222a07e143ec5847c6ec6}{Min}} (\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{pointer_8h_aeeddce917cf130d62c370b8f216026dd}{a}}, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} b)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$ \mbox{\hyperlink{classinternal_1_1_generic_regex_a63f4d8c4e3d61fcd9f1489347708ded8}{own\+Allocator\+\_\+}}
+\item 
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $\ast$ \mbox{\hyperlink{classinternal_1_1_generic_regex_a2fb2543ae1c5ec68f891745fa69af0e3}{allocator\+\_\+}}
+\item 
+\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \mbox{\hyperlink{classinternal_1_1_generic_regex_a5391b182b60bb8967dd0a6d99db9c9f0}{states\+\_\+}}
+\item 
+\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \mbox{\hyperlink{classinternal_1_1_generic_regex_af94c64023502147345303d70ff594140}{ranges\+\_\+}}
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_a2af8c29234a2229b509fdf60cf265201}{root\+\_\+}}
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_af47146f067e491bb9cb23b13a88a26db}{state\+Count\+\_\+}}
+\item 
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex_ad65c6144b7dc5b0441ef20dc4ef81619}{range\+Count\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex_ac99b045cc5250649ea3708bee95a56e8}{anchor\+Begin\+\_\+}}
+\item 
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex_adbd19f8921ece1563d02e74f479d2e13}{anchor\+End\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex_a1f3b72c56d5eab221ba46a473ff611dd}{k\+Any\+Character\+Class}} = 0x\+FFFFFFFF
+\begin{DoxyCompactList}\small\item\em For \textquotesingle{}.\textquotesingle{}. \end{DoxyCompactList}\item 
+static const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex_aec665a90fdb2372dbc18a6ca0971e886}{k\+Range\+Character\+Class}} = 0x\+FFFFFFFE
+\item 
+static const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex_ae435570506343e24811e588614f6842b}{k\+Range\+Negation\+Flag}} = 0x80000000
+\item 
+static const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex_a12955d17d702f2fa9cf39421666c3ff3}{k\+Infinity\+Quantifier}} = $\sim$0u
 \end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
@@ -87,6 +183,42 @@ typedef \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} \mbox{\hyperlin
 
 
 
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Operator@{Operator}}
+\index{Operator@{Operator}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Operator}{Operator}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+enum \mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}{internal\+::\+Generic\+Regex\+::\+Operator}}\hspace{0.3cm}{\ttfamily [private]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kZeroOrOne@{kZeroOrOne}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kZeroOrOne@{kZeroOrOne}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ad4577594ddb5fee3be7138b0759c35b3}} 
+k\+Zero\+Or\+One&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kZeroOrMore@{kZeroOrMore}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kZeroOrMore@{kZeroOrMore}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673aa4482f5484f4db6675095aaec3286e4f}} 
+k\+Zero\+Or\+More&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kOneOrMore@{kOneOrMore}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kOneOrMore@{kOneOrMore}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a5640dadf6c1cff543463686f2f2903e3}} 
+k\+One\+Or\+More&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kConcatenation@{kConcatenation}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kConcatenation@{kConcatenation}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a989378c9dfab87e3faf7b5e7db8885a2}} 
+k\+Concatenation&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kAlternation@{kAlternation}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kAlternation@{kAlternation}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673a6c251a26f84dc6bc21717ef5fe8504d4}} 
+k\+Alternation&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{kLeftParenthesis@{kLeftParenthesis}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kLeftParenthesis@{kLeftParenthesis}}}\mbox{\Hypertarget{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54}\label{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673ae2f7e4cfde06337266fa1ac3a8b47d54}} 
+k\+Left\+Parenthesis&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
 \doxysubsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{classinternal_1_1_generic_regex_a35c3a49bc4545a991ab039858227df0f}\label{classinternal_1_1_generic_regex_a35c3a49bc4545a991ab039858227df0f}} 
 \index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!GenericRegex@{GenericRegex}}
@@ -105,12 +237,142 @@ typedef \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} \mbox{\hyperlin
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a96b270e845e58787b624604531598517}\label{classinternal_1_1_generic_regex_a96b270e845e58787b624604531598517}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Append@{Append}}
+\index{Append@{Append}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Append()}{Append()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Append (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{l1,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{l2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ae46593a63a93b8bc34d044800777b72d}\label{classinternal_1_1_generic_regex_ae46593a63a93b8bc34d044800777b72d}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!CharacterEscape@{CharacterEscape}}
+\index{CharacterEscape@{CharacterEscape}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{CharacterEscape()}{CharacterEscape()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+template$<$typename Input\+Stream $>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Character\+Escape (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&}]{ds,  }\item[{unsigned $\ast$}]{escaped\+Codepoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a44a907caf47179a3f0edcf46a4be8b2f}\label{classinternal_1_1_generic_regex_a44a907caf47179a3f0edcf46a4be8b2f}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!CloneTopOperand@{CloneTopOperand}}
+\index{CloneTopOperand@{CloneTopOperand}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{CloneTopOperand()}{CloneTopOperand()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+void \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Clone\+Top\+Operand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{operand\+Stack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a0cc7e9e0fa434ded7ed37de54c49ce26}\label{classinternal_1_1_generic_regex_a0cc7e9e0fa434ded7ed37de54c49ce26}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Eval@{Eval}}
+\index{Eval@{Eval}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Eval()}{Eval()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Eval (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{operand\+Stack,  }\item[{\mbox{\hyperlink{classinternal_1_1_generic_regex_acd9c0338546415c6d6dabdb76f8be673}{Operator}}}]{op }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a71f934ac6c4b2b4f63b0c5fc68797933}\label{classinternal_1_1_generic_regex_a71f934ac6c4b2b4f63b0c5fc68797933}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!EvalQuantifier@{EvalQuantifier}}
+\index{EvalQuantifier@{EvalQuantifier}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{EvalQuantifier()}{EvalQuantifier()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Eval\+Quantifier (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{operand\+Stack,  }\item[{unsigned}]{n,  }\item[{unsigned}]{m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a7e05e1219867fdbe83cb4e1f6d4aed91}\label{classinternal_1_1_generic_regex_a7e05e1219867fdbe83cb4e1f6d4aed91}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!GetRange@{GetRange}}
+\index{GetRange@{GetRange}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetRange()}{GetRange()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_range}{Range}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Get\+Range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a7725f5a459796b58736b6cddcd19e335}\label{classinternal_1_1_generic_regex_a7725f5a459796b58736b6cddcd19e335}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!GetRange@{GetRange}}
+\index{GetRange@{GetRange}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetRange()}{GetRange()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_range}{Range}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Get\+Range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_aea17c79a5d4d17a3b21ef86dda9fa0e3}\label{classinternal_1_1_generic_regex_aea17c79a5d4d17a3b21ef86dda9fa0e3}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!GetState@{GetState}}
+\index{GetState@{GetState}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetState()}{GetState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_state}{State}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Get\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ada0efa1a7089e9d58376e3fc2821a234}\label{classinternal_1_1_generic_regex_ada0efa1a7089e9d58376e3fc2821a234}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!GetState@{GetState}}
+\index{GetState@{GetState}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{GetState()}{GetState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const \mbox{\hyperlink{structinternal_1_1_generic_regex_1_1_state}{State}} \& \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Get\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a3b6d21989c3e41e33f6d2a7897ffdd6b}\label{classinternal_1_1_generic_regex_a3b6d21989c3e41e33f6d2a7897ffdd6b}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!ImplicitConcatenation@{ImplicitConcatenation}}
+\index{ImplicitConcatenation@{ImplicitConcatenation}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ImplicitConcatenation()}{ImplicitConcatenation()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+void \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Implicit\+Concatenation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{atom\+Count\+Stack,  }\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{operator\+Stack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
 \mbox{\Hypertarget{classinternal_1_1_generic_regex_a34ddb18fa3a2c70203d0fb740443c2a8}\label{classinternal_1_1_generic_regex_a34ddb18fa3a2c70203d0fb740443c2a8}} 
 \index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!IsValid@{IsValid}}
 \index{IsValid@{IsValid}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
 \doxysubsubsection{\texorpdfstring{IsValid()}{IsValid()}}
 {\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
 bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Is\+Valid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a064e15b8c9c222a07e143ec5847c6ec6}\label{classinternal_1_1_generic_regex_a064e15b8c9c222a07e143ec5847c6ec6}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Min@{Min}}
+\index{Min@{Min}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Min()}{Min()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+static \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Min (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{a,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{b }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a868d6e44d0782e9fbdd476243daa578f}\label{classinternal_1_1_generic_regex_a868d6e44d0782e9fbdd476243daa578f}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!NewRange@{NewRange}}
+\index{NewRange@{NewRange}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{NewRange()}{NewRange()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+New\+Range (\begin{DoxyParamCaption}\item[{unsigned}]{codepoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ad57a48991e61750ef7426c48b1d3e51b}\label{classinternal_1_1_generic_regex_ad57a48991e61750ef7426c48b1d3e51b}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!NewState@{NewState}}
+\index{NewState@{NewState}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{NewState()}{NewState()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+New\+State (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{out,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{out1,  }\item[{unsigned}]{codepoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a038af33f370a14f987fb79d78f0d1c75}\label{classinternal_1_1_generic_regex_a038af33f370a14f987fb79d78f0d1c75}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Parse@{Parse}}
+\index{Parse@{Parse}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Parse()}{Parse()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+template$<$typename Input\+Stream $>$ \\
+void \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Parse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&}]{ds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_aa7336514ba21536ec90aaf2188581c1e}\label{classinternal_1_1_generic_regex_aa7336514ba21536ec90aaf2188581c1e}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!ParseRange@{ParseRange}}
+\index{ParseRange@{ParseRange}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ParseRange()}{ParseRange()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+template$<$typename Input\+Stream $>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Parse\+Range (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&}]{ds,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} $\ast$}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a16d0bf927741c666f46eed1c66f04150}\label{classinternal_1_1_generic_regex_a16d0bf927741c666f46eed1c66f04150}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!ParseUnsigned@{ParseUnsigned}}
+\index{ParseUnsigned@{ParseUnsigned}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ParseUnsigned()}{ParseUnsigned()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+template$<$typename Input\+Stream $>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Parse\+Unsigned (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_decoded_stream}{Decoded\+Stream}}$<$ Input\+Stream, \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} $>$ \&}]{ds,  }\item[{unsigned $\ast$}]{u }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a90c5c230de4794560971c48e15861f8e}\label{classinternal_1_1_generic_regex_a90c5c230de4794560971c48e15861f8e}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!Patch@{Patch}}
+\index{Patch@{Patch}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{Patch()}{Patch()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+void \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Patch (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{l,  }\item[{\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}}}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a1a3ea65f584e0dba5815a1232f9a770e}\label{classinternal_1_1_generic_regex_a1a3ea65f584e0dba5815a1232f9a770e}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!PushOperand@{PushOperand}}
+\index{PushOperand@{PushOperand}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{PushOperand()}{PushOperand()}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+void \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::\+Push\+Operand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$ \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$ \&}]{operand\+Stack,  }\item[{unsigned}]{codepoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
 
 
 
@@ -122,6 +384,104 @@ bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Re
 {\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
 template$<$typename , typename $>$ \\
 friend class \mbox{\hyperlink{classinternal_1_1_generic_regex_search}{Generic\+Regex\+Search}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a2fb2543ae1c5ec68f891745fa69af0e3}\label{classinternal_1_1_generic_regex_a2fb2543ae1c5ec68f891745fa69af0e3}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!allocator\_@{allocator\_}}
+\index{allocator\_@{allocator\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{allocator\_}{allocator\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$\ast$ \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::allocator\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ac99b045cc5250649ea3708bee95a56e8}\label{classinternal_1_1_generic_regex_ac99b045cc5250649ea3708bee95a56e8}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!anchorBegin\_@{anchorBegin\_}}
+\index{anchorBegin\_@{anchorBegin\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{anchorBegin\_}{anchorBegin\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::anchor\+Begin\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_adbd19f8921ece1563d02e74f479d2e13}\label{classinternal_1_1_generic_regex_adbd19f8921ece1563d02e74f479d2e13}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!anchorEnd\_@{anchorEnd\_}}
+\index{anchorEnd\_@{anchorEnd\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{anchorEnd\_}{anchorEnd\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+bool \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::anchor\+End\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a1f3b72c56d5eab221ba46a473ff611dd}\label{classinternal_1_1_generic_regex_a1f3b72c56d5eab221ba46a473ff611dd}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kAnyCharacterClass@{kAnyCharacterClass}}
+\index{kAnyCharacterClass@{kAnyCharacterClass}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{kAnyCharacterClass}{kAnyCharacterClass}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::k\+Any\+Character\+Class = 0x\+FFFFFFFF\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+For \textquotesingle{}.\textquotesingle{}. 
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a12955d17d702f2fa9cf39421666c3ff3}\label{classinternal_1_1_generic_regex_a12955d17d702f2fa9cf39421666c3ff3}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kInfinityQuantifier@{kInfinityQuantifier}}
+\index{kInfinityQuantifier@{kInfinityQuantifier}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{kInfinityQuantifier}{kInfinityQuantifier}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::k\+Infinity\+Quantifier = $\sim$0u\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_aec665a90fdb2372dbc18a6ca0971e886}\label{classinternal_1_1_generic_regex_aec665a90fdb2372dbc18a6ca0971e886}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kRangeCharacterClass@{kRangeCharacterClass}}
+\index{kRangeCharacterClass@{kRangeCharacterClass}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{kRangeCharacterClass}{kRangeCharacterClass}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::k\+Range\+Character\+Class = 0x\+FFFFFFFE\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ae435570506343e24811e588614f6842b}\label{classinternal_1_1_generic_regex_ae435570506343e24811e588614f6842b}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!kRangeNegationFlag@{kRangeNegationFlag}}
+\index{kRangeNegationFlag@{kRangeNegationFlag}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{kRangeNegationFlag}{kRangeNegationFlag}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+const unsigned \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::k\+Range\+Negation\+Flag = 0x80000000\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a63f4d8c4e3d61fcd9f1489347708ded8}\label{classinternal_1_1_generic_regex_a63f4d8c4e3d61fcd9f1489347708ded8}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!ownAllocator\_@{ownAllocator\_}}
+\index{ownAllocator\_@{ownAllocator\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ownAllocator\_}{ownAllocator\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$\ast$ \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::own\+Allocator\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_ad65c6144b7dc5b0441ef20dc4ef81619}\label{classinternal_1_1_generic_regex_ad65c6144b7dc5b0441ef20dc4ef81619}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!rangeCount\_@{rangeCount\_}}
+\index{rangeCount\_@{rangeCount\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{rangeCount\_}{rangeCount\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::range\+Count\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_af94c64023502147345303d70ff594140}\label{classinternal_1_1_generic_regex_af94c64023502147345303d70ff594140}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!ranges\_@{ranges\_}}
+\index{ranges\_@{ranges\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{ranges\_}{ranges\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$>$ \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::ranges\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a2af8c29234a2229b509fdf60cf265201}\label{classinternal_1_1_generic_regex_a2af8c29234a2229b509fdf60cf265201}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!root\_@{root\_}}
+\index{root\_@{root\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{root\_}{root\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::root\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_af47146f067e491bb9cb23b13a88a26db}\label{classinternal_1_1_generic_regex_af47146f067e491bb9cb23b13a88a26db}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!stateCount\_@{stateCount\_}}
+\index{stateCount\_@{stateCount\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{stateCount\_}{stateCount\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{Size\+Type}} \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::state\+Count\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classinternal_1_1_generic_regex_a5391b182b60bb8967dd0a6d99db9c9f0}\label{classinternal_1_1_generic_regex_a5391b182b60bb8967dd0a6d99db9c9f0}} 
+\index{internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}!states\_@{states\_}}
+\index{states\_@{states\_}!internal::GenericRegex$<$ Encoding, Allocator $>$@{internal::GenericRegex$<$ Encoding, Allocator $>$}}
+\doxysubsubsection{\texorpdfstring{states\_}{states\_}}
+{\footnotesize\ttfamily template$<$typename \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}} , typename \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}  = Crt\+Allocator$>$ \\
+\mbox{\hyperlink{classinternal_1_1_stack}{Stack}}$<$\mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}}$>$ \mbox{\hyperlink{classinternal_1_1_generic_regex}{internal\+::\+Generic\+Regex}}$<$ \mbox{\hyperlink{classrapidjson_1_1_encoding}{Encoding}}, \mbox{\hyperlink{classrapidjson_1_1_allocator}{Allocator}} $>$\+::states\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
 
 
 

@@ -11,6 +11,23 @@
 <computeroutput>#include &lt;reader.h&gt;</computeroutput>
 </para>
 <simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_struct_generic_reader_1_1_clear_stack_on_exit">ClearStackOnExit</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader_1_1_number_stream">NumberStream</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4">NumberStream&lt; InputStream, StackCharacter, false, false &gt;</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4">NumberStream&lt; InputStream, StackCharacter, true, false &gt;</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01true_01_4">NumberStream&lt; InputStream, StackCharacter, true, true &gt;</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_class_generic_reader_1_1_stack_stream">StackStream</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
     <title>Public Types    </title>
         <itemizedlist>
             <listitem><para>typedef SourceEncoding::Ch <link linkend="_class_generic_reader_1ab39a92bb26d50aee6469df604622218a">Ch</link></para>
@@ -22,7 +39,7 @@
 <simplesect>
     <title>Public Member Functions    </title>
         <itemizedlist>
-            <listitem><para><link linkend="_class_generic_reader_1aab875a34b3092df9fb4e2b8eac6dbb96">GenericReader</link> (StackAllocator *stackAllocator=0, size_t stackCapacity=kDefaultStackCapacity)</para>
+            <listitem><para><link linkend="_class_generic_reader_1aab875a34b3092df9fb4e2b8eac6dbb96">GenericReader</link> (StackAllocator *stackAllocator=0, size_t stackCapacity=<link linkend="_class_generic_reader_1ac507ea8672bf2b5d01b35583c0597f15">kDefaultStackCapacity</link>)</para>
 
 <para>Constructor. </para>
 </listitem>
@@ -64,6 +81,127 @@
     <title>Protected Member Functions    </title>
         <itemizedlist>
             <listitem><para>void <link linkend="_class_generic_reader_1ae50079444295bf109730c3b708a818a6">SetParseError</link> (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> code, size_t offset)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Types    </title>
+        <itemizedlist>
+            <listitem><para>enum <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> { 
+<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166">IterativeParsingFinishState</link> = 0
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1">IterativeParsingErrorState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159">IterativeParsingStartState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de">IterativeParsingObjectInitialState</link>
+, 
+<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13">IterativeParsingMemberKeyState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035">IterativeParsingMemberValueState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3">IterativeParsingObjectFinishState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd">IterativeParsingArrayInitialState</link>
+, 
+<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138">IterativeParsingElementState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4">IterativeParsingArrayFinishState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e">IterativeParsingValueState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd">IterativeParsingElementDelimiterState</link>
+, 
+<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c">IterativeParsingMemberDelimiterState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb">IterativeParsingKeyValueDelimiterState</link>
+, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eac7a053fab876f4447b5c034b9e25bf38">cIterativeParsingStateCount</link>
+ }</para>
+</listitem>
+            <listitem><para>enum <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> { 
+<link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a6b35a147e77cd0bad1eb975e29c2853a">LeftBracketToken</link> = 0
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8aa37f043d8a3851436653046e36d72f4f">RightBracketToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8abb24015be27f1c42d12cdf7baf1fa59c">LeftCurlyBracketToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a7eb49c93ed5c98df68c843731292984f">RightCurlyBracketToken</link>
+, 
+<link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8ae8c27b8a8b2e8cd6745e46aab269bbf1">CommaToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a7ae2cccd94aa5c6f02de28c344d99cab">ColonToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a9743581f6cf4c657ad6bec344f31f44b">StringToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a017affbd2f29580b93d732733eb455da">FalseToken</link>
+, 
+<link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a0cd697f774a54815817a1c3b4bde88eb">TrueToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8abdd797a9fe4ace1702d2fe3561577e3a">NullToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8ace41a2b9df4435cf9a1610e1707bd850">NumberToken</link>
+, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a93abbfd4654e7b17d9557bbc7621be45">kTokenCount</link>
+ }</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_class_generic_reader_1ac767384e34b7078fa9f97ba57c884328">GenericReader</link> (const <link linkend="_class_generic_reader">GenericReader</link> &amp;)</para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_reader">GenericReader</link> &amp; <link linkend="_class_generic_reader_1a6c97642d5f7064805f5254304da2430a">operator=</link> (const <link linkend="_class_generic_reader">GenericReader</link> &amp;)</para>
+</listitem>
+            <listitem><para>void <link linkend="_class_generic_reader_1a1c3db4c395db98714ffb257d559fb28e">ClearStack</link> ()</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream &gt; </para><para>void <link linkend="_class_generic_reader_1a4d01a1cbfbb63744361af3e1eb98aa52">SkipWhitespaceAndComments</link> (InputStream &amp;is)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1af7943451d58ae465e9803d5a78beeb90">ParseObject</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1a8f226bb3c17b232ce142594b7620c8a4">ParseArray</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1ae624956124c98a85d23decd86a406a0b">ParseNull</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1a762f074e0f99c71f0a82cff19bb763cd">ParseTrue</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1af3af2d4e8efa1b8ef2f0bb281d8f0540">ParseFalse</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>unsigned <link linkend="_class_generic_reader_1afc44000d3b4d538080b09c6a43c00f20">ParseHex4</link> (InputStream &amp;is, size_t escapeOffset)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1ab4d4f63b23b55a72069e2e13eb010cff">ParseString</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler, bool isKey=false)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename SEncoding , typename TEncoding , typename InputStream , typename OutputStream &gt; </para><para>RAPIDJSON_FORCEINLINE void <link linkend="_class_generic_reader_1a8fa22aded7085b3fe5f9d59467318f8a">ParseStringToStream</link> (InputStream &amp;is, OutputStream &amp;os)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1a2447207fde31185e2bb8fbf1250b72e0">ParseNumber</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>void <link linkend="_class_generic_reader_1a8c0d07512c0fa447f45c9e5b00dd2d70">ParseValue</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> <link linkend="_class_generic_reader_1a0871b9653ca8283d92ac753bf63e33ce">Tokenize</link> (<link linkend="_class_generic_reader_1ab39a92bb26d50aee6469df604622218a">Ch</link> c) const</para>
+</listitem>
+            <listitem><para>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader_1ad0be8224856167550255d2c9d09f4278">Predict</link> (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> state, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> token) const</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader_1a09637865e7aea8e50fb8f9fc25dd65ad">Transit</link> (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> src, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> token, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> dst, InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>void <link linkend="_class_generic_reader_1a46660019ff1ed42bc192d9b5f9119b0f">HandleError</link> (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> src, InputStream &amp;is)</para>
+</listitem>
+            <listitem><para>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader_1a115b4d35f57ef8dbe9eef467cba471ae">IsIterativeParsingDelimiterState</link> (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> s) const</para>
+</listitem>
+            <listitem><para>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader_1a2907a45d73d2f8cebe1a31bdc3a6e483">IsIterativeParsingCompleteState</link> (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> s) const</para>
+</listitem>
+            <listitem><para>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </para><para><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader_1a55a2d3fd3d5261f26513ed303724bc3a">IterativeParse</link> (InputStream &amp;is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp;handler)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>template&lt;typename InputStream &gt; </para><para>static RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader_1a5552ffdca0c3872ffeab6d35ea7038c2">Consume</link> (InputStream &amp;is, typename InputStream::Ch expect)</para>
+</listitem>
+            <listitem><para>template&lt;typename InputStream , typename OutputStream &gt; </para><para>static RAPIDJSON_FORCEINLINE void <link linkend="_class_generic_reader_1a22d69758dcadf454e372226be028483c">ScanCopyUnescapedString</link> (InputStream &amp;, OutputStream &amp;)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt; StackAllocator &gt; <link linkend="_class_generic_reader_1a7c04f4aa27561d358376920d06b78cdb">stack_</link></para>
+
+<para>A stack for storing decoded string temporarily during non-destructive parsing. </para>
+</listitem>
+            <listitem><para><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader_1a156018c2805bfa730287314ee9d9257d">parseResult_</link></para>
+</listitem>
+            <listitem><para><link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader_1ae155ea97ca78d4ee6c8d848b5b1da3dc">state_</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Static Private Attributes    </title>
+        <itemizedlist>
+            <listitem><para>static const size_t <link linkend="_class_generic_reader_1ac507ea8672bf2b5d01b35583c0597f15">kDefaultStackCapacity</link> = 256</para>
+
+<para>Default stack capacity in bytes for storing a single decoded string. </para>
 </listitem>
         </itemizedlist>
 </simplesect>
@@ -129,13 +267,98 @@ Template Parameters</title>
 </section>
 </section>
 <section>
+<title>Member Enumeration Documentation</title>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e"/><section>
+    <title>IterativeParsingState</title>
+<indexterm><primary>IterativeParsingState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingState</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>enum <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">GenericReader::IterativeParsingState</link><computeroutput>[private]</computeroutput></computeroutput></para><informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>IterativeParsingFinishState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingFinishState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166"/>IterativeParsingFinishState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingErrorState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingErrorState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1"/>IterativeParsingErrorState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingStartState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingStartState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159"/>IterativeParsingStartState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingObjectInitialState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingObjectInitialState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de"/>IterativeParsingObjectInitialState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingMemberKeyState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingMemberKeyState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13"/>IterativeParsingMemberKeyState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingMemberValueState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingMemberValueState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035"/>IterativeParsingMemberValueState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingObjectFinishState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingObjectFinishState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3"/>IterativeParsingObjectFinishState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingArrayInitialState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingArrayInitialState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd"/>IterativeParsingArrayInitialState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingElementState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingElementState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138"/>IterativeParsingElementState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingArrayFinishState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingArrayFinishState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4"/>IterativeParsingArrayFinishState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingValueState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingValueState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e"/>IterativeParsingValueState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingElementDelimiterState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingElementDelimiterState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd"/>IterativeParsingElementDelimiterState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingMemberDelimiterState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingMemberDelimiterState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c"/>IterativeParsingMemberDelimiterState</entry><entry></entry></row><row><entry><indexterm><primary>IterativeParsingKeyValueDelimiterState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParsingKeyValueDelimiterState</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb"/>IterativeParsingKeyValueDelimiterState</entry><entry></entry></row><row><entry><indexterm><primary>cIterativeParsingStateCount</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>cIterativeParsingStateCount</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277eac7a053fab876f4447b5c034b9e25bf38"/>cIterativeParsingStateCount</entry><entry></entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8"/><section>
+    <title>Token</title>
+<indexterm><primary>Token</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Token</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>enum <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">GenericReader::Token</link><computeroutput>[private]</computeroutput></computeroutput></para><informaltable frame="all">
+<title>Enumerator</title>
+    <tgroup cols="2" align="left" colsep="1" rowsep="1">
+      <colspec colname='c1'/>
+      <colspec colname='c2'/>
+<tbody>
+<row><entry><indexterm><primary>LeftBracketToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>LeftBracketToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a6b35a147e77cd0bad1eb975e29c2853a"/>LeftBracketToken</entry><entry></entry></row><row><entry><indexterm><primary>RightBracketToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>RightBracketToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8aa37f043d8a3851436653046e36d72f4f"/>RightBracketToken</entry><entry></entry></row><row><entry><indexterm><primary>LeftCurlyBracketToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>LeftCurlyBracketToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8abb24015be27f1c42d12cdf7baf1fa59c"/>LeftCurlyBracketToken</entry><entry></entry></row><row><entry><indexterm><primary>RightCurlyBracketToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>RightCurlyBracketToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a7eb49c93ed5c98df68c843731292984f"/>RightCurlyBracketToken</entry><entry></entry></row><row><entry><indexterm><primary>CommaToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>CommaToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8ae8c27b8a8b2e8cd6745e46aab269bbf1"/>CommaToken</entry><entry></entry></row><row><entry><indexterm><primary>ColonToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ColonToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a7ae2cccd94aa5c6f02de28c344d99cab"/>ColonToken</entry><entry></entry></row><row><entry><indexterm><primary>StringToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>StringToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a9743581f6cf4c657ad6bec344f31f44b"/>StringToken</entry><entry></entry></row><row><entry><indexterm><primary>FalseToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>FalseToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a017affbd2f29580b93d732733eb455da"/>FalseToken</entry><entry></entry></row><row><entry><indexterm><primary>TrueToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>TrueToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a0cd697f774a54815817a1c3b4bde88eb"/>TrueToken</entry><entry></entry></row><row><entry><indexterm><primary>NullToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>NullToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8abdd797a9fe4ace1702d2fe3561577e3a"/>NullToken</entry><entry></entry></row><row><entry><indexterm><primary>NumberToken</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>NumberToken</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8ace41a2b9df4435cf9a1610e1707bd850"/>NumberToken</entry><entry></entry></row><row><entry><indexterm><primary>kTokenCount</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>kTokenCount</secondary></indexterm>
+<anchor xml:id="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8a93abbfd4654e7b17d9557bbc7621be45"/>kTokenCount</entry><entry></entry></row>    </tbody>
+    </tgroup>
+</informaltable>
+</section>
+</section>
+<section>
 <title>Constructor &amp; Destructor Documentation</title>
 <anchor xml:id="_class_generic_reader_1aab875a34b3092df9fb4e2b8eac6dbb96"/><section>
-    <title>GenericReader()</title>
+    <title>GenericReader()<computeroutput>[1/2]</computeroutput></title>
 <indexterm><primary>GenericReader</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
 <indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>GenericReader</secondary></indexterm>
 <computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;<link linkend="_class_generic_reader">::GenericReader</link> (StackAllocator * stackAllocator = <computeroutput>0</computeroutput>
-, size_t stackCapacity = <computeroutput>kDefaultStackCapacity</computeroutput>
+, size_t stackCapacity = <computeroutput><link linkend="_class_generic_reader_1ac507ea8672bf2b5d01b35583c0597f15">kDefaultStackCapacity</link></computeroutput>
 )<computeroutput>[inline]</computeroutput></computeroutput></para><para>
 
 <para>Constructor. </para>
@@ -168,9 +391,24 @@ Parameters</title>
                 </formalpara>
                 </para>
 </section>
+<anchor xml:id="_class_generic_reader_1ac767384e34b7078fa9f97ba57c884328"/><section>
+    <title>GenericReader()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>GenericReader</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>GenericReader</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;<link linkend="_class_generic_reader">::GenericReader</link> (const <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt; &amp; )<computeroutput>[private]</computeroutput></computeroutput></para></section>
 </section>
 <section>
 <title>Member Function Documentation</title>
+<anchor xml:id="_class_generic_reader_1a1c3db4c395db98714ffb257d559fb28e"/><section>
+    <title>ClearStack()</title>
+<indexterm><primary>ClearStack</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ClearStack</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ClearStack ( )<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a5552ffdca0c3872ffeab6d35ea7038c2"/><section>
+    <title>Consume()</title>
+<indexterm><primary>Consume</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Consume</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>static RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Consume (InputStream &amp; is, typename InputStream::Ch expect)<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_generic_reader_1ae9008523ccd06d839a57335835cb4091"/><section>
     <title>GetErrorOffset()</title>
 <indexterm><primary>GetErrorOffset</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
@@ -189,6 +427,11 @@ Parameters</title>
 <para>Get the <link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> of last parsing. </para>
 </para>
 </section>
+<anchor xml:id="_class_generic_reader_1a46660019ff1ed42bc192d9b5f9119b0f"/><section>
+    <title>HandleError()</title>
+<indexterm><primary>HandleError</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>HandleError</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::HandleError (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> src, InputStream &amp; is)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_generic_reader_1ac417441794477ea747b63adb6d3653a9"/><section>
     <title>HasParseError()</title>
 <indexterm><primary>HasParseError</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
@@ -198,6 +441,21 @@ Parameters</title>
 <para>Whether a parse error has occurred in the last parsing. </para>
 </para>
 </section>
+<anchor xml:id="_class_generic_reader_1a2907a45d73d2f8cebe1a31bdc3a6e483"/><section>
+    <title>IsIterativeParsingCompleteState()</title>
+<indexterm><primary>IsIterativeParsingCompleteState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IsIterativeParsingCompleteState</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IsIterativeParsingCompleteState (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> s) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a115b4d35f57ef8dbe9eef467cba471ae"/><section>
+    <title>IsIterativeParsingDelimiterState()</title>
+<indexterm><primary>IsIterativeParsingDelimiterState</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IsIterativeParsingDelimiterState</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE bool <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IsIterativeParsingDelimiterState (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> s) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a55a2d3fd3d5261f26513ed303724bc3a"/><section>
+    <title>IterativeParse()</title>
+<indexterm><primary>IterativeParse</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>IterativeParse</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::IterativeParse (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_generic_reader_1aa1e9e1eef614fde971550ed2f955151d"/><section>
     <title>IterativeParseComplete()</title>
 <indexterm><primary>IterativeParseComplete</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
@@ -287,6 +545,11 @@ Parameters</title>
 </formalpara>
 </para>
 </section>
+<anchor xml:id="_class_generic_reader_1a6c97642d5f7064805f5254304da2430a"/><section>
+    <title>operator=()</title>
+<indexterm><primary>operator=</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>operator=</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_reader">GenericReader</link> &amp; <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::operator= (const <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt; &amp; )<computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_generic_reader_1a0c450620d14ff1824e58bb7bd9b42099"/><section>
     <title>Parse()<computeroutput>[1/2]</computeroutput></title>
 <indexterm><primary>Parse</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
@@ -422,11 +685,118 @@ Parameters</title>
 </formalpara>
 </para>
 </section>
+<anchor xml:id="_class_generic_reader_1a8f226bb3c17b232ce142594b7620c8a4"/><section>
+    <title>ParseArray()</title>
+<indexterm><primary>ParseArray</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseArray</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseArray (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1af3af2d4e8efa1b8ef2f0bb281d8f0540"/><section>
+    <title>ParseFalse()</title>
+<indexterm><primary>ParseFalse</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseFalse</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseFalse (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1afc44000d3b4d538080b09c6a43c00f20"/><section>
+    <title>ParseHex4()</title>
+<indexterm><primary>ParseHex4</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseHex4</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream &gt; </computeroutput><para><computeroutput>unsigned <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseHex4 (InputStream &amp; is, size_t escapeOffset)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1ae624956124c98a85d23decd86a406a0b"/><section>
+    <title>ParseNull()</title>
+<indexterm><primary>ParseNull</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseNull</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseNull (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a2447207fde31185e2bb8fbf1250b72e0"/><section>
+    <title>ParseNumber()</title>
+<indexterm><primary>ParseNumber</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseNumber</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseNumber (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1af7943451d58ae465e9803d5a78beeb90"/><section>
+    <title>ParseObject()</title>
+<indexterm><primary>ParseObject</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseObject</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseObject (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1ab4d4f63b23b55a72069e2e13eb010cff"/><section>
+    <title>ParseString()</title>
+<indexterm><primary>ParseString</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseString</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseString (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler, bool isKey = <computeroutput>false</computeroutput>
+)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a8fa22aded7085b3fe5f9d59467318f8a"/><section>
+    <title>ParseStringToStream()</title>
+<indexterm><primary>ParseStringToStream</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseStringToStream</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename SEncoding , typename TEncoding , typename InputStream , typename OutputStream &gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseStringToStream (InputStream &amp; is, OutputStream &amp; os)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a762f074e0f99c71f0a82cff19bb763cd"/><section>
+    <title>ParseTrue()</title>
+<indexterm><primary>ParseTrue</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseTrue</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseTrue (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a8c0d07512c0fa447f45c9e5b00dd2d70"/><section>
+    <title>ParseValue()</title>
+<indexterm><primary>ParseValue</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ParseValue</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ParseValue (InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1ad0be8224856167550255d2c9d09f4278"/><section>
+    <title>Predict()</title>
+<indexterm><primary>Predict</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Predict</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Predict (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> state, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> token) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a22d69758dcadf454e372226be028483c"/><section>
+    <title>ScanCopyUnescapedString()</title>
+<indexterm><primary>ScanCopyUnescapedString</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>ScanCopyUnescapedString</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;typename InputStream , typename OutputStream &gt; </computeroutput><para><computeroutput>static RAPIDJSON_FORCEINLINE void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::ScanCopyUnescapedString (InputStream &amp; , OutputStream &amp; )<computeroutput>[inline]</computeroutput>, <computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
 <anchor xml:id="_class_generic_reader_1ae50079444295bf109730c3b708a818a6"/><section>
     <title>SetParseError()</title>
 <indexterm><primary>SetParseError</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
 <indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>SetParseError</secondary></indexterm>
 <computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::SetParseError (<link linkend="_group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_1ga8d4b32dfc45840bca189ade2bbcb6ba7">ParseErrorCode</link> code, size_t offset)<computeroutput>[inline]</computeroutput>, <computeroutput>[protected]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a4d01a1cbfbb63744361af3e1eb98aa52"/><section>
+    <title>SkipWhitespaceAndComments()</title>
+<indexterm><primary>SkipWhitespaceAndComments</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>SkipWhitespaceAndComments</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream &gt; </computeroutput><para><computeroutput>void <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::SkipWhitespaceAndComments (InputStream &amp; is)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a0871b9653ca8283d92ac753bf63e33ce"/><section>
+    <title>Tokenize()</title>
+<indexterm><primary>Tokenize</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Tokenize</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Tokenize (<link linkend="_class_generic_reader_1ab39a92bb26d50aee6469df604622218a">Ch</link> c) const<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a09637865e7aea8e50fb8f9fc25dd65ad"/><section>
+    <title>Transit()</title>
+<indexterm><primary>Transit</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>Transit</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><computeroutput>template&lt;unsigned parseFlags, typename InputStream , typename <link linkend="_classrapidjson_1_1_handler">Handler</link> &gt; </computeroutput><para><computeroutput>RAPIDJSON_FORCEINLINE <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::Transit (<link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> src, <link linkend="_class_generic_reader_1a78cbc3012843daeaa44cb3c2b779a8a8">Token</link> token, <link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> dst, InputStream &amp; is, <link linkend="_classrapidjson_1_1_handler">Handler</link> &amp; handler)<computeroutput>[inline]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_class_generic_reader_1ac507ea8672bf2b5d01b35583c0597f15"/><section>
+    <title>kDefaultStackCapacity</title>
+<indexterm><primary>kDefaultStackCapacity</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>kDefaultStackCapacity</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput>const size_t <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::kDefaultStackCapacity = 256<computeroutput>[static]</computeroutput>, <computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>Default stack capacity in bytes for storing a single decoded string. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1a156018c2805bfa730287314ee9d9257d"/><section>
+    <title>parseResult_</title>
+<indexterm><primary>parseResult_</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>parseResult_</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_struct_parse_result">ParseResult</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::parseResult_<computeroutput>[private]</computeroutput></computeroutput></para></section>
+<anchor xml:id="_class_generic_reader_1a7c04f4aa27561d358376920d06b78cdb"/><section>
+    <title>stack_</title>
+<indexterm><primary>stack_</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>stack_</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_classinternal_1_1_stack">internal::Stack</link>&lt;StackAllocator&gt; <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::stack_<computeroutput>[private]</computeroutput></computeroutput></para><para>
+
+<para>A stack for storing decoded string temporarily during non-destructive parsing. </para>
+</para>
+</section>
+<anchor xml:id="_class_generic_reader_1ae155ea97ca78d4ee6c8d848b5b1da3dc"/><section>
+    <title>state_</title>
+<indexterm><primary>state_</primary><secondary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</secondary></indexterm>
+<indexterm><primary>GenericReader&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;</primary><secondary>state_</secondary></indexterm>
+<computeroutput>template&lt;typename SourceEncoding , typename TargetEncoding , typename StackAllocator  = CrtAllocator&gt; </computeroutput><para><computeroutput><link linkend="_class_generic_reader_1a269700a68b925db2f3ecc84b75f2277e">IterativeParsingState</link> <link linkend="_class_generic_reader">GenericReader</link>&lt; SourceEncoding, TargetEncoding, StackAllocator &gt;::state_<computeroutput>[private]</computeroutput></computeroutput></para></section>
 <para>
 The documentation for this class was generated from the following files:</para>
 src/rapidjson/include/rapidjson/<link linkend="_fwd_8h">fwd.h</link>src/rapidjson/include/rapidjson/<link linkend="_reader_8h">reader.h</link></section>

@@ -12,6 +12,7 @@
         <argsstring></argsstring>
         <name>hp</name>
         <qualifiedname>Damageable::hp</qualifiedname>
+        <initializer>= 3</initializer>
         <briefdescription>
 <para>Aktualna ilość punktów życia obiektu. </para>
         </briefdescription>
@@ -27,6 +28,7 @@
         <argsstring></argsstring>
         <name>maxHP</name>
         <qualifiedname>Damageable::maxHP</qualifiedname>
+        <initializer>= 3</initializer>
         <briefdescription>
 <para>Maksymalna ilość punktów życia obiektu. </para>
         </briefdescription>
@@ -58,6 +60,7 @@
         <argsstring></argsstring>
         <name>invTime</name>
         <qualifiedname>Damageable::invTime</qualifiedname>
+        <initializer>= 1.0f</initializer>
         <briefdescription>
 <para>Częstotliwość z jaką możliwe jest otrzymywanie obrażeń </para>
         </briefdescription>
@@ -66,6 +69,24 @@
         <inbodydescription>
         </inbodydescription>
         <location file="src/modules/Damageable.h" line="16" column="11" bodyfile="src/modules/Damageable.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="class_damageable_1aeaf6d38e4e7e47a89c7ea7759e6f733e" prot="protected" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Damageable::defaultInvincibilityTime</definition>
+        <argsstring></argsstring>
+        <name>defaultInvincibilityTime</name>
+        <qualifiedname>Damageable::defaultInvincibilityTime</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Częstotliwość z jaką możliwe jest otrzymywanie obrażeń. W przeciwieństwie do invTime ta zmienna nie zmienia się w trakcie działania programu i jest punktem powrotu invTime do wartości początkowej. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/modules/Damageable.h" line="26" column="11" bodyfile="src/modules/Damageable.h" bodystart="26" bodyend="-1"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="protected-func">
@@ -80,13 +101,22 @@
           <declname>deltaTime</declname>
         </param>
         <briefdescription>
-<para>Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia. </para>
         </briefdescription>
         <detaileddescription>
+<para>Odświeża wartość licznika, który określa za częstotliwość z jaką obiekt może otrzymywać obrażenia <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>deltaTime</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>czas pomiędzy klatkami aplikacji </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="20" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="28" bodyend="42"/>
+        <location file="src/modules/Damageable.h" line="22" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="29" bodyend="43"/>
       </memberdef>
       </sectiondef>
       <sectiondef kind="public-func">
@@ -101,32 +131,50 @@
           <declname>damage</declname>
         </param>
         <briefdescription>
-<para>Powoduje odjęcie punktów życia o wartość damage. </para>
         </briefdescription>
         <detaileddescription>
+<para>Powoduje odjęcie punktów życia o wartość damage <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>damage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>wartość obrażeń do zadania </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="24" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="3" bodyend="10"/>
+        <location file="src/modules/Damageable.h" line="32" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="3" bodyend="10"/>
       </memberdef>
-      <memberdef kind="function" id="class_damageable_1a74b39da9a9983afddeed50e74ef838a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_damageable_1a315e2a10cc093d04e7b39bae57d294d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void Damageable::setMaxHP</definition>
-        <argsstring>(unsigned newMax)</argsstring>
+        <argsstring>(int newMax)</argsstring>
         <name>setMaxHP</name>
         <qualifiedname>Damageable::setMaxHP</qualifiedname>
         <param>
-          <type>unsigned</type>
+          <type>int</type>
           <declname>newMax</declname>
         </param>
         <briefdescription>
-<para>Ustawia ilość maksymalnych punktów życia. </para>
         </briefdescription>
         <detaileddescription>
+<para>Ustawia ilość maksymalnych punktów życia <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>newMax</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>nowa wartość maksymalna punktów życia </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="26" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="12" bodyend="14"/>
+        <location file="src/modules/Damageable.h" line="36" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="12" bodyend="15"/>
       </memberdef>
       <memberdef kind="function" id="class_damageable_1a2babc0ff0f6b3e78440c71291c727e44" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -135,32 +183,43 @@
         <name>getMaxHP</name>
         <qualifiedname>Damageable::getMaxHP</qualifiedname>
         <briefdescription>
-<para>Pozwala uzyskać ilość maksymalnych punktów życia. </para>
         </briefdescription>
         <detaileddescription>
+<para>Pozwala uzyskać ilość maksymalnych punktów życia <simplesect kind="return"><para>obecna ilość maksymalnych punktów życia </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="28" column="9" bodyfile="src/modules/Damageable.cpp" bodystart="24" bodyend="26"/>
+        <location file="src/modules/Damageable.h" line="40" column="9" bodyfile="src/modules/Damageable.cpp" bodystart="25" bodyend="27"/>
       </memberdef>
-      <memberdef kind="function" id="class_damageable_1a85c9ee9faee9f45d76e2a8bf8345670d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_damageable_1a4804ae4896484ee71ff7cef6207fdfa7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void Damageable::setHP</definition>
-        <argsstring>(unsigned newHP)</argsstring>
+        <argsstring>(int newHP)</argsstring>
         <name>setHP</name>
         <qualifiedname>Damageable::setHP</qualifiedname>
         <param>
-          <type>unsigned</type>
+          <type>int</type>
           <declname>newHP</declname>
         </param>
         <briefdescription>
-<para>Ustawia ilość punktów życia. </para>
         </briefdescription>
         <detaileddescription>
+<para>Ustawia ilość punktów życia <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>newHP</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>nowa wartość punktów życia </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="30" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="16" bodyend="18"/>
+        <location file="src/modules/Damageable.h" line="44" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="17" bodyend="19"/>
       </memberdef>
       <memberdef kind="function" id="class_damageable_1a3c6239facd5bd44ded1a93b657706dae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -169,13 +228,15 @@
         <name>getHP</name>
         <qualifiedname>Damageable::getHP</qualifiedname>
         <briefdescription>
-<para>Pozwala uzyskać aktualną ilość punktów życia. </para>
         </briefdescription>
         <detaileddescription>
+<para>Pozwala uzyskać aktualną ilość punktów życia <simplesect kind="return"><para>obecna wartość punktów życia </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="32" column="9" bodyfile="src/modules/Damageable.cpp" bodystart="20" bodyend="22"/>
+        <location file="src/modules/Damageable.h" line="48" column="9" bodyfile="src/modules/Damageable.cpp" bodystart="21" bodyend="23"/>
       </memberdef>
       <memberdef kind="function" id="class_damageable_1aaca986bb54bb1d762837c0ed30362725" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -184,28 +245,32 @@
         <name>getIsInvincible</name>
         <qualifiedname>Damageable::getIsInvincible</qualifiedname>
         <briefdescription>
-<para>Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń </para>
         </briefdescription>
         <detaileddescription>
+<para>Pozwala sprawdzić, czy możliwe jest przyjęcie obrażeń <simplesect kind="return"><para>wartość bool określająca, czy gracz jest nieśmiertelny </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="34" column="10" bodyfile="src/modules/Damageable.h" bodystart="34" bodyend="34"/>
+        <location file="src/modules/Damageable.h" line="52" column="10" bodyfile="src/modules/Damageable.h" bodystart="52" bodyend="52"/>
       </memberdef>
-      <memberdef kind="function" id="class_damageable_1a125647c54da3ac37588acf783a1bc27e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_damageable_1ac250a92465b92863e145840680496352" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
         <definition>bool Damageable::isDead</definition>
-        <argsstring>()</argsstring>
+        <argsstring>() const</argsstring>
         <name>isDead</name>
         <qualifiedname>Damageable::isDead</qualifiedname>
         <briefdescription>
-<para>Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0. </para>
         </briefdescription>
         <detaileddescription>
+<para>Pozwala sprawdzić, czy ilość punktów życia obiektu wynosi 0 <simplesect kind="return"><para>wartość bool określająca, czy punkty życia gracza zeszły do zera </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/modules/Damageable.h" line="36" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="44" bodyend="49"/>
+        <location file="src/modules/Damageable.h" line="56" column="10" bodyfile="src/modules/Damageable.cpp" bodystart="45" bodyend="47"/>
       </memberdef>
       </sectiondef>
     <briefdescription>
@@ -236,18 +301,19 @@
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="src/modules/Damageable.h" line="7" column="1" bodyfile="src/modules/Damageable.h" bodystart="7" bodyend="37"/>
+    <location file="src/modules/Damageable.h" line="7" column="1" bodyfile="src/modules/Damageable.h" bodystart="7" bodyend="57"/>
     <listofallmembers>
       <member refid="class_damageable_1a89a266e4c17b8270d82fb1e46a0371c9" prot="private" virt="non-virtual"><scope>Damageable</scope><name>_bIsInvincible</name></member>
+      <member refid="class_damageable_1aeaf6d38e4e7e47a89c7ea7759e6f733e" prot="protected" virt="non-virtual"><scope>Damageable</scope><name>defaultInvincibilityTime</name></member>
       <member refid="class_damageable_1a3c6239facd5bd44ded1a93b657706dae" prot="public" virt="non-virtual"><scope>Damageable</scope><name>getHP</name></member>
       <member refid="class_damageable_1aaca986bb54bb1d762837c0ed30362725" prot="public" virt="non-virtual"><scope>Damageable</scope><name>getIsInvincible</name></member>
       <member refid="class_damageable_1a2babc0ff0f6b3e78440c71291c727e44" prot="public" virt="non-virtual"><scope>Damageable</scope><name>getMaxHP</name></member>
       <member refid="class_damageable_1aa0220222ac061629216802d4d63362fa" prot="private" virt="non-virtual"><scope>Damageable</scope><name>hp</name></member>
       <member refid="class_damageable_1ae6f6d15957aa52a086d27973511d84a5" prot="private" virt="non-virtual"><scope>Damageable</scope><name>invTime</name></member>
-      <member refid="class_damageable_1a125647c54da3ac37588acf783a1bc27e" prot="public" virt="non-virtual"><scope>Damageable</scope><name>isDead</name></member>
+      <member refid="class_damageable_1ac250a92465b92863e145840680496352" prot="public" virt="non-virtual"><scope>Damageable</scope><name>isDead</name></member>
       <member refid="class_damageable_1a7bbb7f85ffe542d5b6b176b2400f0e31" prot="private" virt="non-virtual"><scope>Damageable</scope><name>maxHP</name></member>
-      <member refid="class_damageable_1a85c9ee9faee9f45d76e2a8bf8345670d" prot="public" virt="non-virtual"><scope>Damageable</scope><name>setHP</name></member>
-      <member refid="class_damageable_1a74b39da9a9983afddeed50e74ef838a2" prot="public" virt="non-virtual"><scope>Damageable</scope><name>setMaxHP</name></member>
+      <member refid="class_damageable_1a4804ae4896484ee71ff7cef6207fdfa7" prot="public" virt="non-virtual"><scope>Damageable</scope><name>setHP</name></member>
+      <member refid="class_damageable_1a315e2a10cc093d04e7b39bae57d294d5" prot="public" virt="non-virtual"><scope>Damageable</scope><name>setMaxHP</name></member>
       <member refid="class_damageable_1a11ef6567fa56532a64ef1f59a298b1dc" prot="public" virt="non-virtual"><scope>Damageable</scope><name>takeDamage</name></member>
       <member refid="class_damageable_1a277b1ab8be1a6de8af7869ec1e8b7c41" prot="protected" virt="non-virtual"><scope>Damageable</scope><name>updateInvincibilityTimer</name></member>
     </listofallmembers>

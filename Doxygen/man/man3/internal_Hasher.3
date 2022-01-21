@@ -1,4 +1,4 @@
-.TH "internal::Hasher< Encoding, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::Hasher< Encoding, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,6 +8,13 @@ internal::Hasher< Encoding, Allocator >
 .PP
 .PP
 \fC#include <schema\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBNumber\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -19,7 +26,7 @@ internal::Hasher< Encoding, Allocator >
 
 .in +1c
 .ti -1c
-.RI "\fBHasher\fP (\fBAllocator\fP *allocator=0, size_t stackCapacity=kDefaultSize)"
+.RI "\fBHasher\fP (\fBAllocator\fP *allocator=0, size_t stackCapacity=\fBkDefaultSize\fP)"
 .br
 .ti -1c
 .RI "bool \fBNull\fP ()"
@@ -70,13 +77,47 @@ internal::Hasher< Encoding, Allocator >
 .RI "\fBuint64_t\fP \fBGetHashCode\fP () const"
 .br
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBWriteType\fP (\fBType\fP type)"
+.br
+.ti -1c
+.RI "bool \fBWriteNumber\fP (const \fBNumber\fP &n)"
+.br
+.ti -1c
+.RI "bool \fBWriteBuffer\fP (\fBType\fP type, const void *data, size_t len)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBuint64_t\fP \fBHash\fP (\fBuint64_t\fP h, \fBuint64_t\fP d)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBStack\fP< \fBAllocator\fP > \fBstack_\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBkDefaultSize\fP = 256"
+.br
+.in -1c
 .SH "Member Typedef Documentation"
 .PP 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > typedef Encoding::Ch \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Ch"
 
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Hasher (\fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fCkDefaultSize\fP)\fC [inline]\fP"
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Hasher (\fBAllocator\fP * allocator = \fC0\fP, size_t stackCapacity = \fC\fBkDefaultSize\fP\fP)\fC [inline]\fP"
 
 .SH "Member Function Documentation"
 .PP 
@@ -89,6 +130,8 @@ internal::Hasher< Encoding, Allocator >
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::EndObject (\fBSizeType\fP memberCount)\fC [inline]\fP"
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > \fBuint64_t\fP \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::GetHashCode () const\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > static \fBuint64_t\fP \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Hash (\fBuint64_t\fP h, \fBuint64_t\fP d)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Int (int i)\fC [inline]\fP"
 
@@ -111,6 +154,18 @@ internal::Hasher< Encoding, Allocator >
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Uint (unsigned u)\fC [inline]\fP"
 
 .SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::Uint64 (\fBuint64_t\fP u)\fC [inline]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::WriteBuffer (\fBType\fP type, const void * data, size_t len)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::WriteNumber (const \fBNumber\fP & n)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > bool \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::WriteType (\fBType\fP type)\fC [inline]\fP, \fC [private]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > const size_t \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::kDefaultSize = 256\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBEncoding\fP , typename \fBAllocator\fP > \fBStack\fP<\fBAllocator\fP> \fBinternal::Hasher\fP< \fBEncoding\fP, \fBAllocator\fP >::stack_\fC [private]\fP"
 
 
 .SH "Author"

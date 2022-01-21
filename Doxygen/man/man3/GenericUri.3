@@ -1,4 +1,4 @@
-.TH "GenericUri< ValueType, Allocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "GenericUri< ValueType, Allocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -112,6 +112,64 @@ GenericUri< ValueType, Allocator >
 .br
 .RI "Get the allocator of this \fBGenericUri\fP\&. "
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "std::size_t \fBAllocate\fP (std::size_t len)"
+.br
+.ti -1c
+.RI "void \fBFree\fP ()"
+.br
+.ti -1c
+.RI "void \fBParse\fP (const \fBCh\fP *uri, std::size_t len)"
+.br
+.ti -1c
+.RI "void \fBSetBase\fP ()"
+.br
+.ti -1c
+.RI "void \fBSetUri\fP ()"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBCopyPart\fP (\fBCh\fP *to, \fBCh\fP *from, std::size_t len)"
+.br
+.ti -1c
+.RI "void \fBRemoveDotSegments\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBCh\fP * \fBuri_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBbase_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBscheme_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBauth_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBpath_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBquery_\fP"
+.br
+.ti -1c
+.RI "\fBCh\fP * \fBfrag_\fP"
+.br
+.ti -1c
+.RI "\fBAllocator\fP * \fBallocator_\fP"
+.br
+.RI "The current allocator\&. It is either user-supplied or equal to ownAllocator_\&. "
+.ti -1c
+.RI "\fBAllocator\fP * \fBownAllocator_\fP"
+.br
+.RI "Allocator owned by this Uri\&. "
+.in -1c
 .SH "Member Typedef Documentation"
 .PP 
 .SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> typedef \fBValueType::Ch\fP \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Ch"
@@ -142,6 +200,12 @@ Copy constructor\&.
 Destructor\&. 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> std::size_t \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Allocate (std::size_t len)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP * \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::CopyPart (\fBCh\fP * to, \fBCh\fP * from, std::size_t len)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Free ()\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> template<typename \fBT\fP > void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Get (\fBT\fP & uri, \fBAllocator\fP & allocator)\fC [inline]\fP"
 
 .PP
@@ -190,10 +254,42 @@ Assignment operator\&.
 
 .PP
 Equality operators\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Parse (const \fBCh\fP * uri, std::size_t len)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::RemoveDotSegments ()\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBGenericUri\fP \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::Resolve (const \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP > & baseuri, \fBAllocator\fP * allocator = \fC0\fP)\fC [inline]\fP"
 
 .PP
 Resolve this URI against another (base) URI in accordance with URI resolution rules\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::SetBase ()\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> void \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::SetUri ()\fC [inline]\fP, \fC [private]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::allocator_\fC [private]\fP"
+
+.PP
+The current allocator\&. It is either user-supplied or equal to ownAllocator_\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::auth_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::base_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::frag_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBAllocator\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::ownAllocator_\fC [private]\fP"
+
+.PP
+Allocator owned by this Uri\&. 
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::path_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::query_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::scheme_\fC [private]\fP"
+
+.SS "template<typename \fBValueType\fP , typename \fBAllocator\fP  = CrtAllocator> \fBCh\fP* \fBGenericUri\fP< \fBValueType\fP, \fBAllocator\fP >::uri_\fC [private]\fP"
+
 
 .SH "Author"
 .PP 

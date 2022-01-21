@@ -2,12 +2,13 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="_player_8h" kind="file" language="C++">
     <compoundname>Player.h</compoundname>
-    <includes local="no">SFML/Graphics.hpp</includes>
     <includes local="no">SFML/Window/Keyboard.hpp</includes>
     <includes local="no">list</includes>
     <includes local="no">SFML/Audio.hpp</includes>
+    <includes refid="_bullet_8h" local="yes">projectiles/Bullet.h</includes>
     <includes refid="_damageable_8h" local="yes">../modules/Damageable.h</includes>
     <includes refid="_animated_8h" local="yes">../modules/Animated.h</includes>
+    <includes refid="_shooter_8h" local="yes">../modules/Shooter.h</includes>
     <includedby refid="_load_map_8cpp" local="yes">src/LoadMap.cpp</includedby>
     <includedby refid="_player_8cpp" local="yes">src/entities/Player.cpp</includedby>
     <includedby refid="_level_one_state_8h" local="yes">src/states/LevelOneState.h</includedby>
@@ -24,36 +25,60 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
+        <childnode refid="8" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="7">
-        <label>../modules/Animated.h</label>
-        <link refid="_animated_8h"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
+      <node id="5">
+        <label>projectiles/Bullet.h</label>
+        <link refid="_bullet_8h"/>
+        <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="6">
+        <label>Projectile.h</label>
+        <link refid="_projectile_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>../modules/Animated.h</label>
+        <link refid="_animated_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
         <label>../modules/Damageable.h</label>
         <link refid="_damageable_8h"/>
       </node>
-      <node id="5">
-        <label>SFML/Audio.hpp</label>
-      </node>
-      <node id="2">
-        <label>SFML/Graphics.hpp</label>
-      </node>
-      <node id="8">
-        <label>SFML/System/Clock.hpp</label>
-      </node>
-      <node id="3">
-        <label>SFML/Window/Keyboard.hpp</label>
+      <node id="11">
+        <label>../modules/Shooter.h</label>
+        <link refid="_shooter_8h"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
       </node>
       <node id="4">
+        <label>SFML/Audio.hpp</label>
+      </node>
+      <node id="7">
+        <label>SFML/Graphics.hpp</label>
+      </node>
+      <node id="10">
+        <label>SFML/System/Clock.hpp</label>
+      </node>
+      <node id="2">
+        <label>SFML/Window/Keyboard.hpp</label>
+      </node>
+      <node id="3">
         <label>list</label>
       </node>
     </incdepgraph>
@@ -130,71 +155,82 @@
 <codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>TREES_JSON_PLAYER_H</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>TREES_JSON_PLAYER_H</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;SFML/Graphics.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;SFML/Window/Keyboard.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;list&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;SFML/Audio.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;SFML/Window/Keyboard.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;list&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;SFML/Audio.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="_bullet_8h" kindref="compound">projectiles/Bullet.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="8"><highlight class="normal"></highlight></codeline>
 <codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../modules/Damageable.h&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../modules/Animated.h&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="11"><highlight class="normal"></highlight></codeline>
-<codeline lineno="15" refid="class_player" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_player" kindref="compound">Player</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_damageable" kindref="compound">Damageable</ref>,<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_animated" kindref="compound">Animated</ref><sp/>{</highlight></codeline>
-<codeline lineno="16"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::SoundBuffer<sp/>bufGame;</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Sound<sp/>jumpGame;</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Texture<sp/>_texture;</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Sprite<sp/>_sprite;</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::RectangleShape<sp/>_hitbox;</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Vector2f<sp/>_velocity;</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_acceleration;</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_maxSpeedX;</highlight></codeline>
-<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_maxSpeedY;</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_jumpForce;</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_gravity;</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>_gravityDelta;</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>_bIsGrounded;</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"></highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>_bTimeStopped;</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>tsValue;</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>tsFillRate;</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Clock<sp/>tsClock;</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"></highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initValues();</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initSprite();</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initHitbox();</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initSoundGame();</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"></highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>handleInput(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaTime);</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>handleCollision(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::list&lt;sf::RectangleShape&gt;&amp;<sp/>allHitboxes);</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>moveFinal();</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>applyGravity(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaSeconds);</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>jump();</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>animateMovement();</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"></highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>timeStop();</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>timeStart();</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/><ref refid="class_player_1ac1956730c1a4efd8a07546b0276f8b60" kindref="member">Player</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y<sp/>=<sp/>0);</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"></highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85" kindref="member">move</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y);</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Vector2f<sp/><ref refid="class_player_1a23356f99a9de86d3d47eadb679b332dc" kindref="member">getPosition</ref>();</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a8127e94cc6c15d49f28ad840126a4ae5" kindref="member">zeroVelocity</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>y);</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a308bbc68e154a988d40d813d3d1de44c" kindref="member">checkForIntersection</ref>(sf::RectangleShape&amp;<sp/>shape);</highlight></codeline>
-<codeline lineno="94" refid="class_player_1a045c23cf9bbbebfefbfcf32701ba4faf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a045c23cf9bbbebfefbfcf32701ba4faf" kindref="member">getTimeStopped</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_bTimeStopped;}</highlight></codeline>
-<codeline lineno="96" refid="class_player_1ad8a8b25b36812e3f2281fffa900312dd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1ad8a8b25b36812e3f2281fffa900312dd" kindref="member">getTimeStopValue</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>tsValue;}</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../modules/Shooter.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16" refid="class_player" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_player" kindref="compound">Player</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_damageable" kindref="compound">Damageable</ref>,<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_animated" kindref="compound">Animated</ref>,<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_shooter" kindref="compound">Shooter</ref><sp/>{</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="19" refid="class_player_1a31e073a8f4f3fe96721530790a606062" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::SoundBuffer<sp/><ref refid="class_player_1a31e073a8f4f3fe96721530790a606062" kindref="member">bufGame</ref>;</highlight></codeline>
+<codeline lineno="21" refid="class_player_1af25adbe154db7426cde75356ecfba357" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::SoundBuffer<sp/><ref refid="class_player_1af25adbe154db7426cde75356ecfba357" kindref="member">bufShoot</ref>;</highlight></codeline>
+<codeline lineno="23" refid="class_player_1ac9dbdbba328a44a98a13d55662d11321" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Sound<sp/><ref refid="class_player_1ac9dbdbba328a44a98a13d55662d11321" kindref="member">jumpGame</ref>;</highlight></codeline>
+<codeline lineno="25" refid="class_player_1ad0749a5673870ef7a90a1dab5932a5e3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Sound<sp/><ref refid="class_player_1ad0749a5673870ef7a90a1dab5932a5e3" kindref="member">shootGame</ref>;</highlight></codeline>
+<codeline lineno="27" refid="class_player_1a7e9ddc3338b5a6057a3b0245003aedc5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Texture<sp/><ref refid="class_player_1a7e9ddc3338b5a6057a3b0245003aedc5" kindref="member">_texture</ref>;</highlight></codeline>
+<codeline lineno="29" refid="class_player_1a41b3ca516dd0f87bfd4615883820843b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Sprite<sp/><ref refid="class_player_1a41b3ca516dd0f87bfd4615883820843b" kindref="member">_sprite</ref>;</highlight></codeline>
+<codeline lineno="31" refid="class_player_1adaa6f1b79a9ed3515746712ea60bf4a8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::RectangleShape<sp/><ref refid="class_player_1adaa6f1b79a9ed3515746712ea60bf4a8" kindref="member">_hitbox</ref>;</highlight></codeline>
+<codeline lineno="33" refid="class_player_1a573c5f0b04d5d50a2ada502db95f0383" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Vector2f<sp/><ref refid="class_player_1a573c5f0b04d5d50a2ada502db95f0383" kindref="member">_velocity</ref>;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="class_player_1a0feed10ca401149f797fb30793e68368" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1a0feed10ca401149f797fb30793e68368" kindref="member">_acceleration</ref>;</highlight></codeline>
+<codeline lineno="38" refid="class_player_1a2d7c4e0b5752e65ad80707e0a4dac58c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1a2d7c4e0b5752e65ad80707e0a4dac58c" kindref="member">_maxSpeedX</ref>;</highlight></codeline>
+<codeline lineno="40" refid="class_player_1a9a03effad4eb5f778fef1f09cb332443" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1a9a03effad4eb5f778fef1f09cb332443" kindref="member">_maxSpeedY</ref>;</highlight></codeline>
+<codeline lineno="42" refid="class_player_1a357a0400d9672a25afc5d0ad0563b101" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1a357a0400d9672a25afc5d0ad0563b101" kindref="member">_jumpForce</ref>;</highlight></codeline>
+<codeline lineno="44" refid="class_player_1ac9b249735071967211c621cf9b22ab79" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1ac9b249735071967211c621cf9b22ab79" kindref="member">_gravity</ref>;</highlight></codeline>
+<codeline lineno="46" refid="class_player_1aad2ef4eda64386467e646f9a5d1b45c2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1aad2ef4eda64386467e646f9a5d1b45c2" kindref="member">_gravityDelta</ref>;</highlight></codeline>
+<codeline lineno="48" refid="class_player_1afd11abf2a5c38f93d97d187cabdf8168" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1afd11abf2a5c38f93d97d187cabdf8168" kindref="member">_bIsGrounded</ref>;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Time<sp/>stop<sp/>values</highlight></codeline>
+<codeline lineno="52" refid="class_player_1a8385e0c0c1ac711c3fdb9652375bbad2" refkind="member"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a8385e0c0c1ac711c3fdb9652375bbad2" kindref="member">_bTimeStopped</ref>;</highlight></codeline>
+<codeline lineno="54" refid="class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be" kindref="member">tsValue</ref>;</highlight></codeline>
+<codeline lineno="56" refid="class_player_1abe400aaae509dd4e583a8c9f9b019a2b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1abe400aaae509dd4e583a8c9f9b019a2b" kindref="member">tsFillRate</ref>;</highlight></codeline>
+<codeline lineno="58" refid="class_player_1abb1e0fe2d5bb333a4959f6643bb78c17" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Clock<sp/><ref refid="class_player_1abb1e0fe2d5bb333a4959f6643bb78c17" kindref="member">tsClock</ref>;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1ae4ac5d977f9c70585164515b248536ce" kindref="member">initValues</ref>();</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a8fbd417981761d02ec3ca227a204f2fd" kindref="member">initSprite</ref>();</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a26c6b7dff7e105778f83839d0752c07b" kindref="member">initHitbox</ref>();</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a5ea1ca7cf8793c37b6ffe450c8a52c4e" kindref="member">initSoundGame</ref>();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a22c77aea817fb52c33280b2792992123" kindref="member">handleInput</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaTime);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a827529f746003c695ff6891b767f932b" kindref="member">handleCollision</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::list&lt;sf::RectangleShape&gt;&amp;<sp/>allHitboxes);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1ac851a358edb1d38a96d183cc31f16ad3" kindref="member">moveFinal</ref>();</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1ac5720f4a7a1f612438dabb512e81b503" kindref="member">applyGravity</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaSeconds);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a70e21ca98281b7d72f105f2693113d7e" kindref="member">jump</ref>();</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a9aa98a8a224ba98b0b7cb09b8577e140" kindref="member">animateMovement</ref>();</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Shooting</highlight></codeline>
+<codeline lineno="90"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a14a11ab2c2d986763f7c901c6bcce38a" kindref="member">shoot</ref>()<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Time<sp/>stop<sp/>functions</highlight></codeline>
+<codeline lineno="94"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1ad9e19d7afb03af7413f3c867808e9467" kindref="member">timeStop</ref>();</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1aa2544174089ab6274a6098b44dbc770b" kindref="member">timeStart</ref>();</highlight></codeline>
 <codeline lineno="97"><highlight class="normal"></highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a0b8b2c0946659d50a45b560cf83815ee" kindref="member">update</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaTime,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::list&lt;sf::RectangleShape&gt;&amp;<sp/>allHitboxes);</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a317b439dc6ba2bb2b6aad2f82b130c02" kindref="member">render</ref>(sf::RenderTarget&amp;<sp/>window);</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a64b65de6130f811ce670be4b0ca790b4" kindref="member">setPosition</ref>(sf::Vector2f);</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a0b8255feb633ed5922ca99598776de9e" kindref="member">switchAnimation</ref>(<ref refid="class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb" kindref="member">Animation</ref><sp/>newAnimation);</highlight></codeline>
-<codeline lineno="106"><highlight class="normal"></highlight></codeline>
-<codeline lineno="107" refid="class_player_1a836420cfbc65547977599ba7c1a5a77c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a836420cfbc65547977599ba7c1a5a77c" kindref="member">isReady</ref>;</highlight></codeline>
-<codeline lineno="108"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"></highlight></codeline>
-<codeline lineno="110"><highlight class="normal"></highlight></codeline>
-<codeline lineno="111"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//TREES_JSON_PLAYER_H</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/><ref refid="class_player_1ac1956730c1a4efd8a07546b0276f8b60" kindref="member">Player</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x<sp/>=<sp/>0,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y<sp/>=<sp/>0);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Position<sp/>and<sp/>logic</highlight></codeline>
+<codeline lineno="113"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85" kindref="member">move</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>y);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>sf::Vector2f<sp/><ref refid="class_player_1a23356f99a9de86d3d47eadb679b332dc" kindref="member">getPosition</ref>();</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a8127e94cc6c15d49f28ad840126a4ae5" kindref="member">zeroVelocity</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>x,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>y);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a308bbc68e154a988d40d813d3d1de44c" kindref="member">checkForIntersection</ref>(sf::RectangleShape&amp;<sp/>shape);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Time<sp/>stop</highlight></codeline>
+<codeline lineno="133" refid="class_player_1a045c23cf9bbbebfefbfcf32701ba4faf" refkind="member"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a045c23cf9bbbebfefbfcf32701ba4faf" kindref="member">getTimeStopped</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="class_player_1a8385e0c0c1ac711c3fdb9652375bbad2" kindref="member">_bTimeStopped</ref>;}</highlight></codeline>
+<codeline lineno="137" refid="class_player_1ad8a8b25b36812e3f2281fffa900312dd" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="class_player_1ad8a8b25b36812e3f2281fffa900312dd" kindref="member">getTimeStopValue</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be" kindref="member">tsValue</ref>;}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a0b8b2c0946659d50a45b560cf83815ee" kindref="member">update</ref>(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>deltaTime,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::list&lt;sf::RectangleShape&gt;&amp;<sp/>allHitboxes);</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a317b439dc6ba2bb2b6aad2f82b130c02" kindref="member">render</ref>(sf::RenderTarget&amp;<sp/>window);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a876818716e936257241f6febfa6c3cc6" kindref="member">setPosition</ref>(sf::Vector2f<sp/>position);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_player_1a856f53d1ff0e6f44cda41a25c791f865" kindref="member">switchAnimation</ref>(<ref refid="class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb" kindref="member">Animation</ref><sp/>newAnimation)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158" refid="class_player_1a4f0b069f0d135ac2bdc8c8ef367699a3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_player_1a4f0b069f0d135ac2bdc8c8ef367699a3" kindref="member">bTimeStopReady</ref>;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/></highlight><highlight class="comment">//TREES_JSON_PLAYER_H</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/entities/Player.h"/>
   </compounddef>

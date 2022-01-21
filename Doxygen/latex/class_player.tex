@@ -14,32 +14,102 @@ Inheritance diagram for Player\+:\begin{figure}[H]
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_player_ac1956730c1a4efd8a07546b0276f8b60}{Player}} (float x=0, float y=0)
-\begin{DoxyCompactList}\small\item\em Konstruktor gracza z opcją podania lokalizacji początkowej na mapie. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_player_a7ece6518af33ca7bc6a3fc36fd06bd85}{move}} (float x, float y)
-\begin{DoxyCompactList}\small\item\em Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. \end{DoxyCompactList}\item 
+\item 
 sf\+::\+Vector2f \mbox{\hyperlink{class_player_a23356f99a9de86d3d47eadb679b332dc}{get\+Position}} ()
-\begin{DoxyCompactList}\small\item\em Zwraca pozycję gracza. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_player_a8127e94cc6c15d49f28ad840126a4ae5}{zero\+Velocity}} (bool x, bool y)
-\begin{DoxyCompactList}\small\item\em Zeruje x -\/ poziomą, y -\/ pionową prędkość gracza. \end{DoxyCompactList}\item 
+\item 
 bool \mbox{\hyperlink{class_player_a308bbc68e154a988d40d813d3d1de44c}{check\+For\+Intersection}} (sf\+::\+Rectangle\+Shape \&shape)
-\begin{DoxyCompactList}\small\item\em Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze. \end{DoxyCompactList}\item 
+\item 
 bool \mbox{\hyperlink{class_player_a045c23cf9bbbebfefbfcf32701ba4faf}{get\+Time\+Stopped}} () const
-\begin{DoxyCompactList}\small\item\em Pozwala sprawdzić czy czas jest zatrzymany. \end{DoxyCompactList}\item 
+\item 
 float \mbox{\hyperlink{class_player_ad8a8b25b36812e3f2281fffa900312dd}{get\+Time\+Stop\+Value}} () const
-\begin{DoxyCompactList}\small\item\em Zwraca wartość 0-\/1 reprezentującą stopień naładowania umiejętności zatrzymania czasu. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_player_a0b8b2c0946659d50a45b560cf83815ee}{update}} (float delta\+Time, const std\+::list$<$ sf\+::\+Rectangle\+Shape $>$ \&all\+Hitboxes)
-\begin{DoxyCompactList}\small\item\em Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd. \end{DoxyCompactList}\item 
+\item 
 void \mbox{\hyperlink{class_player_a317b439dc6ba2bb2b6aad2f82b130c02}{render}} (sf\+::\+Render\+Target \&window)
-\begin{DoxyCompactList}\small\item\em Wyświetla postać gracza na ekranie. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_player_a64b65de6130f811ce670be4b0ca790b4}{set\+Position}} (sf\+::\+Vector2f)
-\begin{DoxyCompactList}\small\item\em Ustawia pozycję postaci gracza a mapie. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_player_a0b8255feb633ed5922ca99598776de9e}{switch\+Animation}} (\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} new\+Animation)
-\begin{DoxyCompactList}\small\item\em Zmienia stan animacji gracza na podany. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_player_a876818716e936257241f6febfa6c3cc6}{set\+Position}} (sf\+::\+Vector2f position)
+\item 
+void \mbox{\hyperlink{class_player_a856f53d1ff0e6f44cda41a25c791f865}{switch\+Animation}} (\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}} new\+Animation) override
+\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-bool \mbox{\hyperlink{class_player_a836420cfbc65547977599ba7c1a5a77c}{is\+Ready}}
-\end{DoxyCompactItemize}
+bool \mbox{\hyperlink{class_player_a4f0b069f0d135ac2bdc8c8ef367699a3}{b\+Time\+Stop\+Ready}}
+\begin{DoxyCompactList}\small\item\em Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_player_ae4ac5d977f9c70585164515b248536ce}{init\+Values}} ()
+\begin{DoxyCompactList}\small\item\em Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a8fbd417981761d02ec3ca227a204f2fd}{init\+Sprite}} ()
+\begin{DoxyCompactList}\small\item\em Wczytanie tekstury z pliku i zaaplikowanie jej do sprite. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a26c6b7dff7e105778f83839d0752c07b}{init\+Hitbox}} ()
+\begin{DoxyCompactList}\small\item\em Nadaje początkowe parametry hitboxowi. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a5ea1ca7cf8793c37b6ffe450c8a52c4e}{init\+Sound\+Game}} ()
+\begin{DoxyCompactList}\small\item\em Wczytuje z pliku i zapisuje dźwięki dla gracza. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a22c77aea817fb52c33280b2792992123}{handle\+Input}} (float delta\+Time)
+\item 
+void \mbox{\hyperlink{class_player_a827529f746003c695ff6891b767f932b}{handle\+Collision}} (const std\+::list$<$ sf\+::\+Rectangle\+Shape $>$ \&all\+Hitboxes)
+\item 
+void \mbox{\hyperlink{class_player_ac851a358edb1d38a96d183cc31f16ad3}{move\+Final}} ()
+\begin{DoxyCompactList}\small\item\em Aplikuje prędkość do pozycji gracza. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_ac5720f4a7a1f612438dabb512e81b503}{apply\+Gravity}} (float delta\+Seconds)
+\item 
+void \mbox{\hyperlink{class_player_a70e21ca98281b7d72f105f2693113d7e}{jump}} ()
+\begin{DoxyCompactList}\small\item\em Wykonuje skok. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a9aa98a8a224ba98b0b7cb09b8577e140}{animate\+Movement}} ()
+\begin{DoxyCompactList}\small\item\em Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_a14a11ab2c2d986763f7c901c6bcce38a}{shoot}} () override
+\begin{DoxyCompactList}\small\item\em Oddaje strzał \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_ad9e19d7afb03af7413f3c867808e9467}{time\+Stop}} ()
+\begin{DoxyCompactList}\small\item\em Służy do zatrzymywania czasu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_player_aa2544174089ab6274a6098b44dbc770b}{time\+Start}} ()
+\begin{DoxyCompactList}\small\item\em Służy do wznawiania czasu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{class_player_a31e073a8f4f3fe96721530790a606062}{buf\+Game}}
+\begin{DoxyCompactList}\small\item\em Bufor dla dźwięku skoku. \end{DoxyCompactList}\item 
+sf\+::\+Sound\+Buffer \mbox{\hyperlink{class_player_af25adbe154db7426cde75356ecfba357}{buf\+Shoot}}
+\begin{DoxyCompactList}\small\item\em Bufor dla dźwięku strzalu. \end{DoxyCompactList}\item 
+sf\+::\+Sound \mbox{\hyperlink{class_player_ac9dbdbba328a44a98a13d55662d11321}{jump\+Game}}
+\begin{DoxyCompactList}\small\item\em Dźwięk skoku. \end{DoxyCompactList}\item 
+sf\+::\+Sound \mbox{\hyperlink{class_player_ad0749a5673870ef7a90a1dab5932a5e3}{shoot\+Game}}
+\begin{DoxyCompactList}\small\item\em Przechowuje dźwięk strzalu. \end{DoxyCompactList}\item 
+sf\+::\+Texture \mbox{\hyperlink{class_player_a7e9ddc3338b5a6057a3b0245003aedc5}{\+\_\+texture}}
+\begin{DoxyCompactList}\small\item\em Tekstura gracza. \end{DoxyCompactList}\item 
+sf\+::\+Sprite \mbox{\hyperlink{class_player_a41b3ca516dd0f87bfd4615883820843b}{\+\_\+sprite}}
+\begin{DoxyCompactList}\small\item\em Sprite gracza wczytywany z tekstury. \end{DoxyCompactList}\item 
+sf\+::\+Rectangle\+Shape \mbox{\hyperlink{class_player_adaa6f1b79a9ed3515746712ea60bf4a8}{\+\_\+hitbox}}
+\begin{DoxyCompactList}\small\item\em Kształt odpowiadający za kolizje i poruszanie się \end{DoxyCompactList}\item 
+sf\+::\+Vector2f \mbox{\hyperlink{class_player_a573c5f0b04d5d50a2ada502db95f0383}{\+\_\+velocity}}
+\begin{DoxyCompactList}\small\item\em Prędkość gracza. Dodaje się ją do poprzedniej prędkości symulując ruch. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_a0feed10ca401149f797fb30793e68368}{\+\_\+acceleration}}
+\begin{DoxyCompactList}\small\item\em Przyspieszenie gracza podczas poruszania się \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_a2d7c4e0b5752e65ad80707e0a4dac58c}{\+\_\+max\+SpeedX}}
+\begin{DoxyCompactList}\small\item\em Maksymalna prędkość pozioma gracza. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_a9a03effad4eb5f778fef1f09cb332443}{\+\_\+max\+SpeedY}}
+\begin{DoxyCompactList}\small\item\em Maksymalna prędkość pionowa gracza. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_a357a0400d9672a25afc5d0ad0563b101}{\+\_\+jump\+Force}}
+\begin{DoxyCompactList}\small\item\em Siła skoku. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_ac9b249735071967211c621cf9b22ab79}{\+\_\+gravity}}
+\begin{DoxyCompactList}\small\item\em Siła grawitacji działająca na gracza. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_aad2ef4eda64386467e646f9a5d1b45c2}{\+\_\+gravity\+Delta}}
+\begin{DoxyCompactList}\small\item\em Różnica siły grawitacji używana do lepszego symulowania skoku. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_player_afd11abf2a5c38f93d97d187cabdf8168}{\+\_\+b\+Is\+Grounded}}
+\begin{DoxyCompactList}\small\item\em Pokazuje czy gracz stoi na jakimś podłożu. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_player_a8385e0c0c1ac711c3fdb9652375bbad2}{\+\_\+b\+Time\+Stopped}}
+\begin{DoxyCompactList}\small\item\em Pozwala określić, czy czas jest w tej chwili zatrzymany. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_a4c9d040ce3ed1745c9b9a9ed7d1a25be}{ts\+Value}}
+\begin{DoxyCompactList}\small\item\em Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_player_abe400aaae509dd4e583a8c9f9b019a2b}{ts\+Fill\+Rate}}
+\begin{DoxyCompactList}\small\item\em Określa z jaką prędkością napełnia się wartość ts\+Value. \end{DoxyCompactList}\item 
+sf\+::\+Clock \mbox{\hyperlink{class_player_abb1e0fe2d5bb333a4959f6643bb78c17}{ts\+Clock}}
+\begin{DoxyCompactList}\small\item\em Liczy czas po którym czas zostanie wznowiony. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Additional Inherited Members}
 
 
@@ -50,52 +120,149 @@ bool \mbox{\hyperlink{class_player_a836420cfbc65547977599ba7c1a5a77c}{is\+Ready}
 \doxysubsubsection{\texorpdfstring{Player()}{Player()}}
 {\footnotesize\ttfamily Player\+::\+Player (\begin{DoxyParamCaption}\item[{float}]{x = {\ttfamily 0},  }\item[{float}]{y = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
-
-
-Konstruktor gracza z opcją podania lokalizacji początkowej na mapie. 
-
+Konstruktor gracza z opcją podania lokalizacji początkowej na mapie 
+\begin{DoxyParams}{Parameters}
+{\em x} & początkowa pozycja x gracza na mapie \\
+\hline
+{\em y} & początkowa pozycja y gracza na mapie \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_player_a9aa98a8a224ba98b0b7cb09b8577e140}\label{class_player_a9aa98a8a224ba98b0b7cb09b8577e140}} 
+\index{Player@{Player}!animateMovement@{animateMovement}}
+\index{animateMovement@{animateMovement}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{animateMovement()}{animateMovement()}}
+{\footnotesize\ttfamily void Player\+::animate\+Movement (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Przypisuje obiektowi sprite skrawek tekstury odpowiadający animacji odpowiedniej do sytuacji gracza. 
+
+\mbox{\Hypertarget{class_player_ac5720f4a7a1f612438dabb512e81b503}\label{class_player_ac5720f4a7a1f612438dabb512e81b503}} 
+\index{Player@{Player}!applyGravity@{applyGravity}}
+\index{applyGravity@{applyGravity}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{applyGravity()}{applyGravity()}}
+{\footnotesize\ttfamily void Player\+::apply\+Gravity (\begin{DoxyParamCaption}\item[{float}]{delta\+Seconds }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Dodaje do prędkości wartość grawitacji 
+\begin{DoxyParams}{Parameters}
+{\em delta\+Seconds} & czas pomiędzy klatkami aplikacji \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_player_a308bbc68e154a988d40d813d3d1de44c}\label{class_player_a308bbc68e154a988d40d813d3d1de44c}} 
 \index{Player@{Player}!checkForIntersection@{checkForIntersection}}
 \index{checkForIntersection@{checkForIntersection}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{checkForIntersection()}{checkForIntersection()}}
 {\footnotesize\ttfamily bool Player\+::check\+For\+Intersection (\begin{DoxyParamCaption}\item[{sf\+::\+Rectangle\+Shape \&}]{shape }\end{DoxyParamCaption})}
 
-
-
-Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze. 
-
+Sprawdza, czy hitbox gracza nachodzi na hitbox podany w parametrze 
+\begin{DoxyParams}{Parameters}
+{\em shape} & hitbox, który ma być sprawdzany pod kątem nachodzenia na hitbox gracza \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true -\/ jeżeli hitboxy na siebie nachodzą, false -\/ jeżeli hitboxy na siebie nie nachodzą 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_player_a23356f99a9de86d3d47eadb679b332dc}\label{class_player_a23356f99a9de86d3d47eadb679b332dc}} 
 \index{Player@{Player}!getPosition@{getPosition}}
 \index{getPosition@{getPosition}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
 {\footnotesize\ttfamily sf\+::\+Vector2f Player\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-Zwraca pozycję gracza. 
-
+Zwraca pozycję gracza \begin{DoxyReturn}{Returns}
+Pozycja gracza 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_player_a045c23cf9bbbebfefbfcf32701ba4faf}\label{class_player_a045c23cf9bbbebfefbfcf32701ba4faf}} 
 \index{Player@{Player}!getTimeStopped@{getTimeStopped}}
 \index{getTimeStopped@{getTimeStopped}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{getTimeStopped()}{getTimeStopped()}}
 {\footnotesize\ttfamily bool Player\+::get\+Time\+Stopped (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-
-
-Pozwala sprawdzić czy czas jest zatrzymany. 
-
+Pozwala sprawdzić czy czas jest zatrzymany \begin{DoxyReturn}{Returns}
+true -\/ jeżeli czas jest zatrzymany, false -\/ jeżeli czas płynie 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_player_ad8a8b25b36812e3f2281fffa900312dd}\label{class_player_ad8a8b25b36812e3f2281fffa900312dd}} 
 \index{Player@{Player}!getTimeStopValue@{getTimeStopValue}}
 \index{getTimeStopValue@{getTimeStopValue}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{getTimeStopValue()}{getTimeStopValue()}}
 {\footnotesize\ttfamily float Player\+::get\+Time\+Stop\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
+Pobiera stopień naładowania umiejętności zatrzymania czasu \begin{DoxyReturn}{Returns}
+wartość od 0 do 1 reprezentująca stopień naładowania umiejętności 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_player_a827529f746003c695ff6891b767f932b}\label{class_player_a827529f746003c695ff6891b767f932b}} 
+\index{Player@{Player}!handleCollision@{handleCollision}}
+\index{handleCollision@{handleCollision}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{handleCollision()}{handleCollision()}}
+{\footnotesize\ttfamily void Player\+::handle\+Collision (\begin{DoxyParamCaption}\item[{const std\+::list$<$ sf\+::\+Rectangle\+Shape $>$ \&}]{all\+Hitboxes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Sprawdza kolizję gracza ze wszystkimi obiektami terenu i w przypadku kolizji zeruje prędkość gracza 
+\begin{DoxyParams}{Parameters}
+{\em all\+Hitboxes} & lista wszystkich hitboksów otoczenia na mapie \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_a22c77aea817fb52c33280b2792992123}\label{class_player_a22c77aea817fb52c33280b2792992123}} 
+\index{Player@{Player}!handleInput@{handleInput}}
+\index{handleInput@{handleInput}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{handleInput()}{handleInput()}}
+{\footnotesize\ttfamily void Player\+::handle\+Input (\begin{DoxyParamCaption}\item[{float}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Sprawdza, czy użytkownik nacisnął odpowiedni przycisk oraz wykonuje odpowiednią akcję 
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & czas pomiędzy klatkami aplikacji \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_a26c6b7dff7e105778f83839d0752c07b}\label{class_player_a26c6b7dff7e105778f83839d0752c07b}} 
+\index{Player@{Player}!initHitbox@{initHitbox}}
+\index{initHitbox@{initHitbox}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{initHitbox()}{initHitbox()}}
+{\footnotesize\ttfamily void Player\+::init\+Hitbox (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 
-Zwraca wartość 0-\/1 reprezentującą stopień naładowania umiejętności zatrzymania czasu. 
+
+Nadaje początkowe parametry hitboxowi. 
+
+\mbox{\Hypertarget{class_player_a5ea1ca7cf8793c37b6ffe450c8a52c4e}\label{class_player_a5ea1ca7cf8793c37b6ffe450c8a52c4e}} 
+\index{Player@{Player}!initSoundGame@{initSoundGame}}
+\index{initSoundGame@{initSoundGame}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{initSoundGame()}{initSoundGame()}}
+{\footnotesize\ttfamily void Player\+::init\+Sound\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Wczytuje z pliku i zapisuje dźwięki dla gracza. 
+
+\mbox{\Hypertarget{class_player_a8fbd417981761d02ec3ca227a204f2fd}\label{class_player_a8fbd417981761d02ec3ca227a204f2fd}} 
+\index{Player@{Player}!initSprite@{initSprite}}
+\index{initSprite@{initSprite}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{initSprite()}{initSprite()}}
+{\footnotesize\ttfamily void Player\+::init\+Sprite (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Wczytanie tekstury z pliku i zaaplikowanie jej do sprite. 
+
+\mbox{\Hypertarget{class_player_ae4ac5d977f9c70585164515b248536ce}\label{class_player_ae4ac5d977f9c70585164515b248536ce}} 
+\index{Player@{Player}!initValues@{initValues}}
+\index{initValues@{initValues}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{initValues()}{initValues()}}
+{\footnotesize\ttfamily void Player\+::init\+Values (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Nadanie początkowych wartości parametrom gracza takim jak przyspieszenie. 
+
+\mbox{\Hypertarget{class_player_a70e21ca98281b7d72f105f2693113d7e}\label{class_player_a70e21ca98281b7d72f105f2693113d7e}} 
+\index{Player@{Player}!jump@{jump}}
+\index{jump@{jump}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{jump()}{jump()}}
+{\footnotesize\ttfamily void Player\+::jump (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Wykonuje skok. 
 
 \mbox{\Hypertarget{class_player_a7ece6518af33ca7bc6a3fc36fd06bd85}\label{class_player_a7ece6518af33ca7bc6a3fc36fd06bd85}} 
 \index{Player@{Player}!move@{move}}
@@ -103,9 +270,22 @@ Zwraca wartość 0-\/1 reprezentującą stopień naładowania umiejętności zat
 \doxysubsubsection{\texorpdfstring{move()}{move()}}
 {\footnotesize\ttfamily void Player\+::move (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
 
+Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. Podanie do parametrów wartości 1, lub -\/1 jest domyślnym sposobem korzystania z metody. Podanie większej, lub mniejszej wartości skutkować będzie zmianą prędkości poruszania się. Podane wartości nie zmieniają prędkości bezpośrednio, a tylko dodają wartość do wektora prędkości. 
+\begin{DoxyParams}{Parameters}
+{\em x} & wartość o którą gracz zostanie poruszony poziomo \\
+\hline
+{\em y} & wartość o którą gracz zostanie poruszony pionowo \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_ac851a358edb1d38a96d183cc31f16ad3}\label{class_player_ac851a358edb1d38a96d183cc31f16ad3}} 
+\index{Player@{Player}!moveFinal@{moveFinal}}
+\index{moveFinal@{moveFinal}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{moveFinal()}{moveFinal()}}
+{\footnotesize\ttfamily void Player\+::move\+Final (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 
-Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem w domyślny sposób. 
+
+Aplikuje prędkość do pozycji gracza. 
 
 \mbox{\Hypertarget{class_player_a317b439dc6ba2bb2b6aad2f82b130c02}\label{class_player_a317b439dc6ba2bb2b6aad2f82b130c02}} 
 \index{Player@{Player}!render@{render}}
@@ -113,29 +293,70 @@ Służy do poruszania graczem. Podanie wartości 1 jako argument porusza graczem
 \doxysubsubsection{\texorpdfstring{render()}{render()}}
 {\footnotesize\ttfamily void Player\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Target \&}]{window }\end{DoxyParamCaption})}
 
-
-
-Wyświetla postać gracza na ekranie. 
-
-\mbox{\Hypertarget{class_player_a64b65de6130f811ce670be4b0ca790b4}\label{class_player_a64b65de6130f811ce670be4b0ca790b4}} 
+Wyświetla postać gracza na ekranie 
+\begin{DoxyParams}{Parameters}
+{\em window} & okno na którym renderowany jest gracz \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_a876818716e936257241f6febfa6c3cc6}\label{class_player_a876818716e936257241f6febfa6c3cc6}} 
 \index{Player@{Player}!setPosition@{setPosition}}
 \index{setPosition@{setPosition}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
-{\footnotesize\ttfamily void Player\+::set\+Position (\begin{DoxyParamCaption}\item[{sf\+::\+Vector2f}]{new\+Pos }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Player\+::set\+Position (\begin{DoxyParamCaption}\item[{sf\+::\+Vector2f}]{position }\end{DoxyParamCaption})}
+
+Ustawia pozycję postaci gracza a mapie 
+\begin{DoxyParams}{Parameters}
+{\em position} & nowa pozycja gracza \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_a14a11ab2c2d986763f7c901c6bcce38a}\label{class_player_a14a11ab2c2d986763f7c901c6bcce38a}} 
+\index{Player@{Player}!shoot@{shoot}}
+\index{shoot@{shoot}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{shoot()}{shoot()}}
+{\footnotesize\ttfamily void Player\+::shoot (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [private]}, {\ttfamily [virtual]}}
 
 
 
-Ustawia pozycję postaci gracza a mapie. 
+Oddaje strzał 
 
-\mbox{\Hypertarget{class_player_a0b8255feb633ed5922ca99598776de9e}\label{class_player_a0b8255feb633ed5922ca99598776de9e}} 
+
+
+Implements \mbox{\hyperlink{class_shooter_aa2d08f6a1f98d5da51748a3e7784999f}{Shooter}}.
+
+\mbox{\Hypertarget{class_player_a856f53d1ff0e6f44cda41a25c791f865}\label{class_player_a856f53d1ff0e6f44cda41a25c791f865}} 
 \index{Player@{Player}!switchAnimation@{switchAnimation}}
 \index{switchAnimation@{switchAnimation}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{switchAnimation()}{switchAnimation()}}
-{\footnotesize\ttfamily void Player\+::switch\+Animation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}}}]{new\+Animation }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Player\+::switch\+Animation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_animated_a1f2b6a8597e3a5fb5c1d1d8a28d587fb}{Animation}}}]{new\+Animation }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Zmienia stan animacji gracza na podany 
+\begin{DoxyParams}{Parameters}
+{\em new\+Animation} & nowa animacja typu enum Animation zdefiniowanego w \mbox{\hyperlink{_animated_8h}{Animated.\+h}} \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_animated_a81fd919be841d41a23f27909e2ebdb1a}{Animated}}.
+
+\mbox{\Hypertarget{class_player_aa2544174089ab6274a6098b44dbc770b}\label{class_player_aa2544174089ab6274a6098b44dbc770b}} 
+\index{Player@{Player}!timeStart@{timeStart}}
+\index{timeStart@{timeStart}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{timeStart()}{timeStart()}}
+{\footnotesize\ttfamily void Player\+::time\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Zmienia stan animacji gracza na podany. 
+Służy do wznawiania czasu. 
+
+\mbox{\Hypertarget{class_player_ad9e19d7afb03af7413f3c867808e9467}\label{class_player_ad9e19d7afb03af7413f3c867808e9467}} 
+\index{Player@{Player}!timeStop@{timeStop}}
+\index{timeStop@{timeStop}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{timeStop()}{timeStop()}}
+{\footnotesize\ttfamily void Player\+::time\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Służy do zatrzymywania czasu. 
 
 \mbox{\Hypertarget{class_player_a0b8b2c0946659d50a45b560cf83815ee}\label{class_player_a0b8b2c0946659d50a45b560cf83815ee}} 
 \index{Player@{Player}!update@{update}}
@@ -143,28 +364,228 @@ Zmienia stan animacji gracza na podany.
 \doxysubsubsection{\texorpdfstring{update()}{update()}}
 {\footnotesize\ttfamily void Player\+::update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time,  }\item[{const std\+::list$<$ sf\+::\+Rectangle\+Shape $>$ \&}]{all\+Hitboxes }\end{DoxyParamCaption})}
 
-
-
 Odświeża logikę gracza odpowiedzialną za ruch, czytanie klawiatury itd. 
-
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & czas pomiędzy klatkami aplikacji \\
+\hline
+{\em all\+Hitboxes} & lista wszystkich hitboksów otoczenia na mapie \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{class_player_a8127e94cc6c15d49f28ad840126a4ae5}\label{class_player_a8127e94cc6c15d49f28ad840126a4ae5}} 
 \index{Player@{Player}!zeroVelocity@{zeroVelocity}}
 \index{zeroVelocity@{zeroVelocity}!Player@{Player}}
 \doxysubsubsection{\texorpdfstring{zeroVelocity()}{zeroVelocity()}}
 {\footnotesize\ttfamily void Player\+::zero\+Velocity (\begin{DoxyParamCaption}\item[{bool}]{x,  }\item[{bool}]{y }\end{DoxyParamCaption})}
 
-
-
-Zeruje x -\/ poziomą, y -\/ pionową prędkość gracza. 
-
+Zerowanie wektora prędkości na osi 
+\begin{DoxyParams}{Parameters}
+{\em x} & zerowanie zmiennej x wektora \\
+\hline
+{\em y} & zerowanie zmiennej y wektora \\
+\hline
+\end{DoxyParams}
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_player_a836420cfbc65547977599ba7c1a5a77c}\label{class_player_a836420cfbc65547977599ba7c1a5a77c}} 
-\index{Player@{Player}!isReady@{isReady}}
-\index{isReady@{isReady}!Player@{Player}}
-\doxysubsubsection{\texorpdfstring{isReady}{isReady}}
-{\footnotesize\ttfamily bool Player\+::is\+Ready}
+\mbox{\Hypertarget{class_player_a0feed10ca401149f797fb30793e68368}\label{class_player_a0feed10ca401149f797fb30793e68368}} 
+\index{Player@{Player}!\_acceleration@{\_acceleration}}
+\index{\_acceleration@{\_acceleration}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_acceleration}{\_acceleration}}
+{\footnotesize\ttfamily float Player\+::\+\_\+acceleration\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Przyspieszenie gracza podczas poruszania się 
+
+\mbox{\Hypertarget{class_player_afd11abf2a5c38f93d97d187cabdf8168}\label{class_player_afd11abf2a5c38f93d97d187cabdf8168}} 
+\index{Player@{Player}!\_bIsGrounded@{\_bIsGrounded}}
+\index{\_bIsGrounded@{\_bIsGrounded}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_bIsGrounded}{\_bIsGrounded}}
+{\footnotesize\ttfamily bool Player\+::\+\_\+b\+Is\+Grounded\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pokazuje czy gracz stoi na jakimś podłożu. 
+
+\mbox{\Hypertarget{class_player_a8385e0c0c1ac711c3fdb9652375bbad2}\label{class_player_a8385e0c0c1ac711c3fdb9652375bbad2}} 
+\index{Player@{Player}!\_bTimeStopped@{\_bTimeStopped}}
+\index{\_bTimeStopped@{\_bTimeStopped}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_bTimeStopped}{\_bTimeStopped}}
+{\footnotesize\ttfamily bool Player\+::\+\_\+b\+Time\+Stopped\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pozwala określić, czy czas jest w tej chwili zatrzymany. 
+
+\mbox{\Hypertarget{class_player_ac9b249735071967211c621cf9b22ab79}\label{class_player_ac9b249735071967211c621cf9b22ab79}} 
+\index{Player@{Player}!\_gravity@{\_gravity}}
+\index{\_gravity@{\_gravity}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_gravity}{\_gravity}}
+{\footnotesize\ttfamily float Player\+::\+\_\+gravity\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Siła grawitacji działająca na gracza. 
+
+\mbox{\Hypertarget{class_player_aad2ef4eda64386467e646f9a5d1b45c2}\label{class_player_aad2ef4eda64386467e646f9a5d1b45c2}} 
+\index{Player@{Player}!\_gravityDelta@{\_gravityDelta}}
+\index{\_gravityDelta@{\_gravityDelta}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_gravityDelta}{\_gravityDelta}}
+{\footnotesize\ttfamily float Player\+::\+\_\+gravity\+Delta\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Różnica siły grawitacji używana do lepszego symulowania skoku. 
+
+\mbox{\Hypertarget{class_player_adaa6f1b79a9ed3515746712ea60bf4a8}\label{class_player_adaa6f1b79a9ed3515746712ea60bf4a8}} 
+\index{Player@{Player}!\_hitbox@{\_hitbox}}
+\index{\_hitbox@{\_hitbox}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_hitbox}{\_hitbox}}
+{\footnotesize\ttfamily sf\+::\+Rectangle\+Shape Player\+::\+\_\+hitbox\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Kształt odpowiadający za kolizje i poruszanie się 
+
+\mbox{\Hypertarget{class_player_a357a0400d9672a25afc5d0ad0563b101}\label{class_player_a357a0400d9672a25afc5d0ad0563b101}} 
+\index{Player@{Player}!\_jumpForce@{\_jumpForce}}
+\index{\_jumpForce@{\_jumpForce}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_jumpForce}{\_jumpForce}}
+{\footnotesize\ttfamily float Player\+::\+\_\+jump\+Force\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Siła skoku. 
+
+\mbox{\Hypertarget{class_player_a2d7c4e0b5752e65ad80707e0a4dac58c}\label{class_player_a2d7c4e0b5752e65ad80707e0a4dac58c}} 
+\index{Player@{Player}!\_maxSpeedX@{\_maxSpeedX}}
+\index{\_maxSpeedX@{\_maxSpeedX}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_maxSpeedX}{\_maxSpeedX}}
+{\footnotesize\ttfamily float Player\+::\+\_\+max\+SpeedX\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Maksymalna prędkość pozioma gracza. 
+
+\mbox{\Hypertarget{class_player_a9a03effad4eb5f778fef1f09cb332443}\label{class_player_a9a03effad4eb5f778fef1f09cb332443}} 
+\index{Player@{Player}!\_maxSpeedY@{\_maxSpeedY}}
+\index{\_maxSpeedY@{\_maxSpeedY}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_maxSpeedY}{\_maxSpeedY}}
+{\footnotesize\ttfamily float Player\+::\+\_\+max\+SpeedY\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Maksymalna prędkość pionowa gracza. 
+
+\mbox{\Hypertarget{class_player_a41b3ca516dd0f87bfd4615883820843b}\label{class_player_a41b3ca516dd0f87bfd4615883820843b}} 
+\index{Player@{Player}!\_sprite@{\_sprite}}
+\index{\_sprite@{\_sprite}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_sprite}{\_sprite}}
+{\footnotesize\ttfamily sf\+::\+Sprite Player\+::\+\_\+sprite\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Sprite gracza wczytywany z tekstury. 
+
+\mbox{\Hypertarget{class_player_a7e9ddc3338b5a6057a3b0245003aedc5}\label{class_player_a7e9ddc3338b5a6057a3b0245003aedc5}} 
+\index{Player@{Player}!\_texture@{\_texture}}
+\index{\_texture@{\_texture}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_texture}{\_texture}}
+{\footnotesize\ttfamily sf\+::\+Texture Player\+::\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Tekstura gracza. 
+
+\mbox{\Hypertarget{class_player_a573c5f0b04d5d50a2ada502db95f0383}\label{class_player_a573c5f0b04d5d50a2ada502db95f0383}} 
+\index{Player@{Player}!\_velocity@{\_velocity}}
+\index{\_velocity@{\_velocity}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_velocity}{\_velocity}}
+{\footnotesize\ttfamily sf\+::\+Vector2f Player\+::\+\_\+velocity\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Prędkość gracza. Dodaje się ją do poprzedniej prędkości symulując ruch. 
+
+\mbox{\Hypertarget{class_player_a4f0b069f0d135ac2bdc8c8ef367699a3}\label{class_player_a4f0b069f0d135ac2bdc8c8ef367699a3}} 
+\index{Player@{Player}!bTimeStopReady@{bTimeStopReady}}
+\index{bTimeStopReady@{bTimeStopReady}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{bTimeStopReady}{bTimeStopReady}}
+{\footnotesize\ttfamily bool Player\+::b\+Time\+Stop\+Ready}
+
+
+
+Określa, czy umiejętność zatrzymania czasu jest gotowa do użycia. 
+
+\mbox{\Hypertarget{class_player_a31e073a8f4f3fe96721530790a606062}\label{class_player_a31e073a8f4f3fe96721530790a606062}} 
+\index{Player@{Player}!bufGame@{bufGame}}
+\index{bufGame@{bufGame}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{bufGame}{bufGame}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer Player\+::buf\+Game\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Bufor dla dźwięku skoku. 
+
+\mbox{\Hypertarget{class_player_af25adbe154db7426cde75356ecfba357}\label{class_player_af25adbe154db7426cde75356ecfba357}} 
+\index{Player@{Player}!bufShoot@{bufShoot}}
+\index{bufShoot@{bufShoot}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{bufShoot}{bufShoot}}
+{\footnotesize\ttfamily sf\+::\+Sound\+Buffer Player\+::buf\+Shoot\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Bufor dla dźwięku strzalu. 
+
+\mbox{\Hypertarget{class_player_ac9dbdbba328a44a98a13d55662d11321}\label{class_player_ac9dbdbba328a44a98a13d55662d11321}} 
+\index{Player@{Player}!jumpGame@{jumpGame}}
+\index{jumpGame@{jumpGame}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{jumpGame}{jumpGame}}
+{\footnotesize\ttfamily sf\+::\+Sound Player\+::jump\+Game\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Dźwięk skoku. 
+
+\mbox{\Hypertarget{class_player_ad0749a5673870ef7a90a1dab5932a5e3}\label{class_player_ad0749a5673870ef7a90a1dab5932a5e3}} 
+\index{Player@{Player}!shootGame@{shootGame}}
+\index{shootGame@{shootGame}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{shootGame}{shootGame}}
+{\footnotesize\ttfamily sf\+::\+Sound Player\+::shoot\+Game\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Przechowuje dźwięk strzalu. 
+
+\mbox{\Hypertarget{class_player_abb1e0fe2d5bb333a4959f6643bb78c17}\label{class_player_abb1e0fe2d5bb333a4959f6643bb78c17}} 
+\index{Player@{Player}!tsClock@{tsClock}}
+\index{tsClock@{tsClock}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{tsClock}{tsClock}}
+{\footnotesize\ttfamily sf\+::\+Clock Player\+::ts\+Clock\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Liczy czas po którym czas zostanie wznowiony. 
+
+\mbox{\Hypertarget{class_player_abe400aaae509dd4e583a8c9f9b019a2b}\label{class_player_abe400aaae509dd4e583a8c9f9b019a2b}} 
+\index{Player@{Player}!tsFillRate@{tsFillRate}}
+\index{tsFillRate@{tsFillRate}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{tsFillRate}{tsFillRate}}
+{\footnotesize\ttfamily float Player\+::ts\+Fill\+Rate\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa z jaką prędkością napełnia się wartość ts\+Value. 
+
+\mbox{\Hypertarget{class_player_a4c9d040ce3ed1745c9b9a9ed7d1a25be}\label{class_player_a4c9d040ce3ed1745c9b9a9ed7d1a25be}} 
+\index{Player@{Player}!tsValue@{tsValue}}
+\index{tsValue@{tsValue}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{tsValue}{tsValue}}
+{\footnotesize\ttfamily float Player\+::ts\+Value\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Jeżeli wartość ta równa jest 1, to można zatrzymać czas, po czym wartość zeruje się 
 
 
 

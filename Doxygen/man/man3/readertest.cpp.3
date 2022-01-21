@@ -1,4 +1,4 @@
-.TH "src/rapidjson/test/unittest/readertest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "src/rapidjson/test/unittest/readertest.cpp" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -134,7 +134,7 @@ src/rapidjson/test/unittest/readertest.cpp
 .RI "#define \fBTESTERRORHANDLING\fP(text,  errorCode,  offset)"
 .br
 .ti -1c
-.RI "#define \fBTEST_TERMINATION\fP(e,  json)"
+.RI "#define \fBTEST_TERMINATION\fP(e,  \fBjson\fP)"
 .br
 .ti -1c
 .RI "#define \fBTEST_NAN_INF\fP(str,  x)"
@@ -156,6 +156,9 @@ src/rapidjson/test/unittest/readertest.cpp
 .RI "\fBTEST\fP (\fBReader\fP, ParseNumber_Integer)"
 .br
 .ti -1c
+.RI "template<bool fullPrecision> static void \fBTestParseDouble\fP ()"
+.br
+.ti -1c
 .RI "\fBTEST\fP (\fBReader\fP, ParseNumber_NormalPrecisionDouble)"
 .br
 .ti -1c
@@ -163,6 +166,9 @@ src/rapidjson/test/unittest/readertest.cpp
 .br
 .ti -1c
 .RI "\fBTEST\fP (\fBReader\fP, ParseNumber_NormalPrecisionError)"
+.br
+.ti -1c
+.RI "template<bool fullPrecision> static void \fBTestParseNumberError\fP ()"
 .br
 .ti -1c
 .RI "\fBTEST\fP (\fBReader\fP, ParseNumberError_NormalPrecisionDouble)"
@@ -555,7 +561,7 @@ src/rapidjson/test/unittest/readertest.cpp
         EXPECT_EQ(kParseErrorStringInvalidEncoding, reader\&.GetParseErrorCode());\
     }
 .fi
-.SS "#define TEST_TERMINATION(e, json)"
+.SS "#define TEST_TERMINATION(e, \fBjson\fP)"
 \fBValue:\fP
 .PP
 .nf
@@ -706,6 +712,10 @@ src/rapidjson/test/unittest/readertest.cpp
 .SS "template<unsigned parseFlags> void TestMultipleRoot ()"
 
 .SS "template<unsigned extraFlags> void TestMultipleTrailingCommaErrors ()"
+
+.SS "template<bool fullPrecision> static void TestParseDouble ()\fC [static]\fP"
+
+.SS "template<bool fullPrecision> static void TestParseNumberError ()\fC [static]\fP"
 
 .SS "template<typename \fBEncoding\fP > \fBParseErrorCode\fP TestString (const typename Encoding::Ch * str)"
 

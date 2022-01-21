@@ -37,15 +37,15 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 36 &#32;&#32;&#32;&#32;<emphasis role="keyword">typedef</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>;&#32;&#32;&#32;&#32;
 37 
 39 
-44 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1adf91191843d50b900f43cb4f35f16f67">FileReadStream</link>(std::FILE*&#32;fp,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;fp_(fp),&#32;buffer_(buffer),&#32;bufferSize_(bufferSize),&#32;bufferLast_(0),&#32;current_(buffer_),&#32;readCount_(0),&#32;count_(0),&#32;eof_(false)&#32;{&#32;
-45 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(fp_&#32;!=&#32;0);
+44 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1adf91191843d50b900f43cb4f35f16f67">FileReadStream</link>(std::FILE*&#32;fp,&#32;<emphasis role="keywordtype">char</emphasis>*&#32;buffer,&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize)&#32;:&#32;<link linkend="_class_file_read_stream_1a47dc4f7f100bcc02a02e619f9b494a62">fp_</link>(fp),&#32;<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>(buffer),&#32;<link linkend="_class_file_read_stream_1af65abe97e76c94c7f0f6419f94e9105f">bufferSize_</link>(bufferSize),&#32;<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>(0),&#32;<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>(<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>),&#32;<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>(0),&#32;<link linkend="_class_file_read_stream_1a55018d0ad821b9ea01e0ec5001008ab2">count_</link>(0),&#32;<link linkend="_class_file_read_stream_1a02a64d8fc7a4df830834f756b8ac08af">eof_</link>(false)&#32;{&#32;
+45 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<link linkend="_class_file_read_stream_1a47dc4f7f100bcc02a02e619f9b494a62">fp_</link>&#32;!=&#32;0);
 46 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(bufferSize&#32;&gt;=&#32;4);
-47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Read();
+47 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a9213039798b7a07275a451f96a42361a">Read</link>();
 48 &#32;&#32;&#32;&#32;}
 49 
-50 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1ab7d47da8952d3fe5856a261ec3c020c9">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*current_;&#32;}
-51 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1addcbccc9d86ccbbe6d8e876ba595dbcb">Take</link>()&#32;{&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;c&#32;=&#32;*current_;&#32;Read();&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;&#32;}
-52 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1ae82cfaafe347286b3af8976548bedf86">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;count_&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(current_&#32;-&#32;buffer_);&#32;}
+50 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1ab7d47da8952d3fe5856a261ec3c020c9">Peek</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;*<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>;&#32;}
+51 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;<link linkend="_class_file_read_stream_1addcbccc9d86ccbbe6d8e876ba595dbcb">Take</link>()&#32;{&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;c&#32;=&#32;*<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>;&#32;<link linkend="_class_file_read_stream_1a9213039798b7a07275a451f96a42361a">Read</link>();&#32;<emphasis role="keywordflow">return</emphasis>&#32;c;&#32;}
+52 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1ae82cfaafe347286b3af8976548bedf86">Tell</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{&#32;<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_file_read_stream_1a55018d0ad821b9ea01e0ec5001008ab2">count_</link>&#32;+&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">size_t</emphasis><emphasis role="keyword">&gt;</emphasis>(<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>&#32;-&#32;<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>);&#32;}
 53 
 54 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Not&#32;implemented</emphasis>
 55 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_read_stream_1a4f2eac5b08033b1527bff517be657a36">Put</link>(<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>)&#32;{&#32;<link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gabeba18d612187bad2ac62aed9276d47c">RAPIDJSON_ASSERT</link>(<emphasis role="keyword">false</emphasis>);&#32;}
@@ -55,35 +55,35 @@ Go to the documentation of this file.<programlisting linenumbering="unnumbered">
 59 
 60 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;For&#32;encoding&#32;detection&#32;only.</emphasis>
 61 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>*&#32;<link linkend="_class_file_read_stream_1a1989429ffa42111e6f56ee14a3916cac">Peek4</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{
-62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(current_&#32;+&#32;4&#32;-&#32;!eof_&#32;&lt;=&#32;bufferLast_)&#32;?&#32;current_&#32;:&#32;0;
+62 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;(<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>&#32;+&#32;4&#32;-&#32;!<link linkend="_class_file_read_stream_1a02a64d8fc7a4df830834f756b8ac08af">eof_</link>&#32;&lt;=&#32;<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>)&#32;?&#32;<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>&#32;:&#32;0;
 63 &#32;&#32;&#32;&#32;}
 64 
 65 <emphasis role="keyword">private</emphasis>:
-66 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;Read()&#32;{
-67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(current_&#32;&lt;&#32;bufferLast_)
-68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++current_;
-69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!eof_)&#32;{
-70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;count_&#32;+=&#32;readCount_;
-71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;readCount_&#32;=&#32;std::fread(buffer_,&#32;1,&#32;bufferSize_,&#32;fp_);
-72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;bufferLast_&#32;=&#32;buffer_&#32;+&#32;readCount_&#32;-&#32;1;
-73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;current_&#32;=&#32;buffer_;
+66 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_file_read_stream_1a9213039798b7a07275a451f96a42361a">Read</link>()&#32;{
+67 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>&#32;&lt;&#32;<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>)
+68 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>;
+69 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!<link linkend="_class_file_read_stream_1a02a64d8fc7a4df830834f756b8ac08af">eof_</link>)&#32;{
+70 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a55018d0ad821b9ea01e0ec5001008ab2">count_</link>&#32;+=&#32;<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>;
+71 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>&#32;=&#32;std::fread(<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>,&#32;1,&#32;<link linkend="_class_file_read_stream_1af65abe97e76c94c7f0f6419f94e9105f">bufferSize_</link>,&#32;<link linkend="_class_file_read_stream_1a47dc4f7f100bcc02a02e619f9b494a62">fp_</link>);
+72 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>&#32;=&#32;<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>&#32;+&#32;<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>&#32;-&#32;1;
+73 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>&#32;=&#32;<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>;
 74 
-75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(readCount_&#32;&lt;&#32;bufferSize_)&#32;{
-76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;buffer_[readCount_]&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
-77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++bufferLast_;
-78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;eof_&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+75 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>&#32;&lt;&#32;<link linkend="_class_file_read_stream_1af65abe97e76c94c7f0f6419f94e9105f">bufferSize_</link>)&#32;{
+76 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>[<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>]&#32;=&#32;<emphasis role="charliteral">&apos;\0&apos;</emphasis>;
+77 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>;
+78 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1a02a64d8fc7a4df830834f756b8ac08af">eof_</link>&#32;=&#32;<emphasis role="keyword">true</emphasis>;
 79 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 80 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
 81 &#32;&#32;&#32;&#32;}
 82 
-83 &#32;&#32;&#32;&#32;std::FILE*&#32;fp_;
-84 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*buffer_;
-85 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;bufferSize_;
-86 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*bufferLast_;
-87 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*current_;
-88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;readCount_;
-89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;count_;&#32;&#32;
-90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;eof_;
+83 &#32;&#32;&#32;&#32;std::FILE*&#32;<link linkend="_class_file_read_stream_1a47dc4f7f100bcc02a02e619f9b494a62">fp_</link>;
+84 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*<link linkend="_class_file_read_stream_1a1b5563bcaa959d95f9bc3511a73ebbad">buffer_</link>;
+85 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1af65abe97e76c94c7f0f6419f94e9105f">bufferSize_</link>;
+86 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*<link linkend="_class_file_read_stream_1a5affa127604e77646d7acc94432c7e59">bufferLast_</link>;
+87 &#32;&#32;&#32;&#32;<link linkend="_class_file_read_stream_1ae1f83d9ca3c76d1d151af0b6c427f046">Ch</link>&#32;*<link linkend="_class_file_read_stream_1a0c7b4824d8742960eba2ac81c1e6b662">current_</link>;
+88 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1a1b1a7cadb599e83b1f781c0b16d4ed50">readCount_</link>;
+89 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_class_file_read_stream_1a55018d0ad821b9ea01e0ec5001008ab2">count_</link>;&#32;&#32;
+90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_file_read_stream_1a02a64d8fc7a4df830834f756b8ac08af">eof_</link>;
 91 };
 92 
 93 <link linkend="_group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1gaf18f052a98b9f5df5448d39484b743c1">RAPIDJSON_NAMESPACE_END</link>

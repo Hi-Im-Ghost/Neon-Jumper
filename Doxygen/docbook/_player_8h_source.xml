@@ -5,69 +5,80 @@
 Go to the documentation of this file.<programlisting linenumbering="unnumbered">1 <emphasis role="preprocessor">#ifndef&#32;TREES_JSON_PLAYER_H</emphasis>
 2 <emphasis role="preprocessor">#define&#32;TREES_JSON_PLAYER_H</emphasis>
 3 
-4 <emphasis role="preprocessor">#include&#32;&lt;SFML/Graphics.hpp&gt;</emphasis>
-5 <emphasis role="preprocessor">#include&#32;&lt;SFML/Window/Keyboard.hpp&gt;</emphasis>
-6 <emphasis role="preprocessor">#include&#32;&lt;list&gt;</emphasis>
-7 <emphasis role="preprocessor">#include&#32;&lt;SFML/Audio.hpp&gt;</emphasis>
+4 <emphasis role="preprocessor">#include&#32;&lt;SFML/Window/Keyboard.hpp&gt;</emphasis>
+5 <emphasis role="preprocessor">#include&#32;&lt;list&gt;</emphasis>
+6 <emphasis role="preprocessor">#include&#32;&lt;SFML/Audio.hpp&gt;</emphasis>
+7 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="__bullet_8h">projectiles/Bullet.h</link>&quot;</emphasis>
 8 
 9 <emphasis role="preprocessor">#include&#32;&quot;../modules/Damageable.h&quot;</emphasis>
 10 <emphasis role="preprocessor">#include&#32;&quot;../modules/Animated.h&quot;</emphasis>
-11 
-15 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_player">Player</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_damageable">Damageable</link>,&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_animated">Animated</link>&#32;{
-16 <emphasis role="keyword">private</emphasis>:
-18 &#32;&#32;&#32;&#32;sf::SoundBuffer&#32;bufGame;
-20 &#32;&#32;&#32;&#32;sf::Sound&#32;jumpGame;
-22 &#32;&#32;&#32;&#32;sf::Texture&#32;_texture;
-24 &#32;&#32;&#32;&#32;sf::Sprite&#32;_sprite;
-26 &#32;&#32;&#32;&#32;sf::RectangleShape&#32;_hitbox;
-28 &#32;&#32;&#32;&#32;sf::Vector2f&#32;_velocity;
-29 
-31 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_acceleration;
-33 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_maxSpeedX;
-35 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_maxSpeedY;
-37 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_jumpForce;
-39 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_gravity;
-41 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;_gravityDelta;
-43 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;_bIsGrounded;
-44 
-46 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;_bTimeStopped;
-48 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;tsValue;
-50 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;tsFillRate;
-52 &#32;&#32;&#32;&#32;sf::Clock&#32;tsClock;
-53 
-55 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initValues();
-57 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initSprite();
-59 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initHitbox();
-61 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initSoundGame();
-62 
-64 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;handleInput(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime);
-66 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;handleCollision(<emphasis role="keyword">const</emphasis>&#32;std::list&lt;sf::RectangleShape&gt;&amp;&#32;allHitboxes);
-68 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;moveFinal();
-70 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;applyGravity(<emphasis role="keywordtype">float</emphasis>&#32;deltaSeconds);
-72 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;jump();
-74 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;animateMovement();
-75 
-77 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;timeStop();
-79 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;timeStart();
-80 
-81 <emphasis role="keyword">public</emphasis>:
-83 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_player_1ac1956730c1a4efd8a07546b0276f8b60">Player</link>(<emphasis role="keywordtype">float</emphasis>&#32;x&#32;=&#32;0,&#32;<emphasis role="keywordtype">float</emphasis>&#32;y&#32;=&#32;0);
-84 
-86 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85">move</link>(<emphasis role="keywordtype">float</emphasis>&#32;x,&#32;<emphasis role="keywordtype">float</emphasis>&#32;y);
-88 &#32;&#32;&#32;&#32;sf::Vector2f&#32;<link linkend="_class_player_1a23356f99a9de86d3d47eadb679b332dc">getPosition</link>();
-90 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a8127e94cc6c15d49f28ad840126a4ae5">zeroVelocity</link>(<emphasis role="keywordtype">bool</emphasis>&#32;x,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;y);
-92 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a308bbc68e154a988d40d813d3d1de44c">checkForIntersection</link>(sf::RectangleShape&amp;&#32;shape);
-94 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a045c23cf9bbbebfefbfcf32701ba4faf">getTimeStopped</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;_bTimeStopped;}
-96 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1ad8a8b25b36812e3f2281fffa900312dd">getTimeStopValue</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;tsValue;}
+11 <emphasis role="preprocessor">#include&#32;&quot;../modules/Shooter.h&quot;</emphasis>
+12 
+16 <emphasis role="keyword">class&#32;</emphasis><link linkend="_class_player">Player</link>&#32;:&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_damageable">Damageable</link>,&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_animated">Animated</link>,&#32;<emphasis role="keyword">public</emphasis>&#32;<link linkend="_class_shooter">Shooter</link>&#32;{
+17 <emphasis role="keyword">private</emphasis>:
+19 &#32;&#32;&#32;&#32;sf::SoundBuffer&#32;<link linkend="_class_player_1a31e073a8f4f3fe96721530790a606062">bufGame</link>;
+21 &#32;&#32;&#32;&#32;sf::SoundBuffer&#32;<link linkend="_class_player_1af25adbe154db7426cde75356ecfba357">bufShoot</link>;
+23 &#32;&#32;&#32;&#32;sf::Sound&#32;<link linkend="_class_player_1ac9dbdbba328a44a98a13d55662d11321">jumpGame</link>;
+25 &#32;&#32;&#32;&#32;sf::Sound&#32;<link linkend="_class_player_1ad0749a5673870ef7a90a1dab5932a5e3">shootGame</link>;
+27 &#32;&#32;&#32;&#32;sf::Texture&#32;<link linkend="_class_player_1a7e9ddc3338b5a6057a3b0245003aedc5">_texture</link>;
+29 &#32;&#32;&#32;&#32;sf::Sprite&#32;<link linkend="_class_player_1a41b3ca516dd0f87bfd4615883820843b">_sprite</link>;
+31 &#32;&#32;&#32;&#32;sf::RectangleShape&#32;<link linkend="_class_player_1adaa6f1b79a9ed3515746712ea60bf4a8">_hitbox</link>;
+33 &#32;&#32;&#32;&#32;sf::Vector2f&#32;<link linkend="_class_player_1a573c5f0b04d5d50a2ada502db95f0383">_velocity</link>;
+34 
+36 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1a0feed10ca401149f797fb30793e68368">_acceleration</link>;
+38 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1a2d7c4e0b5752e65ad80707e0a4dac58c">_maxSpeedX</link>;
+40 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1a9a03effad4eb5f778fef1f09cb332443">_maxSpeedY</link>;
+42 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1a357a0400d9672a25afc5d0ad0563b101">_jumpForce</link>;
+44 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1ac9b249735071967211c621cf9b22ab79">_gravity</link>;
+46 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1aad2ef4eda64386467e646f9a5d1b45c2">_gravityDelta</link>;
+48 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1afd11abf2a5c38f93d97d187cabdf8168">_bIsGrounded</link>;
+49 
+50 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Time&#32;stop&#32;values</emphasis>
+52 <emphasis role="comment"></emphasis>&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a8385e0c0c1ac711c3fdb9652375bbad2">_bTimeStopped</link>;
+54 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be">tsValue</link>;
+56 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1abe400aaae509dd4e583a8c9f9b019a2b">tsFillRate</link>;
+58 &#32;&#32;&#32;&#32;sf::Clock&#32;<link linkend="_class_player_1abb1e0fe2d5bb333a4959f6643bb78c17">tsClock</link>;
+59 
+61 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1ae4ac5d977f9c70585164515b248536ce">initValues</link>();
+63 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a8fbd417981761d02ec3ca227a204f2fd">initSprite</link>();
+65 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a26c6b7dff7e105778f83839d0752c07b">initHitbox</link>();
+67 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a5ea1ca7cf8793c37b6ffe450c8a52c4e">initSoundGame</link>();
+68 
+72 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a22c77aea817fb52c33280b2792992123">handleInput</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime);
+76 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a827529f746003c695ff6891b767f932b">handleCollision</link>(<emphasis role="keyword">const</emphasis>&#32;std::list&lt;sf::RectangleShape&gt;&amp;&#32;allHitboxes);
+78 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1ac851a358edb1d38a96d183cc31f16ad3">moveFinal</link>();
+82 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1ac5720f4a7a1f612438dabb512e81b503">applyGravity</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaSeconds);
+84 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a70e21ca98281b7d72f105f2693113d7e">jump</link>();
+86 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a9aa98a8a224ba98b0b7cb09b8577e140">animateMovement</link>();
+87 
+88 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Shooting</emphasis>
+90 <emphasis role="comment"></emphasis>&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a14a11ab2c2d986763f7c901c6bcce38a">shoot</link>()&#32;<emphasis role="keyword">override</emphasis>;
+91 
+92 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Time&#32;stop&#32;functions</emphasis>
+94 <emphasis role="comment"></emphasis>&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1ad9e19d7afb03af7413f3c867808e9467">timeStop</link>();
+96 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1aa2544174089ab6274a6098b44dbc770b">timeStart</link>();
 97 
-99 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a0b8b2c0946659d50a45b560cf83815ee">update</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime,&#32;<emphasis role="keyword">const</emphasis>&#32;std::list&lt;sf::RectangleShape&gt;&amp;&#32;allHitboxes);
-101 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a317b439dc6ba2bb2b6aad2f82b130c02">render</link>(sf::RenderTarget&amp;&#32;window);
-103 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a64b65de6130f811ce670be4b0ca790b4">setPosition</link>(sf::Vector2f);
-105 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a0b8255feb633ed5922ca99598776de9e">switchAnimation</link>(<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link>&#32;newAnimation);
-106 
-107 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a836420cfbc65547977599ba7c1a5a77c">isReady</link>;
-108 };
-109 
-110 
-111 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//TREES_JSON_PLAYER_H</emphasis>
+98 <emphasis role="keyword">public</emphasis>:
+103 &#32;&#32;&#32;&#32;<emphasis role="keyword">explicit</emphasis>&#32;<link linkend="_class_player_1ac1956730c1a4efd8a07546b0276f8b60">Player</link>(<emphasis role="keywordtype">float</emphasis>&#32;x&#32;=&#32;0,&#32;<emphasis role="keywordtype">float</emphasis>&#32;y&#32;=&#32;0);
+104 
+105 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Position&#32;and&#32;logic</emphasis>
+113 <emphasis role="comment"></emphasis>&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a7ece6518af33ca7bc6a3fc36fd06bd85">move</link>(<emphasis role="keywordtype">float</emphasis>&#32;x,&#32;<emphasis role="keywordtype">float</emphasis>&#32;y);
+117 &#32;&#32;&#32;&#32;sf::Vector2f&#32;<link linkend="_class_player_1a23356f99a9de86d3d47eadb679b332dc">getPosition</link>();
+122 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a8127e94cc6c15d49f28ad840126a4ae5">zeroVelocity</link>(<emphasis role="keywordtype">bool</emphasis>&#32;x,&#32;<emphasis role="keywordtype">bool</emphasis>&#32;y);
+127 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a308bbc68e154a988d40d813d3d1de44c">checkForIntersection</link>(sf::RectangleShape&amp;&#32;shape);
+128 
+129 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Time&#32;stop</emphasis>
+133 <emphasis role="comment"></emphasis>&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a045c23cf9bbbebfefbfcf32701ba4faf">getTimeStopped</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_player_1a8385e0c0c1ac711c3fdb9652375bbad2">_bTimeStopped</link>;}
+137 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;<link linkend="_class_player_1ad8a8b25b36812e3f2281fffa900312dd">getTimeStopValue</link>()<emphasis role="keyword">&#32;const&#32;</emphasis>{<emphasis role="keywordflow">return</emphasis>&#32;<link linkend="_class_player_1a4c9d040ce3ed1745c9b9a9ed7d1a25be">tsValue</link>;}
+138 
+143 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a0b8b2c0946659d50a45b560cf83815ee">update</link>(<emphasis role="keywordtype">float</emphasis>&#32;deltaTime,&#32;<emphasis role="keyword">const</emphasis>&#32;std::list&lt;sf::RectangleShape&gt;&amp;&#32;allHitboxes);
+147 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a317b439dc6ba2bb2b6aad2f82b130c02">render</link>(sf::RenderTarget&amp;&#32;window);
+151 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a876818716e936257241f6febfa6c3cc6">setPosition</link>(sf::Vector2f&#32;position);
+155 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_class_player_1a856f53d1ff0e6f44cda41a25c791f865">switchAnimation</link>(<link linkend="_class_animated_1a1f2b6a8597e3a5fb5c1d1d8a28d587fb">Animation</link>&#32;newAnimation)&#32;<emphasis role="keyword">override</emphasis>;
+156 
+158 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_class_player_1a4f0b069f0d135ac2bdc8c8ef367699a3">bTimeStopReady</link>;
+159 };
+160 
+161 
+162 <emphasis role="preprocessor">#endif&#32;</emphasis><emphasis role="comment">//TREES_JSON_PLAYER_H</emphasis>
 </programlisting></section>

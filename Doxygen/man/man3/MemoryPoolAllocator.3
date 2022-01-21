@@ -1,4 +1,4 @@
-.TH "MemoryPoolAllocator< BaseAllocator >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "MemoryPoolAllocator< BaseAllocator >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,15 +9,26 @@ MemoryPoolAllocator< BaseAllocator > \- Default memory allocator used by the par
 .PP
 .PP
 \fC#include <allocators\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBChunkHeader\fP"
+.br
+.RI "Chunk header for perpending to each chunk\&. "
+.ti -1c
+.RI "struct \fBSharedData\fP"
+.br
+.in -1c
 .SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBMemoryPoolAllocator\fP (size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)"
+.RI "\fBMemoryPoolAllocator\fP (size_t chunkSize=\fBkDefaultChunkCapacity\fP, BaseAllocator *baseAllocator=0)"
 .br
 .RI "Constructor with chunkSize\&. "
 .ti -1c
-.RI "\fBMemoryPoolAllocator\fP (void *buffer, size_t size, size_t chunkSize=kDefaultChunkCapacity, BaseAllocator *baseAllocator=0)"
+.RI "\fBMemoryPoolAllocator\fP (void *buffer, size_t size, size_t chunkSize=\fBkDefaultChunkCapacity\fP, BaseAllocator *baseAllocator=0)"
 .br
 .RI "Constructor with user-supplied buffer\&. "
 .ti -1c
@@ -83,6 +94,57 @@ MemoryPoolAllocator< BaseAllocator > \- Default memory allocator used by the par
 .br
 .RI "Tell users that this allocator is reference counted on copy\&. "
 .in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBAddChunk\fP (size_t capacity)"
+.br
+.RI "Creates a new chunk\&. "
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBChunkHeader\fP * \fBGetChunkHead\fP (\fBSharedData\fP *shared)"
+.br
+.ti -1c
+.RI "static \fBuint8_t\fP * \fBGetChunkBuffer\fP (\fBSharedData\fP *shared)"
+.br
+.ti -1c
+.RI "static void * \fBAlignBuffer\fP (void *buf, size_t &size)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBchunk_capacity_\fP"
+.br
+.RI "The minimum capacity of chunk when they are allocated\&. "
+.ti -1c
+.RI "BaseAllocator * \fBbaseAllocator_\fP"
+.br
+.RI "base allocator for allocating memory chunks\&. "
+.ti -1c
+.RI "\fBSharedData\fP * \fBshared_\fP"
+.br
+.RI "The shared data of the allocator\&. "
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const size_t \fBSIZEOF_SHARED_DATA\fP = \fBRAPIDJSON_ALIGN\fP(sizeof(\fBSharedData\fP))"
+.br
+.ti -1c
+.RI "static const size_t \fBSIZEOF_CHUNK_HEADER\fP = \fBRAPIDJSON_ALIGN\fP(sizeof(\fBChunkHeader\fP))"
+.br
+.ti -1c
+.RI "static const size_t \fBkDefaultChunkCapacity\fP = \fBRAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY\fP"
+.br
+.RI "Default chunk capacity\&. "
+.in -1c
 .SH "Detailed Description"
 .PP 
 
@@ -115,7 +177,7 @@ implements Allocator concept
 
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (size_t chunkSize = \fCkDefaultChunkCapacity\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (size_t chunkSize = \fC\fBkDefaultChunkCapacity\fP\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
 
 .PP
 Constructor with chunkSize\&. 
@@ -128,7 +190,7 @@ Constructor with chunkSize\&.
 .RE
 .PP
 
-.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (void * buffer, size_t size, size_t chunkSize = \fCkDefaultChunkCapacity\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP"
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBMemoryPoolAllocator\fP< BaseAllocator >\fB::MemoryPoolAllocator\fP (void * buffer, size_t size, size_t chunkSize = \fC\fBkDefaultChunkCapacity\fP\fP, BaseAllocator * baseAllocator = \fC0\fP)\fC [inline]\fP"
 
 .PP
 Constructor with user-supplied buffer\&. The user buffer will be used firstly\&. When it is full, memory pool allocates new chunk with chunk size\&.
@@ -155,6 +217,24 @@ The user buffer will not be deallocated when this allocator is destructed\&.
 Destructor\&. This deallocates all memory chunks, excluding the user-supplied buffer\&. 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename BaseAllocator  = CrtAllocator> bool \fBMemoryPoolAllocator\fP< BaseAllocator >::AddChunk (size_t capacity)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Creates a new chunk\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIcapacity\fP Capacity of the chunk in bytes\&. 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+true if success\&. 
+.RE
+.PP
+
+.SS "template<typename BaseAllocator  = CrtAllocator> static void * \fBMemoryPoolAllocator\fP< BaseAllocator >::AlignBuffer (void * buf, size_t & size)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
 .SS "template<typename BaseAllocator  = CrtAllocator> size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::Capacity () const\fC [inline]\fP"
 
 .PP
@@ -174,6 +254,10 @@ Deallocates all memory chunks, excluding the first/user one\&.
 
 .PP
 Frees a memory block (concept Allocator) 
+.SS "template<typename BaseAllocator  = CrtAllocator> static \fBuint8_t\fP * \fBMemoryPoolAllocator\fP< BaseAllocator >::GetChunkBuffer (\fBSharedData\fP * shared)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename BaseAllocator  = CrtAllocator> static \fBChunkHeader\fP * \fBMemoryPoolAllocator\fP< BaseAllocator >::GetChunkHead (\fBSharedData\fP * shared)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
 .SS "template<typename BaseAllocator  = CrtAllocator> void * \fBMemoryPoolAllocator\fP< BaseAllocator >::Malloc (size_t size)\fC [inline]\fP"
 
 .PP
@@ -216,6 +300,18 @@ total used bytes\&.
 
 .SH "Member Data Documentation"
 .PP 
+.SS "template<typename BaseAllocator  = CrtAllocator> BaseAllocator* \fBMemoryPoolAllocator\fP< BaseAllocator >::baseAllocator_\fC [private]\fP"
+
+.PP
+base allocator for allocating memory chunks\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::chunk_capacity_\fC [private]\fP"
+
+.PP
+The minimum capacity of chunk when they are allocated\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> const size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::kDefaultChunkCapacity = \fBRAPIDJSON_ALLOCATOR_DEFAULT_CHUNK_CAPACITY\fP\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Default chunk capacity\&. 
 .SS "template<typename BaseAllocator  = CrtAllocator> const bool \fBMemoryPoolAllocator\fP< BaseAllocator >::kNeedFree = false\fC [static]\fP"
 
 .PP
@@ -224,6 +320,14 @@ Tell users that no need to call \fBFree()\fP with this allocator\&. (concept All
 
 .PP
 Tell users that this allocator is reference counted on copy\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> \fBSharedData\fP* \fBMemoryPoolAllocator\fP< BaseAllocator >::shared_\fC [private]\fP"
+
+.PP
+The shared data of the allocator\&. 
+.SS "template<typename BaseAllocator  = CrtAllocator> const size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::SIZEOF_CHUNK_HEADER = \fBRAPIDJSON_ALIGN\fP(sizeof(\fBChunkHeader\fP))\fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename BaseAllocator  = CrtAllocator> const size_t \fBMemoryPoolAllocator\fP< BaseAllocator >::SIZEOF_SHARED_DATA = \fBRAPIDJSON_ALIGN\fP(sizeof(\fBSharedData\fP))\fC [static]\fP, \fC [private]\fP"
+
 
 .SH "Author"
 .PP 

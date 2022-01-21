@@ -1,0 +1,248 @@
+\hypertarget{class_projectile}{}\doxysection{Projectile Class Reference}
+\label{class_projectile}\index{Projectile@{Projectile}}
+
+
+{\ttfamily \#include $<$Projectile.\+h$>$}
+
+Inheritance diagram for Projectile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_projectile}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_projectile_a3f19ab91fddb8211bac7e1196b0f15c0}{Projectile}} (sf\+::\+Vector2f pos, bool moving\+Right)
+\item 
+sf\+::\+Vector2f \mbox{\hyperlink{class_projectile_a88ed5be04ec9eddeb83deb201607368c}{get\+Position}} ()
+\item 
+bool \mbox{\hyperlink{class_projectile_a91ca302f63a06df2c67b9b94a478b0f6}{get\+Is\+Moving\+Right}} () const
+\item 
+bool \mbox{\hyperlink{class_projectile_a321c90dbedd089ad2d0b3ec8f21d5922}{get\+Should\+Be\+Destroyed}} () const
+\item 
+bool \mbox{\hyperlink{class_projectile_a429879cf9406d612f95183e9428f104b}{is\+Colliding}} (const sf\+::\+Rectangle\+Shape \&rec\+Shape)
+\item 
+void \mbox{\hyperlink{class_projectile_a970ca4296053eaff4665f0c4ff3e83c7}{mark\+For\+Destruction}} ()
+\begin{DoxyCompactList}\small\item\em Oznacza pocisk jako gotowy do zniszczenia. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_projectile_a5bc646de87829b911d6817a6478c353e}{update}} (float delta\+Time)
+\item 
+void \mbox{\hyperlink{class_projectile_a44595d2283e231188003bef859f98eb9}{render}} (sf\+::\+Render\+Target \&window)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_projectile_a1e7043391129f4b34c7b9ab011edb3ef}{move}} ()=0
+\begin{DoxyCompactList}\small\item\em Porusza pociskiem w odpowiedni sposób. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_projectile_acdf51147e7efc2a15af8bca73b3243be}{set\+Position}} (float x, float y)
+\item 
+void \mbox{\hyperlink{class_projectile_a76008c00d23d28ef400a863bd0b56257}{init\+Texture}} (const std\+::string \&path, sf\+::\+Int\+Rect texture\+Rect)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+sf\+::\+Texture \mbox{\hyperlink{class_projectile_a1220dfd08fe74bb7ab09e8008d1cf70d}{\+\_\+texture}}
+\begin{DoxyCompactList}\small\item\em Tekstura pocisku. \end{DoxyCompactList}\item 
+sf\+::\+Sprite \mbox{\hyperlink{class_projectile_af96e1c6bd505495166db6c59f5301656}{\+\_\+sprite}}
+\begin{DoxyCompactList}\small\item\em Sprite pocisku wczytywany z tekstury. \end{DoxyCompactList}\item 
+sf\+::\+Rectangle\+Shape \mbox{\hyperlink{class_projectile_ae13dbe19f644c0f60751e75f5edcbc2a}{\+\_\+hitbox}}
+\begin{DoxyCompactList}\small\item\em Kształt odpowiadający za wykrywanie kolizji pocisku. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_projectile_a57cd904f69bfb6291ac3fb9807e7ba32}{\+\_\+b\+Moving\+Right}}
+\begin{DoxyCompactList}\small\item\em Określa czy pocisk porysza się w prawo, czy w lewo. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_projectile_a7220229e045cd2d5bc18dcf42c483c43}{\+\_\+b\+Should\+Be\+Destroyed}} = false
+\begin{DoxyCompactList}\small\item\em Określa czy pocisk powinien być zniszczony. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_projectile_a3f19ab91fddb8211bac7e1196b0f15c0}\label{class_projectile_a3f19ab91fddb8211bac7e1196b0f15c0}} 
+\index{Projectile@{Projectile}!Projectile@{Projectile}}
+\index{Projectile@{Projectile}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{Projectile()}{Projectile()}}
+{\footnotesize\ttfamily Projectile\+::\+Projectile (\begin{DoxyParamCaption}\item[{sf\+::\+Vector2f}]{pos,  }\item[{bool}]{moving\+Right }\end{DoxyParamCaption})}
+
+Konstruktor pocisku 
+\begin{DoxyParams}{Parameters}
+{\em pos} & początkowa pozycja pocisku na mapie \\
+\hline
+{\em moving\+Right} & określa czy pocisk powinien poruszać się w prawo czy w lewo \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_projectile_a91ca302f63a06df2c67b9b94a478b0f6}\label{class_projectile_a91ca302f63a06df2c67b9b94a478b0f6}} 
+\index{Projectile@{Projectile}!getIsMovingRight@{getIsMovingRight}}
+\index{getIsMovingRight@{getIsMovingRight}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{getIsMovingRight()}{getIsMovingRight()}}
+{\footnotesize\ttfamily bool Projectile\+::get\+Is\+Moving\+Right (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Zwraca informację, czy pocisk porusza się w prawo \begin{DoxyReturn}{Returns}
+informacja, czy pocisk porusza się w prawo 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_a88ed5be04ec9eddeb83deb201607368c}\label{class_projectile_a88ed5be04ec9eddeb83deb201607368c}} 
+\index{Projectile@{Projectile}!getPosition@{getPosition}}
+\index{getPosition@{getPosition}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{getPosition()}{getPosition()}}
+{\footnotesize\ttfamily sf\+::\+Vector2f Projectile\+::get\+Position (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Zwraca pozycję pocisku na mapie \begin{DoxyReturn}{Returns}
+pozycja pocisku na mapie 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_a321c90dbedd089ad2d0b3ec8f21d5922}\label{class_projectile_a321c90dbedd089ad2d0b3ec8f21d5922}} 
+\index{Projectile@{Projectile}!getShouldBeDestroyed@{getShouldBeDestroyed}}
+\index{getShouldBeDestroyed@{getShouldBeDestroyed}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{getShouldBeDestroyed()}{getShouldBeDestroyed()}}
+{\footnotesize\ttfamily bool Projectile\+::get\+Should\+Be\+Destroyed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Zwraca informację, czy pocisk powinien zostać zniszczony \begin{DoxyReturn}{Returns}
+informacja, czy pocisk powinien zostać zniszcczony 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_a76008c00d23d28ef400a863bd0b56257}\label{class_projectile_a76008c00d23d28ef400a863bd0b56257}} 
+\index{Projectile@{Projectile}!initTexture@{initTexture}}
+\index{initTexture@{initTexture}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{initTexture()}{initTexture()}}
+{\footnotesize\ttfamily void Projectile\+::init\+Texture (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{sf\+::\+Int\+Rect}]{texture\+Rect }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Inicjalizacja tekstury i sprite pocisku 
+\begin{DoxyParams}{Parameters}
+{\em path} & ścieżka do pliku tekstury \\
+\hline
+{\em texture\+Rect} & fragment tekstury, który zostanie wczytany do sprite \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_projectile_a429879cf9406d612f95183e9428f104b}\label{class_projectile_a429879cf9406d612f95183e9428f104b}} 
+\index{Projectile@{Projectile}!isColliding@{isColliding}}
+\index{isColliding@{isColliding}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{isColliding()}{isColliding()}}
+{\footnotesize\ttfamily bool Projectile\+::is\+Colliding (\begin{DoxyParamCaption}\item[{const sf\+::\+Rectangle\+Shape \&}]{rec\+Shape }\end{DoxyParamCaption})}
+
+Sprawdza, czy pocisk koliduje z podanym kształtem 
+\begin{DoxyParams}{Parameters}
+{\em rec\+Shape} & kształt z którym pocisk testuje kolizje \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true -\/ jeżeli nastąpiła kolizja, false -\/ jeżeli nie 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_projectile_a970ca4296053eaff4665f0c4ff3e83c7}\label{class_projectile_a970ca4296053eaff4665f0c4ff3e83c7}} 
+\index{Projectile@{Projectile}!markForDestruction@{markForDestruction}}
+\index{markForDestruction@{markForDestruction}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{markForDestruction()}{markForDestruction()}}
+{\footnotesize\ttfamily void Projectile\+::mark\+For\+Destruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Oznacza pocisk jako gotowy do zniszczenia. 
+
+\mbox{\Hypertarget{class_projectile_a1e7043391129f4b34c7b9ab011edb3ef}\label{class_projectile_a1e7043391129f4b34c7b9ab011edb3ef}} 
+\index{Projectile@{Projectile}!move@{move}}
+\index{move@{move}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily virtual void Projectile\+::move (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Porusza pociskiem w odpowiedni sposób. 
+
+
+
+Implemented in \mbox{\hyperlink{class_bullet_a88af6034543e11dd8e4b5539b7634838}{Bullet}}.
+
+\mbox{\Hypertarget{class_projectile_a44595d2283e231188003bef859f98eb9}\label{class_projectile_a44595d2283e231188003bef859f98eb9}} 
+\index{Projectile@{Projectile}!render@{render}}
+\index{render@{render}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{render()}{render()}}
+{\footnotesize\ttfamily void Projectile\+::render (\begin{DoxyParamCaption}\item[{sf\+::\+Render\+Target \&}]{window }\end{DoxyParamCaption})}
+
+Renderowanie pocisku na oknie 
+\begin{DoxyParams}{Parameters}
+{\em window} & okno, na którym renderowany jest pocisk \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_projectile_acdf51147e7efc2a15af8bca73b3243be}\label{class_projectile_acdf51147e7efc2a15af8bca73b3243be}} 
+\index{Projectile@{Projectile}!setPosition@{setPosition}}
+\index{setPosition@{setPosition}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{setPosition()}{setPosition()}}
+{\footnotesize\ttfamily void Projectile\+::set\+Position (\begin{DoxyParamCaption}\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Ustawia pozycję pozisku na mapie 
+\begin{DoxyParams}{Parameters}
+{\em x} & pozycja x na mapie \\
+\hline
+{\em y} & pozycja y na mapie \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_projectile_a5bc646de87829b911d6817a6478c353e}\label{class_projectile_a5bc646de87829b911d6817a6478c353e}} 
+\index{Projectile@{Projectile}!update@{update}}
+\index{update@{update}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Projectile\+::update (\begin{DoxyParamCaption}\item[{float}]{delta\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Odświeżanie logiki pocisku 
+\begin{DoxyParams}{Parameters}
+{\em delta\+Time} & czas pomiędzy klatkami aplikacji \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_bullet_a0f8a91fcf01c7e95f25bb9754bac6cfd}{Bullet}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_projectile_a57cd904f69bfb6291ac3fb9807e7ba32}\label{class_projectile_a57cd904f69bfb6291ac3fb9807e7ba32}} 
+\index{Projectile@{Projectile}!\_bMovingRight@{\_bMovingRight}}
+\index{\_bMovingRight@{\_bMovingRight}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{\_bMovingRight}{\_bMovingRight}}
+{\footnotesize\ttfamily bool Projectile\+::\+\_\+b\+Moving\+Right\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa czy pocisk porysza się w prawo, czy w lewo. 
+
+\mbox{\Hypertarget{class_projectile_a7220229e045cd2d5bc18dcf42c483c43}\label{class_projectile_a7220229e045cd2d5bc18dcf42c483c43}} 
+\index{Projectile@{Projectile}!\_bShouldBeDestroyed@{\_bShouldBeDestroyed}}
+\index{\_bShouldBeDestroyed@{\_bShouldBeDestroyed}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{\_bShouldBeDestroyed}{\_bShouldBeDestroyed}}
+{\footnotesize\ttfamily bool Projectile\+::\+\_\+b\+Should\+Be\+Destroyed = false\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Określa czy pocisk powinien być zniszczony. 
+
+\mbox{\Hypertarget{class_projectile_ae13dbe19f644c0f60751e75f5edcbc2a}\label{class_projectile_ae13dbe19f644c0f60751e75f5edcbc2a}} 
+\index{Projectile@{Projectile}!\_hitbox@{\_hitbox}}
+\index{\_hitbox@{\_hitbox}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{\_hitbox}{\_hitbox}}
+{\footnotesize\ttfamily sf\+::\+Rectangle\+Shape Projectile\+::\+\_\+hitbox\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Kształt odpowiadający za wykrywanie kolizji pocisku. 
+
+\mbox{\Hypertarget{class_projectile_af96e1c6bd505495166db6c59f5301656}\label{class_projectile_af96e1c6bd505495166db6c59f5301656}} 
+\index{Projectile@{Projectile}!\_sprite@{\_sprite}}
+\index{\_sprite@{\_sprite}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{\_sprite}{\_sprite}}
+{\footnotesize\ttfamily sf\+::\+Sprite Projectile\+::\+\_\+sprite\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Sprite pocisku wczytywany z tekstury. 
+
+\mbox{\Hypertarget{class_projectile_a1220dfd08fe74bb7ab09e8008d1cf70d}\label{class_projectile_a1220dfd08fe74bb7ab09e8008d1cf70d}} 
+\index{Projectile@{Projectile}!\_texture@{\_texture}}
+\index{\_texture@{\_texture}!Projectile@{Projectile}}
+\doxysubsubsection{\texorpdfstring{\_texture}{\_texture}}
+{\footnotesize\ttfamily sf\+::\+Texture Projectile\+::\+\_\+texture\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Tekstura pocisku. 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/entities/projectiles/\mbox{\hyperlink{_projectile_8h}{Projectile.\+h}}\item 
+src/entities/projectiles/\mbox{\hyperlink{_projectile_8cpp}{Projectile.\+cpp}}\end{DoxyCompactItemize}

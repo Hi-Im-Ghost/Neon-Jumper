@@ -1,4 +1,4 @@
-.TH "internal::Schema< SchemaDocumentType >" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "internal::Schema< SchemaDocumentType >" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,6 +8,19 @@ internal::Schema< SchemaDocumentType >
 .PP
 .PP
 \fC#include <schema\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBPatternProperty\fP"
+.br
+.ti -1c
+.RI "struct \fBProperty\fP"
+.br
+.ti -1c
+.RI "struct \fBSchemaArray\fP"
+.br
+.in -1c
 .SS "Public Types"
 
 .in +1c
@@ -113,6 +126,205 @@ internal::Schema< SchemaDocumentType >
 .RI "static const \fBValueType\fP & \fBGetValidateErrorKeyword\fP (\fBValidateErrorCode\fP validateErrorCode)"
 .br
 .in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBSchemaValueType\fP { \fBkNullSchemaType\fP, \fBkBooleanSchemaType\fP, \fBkObjectSchemaType\fP, \fBkArraySchemaType\fP, \fBkStringSchemaType\fP, \fBkNumberSchemaType\fP, \fBkIntegerSchemaType\fP, \fBkTotalSchemaType\fP }"
+.br
+.ti -1c
+.RI "typedef \fBinternal::GenericRegex\fP< \fBEncodingType\fP, \fBAllocatorType\fP > \fBRegexType\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename V1 , typename V2 > void \fBAddUniqueElement\fP (V1 &\fBa\fP, const V2 &v)"
+.br
+.ti -1c
+.RI "void \fBAssignIfExist\fP (\fBSchemaArray\fP &out, SchemaDocumentType &schemaDocument, const \fBPointerType\fP &p, const \fBValueType\fP &\fBvalue\fP, const \fBValueType\fP &name, const \fBValueType\fP &document)"
+.br
+.ti -1c
+.RI "template<typename \fBValueType\fP > \fBRegexType\fP * \fBCreatePattern\fP (const \fBValueType\fP &\fBvalue\fP)"
+.br
+.ti -1c
+.RI "void \fBAddType\fP (const \fBValueType\fP &type)"
+.br
+.ti -1c
+.RI "bool \fBCreateParallelValidator\fP (\fBContext\fP &context) const"
+.br
+.ti -1c
+.RI "void \fBCreateSchemaValidators\fP (\fBContext\fP &context, const \fBSchemaArray\fP &schemas, const bool inheritContinueOnErrors) const"
+.br
+.ti -1c
+.RI "bool \fBFindPropertyIndex\fP (const \fBValueType\fP &name, \fBSizeType\fP *outIndex) const"
+.br
+.ti -1c
+.RI "bool \fBCheckInt\fP (\fBContext\fP &context, \fBint64_t\fP i) const"
+.br
+.ti -1c
+.RI "bool \fBCheckUint\fP (\fBContext\fP &context, \fBuint64_t\fP i) const"
+.br
+.ti -1c
+.RI "bool \fBCheckDoubleMinimum\fP (\fBContext\fP &context, double d) const"
+.br
+.ti -1c
+.RI "bool \fBCheckDoubleMaximum\fP (\fBContext\fP &context, double d) const"
+.br
+.ti -1c
+.RI "bool \fBCheckDoubleMultipleOf\fP (\fBContext\fP &context, double d) const"
+.br
+.ti -1c
+.RI "void \fBDisallowedType\fP (\fBContext\fP &context, const \fBValueType\fP &actualType) const"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static const \fBValueType\fP * \fBGetMember\fP (const \fBValueType\fP &\fBvalue\fP, const \fBValueType\fP &name)"
+.br
+.ti -1c
+.RI "static void \fBAssignIfExist\fP (bool &out, const \fBValueType\fP &\fBvalue\fP, const \fBValueType\fP &name)"
+.br
+.ti -1c
+.RI "static void \fBAssignIfExist\fP (\fBSizeType\fP &out, const \fBValueType\fP &\fBvalue\fP, const \fBValueType\fP &name)"
+.br
+.ti -1c
+.RI "static bool \fBIsPatternMatch\fP (const \fBRegexType\fP *pattern, const \fBCh\fP *str, \fBSizeType\fP)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAllocatorType\fP * \fBallocator_\fP"
+.br
+.ti -1c
+.RI "\fBSValue\fP \fBuri_\fP"
+.br
+.ti -1c
+.RI "\fBUriType\fP \fBid_\fP"
+.br
+.ti -1c
+.RI "\fBPointerType\fP \fBpointer_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBtypeless_\fP"
+.br
+.ti -1c
+.RI "\fBuint64_t\fP * \fBenum_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBenumCount_\fP"
+.br
+.ti -1c
+.RI "\fBSchemaArray\fP \fBallOf_\fP"
+.br
+.ti -1c
+.RI "\fBSchemaArray\fP \fBanyOf_\fP"
+.br
+.ti -1c
+.RI "\fBSchemaArray\fP \fBoneOf_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBnot_\fP"
+.br
+.ti -1c
+.RI "unsigned \fBtype_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBvalidatorCount_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBnotValidatorIndex_\fP"
+.br
+.ti -1c
+.RI "\fBProperty\fP * \fBproperties_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBadditionalPropertiesSchema_\fP"
+.br
+.ti -1c
+.RI "\fBPatternProperty\fP * \fBpatternProperties_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBpatternPropertyCount_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBpropertyCount_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBminProperties_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBmaxProperties_\fP"
+.br
+.ti -1c
+.RI "bool \fBadditionalProperties_\fP"
+.br
+.ti -1c
+.RI "bool \fBhasDependencies_\fP"
+.br
+.ti -1c
+.RI "bool \fBhasRequired_\fP"
+.br
+.ti -1c
+.RI "bool \fBhasSchemaDependencies_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBadditionalItemsSchema_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP * \fBitemsList_\fP"
+.br
+.ti -1c
+.RI "const \fBSchemaType\fP ** \fBitemsTuple_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBitemsTupleCount_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBminItems_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBmaxItems_\fP"
+.br
+.ti -1c
+.RI "bool \fBadditionalItems_\fP"
+.br
+.ti -1c
+.RI "bool \fBuniqueItems_\fP"
+.br
+.ti -1c
+.RI "\fBRegexType\fP * \fBpattern_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBminLength_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBmaxLength_\fP"
+.br
+.ti -1c
+.RI "\fBSValue\fP \fBminimum_\fP"
+.br
+.ti -1c
+.RI "\fBSValue\fP \fBmaximum_\fP"
+.br
+.ti -1c
+.RI "\fBSValue\fP \fBmultipleOf_\fP"
+.br
+.ti -1c
+.RI "bool \fBexclusiveMinimum_\fP"
+.br
+.ti -1c
+.RI "bool \fBexclusiveMaximum_\fP"
+.br
+.ti -1c
+.RI "\fBSizeType\fP \fBdefaultValueLength_\fP"
+.br
+.in -1c
 .SS "Friends"
 
 .in +1c
@@ -134,6 +346,8 @@ internal::Schema< SchemaDocumentType >
 
 .SS "template<typename SchemaDocumentType > typedef SchemaDocumentType::PointerType \fBinternal::Schema\fP< SchemaDocumentType >::PointerType"
 
+.SS "template<typename SchemaDocumentType > typedef \fBinternal::GenericRegex\fP<\fBEncodingType\fP, \fBAllocatorType\fP> \fBinternal::Schema\fP< SchemaDocumentType >::RegexType\fC [private]\fP"
+
 .SS "template<typename SchemaDocumentType > typedef \fBSchema\fP<SchemaDocumentType> \fBinternal::Schema\fP< SchemaDocumentType >::SchemaType"
 
 .SS "template<typename SchemaDocumentType > typedef \fBGenericValue\fP<\fBEncodingType\fP, \fBAllocatorType\fP> \fBinternal::Schema\fP< SchemaDocumentType >::SValue"
@@ -142,6 +356,29 @@ internal::Schema< SchemaDocumentType >
 
 .SS "template<typename SchemaDocumentType > typedef SchemaDocumentType::ValueType \fBinternal::Schema\fP< SchemaDocumentType >\fB::ValueType\fP"
 
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename SchemaDocumentType > enum \fBinternal::Schema::SchemaValueType\fP\fC [private]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIkNullSchemaType \fP\fP
+.TP
+\fB\fIkBooleanSchemaType \fP\fP
+.TP
+\fB\fIkObjectSchemaType \fP\fP
+.TP
+\fB\fIkArraySchemaType \fP\fP
+.TP
+\fB\fIkStringSchemaType \fP\fP
+.TP
+\fB\fIkNumberSchemaType \fP\fP
+.TP
+\fB\fIkIntegerSchemaType \fP\fP
+.TP
+\fB\fIkTotalSchemaType \fP\fP
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "template<typename SchemaDocumentType > \fBinternal::Schema\fP< SchemaDocumentType >\fB::Schema\fP (SchemaDocumentType * schemaDocument, const \fBPointerType\fP & p, const \fBValueType\fP & value, const \fBValueType\fP & document, \fBAllocatorType\fP * allocator, const \fBUriType\fP & id = \fC\fBUriType\fP()\fP)\fC [inline]\fP"
@@ -150,9 +387,37 @@ internal::Schema< SchemaDocumentType >
 
 .SH "Member Function Documentation"
 .PP 
+.SS "template<typename SchemaDocumentType > void \fBinternal::Schema\fP< SchemaDocumentType >::AddType (const \fBValueType\fP & type)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > template<typename V1 , typename V2 > void \fBinternal::Schema\fP< SchemaDocumentType >::AddUniqueElement (V1 & a, const V2 & v)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > static void \fBinternal::Schema\fP< SchemaDocumentType >::AssignIfExist (bool & out, const \fBValueType\fP & value, const \fBValueType\fP & name)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > void \fBinternal::Schema\fP< SchemaDocumentType >::AssignIfExist (\fBSchemaArray\fP & out, SchemaDocumentType & schemaDocument, const \fBPointerType\fP & p, const \fBValueType\fP & value, const \fBValueType\fP & name, const \fBValueType\fP & document)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > static void \fBinternal::Schema\fP< SchemaDocumentType >::AssignIfExist (\fBSizeType\fP & out, const \fBValueType\fP & value, const \fBValueType\fP & name)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::BeginValue (\fBContext\fP & context) const\fC [inline]\fP"
 
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::Bool (\fBContext\fP & context, bool) const\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CheckDoubleMaximum (\fBContext\fP & context, double d) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CheckDoubleMinimum (\fBContext\fP & context, double d) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CheckDoubleMultipleOf (\fBContext\fP & context, double d) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CheckInt (\fBContext\fP & context, \fBint64_t\fP i) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CheckUint (\fBContext\fP & context, \fBuint64_t\fP i) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::CreateParallelValidator (\fBContext\fP & context) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > template<typename \fBValueType\fP > \fBRegexType\fP * \fBinternal::Schema\fP< SchemaDocumentType >::CreatePattern (const \fBValueType\fP & value)\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > void \fBinternal::Schema\fP< SchemaDocumentType >::CreateSchemaValidators (\fBContext\fP & context, const \fBSchemaArray\fP & schemas, const bool inheritContinueOnErrors) const\fC [inline]\fP, \fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > void \fBinternal::Schema\fP< SchemaDocumentType >::DisallowedType (\fBContext\fP & context, const \fBValueType\fP & actualType) const\fC [inline]\fP, \fC [private]\fP"
 
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::Double (\fBContext\fP & context, double d) const\fC [inline]\fP"
 
@@ -162,7 +427,11 @@ internal::Schema< SchemaDocumentType >
 
 .SS "template<typename SchemaDocumentType > RAPIDJSON_FORCEINLINE bool \fBinternal::Schema\fP< SchemaDocumentType >::EndValue (\fBContext\fP & context) const\fC [inline]\fP"
 
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::FindPropertyIndex (const \fBValueType\fP & name, \fBSizeType\fP * outIndex) const\fC [inline]\fP, \fC [private]\fP"
+
 .SS "template<typename SchemaDocumentType > const \fBUriType\fP & \fBinternal::Schema\fP< SchemaDocumentType >::GetId () const\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType > static const \fBValueType\fP * \fBinternal::Schema\fP< SchemaDocumentType >::GetMember (const \fBValueType\fP & value, const \fBValueType\fP & name)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
 
 .SS "template<typename SchemaDocumentType > const \fBPointerType\fP & \fBinternal::Schema\fP< SchemaDocumentType >::GetPointer () const\fC [inline]\fP"
 
@@ -173,6 +442,8 @@ internal::Schema< SchemaDocumentType >
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::Int (\fBContext\fP & context, int i) const\fC [inline]\fP"
 
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::Int64 (\fBContext\fP & context, \fBint64_t\fP i) const\fC [inline]\fP"
+
+.SS "template<typename SchemaDocumentType > static bool \fBinternal::Schema\fP< SchemaDocumentType >::IsPatternMatch (const \fBRegexType\fP * pattern, const \fBCh\fP * str, \fBSizeType\fP)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
 
 .SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::Key (\fBContext\fP & context, const \fBCh\fP * str, \fBSizeType\fP len, bool) const\fC [inline]\fP"
 
@@ -191,6 +462,92 @@ internal::Schema< SchemaDocumentType >
 .SH "Friends And Related Function Documentation"
 .PP 
 .SS "template<typename SchemaDocumentType > friend class \fBGenericSchemaDocument\fP< \fBValueType\fP, \fBAllocatorType\fP >\fC [friend]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::additionalItems_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::additionalItemsSchema_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::additionalProperties_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::additionalPropertiesSchema_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBAllocatorType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::allocator_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSchemaArray\fP \fBinternal::Schema\fP< SchemaDocumentType >::allOf_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSchemaArray\fP \fBinternal::Schema\fP< SchemaDocumentType >::anyOf_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::defaultValueLength_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBuint64_t\fP* \fBinternal::Schema\fP< SchemaDocumentType >::enum_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::enumCount_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::exclusiveMaximum_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::exclusiveMinimum_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::hasDependencies_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::hasRequired_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::hasSchemaDependencies_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBUriType\fP \fBinternal::Schema\fP< SchemaDocumentType >::id_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::itemsList_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP** \fBinternal::Schema\fP< SchemaDocumentType >::itemsTuple_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::itemsTupleCount_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSValue\fP \fBinternal::Schema\fP< SchemaDocumentType >::maximum_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::maxItems_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::maxLength_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::maxProperties_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSValue\fP \fBinternal::Schema\fP< SchemaDocumentType >::minimum_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::minItems_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::minLength_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::minProperties_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSValue\fP \fBinternal::Schema\fP< SchemaDocumentType >::multipleOf_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::not_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::notValidatorIndex_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSchemaArray\fP \fBinternal::Schema\fP< SchemaDocumentType >::oneOf_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBRegexType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::pattern_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBPatternProperty\fP* \fBinternal::Schema\fP< SchemaDocumentType >::patternProperties_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::patternPropertyCount_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBPointerType\fP \fBinternal::Schema\fP< SchemaDocumentType >::pointer_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBProperty\fP* \fBinternal::Schema\fP< SchemaDocumentType >::properties_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::propertyCount_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > unsigned \fBinternal::Schema\fP< SchemaDocumentType >::type_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > const \fBSchemaType\fP* \fBinternal::Schema\fP< SchemaDocumentType >::typeless_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > bool \fBinternal::Schema\fP< SchemaDocumentType >::uniqueItems_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSValue\fP \fBinternal::Schema\fP< SchemaDocumentType >::uri_\fC [private]\fP"
+
+.SS "template<typename SchemaDocumentType > \fBSizeType\fP \fBinternal::Schema\fP< SchemaDocumentType >::validatorCount_\fC [private]\fP"
 
 
 .SH "Author"

@@ -31,7 +31,7 @@
 <codeline><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"></highlight><highlight class="comment">//<sp/>...</highlight><highlight class="normal"></highlight></codeline>
 <codeline><highlight class="normal"><ref refid="class_generic_document" kindref="compound">Document</ref><sp/>document;</highlight></codeline>
-<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(json);</highlight></codeline>
+<codeline><highlight class="normal">document.<ref refid="class_generic_document_1a901db1678f99a1b550003eed75bc380a" kindref="member">Parse</ref>(<ref refid="namespacetest_8cpp_1a04e873a45a18dab42dc9a0eba4f3deee" kindref="member">json</ref>);</highlight></codeline>
 </programlisting></para>
 <para>那么现在该 JSON 就会被解析至 <computeroutput>document</computeroutput> 中，成为一棵 *DOM 树 *:</para>
 <para><image type="html" name="diagram/tutorial.png" alt="教程中的 DOM" inline="yes"></image>
@@ -40,7 +40,7 @@
 </programlisting></para>
 <para>让我们查询一下根 Object 中有没有 <computeroutput>&quot;hello&quot;</computeroutput> 成员。由于一个 <computeroutput>Value</computeroutput> 可包含不同类型的值，我们可能需要验证它的类型，并使用合适的 API 去获取其值。在此例中，<computeroutput>&quot;hello&quot;</computeroutput> 成员关联到一个 JSON String。 <programlisting filename=".cpp"><codeline><highlight class="normal">assert(document.HasMember(</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">));</highlight></codeline>
 <codeline><highlight class="normal">assert(document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].IsString());</highlight></codeline>
-<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].GetString());</highlight></codeline>
+<codeline><highlight class="normal">printf(</highlight><highlight class="stringliteral">&quot;hello<sp/>=<sp/>%s\n&quot;</highlight><highlight class="normal">,<sp/>document[</highlight><highlight class="stringliteral">&quot;hello&quot;</highlight><highlight class="normal">].<ref refid="schemavalidator_8cpp_1a6d90bf6105415d941d0ee014f2aa79c0" kindref="member">GetString</ref>());</highlight></codeline>
 </programlisting></para>
 <para><programlisting><codeline><highlight class="normal">world</highlight></codeline>
 </programlisting></para>
@@ -204,7 +204,7 @@
 </sect2>
 <sect2 id="md_src_rapidjson_doc_tutorial_zh_cn_1QueryString">
 <title>Query String</title>
-<para>除了 <computeroutput>GetString()</computeroutput>，<computeroutput>Value</computeroutput> 类也有一个 <computeroutput>GetStringLength()</computeroutput>。这里会解释个中原因。</para>
+<para>除了 <computeroutput><ref refid="schemavalidator_8cpp_1a6d90bf6105415d941d0ee014f2aa79c0" kindref="member">GetString()</ref></computeroutput>，<computeroutput>Value</computeroutput> 类也有一个 <computeroutput>GetStringLength()</computeroutput>。这里会解释个中原因。</para>
 <para>根据 RFC 4627，JSON String 可包含 Unicode 字符 <computeroutput>U+0000</computeroutput>，在 JSON 中会表示为 <computeroutput>&quot;\u0000&quot;</computeroutput>。问题是，C/C++ 通常使用空字符结尾字符串（null-terminated string），这种字符串把 `<lsquo/>\0<rsquo/>` 作为结束符号。</para>
 <para>为了符合 RFC 4627，RapidJSON 支持包含 <computeroutput>U+0000</computeroutput> 的 String。若你需要处理这些 String，便可使用 <computeroutput>GetStringLength()</computeroutput> 去获得正确的字符串长度。</para>
 <para>例如，当解析以下的 JSON 至 <computeroutput>Document d</computeroutput> 之后：</para>

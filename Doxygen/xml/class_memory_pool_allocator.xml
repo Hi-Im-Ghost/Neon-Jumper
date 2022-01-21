@@ -18,7 +18,7 @@
         <argsstring></argsstring>
         <name>SIZEOF_SHARED_DATA</name>
         <qualifiedname>MemoryPoolAllocator::SIZEOF_SHARED_DATA</qualifiedname>
-        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(SharedData))</initializer>
+        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(<ref refid="struct_memory_pool_allocator_1_1_shared_data" kindref="compound">SharedData</ref>))</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -33,7 +33,7 @@
         <argsstring></argsstring>
         <name>SIZEOF_CHUNK_HEADER</name>
         <qualifiedname>MemoryPoolAllocator::SIZEOF_CHUNK_HEADER</qualifiedname>
-        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(ChunkHeader))</initializer>
+        <initializer>= <ref refid="group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_1ga583915242504c7fdb36e826f02f76242" kindref="member">RAPIDJSON_ALIGN</ref>(sizeof(<ref refid="struct_memory_pool_allocator_1_1_chunk_header" kindref="compound">ChunkHeader</ref>))</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -125,7 +125,7 @@
         <location file="src/rapidjson/include/rapidjson/allocators.h" line="418" column="19" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="418" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_memory_pool_allocator_1a17d48b0a767d489eed4241444702368c" prot="private" static="no" mutable="no">
-        <type>SharedData *</type>
+        <type><ref refid="struct_memory_pool_allocator_1_1_shared_data" kindref="compound">SharedData</ref> *</type>
         <definition>SharedData* MemoryPoolAllocator&lt; BaseAllocator &gt;::shared_</definition>
         <argsstring></argsstring>
         <name>shared_</name>
@@ -142,13 +142,13 @@
       </sectiondef>
       <sectiondef kind="private-static-func">
       <memberdef kind="function" id="class_memory_pool_allocator_1a9e67d84bf86241a3da276057f4458cda" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>ChunkHeader *</type>
+        <type><ref refid="struct_memory_pool_allocator_1_1_chunk_header" kindref="compound">ChunkHeader</ref> *</type>
         <definition>static ChunkHeader * MemoryPoolAllocator&lt; BaseAllocator &gt;::GetChunkHead</definition>
         <argsstring>(SharedData *shared)</argsstring>
         <name>GetChunkHead</name>
         <qualifiedname>MemoryPoolAllocator::GetChunkHead</qualifiedname>
         <param>
-          <type>SharedData *</type>
+          <type><ref refid="struct_memory_pool_allocator_1_1_shared_data" kindref="compound">SharedData</ref> *</type>
           <declname>shared</declname>
         </param>
         <briefdescription>
@@ -166,7 +166,7 @@
         <name>GetChunkBuffer</name>
         <qualifiedname>MemoryPoolAllocator::GetChunkBuffer</qualifiedname>
         <param>
-          <type>SharedData *</type>
+          <type><ref refid="struct_memory_pool_allocator_1_1_shared_data" kindref="compound">SharedData</ref> *</type>
           <declname>shared</declname>
         </param>
         <briefdescription>
@@ -210,7 +210,7 @@
         <param>
           <type>size_t</type>
           <declname>chunkSize</declname>
-          <defval>kDefaultChunkCapacity</defval>
+          <defval><ref refid="class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c" kindref="member">kDefaultChunkCapacity</ref></defval>
         </param>
         <param>
           <type>BaseAllocator *</type>
@@ -261,7 +261,7 @@
         <param>
           <type>size_t</type>
           <declname>chunkSize</declname>
-          <defval>kDefaultChunkCapacity</defval>
+          <defval><ref refid="class_memory_pool_allocator_1a8d9337bc406a25dd06a24ee3fa5fb58c" kindref="member">kDefaultChunkCapacity</ref></defval>
         </param>
         <param>
           <type>BaseAllocator *</type>
@@ -596,6 +596,52 @@
 </simplesect>
 </para>
     </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>CrtAllocator</label>
+        <link refid="class_crt_allocator"/>
+      </node>
+      <node id="5">
+        <label>MemoryPoolAllocator&lt; BaseAllocator &gt;::ChunkHeader</label>
+        <link refid="struct_memory_pool_allocator_1_1_chunk_header"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>capacity</edgelabel>
+          <edgelabel>size</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>MemoryPoolAllocator&lt; BaseAllocator &gt;::SharedData</label>
+        <link refid="struct_memory_pool_allocator_1_1_shared_data"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>chunkHead</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>refcount</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>MemoryPoolAllocator&lt; BaseAllocator &gt;</label>
+        <link refid="class_memory_pool_allocator"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>SIZEOF_CHUNK_HEADER</edgelabel>
+          <edgelabel>SIZEOF_SHARED_DATA</edgelabel>
+          <edgelabel>chunk_capacity_</edgelabel>
+          <edgelabel>kDefaultChunkCapacity</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>baseAllocator_</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>shared_</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>size_t</label>
+      </node>
+    </collaborationgraph>
     <location file="src/rapidjson/include/rapidjson/allocators.h" line="129" column="1" bodyfile="src/rapidjson/include/rapidjson/allocators.h" bodystart="129" bodyend="420"/>
     <listofallmembers>
       <member refid="class_memory_pool_allocator_1a41bebe49979dc69921519c7556af18fc" prot="private" virt="non-virtual"><scope>MemoryPoolAllocator</scope><name>AddChunk</name></member>

@@ -153,9 +153,9 @@
 \DoxyCodeLine{236     \mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}} \mbox{\hyperlink{classinternal_1_1_stream_local_copy_3_01_stream_00_011_01_4_a1d3e8ae8756325df25715d4ffb9c1b44}{s}};}
 \DoxyCodeLine{237 }
 \DoxyCodeLine{238 \textcolor{keyword}{private}:}
-\DoxyCodeLine{239     \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\&) \textcolor{comment}{/* = delete */};}
+\DoxyCodeLine{239     \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\& \mbox{\hyperlink{classinternal_1_1_stream_local_copy_3_01_stream_00_011_01_4_aae89d272b517c263153e78092179f5ab}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\&) \textcolor{comment}{/* = delete */};}
 \DoxyCodeLine{240 }
-\DoxyCodeLine{241     \mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& original\_;}
+\DoxyCodeLine{241     \mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& \mbox{\hyperlink{classinternal_1_1_stream_local_copy_3_01_stream_00_011_01_4_a95cf773c6d96bb2c862cec8d1b54d658}{original\_}};}
 \DoxyCodeLine{242 \};}
 \DoxyCodeLine{243 }
 \DoxyCodeLine{245 \textcolor{keyword}{template}<\textcolor{keyword}{typename} Stream>}
@@ -166,7 +166,7 @@
 \DoxyCodeLine{250     \mbox{\hyperlink{classrapidjson_1_1_stream}{Stream}}\& \mbox{\hyperlink{classinternal_1_1_stream_local_copy_3_01_stream_00_010_01_4_ad31147888384f4bd51eabc2d7acdc4b6}{s}};}
 \DoxyCodeLine{251 }
 \DoxyCodeLine{252 \textcolor{keyword}{private}:}
-\DoxyCodeLine{253     \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\&) \textcolor{comment}{/* = delete */};}
+\DoxyCodeLine{253     \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\& \mbox{\hyperlink{classinternal_1_1_stream_local_copy_3_01_stream_00_010_01_4_a6f336c9800efc177104b0dc1c7349a3d}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{StreamLocalCopy}}\&) \textcolor{comment}{/* = delete */};}
 \DoxyCodeLine{254 \};}
 \DoxyCodeLine{255 }
 \DoxyCodeLine{256 \} \textcolor{comment}{// namespace internal}}
@@ -432,8 +432,8 @@
 \DoxyCodeLine{541     \textcolor{keyword}{typedef} \textcolor{keyword}{typename} SourceEncoding::Ch \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}}; }
 \DoxyCodeLine{542 }
 \DoxyCodeLine{544 }
-\DoxyCodeLine{547     \mbox{\hyperlink{class_generic_reader_aab875a34b3092df9fb4e2b8eac6dbb96}{GenericReader}}(StackAllocator* stackAllocator = 0, \textcolor{keywordtype}{size\_t} stackCapacity = kDefaultStackCapacity) :}
-\DoxyCodeLine{548         stack\_(stackAllocator, stackCapacity), parseResult\_(), state\_(IterativeParsingStartState) \{\}}
+\DoxyCodeLine{547     \mbox{\hyperlink{class_generic_reader_aab875a34b3092df9fb4e2b8eac6dbb96}{GenericReader}}(StackAllocator* stackAllocator = 0, \textcolor{keywordtype}{size\_t} stackCapacity = \mbox{\hyperlink{class_generic_reader_ac507ea8672bf2b5d01b35583c0597f15}{kDefaultStackCapacity}}) :}
+\DoxyCodeLine{548         \mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}(stackAllocator, stackCapacity), \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}(), \mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}}) \{\}}
 \DoxyCodeLine{549 }
 \DoxyCodeLine{551 }
 \DoxyCodeLine{558     \textcolor{keyword}{template} <\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
@@ -441,33 +441,33 @@
 \DoxyCodeLine{560         \textcolor{keywordflow}{if} (parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aadb14f5a3b6b33e28055e913a2eae5e9}{kParseIterativeFlag}})}
 \DoxyCodeLine{561             \textcolor{keywordflow}{return} IterativeParse<parseFlags>(is, handler);}
 \DoxyCodeLine{562 }
-\DoxyCodeLine{563         parseResult\_.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
+\DoxyCodeLine{563         \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
 \DoxyCodeLine{564 }
-\DoxyCodeLine{565         ClearStackOnExit scope(*\textcolor{keyword}{this});}
+\DoxyCodeLine{565         \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}} scope(*\textcolor{keyword}{this});}
 \DoxyCodeLine{566 }
 \DoxyCodeLine{567         SkipWhitespaceAndComments<parseFlags>(is);}
-\DoxyCodeLine{568         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{568         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{569 }
 \DoxyCodeLine{570         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(is.Peek() == \textcolor{charliteral}{'\(\backslash\)0'})) \{}
 \DoxyCodeLine{571             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a}{kParseErrorDocumentEmpty}}, is.Tell());}
-\DoxyCodeLine{572             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{572             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{573         \}}
 \DoxyCodeLine{574         \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{575             ParseValue<parseFlags>(is, handler);}
-\DoxyCodeLine{576             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{576             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{577 }
 \DoxyCodeLine{578             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36}{kParseStopWhenDoneFlag}})) \{}
 \DoxyCodeLine{579                 SkipWhitespaceAndComments<parseFlags>(is);}
-\DoxyCodeLine{580                 RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{580                 RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{581 }
 \DoxyCodeLine{582                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(is.Peek() != \textcolor{charliteral}{'\(\backslash\)0'})) \{}
 \DoxyCodeLine{583                     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5}{kParseErrorDocumentRootNotSingular}}, is.Tell());}
-\DoxyCodeLine{584                     RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{584                     RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{585                 \}}
 \DoxyCodeLine{586             \}}
 \DoxyCodeLine{587         \}}
 \DoxyCodeLine{588 }
-\DoxyCodeLine{589         \textcolor{keywordflow}{return} parseResult\_;}
+\DoxyCodeLine{589         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}};}
 \DoxyCodeLine{590     \}}
 \DoxyCodeLine{591 }
 \DoxyCodeLine{593 }
@@ -478,8 +478,8 @@
 \DoxyCodeLine{603 }
 \DoxyCodeLine{605 }
 \DoxyCodeLine{607     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a7de472eda2ad9de13cfd8c1de74f1754}{IterativeParseInit}}() \{}
-\DoxyCodeLine{608         parseResult\_.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
-\DoxyCodeLine{609         state\_ = IterativeParsingStartState;}
+\DoxyCodeLine{608         \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
+\DoxyCodeLine{609         \mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}} = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}};}
 \DoxyCodeLine{610     \}}
 \DoxyCodeLine{611 }
 \DoxyCodeLine{613 }
@@ -488,21 +488,21 @@
 \DoxyCodeLine{621         \textcolor{keywordflow}{while} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(is.Peek() != \textcolor{charliteral}{'\(\backslash\)0'})) \{}
 \DoxyCodeLine{622             SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{623 }
-\DoxyCodeLine{624             Token t = Tokenize(is.Peek());}
-\DoxyCodeLine{625             IterativeParsingState n = Predict(state\_, t);}
-\DoxyCodeLine{626             IterativeParsingState d = Transit<parseFlags>(state\_, t, n, is, handler);}
+\DoxyCodeLine{624             \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} t = \mbox{\hyperlink{class_generic_reader_a0871b9653ca8283d92ac753bf63e33ce}{Tokenize}}(is.Peek());}
+\DoxyCodeLine{625             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} n = \mbox{\hyperlink{class_generic_reader_ad0be8224856167550255d2c9d09f4278}{Predict}}(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}, t);}
+\DoxyCodeLine{626             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} d = Transit<parseFlags>(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}, t, n, is, handler);}
 \DoxyCodeLine{627 }
 \DoxyCodeLine{628             \textcolor{comment}{// If we've finished or hit an error...}}
-\DoxyCodeLine{629             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(IsIterativeParsingCompleteState(d))) \{}
+\DoxyCodeLine{629             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(\mbox{\hyperlink{class_generic_reader_a2907a45d73d2f8cebe1a31bdc3a6e483}{IsIterativeParsingCompleteState}}(d))) \{}
 \DoxyCodeLine{630                 \textcolor{comment}{// Report errors.}}
-\DoxyCodeLine{631                 \textcolor{keywordflow}{if} (d == IterativeParsingErrorState) \{}
-\DoxyCodeLine{632                     HandleError(state\_, is);}
+\DoxyCodeLine{631                 \textcolor{keywordflow}{if} (d == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}) \{}
+\DoxyCodeLine{632                     \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}, is);}
 \DoxyCodeLine{633                     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
 \DoxyCodeLine{634                 \}}
 \DoxyCodeLine{635 }
 \DoxyCodeLine{636                 \textcolor{comment}{// Transition to the finish state.}}
-\DoxyCodeLine{637                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(d == IterativeParsingFinishState);}
-\DoxyCodeLine{638                 state\_ = d;}
+\DoxyCodeLine{637                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(d == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}});}
+\DoxyCodeLine{638                 \mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}} = d;}
 \DoxyCodeLine{639 }
 \DoxyCodeLine{640                 \textcolor{comment}{// If StopWhenDone is not set...}}
 \DoxyCodeLine{641                 \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36}{kParseStopWhenDoneFlag}})) \{}
@@ -510,7 +510,7 @@
 \DoxyCodeLine{643                     SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{644                     \textcolor{keywordflow}{if} (is.Peek() != \textcolor{charliteral}{'\(\backslash\)0'}) \{}
 \DoxyCodeLine{645                         \textcolor{comment}{// ... this is considered an error.}}
-\DoxyCodeLine{646                         HandleError(state\_, is);}
+\DoxyCodeLine{646                         \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}, is);}
 \DoxyCodeLine{647                         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
 \DoxyCodeLine{648                     \}}
 \DoxyCodeLine{649                 \}}
@@ -520,18 +520,18 @@
 \DoxyCodeLine{653             \}}
 \DoxyCodeLine{654 }
 \DoxyCodeLine{655             \textcolor{comment}{// Transition to the new state.}}
-\DoxyCodeLine{656             state\_ = d;}
+\DoxyCodeLine{656             \mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}} = d;}
 \DoxyCodeLine{657 }
 \DoxyCodeLine{658             \textcolor{comment}{// If we parsed anything other than a delimiter, we invoked the handler, so we can return true now.}}
-\DoxyCodeLine{659             \textcolor{keywordflow}{if} (!IsIterativeParsingDelimiterState(n))}
+\DoxyCodeLine{659             \textcolor{keywordflow}{if} (!\mbox{\hyperlink{class_generic_reader_a115b4d35f57ef8dbe9eef467cba471ae}{IsIterativeParsingDelimiterState}}(n))}
 \DoxyCodeLine{660                 \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
 \DoxyCodeLine{661         \}}
 \DoxyCodeLine{662 }
 \DoxyCodeLine{663         \textcolor{comment}{// We reached the end of file.}}
-\DoxyCodeLine{664         stack\_.\mbox{\hyperlink{classinternal_1_1_stack_a02da31665a372738e81ded2f7b7d598e}{Clear}}();}
+\DoxyCodeLine{664         \mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.\mbox{\hyperlink{classinternal_1_1_stack_a02da31665a372738e81ded2f7b7d598e}{Clear}}();}
 \DoxyCodeLine{665 }
-\DoxyCodeLine{666         \textcolor{keywordflow}{if} (state\_ != IterativeParsingFinishState) \{}
-\DoxyCodeLine{667             HandleError(state\_, is);}
+\DoxyCodeLine{666         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}} != \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}}) \{}
+\DoxyCodeLine{667             \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}}, is);}
 \DoxyCodeLine{668             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
 \DoxyCodeLine{669         \}}
 \DoxyCodeLine{670 }
@@ -540,54 +540,54 @@
 \DoxyCodeLine{673 }
 \DoxyCodeLine{675 }
 \DoxyCodeLine{677     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_aa1e9e1eef614fde971550ed2f955151d}{IterativeParseComplete}}()\textcolor{keyword}{ const }\{}
-\DoxyCodeLine{678         \textcolor{keywordflow}{return} IsIterativeParsingCompleteState(state\_);}
+\DoxyCodeLine{678         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a2907a45d73d2f8cebe1a31bdc3a6e483}{IsIterativeParsingCompleteState}}(\mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}});}
 \DoxyCodeLine{679     \}}
 \DoxyCodeLine{680 }
-\DoxyCodeLine{682     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} parseResult\_.\mbox{\hyperlink{struct_parse_result_adfe0ef5b994e82f8aa9ebf0b30c924b1}{IsError}}(); \}}
+\DoxyCodeLine{682     \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_adfe0ef5b994e82f8aa9ebf0b30c924b1}{IsError}}(); \}}
 \DoxyCodeLine{683 }
-\DoxyCodeLine{685     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{ParseErrorCode}} \mbox{\hyperlink{class_generic_reader_a937bf90919f50e1c370b312cee5833e8}{GetParseErrorCode}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} parseResult\_.\mbox{\hyperlink{struct_parse_result_a2aae3c2f42b31cc2409ee1e03bc4852e}{Code}}(); \}}
+\DoxyCodeLine{685     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{ParseErrorCode}} \mbox{\hyperlink{class_generic_reader_a937bf90919f50e1c370b312cee5833e8}{GetParseErrorCode}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_a2aae3c2f42b31cc2409ee1e03bc4852e}{Code}}(); \}}
 \DoxyCodeLine{686 }
-\DoxyCodeLine{688     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_ae9008523ccd06d839a57335835cb4091}{GetErrorOffset}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} parseResult\_.\mbox{\hyperlink{struct_parse_result_afbe762766ac21b2aae266105f1dfa643}{Offset}}(); \}}
+\DoxyCodeLine{688     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_ae9008523ccd06d839a57335835cb4091}{GetErrorOffset}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_afbe762766ac21b2aae266105f1dfa643}{Offset}}(); \}}
 \DoxyCodeLine{689 }
 \DoxyCodeLine{690 \textcolor{keyword}{protected}:}
-\DoxyCodeLine{691     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_ae50079444295bf109730c3b708a818a6}{SetParseError}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{ParseErrorCode}} code, \textcolor{keywordtype}{size\_t} offset) \{ parseResult\_.\mbox{\hyperlink{struct_parse_result_aa81b4a7b776b77216cb752385203a8c1}{Set}}(code, offset); \}}
+\DoxyCodeLine{691     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_ae50079444295bf109730c3b708a818a6}{SetParseError}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga8d4b32dfc45840bca189ade2bbcb6ba7}{ParseErrorCode}} code, \textcolor{keywordtype}{size\_t} offset) \{ \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_aa81b4a7b776b77216cb752385203a8c1}{Set}}(code, offset); \}}
 \DoxyCodeLine{692 }
 \DoxyCodeLine{693 \textcolor{keyword}{private}:}
 \DoxyCodeLine{694     \textcolor{comment}{// Prohibit copy constructor \& assignment operator.}}
-\DoxyCodeLine{695     \mbox{\hyperlink{class_generic_reader_aab875a34b3092df9fb4e2b8eac6dbb96}{GenericReader}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader}{GenericReader}}\&);}
-\DoxyCodeLine{696     \mbox{\hyperlink{class_generic_reader}{GenericReader}}\& operator=(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader}{GenericReader}}\&);}
+\DoxyCodeLine{695     \mbox{\hyperlink{class_generic_reader_ac767384e34b7078fa9f97ba57c884328}{GenericReader}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader}{GenericReader}}\&);}
+\DoxyCodeLine{696     \mbox{\hyperlink{class_generic_reader}{GenericReader}}\& \mbox{\hyperlink{class_generic_reader_a6c97642d5f7064805f5254304da2430a}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader}{GenericReader}}\&);}
 \DoxyCodeLine{697 }
-\DoxyCodeLine{698     \textcolor{keywordtype}{void} ClearStack() \{ stack\_.\mbox{\hyperlink{classinternal_1_1_stack_a02da31665a372738e81ded2f7b7d598e}{Clear}}(); \}}
+\DoxyCodeLine{698     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a1c3db4c395db98714ffb257d559fb28e}{ClearStack}}() \{ \mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.\mbox{\hyperlink{classinternal_1_1_stack_a02da31665a372738e81ded2f7b7d598e}{Clear}}(); \}}
 \DoxyCodeLine{699 }
 \DoxyCodeLine{700     \textcolor{comment}{// clear stack on any exit from ParseStream, e.g. due to exception}}
-\DoxyCodeLine{701     \textcolor{keyword}{struct }ClearStackOnExit \{}
-\DoxyCodeLine{702         \textcolor{keyword}{explicit} ClearStackOnExit(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& r) : r\_(r) \{\}}
-\DoxyCodeLine{703         \string~ClearStackOnExit() \{ r\_.ClearStack(); \}}
+\DoxyCodeLine{701     \textcolor{keyword}{struct }\mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}} \{}
+\DoxyCodeLine{702         \textcolor{keyword}{explicit} \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_a74f8b1f772229a3b2eb1d26ba4b58eca}{ClearStackOnExit}}(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& r) : \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_a6805ebb172f278c65ec7fc61847eb08d}{r\_}}(r) \{\}}
+\DoxyCodeLine{703         \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_ab6035e502faee35e21fb1c9a9043a230}{\string~ClearStackOnExit}}() \{ \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_a6805ebb172f278c65ec7fc61847eb08d}{r\_}}.\mbox{\hyperlink{class_generic_reader_a1c3db4c395db98714ffb257d559fb28e}{ClearStack}}(); \}}
 \DoxyCodeLine{704     \textcolor{keyword}{private}:}
-\DoxyCodeLine{705         \mbox{\hyperlink{class_generic_reader}{GenericReader}}\& r\_;}
-\DoxyCodeLine{706         ClearStackOnExit(\textcolor{keyword}{const} ClearStackOnExit\&);}
-\DoxyCodeLine{707         ClearStackOnExit\& operator=(\textcolor{keyword}{const} ClearStackOnExit\&);}
+\DoxyCodeLine{705         \mbox{\hyperlink{class_generic_reader}{GenericReader}}\& \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_a6805ebb172f278c65ec7fc61847eb08d}{r\_}};}
+\DoxyCodeLine{706         \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_ab276cf5b396da397f4ec05d6a29139a9}{ClearStackOnExit}}(\textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}}\&);}
+\DoxyCodeLine{707         \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}}\& \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit_abe3690a08d2eae29af981aabb5cdd2af}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}}\&);}
 \DoxyCodeLine{708     \};}
 \DoxyCodeLine{709 }
 \DoxyCodeLine{710     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream>}
-\DoxyCodeLine{711     \textcolor{keywordtype}{void} SkipWhitespaceAndComments(InputStream\& is) \{}
+\DoxyCodeLine{711     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a4d01a1cbfbb63744361af3e1eb98aa52}{SkipWhitespaceAndComments}}(InputStream\& is) \{}
 \DoxyCodeLine{712         \mbox{\hyperlink{reader_8h_a60338858b2582eca23f3e509a2d82e0e}{SkipWhitespace}}(is);}
 \DoxyCodeLine{713 }
 \DoxyCodeLine{714         \textcolor{keywordflow}{if} (parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a245d1b6af730f47f0e7bd27078f5e8c1}{kParseCommentsFlag}}) \{}
-\DoxyCodeLine{715             \textcolor{keywordflow}{while} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(Consume(is, \textcolor{charliteral}{'/'}))) \{}
-\DoxyCodeLine{716                 \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{'*'})) \{}
+\DoxyCodeLine{715             \textcolor{keywordflow}{while} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'/'}))) \{}
+\DoxyCodeLine{716                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'*'})) \{}
 \DoxyCodeLine{717                     \textcolor{keywordflow}{while} (\textcolor{keyword}{true}) \{}
 \DoxyCodeLine{718                         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(is.Peek() == \textcolor{charliteral}{'\(\backslash\)0'}))}
 \DoxyCodeLine{719                             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a2bec6b26bddd3e093a37fc0d6399e0be}{kParseErrorUnspecificSyntaxError}}, is.Tell());}
-\DoxyCodeLine{720                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{'*'})) \{}
-\DoxyCodeLine{721                             \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{'/'}))}
+\DoxyCodeLine{720                         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'*'})) \{}
+\DoxyCodeLine{721                             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'/'}))}
 \DoxyCodeLine{722                                 \textcolor{keywordflow}{break};}
 \DoxyCodeLine{723                         \}}
 \DoxyCodeLine{724                         \textcolor{keywordflow}{else}}
 \DoxyCodeLine{725                             is.Take();}
 \DoxyCodeLine{726                     \}}
 \DoxyCodeLine{727                 \}}
-\DoxyCodeLine{728                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(Consume(is, \textcolor{charliteral}{'/'})))}
+\DoxyCodeLine{728                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'/'})))}
 \DoxyCodeLine{729                     \textcolor{keywordflow}{while} (is.Peek() != \textcolor{charliteral}{'\(\backslash\)0'} \&\& is.Take() != \textcolor{charliteral}{'\(\backslash\)n'}) \{\}}
 \DoxyCodeLine{730                 \textcolor{keywordflow}{else}}
 \DoxyCodeLine{731                     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a2bec6b26bddd3e093a37fc0d6399e0be}{kParseErrorUnspecificSyntaxError}}, is.Tell());}
@@ -599,7 +599,7 @@
 \DoxyCodeLine{737 }
 \DoxyCodeLine{738     \textcolor{comment}{// Parse object: \{ string : value, ... \}}}
 \DoxyCodeLine{739     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{740     \textcolor{keywordtype}{void} ParseObject(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{740     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_af7943451d58ae465e9803d5a78beeb90}{ParseObject}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{741         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(is.Peek() == \textcolor{charliteral}{'\{'});}
 \DoxyCodeLine{742         is.Take();  \textcolor{comment}{// Skip '\{'}}
 \DoxyCodeLine{743 }
@@ -609,7 +609,7 @@
 \DoxyCodeLine{747         SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{748         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{749 }
-\DoxyCodeLine{750         \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{'\}'})) \{}
+\DoxyCodeLine{750         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'\}'})) \{}
 \DoxyCodeLine{751             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.EndObject(0)))  \textcolor{comment}{// empty object}}
 \DoxyCodeLine{752                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{753             \textcolor{keywordflow}{return};}
@@ -625,7 +625,7 @@
 \DoxyCodeLine{763             SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{764             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{765 }
-\DoxyCodeLine{766             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!Consume(is, \textcolor{charliteral}{':'})))}
+\DoxyCodeLine{766             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{':'})))}
 \DoxyCodeLine{767                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017}{kParseErrorObjectMissColon}}, is.Tell());}
 \DoxyCodeLine{768 }
 \DoxyCodeLine{769             SkipWhitespaceAndComments<parseFlags>(is);}
@@ -667,7 +667,7 @@
 \DoxyCodeLine{805 }
 \DoxyCodeLine{806     \textcolor{comment}{// Parse array: [ value, ... ]}}
 \DoxyCodeLine{807     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{808     \textcolor{keywordtype}{void} ParseArray(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{808     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a8f226bb3c17b232ce142594b7620c8a4}{ParseArray}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{809         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(is.Peek() == \textcolor{charliteral}{'['});}
 \DoxyCodeLine{810         is.Take();  \textcolor{comment}{// Skip '['}}
 \DoxyCodeLine{811 }
@@ -677,7 +677,7 @@
 \DoxyCodeLine{815         SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{816         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{817 }
-\DoxyCodeLine{818         \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{']'})) \{}
+\DoxyCodeLine{818         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{']'})) \{}
 \DoxyCodeLine{819             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.EndArray(0))) \textcolor{comment}{// empty array}}
 \DoxyCodeLine{820                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{821             \textcolor{keywordflow}{return};}
@@ -691,11 +691,11 @@
 \DoxyCodeLine{829             SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{830             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{831 }
-\DoxyCodeLine{832             \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{','})) \{}
+\DoxyCodeLine{832             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{','})) \{}
 \DoxyCodeLine{833                 SkipWhitespaceAndComments<parseFlags>(is);}
 \DoxyCodeLine{834                 RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{835             \}}
-\DoxyCodeLine{836             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (Consume(is, \textcolor{charliteral}{']'})) \{}
+\DoxyCodeLine{836             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{']'})) \{}
 \DoxyCodeLine{837                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.EndArray(elementCount)))}
 \DoxyCodeLine{838                     \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{839                 \textcolor{keywordflow}{return};}
@@ -715,11 +715,11 @@
 \DoxyCodeLine{853     \}}
 \DoxyCodeLine{854 }
 \DoxyCodeLine{855     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{856     \textcolor{keywordtype}{void} ParseNull(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{856     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_ae624956124c98a85d23decd86a406a0b}{ParseNull}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{857         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(is.Peek() == \textcolor{charliteral}{'n'});}
 \DoxyCodeLine{858         is.Take();}
 \DoxyCodeLine{859 }
-\DoxyCodeLine{860         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(Consume(is, \textcolor{charliteral}{'u'}) \&\& Consume(is, \textcolor{charliteral}{'l'}) \&\& Consume(is, \textcolor{charliteral}{'l'}))) \{}
+\DoxyCodeLine{860         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'u'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'l'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'l'}))) \{}
 \DoxyCodeLine{861             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.Null()))}
 \DoxyCodeLine{862                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{863         \}}
@@ -728,11 +728,11 @@
 \DoxyCodeLine{866     \}}
 \DoxyCodeLine{867 }
 \DoxyCodeLine{868     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{869     \textcolor{keywordtype}{void} ParseTrue(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{869     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a762f074e0f99c71f0a82cff19bb763cd}{ParseTrue}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{870         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(is.Peek() == \textcolor{charliteral}{'t'});}
 \DoxyCodeLine{871         is.Take();}
 \DoxyCodeLine{872 }
-\DoxyCodeLine{873         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(Consume(is, \textcolor{charliteral}{'r'}) \&\& Consume(is, \textcolor{charliteral}{'u'}) \&\& Consume(is, \textcolor{charliteral}{'e'}))) \{}
+\DoxyCodeLine{873         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'r'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'u'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'e'}))) \{}
 \DoxyCodeLine{874             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.Bool(\textcolor{keyword}{true})))}
 \DoxyCodeLine{875                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{876         \}}
@@ -741,11 +741,11 @@
 \DoxyCodeLine{879     \}}
 \DoxyCodeLine{880 }
 \DoxyCodeLine{881     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{882     \textcolor{keywordtype}{void} ParseFalse(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{882     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_af3af2d4e8efa1b8ef2f0bb281d8f0540}{ParseFalse}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{883         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(is.Peek() == \textcolor{charliteral}{'f'});}
 \DoxyCodeLine{884         is.Take();}
 \DoxyCodeLine{885 }
-\DoxyCodeLine{886         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(Consume(is, \textcolor{charliteral}{'a'}) \&\& Consume(is, \textcolor{charliteral}{'l'}) \&\& Consume(is, \textcolor{charliteral}{'s'}) \&\& Consume(is, \textcolor{charliteral}{'e'}))) \{}
+\DoxyCodeLine{886         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'a'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'l'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'s'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'e'}))) \{}
 \DoxyCodeLine{887             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!handler.Bool(\textcolor{keyword}{false})))}
 \DoxyCodeLine{888                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
 \DoxyCodeLine{889         \}}
@@ -754,7 +754,7 @@
 \DoxyCodeLine{892     \}}
 \DoxyCodeLine{893 }
 \DoxyCodeLine{894     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream>}
-\DoxyCodeLine{895     RAPIDJSON\_FORCEINLINE \textcolor{keyword}{static} \textcolor{keywordtype}{bool} Consume(InputStream\& is, \textcolor{keyword}{typename} InputStream::Ch expect) \{}
+\DoxyCodeLine{895     RAPIDJSON\_FORCEINLINE \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(InputStream\& is, \textcolor{keyword}{typename} InputStream::Ch expect) \{}
 \DoxyCodeLine{896         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(is.Peek() == expect)) \{}
 \DoxyCodeLine{897             is.Take();}
 \DoxyCodeLine{898             \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
@@ -765,7 +765,7 @@
 \DoxyCodeLine{903 }
 \DoxyCodeLine{904     \textcolor{comment}{// Helper function to parse four hexadecimal digits in \(\backslash\)uXXXX in ParseString().}}
 \DoxyCodeLine{905     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream>}
-\DoxyCodeLine{906     \textcolor{keywordtype}{unsigned} ParseHex4(InputStream\& is, \textcolor{keywordtype}{size\_t} escapeOffset) \{}
+\DoxyCodeLine{906     \textcolor{keywordtype}{unsigned} \mbox{\hyperlink{class_generic_reader_afc44000d3b4d538080b09c6a43c00f20}{ParseHex4}}(InputStream\& is, \textcolor{keywordtype}{size\_t} escapeOffset) \{}
 \DoxyCodeLine{907         \textcolor{keywordtype}{unsigned} codepoint = 0;}
 \DoxyCodeLine{908         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 4; i++) \{}
 \DoxyCodeLine{909             \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} c = is.Peek();}
@@ -787,38 +787,38 @@
 \DoxyCodeLine{925     \}}
 \DoxyCodeLine{926 }
 \DoxyCodeLine{927     \textcolor{keyword}{template} <\textcolor{keyword}{typename} CharType>}
-\DoxyCodeLine{928     \textcolor{keyword}{class }StackStream \{}
+\DoxyCodeLine{928     \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream}} \{}
 \DoxyCodeLine{929     \textcolor{keyword}{public}:}
-\DoxyCodeLine{930         \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}};}
+\DoxyCodeLine{930         \textcolor{keyword}{typedef} CharType \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a8b6ba64b97ed5f79f17d96428fd50ec0}{Ch}};}
 \DoxyCodeLine{931 }
-\DoxyCodeLine{932         StackStream(\mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}}\& stack) : stack\_(stack), length\_(0) \{\}}
-\DoxyCodeLine{933         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} Put(\mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} c) \{}
-\DoxyCodeLine{934             *stack\_.template Push<Ch>() = c;}
-\DoxyCodeLine{935             ++length\_;}
+\DoxyCodeLine{932         \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a288cf0f0385f706856b0e19c447e74ab}{StackStream}}(\mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}}\& stack) : \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a175494011b48c130d092129fae81bcc8}{stack\_}}(stack), \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}}(0) \{\}}
+\DoxyCodeLine{933         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_aba4f7888d42e872ccbf668289373006f}{Put}}(\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a8b6ba64b97ed5f79f17d96428fd50ec0}{Ch}} c) \{}
+\DoxyCodeLine{934             *\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a175494011b48c130d092129fae81bcc8}{stack\_}}.template Push<Ch>() = c;}
+\DoxyCodeLine{935             ++\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}};}
 \DoxyCodeLine{936         \}}
 \DoxyCodeLine{937 }
-\DoxyCodeLine{938         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void}* Push(\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} count) \{}
-\DoxyCodeLine{939             length\_ += count;}
-\DoxyCodeLine{940             \textcolor{keywordflow}{return} stack\_.template Push<Ch>(count);}
+\DoxyCodeLine{938         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void}* \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a7b774235ea694c5210b94e4210b96c7f}{Push}}(\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} count) \{}
+\DoxyCodeLine{939             \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}} += count;}
+\DoxyCodeLine{940             \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a175494011b48c130d092129fae81bcc8}{stack\_}}.template Push<Ch>(count);}
 \DoxyCodeLine{941         \}}
 \DoxyCodeLine{942 }
-\DoxyCodeLine{943         \textcolor{keywordtype}{size\_t} Length()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} length\_; \}}
+\DoxyCodeLine{943         \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a528a88479d08ccf62831251fbd35216b}{Length}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}}; \}}
 \DoxyCodeLine{944 }
-\DoxyCodeLine{945         \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}}* Pop() \{}
-\DoxyCodeLine{946             \textcolor{keywordflow}{return} stack\_.template Pop<Ch>(length\_);}
+\DoxyCodeLine{945         \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a8b6ba64b97ed5f79f17d96428fd50ec0}{Ch}}* \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_ae779f1403194a4062465be0d9bb8cf0c}{Pop}}() \{}
+\DoxyCodeLine{946             \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a175494011b48c130d092129fae81bcc8}{stack\_}}.template Pop<Ch>(\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}});}
 \DoxyCodeLine{947         \}}
 \DoxyCodeLine{948 }
 \DoxyCodeLine{949     \textcolor{keyword}{private}:}
-\DoxyCodeLine{950         StackStream(\textcolor{keyword}{const} StackStream\&);}
-\DoxyCodeLine{951         StackStream\& operator=(\textcolor{keyword}{const} StackStream\&);}
+\DoxyCodeLine{950         \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a66f42e9a55810bf5bfe1b5c86c09dd51}{StackStream}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream}}\&);}
+\DoxyCodeLine{951         \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream}}\& \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a3623566bb87b47170d846c943f911aca}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream}}\&);}
 \DoxyCodeLine{952 }
-\DoxyCodeLine{953         \mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}}\& stack\_;}
-\DoxyCodeLine{954         \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length\_;}
+\DoxyCodeLine{953         \mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}}\& \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a175494011b48c130d092129fae81bcc8}{stack\_}};}
+\DoxyCodeLine{954         \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} \mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a9a3711b7b92f4ff85e210c2d59163ff1}{length\_}};}
 \DoxyCodeLine{955     \};}
 \DoxyCodeLine{956 }
 \DoxyCodeLine{957     \textcolor{comment}{// Parse string and generate String event. Different code paths for kParseInsituFlag.}}
 \DoxyCodeLine{958     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{959     \textcolor{keywordtype}{void} ParseString(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler, \textcolor{keywordtype}{bool} isKey = \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{959     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_ab4d4f63b23b55a72069e2e13eb010cff}{ParseString}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler, \textcolor{keywordtype}{bool} isKey = \textcolor{keyword}{false}) \{}
 \DoxyCodeLine{960         \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{internal::StreamLocalCopy<InputStream>}} copy(is);}
 \DoxyCodeLine{961         InputStream\& s(copy.s);}
 \DoxyCodeLine{962 }
@@ -836,11 +836,11 @@
 \DoxyCodeLine{974             success = (isKey ? handler.Key(str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(length), \textcolor{keyword}{false}) : handler.String(str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(length), \textcolor{keyword}{false}));}
 \DoxyCodeLine{975         \}}
 \DoxyCodeLine{976         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{977             StackStream<typename TargetEncoding::Ch> stackStream(stack\_);}
+\DoxyCodeLine{977             \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream<typename TargetEncoding::Ch>}} stackStream(\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}});}
 \DoxyCodeLine{978             ParseStringToStream<parseFlags, SourceEncoding, TargetEncoding>(s, stackStream);}
 \DoxyCodeLine{979             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
-\DoxyCodeLine{980             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}\textcolor{keyword}{>}(stackStream.Length()) -\/ 1;}
-\DoxyCodeLine{981             \textcolor{keyword}{const} \textcolor{keyword}{typename} TargetEncoding::Ch* \textcolor{keyword}{const} str = stackStream.Pop();}
+\DoxyCodeLine{980             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}\textcolor{keyword}{>}(stackStream.\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a528a88479d08ccf62831251fbd35216b}{Length}}()) -\/ 1;}
+\DoxyCodeLine{981             \textcolor{keyword}{const} \textcolor{keyword}{typename} TargetEncoding::Ch* \textcolor{keyword}{const} str = stackStream.\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_ae779f1403194a4062465be0d9bb8cf0c}{Pop}}();}
 \DoxyCodeLine{982             success = (isKey ? handler.Key(str, length, \textcolor{keyword}{true}) : handler.String(str, length, \textcolor{keyword}{true}));}
 \DoxyCodeLine{983         \}}
 \DoxyCodeLine{984         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!success))}
@@ -850,7 +850,7 @@
 \DoxyCodeLine{988     \textcolor{comment}{// Parse string to an output is}}
 \DoxyCodeLine{989     \textcolor{comment}{// This function handles the prefix/suffix double quotes, escaping, and optional encoding validation.}}
 \DoxyCodeLine{990     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} SEncoding, \textcolor{keyword}{typename} TEncoding, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
-\DoxyCodeLine{991     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ParseStringToStream(InputStream\& is, OutputStream\& os) \{}
+\DoxyCodeLine{991     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a8fa22aded7085b3fe5f9d59467318f8a}{ParseStringToStream}}(InputStream\& is, OutputStream\& os) \{}
 \DoxyCodeLine{993 \textcolor{preprocessor}{\#define Z16 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}}
 \DoxyCodeLine{994         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} escape[256] = \{}
 \DoxyCodeLine{995             \mbox{\hyperlink{writer_8h_ae2c492a0a464591893d4255ea26d5e3a}{Z16}}, \mbox{\hyperlink{writer_8h_ae2c492a0a464591893d4255ea26d5e3a}{Z16}}, 0, 0,\textcolor{charliteral}{'\(\backslash\)"{}'}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \textcolor{charliteral}{'/'},}
@@ -864,7 +864,7 @@
 \DoxyCodeLine{1004         \textcolor{keywordflow}{for} (;;) \{}
 \DoxyCodeLine{1005             \textcolor{comment}{// Scan and copy string before "{}\(\backslash\)\(\backslash\)\(\backslash\)"{}"{} or < 0x20. This is an optional optimzation.}}
 \DoxyCodeLine{1006             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9b3baa16346575d2dc072b23a88e1928}{kParseValidateEncodingFlag}}))}
-\DoxyCodeLine{1007                 ScanCopyUnescapedString(is, os);}
+\DoxyCodeLine{1007                 \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(is, os);}
 \DoxyCodeLine{1008 }
 \DoxyCodeLine{1009             \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} c = is.Peek();}
 \DoxyCodeLine{1010             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(c == \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'})) \{    \textcolor{comment}{// Escape}}
@@ -881,15 +881,15 @@
 \DoxyCodeLine{1021                 \}}
 \DoxyCodeLine{1022                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(e == \textcolor{charliteral}{'u'})) \{    \textcolor{comment}{// Unicode}}
 \DoxyCodeLine{1023                     is.Take();}
-\DoxyCodeLine{1024                     \textcolor{keywordtype}{unsigned} codepoint = ParseHex4(is, escapeOffset);}
+\DoxyCodeLine{1024                     \textcolor{keywordtype}{unsigned} codepoint = \mbox{\hyperlink{class_generic_reader_afc44000d3b4d538080b09c6a43c00f20}{ParseHex4}}(is, escapeOffset);}
 \DoxyCodeLine{1025                     RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{1026                     \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(codepoint >= 0xD800 \&\& codepoint <= 0xDFFF)) \{}
 \DoxyCodeLine{1027                         \textcolor{comment}{// high surrogate, check if followed by valid low surrogate}}
 \DoxyCodeLine{1028                         \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(codepoint <= 0xDBFF)) \{}
 \DoxyCodeLine{1029                             \textcolor{comment}{// Handle UTF-\/16 surrogate pair}}
-\DoxyCodeLine{1030                             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!Consume(is, \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}) || !Consume(is, \textcolor{charliteral}{'u'})))}
+\DoxyCodeLine{1030                             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'\(\backslash\)\(\backslash\)'}) || !\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(is, \textcolor{charliteral}{'u'})))}
 \DoxyCodeLine{1031                                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ad9fced6763a06435ca448626c74e5c72}{kParseErrorStringUnicodeSurrogateInvalid}}, escapeOffset);}
-\DoxyCodeLine{1032                             \textcolor{keywordtype}{unsigned} codepoint2 = ParseHex4(is, escapeOffset);}
+\DoxyCodeLine{1032                             \textcolor{keywordtype}{unsigned} codepoint2 = \mbox{\hyperlink{class_generic_reader_afc44000d3b4d538080b09c6a43c00f20}{ParseHex4}}(is, escapeOffset);}
 \DoxyCodeLine{1033                             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN\_VOID;}
 \DoxyCodeLine{1034                             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(codepoint2 < 0xDC00 || codepoint2 > 0xDFFF))}
 \DoxyCodeLine{1035                                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ad9fced6763a06435ca448626c74e5c72}{kParseErrorStringUnicodeSurrogateInvalid}}, escapeOffset);}
@@ -928,13 +928,13 @@
 \DoxyCodeLine{1068     \}}
 \DoxyCodeLine{1069 }
 \DoxyCodeLine{1070     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} OutputStream>}
-\DoxyCodeLine{1071     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ScanCopyUnescapedString(InputStream\&, OutputStream\&) \{}
+\DoxyCodeLine{1071     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(InputStream\&, OutputStream\&) \{}
 \DoxyCodeLine{1072             \textcolor{comment}{// Do nothing for generic version}}
 \DoxyCodeLine{1073     \}}
 \DoxyCodeLine{1074 }
 \DoxyCodeLine{1075 \textcolor{preprocessor}{\#if defined(RAPIDJSON\_SSE2) || defined(RAPIDJSON\_SSE42)}}
 \DoxyCodeLine{1076     \textcolor{comment}{// StringStream -\/> StackStream<char>}}
-\DoxyCodeLine{1077     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ScanCopyUnescapedString(\mbox{\hyperlink{struct_generic_string_stream}{StringStream}}\& is, StackStream<char>\& os) \{}
+\DoxyCodeLine{1077     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(\mbox{\hyperlink{struct_generic_string_stream}{StringStream}}\& is, StackStream<char>\& os) \{}
 \DoxyCodeLine{1078         \textcolor{keyword}{const} \textcolor{keywordtype}{char}* p = is.\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}};}
 \DoxyCodeLine{1079 }
 \DoxyCodeLine{1080         \textcolor{comment}{// Scan one by one until alignment (unaligned load may cross page boundary and cause crash)}}
@@ -987,7 +987,7 @@
 \DoxyCodeLine{1127     \}}
 \DoxyCodeLine{1128 }
 \DoxyCodeLine{1129     \textcolor{comment}{// InsituStringStream -\/> InsituStringStream}}
-\DoxyCodeLine{1130     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ScanCopyUnescapedString(\mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& is, \mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& os) \{}
+\DoxyCodeLine{1130     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(\mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& is, \mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& os) \{}
 \DoxyCodeLine{1131         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\&is == \&os);}
 \DoxyCodeLine{1132         (void)os;}
 \DoxyCodeLine{1133 }
@@ -1091,7 +1091,7 @@
 \DoxyCodeLine{1231     \}}
 \DoxyCodeLine{1232 \textcolor{preprocessor}{\#elif defined(RAPIDJSON\_NEON)}}
 \DoxyCodeLine{1233     \textcolor{comment}{// StringStream -\/> StackStream<char>}}
-\DoxyCodeLine{1234     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ScanCopyUnescapedString(\mbox{\hyperlink{struct_generic_string_stream}{StringStream}}\& is, StackStream<char>\& os) \{}
+\DoxyCodeLine{1234     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(\mbox{\hyperlink{struct_generic_string_stream}{StringStream}}\& is, StackStream<char>\& os) \{}
 \DoxyCodeLine{1235         \textcolor{keyword}{const} \textcolor{keywordtype}{char}* p = is.\mbox{\hyperlink{struct_generic_string_stream_aeda813798e3f2d6bfdac86afc11b6b80}{src\_}};}
 \DoxyCodeLine{1236 }
 \DoxyCodeLine{1237         \textcolor{comment}{// Scan one by one until alignment (unaligned load may cross page boundary and cause crash)}}
@@ -1151,7 +1151,7 @@
 \DoxyCodeLine{1291     \}}
 \DoxyCodeLine{1292 }
 \DoxyCodeLine{1293     \textcolor{comment}{// InsituStringStream -\/> InsituStringStream}}
-\DoxyCodeLine{1294     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} ScanCopyUnescapedString(\mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& is, \mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& os) \{}
+\DoxyCodeLine{1294     \textcolor{keyword}{static} RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a22d69758dcadf454e372226be028483c}{ScanCopyUnescapedString}}(\mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& is, \mbox{\hyperlink{struct_generic_insitu_string_stream}{InsituStringStream}}\& os) \{}
 \DoxyCodeLine{1295         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(\&is == \&os);}
 \DoxyCodeLine{1296         (void)os;}
 \DoxyCodeLine{1297 }
@@ -1265,71 +1265,71 @@
 \DoxyCodeLine{1405 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// RAPIDJSON\_NEON}}
 \DoxyCodeLine{1406 }
 \DoxyCodeLine{1407     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} StackCharacter, \textcolor{keywordtype}{bool} backup, \textcolor{keywordtype}{bool} pushOnTake>}
-\DoxyCodeLine{1408     \textcolor{keyword}{class }NumberStream;}
+\DoxyCodeLine{1408     \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}};}
 \DoxyCodeLine{1409 }
 \DoxyCodeLine{1410     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} StackCharacter>}
-\DoxyCodeLine{1411     \textcolor{keyword}{class }NumberStream<InputStream, StackCharacter, false, false> \{}
+\DoxyCodeLine{1411     \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, StackCharacter, false, false> \{}
 \DoxyCodeLine{1412     \textcolor{keyword}{public}:}
-\DoxyCodeLine{1413         \textcolor{keyword}{typedef} \textcolor{keyword}{typename} InputStream::Ch \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}};}
+\DoxyCodeLine{1413         \textcolor{keyword}{typedef} \textcolor{keyword}{typename} InputStream::Ch \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}};}
 \DoxyCodeLine{1414 }
-\DoxyCodeLine{1415         NumberStream(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& s) : is(s) \{ (void)reader;  \}}
+\DoxyCodeLine{1415         \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a47658fca075a288b6deae38f8d58ec0e}{NumberStream}}(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& s) : is(s) \{ (void)reader;  \}}
 \DoxyCodeLine{1416 }
-\DoxyCodeLine{1417         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} Peek()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_ae21ba3ff4595ccd5caa4a9858e793f3f}{Peek}}(); \}}
-\DoxyCodeLine{1418         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} TakePush() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_afde4e46663225e4c32cfdbcd261f321e}{Take}}(); \}}
-\DoxyCodeLine{1419         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} Take() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_afde4e46663225e4c32cfdbcd261f321e}{Take}}(); \}}
-\DoxyCodeLine{1420         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} Push(\textcolor{keywordtype}{char}) \{\}}
+\DoxyCodeLine{1417         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a59e2539ee8a6db3cf4da76deecc0b5d7}{Peek}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_ae21ba3ff4595ccd5caa4a9858e793f3f}{Peek}}(); \}}
+\DoxyCodeLine{1418         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a87d3eaf081b6602e610f37111654d4e8}{TakePush}}() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_afde4e46663225e4c32cfdbcd261f321e}{Take}}(); \}}
+\DoxyCodeLine{1419         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a9b77aed2ad2f33636be5c79495e26e99}{Take}}() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_afde4e46663225e4c32cfdbcd261f321e}{Take}}(); \}}
+\DoxyCodeLine{1420         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a15561810a953f190fe517d07fdd3ed88}{Push}}(\textcolor{keywordtype}{char}) \{\}}
 \DoxyCodeLine{1421 }
-\DoxyCodeLine{1422         \textcolor{keywordtype}{size\_t} Tell() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_aa9a84abb24e8c93b683a2e7bfea309db}{Tell}}(); \}}
-\DoxyCodeLine{1423         \textcolor{keywordtype}{size\_t} Length() \{ \textcolor{keywordflow}{return} 0; \}}
-\DoxyCodeLine{1424         \textcolor{keyword}{const} StackCharacter* Pop() \{ \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{1422         \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a3317119c59d24c688599292bbae8c78f}{Tell}}() \{ \textcolor{keywordflow}{return} is.\mbox{\hyperlink{struct_generic_insitu_string_stream_aa9a84abb24e8c93b683a2e7bfea309db}{Tell}}(); \}}
+\DoxyCodeLine{1423         \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a368abe0ab3f8a106f55fc2519c6a03e3}{Length}}() \{ \textcolor{keywordflow}{return} 0; \}}
+\DoxyCodeLine{1424         \textcolor{keyword}{const} StackCharacter* \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a45ea7127c5df909d2744cb29d986d733}{Pop}}() \{ \textcolor{keywordflow}{return} 0; \}}
 \DoxyCodeLine{1425 }
 \DoxyCodeLine{1426     \textcolor{keyword}{protected}:}
-\DoxyCodeLine{1427         NumberStream\& operator=(\textcolor{keyword}{const} NumberStream\&);}
+\DoxyCodeLine{1427         \mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}\& \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a471cc0a4fbd1e42b84b125b78011f052}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}\&);}
 \DoxyCodeLine{1428 }
-\DoxyCodeLine{1429         InputStream\& is;}
+\DoxyCodeLine{1429         InputStream\& \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a757fc771328ce94b28df424a32e6407a}{is}};}
 \DoxyCodeLine{1430     \};}
 \DoxyCodeLine{1431 }
 \DoxyCodeLine{1432     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} StackCharacter>}
-\DoxyCodeLine{1433     \textcolor{keyword}{class }NumberStream<InputStream, StackCharacter, true, false> : \textcolor{keyword}{public} NumberStream<InputStream, StackCharacter, false, false> \{}
-\DoxyCodeLine{1434         \textcolor{keyword}{typedef} NumberStream<InputStream, StackCharacter, false, false> Base;}
+\DoxyCodeLine{1433     \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, StackCharacter, true, false> : \textcolor{keyword}{public} \mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, StackCharacter, false, false> \{}
+\DoxyCodeLine{1434         \textcolor{keyword}{typedef} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4}{NumberStream<InputStream, StackCharacter, false, false>}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a59fe7f9d3da6145a8ff45c6a9dad5de4}{Base}};}
 \DoxyCodeLine{1435     \textcolor{keyword}{public}:}
-\DoxyCodeLine{1436         NumberStream(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& is) : Base(reader, is), stackStream(reader.stack\_) \{\}}
+\DoxyCodeLine{1436         \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a02818ba7dbbd8399d155f60eba2e2c3c}{NumberStream}}(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& is) : \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4}{Base}}(reader, is), stackStream(reader.\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}) \{\}}
 \DoxyCodeLine{1437 }
-\DoxyCodeLine{1438         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} TakePush() \{}
+\DoxyCodeLine{1438         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a4d7c647825c4346e88638f27ead739ef}{TakePush}}() \{}
 \DoxyCodeLine{1439             stackStream.Put(\textcolor{keyword}{static\_cast<}StackCharacter\textcolor{keyword}{>}(Base::is.Peek()));}
 \DoxyCodeLine{1440             \textcolor{keywordflow}{return} Base::is.Take();}
 \DoxyCodeLine{1441         \}}
 \DoxyCodeLine{1442 }
-\DoxyCodeLine{1443         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} Push(StackCharacter c) \{}
+\DoxyCodeLine{1443         RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a103447df5bb480245e1495fb5041989e}{Push}}(StackCharacter c) \{}
 \DoxyCodeLine{1444             stackStream.Put(c);}
 \DoxyCodeLine{1445         \}}
 \DoxyCodeLine{1446 }
-\DoxyCodeLine{1447         \textcolor{keywordtype}{size\_t} Length() \{ \textcolor{keywordflow}{return} stackStream.Length(); \}}
+\DoxyCodeLine{1447         \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a881b01ff74eda61822c999522610a7bd}{Length}}() \{ \textcolor{keywordflow}{return} stackStream.Length(); \}}
 \DoxyCodeLine{1448 }
-\DoxyCodeLine{1449         \textcolor{keyword}{const} StackCharacter* Pop() \{}
+\DoxyCodeLine{1449         \textcolor{keyword}{const} StackCharacter* \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_abc902854c89f3ee5e9b53ee1f93c6363}{Pop}}() \{}
 \DoxyCodeLine{1450             stackStream.Put(\textcolor{charliteral}{'\(\backslash\)0'});}
 \DoxyCodeLine{1451             \textcolor{keywordflow}{return} stackStream.Pop();}
 \DoxyCodeLine{1452         \}}
 \DoxyCodeLine{1453 }
 \DoxyCodeLine{1454     \textcolor{keyword}{private}:}
-\DoxyCodeLine{1455         StackStream<StackCharacter> stackStream;}
+\DoxyCodeLine{1455         \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream<StackCharacter>}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4_a144461a74c5f310297a8387df9d04d9f}{stackStream}};}
 \DoxyCodeLine{1456     \};}
 \DoxyCodeLine{1457 }
 \DoxyCodeLine{1458     \textcolor{keyword}{template}<\textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} StackCharacter>}
-\DoxyCodeLine{1459     \textcolor{keyword}{class }NumberStream<InputStream, StackCharacter, true, true> : \textcolor{keyword}{public} NumberStream<InputStream, StackCharacter, true, false> \{}
-\DoxyCodeLine{1460         \textcolor{keyword}{typedef} NumberStream<InputStream, StackCharacter, true, false> Base;}
+\DoxyCodeLine{1459     \textcolor{keyword}{class }\mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, StackCharacter, true, true> : \textcolor{keyword}{public} \mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, StackCharacter, true, false> \{}
+\DoxyCodeLine{1460         \textcolor{keyword}{typedef} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01false_01_4}{NumberStream<InputStream, StackCharacter, true, false>}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01true_01_4_abe19b3955169c800e43adda897c9b83e}{Base}};}
 \DoxyCodeLine{1461     \textcolor{keyword}{public}:}
-\DoxyCodeLine{1462         NumberStream(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& is) : Base(reader, is) \{\}}
+\DoxyCodeLine{1462         \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01true_01_4_a1299c3678925a66480195926d93dd3a4}{NumberStream}}(\mbox{\hyperlink{class_generic_reader}{GenericReader}}\& reader, InputStream\& is) : \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4}{Base}}(reader, is) \{\}}
 \DoxyCodeLine{1463 }
-\DoxyCodeLine{1464         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} Take() \{ \textcolor{keywordflow}{return} Base::TakePush(); \}}
+\DoxyCodeLine{1464         RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01false_00_01false_01_4_a2971d286306cf8df899b87ea9dd24f27}{Ch}} \mbox{\hyperlink{class_generic_reader_1_1_number_stream_3_01_input_stream_00_01_stack_character_00_01true_00_01true_01_4_a8d8589335bf009557f2d486751aa2f63}{Take}}() \{ \textcolor{keywordflow}{return} Base::TakePush(); \}}
 \DoxyCodeLine{1465     \};}
 \DoxyCodeLine{1466 }
 \DoxyCodeLine{1467     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{1468     \textcolor{keywordtype}{void} ParseNumber(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{1468     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a2447207fde31185e2bb8fbf1250b72e0}{ParseNumber}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{1469         \textcolor{keyword}{typedef} \textcolor{keyword}{typename} internal::SelectIf<internal::BoolType<(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01}{kParseNumbersAsStringsFlag}}) != 0>, \textcolor{keyword}{typename} TargetEncoding::Ch, \textcolor{keywordtype}{char}>\mbox{\hyperlink{rapidjson_8h_a1d1cfd8ffb84e947f82999c682b666a7}{::Type}} NumberCharacter;}
 \DoxyCodeLine{1470 }
 \DoxyCodeLine{1471         \mbox{\hyperlink{classinternal_1_1_stream_local_copy}{internal::StreamLocalCopy<InputStream>}} copy(is);}
-\DoxyCodeLine{1472         NumberStream<InputStream, NumberCharacter,}
+\DoxyCodeLine{1472         \mbox{\hyperlink{class_generic_reader_1_1_number_stream}{NumberStream}}<InputStream, NumberCharacter,}
 \DoxyCodeLine{1473             ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450aa951ab03a51b32b60164436bc280cf01}{kParseNumbersAsStringsFlag}}) != 0) ?}
 \DoxyCodeLine{1474                 ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a13188bd483b4df0b6582bebe2aeb5b01}{kParseInsituFlag}}) == 0) :}
 \DoxyCodeLine{1475                 ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a057fbeacafb16bb7d24c9998262cae46}{kParseFullPrecisionFlag}}) != 0),}
@@ -1341,7 +1341,7 @@
 \DoxyCodeLine{1481         \textcolor{keywordtype}{bool} useNanOrInf = \textcolor{keyword}{false};}
 \DoxyCodeLine{1482 }
 \DoxyCodeLine{1483         \textcolor{comment}{// Parse minus}}
-\DoxyCodeLine{1484         \textcolor{keywordtype}{bool} minus = Consume(s, \textcolor{charliteral}{'-\/'});}
+\DoxyCodeLine{1484         \textcolor{keywordtype}{bool} minus = \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'-\/'});}
 \DoxyCodeLine{1485 }
 \DoxyCodeLine{1486         \textcolor{comment}{// Parse int: zero / ( digit1-\/9 *DIGIT )}}
 \DoxyCodeLine{1487         \textcolor{keywordtype}{unsigned} i = 0;}
@@ -1382,19 +1382,19 @@
 \DoxyCodeLine{1522         \}}
 \DoxyCodeLine{1523         \textcolor{comment}{// Parse NaN or Infinity here}}
 \DoxyCodeLine{1524         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a9849d65c1d3edd796bd75897c6a37eb6}{kParseNanAndInfFlag}}) \&\& \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}((s.Peek() == \textcolor{charliteral}{'I'} || s.Peek() == \textcolor{charliteral}{'N'}))) \{}
-\DoxyCodeLine{1525             \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'N'})) \{}
-\DoxyCodeLine{1526                 \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'a'}) \&\& Consume(s, \textcolor{charliteral}{'N'})) \{}
+\DoxyCodeLine{1525             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'N'})) \{}
+\DoxyCodeLine{1526                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'a'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'N'})) \{}
 \DoxyCodeLine{1527                     d = std::numeric\_limits<double>::quiet\_NaN();}
 \DoxyCodeLine{1528                     useNanOrInf = \textcolor{keyword}{true};}
 \DoxyCodeLine{1529                 \}}
 \DoxyCodeLine{1530             \}}
-\DoxyCodeLine{1531             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(Consume(s, \textcolor{charliteral}{'I'}))) \{}
-\DoxyCodeLine{1532                 \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'n'}) \&\& Consume(s, \textcolor{charliteral}{'f'})) \{}
+\DoxyCodeLine{1531             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'I'}))) \{}
+\DoxyCodeLine{1532                 \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'n'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'f'})) \{}
 \DoxyCodeLine{1533                     d = (minus ? -\/std::numeric\_limits<double>::infinity() : std::numeric\_limits<double>::infinity());}
 \DoxyCodeLine{1534                     useNanOrInf = \textcolor{keyword}{true};}
 \DoxyCodeLine{1535 }
-\DoxyCodeLine{1536                     \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(s.Peek() == \textcolor{charliteral}{'i'} \&\& !(Consume(s, \textcolor{charliteral}{'i'}) \&\& Consume(s, \textcolor{charliteral}{'n'})}
-\DoxyCodeLine{1537                                                                 \&\& Consume(s, \textcolor{charliteral}{'i'}) \&\& Consume(s, \textcolor{charliteral}{'t'}) \&\& Consume(s, \textcolor{charliteral}{'y'})))) \{}
+\DoxyCodeLine{1536                     \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(s.Peek() == \textcolor{charliteral}{'i'} \&\& !(\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'i'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'n'})}
+\DoxyCodeLine{1537                                                                 \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'i'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'t'}) \&\& \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'y'})))) \{}
 \DoxyCodeLine{1538                         \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9}{kParseErrorValueInvalid}}, s.Tell());}
 \DoxyCodeLine{1539                     \}}
 \DoxyCodeLine{1540                 \}}
@@ -1444,7 +1444,7 @@
 \DoxyCodeLine{1584         \textcolor{comment}{// Parse frac = decimal-\/point 1*DIGIT}}
 \DoxyCodeLine{1585         \textcolor{keywordtype}{int} expFrac = 0;}
 \DoxyCodeLine{1586         \textcolor{keywordtype}{size\_t} decimalPosition;}
-\DoxyCodeLine{1587         \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'.'})) \{}
+\DoxyCodeLine{1587         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'.'})) \{}
 \DoxyCodeLine{1588             decimalPosition = s.Length();}
 \DoxyCodeLine{1589 }
 \DoxyCodeLine{1590             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga6a2b1695c13e77ae425e3cbac980ccb5}{RAPIDJSON\_UNLIKELY}}(!(s.Peek() >= \textcolor{charliteral}{'0'} \&\& s.Peek() <= \textcolor{charliteral}{'9'})))}
@@ -1491,16 +1491,16 @@
 \DoxyCodeLine{1631 }
 \DoxyCodeLine{1632         \textcolor{comment}{// Parse exp = e [ minus / plus ] 1*DIGIT}}
 \DoxyCodeLine{1633         \textcolor{keywordtype}{int} exp = 0;}
-\DoxyCodeLine{1634         \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'e'}) || Consume(s, \textcolor{charliteral}{'E'})) \{}
+\DoxyCodeLine{1634         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'e'}) || \mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'E'})) \{}
 \DoxyCodeLine{1635             \textcolor{keywordflow}{if} (!useDouble) \{}
 \DoxyCodeLine{1636                 d = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(use64bit ? i64 : i);}
 \DoxyCodeLine{1637                 useDouble = \textcolor{keyword}{true};}
 \DoxyCodeLine{1638             \}}
 \DoxyCodeLine{1639 }
 \DoxyCodeLine{1640             \textcolor{keywordtype}{bool} expMinus = \textcolor{keyword}{false};}
-\DoxyCodeLine{1641             \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'+'}))}
+\DoxyCodeLine{1641             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'+'}))}
 \DoxyCodeLine{1642                 ;}
-\DoxyCodeLine{1643             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (Consume(s, \textcolor{charliteral}{'-\/'}))}
+\DoxyCodeLine{1643             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_a5552ffdca0c3872ffeab6d35ea7038c2}{Consume}}(s, \textcolor{charliteral}{'-\/'}))}
 \DoxyCodeLine{1644                 expMinus = \textcolor{keyword}{true};}
 \DoxyCodeLine{1645 }
 \DoxyCodeLine{1646             \textcolor{keywordflow}{if} (\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_ga5dc14176a9e71ace282404b0bcda57a1}{RAPIDJSON\_LIKELY}}(s.Peek() >= \textcolor{charliteral}{'0'} \&\& s.Peek() <= \textcolor{charliteral}{'9'})) \{}
@@ -1555,13 +1555,13 @@
 \DoxyCodeLine{1695             \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{1696                 \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} numCharsToCopy = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}\textcolor{keyword}{>}(s.Length());}
 \DoxyCodeLine{1697                 \mbox{\hyperlink{struct_generic_string_stream}{GenericStringStream<UTF8<NumberCharacter>}} > srcStream(s.Pop());}
-\DoxyCodeLine{1698                 StackStream<typename TargetEncoding::Ch> dstStream(stack\_);}
+\DoxyCodeLine{1698                 \mbox{\hyperlink{class_generic_reader_1_1_stack_stream}{StackStream<typename TargetEncoding::Ch>}} dstStream(\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}});}
 \DoxyCodeLine{1699                 \textcolor{keywordflow}{while} (numCharsToCopy-\/-\/) \{}
 \DoxyCodeLine{1700                     \mbox{\hyperlink{struct_transcoder}{Transcoder<UTF8<typename TargetEncoding::Ch>}}, TargetEncoding>::Transcode(srcStream, dstStream);}
 \DoxyCodeLine{1701                 \}}
-\DoxyCodeLine{1702                 dstStream.Put(\textcolor{charliteral}{'\(\backslash\)0'});}
-\DoxyCodeLine{1703                 \textcolor{keyword}{const} \textcolor{keyword}{typename} TargetEncoding::Ch* str = dstStream.Pop();}
-\DoxyCodeLine{1704                 \textcolor{keyword}{const} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}\textcolor{keyword}{>}(dstStream.Length()) -\/ 1;}
+\DoxyCodeLine{1702                 dstStream.\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_aba4f7888d42e872ccbf668289373006f}{Put}}(\textcolor{charliteral}{'\(\backslash\)0'});}
+\DoxyCodeLine{1703                 \textcolor{keyword}{const} \textcolor{keyword}{typename} TargetEncoding::Ch* str = dstStream.\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_ae779f1403194a4062465be0d9bb8cf0c}{Pop}}();}
+\DoxyCodeLine{1704                 \textcolor{keyword}{const} \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} length = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}\textcolor{keyword}{>}(dstStream.\mbox{\hyperlink{class_generic_reader_1_1_stack_stream_a528a88479d08ccf62831251fbd35216b}{Length}}()) -\/ 1;}
 \DoxyCodeLine{1705                 cont = handler.RawNumber(str, \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}}(length), \textcolor{keyword}{true});}
 \DoxyCodeLine{1706             \}}
 \DoxyCodeLine{1707         \}}
@@ -1609,7 +1609,7 @@
 \DoxyCodeLine{1749 }
 \DoxyCodeLine{1750     \textcolor{comment}{// Parse any JSON value}}
 \DoxyCodeLine{1751     \textcolor{keyword}{template}<\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{1752     \textcolor{keywordtype}{void} ParseValue(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{1752     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a8c0d07512c0fa447f45c9e5b00dd2d70}{ParseValue}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{1753         \textcolor{keywordflow}{switch} (is.Peek()) \{}
 \DoxyCodeLine{1754             \textcolor{keywordflow}{case} \textcolor{charliteral}{'n'}: ParseNull  <parseFlags>(is, handler); \textcolor{keywordflow}{break};}
 \DoxyCodeLine{1755             \textcolor{keywordflow}{case} \textcolor{charliteral}{'t'}: ParseTrue  <parseFlags>(is, handler); \textcolor{keywordflow}{break};}
@@ -1627,54 +1627,54 @@
 \DoxyCodeLine{1767     \textcolor{comment}{// Iterative Parsing}}
 \DoxyCodeLine{1768 }
 \DoxyCodeLine{1769     \textcolor{comment}{// States}}
-\DoxyCodeLine{1770     \textcolor{keyword}{enum} IterativeParsingState \{}
-\DoxyCodeLine{1771         IterativeParsingFinishState = 0, \textcolor{comment}{// sink states at top}}
-\DoxyCodeLine{1772         IterativeParsingErrorState,      \textcolor{comment}{// sink states at top}}
-\DoxyCodeLine{1773         IterativeParsingStartState,}
+\DoxyCodeLine{1770     \textcolor{keyword}{enum} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} \{}
+\DoxyCodeLine{1771         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}} = 0, \textcolor{comment}{// sink states at top}}
+\DoxyCodeLine{1772         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},      \textcolor{comment}{// sink states at top}}
+\DoxyCodeLine{1773         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}},}
 \DoxyCodeLine{1774 }
 \DoxyCodeLine{1775         \textcolor{comment}{// Object states}}
-\DoxyCodeLine{1776         IterativeParsingObjectInitialState,}
-\DoxyCodeLine{1777         IterativeParsingMemberKeyState,}
-\DoxyCodeLine{1778         IterativeParsingMemberValueState,}
-\DoxyCodeLine{1779         IterativeParsingObjectFinishState,}
+\DoxyCodeLine{1776         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}},}
+\DoxyCodeLine{1777         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13}{IterativeParsingMemberKeyState}},}
+\DoxyCodeLine{1778         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}},}
+\DoxyCodeLine{1779         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3}{IterativeParsingObjectFinishState}},}
 \DoxyCodeLine{1780 }
 \DoxyCodeLine{1781         \textcolor{comment}{// Array states}}
-\DoxyCodeLine{1782         IterativeParsingArrayInitialState,}
-\DoxyCodeLine{1783         IterativeParsingElementState,}
-\DoxyCodeLine{1784         IterativeParsingArrayFinishState,}
+\DoxyCodeLine{1782         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}},}
+\DoxyCodeLine{1783         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},}
+\DoxyCodeLine{1784         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4}{IterativeParsingArrayFinishState}},}
 \DoxyCodeLine{1785 }
 \DoxyCodeLine{1786         \textcolor{comment}{// Single value state}}
-\DoxyCodeLine{1787         IterativeParsingValueState,}
+\DoxyCodeLine{1787         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}},}
 \DoxyCodeLine{1788 }
 \DoxyCodeLine{1789         \textcolor{comment}{// Delimiter states (at bottom)}}
-\DoxyCodeLine{1790         IterativeParsingElementDelimiterState,}
-\DoxyCodeLine{1791         IterativeParsingMemberDelimiterState,}
-\DoxyCodeLine{1792         IterativeParsingKeyValueDelimiterState,}
+\DoxyCodeLine{1790         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}},}
+\DoxyCodeLine{1791         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c}{IterativeParsingMemberDelimiterState}},}
+\DoxyCodeLine{1792         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb}{IterativeParsingKeyValueDelimiterState}},}
 \DoxyCodeLine{1793 }
-\DoxyCodeLine{1794         cIterativeParsingStateCount}
+\DoxyCodeLine{1794         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eac7a053fab876f4447b5c034b9e25bf38}{cIterativeParsingStateCount}}}
 \DoxyCodeLine{1795     \};}
 \DoxyCodeLine{1796 }
 \DoxyCodeLine{1797     \textcolor{comment}{// Tokens}}
-\DoxyCodeLine{1798     \textcolor{keyword}{enum} Token \{}
-\DoxyCodeLine{1799         LeftBracketToken = 0,}
-\DoxyCodeLine{1800         RightBracketToken,}
+\DoxyCodeLine{1798     \textcolor{keyword}{enum} \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} \{}
+\DoxyCodeLine{1799         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a6b35a147e77cd0bad1eb975e29c2853a}{LeftBracketToken}} = 0,}
+\DoxyCodeLine{1800         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8aa37f043d8a3851436653046e36d72f4f}{RightBracketToken}},}
 \DoxyCodeLine{1801 }
-\DoxyCodeLine{1802         LeftCurlyBracketToken,}
-\DoxyCodeLine{1803         RightCurlyBracketToken,}
+\DoxyCodeLine{1802         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8abb24015be27f1c42d12cdf7baf1fa59c}{LeftCurlyBracketToken}},}
+\DoxyCodeLine{1803         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a7eb49c93ed5c98df68c843731292984f}{RightCurlyBracketToken}},}
 \DoxyCodeLine{1804 }
-\DoxyCodeLine{1805         CommaToken,}
-\DoxyCodeLine{1806         ColonToken,}
+\DoxyCodeLine{1805         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8ae8c27b8a8b2e8cd6745e46aab269bbf1}{CommaToken}},}
+\DoxyCodeLine{1806         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a7ae2cccd94aa5c6f02de28c344d99cab}{ColonToken}},}
 \DoxyCodeLine{1807 }
-\DoxyCodeLine{1808         StringToken,}
-\DoxyCodeLine{1809         FalseToken,}
-\DoxyCodeLine{1810         TrueToken,}
-\DoxyCodeLine{1811         NullToken,}
-\DoxyCodeLine{1812         NumberToken,}
+\DoxyCodeLine{1808         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a9743581f6cf4c657ad6bec344f31f44b}{StringToken}},}
+\DoxyCodeLine{1809         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a017affbd2f29580b93d732733eb455da}{FalseToken}},}
+\DoxyCodeLine{1810         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a0cd697f774a54815817a1c3b4bde88eb}{TrueToken}},}
+\DoxyCodeLine{1811         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8abdd797a9fe4ace1702d2fe3561577e3a}{NullToken}},}
+\DoxyCodeLine{1812         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8ace41a2b9df4435cf9a1610e1707bd850}{NumberToken}},}
 \DoxyCodeLine{1813 }
-\DoxyCodeLine{1814         kTokenCount}
+\DoxyCodeLine{1814         \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a93abbfd4654e7b17d9557bbc7621be45}{kTokenCount}}}
 \DoxyCodeLine{1815     \};}
 \DoxyCodeLine{1816 }
-\DoxyCodeLine{1817     RAPIDJSON\_FORCEINLINE Token Tokenize(\mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} c)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{1817     RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} \mbox{\hyperlink{class_generic_reader_a0871b9653ca8283d92ac753bf63e33ce}{Tokenize}}(\mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}} c)\textcolor{keyword}{ const }\{}
 \DoxyCodeLine{1818 }
 \DoxyCodeLine{1820 \textcolor{preprocessor}{\#define N NumberToken}}
 \DoxyCodeLine{1821 \textcolor{preprocessor}{\#define N16 N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N}}
@@ -1682,217 +1682,217 @@
 \DoxyCodeLine{1823         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} tokenMap[256] = \{}
 \DoxyCodeLine{1824             N16, \textcolor{comment}{// 00\string~0F}}
 \DoxyCodeLine{1825             N16, \textcolor{comment}{// 10\string~1F}}
-\DoxyCodeLine{1826             N, N, StringToken, N, N, N, N, N, N, N, N, N, CommaToken, N, N, N, \textcolor{comment}{// 20\string~2F}}
-\DoxyCodeLine{1827             N, N, N, N, N, N, N, N, N, N, ColonToken, N, N, N, N, N, \textcolor{comment}{// 30\string~3F}}
+\DoxyCodeLine{1826             N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a9743581f6cf4c657ad6bec344f31f44b}{StringToken}}, N, N, N, N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8ae8c27b8a8b2e8cd6745e46aab269bbf1}{CommaToken}}, N, N, N, \textcolor{comment}{// 20\string~2F}}
+\DoxyCodeLine{1827             N, N, N, N, N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a7ae2cccd94aa5c6f02de28c344d99cab}{ColonToken}}, N, N, N, N, N, \textcolor{comment}{// 30\string~3F}}
 \DoxyCodeLine{1828             N16, \textcolor{comment}{// 40\string~4F}}
-\DoxyCodeLine{1829             N, N, N, N, N, N, N, N, N, N, N, LeftBracketToken, N, RightBracketToken, N, N, \textcolor{comment}{// 50\string~5F}}
-\DoxyCodeLine{1830             N, N, N, N, N, N, FalseToken, N, N, N, N, N, N, N, NullToken, N, \textcolor{comment}{// 60\string~6F}}
-\DoxyCodeLine{1831             N, N, N, N, TrueToken, N, N, N, N, N, N, LeftCurlyBracketToken, N, RightCurlyBracketToken, N, N, \textcolor{comment}{// 70\string~7F}}
+\DoxyCodeLine{1829             N, N, N, N, N, N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a6b35a147e77cd0bad1eb975e29c2853a}{LeftBracketToken}}, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8aa37f043d8a3851436653046e36d72f4f}{RightBracketToken}}, N, N, \textcolor{comment}{// 50\string~5F}}
+\DoxyCodeLine{1830             N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a017affbd2f29580b93d732733eb455da}{FalseToken}}, N, N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8abdd797a9fe4ace1702d2fe3561577e3a}{NullToken}}, N, \textcolor{comment}{// 60\string~6F}}
+\DoxyCodeLine{1831             N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a0cd697f774a54815817a1c3b4bde88eb}{TrueToken}}, N, N, N, N, N, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8abb24015be27f1c42d12cdf7baf1fa59c}{LeftCurlyBracketToken}}, N, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a7eb49c93ed5c98df68c843731292984f}{RightCurlyBracketToken}}, N, N, \textcolor{comment}{// 70\string~7F}}
 \DoxyCodeLine{1832             N16, N16, N16, N16, N16, N16, N16, N16 \textcolor{comment}{// 80\string~FF}}
 \DoxyCodeLine{1833         \};}
 \DoxyCodeLine{1834 \textcolor{preprocessor}{\#undef N}}
 \DoxyCodeLine{1835 \textcolor{preprocessor}{\#undef N16}}
 \DoxyCodeLine{1837 }
 \DoxyCodeLine{1838         \textcolor{keywordflow}{if} (\textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_generic_reader_ab39a92bb26d50aee6469df604622218a}{Ch}}) == 1 || \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned}\textcolor{keyword}{>}(c) < 256)}
-\DoxyCodeLine{1839             \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}Token\textcolor{keyword}{>}(tokenMap[\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c)]);}
+\DoxyCodeLine{1839             \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}}\textcolor{keyword}{>}(tokenMap[\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(c)]);}
 \DoxyCodeLine{1840         \textcolor{keywordflow}{else}}
-\DoxyCodeLine{1841             \textcolor{keywordflow}{return} NumberToken;}
+\DoxyCodeLine{1841             \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8ace41a2b9df4435cf9a1610e1707bd850}{NumberToken}};}
 \DoxyCodeLine{1842     \}}
 \DoxyCodeLine{1843 }
-\DoxyCodeLine{1844     RAPIDJSON\_FORCEINLINE IterativeParsingState Predict(IterativeParsingState state, Token token)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{1844     RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} \mbox{\hyperlink{class_generic_reader_ad0be8224856167550255d2c9d09f4278}{Predict}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} state, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} token)\textcolor{keyword}{ const }\{}
 \DoxyCodeLine{1845         \textcolor{comment}{// current state x one lookahead token -\/> new state}}
-\DoxyCodeLine{1846         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} G[cIterativeParsingStateCount][kTokenCount] = \{}
+\DoxyCodeLine{1846         \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} G[\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eac7a053fab876f4447b5c034b9e25bf38}{cIterativeParsingStateCount}}][\mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a93abbfd4654e7b17d9557bbc7621be45}{kTokenCount}}] = \{}
 \DoxyCodeLine{1847             \textcolor{comment}{// Finish(sink state)}}
 \DoxyCodeLine{1848             \{}
-\DoxyCodeLine{1849                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1850                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1851                 IterativeParsingErrorState}
+\DoxyCodeLine{1849                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1850                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1851                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}}
 \DoxyCodeLine{1852             \},}
 \DoxyCodeLine{1853             \textcolor{comment}{// Error(sink state)}}
 \DoxyCodeLine{1854             \{}
-\DoxyCodeLine{1855                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1856                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1857                 IterativeParsingErrorState}
+\DoxyCodeLine{1855                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1856                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1857                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}}
 \DoxyCodeLine{1858             \},}
 \DoxyCodeLine{1859             \textcolor{comment}{// Start}}
 \DoxyCodeLine{1860             \{}
-\DoxyCodeLine{1861                 IterativeParsingArrayInitialState,  \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1862                 IterativeParsingErrorState,         \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1863                 IterativeParsingObjectInitialState, \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1864                 IterativeParsingErrorState,         \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1865                 IterativeParsingErrorState,         \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1866                 IterativeParsingErrorState,         \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1867                 IterativeParsingValueState,         \textcolor{comment}{// String}}
-\DoxyCodeLine{1868                 IterativeParsingValueState,         \textcolor{comment}{// False}}
-\DoxyCodeLine{1869                 IterativeParsingValueState,         \textcolor{comment}{// True}}
-\DoxyCodeLine{1870                 IterativeParsingValueState,         \textcolor{comment}{// Null}}
-\DoxyCodeLine{1871                 IterativeParsingValueState          \textcolor{comment}{// Number}}
+\DoxyCodeLine{1861                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}},  \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1862                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1863                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}}, \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1864                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1865                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1866                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1867                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}},         \textcolor{comment}{// String}}
+\DoxyCodeLine{1868                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}},         \textcolor{comment}{// False}}
+\DoxyCodeLine{1869                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}},         \textcolor{comment}{// True}}
+\DoxyCodeLine{1870                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}},         \textcolor{comment}{// Null}}
+\DoxyCodeLine{1871                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}}          \textcolor{comment}{// Number}}
 \DoxyCodeLine{1872             \},}
 \DoxyCodeLine{1873             \textcolor{comment}{// ObjectInitial}}
 \DoxyCodeLine{1874             \{}
-\DoxyCodeLine{1875                 IterativeParsingErrorState,         \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1876                 IterativeParsingErrorState,         \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1877                 IterativeParsingErrorState,         \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1878                 IterativeParsingObjectFinishState,  \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1879                 IterativeParsingErrorState,         \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1880                 IterativeParsingErrorState,         \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1881                 IterativeParsingMemberKeyState,     \textcolor{comment}{// String}}
-\DoxyCodeLine{1882                 IterativeParsingErrorState,         \textcolor{comment}{// False}}
-\DoxyCodeLine{1883                 IterativeParsingErrorState,         \textcolor{comment}{// True}}
-\DoxyCodeLine{1884                 IterativeParsingErrorState,         \textcolor{comment}{// Null}}
-\DoxyCodeLine{1885                 IterativeParsingErrorState          \textcolor{comment}{// Number}}
+\DoxyCodeLine{1875                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1876                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1877                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1878                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3}{IterativeParsingObjectFinishState}},  \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1879                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1880                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1881                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13}{IterativeParsingMemberKeyState}},     \textcolor{comment}{// String}}
+\DoxyCodeLine{1882                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// False}}
+\DoxyCodeLine{1883                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// True}}
+\DoxyCodeLine{1884                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Null}}
+\DoxyCodeLine{1885                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}          \textcolor{comment}{// Number}}
 \DoxyCodeLine{1886             \},}
 \DoxyCodeLine{1887             \textcolor{comment}{// MemberKey}}
 \DoxyCodeLine{1888             \{}
-\DoxyCodeLine{1889                 IterativeParsingErrorState,             \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1890                 IterativeParsingErrorState,             \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1891                 IterativeParsingErrorState,             \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1892                 IterativeParsingErrorState,             \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1893                 IterativeParsingErrorState,             \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1894                 IterativeParsingKeyValueDelimiterState, \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1895                 IterativeParsingErrorState,             \textcolor{comment}{// String}}
-\DoxyCodeLine{1896                 IterativeParsingErrorState,             \textcolor{comment}{// False}}
-\DoxyCodeLine{1897                 IterativeParsingErrorState,             \textcolor{comment}{// True}}
-\DoxyCodeLine{1898                 IterativeParsingErrorState,             \textcolor{comment}{// Null}}
-\DoxyCodeLine{1899                 IterativeParsingErrorState              \textcolor{comment}{// Number}}
+\DoxyCodeLine{1889                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1890                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1891                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1892                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1893                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1894                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb}{IterativeParsingKeyValueDelimiterState}}, \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1895                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// String}}
+\DoxyCodeLine{1896                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// False}}
+\DoxyCodeLine{1897                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// True}}
+\DoxyCodeLine{1898                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Null}}
+\DoxyCodeLine{1899                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}              \textcolor{comment}{// Number}}
 \DoxyCodeLine{1900             \},}
 \DoxyCodeLine{1901             \textcolor{comment}{// MemberValue}}
 \DoxyCodeLine{1902             \{}
-\DoxyCodeLine{1903                 IterativeParsingErrorState,             \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1904                 IterativeParsingErrorState,             \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1905                 IterativeParsingErrorState,             \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1906                 IterativeParsingObjectFinishState,      \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1907                 IterativeParsingMemberDelimiterState,   \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1908                 IterativeParsingErrorState,             \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1909                 IterativeParsingErrorState,             \textcolor{comment}{// String}}
-\DoxyCodeLine{1910                 IterativeParsingErrorState,             \textcolor{comment}{// False}}
-\DoxyCodeLine{1911                 IterativeParsingErrorState,             \textcolor{comment}{// True}}
-\DoxyCodeLine{1912                 IterativeParsingErrorState,             \textcolor{comment}{// Null}}
-\DoxyCodeLine{1913                 IterativeParsingErrorState              \textcolor{comment}{// Number}}
+\DoxyCodeLine{1903                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1904                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1905                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1906                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3}{IterativeParsingObjectFinishState}},      \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1907                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c}{IterativeParsingMemberDelimiterState}},   \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1908                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1909                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// String}}
+\DoxyCodeLine{1910                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// False}}
+\DoxyCodeLine{1911                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// True}}
+\DoxyCodeLine{1912                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Null}}
+\DoxyCodeLine{1913                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}              \textcolor{comment}{// Number}}
 \DoxyCodeLine{1914             \},}
 \DoxyCodeLine{1915             \textcolor{comment}{// ObjectFinish(sink state)}}
 \DoxyCodeLine{1916             \{}
-\DoxyCodeLine{1917                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1918                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1919                 IterativeParsingErrorState}
+\DoxyCodeLine{1917                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1918                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1919                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}}
 \DoxyCodeLine{1920             \},}
 \DoxyCodeLine{1921             \textcolor{comment}{// ArrayInitial}}
 \DoxyCodeLine{1922             \{}
-\DoxyCodeLine{1923                 IterativeParsingArrayInitialState,      \textcolor{comment}{// Left bracket(push Element state)}}
-\DoxyCodeLine{1924                 IterativeParsingArrayFinishState,       \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1925                 IterativeParsingObjectInitialState,     \textcolor{comment}{// Left curly bracket(push Element state)}}
-\DoxyCodeLine{1926                 IterativeParsingErrorState,             \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1927                 IterativeParsingErrorState,             \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1928                 IterativeParsingErrorState,             \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1929                 IterativeParsingElementState,           \textcolor{comment}{// String}}
-\DoxyCodeLine{1930                 IterativeParsingElementState,           \textcolor{comment}{// False}}
-\DoxyCodeLine{1931                 IterativeParsingElementState,           \textcolor{comment}{// True}}
-\DoxyCodeLine{1932                 IterativeParsingElementState,           \textcolor{comment}{// Null}}
-\DoxyCodeLine{1933                 IterativeParsingElementState            \textcolor{comment}{// Number}}
+\DoxyCodeLine{1923                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}},      \textcolor{comment}{// Left bracket(push Element state)}}
+\DoxyCodeLine{1924                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4}{IterativeParsingArrayFinishState}},       \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1925                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}},     \textcolor{comment}{// Left curly bracket(push Element state)}}
+\DoxyCodeLine{1926                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1927                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1928                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1929                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// String}}
+\DoxyCodeLine{1930                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// False}}
+\DoxyCodeLine{1931                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// True}}
+\DoxyCodeLine{1932                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// Null}}
+\DoxyCodeLine{1933                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}}            \textcolor{comment}{// Number}}
 \DoxyCodeLine{1934             \},}
 \DoxyCodeLine{1935             \textcolor{comment}{// Element}}
 \DoxyCodeLine{1936             \{}
-\DoxyCodeLine{1937                 IterativeParsingErrorState,             \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1938                 IterativeParsingArrayFinishState,       \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1939                 IterativeParsingErrorState,             \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1940                 IterativeParsingErrorState,             \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1941                 IterativeParsingElementDelimiterState,  \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1942                 IterativeParsingErrorState,             \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1943                 IterativeParsingErrorState,             \textcolor{comment}{// String}}
-\DoxyCodeLine{1944                 IterativeParsingErrorState,             \textcolor{comment}{// False}}
-\DoxyCodeLine{1945                 IterativeParsingErrorState,             \textcolor{comment}{// True}}
-\DoxyCodeLine{1946                 IterativeParsingErrorState,             \textcolor{comment}{// Null}}
-\DoxyCodeLine{1947                 IterativeParsingErrorState              \textcolor{comment}{// Number}}
+\DoxyCodeLine{1937                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1938                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4}{IterativeParsingArrayFinishState}},       \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1939                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1940                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1941                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}},  \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1942                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1943                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// String}}
+\DoxyCodeLine{1944                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// False}}
+\DoxyCodeLine{1945                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// True}}
+\DoxyCodeLine{1946                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Null}}
+\DoxyCodeLine{1947                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}              \textcolor{comment}{// Number}}
 \DoxyCodeLine{1948             \},}
 \DoxyCodeLine{1949             \textcolor{comment}{// ArrayFinish(sink state)}}
 \DoxyCodeLine{1950             \{}
-\DoxyCodeLine{1951                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1952                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1953                 IterativeParsingErrorState}
+\DoxyCodeLine{1951                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1952                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1953                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}}
 \DoxyCodeLine{1954             \},}
 \DoxyCodeLine{1955             \textcolor{comment}{// Single Value (sink state)}}
 \DoxyCodeLine{1956             \{}
-\DoxyCodeLine{1957                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1958                 IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState, IterativeParsingErrorState,}
-\DoxyCodeLine{1959                 IterativeParsingErrorState}
+\DoxyCodeLine{1957                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1958                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},}
+\DoxyCodeLine{1959                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}}
 \DoxyCodeLine{1960             \},}
 \DoxyCodeLine{1961             \textcolor{comment}{// ElementDelimiter}}
 \DoxyCodeLine{1962             \{}
-\DoxyCodeLine{1963                 IterativeParsingArrayInitialState,      \textcolor{comment}{// Left bracket(push Element state)}}
-\DoxyCodeLine{1964                 IterativeParsingArrayFinishState,       \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1965                 IterativeParsingObjectInitialState,     \textcolor{comment}{// Left curly bracket(push Element state)}}
-\DoxyCodeLine{1966                 IterativeParsingErrorState,             \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1967                 IterativeParsingErrorState,             \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1968                 IterativeParsingErrorState,             \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1969                 IterativeParsingElementState,           \textcolor{comment}{// String}}
-\DoxyCodeLine{1970                 IterativeParsingElementState,           \textcolor{comment}{// False}}
-\DoxyCodeLine{1971                 IterativeParsingElementState,           \textcolor{comment}{// True}}
-\DoxyCodeLine{1972                 IterativeParsingElementState,           \textcolor{comment}{// Null}}
-\DoxyCodeLine{1973                 IterativeParsingElementState            \textcolor{comment}{// Number}}
+\DoxyCodeLine{1963                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}},      \textcolor{comment}{// Left bracket(push Element state)}}
+\DoxyCodeLine{1964                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4}{IterativeParsingArrayFinishState}},       \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1965                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}},     \textcolor{comment}{// Left curly bracket(push Element state)}}
+\DoxyCodeLine{1966                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1967                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1968                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1969                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// String}}
+\DoxyCodeLine{1970                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// False}}
+\DoxyCodeLine{1971                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// True}}
+\DoxyCodeLine{1972                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}},           \textcolor{comment}{// Null}}
+\DoxyCodeLine{1973                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}}            \textcolor{comment}{// Number}}
 \DoxyCodeLine{1974             \},}
 \DoxyCodeLine{1975             \textcolor{comment}{// MemberDelimiter}}
 \DoxyCodeLine{1976             \{}
-\DoxyCodeLine{1977                 IterativeParsingErrorState,         \textcolor{comment}{// Left bracket}}
-\DoxyCodeLine{1978                 IterativeParsingErrorState,         \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1979                 IterativeParsingErrorState,         \textcolor{comment}{// Left curly bracket}}
-\DoxyCodeLine{1980                 IterativeParsingObjectFinishState,  \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1981                 IterativeParsingErrorState,         \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1982                 IterativeParsingErrorState,         \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1983                 IterativeParsingMemberKeyState,     \textcolor{comment}{// String}}
-\DoxyCodeLine{1984                 IterativeParsingErrorState,         \textcolor{comment}{// False}}
-\DoxyCodeLine{1985                 IterativeParsingErrorState,         \textcolor{comment}{// True}}
-\DoxyCodeLine{1986                 IterativeParsingErrorState,         \textcolor{comment}{// Null}}
-\DoxyCodeLine{1987                 IterativeParsingErrorState          \textcolor{comment}{// Number}}
+\DoxyCodeLine{1977                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Left bracket}}
+\DoxyCodeLine{1978                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1979                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Left curly bracket}}
+\DoxyCodeLine{1980                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3}{IterativeParsingObjectFinishState}},  \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1981                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1982                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1983                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13}{IterativeParsingMemberKeyState}},     \textcolor{comment}{// String}}
+\DoxyCodeLine{1984                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// False}}
+\DoxyCodeLine{1985                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// True}}
+\DoxyCodeLine{1986                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},         \textcolor{comment}{// Null}}
+\DoxyCodeLine{1987                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}          \textcolor{comment}{// Number}}
 \DoxyCodeLine{1988             \},}
 \DoxyCodeLine{1989             \textcolor{comment}{// KeyValueDelimiter}}
 \DoxyCodeLine{1990             \{}
-\DoxyCodeLine{1991                 IterativeParsingArrayInitialState,      \textcolor{comment}{// Left bracket(push MemberValue state)}}
-\DoxyCodeLine{1992                 IterativeParsingErrorState,             \textcolor{comment}{// Right bracket}}
-\DoxyCodeLine{1993                 IterativeParsingObjectInitialState,     \textcolor{comment}{// Left curly bracket(push MemberValue state)}}
-\DoxyCodeLine{1994                 IterativeParsingErrorState,             \textcolor{comment}{// Right curly bracket}}
-\DoxyCodeLine{1995                 IterativeParsingErrorState,             \textcolor{comment}{// Comma}}
-\DoxyCodeLine{1996                 IterativeParsingErrorState,             \textcolor{comment}{// Colon}}
-\DoxyCodeLine{1997                 IterativeParsingMemberValueState,       \textcolor{comment}{// String}}
-\DoxyCodeLine{1998                 IterativeParsingMemberValueState,       \textcolor{comment}{// False}}
-\DoxyCodeLine{1999                 IterativeParsingMemberValueState,       \textcolor{comment}{// True}}
-\DoxyCodeLine{2000                 IterativeParsingMemberValueState,       \textcolor{comment}{// Null}}
-\DoxyCodeLine{2001                 IterativeParsingMemberValueState        \textcolor{comment}{// Number}}
+\DoxyCodeLine{1991                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}},      \textcolor{comment}{// Left bracket(push MemberValue state)}}
+\DoxyCodeLine{1992                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right bracket}}
+\DoxyCodeLine{1993                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}},     \textcolor{comment}{// Left curly bracket(push MemberValue state)}}
+\DoxyCodeLine{1994                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Right curly bracket}}
+\DoxyCodeLine{1995                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Comma}}
+\DoxyCodeLine{1996                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}},             \textcolor{comment}{// Colon}}
+\DoxyCodeLine{1997                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}},       \textcolor{comment}{// String}}
+\DoxyCodeLine{1998                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}},       \textcolor{comment}{// False}}
+\DoxyCodeLine{1999                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}},       \textcolor{comment}{// True}}
+\DoxyCodeLine{2000                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}},       \textcolor{comment}{// Null}}
+\DoxyCodeLine{2001                 \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}}        \textcolor{comment}{// Number}}
 \DoxyCodeLine{2002             \},}
 \DoxyCodeLine{2003         \}; \textcolor{comment}{// End of G}}
 \DoxyCodeLine{2004 }
-\DoxyCodeLine{2005         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}IterativeParsingState\textcolor{keyword}{>}(G[state][token]);}
+\DoxyCodeLine{2005         \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}}\textcolor{keyword}{>}(G[state][token]);}
 \DoxyCodeLine{2006     \}}
 \DoxyCodeLine{2007 }
 \DoxyCodeLine{2008     \textcolor{comment}{// Make an advance in the token stream and state based on the candidate destination state which was returned by Transit().}}
 \DoxyCodeLine{2009     \textcolor{comment}{// May return a new state on state pop.}}
 \DoxyCodeLine{2010     \textcolor{keyword}{template} <\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{2011     RAPIDJSON\_FORCEINLINE IterativeParsingState Transit(IterativeParsingState src, Token token, IterativeParsingState dst, InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{2011     RAPIDJSON\_FORCEINLINE \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} \mbox{\hyperlink{class_generic_reader_a09637865e7aea8e50fb8f9fc25dd65ad}{Transit}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} src, \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} token, \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} dst, InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
 \DoxyCodeLine{2012         (void)token;}
 \DoxyCodeLine{2013 }
 \DoxyCodeLine{2014         \textcolor{keywordflow}{switch} (dst) \{}
-\DoxyCodeLine{2015         \textcolor{keywordflow}{case} IterativeParsingErrorState:}
+\DoxyCodeLine{2015         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}:}
 \DoxyCodeLine{2016             \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2017 }
-\DoxyCodeLine{2018         \textcolor{keywordflow}{case} IterativeParsingObjectInitialState:}
-\DoxyCodeLine{2019         \textcolor{keywordflow}{case} IterativeParsingArrayInitialState:}
+\DoxyCodeLine{2018         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}}:}
+\DoxyCodeLine{2019         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}}:}
 \DoxyCodeLine{2020         \{}
 \DoxyCodeLine{2021             \textcolor{comment}{// Push the state(Element or MemeberValue) if we are nested in another array or value of member.}}
 \DoxyCodeLine{2022             \textcolor{comment}{// In this way we can get the correct state on ObjectFinish or ArrayFinish by frame pop.}}
-\DoxyCodeLine{2023             IterativeParsingState n = src;}
-\DoxyCodeLine{2024             \textcolor{keywordflow}{if} (src == IterativeParsingArrayInitialState || src == IterativeParsingElementDelimiterState)}
-\DoxyCodeLine{2025                 n = IterativeParsingElementState;}
-\DoxyCodeLine{2026             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (src == IterativeParsingKeyValueDelimiterState)}
-\DoxyCodeLine{2027                 n = IterativeParsingMemberValueState;}
+\DoxyCodeLine{2023             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} n = src;}
+\DoxyCodeLine{2024             \textcolor{keywordflow}{if} (src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}} || src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}})}
+\DoxyCodeLine{2025                 n = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}};}
+\DoxyCodeLine{2026             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb}{IterativeParsingKeyValueDelimiterState}})}
+\DoxyCodeLine{2027                 n = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}};}
 \DoxyCodeLine{2028             \textcolor{comment}{// Push current state.}}
-\DoxyCodeLine{2029             *stack\_.template Push<SizeType>(1) = n;}
+\DoxyCodeLine{2029             *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Push<SizeType>(1) = n;}
 \DoxyCodeLine{2030             \textcolor{comment}{// Initialize and push the member/element count.}}
-\DoxyCodeLine{2031             *stack\_.template Push<SizeType>(1) = 0;}
+\DoxyCodeLine{2031             *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Push<SizeType>(1) = 0;}
 \DoxyCodeLine{2032             \textcolor{comment}{// Call handler}}
-\DoxyCodeLine{2033             \textcolor{keywordtype}{bool} hr = (dst == IterativeParsingObjectInitialState) ? handler.StartObject() : handler.StartArray();}
+\DoxyCodeLine{2033             \textcolor{keywordtype}{bool} hr = (dst == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}}) ? handler.StartObject() : handler.StartArray();}
 \DoxyCodeLine{2034             \textcolor{comment}{// On handler short circuits the parsing.}}
 \DoxyCodeLine{2035             \textcolor{keywordflow}{if} (!hr) \{}
 \DoxyCodeLine{2036                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
-\DoxyCodeLine{2037                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2037                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2038             \}}
 \DoxyCodeLine{2039             \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{2040                 is.Take();}
@@ -1900,64 +1900,64 @@
 \DoxyCodeLine{2042             \}}
 \DoxyCodeLine{2043         \}}
 \DoxyCodeLine{2044 }
-\DoxyCodeLine{2045         \textcolor{keywordflow}{case} IterativeParsingMemberKeyState:}
+\DoxyCodeLine{2045         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13}{IterativeParsingMemberKeyState}}:}
 \DoxyCodeLine{2046             ParseString<parseFlags>(is, handler, \textcolor{keyword}{true});}
 \DoxyCodeLine{2047             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}())}
-\DoxyCodeLine{2048                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2048                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2049             \textcolor{keywordflow}{else}}
 \DoxyCodeLine{2050                 \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2051 }
-\DoxyCodeLine{2052         \textcolor{keywordflow}{case} IterativeParsingKeyValueDelimiterState:}
-\DoxyCodeLine{2053             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(token == ColonToken);}
+\DoxyCodeLine{2052         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb}{IterativeParsingKeyValueDelimiterState}}:}
+\DoxyCodeLine{2053             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(token == \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8a7ae2cccd94aa5c6f02de28c344d99cab}{ColonToken}});}
 \DoxyCodeLine{2054             is.Take();}
 \DoxyCodeLine{2055             \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2056 }
-\DoxyCodeLine{2057         \textcolor{keywordflow}{case} IterativeParsingMemberValueState:}
+\DoxyCodeLine{2057         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}}:}
 \DoxyCodeLine{2058             \textcolor{comment}{// Must be non-\/compound value. Or it would be ObjectInitial or ArrayInitial state.}}
 \DoxyCodeLine{2059             ParseValue<parseFlags>(is, handler);}
 \DoxyCodeLine{2060             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()) \{}
-\DoxyCodeLine{2061                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2061                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2062             \}}
 \DoxyCodeLine{2063             \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2064 }
-\DoxyCodeLine{2065         \textcolor{keywordflow}{case} IterativeParsingElementState:}
+\DoxyCodeLine{2065         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}}:}
 \DoxyCodeLine{2066             \textcolor{comment}{// Must be non-\/compound value. Or it would be ObjectInitial or ArrayInitial state.}}
 \DoxyCodeLine{2067             ParseValue<parseFlags>(is, handler);}
 \DoxyCodeLine{2068             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()) \{}
-\DoxyCodeLine{2069                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2069                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2070             \}}
 \DoxyCodeLine{2071             \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2072 }
-\DoxyCodeLine{2073         \textcolor{keywordflow}{case} IterativeParsingMemberDelimiterState:}
-\DoxyCodeLine{2074         \textcolor{keywordflow}{case} IterativeParsingElementDelimiterState:}
+\DoxyCodeLine{2073         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c}{IterativeParsingMemberDelimiterState}}:}
+\DoxyCodeLine{2074         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}}:}
 \DoxyCodeLine{2075             is.Take();}
 \DoxyCodeLine{2076             \textcolor{comment}{// Update member/element count.}}
-\DoxyCodeLine{2077             *stack\_.template Top<SizeType>() = *stack\_.template Top<SizeType>() + 1;}
+\DoxyCodeLine{2077             *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Top<SizeType>() = *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Top<SizeType>() + 1;}
 \DoxyCodeLine{2078             \textcolor{keywordflow}{return} dst;}
 \DoxyCodeLine{2079 }
-\DoxyCodeLine{2080         \textcolor{keywordflow}{case} IterativeParsingObjectFinishState:}
+\DoxyCodeLine{2080         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea210d982844ae622f74731acb0e1c37e3}{IterativeParsingObjectFinishState}}:}
 \DoxyCodeLine{2081         \{}
 \DoxyCodeLine{2082             \textcolor{comment}{// Transit from delimiter is only allowed when trailing commas are enabled}}
-\DoxyCodeLine{2083             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a}{kParseTrailingCommasFlag}}) \&\& src == IterativeParsingMemberDelimiterState) \{}
+\DoxyCodeLine{2083             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a}{kParseTrailingCommasFlag}}) \&\& src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c}{IterativeParsingMemberDelimiterState}}) \{}
 \DoxyCodeLine{2084                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3}{kParseErrorObjectMissName}}, is.Tell());}
-\DoxyCodeLine{2085                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2085                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2086             \}}
 \DoxyCodeLine{2087             \textcolor{comment}{// Get member count.}}
-\DoxyCodeLine{2088             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} c = *stack\_.template Pop<SizeType>(1);}
+\DoxyCodeLine{2088             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} c = *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Pop<SizeType>(1);}
 \DoxyCodeLine{2089             \textcolor{comment}{// If the object is not empty, count the last member.}}
-\DoxyCodeLine{2090             \textcolor{keywordflow}{if} (src == IterativeParsingMemberValueState)}
+\DoxyCodeLine{2090             \textcolor{keywordflow}{if} (src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}})}
 \DoxyCodeLine{2091                 ++c;}
 \DoxyCodeLine{2092             \textcolor{comment}{// Restore the state.}}
-\DoxyCodeLine{2093             IterativeParsingState n = \textcolor{keyword}{static\_cast<}IterativeParsingState\textcolor{keyword}{>}(*stack\_.template Pop<SizeType>(1));}
+\DoxyCodeLine{2093             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} n = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}}\textcolor{keyword}{>}(*\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Pop<SizeType>(1));}
 \DoxyCodeLine{2094             \textcolor{comment}{// Transit to Finish state if this is the topmost scope.}}
-\DoxyCodeLine{2095             \textcolor{keywordflow}{if} (n == IterativeParsingStartState)}
-\DoxyCodeLine{2096                 n = IterativeParsingFinishState;}
+\DoxyCodeLine{2095             \textcolor{keywordflow}{if} (n == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}})}
+\DoxyCodeLine{2096                 n = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}};}
 \DoxyCodeLine{2097             \textcolor{comment}{// Call handler}}
 \DoxyCodeLine{2098             \textcolor{keywordtype}{bool} hr = handler.EndObject(c);}
 \DoxyCodeLine{2099             \textcolor{comment}{// On handler short circuits the parsing.}}
 \DoxyCodeLine{2100             \textcolor{keywordflow}{if} (!hr) \{}
 \DoxyCodeLine{2101                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
-\DoxyCodeLine{2102                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2102                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2103             \}}
 \DoxyCodeLine{2104             \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{2105                 is.Take();}
@@ -1965,29 +1965,29 @@
 \DoxyCodeLine{2107             \}}
 \DoxyCodeLine{2108         \}}
 \DoxyCodeLine{2109 }
-\DoxyCodeLine{2110         \textcolor{keywordflow}{case} IterativeParsingArrayFinishState:}
+\DoxyCodeLine{2110         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eab25951e89a18765eee6cf80dae400aa4}{IterativeParsingArrayFinishState}}:}
 \DoxyCodeLine{2111         \{}
 \DoxyCodeLine{2112             \textcolor{comment}{// Transit from delimiter is only allowed when trailing commas are enabled}}
-\DoxyCodeLine{2113             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a}{kParseTrailingCommasFlag}}) \&\& src == IterativeParsingElementDelimiterState) \{}
+\DoxyCodeLine{2113             \textcolor{keywordflow}{if} (!(parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450a953d6381de950e25c8c97ad54f52370a}{kParseTrailingCommasFlag}}) \&\& src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}}) \{}
 \DoxyCodeLine{2114                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9}{kParseErrorValueInvalid}}, is.Tell());}
-\DoxyCodeLine{2115                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2115                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2116             \}}
 \DoxyCodeLine{2117             \textcolor{comment}{// Get element count.}}
-\DoxyCodeLine{2118             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} c = *stack\_.template Pop<SizeType>(1);}
+\DoxyCodeLine{2118             \mbox{\hyperlink{rapidjson_8h_a5ed6e6e67250fadbd041127e6386dcb5}{SizeType}} c = *\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Pop<SizeType>(1);}
 \DoxyCodeLine{2119             \textcolor{comment}{// If the array is not empty, count the last element.}}
-\DoxyCodeLine{2120             \textcolor{keywordflow}{if} (src == IterativeParsingElementState)}
+\DoxyCodeLine{2120             \textcolor{keywordflow}{if} (src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}})}
 \DoxyCodeLine{2121                 ++c;}
 \DoxyCodeLine{2122             \textcolor{comment}{// Restore the state.}}
-\DoxyCodeLine{2123             IterativeParsingState n = \textcolor{keyword}{static\_cast<}IterativeParsingState\textcolor{keyword}{>}(*stack\_.template Pop<SizeType>(1));}
+\DoxyCodeLine{2123             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} n = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}}\textcolor{keyword}{>}(*\mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}}.template Pop<SizeType>(1));}
 \DoxyCodeLine{2124             \textcolor{comment}{// Transit to Finish state if this is the topmost scope.}}
-\DoxyCodeLine{2125             \textcolor{keywordflow}{if} (n == IterativeParsingStartState)}
-\DoxyCodeLine{2126                 n = IterativeParsingFinishState;}
+\DoxyCodeLine{2125             \textcolor{keywordflow}{if} (n == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}})}
+\DoxyCodeLine{2126                 n = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}};}
 \DoxyCodeLine{2127             \textcolor{comment}{// Call handler}}
 \DoxyCodeLine{2128             \textcolor{keywordtype}{bool} hr = handler.EndArray(c);}
 \DoxyCodeLine{2129             \textcolor{comment}{// On handler short circuits the parsing.}}
 \DoxyCodeLine{2130             \textcolor{keywordflow}{if} (!hr) \{}
 \DoxyCodeLine{2131                 \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_ga7f8c4265b2edda78568ae3338aaf1461}{RAPIDJSON\_PARSE\_ERROR\_NORETURN}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a6fed2d9a15f88540a1ba785f0de2cbe6}{kParseErrorTermination}}, is.Tell());}
-\DoxyCodeLine{2132                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2132                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2133             \}}
 \DoxyCodeLine{2134             \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{2135                 is.Take();}
@@ -2006,85 +2006,85 @@
 \DoxyCodeLine{2148             \textcolor{comment}{// The IterativeParsingFinishState is not enumerated in this switch-\/case either.}}
 \DoxyCodeLine{2149             \textcolor{comment}{// It is a "{}derivative"{} state which cannot triggered from Predict() directly.}}
 \DoxyCodeLine{2150             \textcolor{comment}{// Therefore it cannot happen here. And it can be caught by following assertion.}}
-\DoxyCodeLine{2151             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(dst == IterativeParsingValueState);}
+\DoxyCodeLine{2151             \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(dst == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaee2be3de24a8fe605a56a1ac8495b15e}{IterativeParsingValueState}});}
 \DoxyCodeLine{2152 }
 \DoxyCodeLine{2153             \textcolor{comment}{// Must be non-\/compound value. Or it would be ObjectInitial or ArrayInitial state.}}
 \DoxyCodeLine{2154             ParseValue<parseFlags>(is, handler);}
 \DoxyCodeLine{2155             \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()) \{}
-\DoxyCodeLine{2156                 \textcolor{keywordflow}{return} IterativeParsingErrorState;}
+\DoxyCodeLine{2156                 \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2157             \}}
-\DoxyCodeLine{2158             \textcolor{keywordflow}{return} IterativeParsingFinishState;}
+\DoxyCodeLine{2158             \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}};}
 \DoxyCodeLine{2159         \}}
 \DoxyCodeLine{2160     \}}
 \DoxyCodeLine{2161 }
 \DoxyCodeLine{2162     \textcolor{keyword}{template} <\textcolor{keyword}{typename} InputStream>}
-\DoxyCodeLine{2163     \textcolor{keywordtype}{void} HandleError(IterativeParsingState src, InputStream\& is) \{}
+\DoxyCodeLine{2163     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} src, InputStream\& is) \{}
 \DoxyCodeLine{2164         \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_generic_reader_ac417441794477ea747b63adb6d3653a9}{HasParseError}}()) \{}
 \DoxyCodeLine{2165             \textcolor{comment}{// Error flag has been set.}}
 \DoxyCodeLine{2166             \textcolor{keywordflow}{return};}
 \DoxyCodeLine{2167         \}}
 \DoxyCodeLine{2168 }
 \DoxyCodeLine{2169         \textcolor{keywordflow}{switch} (src) \{}
-\DoxyCodeLine{2170         \textcolor{keywordflow}{case} IterativeParsingStartState:            \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a}{kParseErrorDocumentEmpty}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2171         \textcolor{keywordflow}{case} IterativeParsingFinishState:           \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5}{kParseErrorDocumentRootNotSingular}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2172         \textcolor{keywordflow}{case} IterativeParsingObjectInitialState:}
-\DoxyCodeLine{2173         \textcolor{keywordflow}{case} IterativeParsingMemberDelimiterState:  \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3}{kParseErrorObjectMissName}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2174         \textcolor{keywordflow}{case} IterativeParsingMemberKeyState:        \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017}{kParseErrorObjectMissColon}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2175         \textcolor{keywordflow}{case} IterativeParsingMemberValueState:      \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a34f70d7ed2fa121954f5fc5b5113d05f}{kParseErrorObjectMissCommaOrCurlyBracket}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2176         \textcolor{keywordflow}{case} IterativeParsingKeyValueDelimiterState:}
-\DoxyCodeLine{2177         \textcolor{keywordflow}{case} IterativeParsingArrayInitialState:}
-\DoxyCodeLine{2178         \textcolor{keywordflow}{case} IterativeParsingElementDelimiterState: \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9}{kParseErrorValueInvalid}}, is.Tell()); \textcolor{keywordflow}{return};}
-\DoxyCodeLine{2179         \textcolor{keywordflow}{default}: \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(src == IterativeParsingElementState); \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7abfdd2bd90134fec4fe6a22762d16a5f5}{kParseErrorArrayMissCommaOrSquareBracket}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2170         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}}:            \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a04b368d184e84b50580be2faa55f738a}{kParseErrorDocumentEmpty}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2171         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}}:           \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a2293b39033220f4c2a568482c497dab5}{kParseErrorDocumentRootNotSingular}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2172         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaaf54ec0c42830e9b42a9bc2a5bbb71de}{IterativeParsingObjectInitialState}}:}
+\DoxyCodeLine{2173         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9a246402fe6a9307095cd412a9328f8c}{IterativeParsingMemberDelimiterState}}:  \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7ae3142fbadf2c4cdfd0c7200d7b6b8ed3}{kParseErrorObjectMissName}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2174         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea9c1d0b88cbc53c04790d9086c4068e13}{IterativeParsingMemberKeyState}}:        \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a55cda7eb30436986ab42a61e06caf017}{kParseErrorObjectMissColon}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2175         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ead323d1265edcac75c48038cf73e4d035}{IterativeParsingMemberValueState}}:      \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a34f70d7ed2fa121954f5fc5b5113d05f}{kParseErrorObjectMissCommaOrCurlyBracket}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2176         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea04d80601d75bcebcc7c98ad6a4f402cb}{IterativeParsingKeyValueDelimiterState}}:}
+\DoxyCodeLine{2177         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaef925723e66b3c1de7e98203774607fd}{IterativeParsingArrayInitialState}}:}
+\DoxyCodeLine{2178         \textcolor{keywordflow}{case} \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}}: \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7a20a50e257aab726699ab02192db72ba9}{kParseErrorValueInvalid}}, is.Tell()); \textcolor{keywordflow}{return};}
+\DoxyCodeLine{2179         \textcolor{keywordflow}{default}: \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___c_o_n_f_i_g_gabeba18d612187bad2ac62aed9276d47c}{RAPIDJSON\_ASSERT}}(src == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf71361a62b9a27ce47ba680502b54138}{IterativeParsingElementState}}); \mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gae3689840fa6e89a241313f33b602f865}{RAPIDJSON\_PARSE\_ERROR}}(\mbox{\hyperlink{group___r_a_p_i_d_j_s_o_n___e_r_r_o_r_s_gga8d4b32dfc45840bca189ade2bbcb6ba7abfdd2bd90134fec4fe6a22762d16a5f5}{kParseErrorArrayMissCommaOrSquareBracket}}, is.Tell()); \textcolor{keywordflow}{return};}
 \DoxyCodeLine{2180         \}}
 \DoxyCodeLine{2181     \}}
 \DoxyCodeLine{2182 }
-\DoxyCodeLine{2183     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} IsIterativeParsingDelimiterState(IterativeParsingState s)\textcolor{keyword}{ const }\{}
-\DoxyCodeLine{2184         \textcolor{keywordflow}{return} s >= IterativeParsingElementDelimiterState;}
+\DoxyCodeLine{2183     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_a115b4d35f57ef8dbe9eef467cba471ae}{IsIterativeParsingDelimiterState}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} s)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{2184         \textcolor{keywordflow}{return} s >= \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea8b27efdb1104733da9625e0e397442cd}{IterativeParsingElementDelimiterState}};}
 \DoxyCodeLine{2185     \}}
 \DoxyCodeLine{2186 }
-\DoxyCodeLine{2187     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} IsIterativeParsingCompleteState(IterativeParsingState s)\textcolor{keyword}{ const }\{}
-\DoxyCodeLine{2188         \textcolor{keywordflow}{return} s <= IterativeParsingErrorState;}
+\DoxyCodeLine{2187     RAPIDJSON\_FORCEINLINE \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_generic_reader_a2907a45d73d2f8cebe1a31bdc3a6e483}{IsIterativeParsingCompleteState}}(\mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} s)\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{2188         \textcolor{keywordflow}{return} s <= \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}};}
 \DoxyCodeLine{2189     \}}
 \DoxyCodeLine{2190 }
 \DoxyCodeLine{2191     \textcolor{keyword}{template} <\textcolor{keywordtype}{unsigned} parseFlags, \textcolor{keyword}{typename} InputStream, \textcolor{keyword}{typename} Handler>}
-\DoxyCodeLine{2192     \mbox{\hyperlink{struct_parse_result}{ParseResult}} IterativeParse(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
-\DoxyCodeLine{2193         parseResult\_.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
-\DoxyCodeLine{2194         ClearStackOnExit scope(*\textcolor{keyword}{this});}
-\DoxyCodeLine{2195         IterativeParsingState state = IterativeParsingStartState;}
+\DoxyCodeLine{2192     \mbox{\hyperlink{struct_parse_result}{ParseResult}} \mbox{\hyperlink{class_generic_reader_a55a2d3fd3d5261f26513ed303724bc3a}{IterativeParse}}(InputStream\& is, \mbox{\hyperlink{classrapidjson_1_1_handler}{Handler}}\& handler) \{}
+\DoxyCodeLine{2193         \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}}.\mbox{\hyperlink{struct_parse_result_a88b6d44f052a19e6436ae6aadc2c40b4}{Clear}}();}
+\DoxyCodeLine{2194         \mbox{\hyperlink{struct_generic_reader_1_1_clear_stack_on_exit}{ClearStackOnExit}} scope(*\textcolor{keyword}{this});}
+\DoxyCodeLine{2195         \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} state = \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277eaf17685095fd55d935b9e6b9cf6a54159}{IterativeParsingStartState}};}
 \DoxyCodeLine{2196 }
 \DoxyCodeLine{2197         SkipWhitespaceAndComments<parseFlags>(is);}
-\DoxyCodeLine{2198         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{2198         RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{2199         \textcolor{keywordflow}{while} (is.Peek() != \textcolor{charliteral}{'\(\backslash\)0'}) \{}
-\DoxyCodeLine{2200             Token t = Tokenize(is.Peek());}
-\DoxyCodeLine{2201             IterativeParsingState n = Predict(state, t);}
-\DoxyCodeLine{2202             IterativeParsingState d = Transit<parseFlags>(state, t, n, is, handler);}
+\DoxyCodeLine{2200             \mbox{\hyperlink{class_generic_reader_a78cbc3012843daeaa44cb3c2b779a8a8}{Token}} t = \mbox{\hyperlink{class_generic_reader_a0871b9653ca8283d92ac753bf63e33ce}{Tokenize}}(is.Peek());}
+\DoxyCodeLine{2201             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} n = \mbox{\hyperlink{class_generic_reader_ad0be8224856167550255d2c9d09f4278}{Predict}}(state, t);}
+\DoxyCodeLine{2202             \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} d = Transit<parseFlags>(state, t, n, is, handler);}
 \DoxyCodeLine{2203 }
-\DoxyCodeLine{2204             \textcolor{keywordflow}{if} (d == IterativeParsingErrorState) \{}
-\DoxyCodeLine{2205                 HandleError(state, is);}
+\DoxyCodeLine{2204             \textcolor{keywordflow}{if} (d == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea326dd1efe3866f0d57c5f52a270ba8e1}{IterativeParsingErrorState}}) \{}
+\DoxyCodeLine{2205                 \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(state, is);}
 \DoxyCodeLine{2206                 \textcolor{keywordflow}{break};}
 \DoxyCodeLine{2207             \}}
 \DoxyCodeLine{2208 }
 \DoxyCodeLine{2209             state = d;}
 \DoxyCodeLine{2210 }
 \DoxyCodeLine{2211             \textcolor{comment}{// Do not further consume streams if a root JSON has been parsed.}}
-\DoxyCodeLine{2212             \textcolor{keywordflow}{if} ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36}{kParseStopWhenDoneFlag}}) \&\& state == IterativeParsingFinishState)}
+\DoxyCodeLine{2212             \textcolor{keywordflow}{if} ((parseFlags \& \mbox{\hyperlink{reader_8h_ab7be7dabe6ffcba60fad441505583450af77d115d3bbed0a448b6b335f3b93b36}{kParseStopWhenDoneFlag}}) \&\& state == \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}})}
 \DoxyCodeLine{2213                 \textcolor{keywordflow}{break};}
 \DoxyCodeLine{2214 }
 \DoxyCodeLine{2215             SkipWhitespaceAndComments<parseFlags>(is);}
-\DoxyCodeLine{2216             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(parseResult\_);}
+\DoxyCodeLine{2216             RAPIDJSON\_PARSE\_ERROR\_EARLY\_RETURN(\mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}});}
 \DoxyCodeLine{2217         \}}
 \DoxyCodeLine{2218 }
 \DoxyCodeLine{2219         \textcolor{comment}{// Handle the end of file.}}
-\DoxyCodeLine{2220         \textcolor{keywordflow}{if} (state != IterativeParsingFinishState)}
-\DoxyCodeLine{2221             HandleError(state, is);}
+\DoxyCodeLine{2220         \textcolor{keywordflow}{if} (state != \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277ea57e40efdbe78a825a306003f45be0166}{IterativeParsingFinishState}})}
+\DoxyCodeLine{2221             \mbox{\hyperlink{class_generic_reader_a46660019ff1ed42bc192d9b5f9119b0f}{HandleError}}(state, is);}
 \DoxyCodeLine{2222 }
-\DoxyCodeLine{2223         \textcolor{keywordflow}{return} parseResult\_;}
+\DoxyCodeLine{2223         \textcolor{keywordflow}{return} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}};}
 \DoxyCodeLine{2224     \}}
 \DoxyCodeLine{2225 }
-\DoxyCodeLine{2226     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} kDefaultStackCapacity = 256;    }
-\DoxyCodeLine{2227     \mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}} stack\_;  }
-\DoxyCodeLine{2228     \mbox{\hyperlink{struct_parse_result}{ParseResult}} parseResult\_;}
-\DoxyCodeLine{2229     IterativeParsingState state\_;}
+\DoxyCodeLine{2226     \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{class_generic_reader_ac507ea8672bf2b5d01b35583c0597f15}{kDefaultStackCapacity}} = 256;    }
+\DoxyCodeLine{2227     \mbox{\hyperlink{classinternal_1_1_stack}{internal::Stack<StackAllocator>}} \mbox{\hyperlink{class_generic_reader_a7c04f4aa27561d358376920d06b78cdb}{stack\_}};  }
+\DoxyCodeLine{2228     \mbox{\hyperlink{struct_parse_result}{ParseResult}} \mbox{\hyperlink{class_generic_reader_a156018c2805bfa730287314ee9d9257d}{parseResult\_}};}
+\DoxyCodeLine{2229     \mbox{\hyperlink{class_generic_reader_a269700a68b925db2f3ecc84b75f2277e}{IterativeParsingState}} \mbox{\hyperlink{class_generic_reader_ae155ea97ca78d4ee6c8d848b5b1da3dc}{state\_}};}
 \DoxyCodeLine{2230 \}; \textcolor{comment}{// class GenericReader}}
 \DoxyCodeLine{2231 }
 \DoxyCodeLine{2233 \textcolor{keyword}{typedef} \mbox{\hyperlink{class_generic_reader}{GenericReader<UTF8<>}}, \mbox{\hyperlink{struct_u_t_f8}{UTF8<>}} > \mbox{\hyperlink{reader_8h_a84f3b66a66647f4ac4267078359188ba}{Reader}};}

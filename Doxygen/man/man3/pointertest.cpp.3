@@ -1,4 +1,4 @@
-.TH "src/rapidjson/test/unittest/pointertest.cpp" 3 "Fri Jan 14 2022" "Version 1.0.0" "Neon Jumper" \" -*- nroff -*-
+.TH "src/rapidjson/test/unittest/pointertest.cpp" 3 "Fri Jan 21 2022" "Neon Jumper" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,7 +39,7 @@ src/rapidjson/test/unittest/pointertest.cpp
 
 .in +1c
 .ti -1c
-.RI "#define \fBNAME\fP(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), kPointerInvalidIndex }"
+.RI "#define \fBNAME\fP(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), \fBkPointerInvalidIndex\fP }"
 .br
 .ti -1c
 .RI "#define \fBINDEX\fP(i)   { #i, static_cast<\fBSizeType\fP>(sizeof(#i) \- 1), i }"
@@ -188,11 +188,24 @@ src/rapidjson/test/unittest/pointertest.cpp
 .RI "\fBTEST\fP (\fBPointer\fP, Issue1899)"
 .br
 .in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static const char \fBkJson\fP []"
+.br
+.ti -1c
+.RI "static const \fBPointer::Token\fP \fBkTokens\fP [] = { \fBNAME\fP('foo'), INDEX(0) }"
+.br
+.ti -1c
+.RI "static const char \fBkJsonIds\fP []"
+.br
+.in -1c
 .SH "Macro Definition Documentation"
 .PP 
 .SS "#define INDEX(i)   { #i, static_cast<\fBSizeType\fP>(sizeof(#i) \- 1), i }"
 
-.SS "#define NAME(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), kPointerInvalidIndex }"
+.SS "#define NAME(s)   { s, static_cast<\fBSizeType\fP>(sizeof(s) / sizeof(s[0]) \- 1), \fBkPointerInvalidIndex\fP }"
 
 .SH "Function Documentation"
 .PP 
@@ -279,6 +292,40 @@ src/rapidjson/test/unittest/pointertest.cpp
 .SS "TEST (\fBPointer\fP, \fBSwapValueByPointer\fP)"
 
 .SS "TEST (\fBPointer\fP, SwapValueByPointer_NoAllocator)"
+
+.SH "Variable Documentation"
+.PP 
+.SS "const char kJson[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= "{\n"
+"    \"foo\":[\"bar\", \"baz\"],\n"
+"    \"\" : 0,\n"
+"    \"a/b\" : 1,\n"
+"    \"c%d\" : 2,\n"
+"    \"e^f\" : 3,\n"
+"    \"g|h\" : 4,\n"
+"    \"i\\\\j\" : 5,\n"
+"    \"k\\\"l\" : 6,\n"
+"    \" \" : 7,\n"
+"    \"m~n\" : 8\n"
+"}"
+.fi
+.SS "const char kJsonIds[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= "{\n"
+   "    \"id\": \"/root/\","
+   "    \"foo\":[\"bar\", \"baz\", {\"id\": \"inarray\", \"child\": 1}],\n"
+   "    \"int\" : 2,\n"
+   "    \"str\" : \"val\",\n"
+   "    \"obj\": {\"id\": \"inobj\", \"child\": 3},\n"
+   "    \"jbo\": {\"id\": true, \"child\": 4}\n"
+   "}"
+.fi
+.SS "const \fBPointer::Token\fP kTokens[] = { \fBNAME\fP('foo'), INDEX(0) }\fC [static]\fP"
 
 .SH "Author"
 .PP 
